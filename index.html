@@ -301,6 +301,7 @@
             <button type="button" value="hhc"  class="btn btn-outline-primary btn-sm">Hybrid Hydrometer Classification</button> <!-- hhc -->
             <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
             <button type="button" value="ref" class="btn btn-outline-primary btn-sm">Digital Base Reflectivity</button> <!-- ref -->
+            <button type="button" value="lowres-vel" class="btn btn-outline-primary btn-sm">Digital Base Velocity</button>
             <button type="button" value="vil"  class="btn btn-outline-primary btn-sm">Vertically Integrated Liquid</button> <!-- vil -->
         </div>
         <br>
@@ -849,14 +850,14 @@
                     removeMapLayer('baseReflectivity');
                 }
                 var tiltProduct = tiltObject[tilt][pr];
-                if (pr != 'ref') {
+                if (pr != 'ref' && pr != 'vel') {
                     // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
                     // DS.165h0 = product code 165, N0H (h0)
                     var level3url = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
                     console.log(level3url)
                     console.log(tiltProduct, stat)
                     loadFileObject(level3url, 'sn.last', 3);
-                } else {
+                } else if (pr == 'ref' || pr == 'vel') {
                     getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function(cbVal) {
                         var proxiedCbVal = `${phpProxy}${cbVal}`;
                         console.log(cbVal);
@@ -907,7 +908,8 @@
         var tiltObject = {
             'tilt1': {
                 'ref': 'N0B',
-                'vel': 'p99v0',
+                'vel': 'N0G',
+                'lowres-vel': 'p99v0',
                 'rho': '161c0',
                 'zdr': '159x0',
                 'sw ': 'p30sw',
@@ -920,7 +922,8 @@
             },
             'tilt2': {
                 'ref': 'N1B',
-                'vel': 'p99v1',
+                'vel': 'N1G',
+                'lowres-vel': 'p99v1',
                 'rho': '161c1',
                 'zdr': '159x1',
                 'sw ': 'p30sw',
@@ -932,7 +935,8 @@
             },
             'tilt3': {
                 'ref': 'N2B',
-                'vel': 'p99v2',
+                'vel': 'N2G',
+                'lowres-vel': 'p99v2',
                 'rho': '161c2',
                 'zdr': '159x2',
                 'sw ': 'p30sw',
@@ -944,7 +948,8 @@
             },
             'tilt4': {
                 'ref': 'N3B',
-                'vel': 'p99v3',
+                'vel': 'N3G',
+                'lowres-vel': 'p99v3',
                 'rho': '161c3',
                 'zdr': '159x3',
                 'sw ': 'p30sw',

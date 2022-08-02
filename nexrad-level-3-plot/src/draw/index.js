@@ -35,7 +35,7 @@ const draw = (data, product, _options) => {
 	};
 	var adder = 0;
 	var divider = 1;
-	if (product[0] == "N0U") {
+	if (product[0] == "N0U" || product[0] == "N0G") {
 		adder = 65;
 	}
 	// generate a palette

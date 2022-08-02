@@ -340,7 +340,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         5, 10, 15, 20, 25, 30, 35, 40,
         45, 50, 55, 60, 65, 70, 75
       )
-    } else if (produc[0] == "N0U") {
+    } else if (produc[0] == "N0U" || produc[0] == "N0G") {
       console.log('l3 velocity')
       colors["ref"].push(
         "#ffffff",
@@ -575,6 +575,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
   } else if (produc[0] == "NXQ") {
     divider = '/(70.0)';
   } else if (produc[0] == "N0U") {
+    divider = '/(135.0)';
+  } else if (produc[0] == "N0G") {
     divider = '/(135.0)';
   } else if (produc[0] == "DVL") {
     divider = '/(90.0)';
