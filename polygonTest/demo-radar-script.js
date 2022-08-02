@@ -97,7 +97,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
       values["ref"].push(
         -50, -30, -10, -5, 10, 20, 50
       )
-    } else if (produc == "RHO") {
+    } else if (produc == "RHO" || produc[0] == "N0C") {
       console.log('cor coef --')
       colors["ref"].push(
         "#000000", "#949494", "#7593FF", "#0045BD", "#ADF4FF", "#00FA32", "#FFD53D", "#F01000", "#C20047", "#FFB8D8", "#FFEBF2"
@@ -124,7 +124,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         0, 40, 80, 120, 160, 200, 240, 280, 320, 360
         //0, 36, 72, 108, 144, 180, 216, 252, 288, 324, 360
       )
-    } else if (produc == "ZDR") {
+    } else if (produc == "ZDR" || produc[0] == "N0X") {
       console.log('diff refl...')
       // https://github.com/paulyc/NOAA-WCT/blob/master/ext/config/colormaps/nexrad_dp_zdr.pal
       colors["ref"].push(
@@ -147,7 +147,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
       values["ref"].push(
         -8, -6, -4, -2, 0, 0, 0.25, 1, 1.5, 2, 3, 4, 5, 6, 8
       )
-    } else if (produc == "SW ") {
+    } else if (produc == "SW " || produc[0] == "NSW") {
       console.log('spect width,')
       // https://github.com/paulyc/NOAA-WCT/blob/master/ext/config/colormaps/nexrad_spec.wctpal
       colors["ref"].push(
@@ -564,7 +564,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     divider = '/(135.0)';
   } else if (produc == "ZDR") {
     divider = '/(20.0)';
-  } else if (produc == "SW ") {
+  } else if (produc == "SW " || produc[0] == "NSW") {
     divider = '/(10.0)';
   }
 
@@ -578,6 +578,10 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     divider = '/(135.0)';
   } else if (produc[0] == "DVL") {
     divider = '/(90.0)';
+  } else if (produc[0] == "N0C") {
+    divider = '/(255.0)';
+  } else if (produc[0] == "N0X") {
+    divider = '/(255.0)';
   }
   console.log(divider)
   //compile shaders

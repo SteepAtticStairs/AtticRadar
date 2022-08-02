@@ -43,7 +43,11 @@ const draw = (data, product, _options) => {
 	// calculate scaling paramater with respect to pallet's designed criteria
 	//const paletteScale = (data?.productDescription?.plot?.maxDataValue ?? 255) / (product.palette.baseScale ?? data?.productDescription?.plot?.maxDataValue ?? 1);
 	// use the raw values to avoid scaling and un-scaling
-	data.radialPackets[0].radials.forEach((radial) => {
+	var radialLoop = data.radialPackets[0].radials;
+	if (product[0] == "N0C" || product[0] == "N0X") {
+		radialLoop = data.radialPackets[0].radialsRaw;
+	}
+	radialLoop.forEach((radial) => {
 		arr = [];
 		valArr = [];
 		const startAngle = radial.startAngle * (Math.PI / 180);
