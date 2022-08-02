@@ -43,11 +43,9 @@ https://steepatticstairs.github.io/NexradJS/**
 <br><br><br>
 You can add some parameters to the URL to make the app easier to use / bookmark. You can add 
 * `#development`
-<br>
-to allow for extra development features (this is mainly for my own use, I wouldn't recommend trying this), and you can add
-<br>
-*  `#station=ICAO` <br>
-to set the app's initial station view. (The default will likely be either `KLWX` or `KMHX`, because those are the stations I use the most.) Here are some examples:
+* `#station=ICAO`
+
+The first one is to allow for extra development features (this is mainly for my own use, I wouldn't recommend trying this), and the second one is to set the app's initial station view. (The default will likely be either `KLWX` or `KMHX`, because those are the stations I use the most.) Here are some examples:
 <br>
 
 Sets the app's initial station to `KHGX`:
