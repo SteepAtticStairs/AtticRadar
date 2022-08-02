@@ -1016,6 +1016,14 @@
             }).then(function() {
                 $('.customMarker').on('click', function() {
                     $('#stationInp').val(this.innerHTML)
+
+                    document.getElementById('curProd').innerHTML = 'ref';
+                    loadLatestFile(
+                        'l3',
+                        'ref',
+                        $('#tiltDropdownBtn').attr('value'),
+                        $('#stationInp').val().toLowerCase()
+                    );
                 })
             })
         }
