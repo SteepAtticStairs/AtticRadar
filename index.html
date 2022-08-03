@@ -294,19 +294,27 @@
         </div>
         <br>
         <div class="btn-group-vertical productBtnGroup">
-            <div>Level 3</div>
+            <div>Super Resolution</div>
             <!-- <button type="button" value="mcy" class="btn btn-outline-primary btn-sm">Mesocyclone</button> -->
             <button type="button" value="ref" class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
             <button type="button" value="vel"  class="btn btn-outline-primary btn-sm"><b>HR</b> Base Velocity</button> <!-- vel -->
-            <button type="button" value="rho" class="btn btn-outline-primary btn-sm">Digital Correlation Coefficient</button>
-            <button type="button" value="zdr" class="btn btn-outline-primary btn-sm">Digital Differential Reflectivity</button>
+        </div>
+        <div class="btn-group-vertical productBtnGroup">
+            <br>
+            <div>Digital</div>
+            <button type="button" value="rho" class="btn btn-outline-primary btn-sm">Correlation Coefficient</button>
+            <button type="button" value="zdr" class="btn btn-outline-primary btn-sm">Differential Reflectivity</button>
             <button type="button" value="sw " class="btn btn-outline-primary btn-sm">Base Spectrum Width (124 nmi)</button>
             <button type="button" value="hyc"  class="btn btn-outline-primary btn-sm">Hydrometer Classification</button> <!-- hyc -->
             <button type="button" value="hhc"  class="btn btn-outline-primary btn-sm">Hybrid Hydrometer Classification</button> <!-- hhc -->
-            <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
             <button type="button" value="lowres-ref" class="btn btn-outline-primary btn-sm">Digital Base Reflectivity</button> <!-- ref -->
             <button type="button" value="lowres-vel" class="btn btn-outline-primary btn-sm">Digital Base Velocity</button>
             <button type="button" value="vil"  class="btn btn-outline-primary btn-sm">Vertically Integrated Liquid</button> <!-- vil -->
+        </div>
+        <div class="btn-group-vertical productBtnGroup">
+            <br>
+            <div>Classic</div>
+            <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
         </div>
         <br>
         <div class="btn-group-vertical productBtnGroup">
@@ -828,10 +836,10 @@
             var filenamePrefix = `${sta}_${pro}_${year}_${month}_${day}`;
             var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
             var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
-            //console.log(fullURL)
             $.get(phpProxy + fullURL, function (data) {
                 var dataToWorkWith = JSON.stringify(xmlToJson(data)).replace(/#/g, 'HASH')
                 dataToWorkWith = JSON.parse(dataToWorkWith)
+                console.log(dataToWorkWith)
                 var contentsBase = dataToWorkWith.ListBucketResult.Contents;
                 var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
