@@ -285,11 +285,11 @@
         <div class="dropdown-center" id="tiltDropdown">
             <button class="btn btn-secondary btn-sm dropdown-toggle" id="tiltDropdownBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false" value="tilt1">
                 Tilt 1</button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
+            <ul class="dropdown-menu" id="tiltMenu">
+                <!-- <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
                 <li><a class="dropdown-item" href="#" value="tilt2">Tilt 2</a></li>
                 <li><a class="dropdown-item" href="#" value="tilt3">Tilt 3</a></li>
-                <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li>
+                <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li> -->
             </ul>
         </div>
         <br>
@@ -383,6 +383,27 @@
                 isDevelopmentMode = true;
             }
         }
+
+        function listTilts(tiltsArr) {
+            //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
+            $('#tiltMenu').empty();
+            for (key in tiltsArr) {
+                var anchorElem = document.createElement('a');
+                anchorElem.className = 'dropdown-item';
+                anchorElem.href = '#';
+                anchorElem.setAttribute('value', `tilt${tiltsArr[key]}`);
+                anchorElem.innerHTML = `Tilt ${tiltsArr[key]}`
+
+                var lineElem = document.createElement('li');
+                lineElem.appendChild(anchorElem)
+                //console.log(lineElem)
+                document.getElementById('tiltMenu').appendChild(lineElem);
+                if (key == 0) {
+                    document.getElementById('tiltDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
+                }
+            }
+        }
+        listTilts([1, 2, 3, 4]);
 
         function logToModal(textContent) {
             console.log(textContent);
@@ -979,6 +1000,20 @@
                 'sti': '58sti',
             },
         }
+        var numOfTiltsObj = {
+            'ref': [1, 2, 3, 4],
+            'vel': [1, 2],
+            'lowres-ref': [1, 2, 3, 4],
+            'lowres-vel': [1, 2, 3, 4],
+            'rho': [1, 2, 3, 4],
+            'zdr': [1, 2, 3, 4],
+            'sw ': [1],
+            'hhc': [1],
+            'hyc': [1, 2, 3, 4],
+            'srv': [1, 2, 3, 4],
+            'vil': [1],
+            'sti': [1],
+        }
 
         var allL2Btns = [
             'l2-ref',
@@ -988,7 +1023,23 @@
             'l2-zdr',
             'l2-sw '
         ];
+        function tiltClickFunc() {
+            document.getElementById('tiltDropdownBtn').innerHTML = this.innerHTML;
+            $('#tiltDropdownBtn').attr('value', $(this).attr('value'))
+
+            if (document.getElementById('curProd').innerHTML != '') {
+                loadLatestFile(
+                    'l3',
+                    document.getElementById('curProd').innerHTML,
+                    $(this).attr('value'),
+                    $('#stationInp').val().toLowerCase()
+                );
+            }
+        }
         $('.productBtnGroup button').on('click', function() {
+            listTilts(numOfTiltsObj[this.value]);
+            $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
+            $('#tiltDropdown a').on('click', tiltClickFunc);
             //$('#productInput').val()
             var initInnerHTML = this.innerHTML;
             if (!initInnerHTML.includes('span')) {
@@ -1016,19 +1067,6 @@
                 loadLatestFile('l2', this.value);
             }
         });
-        $('#tiltDropdown a').on('click', function() {
-            document.getElementById('tiltDropdownBtn').innerHTML = this.innerHTML;
-            $('#tiltDropdownBtn').attr('value', $(this).attr('value'))
-
-            if (document.getElementById('curProd').innerHTML != '') {
-                loadLatestFile(
-                    'l3',
-                    document.getElementById('curProd').innerHTML,
-                    $(this).attr('value'),
-                    $('#stationInp').val().toLowerCase()
-                );
-            }
-        })
 
         var statMarkerArr = [];
         function showStations() {
