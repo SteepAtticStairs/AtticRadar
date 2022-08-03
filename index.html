@@ -208,7 +208,11 @@
     <div id="fileVersion" style="display: none"></div>
     <div id="level3json" style="display: none"></div>
     <div id="decodedRadarDataURL" style="display: none"></div>
+
     <div id="allStormTracksLayers" style="display: none"></div>
+    <div id="allMesocycloneLayers" style="display: none"></div>
+    <div id="allTornadoLayers" style="display: none"></div>
+
     <div id="curProd" style="display: none"></div>
     <div id="prevStat" style="display: none"></div>
     <div id="testEventElem" style="display: none"></div>
@@ -756,13 +760,16 @@
                         // LWX_N0Q_2022_04_18_15_21_24
                         // KOUN_SDUS54_N0STLX_201305200301
                         // KCRP_SDUS54_N0UCRP_201708252357
+                        // KCRP_SDUS54_N0QCRP_201708252357
                         // KOUN_SDUS54_DVLTLX_201305200301
                         // KOUN_SDUS34_NSTTLX_201305200301
 
                         // LOT_NMD_2021_06_21_04_22_17
                         // LOT_NMD_2021_06_21_04_27_31
-                        // ESX_NMD_2022_07_31_21_50_40
-                        var fileToLoad = 'LOT_NMD_2021_06_21_04_22_17';
+                        // KILX_NTV
+                        // ILX_N0Q_2021_07_15_22_19_15
+
+                        var fileToLoad = 'KILX_NTV';
                         loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
                     } else if ($('#testFile3Thing').hasClass('icon-selected')) {
                         $('#testFile3Thing').removeClass('icon-selected');
@@ -1242,6 +1249,22 @@
                     'circle-radius': 4,
                     'circle-stroke-width': 2,
                     'circle-color': 'blue',
+                    'circle-stroke-color': 'white',
+                }
+            } else if (gjType == 'greenCircle') {
+                type = 'circle';
+                styling = {
+                    'circle-radius': 4,
+                    'circle-stroke-width': 2,
+                    'circle-color': 'green',
+                    'circle-stroke-color': 'white',
+                }
+            } else if (gjType == 'yellowCircle') {
+                type = 'circle';
+                styling = {
+                    'circle-radius': 4,
+                    'circle-stroke-width': 2,
+                    'circle-color': 'yellow',
                     'circle-stroke-color': 'white',
                 }
             } else if (gjType == 'lineCircleEdge') {

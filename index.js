@@ -302,7 +302,44 @@ document.addEventListener('loadFile', function(event) {
 
                 document.getElementById('radDate').innerHTML = finalRadarDateTime;
 
-                if (l3rad.textHeader.type == "NMD") {
+                if (l3rad.textHeader.type == "NTV") {
+                    var tornadoLayersArr = [];
+                    var geojsonPointTemplate = {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': 'he'
+                        }
+                    }
+                    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+                        var staLat = data[theFileStation][1];
+                        var staLng = data[theFileStation][2];
+
+                        var tornadoObj = l3rad.formatted.tvs;
+                        console.log(tornadoObj)
+                        var tornadoList = Object.keys(tornadoObj);
+
+                        function loadTornado(identifier) {
+                            // store all map layers being added to be able to manipulate later
+                            tornadoLayersArr.push(identifier)
+                            // reset geojson coordinates
+                            geojsonPointTemplate.geometry.coordinates = [];
+
+                            // current storm track
+                            var curTVS = tornadoObj[identifier];
+                            var curTVSCoords = findTerminalCoordinates(staLat, staLng, curTVS.az, curTVS.range);
+                            // push the initial coordinate point - we do not know if the current track is a line or a point yet
+                            geojsonPointTemplate.geometry.coordinates = [curTVSCoords.longitude, curTVSCoords.latitude];
+
+                            setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
+                        }
+                        for (key in tornadoList) {
+                            loadTornado(tornadoList[key])
+                        }
+                        document.getElementById('allTornadoLayers').innerHTML = JSON.stringify(tornadoLayersArr);
+                    });
+                } else if (l3rad.textHeader.type == "NMD") {
                     var mesocycloneLayersArr = [];
                     var geojsonPointTemplate = {
                         'type': 'Feature',
@@ -317,25 +354,27 @@ document.addEventListener('loadFile', function(event) {
                         var staLng = data[theFileStation][2];
 
                         var mesocycloneObj = l3rad.formatted.mesocyclone;
-                        console.log(mesocycloneObj)
-                        var mesocycloneList = Object.keys(mesocycloneObj);
+                        if (mesocycloneObj != undefined) {
+                            var mesocycloneList = Object.keys(mesocycloneObj);
 
-                        function loadMesocyclone(identifier) {
-                            // store all map layers being added to be able to manipulate later
-                            mesocycloneLayersArr.push(identifier)
-                            // reset geojson coordinates
-                            geojsonPointTemplate.geometry.coordinates = [];
+                            function loadMesocyclone(identifier) {
+                                // store all map layers being added to be able to manipulate later
+                                mesocycloneLayersArr.push(identifier)
+                                // reset geojson coordinates
+                                geojsonPointTemplate.geometry.coordinates = [];
 
-                            // current storm track
-                            var curMC = mesocycloneObj[identifier];
-                            var curMCCoords = findTerminalCoordinates(staLat, staLng, curMC.az, curMC.ran);
-                            // push the initial coordinate point - we do not know if the current track is a line or a point yet
-                            geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
+                                // current storm track
+                                var curMC = mesocycloneObj[identifier];
+                                var curMCCoords = findTerminalCoordinates(staLat, staLng, curMC.az, curMC.ran);
+                                // push the initial coordinate point - we do not know if the current track is a line or a point yet
+                                geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
 
-                            setGeojsonLayer(geojsonPointTemplate, 'circle', identifier)
-                        }
-                        for (key in mesocycloneList) {
-                            loadMesocyclone(mesocycloneList[key])
+                                setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
+                            }
+                            for (key in mesocycloneList) {
+                                loadMesocyclone(mesocycloneList[key])
+                            }
+                            document.getElementById('allMesocycloneLayers').innerHTML = JSON.stringify(mesocycloneLayersArr);
                         }
                     });
                 } else if (l3rad.textHeader.type == "NST") {
