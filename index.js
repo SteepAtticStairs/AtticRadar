@@ -195,8 +195,18 @@ document.addEventListener('loadFile', function(event) {
                     $(curElemIter).removeClass('btn-outline-secondary');
                 }
                 document.getElementById('loadl2').style.display = 'none';
-                $('.productBtnGroup button').on('click', function() {
+                $('.level2btns button').off();
+                console.log('turned off listener')
+                $('.level2btns button').on('click', function() {
+                    console.log(this.value)
                     removeMapLayer('baseReflectivity');
+                    if (this.value == 'load') {
+                        getLatestFile($('#stationInp').val(), function(fileName, y, m, d, s) {
+                            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+                            console.log(phpProxy + individualFileURL)
+                            loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+                        });
+                    }
                     if (this.value == 'l2-ref') {
                         const level2Plot = plot(l2rad, 'REF', {
                             elevations: 1,
@@ -224,6 +234,7 @@ document.addEventListener('loadFile', function(event) {
                         });
                     }
                 });
+                console.log('turned on listener i think')
                 $('#productInput').on('change', function() {
                     removeMapLayer('baseReflectivity');
                     if ($('#productInput').val() == 'REF') {
