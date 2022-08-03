@@ -317,15 +317,16 @@
             <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
         </div>
         <br>
-        <div class="btn-group-vertical productBtnGroup">
+        <div class="btn-group-vertical productBtnGroup level2btns">
             <br>
             <div>Level 2</div>
-            <button type="button" value="l2-ref" class="btn btn-outline-primary btn-sm">Base Reflectivity</button>
-            <button type="button" value="l2-vel" class="btn btn-outline-primary btn-sm">Base Velocity</button>
-            <button type="button" value="l2-rho" class="btn btn-outline-primary btn-sm">Correlation Coefficient</button>
-            <button type="button" value="l2-phi" class="btn btn-outline-primary btn-sm">Differential Phase Shift</button>
-            <button type="button" value="l2-zdr" class="btn btn-outline-primary btn-sm">Differential Reflectivity</button>
-            <button type="button" value="l2-sw " class="btn btn-outline-primary btn-sm">Spectrum Width</button>
+            <button type="button" value="load" id="loadl2" class="btn btn-outline-primary btn-sm">Load Level 2 File</button>
+            <button type="button" value="l2-ref" id="l2-ref" class="btn btn-outline-secondary btn-sm" disabled>Base Reflectivity</button>
+            <button type="button" value="l2-vel" id="l2-vel" class="btn btn-outline-secondary btn-sm" disabled>Base Velocity</button>
+            <button type="button" value="l2-rho" id="l2-rho" class="btn btn-outline-secondary btn-sm" disabled>Correlation Coefficient</button>
+            <button type="button" value="l2-phi" id="l2-phi" class="btn btn-outline-secondary btn-sm" disabled>Differential Phase Shift</button>
+            <button type="button" value="l2-zdr" id="l2-zdr" class="btn btn-outline-secondary btn-sm" disabled>Differential Reflectivity</button>
+            <button type="button" value="l2-sw " id="l2-sw " class="btn btn-outline-secondary btn-sm" disabled>Spectrum Width</button>
         </div>
     </div>
 
@@ -842,7 +843,7 @@
                 }
                 callbck(latestFileName, year, month, day, stationToGet);
             })
-        }
+        };
 
         function getLatestL3File(sta, pro, cb) {
             document.getElementById('spinnerParent').style.display = 'block';
@@ -1037,34 +1038,44 @@
             }
         }
         $('.productBtnGroup button').on('click', function() {
-            listTilts(numOfTiltsObj[this.value]);
-            $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
-            $('#tiltDropdown a').on('click', tiltClickFunc);
-            //$('#productInput').val()
-            var initInnerHTML = this.innerHTML;
-            if (!initInnerHTML.includes('span')) {
-                this.innerHTML = `<span class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true"></span>&nbsp;&nbsp;` + initInnerHTML;
-                var thisBtn = this;
-                document.getElementById('testEventElem').addEventListener('DOMSubtreeModified', function() {
-                    thisBtn.innerHTML = initInnerHTML;
-                }, {once : true})
-            }
-            $('.btn-outline-success').each(function() {
-                $(this).removeClass('btn-outline-success');
-                $(this).addClass('btn-outline-primary');
-            });
-            $(this).removeClass('btn-outline-primary');
-            $(this).addClass('btn-outline-success');
-            document.getElementById('curProd').innerHTML = this.value;
-            if (!allL2Btns.includes(this.value)) {
-                loadLatestFile(
-                    'l3',
-                    this.value,
-                    $('#tiltDropdownBtn').attr('value'),
-                    $('#stationInp').val().toLowerCase()
-                );
+            if (this.value == 'load') {
+                getLatestFile($('#stationInp').val(), function(fileName, y, m, d, s) {
+                    var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+                    console.log(phpProxy + individualFileURL)
+                    loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+                });
+            } else if (this.value.includes('l2')) {
+                console.log('level twoo')
             } else {
-                loadLatestFile('l2', this.value);
+                listTilts(numOfTiltsObj[this.value]);
+                $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
+                $('#tiltDropdown a').on('click', tiltClickFunc);
+                //$('#productInput').val()
+                var initInnerHTML = this.innerHTML;
+                if (!initInnerHTML.includes('span')) {
+                    this.innerHTML = `<span class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true"></span>&nbsp;&nbsp;` + initInnerHTML;
+                    var thisBtn = this;
+                    document.getElementById('testEventElem').addEventListener('DOMSubtreeModified', function() {
+                        thisBtn.innerHTML = initInnerHTML;
+                    }, {once : true})
+                }
+                $('.btn-outline-success').each(function() {
+                    $(this).removeClass('btn-outline-success');
+                    $(this).addClass('btn-outline-primary');
+                });
+                $(this).removeClass('btn-outline-primary');
+                $(this).addClass('btn-outline-success');
+                document.getElementById('curProd').innerHTML = this.value;
+                if (!allL2Btns.includes(this.value)) {
+                    loadLatestFile(
+                        'l3',
+                        this.value,
+                        $('#tiltDropdownBtn').attr('value'),
+                        $('#stationInp').val().toLowerCase()
+                    );
+                } else {
+                    loadLatestFile('l2', this.value);
+                }
             }
         });
 
