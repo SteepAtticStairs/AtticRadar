@@ -39,6 +39,13 @@ setTimeout(function() {
     //const level3Plot = plotAndData(file);
 }, 1000)
 
+if (require('./misc/detectmobilebrowser')) {
+    console.log('yup, its mobile');
+    document.getElementById('level2btns').style.display = 'none';
+} else {
+    console.log('nope, not mobile');
+}
+
 document.addEventListener('loadFile', function(event) {
     //logToModal('starting')
     document.getElementById('spinnerParent').style.display = 'block';
