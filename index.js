@@ -7,61 +7,20 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const fs = require('fs');
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
+const ut = require('./plotData/utils');
+
 const l3plot = require('./plotData/level3/draw');
-const loadL2Listeners = require('./plotData/level2/eventListeners')
+const loadL2Listeners = require('./plotData/level2/eventListeners');
 
-function toBuffer(ab) {
-    const buf = Buffer.alloc(ab.byteLength);
-    const view = new Uint8Array(ab);
-    for (let i = 0; i < buf.length; ++i) {
-        buf[i] = view[i];
-    }
-    return buf;
-}
+const parsePlotTornado = require('./plotData/level3/tornadoVortexSignature');
+const parsePlotMesocyclone = require('./plotData/level3/mesocycloneDetection');
+const parsePlotStormTracks = require('./plotData/level3/stormTracks');
 
-function printFancyTime(dateObj, tz) {
-    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
-}
+
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
-}
-function msToTime(s) {
-    // Pad to 2 or 3 digits, default is 2
-    function pad(n, z) {
-        z = z || 2;
-        return ('00' + n).slice(-z);
-    }
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = (s - mins) / 60;
-    return {
-        'hours': pad(hrs),
-        'minutes': pad(mins),
-        'seconds': pad(secs),
-        'milliseconds': pad(ms, 3),
-    }
-    //return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
-}
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-}
-function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
-    var metersInNauticalMiles = 1852;
-    var startPoint = { latitude: startLat, longitude: startLng };
-    var distanceMeters = distanceNM * metersInNauticalMiles;
-    var bearing = bearingDEG;
-    const destination = geolib.computeDestinationPoint(
-        startPoint,
-        distanceMeters,
-        bearing 
-    );
-    return destination;
 }
 document.getElementById('fileInput').addEventListener('input', function() {
     // Create the event
@@ -96,7 +55,7 @@ document.addEventListener('loadFile', function(event) {
                 var wholeOrPart = event.detail[2];
                 document.getElementById('elevStuff').style.display = 'block';
                 document.getElementById('extraStuff').style.display = 'block';
-                var l2rad = new Level2Radar(toBuffer(this.result), {wholeOrPart})
+                var l2rad = new Level2Radar(ut.toBuffer(this.result), {wholeOrPart})
                 console.log(l2rad)
                 var theFileVersion = l2rad.header.version;
                 document.getElementById('fileVersion').innerHTML = theFileVersion;
@@ -128,11 +87,11 @@ document.addEventListener('loadFile', function(event) {
                     for (var key in elevAngles) {
                         if (theFileVersion == "06") {
                             if (preferredWaveformUsage[elevAngles[key][1]].includes(displayedProduct)) {
-                                document.getElementById('elevInput').add(new Option(round(elevAngles[key][0], 1), elevs[key]));
+                                document.getElementById('elevInput').add(new Option(ut.round(elevAngles[key][0], 1), elevs[key]));
                             }
                         } else {
                             if (elevAngles[key][1].includes(displayedProduct)) {
-                                document.getElementById('elevInput').add(new Option(round(elevAngles[key][0], 1), elevs[key]));
+                                document.getElementById('elevInput').add(new Option(ut.round(elevAngles[key][0], 1), elevs[key]));
                             }
                         }
                     }
@@ -162,20 +121,20 @@ document.addEventListener('loadFile', function(event) {
                 var theFileDate = l2rad.header.modified_julian_date;
                 var theFileTime = l2rad.header.milliseconds;
                 var fileDateObj = new Date(0).addDays(theFileDate);
-                var fileHours = msToTime(theFileTime).hours;
-                var fileMinutes = msToTime(theFileTime).minutes;
-                var fileSeconds = msToTime(theFileTime).seconds;
+                var fileHours = ut.msToTime(theFileTime).hours;
+                var fileMinutes = ut.msToTime(theFileTime).minutes;
+                var fileSeconds = ut.msToTime(theFileTime).seconds;
                 fileDateObj.setUTCHours(fileHours);
                 fileDateObj.setUTCMinutes(fileMinutes);
                 fileDateObj.setUTCSeconds(fileSeconds);
-                var finalRadarDateTime = printFancyTime(fileDateObj, "UTC");
+                var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
                 document.getElementById('radDate').innerHTML = finalRadarDateTime;
 
                 loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
                 console.log('level 3 file')
-                var l3rad = Level3Radar(toBuffer(this.result))
+                var l3rad = Level3Radar(ut.toBuffer(this.result))
                 console.log(l3rad)
 
                 //showPlotBtn();
@@ -193,189 +152,22 @@ document.addEventListener('loadFile', function(event) {
                 var theFileDate = l3rad.messageHeader.julianDate;
                 var theFileTime = l3rad.messageHeader.seconds * 1000;
                 var fileDateObj = new Date(0).addDays(theFileDate);
-                var fileHours = msToTime(theFileTime).hours;
-                var fileMinutes = msToTime(theFileTime).minutes;
-                var fileSeconds = msToTime(theFileTime).seconds;
+                var fileHours = ut.msToTime(theFileTime).hours;
+                var fileMinutes = ut.msToTime(theFileTime).minutes;
+                var fileSeconds = ut.msToTime(theFileTime).seconds;
                 fileDateObj.setUTCHours(fileHours);
                 fileDateObj.setUTCMinutes(fileMinutes);
                 fileDateObj.setUTCSeconds(fileSeconds);
-                var finalRadarDateTime = printFancyTime(fileDateObj, "UTC");
+                var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
                 document.getElementById('radDate').innerHTML = finalRadarDateTime;
 
                 if (l3rad.textHeader.type == "NTV") {
-                    var tornadoLayersArr = [];
-                    var geojsonPointTemplate = {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': 'he'
-                        }
-                    }
-                    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-                        var staLat = data[theFileStation][1];
-                        var staLng = data[theFileStation][2];
-
-                        var tornadoObj = l3rad.formatted.tvs;
-                        console.log(tornadoObj)
-                        var tornadoList = Object.keys(tornadoObj);
-
-                        function loadTornado(identifier) {
-                            // store all map layers being added to be able to manipulate later
-                            tornadoLayersArr.push(identifier)
-                            // reset geojson coordinates
-                            geojsonPointTemplate.geometry.coordinates = [];
-
-                            // current storm track
-                            var curTVS = tornadoObj[identifier];
-                            var curTVSCoords = findTerminalCoordinates(staLat, staLng, curTVS.az, curTVS.range);
-                            // push the initial coordinate point - we do not know if the current track is a line or a point yet
-                            geojsonPointTemplate.geometry.coordinates = [curTVSCoords.longitude, curTVSCoords.latitude];
-
-                            setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
-                        }
-                        for (key in tornadoList) {
-                            loadTornado(tornadoList[key])
-                        }
-                        document.getElementById('allTornadoLayers').innerHTML = JSON.stringify(tornadoLayersArr);
-                    });
+                    parsePlotTornado(l3rad, theFileStation);
                 } else if (l3rad.textHeader.type == "NMD") {
-                    var mesocycloneLayersArr = [];
-                    var geojsonPointTemplate = {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': 'he'
-                        }
-                    }
-                    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-                        var staLat = data[theFileStation][1];
-                        var staLng = data[theFileStation][2];
-
-                        var mesocycloneObj = l3rad.formatted.mesocyclone;
-                        if (mesocycloneObj != undefined) {
-                            var mesocycloneList = Object.keys(mesocycloneObj);
-
-                            function loadMesocyclone(identifier) {
-                                // store all map layers being added to be able to manipulate later
-                                mesocycloneLayersArr.push(identifier)
-                                // reset geojson coordinates
-                                geojsonPointTemplate.geometry.coordinates = [];
-
-                                // current storm track
-                                var curMC = mesocycloneObj[identifier];
-                                var curMCCoords = findTerminalCoordinates(staLat, staLng, curMC.az, curMC.ran);
-                                // push the initial coordinate point - we do not know if the current track is a line or a point yet
-                                geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
-
-                                setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
-                            }
-                            for (key in mesocycloneList) {
-                                loadMesocyclone(mesocycloneList[key])
-                            }
-                            document.getElementById('allMesocycloneLayers').innerHTML = JSON.stringify(mesocycloneLayersArr);
-                        }
-                    });
+                    parsePlotMesocyclone(l3rad, theFileStation);
                 } else if (l3rad.textHeader.type == "NST") {
-                    var stormTracksLayerArr = [];
-                    // load storm tracking information
-                    var geojsonLineTemplate = {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': []
-                        }
-                    }
-                    var geojsonPointTemplate = {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': []
-                        }
-                    }
-
-                    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-                        var staLat = data[theFileStation][1];
-                        var staLng = data[theFileStation][2];
-
-                        var stormTracks = l3rad.formatted.storms;
-                        console.log(stormTracks)
-                        var stormTracksList = Object.keys(stormTracks);
-
-                        function loadStormTrack(identifier) {
-                            // store all map layers being added to be able to manipulate later
-                            stormTracksLayerArr.push(identifier)
-                            // reset geojson coordinates
-                            geojsonLineTemplate.geometry.coordinates = [];
-                            geojsonLineTemplate.geometry.type = 'LineString';
-
-                            // current storm track
-                            var curST = stormTracks[identifier].current;
-                            var curSTCoords = findTerminalCoordinates(staLat, staLng, curST.nm, curST.deg);
-                            // push the initial coordinate point - we do not know if the current track is a line or a point yet
-                            geojsonLineTemplate.geometry.coordinates.push([curSTCoords.longitude, curSTCoords.latitude])
-
-                            // future storm track (forecast)
-                            var futureST = stormTracks[identifier].forecast;
-                            var isLine;
-                            // if the first forecast value for the current track is null, there is no line track - it is a point
-                            if (futureST[0] == null) {
-                                isLine = false;
-                            } else if (futureST[0] != null) {
-                                isLine = true;
-                            }
-                            if (isLine) {
-                                for (key in futureST) {
-                                    // the current index in the futureST variable being looped through
-                                    var indexedFutureST = futureST[key];
-                                    // check if the value is null, in which case the storm track is over
-                                    if (indexedFutureST != null) {
-                                        var indexedFutureSTCoords = findTerminalCoordinates(staLat, staLng, indexedFutureST.nm, indexedFutureST.deg);
-                                        // push the current index point to the line geojson object
-                                        geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
-                                        // add a circle for each edge on a storm track line
-                                        geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
-                                        setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
-                                        stormTracksLayerArr.push(identifier + '_pointEdge' + key)
-                                    }
-                                }
-                                // push the finished geojson line object to a function that adds to the map
-                                setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
-                                // adds a blue circle at the start of the storm track
-                                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
-                                geojsonLineTemplate.geometry.type = 'Point';
-                                setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
-                                stormTracksLayerArr.push(identifier + '_point')
-                            } else if (!isLine) {
-                                // if the storm track does not have a forecast, display a Point geojson
-                                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
-                                geojsonLineTemplate.geometry.type = 'Point';
-                                setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
-                            }
-                        }
-                        // Z0 = line, R1 = point
-                        for (key in stormTracksList) {
-                            loadStormTrack(stormTracksList[key])
-                        }
-                        document.getElementById('allStormTracksLayers').innerHTML = JSON.stringify(stormTracksLayerArr);
-                        var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
-                        var stLayers = stLayersText.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
-                        // setting layer orders
-                        for (key in stLayers) {
-                            if (stLayers[key].includes('_pointEdge')) {
-                                moveMapLayer(stLayers[key])
-                            }
-                        }
-                        for (key in stLayers) {
-                            if (stLayers[key].includes('_point')) {
-                                moveMapLayer(stLayers[key])
-                            }
-                        }
-                    });
+                    parsePlotStormTracks(l3rad, theFileStation);
                 } else {
                     const level3Plot = l3plot(l3rad);
                 }
