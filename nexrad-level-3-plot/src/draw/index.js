@@ -63,12 +63,6 @@ const draw = (data, product, _options) => {
 			if (bin === null) return;
 			// see if there's a sample to plot
 			if (!bin) return;
-			// if the product is l3 reflectivity, only push values 0 or greater
-			if (product[0] == "NXQ") {
-				if (bin < 0) {
-					return;
-				}
-			}
 			//ctx.beginPath();
 			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
 			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
