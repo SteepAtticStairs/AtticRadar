@@ -37124,7 +37124,8 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
-const l3plot = require('./plotData/level3/draw')
+const l3plot = require('./plotData/level3/draw');
+const loadL2Listeners = require('./plotData/level2/eventListeners')
 
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
@@ -37288,138 +37289,7 @@ document.addEventListener('loadFile', function(event) {
 
                 document.getElementById('radDate').innerHTML = finalRadarDateTime;
 
-                $('.reflPlotButton').on('click', function() {
-                    if ($('#reflPlotThing').hasClass('icon-selected')) {
-                        console.log('plot reflectivity data button clicked');
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                //$('.reflPlotButton').trigger('click');
-                //console.log('initial reflectivity plot');
-                //displayElevations('REF');
-                var btnsArr = [
-                    "l2-ref",
-                    "l2-vel",
-                    "l2-rho",
-                    "l2-phi",
-                    "l2-zdr",
-                    "l2-sw "
-                ]
-                for (key in btnsArr) {
-                    var curElemIter = document.getElementById(btnsArr[key]);
-                    curElemIter.disabled = false;
-                    $(curElemIter).addClass('btn-outline-primary');
-                    $(curElemIter).removeClass('btn-outline-secondary');
-                }
-                document.getElementById('loadl2').style.display = 'none';
-                $('.level2btns button').off();
-                console.log('turned off listener')
-                $('.level2btns button').on('click', function() {
-                    console.log(this.value)
-                    removeMapLayer('baseReflectivity');
-                    if (this.value == 'load') {
-                        getLatestFile($('#stationInp').val(), function(fileName, y, m, d, s) {
-                            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-                            console.log(phpProxy + individualFileURL)
-                            loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
-                        });
-                    }
-                    if (this.value == 'l2-ref') {
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-vel') {
-                        const level2Plot = plot(l2rad, 'VEL', {
-                            elevations: 2,
-                        });
-                    } else if (this.value == 'l2-rho') {
-                        const level2Plot = plot(l2rad, 'RHO', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-phi') {
-                        const level2Plot = plot(l2rad, 'PHI', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-zdr') {
-                        const level2Plot = plot(l2rad, 'ZDR', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-sw ') {
-                        displayElevations('SW ');
-                        const level2Plot = plot(l2rad, 'SW ', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                });
-                console.log('turned on listener i think')
-                $('#productInput').on('change', function() {
-                    removeMapLayer('baseReflectivity');
-                    if ($('#productInput').val() == 'REF') {
-                        document.getElementById('extraStuff').style.display = 'block';
-                        displayElevations('REF');
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'VEL') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('VEL');
-                        const level2Plot = plot(l2rad, 'VEL', {
-                            elevations: 2,
-                        });
-                    } else if ($('#productInput').val() == 'RHO') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('RHO');
-                        const level2Plot = plot(l2rad, 'RHO', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'PHI') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('PHI');
-                        const level2Plot = plot(l2rad, 'PHI', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'ZDR') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('ZDR');
-                        const level2Plot = plot(l2rad, 'ZDR', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'SW ') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('SW ');
-                        const level2Plot = plot(l2rad, 'SW ', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                $('#elevInput').on('change', function() {
-                    if ($('#reflPlotThing').hasClass('icon-selected')) {
-                        removeMapLayer('baseReflectivity');
-                        //$("#settingsDialog").dialog('close');
-                        const level2Plot = plot(l2rad, $('#productInput').val(), {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                $('#shouldLowFilter').on('change', function() {
-                    if ($('#reflPlotThing').hasClass('icon-selected')) {
-                        removeMapLayer('baseReflectivity');
-                        //$("#settingsDialog").dialog('close');
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                /*const level2Plot = plot(l2rad, 'REF', {
-                    elevations: 1,
-                    background: 'rgba(0, 0, 0, 0)',
-                    //size: 500,
-                    //cropTo: 500,
-                    dpi: $('#userDPI').val(),
-                });
-                console.log('dpi set to ' + $('#userDPI').val())*/
+                loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
                 console.log('level 3 file')
                 var l3rad = Level3Radar(toBuffer(this.result))
@@ -37666,7 +37536,7 @@ document.getElementById('fileThatWorks').addEventListener('click', function() {
     })
     .catch(err => console.error(err));*/
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./nexrad-level-2-data/src":239,"./nexrad-level-2-plot/src":252,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":243,"./nexrad-level-3-data/src":263,"./nexrad-level-3-plot/src":312,"./plotData/level3/draw":333,"buffer":71}],228:[function(require,module,exports){
+},{"./nexrad-level-2-data/src":239,"./nexrad-level-2-plot/src":252,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":243,"./nexrad-level-3-data/src":263,"./nexrad-level-3-plot/src":312,"./plotData/level2/eventListeners":333,"./plotData/level3/draw":334,"buffer":71}],228:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -39240,6 +39110,8 @@ const downSample = require('./preprocess/downsample');
 const indexProduct = require('./preprocess/indexproduct');
 const rrle = require('./preprocess/rrle');
 
+const drawRadarShape = require('../../../plotData/drawToMap');
+
 // names of data structures keyed to product name
 const dataNames = {
 	REF: 'reflect',
@@ -39531,7 +39403,7 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"./palettes":244,"./palettes/ref":245,"./palettes/vel":246,"./palettize":247,"./preprocess/downsample":248,"./preprocess/filterproduct":249,"./preprocess/indexproduct":250,"./preprocess/rrle":251,"canvas":324}],243:[function(require,module,exports){
+},{"../../../plotData/drawToMap":332,"./palettes":244,"./palettes/ref":245,"./palettes/vel":246,"./palettize":247,"./preprocess/downsample":248,"./preprocess/filterproduct":249,"./preprocess/indexproduct":250,"./preprocess/rrle":251,"canvas":324}],243:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
 },{}],244:[function(require,module,exports){
@@ -44799,7 +44671,73 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"./calculatePolygons":331,"./paletteTooltip":334,"./stormTracking":335}],333:[function(require,module,exports){
+},{"./calculatePolygons":331,"./paletteTooltip":335,"./stormTracking":336}],333:[function(require,module,exports){
+const { plot } = require('../../nexrad-level-2-plot/src');
+
+function loadL2Listeners(l2rad, displayElevations) {
+    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+    //$('.reflPlotButton').trigger('click');
+    //console.log('initial reflectivity plot');
+    //displayElevations('REF');
+    var btnsArr = [
+        "l2-ref",
+        "l2-vel",
+        "l2-rho",
+        "l2-phi",
+        "l2-zdr",
+        "l2-sw "
+    ]
+    for (key in btnsArr) {
+        var curElemIter = document.getElementById(btnsArr[key]);
+        curElemIter.disabled = false;
+        $(curElemIter).addClass('btn-outline-primary');
+        $(curElemIter).removeClass('btn-outline-secondary');
+    }
+    document.getElementById('loadl2').style.display = 'none';
+    $('.level2btns button').off();
+    console.log('turned off listener')
+    $('.level2btns button').on('click', function () {
+        console.log(this.value)
+        removeMapLayer('baseReflectivity');
+        if (this.value == 'load') {
+            getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+                var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+                console.log(phpProxy + individualFileURL)
+                loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+            });
+        }
+        if (this.value == 'l2-ref') {
+            const level2Plot = plot(l2rad, 'REF', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-vel') {
+            const level2Plot = plot(l2rad, 'VEL', {
+                elevations: 2,
+            });
+        } else if (this.value == 'l2-rho') {
+            const level2Plot = plot(l2rad, 'RHO', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-phi') {
+            const level2Plot = plot(l2rad, 'PHI', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-zdr') {
+            const level2Plot = plot(l2rad, 'ZDR', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-sw ') {
+            displayElevations('SW ');
+            const level2Plot = plot(l2rad, 'SW ', {
+                elevations: parseInt($('#elevInput').val()),
+            });
+        }
+    });
+    console.log('turned on listener i think')
+}
+
+module.exports = loadL2Listeners;
+},{"../../nexrad-level-2-plot/src":252}],334:[function(require,module,exports){
 const drawRadarShape = require('../drawToMap');
 
 function draw(data) {
@@ -44913,7 +44851,7 @@ function draw(data) {
 }
 
 module.exports = draw
-},{"../drawToMap":332}],334:[function(require,module,exports){
+},{"../drawToMap":332}],335:[function(require,module,exports){
 function initPaletteTooltip(produc, colortcanvas) {
     var hycObj = {
         0: 'ND: Below Threshold',
@@ -44968,7 +44906,7 @@ function initPaletteTooltip(produc, colortcanvas) {
 module.exports = {
     initPaletteTooltip
 }
-},{}],335:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 function loadAllStormTrackingStuff() {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {

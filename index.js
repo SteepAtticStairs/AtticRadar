@@ -7,7 +7,8 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const fs = require('fs');
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
-const l3plot = require('./plotData/level3/draw')
+const l3plot = require('./plotData/level3/draw');
+const loadL2Listeners = require('./plotData/level2/eventListeners')
 
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
@@ -171,138 +172,7 @@ document.addEventListener('loadFile', function(event) {
 
                 document.getElementById('radDate').innerHTML = finalRadarDateTime;
 
-                $('.reflPlotButton').on('click', function() {
-                    if ($('#reflPlotThing').hasClass('icon-selected')) {
-                        console.log('plot reflectivity data button clicked');
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                //$('.reflPlotButton').trigger('click');
-                //console.log('initial reflectivity plot');
-                //displayElevations('REF');
-                var btnsArr = [
-                    "l2-ref",
-                    "l2-vel",
-                    "l2-rho",
-                    "l2-phi",
-                    "l2-zdr",
-                    "l2-sw "
-                ]
-                for (key in btnsArr) {
-                    var curElemIter = document.getElementById(btnsArr[key]);
-                    curElemIter.disabled = false;
-                    $(curElemIter).addClass('btn-outline-primary');
-                    $(curElemIter).removeClass('btn-outline-secondary');
-                }
-                document.getElementById('loadl2').style.display = 'none';
-                $('.level2btns button').off();
-                console.log('turned off listener')
-                $('.level2btns button').on('click', function() {
-                    console.log(this.value)
-                    removeMapLayer('baseReflectivity');
-                    if (this.value == 'load') {
-                        getLatestFile($('#stationInp').val(), function(fileName, y, m, d, s) {
-                            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-                            console.log(phpProxy + individualFileURL)
-                            loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
-                        });
-                    }
-                    if (this.value == 'l2-ref') {
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-vel') {
-                        const level2Plot = plot(l2rad, 'VEL', {
-                            elevations: 2,
-                        });
-                    } else if (this.value == 'l2-rho') {
-                        const level2Plot = plot(l2rad, 'RHO', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-phi') {
-                        const level2Plot = plot(l2rad, 'PHI', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-zdr') {
-                        const level2Plot = plot(l2rad, 'ZDR', {
-                            elevations: 1,
-                        });
-                    } else if (this.value == 'l2-sw ') {
-                        displayElevations('SW ');
-                        const level2Plot = plot(l2rad, 'SW ', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                });
-                console.log('turned on listener i think')
-                $('#productInput').on('change', function() {
-                    removeMapLayer('baseReflectivity');
-                    if ($('#productInput').val() == 'REF') {
-                        document.getElementById('extraStuff').style.display = 'block';
-                        displayElevations('REF');
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'VEL') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('VEL');
-                        const level2Plot = plot(l2rad, 'VEL', {
-                            elevations: 2,
-                        });
-                    } else if ($('#productInput').val() == 'RHO') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('RHO');
-                        const level2Plot = plot(l2rad, 'RHO', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'PHI') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('PHI');
-                        const level2Plot = plot(l2rad, 'PHI', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'ZDR') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('ZDR');
-                        const level2Plot = plot(l2rad, 'ZDR', {
-                            elevations: 1,
-                        });
-                    } else if ($('#productInput').val() == 'SW ') {
-                        document.getElementById('extraStuff').style.display = 'none';
-                        displayElevations('SW ');
-                        const level2Plot = plot(l2rad, 'SW ', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                $('#elevInput').on('change', function() {
-                    if ($('#reflPlotThing').hasClass('icon-selected')) {
-                        removeMapLayer('baseReflectivity');
-                        //$("#settingsDialog").dialog('close');
-                        const level2Plot = plot(l2rad, $('#productInput').val(), {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                $('#shouldLowFilter').on('change', function() {
-                    if ($('#reflPlotThing').hasClass('icon-selected')) {
-                        removeMapLayer('baseReflectivity');
-                        //$("#settingsDialog").dialog('close');
-                        const level2Plot = plot(l2rad, 'REF', {
-                            elevations: parseInt($('#elevInput').val()),
-                        });
-                    }
-                })
-                /*const level2Plot = plot(l2rad, 'REF', {
-                    elevations: 1,
-                    background: 'rgba(0, 0, 0, 0)',
-                    //size: 500,
-                    //cropTo: 500,
-                    dpi: $('#userDPI').val(),
-                });
-                console.log('dpi set to ' + $('#userDPI').val())*/
+                loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
                 console.log('level 3 file')
                 var l3rad = Level3Radar(toBuffer(this.result))
