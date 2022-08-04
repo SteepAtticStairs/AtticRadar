@@ -1,6 +1,7 @@
 const { createCanvas } = require('canvas');
 const { keys } = require('../../../nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const Palette = require('./palette');
+const plotData = require('../../../plotData/drawToMap');
 
 const DEFAULT_OPTIONS = {
 	// must be a square image
@@ -129,7 +130,7 @@ const draw = (data, product, _options) => {
 		var statLng = data[currentStation][2];
 		// ../../../data/json/KLWX20220623_014344_V06.json
 		// product.abbreviation
-		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+		plotData.drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
 
 		//new mapboxgl.Marker()
 		//    .setLngLat([stationLng, stationLat])
