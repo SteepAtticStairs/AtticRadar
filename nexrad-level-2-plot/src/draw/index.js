@@ -11,7 +11,7 @@ const downSample = require('./preprocess/downsample');
 const indexProduct = require('./preprocess/indexproduct');
 const rrle = require('./preprocess/rrle');
 
-const drawRadarShape = require('../../../plotData/drawToMap');
+const drawRadarShape = require('../../../app/drawToMap');
 
 // names of data structures keyed to product name
 const dataNames = {

@@ -7,14 +7,14 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const fs = require('fs');
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
-const ut = require('./plotData/utils');
+const ut = require('./app/utils');
 
-const l3plot = require('./plotData/level3/draw');
-const loadL2Listeners = require('./plotData/level2/eventListeners');
+const l3plot = require('./app/level3/draw');
+const loadL2Listeners = require('./app/level2/eventListeners');
 
-const parsePlotTornado = require('./plotData/level3/tornadoVortexSignature');
-const parsePlotMesocyclone = require('./plotData/level3/mesocycloneDetection');
-const parsePlotStormTracks = require('./plotData/level3/stormTracks');
+const parsePlotTornado = require('./app/level3/tornadoVortexSignature');
+const parsePlotMesocyclone = require('./app/level3/mesocycloneDetection');
+const parsePlotStormTracks = require('./app/level3/stormTracks');
 
 
 Date.prototype.addDays = function(days) {

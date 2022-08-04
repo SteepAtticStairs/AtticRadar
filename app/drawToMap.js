@@ -17,7 +17,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
     var divider;
     function createTexture(gl) {
-        $.getJSON(`./plotData/products/${produc}.json`, function(data) {
+        $.getJSON(`./app/products/${produc}.json`, function(data) {
             console.log(data);
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
@@ -78,7 +78,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         STstuff.loadAllStormTrackingStuff();
     }
 
-    $.getJSON(`./plotData/products/${produc}.json`, function(data) {
+    $.getJSON(`./app/products/${produc}.json`, function(data) {
         divider = data.divider;
     }).then(function() {
         console.log('NEW!!!!')

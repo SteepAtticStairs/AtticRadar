@@ -37114,6 +37114,938 @@ module.exports = function whichTypedArray(value) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"available-typed-arrays":21,"call-bind/callBound":72,"es-abstract/helpers/getOwnPropertyDescriptor":110,"for-each":113,"has-tostringtag/shams":119,"is-typed-array":155}],227:[function(require,module,exports){
+//onmessage=function(oEvent) {
+function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
+    //var url = oEvent.data[0];
+
+    //250/2
+    //1000/2
+    //var gateRes = 125;
+    //var multiplier = gateRes*2;
+    //var radVersion = oEvent.data[4];
+
+    var gateRes;
+    var multiplier;
+    // different gate resolutions for hi-res vs non hi-res data
+    if (radVersion == "01") {
+        // version 01 is non hi-res data
+        gateRes = 2000;
+        multiplier = gateRes*8;
+    } else if (radVersion == "08") {
+        // version 08 is TDWR
+        gateRes = 150;
+        multiplier = gateRes*1.2;
+    } else if (radVersion == "l3") {
+        // version l3 is level 3 data
+        gateRes = 125;
+        multiplier = gateRes*2;
+    } else if (radVersion == "NXQ" || radVersion == "N0S") {
+        // different resolution for l3 base reflectivity, storm relative velocity
+        gateRes = 500;
+        multiplier = gateRes*2;
+    } else {
+        // everything else (new l2 files - hi-res)
+        gateRes = 125;
+        multiplier = gateRes*2;
+    }
+
+    console.log(gateRes, multiplier)
+
+    function radians(deg) {
+        return (3.141592654/180.)*deg;
+    }
+
+    var radarLat = radians(radarLat); // radians(oEvent.data[2]);
+    var radarLon = radians(radarLon); // radians(oEvent.data[3]);
+    var inv = 180.0/3.141592654;
+    var re = 6371000.0;
+    var phi = radians(phi)//radians(oEvent.data[1]);
+    var h0 = 0.0;
+
+    function calculatePosition(az, range) {
+        var mathaz = radians(90.0 - az);
+        var h = Math.sqrt(Math.pow(range,2.0)+Math.pow(((4./3.)*re+h0),2.0)+2.*range*((4./3.)*re+h0)*Math.sin(phi))-(4./3.)*re;
+        var ca = Math.acos((Math.pow(range,2.0)-Math.pow(re,2.0)-Math.pow(re+h,2.0))/(-2.0*re*(re+h)));
+        var xcart = (ca*re)*Math.cos(mathaz);
+        var ycart = (ca*re)*Math.sin(mathaz);
+        //convert to latitude longitude
+        var rho = Math.sqrt(Math.pow(xcart,2.0)+Math.pow(ycart,2.0));
+        var c = rho/re;
+        var lat = Math.asin(Math.cos(c)*Math.sin(radarLat)+(ycart*Math.sin(c)*Math.cos(radarLat))/(rho))*inv;
+        lon = (radarLon + Math.atan((xcart*Math.sin(c))/(rho*Math.cos(radarLat)*Math.cos(c)-ycart*Math.sin(radarLat)*Math.sin(c))))*inv;
+
+        //console.log(lat, lon)
+
+        mx = (180.0 + lon)/360.0;
+        my = (180. - (180. / 3.141592654 * Math.log(Math.tan(3.141592654 / 4. + lat * 3.141592654 / 360.)))) / 360.; 
+        //console.log(mx,my);
+        return {
+            x:mx,
+            y:my
+        }
+    }
+
+    //function to process file
+    function reqListener() {
+        var json = JSON.parse(this.responseText);
+
+        var azs = json.azimuths;
+        var min = azs[0];
+        var max = azs[azs.length-1];
+
+        for (var key in json.radials) {
+            if (key == "azimuths") continue;
+            key = +key;
+            var values = json.radials[key];
+            var az = azs[key];
+            var leftAz, rightAz, bottomR, topR;
+
+            //case when first az
+            if (key == 0) {
+                //case when crossing 0
+                leftAz = (min + 360 + max)/2;
+                rightAz = (az+azs[key+1])/2;
+            } else if (key == azs.length-1) {
+                //case when crossing 0 the other way
+                leftAz = (az + azs[key-1])/2;
+                rightAz = (min+360+max)/2;
+            } else {
+                //case when nothing to worry about
+                leftAz = (az + azs[key-1])/2;
+                rightAz = (az + azs[key+1])/2;
+            }
+
+            //loop through radar range gates
+            for (var i=0; i<values.length; i++) {
+                bottomR = values[i]*multiplier - gateRes;
+                topR = values[i]*multiplier + gateRes;
+
+                var bl = calculatePosition(leftAz, bottomR);
+                //console.log(bl, bl.x);
+                var tl = calculatePosition(leftAz, topR);
+                var br = calculatePosition(rightAz, bottomR);
+                var tr = calculatePosition(rightAz, topR);
+
+                output.push(
+                    bl.x,//leftAz,
+                    bl.y,//bottomR,
+
+                    tl.x,//leftAz,
+                    tl.y,//topR,
+
+                    br.x,//rightAz,
+                    br.y,//bottomR,
+                    br.x,//rightAz,
+                    br.y,//bottomR,
+
+                    tl.x,//leftAz,
+                    tl.y,//topR,
+                    tr.x,//rightAz,
+                    tr.y//topR
+                )
+                var colorVal = json.values[key][i];
+                colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
+            }
+        }
+        var typedOutput = new Float32Array(output);
+        var colorOutput = new Float32Array(colors);
+        var indexOutput = new Int32Array(indices);
+        callback({"data":typedOutput.buffer,"indices":indexOutput.buffer,"colors":colorOutput.buffer},[typedOutput.buffer,indexOutput.buffer,colorOutput.buffer]);
+        //postMessage({"data":typedOutput.buffer,"indices":indexOutput.buffer,"colors":colorOutput.buffer},[typedOutput.buffer,indexOutput.buffer,colorOutput.buffer]);
+    }
+
+    //get file from server
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", reqListener);
+    oReq.open("GET", url);
+    oReq.send();
+
+    var output = [];
+    //var maxUn = 467000;
+    //var firstGate = 2125;
+    //var startingAngle = 0.0;
+    var indices = [];
+    var colors = [];
+}
+//}
+
+module.exports = {
+    calcPolygons
+}
+},{}],228:[function(require,module,exports){
+const calcPolys = require('./calculatePolygons');
+const STstuff = require('./stormTracking');
+const tt = require('./paletteTooltip');
+
+function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
+    var settings = {};
+    settings["rlat"] = lati;
+    settings["rlon"] = lngi;
+    // phi is elevation
+    settings["phi"] = 0.483395;
+    settings["base"] = jsonObj;
+
+    if (Array.isArray(produc)) {
+        produc = produc[0];
+    }
+
+
+    var divider;
+    function createTexture(gl) {
+        $.getJSON(`./app/products/${produc}.json`, function(data) {
+            console.log(data);
+            var colors = data.colors; //colors["ref"];
+            var levs = data.values; //values["ref"];
+            var colortcanvas = document.getElementById("texturecolorbar");
+            colortcanvas.width = 300;
+            colortcanvas.height = 30;
+            var ctxt = colortcanvas.getContext('2d');
+            ctxt.clearRect(0, 0, colortcanvas.width, colortcanvas.height);
+            var grdt = ctxt.createLinearGradient(0, 0, colortcanvas.width, 0);
+            var cmax = levs[levs.length - 1];
+            var cmin = levs[0];
+            var clen = colors.length;
+
+            for (var i = 0; i < clen; ++i) {
+                grdt.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
+            }
+            ctxt.fillStyle = grdt;
+            ctxt.fillRect(0, 0, colortcanvas.width, colortcanvas.height);
+            imagedata = ctxt.getImageData(0, 0, colortcanvas.width, colortcanvas.height);
+            imagetexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, imagetexture);
+            pageState.imagetexture = imagetexture;
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+            tt.initPaletteTooltip(produc, colortcanvas);
+        });
+    }
+
+    function dataStore() {
+        return {
+            positions: null,
+            indices: null,
+            colors: null
+        }
+    }
+
+    var pageState = dataStore();
+
+    //var myWorker = new Worker('./polygonTest/generateVerticesRadarDemo.js');
+    //myWorker.onmessage = function (oEvent) {
+    function finishItUp(data, indices, colors, layer, geojson) {
+        //var data = new Float32Array(oEvent.data.data);
+        //var indices = new Int32Array(oEvent.data.indices);
+        //var colors = new Float32Array(oEvent.data.colors);
+        var data = new Float32Array(data);
+        var indices = new Int32Array(indices);
+        var colors = new Int32Array(colors);
+        var returnedGeojson = geojson;//oEvent.data.geojson;
+        pageState.positions = data;
+        pageState.indices = indices;
+        pageState.colors = colors;
+        //console.log(Math.max(...[...new Set(colors)]))
+        map.addLayer(layer);
+
+        STstuff.loadAllStormTrackingStuff();
+    }
+
+    $.getJSON(`./app/products/${produc}.json`, function(data) {
+        divider = data.divider;
+    }).then(function() {
+        console.log('NEW!!!!')
+        console.log(divider)
+        //compile shaders
+        var vertexSource = `
+            //x: azimuth
+            //y: range
+            //z: value
+            attribute vec2 aPosition;
+            attribute float aColor;
+            uniform mat4 u_matrix;
+            varying float color;
+    
+            void main() {
+                color = aColor;
+                gl_Position = u_matrix * vec4(aPosition.x,aPosition.y,0.0,1.0);
+            }`;
+        var fragmentSource = `
+            precision mediump float;
+            varying float color;
+            uniform sampler2D u_texture;
+            void main() {
+                //gl_FragColor = vec4(0.0,color/60.0,0.0,1.0);
+                float calcolor = (color)${divider};
+                gl_FragColor = texture2D(u_texture,vec2(min(max(calcolor,0.0),1.0),0.0));
+                //gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+            }`
+        var masterGl;
+        var layer = {
+            id: "baseReflectivity",
+            type: "custom",
+            minzoom: 0,
+            maxzoom: 18,
+
+            onAdd: function (map, gl) {
+                masterGl = gl;
+                createTexture(gl);
+
+                var ext = gl.getExtension('OES_element_index_uint');
+                var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vertexShader, vertexSource);
+                gl.compileShader(vertexShader);
+                var compilationLog = gl.getShaderInfoLog(vertexShader);
+                var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fragmentShader, fragmentSource);
+                gl.compileShader(fragmentShader);
+                var compilationLog = gl.getShaderInfoLog(fragmentShader);
+                this.program = gl.createProgram();
+                gl.attachShader(this.program, vertexShader);
+                gl.attachShader(this.program, fragmentShader);
+                gl.linkProgram(this.program);
+                this.matrixLocation = gl.getUniformLocation(this.program, "u_matrix");
+                this.positionLocation = gl.getAttribLocation(this.program, "aPosition");
+                this.colorLocation = gl.getAttribLocation(this.program, "aColor");
+                this.textureLocation = gl.getUniformLocation(this.program, "u_texture");
+
+                //data buffers
+                this.positionBuffer = gl.createBuffer();
+                this.indexBuffer = gl.createBuffer();
+                this.colorBuffer = gl.createBuffer();
+            },//end onAdd
+            render: function (gl, matrix) {
+                //console.log("render base");
+                var ext = gl.getExtension('OES_element_index_uint');
+                //use program
+                gl.useProgram(this.program);
+                //how to remove vertices from position buffer
+                var size = 2;
+                var type = gl.FLOAT;
+                var normalize = false;
+                var stride = 0;
+                var offset = 0;
+                //calculate matrices
+                gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+                gl.uniform1i(this.textureLocation, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, pageState.positions, gl.STATIC_DRAW);
+                gl.enableVertexAttribArray(this.positionLocation);
+                gl.vertexAttribPointer(this.positionLocation, size, type, normalize, stride, offset);
+
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, pageState.colors, gl.STATIC_DRAW);
+                gl.enableVertexAttribArray(this.colorLocation);
+                gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
+
+                gl.bindTexture(gl.TEXTURE_2D, pageState.imagetexture);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+                var primitiveType = gl.TRIANGLES;
+                var count = pageState.indices.length;
+                gl.drawArrays(primitiveType, offset, pageState.positions.length / 2);
+
+            }//end render
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var vers = JSON.parse(this.responseText).version;
+
+                calcPolys.calcPolygons(
+                    settings["base"],
+                    settings["phi"],
+                    settings["rlat"],
+                    settings["rlon"],
+                    vers,
+                    function(dat) {
+                        finishItUp(dat.data, dat.indices, dat.colors, layer)
+                    }
+                )
+                //myWorker.postMessage([
+                //    settings["base"],
+                //    settings["phi"],
+                //    settings["rlat"],
+                //    settings["rlon"],
+                //    vers
+                //]);
+            }
+        };
+        xhttp.open("GET", jsonObj, true);
+        xhttp.send();
+    })
+}
+
+module.exports = drawRadarShape;
+},{"./calculatePolygons":227,"./paletteTooltip":234,"./stormTracking":235}],229:[function(require,module,exports){
+const { plot } = require('../../nexrad-level-2-plot/src');
+
+function loadL2Listeners(l2rad, displayElevations) {
+    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+    //$('.reflPlotButton').trigger('click');
+    //console.log('initial reflectivity plot');
+    //displayElevations('REF');
+    var btnsArr = [
+        "l2-ref",
+        "l2-vel",
+        "l2-rho",
+        "l2-phi",
+        "l2-zdr",
+        "l2-sw "
+    ]
+    for (key in btnsArr) {
+        var curElemIter = document.getElementById(btnsArr[key]);
+        curElemIter.disabled = false;
+        $(curElemIter).addClass('btn-outline-primary');
+        $(curElemIter).removeClass('btn-outline-secondary');
+    }
+    document.getElementById('loadl2').style.display = 'none';
+    $('.level2btns button').off();
+    console.log('turned off listener')
+    $('.level2btns button').on('click', function () {
+        console.log(this.value)
+        removeMapLayer('baseReflectivity');
+        if (this.value == 'load') {
+            getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+                var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+                console.log(phpProxy + individualFileURL)
+                loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+            });
+        }
+        if (this.value == 'l2-ref') {
+            const level2Plot = plot(l2rad, 'REF', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-vel') {
+            const level2Plot = plot(l2rad, 'VEL', {
+                elevations: 2,
+            });
+        } else if (this.value == 'l2-rho') {
+            const level2Plot = plot(l2rad, 'RHO', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-phi') {
+            const level2Plot = plot(l2rad, 'PHI', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-zdr') {
+            const level2Plot = plot(l2rad, 'ZDR', {
+                elevations: 1,
+            });
+        } else if (this.value == 'l2-sw ') {
+            displayElevations('SW ');
+            const level2Plot = plot(l2rad, 'SW ', {
+                elevations: parseInt($('#elevInput').val()),
+            });
+        }
+    });
+    console.log('turned on listener i think')
+}
+
+module.exports = loadL2Listeners;
+},{"../../nexrad-level-2-plot/src":262}],230:[function(require,module,exports){
+const drawRadarShape = require('../drawToMap');
+
+function draw(data) {
+    var product = data.productDescription.abbreviation;
+    if (Array.isArray(product)) {
+        product = product[0];
+    }
+    var c = [];
+	var json = {
+		'radials': [],
+		'values': [],
+		'azimuths': [],
+		'version': [],
+	};
+	var adder = 0;
+	var divider = 1;
+	if (product == "N0U" || product == "N0G") {
+		adder = 65;
+	}
+	// generate a palette
+	//const palette = Palette.generate(product.palette);
+	// calculate scaling paramater with respect to pallet's designed criteria
+	//const paletteScale = (data?.productDescription?.plot?.maxDataValue ?? 255) / (product.palette.baseScale ?? data?.productDescription?.plot?.maxDataValue ?? 1);
+	// use the raw values to avoid scaling and un-scaling
+	var radialLoop = data.radialPackets[0].radials;
+	if (product == "N0C" || product == "N0X") {
+		radialLoop = data.radialPackets[0].radialsRaw;
+	}
+	radialLoop.forEach((radial) => {
+		arr = [];
+		valArr = [];
+		const startAngle = radial.startAngle * (Math.PI / 180);
+		const endAngle = startAngle + radial.angleDelta * (Math.PI / 180);
+		json.azimuths.push(radial.startAngle)
+		// track max value for downsampling
+		let maxDownsample = 0;
+		let lastRemainder = 0;
+		// for each bin
+		radial.bins.forEach((bin, idx) => {
+			// skip null values
+			if (bin === null) return;
+			// see if there's a sample to plot
+			if (!bin) return;
+			//ctx.beginPath();
+			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
+			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
+
+			arr.push(idx + data.radialPackets[0].firstBin)
+			valArr.push((bin + adder) / divider)
+			c.push((bin + adder) / divider)
+
+			//ctx.stroke();
+		});
+		json.radials.push(arr)
+		json.values.push(valArr)
+	});
+
+	// if the first azimuth isn't zero (e.g. azimuths going 0-360) then we need to do some re-arrangement
+	if (json.azimuths[0] != 0) {
+		// store the value of first azimuth (in this case it will be the offset)
+		var startAzimuth = json.azimuths[0];
+		for (val in json.azimuths) {
+			// add the starting value to each azimuth value, allowing for correct rotation
+			json.azimuths[val] = json.azimuths[val] + startAzimuth
+		}
+	}
+	// sort each azimuth value from lowest to highest
+	json.azimuths.sort(function(a, b){return a - b});
+
+	if (product == "DVL") {
+		var arrMin = Math.min(...[...new Set(c)]);
+		var arrMax = Math.max(...[...new Set(c)]);
+		for (value in json.values) {
+			json.values[value] = json.values[value].map(scaleArray([arrMin, arrMax], [0.1, 75]))
+		}
+	}
+
+	console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
+	//console.log([...new Set(c)])
+	json.version = 'l3';
+	if (product == "NXQ" || product == "N0S") {
+		json.version = product;
+	}
+	console.log(json)
+	var blob = new Blob([JSON.stringify(json)], {type: "text/plain"});
+    var url = window.URL.createObjectURL(blob);
+	document.getElementById('level3json').innerHTML = url;
+	/*const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    // the filename you want
+    a.download = 'level3.json';
+    document.body.appendChild(a);
+    a.click();*/
+
+	var currentStation = 'K' + data.textHeader.id3;
+	if (document.getElementById('fileStation').innerHTML != currentStation) {
+		document.getElementById('fileStation').innerHTML = currentStation;
+	}
+	$.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+		var statLat = data[currentStation][1];
+		var statLng = data[currentStation][2];
+		// ../../../data/json/KLWX20220623_014344_V06.json
+		// product.abbreviation
+		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+
+		//new mapboxgl.Marker()
+		//    .setLngLat([stationLng, stationLat])
+		//    .addTo(map);
+	});
+}
+
+module.exports = draw
+},{"../drawToMap":228}],231:[function(require,module,exports){
+const ut = require('../utils');
+
+function parsePlotMesocyclone(l3rad, theFileStation) {
+    var mesocycloneLayersArr = [];
+    var geojsonPointTemplate = {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'Point',
+            'coordinates': 'he'
+        }
+    }
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+        var staLat = data[theFileStation][1];
+        var staLng = data[theFileStation][2];
+
+        var mesocycloneObj = l3rad.formatted.mesocyclone;
+        if (mesocycloneObj != undefined) {
+            var mesocycloneList = Object.keys(mesocycloneObj);
+
+            function loadMesocyclone(identifier) {
+                // store all map layers being added to be able to manipulate later
+                mesocycloneLayersArr.push(identifier)
+                // reset geojson coordinates
+                geojsonPointTemplate.geometry.coordinates = [];
+
+                // current storm track
+                var curMC = mesocycloneObj[identifier];
+                var curMCCoords = ut.findTerminalCoordinates(staLat, staLng, curMC.az, curMC.ran);
+                // push the initial coordinate point - we do not know if the current track is a line or a point yet
+                geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
+
+                setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
+            }
+            for (key in mesocycloneList) {
+                loadMesocyclone(mesocycloneList[key])
+            }
+            document.getElementById('allMesocycloneLayers').innerHTML = JSON.stringify(mesocycloneLayersArr);
+        }
+    })
+}
+
+module.exports = parsePlotMesocyclone;
+},{"../utils":236}],232:[function(require,module,exports){
+const ut = require('../utils');
+
+function parsePlotStormTracks(l3rad, theFileStation) {
+    var stormTracksLayerArr = [];
+    // load storm tracking information
+    var geojsonLineTemplate = {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'LineString',
+            'coordinates': []
+        }
+    }
+    var geojsonPointTemplate = {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'Point',
+            'coordinates': []
+        }
+    }
+
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+        var staLat = data[theFileStation][1];
+        var staLng = data[theFileStation][2];
+
+        var stormTracks = l3rad.formatted.storms;
+        console.log(stormTracks)
+        var stormTracksList = Object.keys(stormTracks);
+
+        function loadStormTrack(identifier) {
+            // store all map layers being added to be able to manipulate later
+            stormTracksLayerArr.push(identifier)
+            // reset geojson coordinates
+            geojsonLineTemplate.geometry.coordinates = [];
+            geojsonLineTemplate.geometry.type = 'LineString';
+
+            // current storm track
+            var curST = stormTracks[identifier].current;
+            var curSTCoords = ut.findTerminalCoordinates(staLat, staLng, curST.nm, curST.deg);
+            // push the initial coordinate point - we do not know if the current track is a line or a point yet
+            geojsonLineTemplate.geometry.coordinates.push([curSTCoords.longitude, curSTCoords.latitude])
+
+            // future storm track (forecast)
+            var futureST = stormTracks[identifier].forecast;
+            var isLine;
+            // if the first forecast value for the current track is null, there is no line track - it is a point
+            if (futureST[0] == null) {
+                isLine = false;
+            } else if (futureST[0] != null) {
+                isLine = true;
+            }
+            if (isLine) {
+                for (key in futureST) {
+                    // the current index in the futureST variable being looped through
+                    var indexedFutureST = futureST[key];
+                    // check if the value is null, in which case the storm track is over
+                    if (indexedFutureST != null) {
+                        var indexedFutureSTCoords = ut.findTerminalCoordinates(staLat, staLng, indexedFutureST.nm, indexedFutureST.deg);
+                        // push the current index point to the line geojson object
+                        geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
+                        // add a circle for each edge on a storm track line
+                        geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
+                        setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
+                        stormTracksLayerArr.push(identifier + '_pointEdge' + key)
+                    }
+                }
+                // push the finished geojson line object to a function that adds to the map
+                setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
+                // adds a blue circle at the start of the storm track
+                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
+                geojsonLineTemplate.geometry.type = 'Point';
+                setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
+                stormTracksLayerArr.push(identifier + '_point')
+            } else if (!isLine) {
+                // if the storm track does not have a forecast, display a Point geojson
+                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
+                geojsonLineTemplate.geometry.type = 'Point';
+                setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
+            }
+        }
+        // Z0 = line, R1 = point
+        for (key in stormTracksList) {
+            loadStormTrack(stormTracksList[key])
+        }
+        document.getElementById('allStormTracksLayers').innerHTML = JSON.stringify(stormTracksLayerArr);
+        var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
+        var stLayers = stLayersText.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
+        // setting layer orders
+        for (key in stLayers) {
+            if (stLayers[key].includes('_pointEdge')) {
+                moveMapLayer(stLayers[key])
+            }
+        }
+        for (key in stLayers) {
+            if (stLayers[key].includes('_point')) {
+                moveMapLayer(stLayers[key])
+            }
+        }
+    });
+}
+
+module.exports = parsePlotStormTracks;
+},{"../utils":236}],233:[function(require,module,exports){
+const ut = require('../utils');
+
+function parsePlotTornado(l3rad, theFileStation) {
+    var tornadoLayersArr = [];
+    var geojsonPointTemplate = {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+            'type': 'Point',
+            'coordinates': 'he'
+        }
+    }
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+        var staLat = data[theFileStation][1];
+        var staLng = data[theFileStation][2];
+
+        var tornadoObj = l3rad.formatted.tvs;
+        console.log(tornadoObj)
+        var tornadoList = Object.keys(tornadoObj);
+
+        function loadTornado(identifier) {
+            // store all map layers being added to be able to manipulate later
+            tornadoLayersArr.push(identifier)
+            // reset geojson coordinates
+            geojsonPointTemplate.geometry.coordinates = [];
+
+            // current storm track
+            var curTVS = tornadoObj[identifier];
+            var curTVSCoords = ut.findTerminalCoordinates(staLat, staLng, curTVS.az, curTVS.range);
+            // push the initial coordinate point - we do not know if the current track is a line or a point yet
+            geojsonPointTemplate.geometry.coordinates = [curTVSCoords.longitude, curTVSCoords.latitude];
+
+            setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
+        }
+        for (key in tornadoList) {
+            loadTornado(tornadoList[key])
+        }
+        document.getElementById('allTornadoLayers').innerHTML = JSON.stringify(tornadoLayersArr);
+    });
+}
+
+module.exports = parsePlotTornado;
+},{"../utils":236}],234:[function(require,module,exports){
+function initPaletteTooltip(produc, colortcanvas) {
+    var hycObj = {
+        0: 'ND: Below Threshold',
+        1: 'ND: Below Threshold',
+        2: 'BI: Biological',
+        3: 'GC: Anomalous Propagation/Ground Clutter',
+        4: 'IC: Ice Crystals',
+        5: 'DS: Dry Snow',
+        6: 'WS: Wet Snow',
+        7: 'RA: Light and/or Moderate Rain',
+        8: 'HR: Heavy Rain',
+        9: 'BD: Big Drops (rain)',
+        10: 'GR: Graupel',
+        11: 'HA: Hail, possibly with rain',
+        12: 'LH: Large Hail',
+        13: 'GH: Giant Hail',
+        14: 'UK: Unknown Classification',
+        15: 'RF: Range Folded',
+    };
+    const tooltip = bootstrap.Tooltip.getInstance('#texturecolorbar')
+    if (produc == "HHC" || produc == "N0H") {
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            const x = event.clientX - rect.left
+            const y = event.clientY - rect.top
+            return ({ "x": x, "y": y });
+        }
+        colortcanvas.addEventListener('mousemove', function (e) {
+            if (document.getElementById('curProd').innerHTML == 'hyc' || document.getElementById('curProd').innerHTML == 'hhc') {
+                var xPos = getCursorPosition(colortcanvas, e).x;
+                var thearr = [];
+                var numOfColors = 14;
+                for (var e = 0; e < numOfColors; e++) {
+                    thearr.push(Math.round((colortcanvas.width / numOfColors) * e))
+                }
+                var thearr2 = thearr;
+                thearr.push(xPos);
+                thearr2.sort(function (a, b) { return a - b });
+                var xPosIndex = thearr2.indexOf(xPos);
+                var xPosProduct = hycObj[thearr2.indexOf(xPos)];
+                //console.log(xPosProduct)
+                tooltip.enable();
+                tooltip.setContent({ '.tooltip-inner': xPosProduct })
+            }
+        })
+    } else {
+        tooltip.disable();
+    }
+    //$('#texturecolorbar').off()
+}
+
+module.exports = {
+    initPaletteTooltip
+}
+},{}],235:[function(require,module,exports){
+function loadAllStormTrackingStuff() {
+    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+    function addStormTracksLayers() {
+        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+    }
+    function addMesocycloneLayers() {
+        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+    }
+    function addTornadoLayers() {
+        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+    }
+    function arrayify(text) {
+        return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
+    }
+    function removeAMapLayer(lay) {
+        if (map.getLayer(lay)) {
+            map.removeLayer(lay);
+        }
+        if (map.getSource(lay)) {
+            map.removeSource(lay);
+        }
+    }
+    var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
+    var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
+    var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
+    var stLayers = arrayify(stLayersText);
+    var mdLayers = arrayify(mdLayersText);
+    var tvLayers = arrayify(tvLayersText);
+
+    if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
+        var station = document.getElementById('fileStation').innerHTML;
+        $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+            var stationLat = data[station][1];
+            var stationLng = data[station][2];
+            map.flyTo({
+                center: [stationLng, stationLat],
+                zoom: 8,
+                duration: 1000,
+            });
+        })
+        for (key in stLayers) {
+            removeAMapLayer(stLayers[key]);
+        }
+        addStormTracksLayers();
+        for (key in mdLayers) {
+            removeAMapLayer(mdLayers[key]);
+        }
+        addMesocycloneLayers();
+        for (key in tvLayers) {
+            removeAMapLayer(tvLayers[key]);
+        }
+        addTornadoLayers();
+    } else {
+        for (key in stLayers) {
+            map.moveLayer(stLayers[key]);
+        }
+        for (key in mdLayers) {
+            map.moveLayer(mdLayers[key]);
+        }
+        for (key in tvLayers) {
+            map.moveLayer(tvLayers[key]);
+        }
+    }
+    document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
+    document.getElementById('testEventElem').innerHTML = 'changed'
+}
+
+module.exports = {
+    loadAllStormTrackingStuff
+}
+},{}],236:[function(require,module,exports){
+(function (Buffer){(function (){
+function toBuffer(ab) {
+    const buf = Buffer.alloc(ab.byteLength);
+    const view = new Uint8Array(ab);
+    for (let i = 0; i < buf.length; ++i) {
+        buf[i] = view[i];
+    }
+    return buf;
+}
+
+function printFancyTime(dateObj, tz) {
+    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
+}
+function msToTime(s) {
+    // Pad to 2 or 3 digits, default is 2
+    function pad(n, z) {
+        z = z || 2;
+        return ('00' + n).slice(-z);
+    }
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+    return {
+        'hours': pad(hrs),
+        'minutes': pad(mins),
+        'seconds': pad(secs),
+        'milliseconds': pad(ms, 3),
+    }
+    //return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
+}
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
+    var metersInNauticalMiles = 1852;
+    var startPoint = { latitude: startLat, longitude: startLng };
+    var distanceMeters = distanceNM * metersInNauticalMiles;
+    var bearing = bearingDEG;
+    const destination = geolib.computeDestinationPoint(
+        startPoint,
+        distanceMeters,
+        bearing 
+    );
+    return destination;
+}
+
+module.exports = {
+    toBuffer,
+    printFancyTime,
+    msToTime,
+    round,
+    findTerminalCoordinates
+}
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"buffer":71}],237:[function(require,module,exports){
 //const fetch = require('node-fetch');
 const { Level2Radar } = require('./nexrad-level-2-data/src');
 const Level3Radar = require('./nexrad-level-3-data/src');
@@ -37123,14 +38055,14 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
-const ut = require('./plotData/utils');
+const ut = require('./app/utils');
 
-const l3plot = require('./plotData/level3/draw');
-const loadL2Listeners = require('./plotData/level2/eventListeners');
+const l3plot = require('./app/level3/draw');
+const loadL2Listeners = require('./app/level2/eventListeners');
 
-const parsePlotTornado = require('./plotData/level3/tornadoVortexSignature');
-const parsePlotMesocyclone = require('./plotData/level3/mesocycloneDetection');
-const parsePlotStormTracks = require('./plotData/level3/stormTracks');
+const parsePlotTornado = require('./app/level3/tornadoVortexSignature');
+const parsePlotMesocyclone = require('./app/level3/mesocycloneDetection');
+const parsePlotStormTracks = require('./app/level3/stormTracks');
 
 
 Date.prototype.addDays = function(days) {
@@ -37326,7 +38258,7 @@ document.getElementById('fileThatWorks').addEventListener('click', function() {
         console.log(l2rad)
     })
     .catch(err => console.error(err));*/
-},{"./nexrad-level-2-data/src":239,"./nexrad-level-2-plot/src":252,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":243,"./nexrad-level-3-data/src":263,"./nexrad-level-3-plot/src":312,"./plotData/level2/eventListeners":333,"./plotData/level3/draw":334,"./plotData/level3/mesocycloneDetection":335,"./plotData/level3/stormTracks":336,"./plotData/level3/tornadoVortexSignature":337,"./plotData/utils":340}],228:[function(require,module,exports){
+},{"./app/level2/eventListeners":229,"./app/level3/draw":230,"./app/level3/mesocycloneDetection":231,"./app/level3/stormTracks":232,"./app/level3/tornadoVortexSignature":233,"./app/utils":236,"./nexrad-level-2-data/src":249,"./nexrad-level-2-plot/src":262,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":253,"./nexrad-level-3-data/src":273,"./nexrad-level-3-plot/src":322}],238:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -37426,7 +38358,7 @@ module.exports = (raf, message, options) => {
 	return message;
 };
 
-},{}],229:[function(require,module,exports){
+},{}],239:[function(require,module,exports){
 // parse message type 2
 module.exports = (raf, message) => {
 	message.record = {
@@ -37478,7 +38410,7 @@ const alarmCodes = (raf) => {
 	return alarms;
 };
 
-},{}],230:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 const { MESSAGE_HEADER_SIZE } = require('../constants');
 
 // parse message type 31
@@ -37742,7 +38674,7 @@ const blockName = (raf) => {
 	return { name, type };
 };
 
-},{"../constants":236}],231:[function(require,module,exports){
+},{"../constants":246}],241:[function(require,module,exports){
 // parse message type 5 and 7
 module.exports = (raf, message) => {
 	message.record = {
@@ -37884,7 +38816,7 @@ const supplementalData = (raw) => ({
 	base_tilt_cut: parseBits(raw, 10),
 });
 
-},{}],232:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 const {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE,
 } = require('../constants');
@@ -37959,7 +38891,7 @@ const getRecord = (raf, recordOffset, options) => {
 
 module.exports.Level2Record = Level2Record;
 
-},{"../constants":236,"./Level2Record-1":228,"./Level2Record-2":229,"./Level2Record-31":230,"./Level2Record-5-7":231,"./Level2RecordSearch":233}],233:[function(require,module,exports){
+},{"../constants":246,"./Level2Record-1":238,"./Level2Record-2":239,"./Level2Record-31":240,"./Level2Record-5-7":241,"./Level2RecordSearch":243}],243:[function(require,module,exports){
 // attempt to search for the next message by looking for some known values
 
 const level2RecordSearch = (raf, startPos, julianDate, options) => {
@@ -38013,7 +38945,7 @@ module.exports = {
 	level2RecordSearch,
 };
 
-},{}],234:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -38196,7 +39128,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],235:[function(require,module,exports){
+},{"buffer":71}],245:[function(require,module,exports){
 // combine data returned by multiple calls to the Level2Radar constructor
 
 // individual data structures or arrays can be passed
@@ -38239,7 +39171,7 @@ const combine = (...args) => {
 
 module.exports = combine;
 
-},{}],236:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 const FILE_HEADER_SIZE = 24;
 const RADAR_DATA_SIZE = 2432;
 const CTM_HEADER_SIZE = 12;
@@ -38249,7 +39181,7 @@ module.exports = {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE, MESSAGE_HEADER_SIZE,
 };
 
-},{}],237:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 (function (Buffer){(function (){
 // decompress a nexrad level 2 archive, or return the provided file if it is not compressed
 
@@ -38356,7 +39288,7 @@ const readCompressionHeader = (raf) => ({
 module.exports = decompress;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./classes/RandomAccessFile":234,"./constants":236,"./gzipdecompress":238,"buffer":71,"seek-bzip":328}],238:[function(require,module,exports){
+},{"./classes/RandomAccessFile":244,"./constants":246,"./gzipdecompress":248,"buffer":71,"seek-bzip":338}],248:[function(require,module,exports){
 const zlib = require('zlib');
 // structured byte access
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
@@ -38366,7 +39298,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":234,"zlib":69}],239:[function(require,module,exports){
+},{"./classes/RandomAccessFile":244,"zlib":69}],249:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -38735,7 +39667,7 @@ const nullLogger = {
 module.exports.Level2Radar = Level2Radar;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./combinedata":235,"./parsedata":240,"buffer":71}],240:[function(require,module,exports){
+},{"./combinedata":245,"./parsedata":250,"buffer":71}],250:[function(require,module,exports){
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
 const { Level2Record } = require('./classes/Level2Record');
 const { RADAR_DATA_SIZE } = require('./constants');
@@ -38860,7 +39792,7 @@ const groupAndSortScans = (scans) => {
 
 module.exports = parseData;
 
-},{"./classes/Level2Record":232,"./classes/RandomAccessFile":234,"./constants":236,"./decompress":237,"./parseheader":241}],241:[function(require,module,exports){
+},{"./classes/Level2Record":242,"./classes/RandomAccessFile":244,"./constants":246,"./decompress":247,"./parseheader":251}],251:[function(require,module,exports){
 const { FILE_HEADER_SIZE } = require('./constants');
 
 const parse = (raf) => {
@@ -38886,7 +39818,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./constants":236}],242:[function(require,module,exports){
+},{"./constants":246}],252:[function(require,module,exports){
 const canvasObj = require('canvas');
 
 const { createCanvas } = canvasObj;
@@ -38900,7 +39832,7 @@ const downSample = require('./preprocess/downsample');
 const indexProduct = require('./preprocess/indexproduct');
 const rrle = require('./preprocess/rrle');
 
-const drawRadarShape = require('../../../plotData/drawToMap');
+const drawRadarShape = require('../../../app/drawToMap');
 
 // names of data structures keyed to product name
 const dataNames = {
@@ -39193,10 +40125,10 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../plotData/drawToMap":332,"./palettes":244,"./palettes/ref":245,"./palettes/vel":246,"./palettize":247,"./preprocess/downsample":248,"./preprocess/filterproduct":249,"./preprocess/indexproduct":250,"./preprocess/rrle":251,"canvas":324}],243:[function(require,module,exports){
+},{"../../../app/drawToMap":228,"./palettes":254,"./palettes/ref":255,"./palettes/vel":256,"./palettize":257,"./preprocess/downsample":258,"./preprocess/filterproduct":259,"./preprocess/indexproduct":260,"./preprocess/rrle":261,"canvas":334}],253:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
-},{}],244:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 // ingest a palette and provide lookup and formatting functionality
 // {palette: [r1,g1,b1,a1, r2,g2,b2,a2, ...], limits: [1,2, ...]}
 // rgba values are returned with the the color index in the g position with 100% opacity
@@ -39315,7 +40247,7 @@ const inDeadband = (reset) => (a) => (a === null || a === reset || a === undefin
 
 module.exports = Palette;
 
-},{"./hexlookup":243}],245:[function(require,module,exports){
+},{"./hexlookup":253}],255:[function(require,module,exports){
 const palette = [
 	255, 255, 255, 0,	// transparent
 	0, 128, 128, 192,
@@ -39363,7 +40295,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],246:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 const palette = [
 	// 0: green/outbound
 	0, 255, 0, 255,
@@ -39425,7 +40357,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],247:[function(require,module,exports){
+},{}],257:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 
 const palettizeImage = (sourceCtx, palette) => {
@@ -39458,7 +40390,7 @@ const palettizeImage = (sourceCtx, palette) => {
 
 module.exports = palettizeImage;
 
-},{"canvas":324}],248:[function(require,module,exports){
+},{"canvas":334}],258:[function(require,module,exports){
 // downsample the moment data preserving the maximum dbz using palette.downSample
 // this includes "cropping" the data to the specified size
 
@@ -39516,7 +40448,7 @@ const downSample = (radials, scale, resolution, options, palette) => {
 
 module.exports = downSample;
 
-},{}],249:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 // accomplish some pre-processing in one loop
 
 // filter data for a specific product
@@ -39554,7 +40486,7 @@ const filterProduct = (data, product) => data.map((header) => {
 
 module.exports = filterProduct;
 
-},{}],250:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 // take the raw data values and turn them into indexed values in the palette
 // this is the first step in palettizing and in the Radial run-length encoding process
 
@@ -39572,7 +40504,7 @@ const indexProduct = (radials, palette) => radials.map((radial) => {
 
 module.exports = indexProduct;
 
-},{}],251:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 // radial run-length encoding
 // encode run length data to the adjacent radials, instead of along the length of the radial
 
@@ -39652,7 +40584,7 @@ const rrle = (radials, resolutionRad, shouldNullValues) => {
 
 module.exports = rrle;
 
-},{}],252:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 const { draw, canvas } = require('./draw');
 const { keys } = require('./draw/palettes/hexlookup');
 const { writePngToFile } = require('./utils/file');
@@ -39719,7 +40651,7 @@ module.exports = {
 	canvas,
 };
 
-},{"./draw":242,"./draw/palettes/hexlookup":243,"./utils/file":253}],253:[function(require,module,exports){
+},{"./draw":252,"./draw/palettes/hexlookup":253,"./utils/file":263}],263:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 /**
@@ -39752,7 +40684,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],254:[function(require,module,exports){
+},{"fs":1}],264:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -39805,7 +40737,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"../packets":281,"./graphic22":255}],255:[function(require,module,exports){
+},{"../packets":291,"./graphic22":265}],265:[function(require,module,exports){
 // parse data in the graphic area as packet 22 and related packets
 const { parser } = require('../packets');
 
@@ -39835,7 +40767,7 @@ const parse22 = (raf) => {
 
 module.exports = parse22;
 
-},{"../packets":281}],256:[function(require,module,exports){
+},{"../packets":291}],266:[function(require,module,exports){
 const parse = (raf) => ({
 
 	code: raf.readShort(),
@@ -39850,7 +40782,7 @@ const parse = (raf) => ({
 
 module.exports = parse;
 
-},{}],257:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 const MODE_MAINTENANCE = 0;
 const MODE_CLEAN_AIR = 1;
 const MODE_PRECIPITATION = 2;
@@ -39900,7 +40832,7 @@ module.exports = {
 	MODE_PRECIPITATION,
 };
 
-},{}],258:[function(require,module,exports){
+},{}],268:[function(require,module,exports){
 // register packet parsers
 
 const { parser } = require('../packets');
@@ -39940,7 +40872,7 @@ const parse = (raf, productDescription, layerCount, options) => {
 
 module.exports = parse;
 
-},{"../packets":281}],259:[function(require,module,exports){
+},{"../packets":291}],269:[function(require,module,exports){
 const symbologyText = require('./symbologytext');
 // some block ids just have text, this is not well documented so we do our best to parse these
 const textSymbologies = [3, 4, 5, 6, 7];
@@ -39968,7 +40900,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./symbologytext":260}],260:[function(require,module,exports){
+},{"./symbologytext":270}],270:[function(require,module,exports){
 // block id 6 is undocumented but appears to be text
 
 const parse = (raf) => {
@@ -40002,7 +40934,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],261:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 const parseMessageHeader = require('./message');
 const { parse: parseProductDescription } = require('./productdescription');
 
@@ -40065,7 +40997,7 @@ const parse = (raf, product) => {
 
 module.exports = parse;
 
-},{"./message":256,"./productdescription":257}],262:[function(require,module,exports){
+},{"./message":266,"./productdescription":267}],272:[function(require,module,exports){
 // file header as 30 byte string
 
 const parse = (raf) => {
@@ -40093,7 +41025,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],263:[function(require,module,exports){
+},{}],273:[function(require,module,exports){
 (function (Buffer){(function (){
 const bzip = require('seek-bzip');
 const { RandomAccessFile } = require('./randomaccessfile');
@@ -40240,7 +41172,7 @@ const nullLogger = {
 module.exports = nexradLevel3Data;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./headers/graphic":254,"./headers/message":256,"./headers/productdescription":257,"./headers/radialpackets":258,"./headers/symbology":259,"./headers/tabular":261,"./headers/text":262,"./products":308,"./randomaccessfile":309,"buffer":71,"seek-bzip":328}],264:[function(require,module,exports){
+},{"./headers/graphic":264,"./headers/message":266,"./headers/productdescription":267,"./headers/radialpackets":268,"./headers/symbology":269,"./headers/tabular":271,"./headers/text":272,"./products":318,"./randomaccessfile":319,"buffer":71,"seek-bzip":338}],274:[function(require,module,exports){
 const code = 1;
 const description = 'Text and Special Symbol Packets';
 
@@ -40272,7 +41204,7 @@ module.exports = {
 	parser,
 };
 
-},{}],265:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 const code = 16;
 const description = 'Digital Radial Data Array Packet';
 
@@ -40357,7 +41289,7 @@ module.exports = {
 	parser,
 };
 
-},{}],266:[function(require,module,exports){
+},{}],276:[function(require,module,exports){
 const code = 19;
 const description = 'Special Graphic Symbol Packet';
 
@@ -40417,7 +41349,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],267:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 const code = 20;
 const description = 'Special Graphic Symbol Packet';
 
@@ -40477,7 +41409,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],268:[function(require,module,exports){
+},{}],278:[function(require,module,exports){
 const code = 21;
 const description = 'Special Graphic Symbol Packet';
 const { ijToAzDeg } = require('./utilities/ij');
@@ -40569,7 +41501,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/ij":282}],269:[function(require,module,exports){
+},{"./utilities/ij":292}],279:[function(require,module,exports){
 const code = 22;
 const description = 'Cell Trend Data Packet';
 
@@ -40604,7 +41536,7 @@ module.exports = {
 	parser,
 };
 
-},{}],270:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 const code = 23;
 const description = 'Special Graphic Symbol Packet';
 
@@ -40637,7 +41569,7 @@ module.exports = {
 	parser,
 };
 
-},{".":281}],271:[function(require,module,exports){
+},{".":291}],281:[function(require,module,exports){
 const code = 24;
 const description = 'Special Graphic Symbol Packet';
 
@@ -40650,7 +41582,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":270}],272:[function(require,module,exports){
+},{"./17":280}],282:[function(require,module,exports){
 const code = 25;
 const description = 'Special Graphic Symbol Packet';
 
@@ -40663,7 +41595,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":270}],273:[function(require,module,exports){
+},{"./17":280}],283:[function(require,module,exports){
 const code = 2;
 const description = 'Text and Special Symbol Packets';
 
@@ -40693,7 +41625,7 @@ module.exports = {
 	parser,
 };
 
-},{}],274:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 const code = 32;
 const description = 'Special Graphic Symbol Packet';
 
@@ -40753,7 +41685,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],275:[function(require,module,exports){
+},{}],285:[function(require,module,exports){
 const code = 6;
 const description = 'Linked Vector Packet';
 
@@ -40797,7 +41729,7 @@ module.exports = {
 	parser,
 };
 
-},{}],276:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 const code = 8;
 const description = 'Text and Special Symbol Packets';
 
@@ -40827,7 +41759,7 @@ module.exports = {
 	parser,
 };
 
-},{}],277:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 const code = 10;
 const description = 'Unlinked Vector Packet';
 
@@ -40877,7 +41809,7 @@ module.exports = {
 	parser,
 };
 
-},{}],278:[function(require,module,exports){
+},{}],288:[function(require,module,exports){
 const code = 0xaf1f;
 const description = 'Radial Data Packet (16 Data Levels)';
 const rle = require('./utilities/rle');
@@ -40928,7 +41860,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/rle":283}],279:[function(require,module,exports){
+},{"./utilities/rle":293}],289:[function(require,module,exports){
 const code = 12;
 const description = 'Tornado Vortex Signautre';
 
@@ -40970,7 +41902,7 @@ module.exports = {
 	parser,
 };
 
-},{}],280:[function(require,module,exports){
+},{}],290:[function(require,module,exports){
 const code = 15;
 const description = 'Special Graphic Symbol Packet';
 
@@ -41003,7 +41935,7 @@ module.exports = {
 	parser,
 };
 
-},{}],281:[function(require,module,exports){
+},{}],291:[function(require,module,exports){
 
 const path = require('path');
 require('./1')
@@ -41058,7 +41990,7 @@ module.exports = {
 	parser,
 };
 
-},{"./1":264,"./10":265,"./13":266,"./14":267,"./15":268,"./16":269,"./17":270,"./18":271,"./19":272,"./2":273,"./32":274,"./6":275,"./8":276,"./a":277,"./af1f":278,"./c":279,"./f":280,"path":178}],282:[function(require,module,exports){
+},{"./1":274,"./10":275,"./13":276,"./14":277,"./15":278,"./16":279,"./17":280,"./18":281,"./19":282,"./2":283,"./32":284,"./6":285,"./8":286,"./a":287,"./af1f":288,"./c":289,"./f":290,"path":178}],292:[function(require,module,exports){
 // i,j coordinate functions
 
 // i,j to azimuth/nmi
@@ -41085,7 +42017,7 @@ module.exports = {
 	ijToAzDeg,
 };
 
-},{}],283:[function(require,module,exports){
+},{}],293:[function(require,module,exports){
 // run length encoding expansion methods
 
 // expand rle from rrrrvvvv, 4-bit run, 4-bit value
@@ -41104,7 +42036,7 @@ module.exports = {
 	expand4_4,
 };
 
-},{}],284:[function(require,module,exports){
+},{}],294:[function(require,module,exports){
 const code = 134;
 const abbreviation = ['DVL'];
 const description = 'Digital Vertically Integrated Liquid';
@@ -41147,7 +42079,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],285:[function(require,module,exports){
+},{"../../randomaccessfile":319}],295:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -41210,7 +42142,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],286:[function(require,module,exports){
+},{}],296:[function(require,module,exports){
 const code = 141;
 const abbreviation = ['NMD'];
 const description = 'Mesocyclone';
@@ -41247,7 +42179,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309,"./formatter":285}],287:[function(require,module,exports){
+},{"../../randomaccessfile":319,"./formatter":295}],297:[function(require,module,exports){
 const code = 153;
 const abbreviation = ['N0B', 'N1B', 'N2B', 'N3B'];
 const description = 'Hi-Res Base Reflectivity';
@@ -41291,7 +42223,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],288:[function(require,module,exports){
+},{"../../randomaccessfile":319}],298:[function(require,module,exports){
 const code = 154;
 const abbreviation = [
 	'N0G',
@@ -41340,7 +42272,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],289:[function(require,module,exports){
+},{"../../randomaccessfile":319}],299:[function(require,module,exports){
 const code = 159;
 const abbreviation = [
 	'N0X',
@@ -41389,7 +42321,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],290:[function(require,module,exports){
+},{"../../randomaccessfile":319}],300:[function(require,module,exports){
 const code = 161;
 const abbreviation = [
 	'N0C',
@@ -41438,7 +42370,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],291:[function(require,module,exports){
+},{"../../randomaccessfile":319}],301:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -41500,7 +42432,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":309}],292:[function(require,module,exports){
+},{"../../randomaccessfile":319}],302:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -41591,7 +42523,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],293:[function(require,module,exports){
+},{"../../randomaccessfile":319}],303:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Storm Total Precipitation';
@@ -41682,7 +42614,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],294:[function(require,module,exports){
+},{"../../randomaccessfile":319}],304:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -41723,7 +42655,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":309,"../165":291}],295:[function(require,module,exports){
+},{"../../randomaccessfile":319,"../165":301}],305:[function(require,module,exports){
 const code = 30;
 const abbreviation = [
 	'NSW'
@@ -41769,7 +42701,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],296:[function(require,module,exports){
+},{"../../randomaccessfile":319}],306:[function(require,module,exports){
 const code = 56;
 const abbreviation = ['N0S', 'N1S', 'N2S', 'N3S'];
 const description = 'Storm relative velocity';
@@ -41801,7 +42733,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],297:[function(require,module,exports){
+},{"../../randomaccessfile":319}],307:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  P2     244/125   232/ 38     245/116   246/107   247/ 97   NO DATA    1.1/ 0.9"
@@ -41876,7 +42808,7 @@ const parseStringPosition = (position, kts = false) => {
 	};
 };
 
-},{}],298:[function(require,module,exports){
+},{}],308:[function(require,module,exports){
 const code = 58;
 const abbreviation = ['NST'];
 const description = 'Storm Tracking Information';
@@ -41912,7 +42844,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309,"./formatter":297}],299:[function(require,module,exports){
+},{"../../randomaccessfile":319,"./formatter":307}],309:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -41955,7 +42887,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],300:[function(require,module,exports){
+},{}],310:[function(require,module,exports){
 const code = 59;
 const abbreviation = ['NHI'];
 const description = 'Hail Index';
@@ -41973,7 +42905,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":299}],301:[function(require,module,exports){
+},{"./formatter":309}],311:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  TVS    F0    74/ 52    35    52    52/ 4.9   >11.1  < 4.9/ 16.0    16/ 4.9    "
@@ -42034,7 +42966,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],302:[function(require,module,exports){
+},{}],312:[function(require,module,exports){
 const code = 61;
 const abbreviation = ['NTV'];
 const description = 'Tornadic Vortex Signature';
@@ -42050,7 +42982,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":301}],303:[function(require,module,exports){
+},{"./formatter":311}],313:[function(require,module,exports){
 const code = 62;
 const abbreviation = ['NSS'];
 const description = 'Storm Structure';
@@ -42068,7 +43000,7 @@ module.exports = {
 	},
 };
 
-},{}],304:[function(require,module,exports){
+},{}],314:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -42100,7 +43032,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],305:[function(require,module,exports){
+},{"../../randomaccessfile":319}],315:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm Total Rainfall Accumulation';
@@ -42134,7 +43066,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],306:[function(require,module,exports){
+},{"../../randomaccessfile":319}],316:[function(require,module,exports){
 const code = 94;
 const abbreviation = ['NXQ', 'NYQ', 'NZQ', 'N0Q', 'NAQ', 'N1Q', 'NBQ', 'N2Q', 'N3Q'];
 const description = 'Digital Base Reflectivity';
@@ -42178,7 +43110,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],307:[function(require,module,exports){
+},{"../../randomaccessfile":319}],317:[function(require,module,exports){
 const code = 99;
 const abbreviation = [
 	'N0U',
@@ -42227,7 +43159,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":309}],308:[function(require,module,exports){
+},{"../../randomaccessfile":319}],318:[function(require,module,exports){
 
 const path = require('path');
 
@@ -42272,7 +43204,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./134":284,"./141":286,"./153":287,"./154":288,"./159":289,"./161":290,"./165":291,"./170":292,"./172":293,"./177":294,"./30":295,"./56":296,"./58":298,"./59":300,"./61":302,"./62":303,"./78":304,"./80":305,"./94":306,"./99":307,"path":178}],309:[function(require,module,exports){
+},{"./134":294,"./141":296,"./153":297,"./154":298,"./159":299,"./161":300,"./165":301,"./170":302,"./172":303,"./177":304,"./30":305,"./56":306,"./58":308,"./59":310,"./61":312,"./62":313,"./78":314,"./80":315,"./94":316,"./99":317,"path":178}],319:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -42387,11 +43319,11 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],310:[function(require,module,exports){
+},{"buffer":71}],320:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 const { keys } = require('../../../nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const Palette = require('./palette');
-const plotData = require('../../../plotData/drawToMap');
+const plotData = require('../../../app/drawToMap');
 
 const DEFAULT_OPTIONS = {
 	// must be a square image
@@ -42529,7 +43461,7 @@ module.exports = {
 	DEFAULT_OPTIONS,
 };
 
-},{"../../../nexrad-level-2-plot/src/draw/palettes/hexlookup":243,"../../../plotData/drawToMap":332,"./palette":311,"canvas":324}],311:[function(require,module,exports){
+},{"../../../app/drawToMap":228,"../../../nexrad-level-2-plot/src/draw/palettes/hexlookup":253,"./palette":321,"canvas":334}],321:[function(require,module,exports){
 // pallette utilities
 
 // generate a palette as rgb[a](r,g,b)
@@ -42577,7 +43509,7 @@ module.exports = {
 	generate,
 };
 
-},{}],312:[function(require,module,exports){
+},{}],322:[function(require,module,exports){
 const NexradLevel3Data = require('../../nexrad-level-3-data/src');
 const { products, productAbbreviations } = require('./products');
 const { draw } = require('./draw');
@@ -42656,7 +43588,7 @@ module.exports = {
 	plotAndData,
 };
 
-},{"../../nexrad-level-3-data/src":263,"./draw":310,"./palletize":315,"./products":322,"./utils/file":323}],313:[function(require,module,exports){
+},{"../../nexrad-level-3-data/src":273,"./draw":320,"./palletize":325,"./products":332,"./utils/file":333}],323:[function(require,module,exports){
 // return the index of the closest color match in the palette
 
 // memoize results by provided key.
@@ -42701,7 +43633,7 @@ const geometricDistance = (a, b) => a.reduce((acc, val, idx) => acc + (val - b[i
 
 module.exports = closest;
 
-},{}],314:[function(require,module,exports){
+},{}],324:[function(require,module,exports){
 // generate a palette with the number of steps provided
 const { createCanvas } = require('canvas');
 const crypto = require('crypto');
@@ -42769,7 +43701,7 @@ const calcIntermediate = (a, b, num, den) => {
 
 module.exports = generatePalette;
 
-},{"canvas":324,"crypto":81}],315:[function(require,module,exports){
+},{"canvas":334,"crypto":81}],325:[function(require,module,exports){
 // palletize an image
 const { createCanvas } = require('canvas');
 const generatePalette = require('./generatepalette');
@@ -42835,7 +43767,7 @@ const combineOptions = (_options, product) => {
 
 module.exports = palletize;
 
-},{"../draw":310,"./closest":313,"./generatepalette":314,"canvas":324}],316:[function(require,module,exports){
+},{"../draw":320,"./closest":323,"./generatepalette":324,"canvas":334}],326:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -42868,7 +43800,7 @@ module.exports = {
 	palette,
 };
 
-},{}],317:[function(require,module,exports){
+},{}],327:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -42890,7 +43822,7 @@ module.exports = {
 	palette,
 };
 
-},{"../172":318}],318:[function(require,module,exports){
+},{"../172":328}],328:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Digital Total Accumulation';
@@ -42929,7 +43861,7 @@ module.exports = {
 	palette,
 };
 
-},{}],319:[function(require,module,exports){
+},{}],329:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -42962,7 +43894,7 @@ module.exports = {
 	palette,
 };
 
-},{}],320:[function(require,module,exports){
+},{}],330:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -42994,7 +43926,7 @@ module.exports = {
 	palette,
 };
 
-},{}],321:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm total precipitation';
@@ -43010,7 +43942,7 @@ module.exports = {
 	palette,
 };
 
-},{"../78":320}],322:[function(require,module,exports){
+},{"../78":330}],332:[function(require,module,exports){
 
 const path = require('path');
 
@@ -43041,7 +43973,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./165":316,"./170":317,"./172":318,"./177":319,"./78":320,"./80":321,"path":178}],323:[function(require,module,exports){
+},{"./165":326,"./170":327,"./172":328,"./177":329,"./78":330,"./80":331,"path":178}],333:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 const writePngToFile = (fileName, canvas) => new Promise((resolve, reject) => {
@@ -43058,7 +43990,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],324:[function(require,module,exports){
+},{"fs":1}],334:[function(require,module,exports){
 /* globals document, ImageData */
 
 const parseFont = require('./lib/parse-font')
@@ -43095,7 +44027,7 @@ exports.loadImage = function (src, options) {
   })
 }
 
-},{"./lib/parse-font":325}],325:[function(require,module,exports){
+},{"./lib/parse-font":335}],335:[function(require,module,exports){
 'use strict'
 
 /**
@@ -43198,7 +44130,7 @@ module.exports = str => {
   return (cache[str] = font)
 }
 
-},{}],326:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
@@ -43296,7 +44228,7 @@ BitReader.prototype.pi = function() {
 module.exports = BitReader;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],327:[function(require,module,exports){
+},{"buffer":71}],337:[function(require,module,exports){
 /* CRC32, used in Bzip2 implementation.
  * This is a port of CRC32.java from the jbzip2 implementation at
  *   https://code.google.com/p/jbzip2
@@ -43402,7 +44334,7 @@ module.exports = (function() {
   return CRC32;
 })();
 
-},{}],328:[function(require,module,exports){
+},{}],338:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
@@ -44011,7 +44943,7 @@ Bunzip.license = pjson.license;
 module.exports = Bunzip;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../package.json":330,"./bitreader":326,"./crc32":327,"./stream":329,"buffer":71}],329:[function(require,module,exports){
+},{"../package.json":340,"./bitreader":336,"./crc32":337,"./stream":339,"buffer":71}],339:[function(require,module,exports){
 /* very simple input/output stream interface */
 var Stream = function() {
 };
@@ -44055,7 +44987,7 @@ Stream.prototype.flush = function() {
 
 module.exports = Stream;
 
-},{}],330:[function(require,module,exports){
+},{}],340:[function(require,module,exports){
 module.exports={
   "name": "seek-bzip",
   "version": "2.0.0",
@@ -44091,936 +45023,4 @@ module.exports={
   }
 }
 
-},{}],331:[function(require,module,exports){
-//onmessage=function(oEvent) {
-function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
-    //var url = oEvent.data[0];
-
-    //250/2
-    //1000/2
-    //var gateRes = 125;
-    //var multiplier = gateRes*2;
-    //var radVersion = oEvent.data[4];
-
-    var gateRes;
-    var multiplier;
-    // different gate resolutions for hi-res vs non hi-res data
-    if (radVersion == "01") {
-        // version 01 is non hi-res data
-        gateRes = 2000;
-        multiplier = gateRes*8;
-    } else if (radVersion == "08") {
-        // version 08 is TDWR
-        gateRes = 150;
-        multiplier = gateRes*1.2;
-    } else if (radVersion == "l3") {
-        // version l3 is level 3 data
-        gateRes = 125;
-        multiplier = gateRes*2;
-    } else if (radVersion == "NXQ" || radVersion == "N0S") {
-        // different resolution for l3 base reflectivity, storm relative velocity
-        gateRes = 500;
-        multiplier = gateRes*2;
-    } else {
-        // everything else (new l2 files - hi-res)
-        gateRes = 125;
-        multiplier = gateRes*2;
-    }
-
-    console.log(gateRes, multiplier)
-
-    function radians(deg) {
-        return (3.141592654/180.)*deg;
-    }
-
-    var radarLat = radians(radarLat); // radians(oEvent.data[2]);
-    var radarLon = radians(radarLon); // radians(oEvent.data[3]);
-    var inv = 180.0/3.141592654;
-    var re = 6371000.0;
-    var phi = radians(phi)//radians(oEvent.data[1]);
-    var h0 = 0.0;
-
-    function calculatePosition(az, range) {
-        var mathaz = radians(90.0 - az);
-        var h = Math.sqrt(Math.pow(range,2.0)+Math.pow(((4./3.)*re+h0),2.0)+2.*range*((4./3.)*re+h0)*Math.sin(phi))-(4./3.)*re;
-        var ca = Math.acos((Math.pow(range,2.0)-Math.pow(re,2.0)-Math.pow(re+h,2.0))/(-2.0*re*(re+h)));
-        var xcart = (ca*re)*Math.cos(mathaz);
-        var ycart = (ca*re)*Math.sin(mathaz);
-        //convert to latitude longitude
-        var rho = Math.sqrt(Math.pow(xcart,2.0)+Math.pow(ycart,2.0));
-        var c = rho/re;
-        var lat = Math.asin(Math.cos(c)*Math.sin(radarLat)+(ycart*Math.sin(c)*Math.cos(radarLat))/(rho))*inv;
-        lon = (radarLon + Math.atan((xcart*Math.sin(c))/(rho*Math.cos(radarLat)*Math.cos(c)-ycart*Math.sin(radarLat)*Math.sin(c))))*inv;
-
-        //console.log(lat, lon)
-
-        mx = (180.0 + lon)/360.0;
-        my = (180. - (180. / 3.141592654 * Math.log(Math.tan(3.141592654 / 4. + lat * 3.141592654 / 360.)))) / 360.; 
-        //console.log(mx,my);
-        return {
-            x:mx,
-            y:my
-        }
-    }
-
-    //function to process file
-    function reqListener() {
-        var json = JSON.parse(this.responseText);
-
-        var azs = json.azimuths;
-        var min = azs[0];
-        var max = azs[azs.length-1];
-
-        for (var key in json.radials) {
-            if (key == "azimuths") continue;
-            key = +key;
-            var values = json.radials[key];
-            var az = azs[key];
-            var leftAz, rightAz, bottomR, topR;
-
-            //case when first az
-            if (key == 0) {
-                //case when crossing 0
-                leftAz = (min + 360 + max)/2;
-                rightAz = (az+azs[key+1])/2;
-            } else if (key == azs.length-1) {
-                //case when crossing 0 the other way
-                leftAz = (az + azs[key-1])/2;
-                rightAz = (min+360+max)/2;
-            } else {
-                //case when nothing to worry about
-                leftAz = (az + azs[key-1])/2;
-                rightAz = (az + azs[key+1])/2;
-            }
-
-            //loop through radar range gates
-            for (var i=0; i<values.length; i++) {
-                bottomR = values[i]*multiplier - gateRes;
-                topR = values[i]*multiplier + gateRes;
-
-                var bl = calculatePosition(leftAz, bottomR);
-                //console.log(bl, bl.x);
-                var tl = calculatePosition(leftAz, topR);
-                var br = calculatePosition(rightAz, bottomR);
-                var tr = calculatePosition(rightAz, topR);
-
-                output.push(
-                    bl.x,//leftAz,
-                    bl.y,//bottomR,
-
-                    tl.x,//leftAz,
-                    tl.y,//topR,
-
-                    br.x,//rightAz,
-                    br.y,//bottomR,
-                    br.x,//rightAz,
-                    br.y,//bottomR,
-
-                    tl.x,//leftAz,
-                    tl.y,//topR,
-                    tr.x,//rightAz,
-                    tr.y//topR
-                )
-                var colorVal = json.values[key][i];
-                colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
-            }
-        }
-        var typedOutput = new Float32Array(output);
-        var colorOutput = new Float32Array(colors);
-        var indexOutput = new Int32Array(indices);
-        callback({"data":typedOutput.buffer,"indices":indexOutput.buffer,"colors":colorOutput.buffer},[typedOutput.buffer,indexOutput.buffer,colorOutput.buffer]);
-        //postMessage({"data":typedOutput.buffer,"indices":indexOutput.buffer,"colors":colorOutput.buffer},[typedOutput.buffer,indexOutput.buffer,colorOutput.buffer]);
-    }
-
-    //get file from server
-    var oReq = new XMLHttpRequest();
-    oReq.addEventListener("load", reqListener);
-    oReq.open("GET", url);
-    oReq.send();
-
-    var output = [];
-    //var maxUn = 467000;
-    //var firstGate = 2125;
-    //var startingAngle = 0.0;
-    var indices = [];
-    var colors = [];
-}
-//}
-
-module.exports = {
-    calcPolygons
-}
-},{}],332:[function(require,module,exports){
-const calcPolys = require('./calculatePolygons');
-const STstuff = require('./stormTracking');
-const tt = require('./paletteTooltip');
-
-function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
-    var settings = {};
-    settings["rlat"] = lati;
-    settings["rlon"] = lngi;
-    // phi is elevation
-    settings["phi"] = 0.483395;
-    settings["base"] = jsonObj;
-
-    if (Array.isArray(produc)) {
-        produc = produc[0];
-    }
-
-
-    var divider;
-    function createTexture(gl) {
-        $.getJSON(`./plotData/products/${produc}.json`, function(data) {
-            console.log(data);
-            var colors = data.colors; //colors["ref"];
-            var levs = data.values; //values["ref"];
-            var colortcanvas = document.getElementById("texturecolorbar");
-            colortcanvas.width = 300;
-            colortcanvas.height = 30;
-            var ctxt = colortcanvas.getContext('2d');
-            ctxt.clearRect(0, 0, colortcanvas.width, colortcanvas.height);
-            var grdt = ctxt.createLinearGradient(0, 0, colortcanvas.width, 0);
-            var cmax = levs[levs.length - 1];
-            var cmin = levs[0];
-            var clen = colors.length;
-
-            for (var i = 0; i < clen; ++i) {
-                grdt.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
-            }
-            ctxt.fillStyle = grdt;
-            ctxt.fillRect(0, 0, colortcanvas.width, colortcanvas.height);
-            imagedata = ctxt.getImageData(0, 0, colortcanvas.width, colortcanvas.height);
-            imagetexture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, imagetexture);
-            pageState.imagetexture = imagetexture;
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-            tt.initPaletteTooltip(produc, colortcanvas);
-        });
-    }
-
-    function dataStore() {
-        return {
-            positions: null,
-            indices: null,
-            colors: null
-        }
-    }
-
-    var pageState = dataStore();
-
-    //var myWorker = new Worker('./polygonTest/generateVerticesRadarDemo.js');
-    //myWorker.onmessage = function (oEvent) {
-    function finishItUp(data, indices, colors, layer, geojson) {
-        //var data = new Float32Array(oEvent.data.data);
-        //var indices = new Int32Array(oEvent.data.indices);
-        //var colors = new Float32Array(oEvent.data.colors);
-        var data = new Float32Array(data);
-        var indices = new Int32Array(indices);
-        var colors = new Int32Array(colors);
-        var returnedGeojson = geojson;//oEvent.data.geojson;
-        pageState.positions = data;
-        pageState.indices = indices;
-        pageState.colors = colors;
-        //console.log(Math.max(...[...new Set(colors)]))
-        map.addLayer(layer);
-
-        STstuff.loadAllStormTrackingStuff();
-    }
-
-    $.getJSON(`./plotData/products/${produc}.json`, function(data) {
-        divider = data.divider;
-    }).then(function() {
-        console.log('NEW!!!!')
-        console.log(divider)
-        //compile shaders
-        var vertexSource = `
-            //x: azimuth
-            //y: range
-            //z: value
-            attribute vec2 aPosition;
-            attribute float aColor;
-            uniform mat4 u_matrix;
-            varying float color;
-    
-            void main() {
-                color = aColor;
-                gl_Position = u_matrix * vec4(aPosition.x,aPosition.y,0.0,1.0);
-            }`;
-        var fragmentSource = `
-            precision mediump float;
-            varying float color;
-            uniform sampler2D u_texture;
-            void main() {
-                //gl_FragColor = vec4(0.0,color/60.0,0.0,1.0);
-                float calcolor = (color)${divider};
-                gl_FragColor = texture2D(u_texture,vec2(min(max(calcolor,0.0),1.0),0.0));
-                //gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-            }`
-        var masterGl;
-        var layer = {
-            id: "baseReflectivity",
-            type: "custom",
-            minzoom: 0,
-            maxzoom: 18,
-
-            onAdd: function (map, gl) {
-                masterGl = gl;
-                createTexture(gl);
-
-                var ext = gl.getExtension('OES_element_index_uint');
-                var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-                gl.shaderSource(vertexShader, vertexSource);
-                gl.compileShader(vertexShader);
-                var compilationLog = gl.getShaderInfoLog(vertexShader);
-                var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-                gl.shaderSource(fragmentShader, fragmentSource);
-                gl.compileShader(fragmentShader);
-                var compilationLog = gl.getShaderInfoLog(fragmentShader);
-                this.program = gl.createProgram();
-                gl.attachShader(this.program, vertexShader);
-                gl.attachShader(this.program, fragmentShader);
-                gl.linkProgram(this.program);
-                this.matrixLocation = gl.getUniformLocation(this.program, "u_matrix");
-                this.positionLocation = gl.getAttribLocation(this.program, "aPosition");
-                this.colorLocation = gl.getAttribLocation(this.program, "aColor");
-                this.textureLocation = gl.getUniformLocation(this.program, "u_texture");
-
-                //data buffers
-                this.positionBuffer = gl.createBuffer();
-                this.indexBuffer = gl.createBuffer();
-                this.colorBuffer = gl.createBuffer();
-            },//end onAdd
-            render: function (gl, matrix) {
-                //console.log("render base");
-                var ext = gl.getExtension('OES_element_index_uint');
-                //use program
-                gl.useProgram(this.program);
-                //how to remove vertices from position buffer
-                var size = 2;
-                var type = gl.FLOAT;
-                var normalize = false;
-                var stride = 0;
-                var offset = 0;
-                //calculate matrices
-                gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
-                gl.uniform1i(this.textureLocation, 0);
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-                gl.bufferData(gl.ARRAY_BUFFER, pageState.positions, gl.STATIC_DRAW);
-                gl.enableVertexAttribArray(this.positionLocation);
-                gl.vertexAttribPointer(this.positionLocation, size, type, normalize, stride, offset);
-
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-                gl.bufferData(gl.ARRAY_BUFFER, pageState.colors, gl.STATIC_DRAW);
-                gl.enableVertexAttribArray(this.colorLocation);
-                gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
-
-                gl.bindTexture(gl.TEXTURE_2D, pageState.imagetexture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-                var primitiveType = gl.TRIANGLES;
-                var count = pageState.indices.length;
-                gl.drawArrays(primitiveType, offset, pageState.positions.length / 2);
-
-            }//end render
-        }
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var vers = JSON.parse(this.responseText).version;
-
-                calcPolys.calcPolygons(
-                    settings["base"],
-                    settings["phi"],
-                    settings["rlat"],
-                    settings["rlon"],
-                    vers,
-                    function(dat) {
-                        finishItUp(dat.data, dat.indices, dat.colors, layer)
-                    }
-                )
-                //myWorker.postMessage([
-                //    settings["base"],
-                //    settings["phi"],
-                //    settings["rlat"],
-                //    settings["rlon"],
-                //    vers
-                //]);
-            }
-        };
-        xhttp.open("GET", jsonObj, true);
-        xhttp.send();
-    })
-}
-
-module.exports = drawRadarShape;
-},{"./calculatePolygons":331,"./paletteTooltip":338,"./stormTracking":339}],333:[function(require,module,exports){
-const { plot } = require('../../nexrad-level-2-plot/src');
-
-function loadL2Listeners(l2rad, displayElevations) {
-    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
-    //$('.reflPlotButton').trigger('click');
-    //console.log('initial reflectivity plot');
-    //displayElevations('REF');
-    var btnsArr = [
-        "l2-ref",
-        "l2-vel",
-        "l2-rho",
-        "l2-phi",
-        "l2-zdr",
-        "l2-sw "
-    ]
-    for (key in btnsArr) {
-        var curElemIter = document.getElementById(btnsArr[key]);
-        curElemIter.disabled = false;
-        $(curElemIter).addClass('btn-outline-primary');
-        $(curElemIter).removeClass('btn-outline-secondary');
-    }
-    document.getElementById('loadl2').style.display = 'none';
-    $('.level2btns button').off();
-    console.log('turned off listener')
-    $('.level2btns button').on('click', function () {
-        console.log(this.value)
-        removeMapLayer('baseReflectivity');
-        if (this.value == 'load') {
-            getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
-                var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-                console.log(phpProxy + individualFileURL)
-                loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
-            });
-        }
-        if (this.value == 'l2-ref') {
-            const level2Plot = plot(l2rad, 'REF', {
-                elevations: 1,
-            });
-        } else if (this.value == 'l2-vel') {
-            const level2Plot = plot(l2rad, 'VEL', {
-                elevations: 2,
-            });
-        } else if (this.value == 'l2-rho') {
-            const level2Plot = plot(l2rad, 'RHO', {
-                elevations: 1,
-            });
-        } else if (this.value == 'l2-phi') {
-            const level2Plot = plot(l2rad, 'PHI', {
-                elevations: 1,
-            });
-        } else if (this.value == 'l2-zdr') {
-            const level2Plot = plot(l2rad, 'ZDR', {
-                elevations: 1,
-            });
-        } else if (this.value == 'l2-sw ') {
-            displayElevations('SW ');
-            const level2Plot = plot(l2rad, 'SW ', {
-                elevations: parseInt($('#elevInput').val()),
-            });
-        }
-    });
-    console.log('turned on listener i think')
-}
-
-module.exports = loadL2Listeners;
-},{"../../nexrad-level-2-plot/src":252}],334:[function(require,module,exports){
-const drawRadarShape = require('../drawToMap');
-
-function draw(data) {
-    var product = data.productDescription.abbreviation;
-    if (Array.isArray(product)) {
-        product = product[0];
-    }
-    var c = [];
-	var json = {
-		'radials': [],
-		'values': [],
-		'azimuths': [],
-		'version': [],
-	};
-	var adder = 0;
-	var divider = 1;
-	if (product == "N0U" || product == "N0G") {
-		adder = 65;
-	}
-	// generate a palette
-	//const palette = Palette.generate(product.palette);
-	// calculate scaling paramater with respect to pallet's designed criteria
-	//const paletteScale = (data?.productDescription?.plot?.maxDataValue ?? 255) / (product.palette.baseScale ?? data?.productDescription?.plot?.maxDataValue ?? 1);
-	// use the raw values to avoid scaling and un-scaling
-	var radialLoop = data.radialPackets[0].radials;
-	if (product == "N0C" || product == "N0X") {
-		radialLoop = data.radialPackets[0].radialsRaw;
-	}
-	radialLoop.forEach((radial) => {
-		arr = [];
-		valArr = [];
-		const startAngle = radial.startAngle * (Math.PI / 180);
-		const endAngle = startAngle + radial.angleDelta * (Math.PI / 180);
-		json.azimuths.push(radial.startAngle)
-		// track max value for downsampling
-		let maxDownsample = 0;
-		let lastRemainder = 0;
-		// for each bin
-		radial.bins.forEach((bin, idx) => {
-			// skip null values
-			if (bin === null) return;
-			// see if there's a sample to plot
-			if (!bin) return;
-			//ctx.beginPath();
-			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
-			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
-
-			arr.push(idx + data.radialPackets[0].firstBin)
-			valArr.push((bin + adder) / divider)
-			c.push((bin + adder) / divider)
-
-			//ctx.stroke();
-		});
-		json.radials.push(arr)
-		json.values.push(valArr)
-	});
-
-	// if the first azimuth isn't zero (e.g. azimuths going 0-360) then we need to do some re-arrangement
-	if (json.azimuths[0] != 0) {
-		// store the value of first azimuth (in this case it will be the offset)
-		var startAzimuth = json.azimuths[0];
-		for (val in json.azimuths) {
-			// add the starting value to each azimuth value, allowing for correct rotation
-			json.azimuths[val] = json.azimuths[val] + startAzimuth
-		}
-	}
-	// sort each azimuth value from lowest to highest
-	json.azimuths.sort(function(a, b){return a - b});
-
-	if (product == "DVL") {
-		var arrMin = Math.min(...[...new Set(c)]);
-		var arrMax = Math.max(...[...new Set(c)]);
-		for (value in json.values) {
-			json.values[value] = json.values[value].map(scaleArray([arrMin, arrMax], [0.1, 75]))
-		}
-	}
-
-	console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
-	//console.log([...new Set(c)])
-	json.version = 'l3';
-	if (product == "NXQ" || product == "N0S") {
-		json.version = product;
-	}
-	console.log(json)
-	var blob = new Blob([JSON.stringify(json)], {type: "text/plain"});
-    var url = window.URL.createObjectURL(blob);
-	document.getElementById('level3json').innerHTML = url;
-	/*const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    // the filename you want
-    a.download = 'level3.json';
-    document.body.appendChild(a);
-    a.click();*/
-
-	var currentStation = 'K' + data.textHeader.id3;
-	if (document.getElementById('fileStation').innerHTML != currentStation) {
-		document.getElementById('fileStation').innerHTML = currentStation;
-	}
-	$.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-		var statLat = data[currentStation][1];
-		var statLng = data[currentStation][2];
-		// ../../../data/json/KLWX20220623_014344_V06.json
-		// product.abbreviation
-		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
-
-		//new mapboxgl.Marker()
-		//    .setLngLat([stationLng, stationLat])
-		//    .addTo(map);
-	});
-}
-
-module.exports = draw
-},{"../drawToMap":332}],335:[function(require,module,exports){
-const ut = require('../utils');
-
-function parsePlotMesocyclone(l3rad, theFileStation) {
-    var mesocycloneLayersArr = [];
-    var geojsonPointTemplate = {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'Point',
-            'coordinates': 'he'
-        }
-    }
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-        var staLat = data[theFileStation][1];
-        var staLng = data[theFileStation][2];
-
-        var mesocycloneObj = l3rad.formatted.mesocyclone;
-        if (mesocycloneObj != undefined) {
-            var mesocycloneList = Object.keys(mesocycloneObj);
-
-            function loadMesocyclone(identifier) {
-                // store all map layers being added to be able to manipulate later
-                mesocycloneLayersArr.push(identifier)
-                // reset geojson coordinates
-                geojsonPointTemplate.geometry.coordinates = [];
-
-                // current storm track
-                var curMC = mesocycloneObj[identifier];
-                var curMCCoords = ut.findTerminalCoordinates(staLat, staLng, curMC.az, curMC.ran);
-                // push the initial coordinate point - we do not know if the current track is a line or a point yet
-                geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
-
-                setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
-            }
-            for (key in mesocycloneList) {
-                loadMesocyclone(mesocycloneList[key])
-            }
-            document.getElementById('allMesocycloneLayers').innerHTML = JSON.stringify(mesocycloneLayersArr);
-        }
-    })
-}
-
-module.exports = parsePlotMesocyclone;
-},{"../utils":340}],336:[function(require,module,exports){
-const ut = require('../utils');
-
-function parsePlotStormTracks(l3rad, theFileStation) {
-    var stormTracksLayerArr = [];
-    // load storm tracking information
-    var geojsonLineTemplate = {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'LineString',
-            'coordinates': []
-        }
-    }
-    var geojsonPointTemplate = {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'Point',
-            'coordinates': []
-        }
-    }
-
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-        var staLat = data[theFileStation][1];
-        var staLng = data[theFileStation][2];
-
-        var stormTracks = l3rad.formatted.storms;
-        console.log(stormTracks)
-        var stormTracksList = Object.keys(stormTracks);
-
-        function loadStormTrack(identifier) {
-            // store all map layers being added to be able to manipulate later
-            stormTracksLayerArr.push(identifier)
-            // reset geojson coordinates
-            geojsonLineTemplate.geometry.coordinates = [];
-            geojsonLineTemplate.geometry.type = 'LineString';
-
-            // current storm track
-            var curST = stormTracks[identifier].current;
-            var curSTCoords = ut.findTerminalCoordinates(staLat, staLng, curST.nm, curST.deg);
-            // push the initial coordinate point - we do not know if the current track is a line or a point yet
-            geojsonLineTemplate.geometry.coordinates.push([curSTCoords.longitude, curSTCoords.latitude])
-
-            // future storm track (forecast)
-            var futureST = stormTracks[identifier].forecast;
-            var isLine;
-            // if the first forecast value for the current track is null, there is no line track - it is a point
-            if (futureST[0] == null) {
-                isLine = false;
-            } else if (futureST[0] != null) {
-                isLine = true;
-            }
-            if (isLine) {
-                for (key in futureST) {
-                    // the current index in the futureST variable being looped through
-                    var indexedFutureST = futureST[key];
-                    // check if the value is null, in which case the storm track is over
-                    if (indexedFutureST != null) {
-                        var indexedFutureSTCoords = ut.findTerminalCoordinates(staLat, staLng, indexedFutureST.nm, indexedFutureST.deg);
-                        // push the current index point to the line geojson object
-                        geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
-                        // add a circle for each edge on a storm track line
-                        geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
-                        setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
-                        stormTracksLayerArr.push(identifier + '_pointEdge' + key)
-                    }
-                }
-                // push the finished geojson line object to a function that adds to the map
-                setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
-                // adds a blue circle at the start of the storm track
-                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
-                geojsonLineTemplate.geometry.type = 'Point';
-                setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
-                stormTracksLayerArr.push(identifier + '_point')
-            } else if (!isLine) {
-                // if the storm track does not have a forecast, display a Point geojson
-                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
-                geojsonLineTemplate.geometry.type = 'Point';
-                setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
-            }
-        }
-        // Z0 = line, R1 = point
-        for (key in stormTracksList) {
-            loadStormTrack(stormTracksList[key])
-        }
-        document.getElementById('allStormTracksLayers').innerHTML = JSON.stringify(stormTracksLayerArr);
-        var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
-        var stLayers = stLayersText.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
-        // setting layer orders
-        for (key in stLayers) {
-            if (stLayers[key].includes('_pointEdge')) {
-                moveMapLayer(stLayers[key])
-            }
-        }
-        for (key in stLayers) {
-            if (stLayers[key].includes('_point')) {
-                moveMapLayer(stLayers[key])
-            }
-        }
-    });
-}
-
-module.exports = parsePlotStormTracks;
-},{"../utils":340}],337:[function(require,module,exports){
-const ut = require('../utils');
-
-function parsePlotTornado(l3rad, theFileStation) {
-    var tornadoLayersArr = [];
-    var geojsonPointTemplate = {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'Point',
-            'coordinates': 'he'
-        }
-    }
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-        var staLat = data[theFileStation][1];
-        var staLng = data[theFileStation][2];
-
-        var tornadoObj = l3rad.formatted.tvs;
-        console.log(tornadoObj)
-        var tornadoList = Object.keys(tornadoObj);
-
-        function loadTornado(identifier) {
-            // store all map layers being added to be able to manipulate later
-            tornadoLayersArr.push(identifier)
-            // reset geojson coordinates
-            geojsonPointTemplate.geometry.coordinates = [];
-
-            // current storm track
-            var curTVS = tornadoObj[identifier];
-            var curTVSCoords = ut.findTerminalCoordinates(staLat, staLng, curTVS.az, curTVS.range);
-            // push the initial coordinate point - we do not know if the current track is a line or a point yet
-            geojsonPointTemplate.geometry.coordinates = [curTVSCoords.longitude, curTVSCoords.latitude];
-
-            setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
-        }
-        for (key in tornadoList) {
-            loadTornado(tornadoList[key])
-        }
-        document.getElementById('allTornadoLayers').innerHTML = JSON.stringify(tornadoLayersArr);
-    });
-}
-
-module.exports = parsePlotTornado;
-},{"../utils":340}],338:[function(require,module,exports){
-function initPaletteTooltip(produc, colortcanvas) {
-    var hycObj = {
-        0: 'ND: Below Threshold',
-        1: 'ND: Below Threshold',
-        2: 'BI: Biological',
-        3: 'GC: Anomalous Propagation/Ground Clutter',
-        4: 'IC: Ice Crystals',
-        5: 'DS: Dry Snow',
-        6: 'WS: Wet Snow',
-        7: 'RA: Light and/or Moderate Rain',
-        8: 'HR: Heavy Rain',
-        9: 'BD: Big Drops (rain)',
-        10: 'GR: Graupel',
-        11: 'HA: Hail, possibly with rain',
-        12: 'LH: Large Hail',
-        13: 'GH: Giant Hail',
-        14: 'UK: Unknown Classification',
-        15: 'RF: Range Folded',
-    };
-    const tooltip = bootstrap.Tooltip.getInstance('#texturecolorbar')
-    if (produc == "HHC" || produc == "N0H") {
-        function getCursorPosition(canvas, event) {
-            const rect = canvas.getBoundingClientRect()
-            const x = event.clientX - rect.left
-            const y = event.clientY - rect.top
-            return ({ "x": x, "y": y });
-        }
-        colortcanvas.addEventListener('mousemove', function (e) {
-            if (document.getElementById('curProd').innerHTML == 'hyc' || document.getElementById('curProd').innerHTML == 'hhc') {
-                var xPos = getCursorPosition(colortcanvas, e).x;
-                var thearr = [];
-                var numOfColors = 14;
-                for (var e = 0; e < numOfColors; e++) {
-                    thearr.push(Math.round((colortcanvas.width / numOfColors) * e))
-                }
-                var thearr2 = thearr;
-                thearr.push(xPos);
-                thearr2.sort(function (a, b) { return a - b });
-                var xPosIndex = thearr2.indexOf(xPos);
-                var xPosProduct = hycObj[thearr2.indexOf(xPos)];
-                //console.log(xPosProduct)
-                tooltip.enable();
-                tooltip.setContent({ '.tooltip-inner': xPosProduct })
-            }
-        })
-    } else {
-        tooltip.disable();
-    }
-    //$('#texturecolorbar').off()
-}
-
-module.exports = {
-    initPaletteTooltip
-}
-},{}],339:[function(require,module,exports){
-function loadAllStormTrackingStuff() {
-    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
-    function addStormTracksLayers() {
-        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
-    }
-    function addMesocycloneLayers() {
-        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
-    }
-    function addTornadoLayers() {
-        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
-    }
-    function arrayify(text) {
-        return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
-    }
-    function removeAMapLayer(lay) {
-        if (map.getLayer(lay)) {
-            map.removeLayer(lay);
-        }
-        if (map.getSource(lay)) {
-            map.removeSource(lay);
-        }
-    }
-    var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
-    var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
-    var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
-    var stLayers = arrayify(stLayersText);
-    var mdLayers = arrayify(mdLayersText);
-    var tvLayers = arrayify(tvLayersText);
-
-    if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
-        var station = document.getElementById('fileStation').innerHTML;
-        $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
-            var stationLat = data[station][1];
-            var stationLng = data[station][2];
-            map.flyTo({
-                center: [stationLng, stationLat],
-                zoom: 8,
-                duration: 1000,
-            });
-        })
-        for (key in stLayers) {
-            removeAMapLayer(stLayers[key]);
-        }
-        addStormTracksLayers();
-        for (key in mdLayers) {
-            removeAMapLayer(mdLayers[key]);
-        }
-        addMesocycloneLayers();
-        for (key in tvLayers) {
-            removeAMapLayer(tvLayers[key]);
-        }
-        addTornadoLayers();
-    } else {
-        for (key in stLayers) {
-            map.moveLayer(stLayers[key]);
-        }
-        for (key in mdLayers) {
-            map.moveLayer(mdLayers[key]);
-        }
-        for (key in tvLayers) {
-            map.moveLayer(tvLayers[key]);
-        }
-    }
-    document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
-    document.getElementById('testEventElem').innerHTML = 'changed'
-}
-
-module.exports = {
-    loadAllStormTrackingStuff
-}
-},{}],340:[function(require,module,exports){
-(function (Buffer){(function (){
-function toBuffer(ab) {
-    const buf = Buffer.alloc(ab.byteLength);
-    const view = new Uint8Array(ab);
-    for (let i = 0; i < buf.length; ++i) {
-        buf[i] = view[i];
-    }
-    return buf;
-}
-
-function printFancyTime(dateObj, tz) {
-    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
-}
-function msToTime(s) {
-    // Pad to 2 or 3 digits, default is 2
-    function pad(n, z) {
-        z = z || 2;
-        return ('00' + n).slice(-z);
-    }
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = (s - mins) / 60;
-    return {
-        'hours': pad(hrs),
-        'minutes': pad(mins),
-        'seconds': pad(secs),
-        'milliseconds': pad(ms, 3),
-    }
-    //return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
-}
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-}
-function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
-    var metersInNauticalMiles = 1852;
-    var startPoint = { latitude: startLat, longitude: startLng };
-    var distanceMeters = distanceNM * metersInNauticalMiles;
-    var bearing = bearingDEG;
-    const destination = geolib.computeDestinationPoint(
-        startPoint,
-        distanceMeters,
-        bearing 
-    );
-    return destination;
-}
-
-module.exports = {
-    toBuffer,
-    printFancyTime,
-    msToTime,
-    round,
-    findTerminalCoordinates
-}
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}]},{},[227]);
+},{}]},{},[237]);

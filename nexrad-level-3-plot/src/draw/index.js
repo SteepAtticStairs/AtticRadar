@@ -1,7 +1,7 @@
 const { createCanvas } = require('canvas');
 const { keys } = require('../../../nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const Palette = require('./palette');
-const plotData = require('../../../plotData/drawToMap');
+const plotData = require('../../../app/drawToMap');
 
 const DEFAULT_OPTIONS = {
 	// must be a square image
