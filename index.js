@@ -7,6 +7,8 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const fs = require('fs');
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
+const l3plot = require('./plotData/level3/draw')
+
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
     const view = new Uint8Array(ab);
@@ -505,7 +507,7 @@ document.addEventListener('loadFile', function(event) {
                         }
                     });
                 } else {
-                    const level3Plot = plotAndData(l3rad);
+                    const level3Plot = l3plot(l3rad);
                 }
 
                 //document.getElementById('settingsDialog').innerHTML = 'No settings for Level 3 files yet.'

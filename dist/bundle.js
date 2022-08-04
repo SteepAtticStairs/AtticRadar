@@ -37124,6 +37124,8 @@ const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
 
 const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
 
+const l3plot = require('./plotData/level3/draw')
+
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
     const view = new Uint8Array(ab);
@@ -37622,7 +37624,7 @@ document.addEventListener('loadFile', function(event) {
                         }
                     });
                 } else {
-                    const level3Plot = plotAndData(l3rad);
+                    const level3Plot = l3plot(l3rad);
                 }
 
                 //document.getElementById('settingsDialog').innerHTML = 'No settings for Level 3 files yet.'
@@ -37664,7 +37666,7 @@ document.getElementById('fileThatWorks').addEventListener('click', function() {
     })
     .catch(err => console.error(err));*/
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./nexrad-level-2-data/src":239,"./nexrad-level-2-plot/src":252,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":243,"./nexrad-level-3-data/src":263,"./nexrad-level-3-plot/src":312,"buffer":71}],228:[function(require,module,exports){
+},{"./nexrad-level-2-data/src":239,"./nexrad-level-2-plot/src":252,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":243,"./nexrad-level-3-data/src":263,"./nexrad-level-3-plot/src":312,"./plotData/level3/draw":333,"buffer":71}],228:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -44796,10 +44798,122 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     })
 }
 
-module.exports = {
-    drawRadarShape
+module.exports = drawRadarShape;
+},{"./calculatePolygons":331,"./paletteTooltip":334,"./stormTracking":335}],333:[function(require,module,exports){
+const drawRadarShape = require('../drawToMap');
+
+function draw(data) {
+    var product = data.productDescription.abbreviation;
+    if (Array.isArray(product)) {
+        product = product[0];
+    }
+    var c = [];
+	var json = {
+		'radials': [],
+		'values': [],
+		'azimuths': [],
+		'version': [],
+	};
+	var adder = 0;
+	var divider = 1;
+	if (product == "N0U" || product == "N0G") {
+		adder = 65;
+	}
+	// generate a palette
+	//const palette = Palette.generate(product.palette);
+	// calculate scaling paramater with respect to pallet's designed criteria
+	//const paletteScale = (data?.productDescription?.plot?.maxDataValue ?? 255) / (product.palette.baseScale ?? data?.productDescription?.plot?.maxDataValue ?? 1);
+	// use the raw values to avoid scaling and un-scaling
+	var radialLoop = data.radialPackets[0].radials;
+	if (product == "N0C" || product == "N0X") {
+		radialLoop = data.radialPackets[0].radialsRaw;
+	}
+	radialLoop.forEach((radial) => {
+		arr = [];
+		valArr = [];
+		const startAngle = radial.startAngle * (Math.PI / 180);
+		const endAngle = startAngle + radial.angleDelta * (Math.PI / 180);
+		json.azimuths.push(radial.startAngle)
+		// track max value for downsampling
+		let maxDownsample = 0;
+		let lastRemainder = 0;
+		// for each bin
+		radial.bins.forEach((bin, idx) => {
+			// skip null values
+			if (bin === null) return;
+			// see if there's a sample to plot
+			if (!bin) return;
+			//ctx.beginPath();
+			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
+			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
+
+			arr.push(idx + data.radialPackets[0].firstBin)
+			valArr.push((bin + adder) / divider)
+			c.push((bin + adder) / divider)
+
+			//ctx.stroke();
+		});
+		json.radials.push(arr)
+		json.values.push(valArr)
+	});
+
+	// if the first azimuth isn't zero (e.g. azimuths going 0-360) then we need to do some re-arrangement
+	if (json.azimuths[0] != 0) {
+		// store the value of first azimuth (in this case it will be the offset)
+		var startAzimuth = json.azimuths[0];
+		for (val in json.azimuths) {
+			// add the starting value to each azimuth value, allowing for correct rotation
+			json.azimuths[val] = json.azimuths[val] + startAzimuth
+		}
+	}
+	// sort each azimuth value from lowest to highest
+	json.azimuths.sort(function(a, b){return a - b});
+
+	if (product == "DVL") {
+		var arrMin = Math.min(...[...new Set(c)]);
+		var arrMax = Math.max(...[...new Set(c)]);
+		for (value in json.values) {
+			json.values[value] = json.values[value].map(scaleArray([arrMin, arrMax], [0.1, 75]))
+		}
+	}
+
+	console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
+	//console.log([...new Set(c)])
+	json.version = 'l3';
+	if (product == "NXQ" || product == "N0S") {
+		json.version = product;
+	}
+	console.log(json)
+	var blob = new Blob([JSON.stringify(json)], {type: "text/plain"});
+    var url = window.URL.createObjectURL(blob);
+	document.getElementById('level3json').innerHTML = url;
+	/*const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    // the filename you want
+    a.download = 'level3.json';
+    document.body.appendChild(a);
+    a.click();*/
+
+	var currentStation = 'K' + data.textHeader.id3;
+	if (document.getElementById('fileStation').innerHTML != currentStation) {
+		document.getElementById('fileStation').innerHTML = currentStation;
+	}
+	$.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+		var statLat = data[currentStation][1];
+		var statLng = data[currentStation][2];
+		// ../../../data/json/KLWX20220623_014344_V06.json
+		// product.abbreviation
+		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+
+		//new mapboxgl.Marker()
+		//    .setLngLat([stationLng, stationLat])
+		//    .addTo(map);
+	});
 }
-},{"./calculatePolygons":331,"./paletteTooltip":333,"./stormTracking":334}],333:[function(require,module,exports){
+
+module.exports = draw
+},{"../drawToMap":332}],334:[function(require,module,exports){
 function initPaletteTooltip(produc, colortcanvas) {
     var hycObj = {
         0: 'ND: Below Threshold',
@@ -44854,7 +44968,7 @@ function initPaletteTooltip(produc, colortcanvas) {
 module.exports = {
     initPaletteTooltip
 }
-},{}],334:[function(require,module,exports){
+},{}],335:[function(require,module,exports){
 function loadAllStormTrackingStuff() {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {

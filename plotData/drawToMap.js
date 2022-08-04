@@ -207,6 +207,4 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     })
 }
 
-module.exports = {
-    drawRadarShape
-}
+module.exports = drawRadarShape;
