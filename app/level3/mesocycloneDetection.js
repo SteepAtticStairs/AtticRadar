@@ -1,4 +1,5 @@
 const ut = require('../utils');
+const mapFuncs = require('../map/mapFunctions');
 
 function parsePlotMesocyclone(l3rad, theFileStation) {
     var mesocycloneLayersArr = [];
@@ -30,7 +31,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
                 // push the initial coordinate point - we do not know if the current track is a line or a point yet
                 geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
 
-                setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
+                mapFuncs.setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
             }
             for (key in mesocycloneList) {
                 loadMesocyclone(mesocycloneList[key])

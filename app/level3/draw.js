@@ -1,5 +1,10 @@
 const drawRadarShape = require('../drawToMap');
 
+const scaleArray = (fromRange, toRange) => {
+	const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
+  	return from =>  (from - fromRange[0]) * d + toRange[0];
+};
+
 function draw(data) {
     var product = data.productDescription.abbreviation;
     if (Array.isArray(product)) {

@@ -1,4 +1,5 @@
 const ut = require('../utils');
+const mapFuncs = require('../map/mapFunctions');
 
 function parsePlotTornado(l3rad, theFileStation) {
     var tornadoLayersArr = [];
@@ -30,7 +31,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             // push the initial coordinate point - we do not know if the current track is a line or a point yet
             geojsonPointTemplate.geometry.coordinates = [curTVSCoords.longitude, curTVSCoords.latitude];
 
-            setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
+            mapFuncs.setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
         }
         for (key in tornadoList) {
             loadTornado(tornadoList[key])

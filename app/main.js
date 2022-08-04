@@ -44,7 +44,7 @@ document.addEventListener('loadFile', function(event) {
     document.getElementById('spinnerParent').style.display = 'block';
     document.getElementById('productStuff').style.display = 'block';
     document.getElementById('levelInput').style.display = 'none';
-    removeTestFileControl();
+    //removeTestFileControl();
     //console.log(URL.createObjectURL(document.getElementById("fileInput").files[0]));
     setTimeout(function() {
         var uploadedFile = event.detail[0];

@@ -1,3 +1,5 @@
+const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
     const view = new Uint8Array(ab);
@@ -47,10 +49,198 @@ function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     return destination;
 }
 
+function logToModal(textContent) {
+    console.log(textContent);
+    function openMessageModal() {
+        $("#messageDialog").dialog({
+            modal: true,
+            // https://stackoverflow.com/a/30624445/18758797
+            open: function () {
+                $(this).parent().css({
+                    position: 'absolute',
+                    top: 10,
+                    maxHeight: '70vh',
+                    overflow: 'scroll'
+                });
+            },
+        });
+    }
+    if (!($("#messageDialog").dialog('instance') == undefined)) {
+        // message box is already initialized
+        if (!$('#messageDialog').closest('.ui-dialog').is(':visible')) {
+            // message box is initialized but hidden - open it
+            openMessageModal();
+        }
+    } else if ($("#messageDialog").dialog('instance') == undefined) {
+        // message box is not initialized, open it
+        openMessageModal();
+    }
+    $('#messageBox').append(`<div>${textContent}</div>`);
+    $("#messageBox").animate({ scrollTop: $("#messageBox")[0].scrollHeight }, 0);
+}
+
+function xmlToJson(xml) {
+    if (typeof xml == "string") {
+        parser = new DOMParser();
+        xml = parser.parseFromString(xml, "text/xml");
+    }
+    // Create the return object
+    var obj = {};
+    // console.log(xml.nodeType, xml.nodeName );
+    if (xml.nodeType == 1) { // element
+        // do attributes
+        if (xml.attributes.length > 0) {
+            obj["@attributes"] = {};
+            for (var j = 0; j < xml.attributes.length; j++) {
+                var attribute = xml.attributes.item(j);
+                obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+            }
+        }
+    }
+    else if (xml.nodeType == 3 ||
+        xml.nodeType == 4) { // text and cdata section
+        obj = xml.nodeValue
+    }
+    // do children
+    if (xml.hasChildNodes()) {
+        for (var i = 0; i < xml.childNodes.length; i++) {
+            var item = xml.childNodes.item(i);
+            var nodeName = item.nodeName;
+            if (typeof (obj[nodeName]) == "undefined") {
+                obj[nodeName] = xmlToJson(item);
+            } else {
+                if (typeof (obj[nodeName].length) == "undefined") {
+                    var old = obj[nodeName];
+                    obj[nodeName] = [];
+                    obj[nodeName].push(old);
+                }
+                if (typeof (obj[nodeName]) === 'object') {
+                    obj[nodeName].push(xmlToJson(item));
+                }
+            }
+        }
+    }
+    return obj;
+}
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    var k = 1024;
+    var dm = decimals < 0 ? 0 : decimals;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+var tiltObject = {
+    'tilt1': {
+        'ref': 'N0B',
+        'vel': 'N0G',
+        'lowres-ref': 'p94r0',
+        'lowres-vel': 'p99v0',
+        'rho': '161c0',
+        'zdr': '159x0',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h0',
+        'srv': '56rm0',
+        'vil': '134il',
+        'sti': '58sti',
+        'mcy': '141md',
+    },
+    'tilt2': {
+        'ref': 'N1B',
+        'vel': 'N1G',
+        'lowres-ref': 'p94r1',
+        'lowres-vel': 'p99v1',
+        'rho': '161c1',
+        'zdr': '159x1',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h1',
+        'srv': '56rm1',
+        'vil': '134il',
+        'sti': '58sti',
+    },
+    'tilt3': {
+        'ref': 'N2B',
+        'vel': 'N2G',
+        'lowres-ref': 'p94r2',
+        'lowres-vel': 'p99v2',
+        'rho': '161c2',
+        'zdr': '159x2',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h2',
+        'srv': '56rm2',
+        'vil': '134il',
+        'sti': '58sti',
+    },
+    'tilt4': {
+        'ref': 'N3B',
+        'vel': 'N3G',
+        'lowres-ref': 'p94r3',
+        'lowres-vel': 'p99v3',
+        'rho': '161c3',
+        'zdr': '159x3',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h3',
+        'srv': '56rm3',
+        'vil': '134il',
+        'sti': '58sti',
+    },
+}
+var numOfTiltsObj = {
+    'ref': [1, 2, 3, 4],
+    'vel': [1, 2],
+    'lowres-ref': [1, 2, 3, 4],
+    'lowres-vel': [1, 2, 3, 4],
+    'rho': [1, 2, 3, 4],
+    'zdr': [1, 2, 3, 4],
+    'sw ': [1],
+    'hhc': [1],
+    'hyc': [1, 2, 3, 4],
+    'srv': [1, 2, 3, 4],
+    'vil': [1],
+    'sti': [1],
+}
+var numOfTiltsObj = {
+    'ref': [1, 2, 3, 4],
+    'vel': [1, 2],
+    'lowres-ref': [1, 2, 3, 4],
+    'lowres-vel': [1, 2, 3, 4],
+    'rho': [1, 2, 3, 4],
+    'zdr': [1, 2, 3, 4],
+    'sw ': [1],
+    'hhc': [1],
+    'hyc': [1, 2, 3, 4],
+    'srv': [1, 2, 3, 4],
+    'vil': [1],
+    'sti': [1],
+}
+var allL2Btns = [
+    'l2-ref',
+    'l2-vel',
+    'l2-rho',
+    'l2-phi',
+    'l2-zdr',
+    'l2-sw '
+];
+
 module.exports = {
+    phpProxy,
     toBuffer,
     printFancyTime,
     msToTime,
     round,
-    findTerminalCoordinates
+    findTerminalCoordinates,
+    logToModal,
+    xmlToJson,
+    formatBytes,
+    tiltObject,
+    numOfTiltsObj,
+    allL2Btns
 }

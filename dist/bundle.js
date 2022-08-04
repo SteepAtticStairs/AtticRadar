@@ -37276,6 +37276,7 @@ module.exports = {
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('./stormTracking');
 const tt = require('./paletteTooltip');
+var map = require('./map/map');
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var settings = {};
@@ -37483,1015 +37484,25 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"./calculatePolygons":227,"./paletteTooltip":236,"./stormTracking":237}],229:[function(require,module,exports){
-var parser = document.createElement('a');
-parser.href = window.location.href;
-console.log(parser.hash);
+},{"./calculatePolygons":227,"./map/map":238,"./paletteTooltip":242,"./stormTracking":243}],229:[function(require,module,exports){
+const ut = require('./utils');
+const loaders = require('./loaders');
 
-var allParserArgs = parser.hash.split('&');
-console.log(allParserArgs)
+// list the initial four tilts
+loaders.listTilts([1, 2, 3, 4]);
 
-var isDevelopmentMode = false;
-for (key in allParserArgs) {
-    if (allParserArgs[key].includes('#station=')) {
-        console.log('we got a station URL parameter!');
-        $('#stationInp').val(allParserArgs[key].slice(9, 13));
-    }
-    if (allParserArgs[key].includes('#development')) {
-        console.log('we got a development mode URL parameter!');
-        isDevelopmentMode = true;
-    }
-}
+// initialize the mapboxgl map
+require('./map/map');
 
-function listTilts(tiltsArr) {
-    //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-    $('#tiltMenu').empty();
-    for (key in tiltsArr) {
-        var anchorElem = document.createElement('a');
-        anchorElem.className = 'dropdown-item';
-        anchorElem.href = '#';
-        anchorElem.setAttribute('value', `tilt${tiltsArr[key]}`);
-        anchorElem.innerHTML = `Tilt ${tiltsArr[key]}`
+// intialize all level 3 button event listeners
+require('./level3/eventListeners');
 
-        var lineElem = document.createElement('li');
-        lineElem.appendChild(anchorElem)
-        //console.log(lineElem)
-        document.getElementById('tiltMenu').appendChild(lineElem);
-        if (key == 0) {
-            document.getElementById('tiltDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
-        }
-    }
-}
-listTilts([1, 2, 3, 4]);
-
-function logToModal(textContent) {
-    console.log(textContent);
-    function openMessageModal() {
-        $("#messageDialog").dialog({
-            modal: true,
-            // https://stackoverflow.com/a/30624445/18758797
-            open: function () {
-                $(this).parent().css({
-                    position: 'absolute',
-                    top: 10,
-                    maxHeight: '70vh',
-                    overflow: 'scroll'
-                });
-            },
-        });
-    }
-    if (!($("#messageDialog").dialog('instance') == undefined)) {
-        // message box is already initialized
-        if (!$('#messageDialog').closest('.ui-dialog').is(':visible')) {
-            // message box is initialized but hidden - open it
-            openMessageModal();
-        }
-    } else if ($("#messageDialog").dialog('instance') == undefined) {
-        // message box is not initialized, open it
-        openMessageModal();
-    }
-    $('#messageBox').append(`<div>${textContent}</div>`);
-    $("#messageBox").animate({ scrollTop: $("#messageBox")[0].scrollHeight }, 0);
-}
-
-function xmlToJson(xml) {
-    if (typeof xml == "string") {
-        parser = new DOMParser();
-        xml = parser.parseFromString(xml, "text/xml");
-    }
-    // Create the return object
-    var obj = {};
-    // console.log(xml.nodeType, xml.nodeName );
-    if (xml.nodeType == 1) { // element
-        // do attributes
-        if (xml.attributes.length > 0) {
-            obj["@attributes"] = {};
-            for (var j = 0; j < xml.attributes.length; j++) {
-                var attribute = xml.attributes.item(j);
-                obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-            }
-        }
-    }
-    else if (xml.nodeType == 3 ||
-        xml.nodeType == 4) { // text and cdata section
-        obj = xml.nodeValue
-    }
-    // do children
-    if (xml.hasChildNodes()) {
-        for (var i = 0; i < xml.childNodes.length; i++) {
-            var item = xml.childNodes.item(i);
-            var nodeName = item.nodeName;
-            if (typeof (obj[nodeName]) == "undefined") {
-                obj[nodeName] = xmlToJson(item);
-            } else {
-                if (typeof (obj[nodeName].length) == "undefined") {
-                    var old = obj[nodeName];
-                    obj[nodeName] = [];
-                    obj[nodeName].push(old);
-                }
-                if (typeof (obj[nodeName]) === 'object') {
-                    obj[nodeName].push(xmlToJson(item));
-                }
-            }
-        }
-    }
-    return obj;
-}
-function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes';
-
-    var k = 1024;
-    var dm = decimals < 0 ? 0 : decimals;
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    var i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
-mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
-const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v10',
-    zoom: 3,
-    center: [-98.5606744, 36.8281576],
-    //projection: 'equirectangular',
-});
-var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
-map.on('load', function () {
-    /*map.addLayer({
-        'id': `wms-test-layer`,
-        'type': 'raster',
-        'source': {
-            'type': 'raster',
-            // use the tiles option to specify a WMS tile source URL
-            // https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/
-            'tiles': [
-                `${phpProxy}https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/ridge::JAX-N0B-0/{z}/{x}/{y}.png`
-                //'https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Natural2015'
-                //'https://opengeo.ncep.noaa.gov/geoserver/klwx/klwx_bref_raw/ows?&service=WMS&request=GetMap&layers=&styles=&format=image/png&transparent=true&version=1.1.1&SERVICE=WMS&LAYERS=klwx_bref_raw&width=256&height=256&srs=EPSG:3857&bbox={bbox-epsg-3857}'
-                //https://opengeo.ncep.noaa.gov/geoserver/klwx/klwx_bref_raw/ows?&service=WMS&request=GetMap&layers=&styles=&format=image/png&transparent=true&version=1.1.1&SERVICE=WMS&LAYERS=klwx_bref_raw&width=256&height=256&srs=EPSG:3857&bbox=-20037508.342789244,0,-10018754.171394622,10018754.17139462
-            ],
-            'tileSize': 256
-        },
-    });*/
-})
-
-function loadFileObject(path, name, level, product) {
-    var radLevel;
-    var wholeOrPart = 'whole';
-    if (level == 2) {
-        radLevel = 'level2';
-    } if (level == 22) {
-        radLevel = 'level2';
-        wholeOrPart = 'part';
-    } else if (level == 3) {
-        radLevel = 'level3';
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", path);
-    xhr.responseType = "blob";
-    xhr.addEventListener('load', function () {
-        var blob = xhr.response;
-        blob.lastModifiedDate = new Date();
-        blob.name = name;
-        // Create the event
-        var event = new CustomEvent("loadFile", {
-            "detail": [
-                blob,
-                radLevel,
-                wholeOrPart,
-                product
-            ]
-        });
-        // Dispatch/Trigger/Fire the event
-        document.dispatchEvent(event);
-    });
-    xhr.onprogress = (event) => {
-        // event.loaded returns how many bytes are downloaded
-        // event.total returns the total number of bytes
-        // event.total is only available if server sends `Content-Length` header
-        //console.log(`%c Downloaded ${formatBytes(event.loaded)} of ${formatBytes(event.total)}`, 'color: #bada55');
-        //var complete = (event.loaded / event.total * 50 | 0);
-        console.log(formatBytes(event.loaded))
-    }
-    xhr.send();
-}
-
-// https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567
-function registerControlPosition(map, positionName) {
-    if (map._controlPositions[positionName]) {
-        return;
-    }
-    var positionContainer = document.createElement('div');
-    positionContainer.className = `mapboxgl-ctrl-${positionName}`;
-    map._controlContainer.appendChild(positionContainer);
-    map._controlPositions[positionName] = positionContainer;
-}
-registerControlPosition(map, 'top-center');
-registerControlPosition(map, 'bottom-center');
-registerControlPosition(map, 'center');
-
-class infoControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div id='infoContainer' style='
-                    display: none;
-                    text-align: center;
-                    width: auto;
-                    height: auto;
-                    padding: 5px 10px;
-                    /* line-height: 25px; */
-                    background-color: white;
-                    border: 1px solid black;
-                    border-radius: 5px;
-                    '>
-                        <input id="fileInput" type="file"/>
-                        <div id='radarInfoDiv' style='display: none'>
-                            <div id='radFileNameParent'><b><a id='radFileName'></a></b></div>
-                            <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
-                            <b>Station: </b><a id='radStation'></a>
-                            <b>VCP: </b><a id='radVCP'></a>
-                        </div>
-                    </div>`
-        this._container.addEventListener('click', function () {
-            console.log('sus')
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theInfoControl = new infoControl
-map.addControl(theInfoControl, 'top-center');
-
-class infoControlBottom {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div id='infoContainerBottom' style='
-                    text-align: center;
-                    width: auto;
-                    height: auto;
-                    padding: 5px 10px;
-                    /* line-height: 25px; */
-                    background-color: white;
-                    border: 1px solid black;
-                    border-radius: 5px;
-                    '>
-                        <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
-                    </div>`
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theInfoControlBottom = new infoControlBottom
-map.addControl(theInfoControlBottom, 'top-center');
-
-document.getElementById("texturecolorbar").width = 0;
-document.getElementById("texturecolorbar").height = 0;
-
-// enable bootstrap tooltips
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
-function showPlotBtn() {
-    class reflPlotControl {
-        onAdd(map) {
-            this._map = map;
-            this._container = document.createElement('div');
-            this._container.innerHTML = `
-                        <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                            <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                                <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                    <span class="fa fa-hurricane icon-black" id="reflPlotThing" aria-hidden="true" title="Globe Toggle"></span>
-                                </button>
-                            </div>
-                        </div>`
-            $(this._container).addClass('reflPlotButton');
-            this._container.addEventListener('click', function () {
-                if (!$('#reflPlotThing').hasClass('icon-selected')) {
-                    $('#reflPlotThing').addClass('icon-selected');
-                    $('#reflPlotThing').removeClass('icon-black');
-                } else if ($('#reflPlotThing').hasClass('icon-selected')) {
-                    $('#reflPlotThing').removeClass('icon-selected');
-                    $('#reflPlotThing').addClass('icon-black');
-                    removeMapLayer('baseReflectivity');
-                }
-            })
-            return this._container;
-        }
-
-        onRemove() {
-            this._container.parentNode.removeChild(this._container);
-            this._map = undefined;
-        }
-    }
-    var theReflPlotControl = new reflPlotControl;
-    map.addControl(theReflPlotControl, 'top-left');
-}
-//showPlotBtn();
-
-class settingsControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-gear icon-black" id="settingsThing" aria-hidden="true" title="Globe Toggle"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#settingsThing').hasClass('icon-selected')) {
-                $('#settingsThing').addClass('icon-selected');
-                $('#settingsThing').removeClass('icon-black');
-                $("#settingsDialog").dialog({
-                    modal: true,
-                    // https://stackoverflow.com/a/30624445/18758797
-                    open: function () {
-                        $(this).parent().css({
-                            position: 'absolute',
-                            top: 10,
-                            maxHeight: '70vh',
-                            overflow: 'scroll'
-                        });
-                        $('.ui-widget-overlay').bind('click', function () {
-                            $("#settingsDialog").dialog('close');
-                        });
-                    },
-                    close: function () {
-                        $('#settingsThing').removeClass('icon-selected');
-                        $('#settingsThing').addClass('icon-black');
-                    }
-                });
-            } else if ($('#settingsThing').hasClass('icon-selected')) {
-                $('#settingsThing').removeClass('icon-selected');
-                $('#settingsThing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theSettingsControl = new settingsControl;
-//map.addControl(theSettingsControl, 'top-right');
-
-class testFileControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-flask-vial icon-black" id="testFileThing" aria-hidden="true" title="Globe Toggle"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#testFileThing').hasClass('icon-selected')) {
-                $('#testFileThing').addClass('icon-selected');
-                $('#testFileThing').removeClass('icon-black');
-                // KLIX20050829_061516.gz
-                // KTLX20130520_200356_V06.gz
-                var fileToLoad = 'KTLX20130520_200356_V06.gz';
-                loadFileObject('data/' + fileToLoad, fileToLoad, 2);
-            } else if ($('#testFileThing').hasClass('icon-selected')) {
-                $('#testFileThing').removeClass('icon-selected');
-                $('#testFileThing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theTestFileControl = new testFileControl;
-
-class testFile3Control {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-3 icon-black" id="testFile3Thing" aria-hidden="true" title="Globe Toggle"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#testFile3Thing').hasClass('icon-selected')) {
-                $('#testFile3Thing').addClass('icon-selected');
-                $('#testFile3Thing').removeClass('icon-black');
-                // LWX_N0H_2022_04_18_15_21_24
-                // LWX_N0Q_2022_04_18_15_21_24
-                // KOUN_SDUS54_N0STLX_201305200301
-                // KCRP_SDUS54_N0UCRP_201708252357
-                // KCRP_SDUS54_N0QCRP_201708252357
-                // KOUN_SDUS54_DVLTLX_201305200301
-                // KOUN_SDUS34_NSTTLX_201305200301
-
-                // LOT_NMD_2021_06_21_04_22_17
-                // LOT_NMD_2021_06_21_04_27_31
-                // KILX_NTV
-                // ILX_N0Q_2021_07_15_22_19_15
-
-                var fileToLoad = 'KILX_NTV';
-                loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
-            } else if ($('#testFile3Thing').hasClass('icon-selected')) {
-                $('#testFile3Thing').removeClass('icon-selected');
-                $('#testFile3Thing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theTestFile3Control = new testFile3Control;
-
-if (isDevelopmentMode) {
-    map.addControl(theTestFile3Control, 'top-right');
-    map.addControl(theTestFileControl, 'top-right');
-}
-
-function getLatestFile(sta, callbck) {
-    document.getElementById('spinnerParent').style.display = 'block';
-    var curTime = new Date();
-    var year = curTime.getUTCFullYear();
-    var month = curTime.getUTCMonth() + 1;
-    month = "0" + month.toString();
-    var day = curTime.getUTCDate();
-    day = "0" + day.toString();
-    var stationToGet = sta.toUpperCase().replace(/ /g, '')
-    var fullURL = "https://noaa-nexrad-level2.s3.amazonaws.com/?list-type=2&delimiter=%2F&prefix=" + year + "%2F" + month + "%2F" + day + "%2F" + stationToGet + "%2F"
-    //console.log(fullURL)
-    $.get(phpProxy + fullURL, function (data) {
-        var dataToWorkWith = JSON.stringify(xmlToJson(data)).replace(/#/g, 'HASH')
-        dataToWorkWith = JSON.parse(dataToWorkWith)
-        //console.log(dataToWorkWith)
-        var filenameKey = dataToWorkWith.ListBucketResult.Contents
-        var latestFileName = filenameKey[filenameKey.length - 1].Key.HASHtext.slice(16);
-        if (latestFileName.includes('MDM')) {
-            latestFileName = filenameKey[filenameKey.length - 2].Key.HASHtext.slice(16);
-        }
-        callbck(latestFileName, year, month, day, stationToGet);
-    })
-};
-
-function getLatestL3File(sta, pro, cb) {
-    document.getElementById('spinnerParent').style.display = 'block';
-    var curTime = new Date();
-    var year = curTime.getUTCFullYear();
-    var month = curTime.getUTCMonth() + 1;
-    month = "0" + month.toString();
-    var day = curTime.getUTCDate();
-    day = "0" + day.toString();
-    var stationToGet = sta.toUpperCase().replace(/ /g, '')
-    var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
-    var filenamePrefix = `${sta}_${pro}_${year}_${month}_${day}`;
-    var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
-    var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
-    $.get(phpProxy + fullURL, function (data) {
-        var dataToWorkWith = JSON.stringify(xmlToJson(data)).replace(/#/g, 'HASH')
-        dataToWorkWith = JSON.parse(dataToWorkWith)
-        console.log(dataToWorkWith)
-        var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-        var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
-
-        var finishedURL = `${urlBase}${filenameKey}`;
-        cb(finishedURL);
-    })
-}
-
-function loadLatestFile(levell, pr, tilt, stat) {
-    var numLevel = 2;
-    if (levell == 'l22') {
-        numLevel = 22;
-    }
-    if (levell == 'l2' || levell == 'l22') {
-        removeMapLayer('baseReflectivity');
-        getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
-            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-            console.log(phpProxy + individualFileURL)
-            loadFileObject(phpProxy + individualFileURL, fileName, numLevel, pr);
-        });
-    } else if (levell == 'l3') {
-        if ($('#productInput').val() != 'sti') {
-            removeMapLayer('baseReflectivity');
-        }
-        var tiltProduct = tiltObject[tilt][pr];
-        if (pr != 'ref' && pr != 'vel') {
-            // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
-            // DS.165h0 = product code 165, N0H (h0)
-            var level3url = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
-            console.log(level3url)
-            console.log(tiltProduct, stat)
-            loadFileObject(level3url, 'sn.last', 3);
-        } else if (pr == 'ref' || pr == 'vel') {
-            getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
-                var proxiedCbVal = `${phpProxy}${cbVal}`;
-                console.log(cbVal);
-                loadFileObject(proxiedCbVal, 'sn.last', 3);
-            });
-        }
-    }
-}
-
-class curFileControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-clock icon-black" id="curFileThing" aria-hidden="true" title="Globe Toggle"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.classList.add('currentFileControl');
-        this._container.addEventListener('click', function () {
-            if (!$('#curFileThing').hasClass('icon-selected')) {
-                $('#curFileThing').addClass('icon-selected');
-                $('#curFileThing').removeClass('icon-black');
-                if ($('#levelInput').val() == 'l2') {
-                    loadLatestFile('l2');
-                } else if ($('#levelInput').val() == 'l3') {
-                    loadLatestFile('l3');
-                }
-            } else if ($('#curFileThing').hasClass('icon-selected')) {
-                $('#curFileThing').removeClass('icon-selected');
-                $('#curFileThing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theCurFileControl = new curFileControl;
-//map.addControl(theCurFileControl, 'top-right');
-
-var tiltObject = {
-    'tilt1': {
-        'ref': 'N0B',
-        'vel': 'N0G',
-        'lowres-ref': 'p94r0',
-        'lowres-vel': 'p99v0',
-        'rho': '161c0',
-        'zdr': '159x0',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h0',
-        'srv': '56rm0',
-        'vil': '134il',
-        'sti': '58sti',
-        'mcy': '141md',
-    },
-    'tilt2': {
-        'ref': 'N1B',
-        'vel': 'N1G',
-        'lowres-ref': 'p94r1',
-        'lowres-vel': 'p99v1',
-        'rho': '161c1',
-        'zdr': '159x1',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h1',
-        'srv': '56rm1',
-        'vil': '134il',
-        'sti': '58sti',
-    },
-    'tilt3': {
-        'ref': 'N2B',
-        'vel': 'N2G',
-        'lowres-ref': 'p94r2',
-        'lowres-vel': 'p99v2',
-        'rho': '161c2',
-        'zdr': '159x2',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h2',
-        'srv': '56rm2',
-        'vil': '134il',
-        'sti': '58sti',
-    },
-    'tilt4': {
-        'ref': 'N3B',
-        'vel': 'N3G',
-        'lowres-ref': 'p94r3',
-        'lowres-vel': 'p99v3',
-        'rho': '161c3',
-        'zdr': '159x3',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h3',
-        'srv': '56rm3',
-        'vil': '134il',
-        'sti': '58sti',
-    },
-}
-var numOfTiltsObj = {
-    'ref': [1, 2, 3, 4],
-    'vel': [1, 2],
-    'lowres-ref': [1, 2, 3, 4],
-    'lowres-vel': [1, 2, 3, 4],
-    'rho': [1, 2, 3, 4],
-    'zdr': [1, 2, 3, 4],
-    'sw ': [1],
-    'hhc': [1],
-    'hyc': [1, 2, 3, 4],
-    'srv': [1, 2, 3, 4],
-    'vil': [1],
-    'sti': [1],
-}
-
-var allL2Btns = [
-    'l2-ref',
-    'l2-vel',
-    'l2-rho',
-    'l2-phi',
-    'l2-zdr',
-    'l2-sw '
-];
-function tiltClickFunc() {
-    document.getElementById('tiltDropdownBtn').innerHTML = this.innerHTML;
-    $('#tiltDropdownBtn').attr('value', $(this).attr('value'))
-
-    if (document.getElementById('curProd').innerHTML != '') {
-        loadLatestFile(
-            'l3',
-            document.getElementById('curProd').innerHTML,
-            $(this).attr('value'),
-            $('#stationInp').val().toLowerCase()
-        );
-    }
-}
-$('.productBtnGroup button').on('click', function () {
-    if (this.value == 'load') {
-        getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
-            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-            console.log(phpProxy + individualFileURL)
-            loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
-        });
-    }
-
-    //$('#productInput').val()
-    var initInnerHTML = this.innerHTML;
-    if (!initInnerHTML.includes('span')) {
-        this.innerHTML = `<span class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true"></span>&nbsp;&nbsp;` + initInnerHTML;
-        var thisBtn = this;
-        document.getElementById('testEventElem').addEventListener('DOMSubtreeModified', function () {
-            thisBtn.innerHTML = initInnerHTML;
-        }, { once: true })
-    }
-    $('.btn-outline-success').each(function () {
-        $(this).removeClass('btn-outline-success');
-        $(this).addClass('btn-outline-primary');
-    });
-    $(this).removeClass('btn-outline-primary');
-    $(this).addClass('btn-outline-success');
-    document.getElementById('curProd').innerHTML = this.value;
-
-    if (this.value.includes('l2')) {
-        console.log('level twoo')
-    } else {
-        listTilts(numOfTiltsObj[this.value]);
-        $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
-        $('#tiltDropdown a').on('click', tiltClickFunc);
-        if (!allL2Btns.includes(this.value)) {
-            loadLatestFile(
-                'l3',
-                this.value,
-                $('#tiltDropdownBtn').attr('value'),
-                $('#stationInp').val().toLowerCase()
-            );
-        } else {
-            loadLatestFile('l2', this.value);
-        }
-    }
-});
-
-var statMarkerArr = [];
-function showStations() {
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
-        var allKeys = Object.keys(data);
-        for (key in allKeys) {
-            var curIter = data[allKeys[key]];
-            var curStat = allKeys[key];
-
-            // check if it is an unsupported radar
-            if (curStat.charAt(0) == 'K') {
-                // create a HTML element for each feature
-                var el = document.createElement('div');
-                el.className = 'customMarker';
-                el.innerHTML = curStat;
-
-                // make a marker for each feature and add to the map
-                var mark = new mapboxgl.Marker(el)
-                    .setLngLat([curIter[2], curIter[1]])
-                    .addTo(map);
-                statMarkerArr.push(mark)
-            }
-        }
-    }).then(function () {
-        $('.customMarker').on('click', function () {
-            //$('.productBtnGroup button').off()
-            var btnsArr = [
-                "l2-ref",
-                "l2-vel",
-                "l2-rho",
-                "l2-phi",
-                "l2-zdr",
-                "l2-sw "
-            ]
-            for (key in btnsArr) {
-                var curElemIter = document.getElementById(btnsArr[key]);
-                curElemIter.disabled = true;
-                $(curElemIter).addClass('btn-outline-secondary');
-                $(curElemIter).removeClass('btn-outline-primary');
-            }
-            document.getElementById('loadl2').style.display = 'block';
-
-            $('#stationInp').val(this.innerHTML)
-
-            document.getElementById('curProd').innerHTML = 'ref';
-            loadLatestFile(
-                'l3',
-                'ref',
-                $('#tiltDropdownBtn').attr('value'),
-                $('#stationInp').val().toLowerCase()
-            );
-        })
-    })
-}
-
-class stationControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-satellite-dish icon-black" id="stationThing" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#stationThing').hasClass('icon-selected')) {
-                $('#stationThing').addClass('icon-selected');
-                $('#stationThing').removeClass('icon-black');
-                showStations();
-            } else if ($('#stationThing').hasClass('icon-selected')) {
-                $('#stationThing').removeClass('icon-selected');
-                $('#stationThing').addClass('icon-black');
-                for (key in statMarkerArr) {
-                    statMarkerArr[key].remove();
-                }
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theStationControl = new stationControl;
-map.addControl(theStationControl, 'top-left');
-
-class showOptionsBoxControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style='position: absolute; bottom: 10vh'>
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-circle-chevron-up icon-black" id="showOptionsBoxThing" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.classList.add('optionsBoxControl');
-        this._container.addEventListener('click', function () {
-            if (!$('#showOptionsBoxThing').hasClass('icon-selected')) {
-                $('#showOptionsBoxThing').addClass('icon-selected');
-
-                $('#showOptionsBoxThing').removeClass('fa-circle-chevron-up');
-                $('#showOptionsBoxThing').addClass('fa-circle-chevron-down');
-
-                $('#showOptionsBoxThing').removeClass('icon-black');
-                $('#optionsBox').show("slide", { direction: "down" }, 200);
-            } else if ($('#showOptionsBoxThing').hasClass('icon-selected')) {
-                $('#showOptionsBoxThing').removeClass('icon-selected');
-
-                $('#showOptionsBoxThing').removeClass('fa-circle-chevron-down');
-                $('#showOptionsBoxThing').addClass('fa-circle-chevron-up');
-
-                $('#showOptionsBoxThing').addClass('icon-black');
-                $('#optionsBox').hide("slide", { direction: "down" }, 200);
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theShowOptionsBoxControl = new showOptionsBoxControl;
-map.addControl(theShowOptionsBoxControl, 'bottom-left');
-
-//$('#optionsBox').hide();
-$('.optionsBoxControl').trigger('click');
-
-$('#levelInput').on('change', function () {
-    if ($('#levelInput').val() == 'l2') {
-        document.getElementById('productStuff').style.display = 'none';
-        document.getElementById('tiltStuff').style.display = 'none';
-        $('#productInput').empty();
-    } else if ($('#levelInput').val() == 'l3') {
-        $('#productStuff').on('change', function () {
-            if ($('#levelInput').val() == 'l3' && map.getLayer('baseReflectivity')) {
-                loadLatestFile('l3');
-            }
-        })
-        $('#tiltInput').on('change', function () {
-            if ($('#levelInput').val() == 'l3' && map.getLayer('baseReflectivity')) {
-                loadLatestFile('l3');
-            }
-        })
-        document.getElementById('productStuff').style.display = 'block';
-        document.getElementById('tiltStuff').style.display = 'block';
-
-        document.getElementById('productInput').add(new Option('Base Reflectivity', 'ref', false, true));
-        document.getElementById('productInput').add(new Option('Base Velocity', 'vel'));
-        document.getElementById('productInput').add(new Option('Hydrometer Classification', 'hyc'));
-        document.getElementById('productInput').add(new Option('Vertically Integrated Liquid', 'vil'));
-        document.getElementById('productInput').add(new Option('Hybrid Hydrometer Classification', 'hhc'));
-        document.getElementById('productInput').add(new Option('Storm Relative Velocity', 'srv'));
-        //document.getElementById('productInput').add(new Option('Storm Tracking', 'sti'));
-    }
-})
-$('#levelInput').val('l3');
-$('#levelInput').trigger('change');
-
-// radius of wsr-88d scan in km
-var radius = 460;
-$('#fileStation').on('DOMSubtreeModified', function () {
-    var station = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
-        var stationLat = data[station][1];
-        var stationLng = data[station][2];
-        //map.flyTo({
-        //    center: [stationLng, stationLat],
-        //    zoom: 8,
-        //    duration: 1000,
-        //});
-        var stationBbox = getBoundingBox(stationLat, stationLng, radius);
-
-        var coord1 = stationBbox.minLat;
-        var coord2 = stationBbox.minLng;
-        var coord3 = stationBbox.maxLat;
-        var coord4 = stationBbox.maxLng;
-        //map.addLayer({
-        //    id: 'canvas-layer',
-        //    type: 'raster',
-        //    source: {
-        //        type: 'canvas',
-        //        canvas: 'theCanvas',
-        //        coordinates: [
-        //            [coord2, coord3],
-        //            [coord4, coord3],
-        //            [coord4, coord1],
-        //            [coord2, coord1]
-        //        ],
-        //    }
-        //});
-        //new mapboxgl.Marker()
-        //    .setLngLat([stationLng, stationLat])
-        //    .addTo(map);
-    });
-});
-function testHello(text) {
-    console.log(text)
-}
-function removeMapLayer(layername) {
-    if (map.getLayer(layername)) {
-        map.removeLayer(layername);
-    }
-    if (map.getSource(layername)) {
-        map.removeSource(layername);
-    }
-}
-function removeTestFileControl() {
-    if (map.hasControl(theTestFileControl)) {
-        map.removeControl(theTestFileControl);
-    }
-    if (map.hasControl(theTestFile3Control)) {
-        map.removeControl(theTestFile3Control);
-    }
-    if (map.hasControl(theCurFileControl)) {
-        map.removeControl(theCurFileControl);
-    }
-}
-
-function setGeojsonLayer(gj, gjType, identity) {
-    var styling;
-    var type;
-    if (gjType == 'circle') {
-        type = gjType;
-        styling = {
-            'circle-radius': 4,
-            'circle-stroke-width': 2,
-            'circle-color': 'red',
-            'circle-stroke-color': 'white',
-        }
-    } else if (gjType == 'lineCircle') {
-        type = 'circle';
-        styling = {
-            'circle-radius': 4,
-            'circle-stroke-width': 2,
-            'circle-color': 'blue',
-            'circle-stroke-color': 'white',
-        }
-    } else if (gjType == 'greenCircle') {
-        type = 'circle';
-        styling = {
-            'circle-radius': 4,
-            'circle-stroke-width': 2,
-            'circle-color': 'green',
-            'circle-stroke-color': 'white',
-        }
-    } else if (gjType == 'yellowCircle') {
-        type = 'circle';
-        styling = {
-            'circle-radius': 4,
-            'circle-stroke-width': 2,
-            'circle-color': 'yellow',
-            'circle-stroke-color': 'white',
-        }
-    } else if (gjType == 'lineCircleEdge') {
-        type = 'circle';
-        styling = {
-            'circle-radius': 4,
-            'circle-color': '#ffffff',
-        }
-    } else if (gjType == 'line') {
-        type = gjType;
-        styling = {
-            'line-color': '#ffffff',
-            'line-width': 1.5,
-        }
-    }
-    map.addLayer({
-        'id': identity,
-        'type': type,
-        'source': {
-            'type': 'geojson',
-            'data': gj,
-        },
-        'paint': styling,
-    })
-}
-function moveMapLayer(lay) {
-    if (map.getLayer(lay)) {
-        map.moveLayer(lay)
-    }
-}
-},{}],230:[function(require,module,exports){
+// initialize the station markers control and code
+require('./map/stationMarkers');
+},{"./level3/eventListeners":232,"./loaders":236,"./map/map":238,"./map/stationMarkers":240,"./utils":244}],230:[function(require,module,exports){
 const { plot } = require('../../nexrad-level-2-plot/src');
+const loaders = require('../loaders');
+const mapFuncs = require('../map/mapFunctions');
 
 function loadL2Listeners(l2rad, displayElevations) {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
@@ -38517,12 +37528,12 @@ function loadL2Listeners(l2rad, displayElevations) {
     console.log('turned off listener')
     $('.level2btns button').on('click', function () {
         console.log(this.value)
-        removeMapLayer('baseReflectivity');
+        mapFuncs.removeMapLayer('baseReflectivity');
         if (this.value == 'load') {
-            getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+            loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
                 var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
                 console.log(phpProxy + individualFileURL)
-                loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+                loaders.loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
             });
         }
         if (this.value == 'l2-ref') {
@@ -38556,8 +37567,13 @@ function loadL2Listeners(l2rad, displayElevations) {
 }
 
 module.exports = loadL2Listeners;
-},{"../../nexrad-level-2-plot/src":263}],231:[function(require,module,exports){
+},{"../../nexrad-level-2-plot/src":269,"../loaders":236,"../map/mapFunctions":239}],231:[function(require,module,exports){
 const drawRadarShape = require('../drawToMap');
+
+const scaleArray = (fromRange, toRange) => {
+	const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
+  	return from =>  (from - fromRange[0]) * d + toRange[0];
+};
 
 function draw(data) {
     var product = data.productDescription.abbreviation;
@@ -38671,7 +37687,74 @@ function draw(data) {
 
 module.exports = draw
 },{"../drawToMap":228}],232:[function(require,module,exports){
+const utilFuncs = require('../utils');
+const loaders = require('../loaders');
+const phpProxy = require('../utils').phpProxy;
+
+var tiltObject = require('../utils').tiltObject;
+var numOfTiltsObj = require('../utils').numOfTiltsObj;
+var allL2Btns = require('../utils').allL2Btns;
+
+function tiltClickFunc() {
+    document.getElementById('tiltDropdownBtn').innerHTML = this.innerHTML;
+    $('#tiltDropdownBtn').attr('value', $(this).attr('value'))
+
+    if (document.getElementById('curProd').innerHTML != '') {
+        loaders.loadLatestFile(
+            'l3',
+            document.getElementById('curProd').innerHTML,
+            $(this).attr('value'),
+            $('#stationInp').val().toLowerCase()
+        );
+    }
+}
+$('.productBtnGroup button').on('click', function () {
+    if (this.value == 'load') {
+        loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+            console.log(phpProxy + individualFileURL)
+            loaders.loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+        });
+    }
+
+    //$('#productInput').val()
+    var initInnerHTML = this.innerHTML;
+    if (!initInnerHTML.includes('span')) {
+        this.innerHTML = `<span class="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true"></span>&nbsp;&nbsp;` + initInnerHTML;
+        var thisBtn = this;
+        document.getElementById('testEventElem').addEventListener('DOMSubtreeModified', function () {
+            thisBtn.innerHTML = initInnerHTML;
+        }, { once: true })
+    }
+    $('.btn-outline-success').each(function () {
+        $(this).removeClass('btn-outline-success');
+        $(this).addClass('btn-outline-primary');
+    });
+    $(this).removeClass('btn-outline-primary');
+    $(this).addClass('btn-outline-success');
+    document.getElementById('curProd').innerHTML = this.value;
+
+    if (this.value.includes('l2')) {
+        console.log('level twoo')
+    } else {
+        loaders.listTilts(numOfTiltsObj[this.value]);
+        $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
+        $('#tiltDropdown a').on('click', tiltClickFunc);
+        if (!allL2Btns.includes(this.value)) {
+            loaders.loadLatestFile(
+                'l3',
+                this.value,
+                $('#tiltDropdownBtn').attr('value'),
+                $('#stationInp').val().toLowerCase()
+            );
+        } else {
+            loaders.loadLatestFile('l2', this.value);
+        }
+    }
+});
+},{"../loaders":236,"../utils":244}],233:[function(require,module,exports){
 const ut = require('../utils');
+const mapFuncs = require('../map/mapFunctions');
 
 function parsePlotMesocyclone(l3rad, theFileStation) {
     var mesocycloneLayersArr = [];
@@ -38703,7 +37786,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
                 // push the initial coordinate point - we do not know if the current track is a line or a point yet
                 geojsonPointTemplate.geometry.coordinates = [curMCCoords.longitude, curMCCoords.latitude];
 
-                setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
+                mapFuncs.setGeojsonLayer(geojsonPointTemplate, 'greenCircle', identifier)
             }
             for (key in mesocycloneList) {
                 loadMesocyclone(mesocycloneList[key])
@@ -38714,8 +37797,9 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotMesocyclone;
-},{"../utils":238}],233:[function(require,module,exports){
+},{"../map/mapFunctions":239,"../utils":244}],234:[function(require,module,exports){
 const ut = require('../utils');
+const mapFuncs = require('../map/mapFunctions');
 
 function parsePlotStormTracks(l3rad, theFileStation) {
     var stormTracksLayerArr = [];
@@ -38778,22 +37862,22 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                         geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
                         // add a circle for each edge on a storm track line
                         geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
-                        setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
+                        mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
                         stormTracksLayerArr.push(identifier + '_pointEdge' + key)
                     }
                 }
                 // push the finished geojson line object to a function that adds to the map
-                setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
                 // adds a blue circle at the start of the storm track
                 geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
                 geojsonLineTemplate.geometry.type = 'Point';
-                setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
                 stormTracksLayerArr.push(identifier + '_point')
             } else if (!isLine) {
                 // if the storm track does not have a forecast, display a Point geojson
                 geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
                 geojsonLineTemplate.geometry.type = 'Point';
-                setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
             }
         }
         // Z0 = line, R1 = point
@@ -38806,20 +37890,21 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         // setting layer orders
         for (key in stLayers) {
             if (stLayers[key].includes('_pointEdge')) {
-                moveMapLayer(stLayers[key])
+                mapFuncs.moveMapLayer(stLayers[key])
             }
         }
         for (key in stLayers) {
             if (stLayers[key].includes('_point')) {
-                moveMapLayer(stLayers[key])
+                mapFuncs.moveMapLayer(stLayers[key])
             }
         }
     });
 }
 
 module.exports = parsePlotStormTracks;
-},{"../utils":238}],234:[function(require,module,exports){
+},{"../map/mapFunctions":239,"../utils":244}],235:[function(require,module,exports){
 const ut = require('../utils');
+const mapFuncs = require('../map/mapFunctions');
 
 function parsePlotTornado(l3rad, theFileStation) {
     var tornadoLayersArr = [];
@@ -38851,7 +37936,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             // push the initial coordinate point - we do not know if the current track is a line or a point yet
             geojsonPointTemplate.geometry.coordinates = [curTVSCoords.longitude, curTVSCoords.latitude];
 
-            setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
+            mapFuncs.setGeojsonLayer(geojsonPointTemplate, 'yellowCircle', identifier)
         }
         for (key in tornadoList) {
             loadTornado(tornadoList[key])
@@ -38861,7 +37946,162 @@ function parsePlotTornado(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotTornado;
-},{"../utils":238}],235:[function(require,module,exports){
+},{"../map/mapFunctions":239,"../utils":244}],236:[function(require,module,exports){
+const mapFuncs = require('./map/mapFunctions');
+const ut = require('./utils');
+
+function listTilts(tiltsArr) {
+    //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
+    $('#tiltMenu').empty();
+    for (key in tiltsArr) {
+        var anchorElem = document.createElement('a');
+        anchorElem.className = 'dropdown-item';
+        anchorElem.href = '#';
+        anchorElem.setAttribute('value', `tilt${tiltsArr[key]}`);
+        anchorElem.innerHTML = `Tilt ${tiltsArr[key]}`
+
+        var lineElem = document.createElement('li');
+        lineElem.appendChild(anchorElem)
+        //console.log(lineElem)
+        document.getElementById('tiltMenu').appendChild(lineElem);
+        if (key == 0) {
+            document.getElementById('tiltDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
+        }
+    }
+}
+
+function loadFileObject(path, name, level, product) {
+    var radLevel;
+    var wholeOrPart = 'whole';
+    if (level == 2) {
+        radLevel = 'level2';
+    } if (level == 22) {
+        radLevel = 'level2';
+        wholeOrPart = 'part';
+    } else if (level == 3) {
+        radLevel = 'level3';
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", path);
+    xhr.responseType = "blob";
+    xhr.addEventListener('load', function () {
+        var blob = xhr.response;
+        blob.lastModifiedDate = new Date();
+        blob.name = name;
+        // Create the event
+        var event = new CustomEvent("loadFile", {
+            "detail": [
+                blob,
+                radLevel,
+                wholeOrPart,
+                product
+            ]
+        });
+        // Dispatch/Trigger/Fire the event
+        document.dispatchEvent(event);
+    });
+    xhr.onprogress = (event) => {
+        // event.loaded returns how many bytes are downloaded
+        // event.total returns the total number of bytes
+        // event.total is only available if server sends `Content-Length` header
+        //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
+        //var complete = (event.loaded / event.total * 50 | 0);
+        console.log(ut.formatBytes(event.loaded))
+    }
+    xhr.send();
+}
+
+function getLatestFile(sta, callbck) {
+    document.getElementById('spinnerParent').style.display = 'block';
+    var curTime = new Date();
+    var year = curTime.getUTCFullYear();
+    var month = curTime.getUTCMonth() + 1;
+    month = "0" + month.toString();
+    var day = curTime.getUTCDate();
+    day = "0" + day.toString();
+    var stationToGet = sta.toUpperCase().replace(/ /g, '')
+    var fullURL = "https://noaa-nexrad-level2.s3.amazonaws.com/?list-type=2&delimiter=%2F&prefix=" + year + "%2F" + month + "%2F" + day + "%2F" + stationToGet + "%2F"
+    //console.log(fullURL)
+    $.get(ut.phpProxy + fullURL, function (data) {
+        var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
+        dataToWorkWith = JSON.parse(dataToWorkWith)
+        //console.log(dataToWorkWith)
+        var filenameKey = dataToWorkWith.ListBucketResult.Contents
+        var latestFileName = filenameKey[filenameKey.length - 1].Key.HASHtext.slice(16);
+        if (latestFileName.includes('MDM')) {
+            latestFileName = filenameKey[filenameKey.length - 2].Key.HASHtext.slice(16);
+        }
+        callbck(latestFileName, year, month, day, stationToGet);
+    })
+};
+
+function getLatestL3File(sta, pro, cb) {
+    document.getElementById('spinnerParent').style.display = 'block';
+    var curTime = new Date();
+    var year = curTime.getUTCFullYear();
+    var month = curTime.getUTCMonth() + 1;
+    month = "0" + month.toString();
+    var day = curTime.getUTCDate();
+    day = "0" + day.toString();
+    var stationToGet = sta.toUpperCase().replace(/ /g, '')
+    var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
+    var filenamePrefix = `${sta}_${pro}_${year}_${month}_${day}`;
+    var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+    var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+    $.get(ut.phpProxy + fullURL, function (data) {
+        var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
+        dataToWorkWith = JSON.parse(dataToWorkWith)
+        console.log(dataToWorkWith)
+        var contentsBase = dataToWorkWith.ListBucketResult.Contents;
+        var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
+
+        var finishedURL = `${urlBase}${filenameKey}`;
+        cb(finishedURL);
+    })
+}
+
+function loadLatestFile(levell, pr, tilt, stat) {
+    var numLevel = 2;
+    if (levell == 'l22') {
+        numLevel = 22;
+    }
+    if (levell == 'l2' || levell == 'l22') {
+        mapFuncs.removeMapLayer('baseReflectivity');
+        getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+            console.log(ut.phpProxy + individualFileURL)
+            loadFileObject(ut.phpProxy + individualFileURL, fileName, numLevel, pr);
+        });
+    } else if (levell == 'l3') {
+        if ($('#productInput').val() != 'sti') {
+            mapFuncs.removeMapLayer('baseReflectivity');
+        }
+        var tiltProduct = ut.tiltObject[tilt][pr];
+        if (pr != 'ref' && pr != 'vel') {
+            // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
+            // DS.165h0 = product code 165, N0H (h0)
+            var level3url = `${ut.phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
+            console.log(level3url)
+            console.log(tiltProduct, stat)
+            loadFileObject(level3url, 'sn.last', 3);
+        } else if (pr == 'ref' || pr == 'vel') {
+            getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
+                var proxiedCbVal = `${ut.phpProxy}${cbVal}`;
+                console.log(cbVal);
+                loadFileObject(proxiedCbVal, 'sn.last', 3);
+            });
+        }
+    }
+}
+
+module.exports = {
+    loadFileObject,
+    getLatestFile,
+    getLatestL3File,
+    loadLatestFile,
+    listTilts
+}
+},{"./map/mapFunctions":239,"./utils":244}],237:[function(require,module,exports){
 //const fetch = require('node-fetch');
 const { Level2Radar } = require('../nexrad-level-2-data/src');
 const Level3Radar = require('../nexrad-level-3-data/src');
@@ -38908,7 +38148,7 @@ document.addEventListener('loadFile', function(event) {
     document.getElementById('spinnerParent').style.display = 'block';
     document.getElementById('productStuff').style.display = 'block';
     document.getElementById('levelInput').style.display = 'none';
-    removeTestFileControl();
+    //removeTestFileControl();
     //console.log(URL.createObjectURL(document.getElementById("fileInput").files[0]));
     setTimeout(function() {
         var uploadedFile = event.detail[0];
@@ -39076,7 +38316,597 @@ document.getElementById('fileThatWorks').addEventListener('click', function() {
         console.log(l2rad)
     })
     .catch(err => console.error(err));*/
-},{"../nexrad-level-2-data/src":250,"../nexrad-level-2-plot/src":263,"../nexrad-level-2-plot/src/draw/palettes/hexlookup":254,"../nexrad-level-3-data/src":274,"../nexrad-level-3-plot/src":323,"./index":229,"./level2/eventListeners":230,"./level3/draw":231,"./level3/mesocycloneDetection":232,"./level3/stormTracks":233,"./level3/tornadoVortexSignature":234,"./utils":238}],236:[function(require,module,exports){
+},{"../nexrad-level-2-data/src":256,"../nexrad-level-2-plot/src":269,"../nexrad-level-2-plot/src/draw/palettes/hexlookup":260,"../nexrad-level-3-data/src":280,"../nexrad-level-3-plot/src":329,"./index":229,"./level2/eventListeners":230,"./level3/draw":231,"./level3/mesocycloneDetection":233,"./level3/stormTracks":234,"./level3/tornadoVortexSignature":235,"./utils":244}],238:[function(require,module,exports){
+const isDevelopmentMode = require('../misc/urlParser');
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
+const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v10',
+    zoom: 3,
+    center: [-98.5606744, 36.8281576],
+    //projection: 'equirectangular',
+});
+
+// https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567
+function registerControlPosition(map, positionName) {
+    if (map._controlPositions[positionName]) {
+        return;
+    }
+    var positionContainer = document.createElement('div');
+    positionContainer.className = `mapboxgl-ctrl-${positionName}`;
+    map._controlContainer.appendChild(positionContainer);
+    map._controlPositions[positionName] = positionContainer;
+}
+registerControlPosition(map, 'top-center');
+registerControlPosition(map, 'bottom-center');
+registerControlPosition(map, 'center');
+
+class infoControl {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+            <div id='infoContainer' style='
+            display: none;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px 10px;
+            /* line-height: 25px; */
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            '>
+                <input id="fileInput" type="file"/>
+                <div id='radarInfoDiv' style='display: none'>
+                    <div id='radFileNameParent'><b><a id='radFileName'></a></b></div>
+                    <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
+                    <b>Station: </b><a id='radStation'></a>
+                    <b>VCP: </b><a id='radVCP'></a>
+                </div>
+            </div>`
+        this._container.addEventListener('click', function () {
+            console.log('sus')
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theInfoControl = new infoControl
+map.addControl(theInfoControl, 'top-center');
+
+class infoControlBottom {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+            <div id='infoContainerBottom' style='
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 5px 10px;
+            /* line-height: 25px; */
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            '>
+                <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+            </div>`
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theInfoControlBottom = new infoControlBottom
+map.addControl(theInfoControlBottom, 'top-center');
+
+document.getElementById("texturecolorbar").width = 0;
+document.getElementById("texturecolorbar").height = 0;
+
+// enable bootstrap tooltips
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+function showPlotBtn() {
+    class reflPlotControl {
+        onAdd(map) {
+            this._map = map;
+            this._container = document.createElement('div');
+            this._container.innerHTML = `
+                <div class="mapboxgl-control-container" style="margin-top: 100%;">
+                    <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                        <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                            <span class="fa fa-hurricane icon-black" id="reflPlotThing" aria-hidden="true" title="Globe Toggle"></span>
+                        </button>
+                    </div>
+                </div>`
+            $(this._container).addClass('reflPlotButton');
+            this._container.addEventListener('click', function () {
+                if (!$('#reflPlotThing').hasClass('icon-selected')) {
+                    $('#reflPlotThing').addClass('icon-selected');
+                    $('#reflPlotThing').removeClass('icon-black');
+                } else if ($('#reflPlotThing').hasClass('icon-selected')) {
+                    $('#reflPlotThing').removeClass('icon-selected');
+                    $('#reflPlotThing').addClass('icon-black');
+                    removeMapLayer('baseReflectivity');
+                }
+            })
+            return this._container;
+        }
+
+        onRemove() {
+            this._container.parentNode.removeChild(this._container);
+            this._map = undefined;
+        }
+    }
+    var theReflPlotControl = new reflPlotControl;
+    map.addControl(theReflPlotControl, 'top-left');
+}
+//showPlotBtn();
+
+class settingsControl {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+            <div class="mapboxgl-control-container" style="margin-top: 100%;">
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                    <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                        <span class="fa fa-gear icon-black" id="settingsThing" aria-hidden="true" title="Globe Toggle"></span>
+                    </button>
+                </div>
+            </div>`
+        this._container.addEventListener('click', function () {
+            if (!$('#settingsThing').hasClass('icon-selected')) {
+                $('#settingsThing').addClass('icon-selected');
+                $('#settingsThing').removeClass('icon-black');
+                $("#settingsDialog").dialog({
+                    modal: true,
+                    // https://stackoverflow.com/a/30624445/18758797
+                    open: function () {
+                        $(this).parent().css({
+                            position: 'absolute',
+                            top: 10,
+                            maxHeight: '70vh',
+                            overflow: 'scroll'
+                        });
+                        $('.ui-widget-overlay').bind('click', function () {
+                            $("#settingsDialog").dialog('close');
+                        });
+                    },
+                    close: function () {
+                        $('#settingsThing').removeClass('icon-selected');
+                        $('#settingsThing').addClass('icon-black');
+                    }
+                });
+            } else if ($('#settingsThing').hasClass('icon-selected')) {
+                $('#settingsThing').removeClass('icon-selected');
+                $('#settingsThing').addClass('icon-black');
+            }
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theSettingsControl = new settingsControl;
+//map.addControl(theSettingsControl, 'top-right');
+
+class testFileControl {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+            <div class="mapboxgl-control-container" style="margin-top: 100%;">
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                    <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                        <span class="fa fa-flask-vial icon-black" id="testFileThing" aria-hidden="true" title="Globe Toggle"></span>
+                    </button>
+                </div>
+            </div>`
+        this._container.addEventListener('click', function () {
+            if (!$('#testFileThing').hasClass('icon-selected')) {
+                $('#testFileThing').addClass('icon-selected');
+                $('#testFileThing').removeClass('icon-black');
+                // KLIX20050829_061516.gz
+                // KTLX20130520_200356_V06.gz
+                var fileToLoad = 'KTLX20130520_200356_V06.gz';
+                loadFileObject('data/' + fileToLoad, fileToLoad, 2);
+            } else if ($('#testFileThing').hasClass('icon-selected')) {
+                $('#testFileThing').removeClass('icon-selected');
+                $('#testFileThing').addClass('icon-black');
+            }
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theTestFileControl = new testFileControl;
+
+class testFile3Control {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+            <div class="mapboxgl-control-container" style="margin-top: 100%;">
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                    <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                        <span class="fa fa-3 icon-black" id="testFile3Thing" aria-hidden="true" title="Globe Toggle"></span>
+                    </button>
+                </div>
+            </div>`
+        this._container.addEventListener('click', function () {
+            if (!$('#testFile3Thing').hasClass('icon-selected')) {
+                $('#testFile3Thing').addClass('icon-selected');
+                $('#testFile3Thing').removeClass('icon-black');
+                // LWX_N0H_2022_04_18_15_21_24
+                // LWX_N0Q_2022_04_18_15_21_24
+                // KOUN_SDUS54_N0STLX_201305200301
+                // KCRP_SDUS54_N0UCRP_201708252357
+                // KCRP_SDUS54_N0QCRP_201708252357
+                // KOUN_SDUS54_DVLTLX_201305200301
+                // KOUN_SDUS34_NSTTLX_201305200301
+
+                // LOT_NMD_2021_06_21_04_22_17
+                // LOT_NMD_2021_06_21_04_27_31
+                // KILX_NTV
+                // ILX_N0Q_2021_07_15_22_19_15
+
+                var fileToLoad = 'KILX_NTV';
+                loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
+            } else if ($('#testFile3Thing').hasClass('icon-selected')) {
+                $('#testFile3Thing').removeClass('icon-selected');
+                $('#testFile3Thing').addClass('icon-black');
+            }
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theTestFile3Control = new testFile3Control;
+
+if (isDevelopmentMode) {
+    map.addControl(theTestFile3Control, 'top-right');
+    map.addControl(theTestFileControl, 'top-right');
+}
+
+class curFileControl {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
+                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                                <span class="fa fa-clock icon-black" id="curFileThing" aria-hidden="true" title="Globe Toggle"></span>
+                            </button>
+                        </div>
+                    </div>`
+        this._container.classList.add('currentFileControl');
+        this._container.addEventListener('click', function () {
+            if (!$('#curFileThing').hasClass('icon-selected')) {
+                $('#curFileThing').addClass('icon-selected');
+                $('#curFileThing').removeClass('icon-black');
+                if ($('#levelInput').val() == 'l2') {
+                    loadLatestFile('l2');
+                } else if ($('#levelInput').val() == 'l3') {
+                    loadLatestFile('l3');
+                }
+            } else if ($('#curFileThing').hasClass('icon-selected')) {
+                $('#curFileThing').removeClass('icon-selected');
+                $('#curFileThing').addClass('icon-black');
+            }
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theCurFileControl = new curFileControl;
+//map.addControl(theCurFileControl, 'top-right');
+
+class showOptionsBoxControl {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+                    <div class="mapboxgl-control-container" style='position: absolute; bottom: 10vh'>
+                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                                <span class="fa fa-circle-chevron-up icon-black" id="showOptionsBoxThing" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>`
+        this._container.classList.add('optionsBoxControl');
+        this._container.addEventListener('click', function () {
+            if (!$('#showOptionsBoxThing').hasClass('icon-selected')) {
+                $('#showOptionsBoxThing').addClass('icon-selected');
+
+                $('#showOptionsBoxThing').removeClass('fa-circle-chevron-up');
+                $('#showOptionsBoxThing').addClass('fa-circle-chevron-down');
+
+                $('#showOptionsBoxThing').removeClass('icon-black');
+                $('#optionsBox').show("slide", { direction: "down" }, 200);
+            } else if ($('#showOptionsBoxThing').hasClass('icon-selected')) {
+                $('#showOptionsBoxThing').removeClass('icon-selected');
+
+                $('#showOptionsBoxThing').removeClass('fa-circle-chevron-down');
+                $('#showOptionsBoxThing').addClass('fa-circle-chevron-up');
+
+                $('#showOptionsBoxThing').addClass('icon-black');
+                $('#optionsBox').hide("slide", { direction: "down" }, 200);
+            }
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theShowOptionsBoxControl = new showOptionsBoxControl;
+map.addControl(theShowOptionsBoxControl, 'bottom-left');
+
+//$('#optionsBox').hide();
+$('.optionsBoxControl').trigger('click');
+
+// radius of wsr-88d scan in km
+var radius = 460;
+$('#fileStation').on('DOMSubtreeModified', function () {
+    var station = document.getElementById('fileStation').innerHTML;
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+        var stationLat = data[station][1];
+        var stationLng = data[station][2];
+        //map.flyTo({
+        //    center: [stationLng, stationLat],
+        //    zoom: 8,
+        //    duration: 1000,
+        //});
+        var stationBbox = getBoundingBox(stationLat, stationLng, radius);
+
+        var coord1 = stationBbox.minLat;
+        var coord2 = stationBbox.minLng;
+        var coord3 = stationBbox.maxLat;
+        var coord4 = stationBbox.maxLng;
+        //map.addLayer({
+        //    id: 'canvas-layer',
+        //    type: 'raster',
+        //    source: {
+        //        type: 'canvas',
+        //        canvas: 'theCanvas',
+        //        coordinates: [
+        //            [coord2, coord3],
+        //            [coord4, coord3],
+        //            [coord4, coord1],
+        //            [coord2, coord1]
+        //        ],
+        //    }
+        //});
+        //new mapboxgl.Marker()
+        //    .setLngLat([stationLng, stationLat])
+        //    .addTo(map);
+    });
+});
+
+module.exports = map;
+},{"../misc/urlParser":241}],239:[function(require,module,exports){
+var map = require('./map');
+
+function removeMapLayer(layername) {
+    if (map.getLayer(layername)) {
+        map.removeLayer(layername);
+    }
+    if (map.getSource(layername)) {
+        map.removeSource(layername);
+    }
+}
+function setGeojsonLayer(gj, gjType, identity) {
+    var styling;
+    var type;
+    if (gjType == 'circle') {
+        type = gjType;
+        styling = {
+            'circle-radius': 4,
+            'circle-stroke-width': 2,
+            'circle-color': 'red',
+            'circle-stroke-color': 'white',
+        }
+    } else if (gjType == 'lineCircle') {
+        type = 'circle';
+        styling = {
+            'circle-radius': 4,
+            'circle-stroke-width': 2,
+            'circle-color': 'blue',
+            'circle-stroke-color': 'white',
+        }
+    } else if (gjType == 'greenCircle') {
+        type = 'circle';
+        styling = {
+            'circle-radius': 4,
+            'circle-stroke-width': 2,
+            'circle-color': 'green',
+            'circle-stroke-color': 'white',
+        }
+    } else if (gjType == 'yellowCircle') {
+        type = 'circle';
+        styling = {
+            'circle-radius': 4,
+            'circle-stroke-width': 2,
+            'circle-color': 'yellow',
+            'circle-stroke-color': 'white',
+        }
+    } else if (gjType == 'lineCircleEdge') {
+        type = 'circle';
+        styling = {
+            'circle-radius': 4,
+            'circle-color': '#ffffff',
+        }
+    } else if (gjType == 'line') {
+        type = gjType;
+        styling = {
+            'line-color': '#ffffff',
+            'line-width': 1.5,
+        }
+    }
+    map.addLayer({
+        'id': identity,
+        'type': type,
+        'source': {
+            'type': 'geojson',
+            'data': gj,
+        },
+        'paint': styling,
+    })
+}
+function moveMapLayer(lay) {
+    if (map.getLayer(lay)) {
+        map.moveLayer(lay)
+    }
+}
+
+module.exports = {
+    removeMapLayer,
+    setGeojsonLayer,
+    moveMapLayer
+}
+},{"./map":238}],240:[function(require,module,exports){
+var map = require('./map');
+const loaders = require('../loaders');
+
+var statMarkerArr = [];
+function showStations() {
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+        var allKeys = Object.keys(data);
+        for (key in allKeys) {
+            var curIter = data[allKeys[key]];
+            var curStat = allKeys[key];
+
+            // check if it is an unsupported radar
+            if (curStat.charAt(0) == 'K') {
+                // create a HTML element for each feature
+                var el = document.createElement('div');
+                el.className = 'customMarker';
+                el.innerHTML = curStat;
+
+                // make a marker for each feature and add to the map
+                var mark = new mapboxgl.Marker(el)
+                    .setLngLat([curIter[2], curIter[1]])
+                    .addTo(map);
+                statMarkerArr.push(mark)
+            }
+        }
+    }).then(function () {
+        $('.customMarker').on('click', function () {
+            //$('.productBtnGroup button').off()
+            var btnsArr = [
+                "l2-ref",
+                "l2-vel",
+                "l2-rho",
+                "l2-phi",
+                "l2-zdr",
+                "l2-sw "
+            ]
+            for (key in btnsArr) {
+                var curElemIter = document.getElementById(btnsArr[key]);
+                curElemIter.disabled = true;
+                $(curElemIter).addClass('btn-outline-secondary');
+                $(curElemIter).removeClass('btn-outline-primary');
+            }
+            document.getElementById('loadl2').style.display = 'block';
+
+            $('#stationInp').val(this.innerHTML)
+
+            document.getElementById('curProd').innerHTML = 'ref';
+            loaders.loadLatestFile(
+                'l3',
+                'ref',
+                $('#tiltDropdownBtn').attr('value'),
+                $('#stationInp').val().toLowerCase()
+            );
+        })
+    })
+}
+
+class stationControl {
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.innerHTML = `
+                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
+                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
+                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
+                                <span class="fa fa-satellite-dish icon-black" id="stationThing" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>`
+        this._container.addEventListener('click', function () {
+            if (!$('#stationThing').hasClass('icon-selected')) {
+                $('#stationThing').addClass('icon-selected');
+                $('#stationThing').removeClass('icon-black');
+                showStations();
+            } else if ($('#stationThing').hasClass('icon-selected')) {
+                $('#stationThing').removeClass('icon-selected');
+                $('#stationThing').addClass('icon-black');
+                for (key in statMarkerArr) {
+                    statMarkerArr[key].remove();
+                }
+            }
+        })
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+}
+var theStationControl = new stationControl;
+map.addControl(theStationControl, 'top-left');
+},{"../loaders":236,"./map":238}],241:[function(require,module,exports){
+var parser = document.createElement('a');
+parser.href = window.location.href;
+console.log(parser.hash);
+
+var allParserArgs = parser.hash.split('&');
+console.log(allParserArgs)
+
+var isDevelopmentMode = false;
+for (key in allParserArgs) {
+    if (allParserArgs[key].includes('#station=')) {
+        console.log('we got a station URL parameter!');
+        $('#stationInp').val(allParserArgs[key].slice(9, 13));
+    }
+    if (allParserArgs[key].includes('#development')) {
+        console.log('we got a development mode URL parameter!');
+        isDevelopmentMode = true;
+    }
+}
+
+module.exports = isDevelopmentMode;
+},{}],242:[function(require,module,exports){
 function initPaletteTooltip(produc, colortcanvas) {
     var hycObj = {
         0: 'ND: Below Threshold',
@@ -39131,23 +38961,26 @@ function initPaletteTooltip(produc, colortcanvas) {
 module.exports = {
     initPaletteTooltip
 }
-},{}],237:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
+var map = require('./map/map');
+const loaders = require('./loaders');
+
 function loadAllStormTrackingStuff() {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
     }
     function addMesocycloneLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
     }
     function addTornadoLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
     }
     function arrayify(text) {
         return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
@@ -39208,8 +39041,10 @@ function loadAllStormTrackingStuff() {
 module.exports = {
     loadAllStormTrackingStuff
 }
-},{}],238:[function(require,module,exports){
+},{"./loaders":236,"./map/map":238}],244:[function(require,module,exports){
 (function (Buffer){(function (){
+const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
     const view = new Uint8Array(ab);
@@ -39259,15 +39094,203 @@ function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     return destination;
 }
 
+function logToModal(textContent) {
+    console.log(textContent);
+    function openMessageModal() {
+        $("#messageDialog").dialog({
+            modal: true,
+            // https://stackoverflow.com/a/30624445/18758797
+            open: function () {
+                $(this).parent().css({
+                    position: 'absolute',
+                    top: 10,
+                    maxHeight: '70vh',
+                    overflow: 'scroll'
+                });
+            },
+        });
+    }
+    if (!($("#messageDialog").dialog('instance') == undefined)) {
+        // message box is already initialized
+        if (!$('#messageDialog').closest('.ui-dialog').is(':visible')) {
+            // message box is initialized but hidden - open it
+            openMessageModal();
+        }
+    } else if ($("#messageDialog").dialog('instance') == undefined) {
+        // message box is not initialized, open it
+        openMessageModal();
+    }
+    $('#messageBox').append(`<div>${textContent}</div>`);
+    $("#messageBox").animate({ scrollTop: $("#messageBox")[0].scrollHeight }, 0);
+}
+
+function xmlToJson(xml) {
+    if (typeof xml == "string") {
+        parser = new DOMParser();
+        xml = parser.parseFromString(xml, "text/xml");
+    }
+    // Create the return object
+    var obj = {};
+    // console.log(xml.nodeType, xml.nodeName );
+    if (xml.nodeType == 1) { // element
+        // do attributes
+        if (xml.attributes.length > 0) {
+            obj["@attributes"] = {};
+            for (var j = 0; j < xml.attributes.length; j++) {
+                var attribute = xml.attributes.item(j);
+                obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+            }
+        }
+    }
+    else if (xml.nodeType == 3 ||
+        xml.nodeType == 4) { // text and cdata section
+        obj = xml.nodeValue
+    }
+    // do children
+    if (xml.hasChildNodes()) {
+        for (var i = 0; i < xml.childNodes.length; i++) {
+            var item = xml.childNodes.item(i);
+            var nodeName = item.nodeName;
+            if (typeof (obj[nodeName]) == "undefined") {
+                obj[nodeName] = xmlToJson(item);
+            } else {
+                if (typeof (obj[nodeName].length) == "undefined") {
+                    var old = obj[nodeName];
+                    obj[nodeName] = [];
+                    obj[nodeName].push(old);
+                }
+                if (typeof (obj[nodeName]) === 'object') {
+                    obj[nodeName].push(xmlToJson(item));
+                }
+            }
+        }
+    }
+    return obj;
+}
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    var k = 1024;
+    var dm = decimals < 0 ? 0 : decimals;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+var tiltObject = {
+    'tilt1': {
+        'ref': 'N0B',
+        'vel': 'N0G',
+        'lowres-ref': 'p94r0',
+        'lowres-vel': 'p99v0',
+        'rho': '161c0',
+        'zdr': '159x0',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h0',
+        'srv': '56rm0',
+        'vil': '134il',
+        'sti': '58sti',
+        'mcy': '141md',
+    },
+    'tilt2': {
+        'ref': 'N1B',
+        'vel': 'N1G',
+        'lowres-ref': 'p94r1',
+        'lowres-vel': 'p99v1',
+        'rho': '161c1',
+        'zdr': '159x1',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h1',
+        'srv': '56rm1',
+        'vil': '134il',
+        'sti': '58sti',
+    },
+    'tilt3': {
+        'ref': 'N2B',
+        'vel': 'N2G',
+        'lowres-ref': 'p94r2',
+        'lowres-vel': 'p99v2',
+        'rho': '161c2',
+        'zdr': '159x2',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h2',
+        'srv': '56rm2',
+        'vil': '134il',
+        'sti': '58sti',
+    },
+    'tilt4': {
+        'ref': 'N3B',
+        'vel': 'N3G',
+        'lowres-ref': 'p94r3',
+        'lowres-vel': 'p99v3',
+        'rho': '161c3',
+        'zdr': '159x3',
+        'sw ': 'p30sw',
+        'hhc': '177hh',
+        'hyc': '165h3',
+        'srv': '56rm3',
+        'vil': '134il',
+        'sti': '58sti',
+    },
+}
+var numOfTiltsObj = {
+    'ref': [1, 2, 3, 4],
+    'vel': [1, 2],
+    'lowres-ref': [1, 2, 3, 4],
+    'lowres-vel': [1, 2, 3, 4],
+    'rho': [1, 2, 3, 4],
+    'zdr': [1, 2, 3, 4],
+    'sw ': [1],
+    'hhc': [1],
+    'hyc': [1, 2, 3, 4],
+    'srv': [1, 2, 3, 4],
+    'vil': [1],
+    'sti': [1],
+}
+var numOfTiltsObj = {
+    'ref': [1, 2, 3, 4],
+    'vel': [1, 2],
+    'lowres-ref': [1, 2, 3, 4],
+    'lowres-vel': [1, 2, 3, 4],
+    'rho': [1, 2, 3, 4],
+    'zdr': [1, 2, 3, 4],
+    'sw ': [1],
+    'hhc': [1],
+    'hyc': [1, 2, 3, 4],
+    'srv': [1, 2, 3, 4],
+    'vil': [1],
+    'sti': [1],
+}
+var allL2Btns = [
+    'l2-ref',
+    'l2-vel',
+    'l2-rho',
+    'l2-phi',
+    'l2-zdr',
+    'l2-sw '
+];
+
 module.exports = {
+    phpProxy,
     toBuffer,
     printFancyTime,
     msToTime,
     round,
-    findTerminalCoordinates
+    findTerminalCoordinates,
+    logToModal,
+    xmlToJson,
+    formatBytes,
+    tiltObject,
+    numOfTiltsObj,
+    allL2Btns
 }
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],239:[function(require,module,exports){
+},{"buffer":71}],245:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -39367,7 +39390,7 @@ module.exports = (raf, message, options) => {
 	return message;
 };
 
-},{}],240:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 // parse message type 2
 module.exports = (raf, message) => {
 	message.record = {
@@ -39419,7 +39442,7 @@ const alarmCodes = (raf) => {
 	return alarms;
 };
 
-},{}],241:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 const { MESSAGE_HEADER_SIZE } = require('../constants');
 
 // parse message type 31
@@ -39683,7 +39706,7 @@ const blockName = (raf) => {
 	return { name, type };
 };
 
-},{"../constants":247}],242:[function(require,module,exports){
+},{"../constants":253}],248:[function(require,module,exports){
 // parse message type 5 and 7
 module.exports = (raf, message) => {
 	message.record = {
@@ -39825,7 +39848,7 @@ const supplementalData = (raw) => ({
 	base_tilt_cut: parseBits(raw, 10),
 });
 
-},{}],243:[function(require,module,exports){
+},{}],249:[function(require,module,exports){
 const {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE,
 } = require('../constants');
@@ -39900,7 +39923,7 @@ const getRecord = (raf, recordOffset, options) => {
 
 module.exports.Level2Record = Level2Record;
 
-},{"../constants":247,"./Level2Record-1":239,"./Level2Record-2":240,"./Level2Record-31":241,"./Level2Record-5-7":242,"./Level2RecordSearch":244}],244:[function(require,module,exports){
+},{"../constants":253,"./Level2Record-1":245,"./Level2Record-2":246,"./Level2Record-31":247,"./Level2Record-5-7":248,"./Level2RecordSearch":250}],250:[function(require,module,exports){
 // attempt to search for the next message by looking for some known values
 
 const level2RecordSearch = (raf, startPos, julianDate, options) => {
@@ -39954,7 +39977,7 @@ module.exports = {
 	level2RecordSearch,
 };
 
-},{}],245:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -40137,7 +40160,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],246:[function(require,module,exports){
+},{"buffer":71}],252:[function(require,module,exports){
 // combine data returned by multiple calls to the Level2Radar constructor
 
 // individual data structures or arrays can be passed
@@ -40180,7 +40203,7 @@ const combine = (...args) => {
 
 module.exports = combine;
 
-},{}],247:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 const FILE_HEADER_SIZE = 24;
 const RADAR_DATA_SIZE = 2432;
 const CTM_HEADER_SIZE = 12;
@@ -40190,7 +40213,7 @@ module.exports = {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE, MESSAGE_HEADER_SIZE,
 };
 
-},{}],248:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 (function (Buffer){(function (){
 // decompress a nexrad level 2 archive, or return the provided file if it is not compressed
 
@@ -40297,7 +40320,7 @@ const readCompressionHeader = (raf) => ({
 module.exports = decompress;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./classes/RandomAccessFile":245,"./constants":247,"./gzipdecompress":249,"buffer":71,"seek-bzip":339}],249:[function(require,module,exports){
+},{"./classes/RandomAccessFile":251,"./constants":253,"./gzipdecompress":255,"buffer":71,"seek-bzip":345}],255:[function(require,module,exports){
 const zlib = require('zlib');
 // structured byte access
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
@@ -40307,7 +40330,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":245,"zlib":69}],250:[function(require,module,exports){
+},{"./classes/RandomAccessFile":251,"zlib":69}],256:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -40676,7 +40699,7 @@ const nullLogger = {
 module.exports.Level2Radar = Level2Radar;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./combinedata":246,"./parsedata":251,"buffer":71}],251:[function(require,module,exports){
+},{"./combinedata":252,"./parsedata":257,"buffer":71}],257:[function(require,module,exports){
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
 const { Level2Record } = require('./classes/Level2Record');
 const { RADAR_DATA_SIZE } = require('./constants');
@@ -40801,7 +40824,7 @@ const groupAndSortScans = (scans) => {
 
 module.exports = parseData;
 
-},{"./classes/Level2Record":243,"./classes/RandomAccessFile":245,"./constants":247,"./decompress":248,"./parseheader":252}],252:[function(require,module,exports){
+},{"./classes/Level2Record":249,"./classes/RandomAccessFile":251,"./constants":253,"./decompress":254,"./parseheader":258}],258:[function(require,module,exports){
 const { FILE_HEADER_SIZE } = require('./constants');
 
 const parse = (raf) => {
@@ -40827,7 +40850,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./constants":247}],253:[function(require,module,exports){
+},{"./constants":253}],259:[function(require,module,exports){
 const canvasObj = require('canvas');
 
 const { createCanvas } = canvasObj;
@@ -41134,10 +41157,10 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../app/drawToMap":228,"./palettes":255,"./palettes/ref":256,"./palettes/vel":257,"./palettize":258,"./preprocess/downsample":259,"./preprocess/filterproduct":260,"./preprocess/indexproduct":261,"./preprocess/rrle":262,"canvas":335}],254:[function(require,module,exports){
+},{"../../../app/drawToMap":228,"./palettes":261,"./palettes/ref":262,"./palettes/vel":263,"./palettize":264,"./preprocess/downsample":265,"./preprocess/filterproduct":266,"./preprocess/indexproduct":267,"./preprocess/rrle":268,"canvas":341}],260:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
-},{}],255:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 // ingest a palette and provide lookup and formatting functionality
 // {palette: [r1,g1,b1,a1, r2,g2,b2,a2, ...], limits: [1,2, ...]}
 // rgba values are returned with the the color index in the g position with 100% opacity
@@ -41256,7 +41279,7 @@ const inDeadband = (reset) => (a) => (a === null || a === reset || a === undefin
 
 module.exports = Palette;
 
-},{"./hexlookup":254}],256:[function(require,module,exports){
+},{"./hexlookup":260}],262:[function(require,module,exports){
 const palette = [
 	255, 255, 255, 0,	// transparent
 	0, 128, 128, 192,
@@ -41304,7 +41327,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],257:[function(require,module,exports){
+},{}],263:[function(require,module,exports){
 const palette = [
 	// 0: green/outbound
 	0, 255, 0, 255,
@@ -41366,7 +41389,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],258:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 
 const palettizeImage = (sourceCtx, palette) => {
@@ -41399,7 +41422,7 @@ const palettizeImage = (sourceCtx, palette) => {
 
 module.exports = palettizeImage;
 
-},{"canvas":335}],259:[function(require,module,exports){
+},{"canvas":341}],265:[function(require,module,exports){
 // downsample the moment data preserving the maximum dbz using palette.downSample
 // this includes "cropping" the data to the specified size
 
@@ -41457,7 +41480,7 @@ const downSample = (radials, scale, resolution, options, palette) => {
 
 module.exports = downSample;
 
-},{}],260:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 // accomplish some pre-processing in one loop
 
 // filter data for a specific product
@@ -41495,7 +41518,7 @@ const filterProduct = (data, product) => data.map((header) => {
 
 module.exports = filterProduct;
 
-},{}],261:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 // take the raw data values and turn them into indexed values in the palette
 // this is the first step in palettizing and in the Radial run-length encoding process
 
@@ -41513,7 +41536,7 @@ const indexProduct = (radials, palette) => radials.map((radial) => {
 
 module.exports = indexProduct;
 
-},{}],262:[function(require,module,exports){
+},{}],268:[function(require,module,exports){
 // radial run-length encoding
 // encode run length data to the adjacent radials, instead of along the length of the radial
 
@@ -41593,7 +41616,7 @@ const rrle = (radials, resolutionRad, shouldNullValues) => {
 
 module.exports = rrle;
 
-},{}],263:[function(require,module,exports){
+},{}],269:[function(require,module,exports){
 const { draw, canvas } = require('./draw');
 const { keys } = require('./draw/palettes/hexlookup');
 const { writePngToFile } = require('./utils/file');
@@ -41660,7 +41683,7 @@ module.exports = {
 	canvas,
 };
 
-},{"./draw":253,"./draw/palettes/hexlookup":254,"./utils/file":264}],264:[function(require,module,exports){
+},{"./draw":259,"./draw/palettes/hexlookup":260,"./utils/file":270}],270:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 /**
@@ -41693,7 +41716,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],265:[function(require,module,exports){
+},{"fs":1}],271:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -41746,7 +41769,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"../packets":292,"./graphic22":266}],266:[function(require,module,exports){
+},{"../packets":298,"./graphic22":272}],272:[function(require,module,exports){
 // parse data in the graphic area as packet 22 and related packets
 const { parser } = require('../packets');
 
@@ -41776,7 +41799,7 @@ const parse22 = (raf) => {
 
 module.exports = parse22;
 
-},{"../packets":292}],267:[function(require,module,exports){
+},{"../packets":298}],273:[function(require,module,exports){
 const parse = (raf) => ({
 
 	code: raf.readShort(),
@@ -41791,7 +41814,7 @@ const parse = (raf) => ({
 
 module.exports = parse;
 
-},{}],268:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 const MODE_MAINTENANCE = 0;
 const MODE_CLEAN_AIR = 1;
 const MODE_PRECIPITATION = 2;
@@ -41841,7 +41864,7 @@ module.exports = {
 	MODE_PRECIPITATION,
 };
 
-},{}],269:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 // register packet parsers
 
 const { parser } = require('../packets');
@@ -41881,7 +41904,7 @@ const parse = (raf, productDescription, layerCount, options) => {
 
 module.exports = parse;
 
-},{"../packets":292}],270:[function(require,module,exports){
+},{"../packets":298}],276:[function(require,module,exports){
 const symbologyText = require('./symbologytext');
 // some block ids just have text, this is not well documented so we do our best to parse these
 const textSymbologies = [3, 4, 5, 6, 7];
@@ -41909,7 +41932,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./symbologytext":271}],271:[function(require,module,exports){
+},{"./symbologytext":277}],277:[function(require,module,exports){
 // block id 6 is undocumented but appears to be text
 
 const parse = (raf) => {
@@ -41943,7 +41966,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],272:[function(require,module,exports){
+},{}],278:[function(require,module,exports){
 const parseMessageHeader = require('./message');
 const { parse: parseProductDescription } = require('./productdescription');
 
@@ -42006,7 +42029,7 @@ const parse = (raf, product) => {
 
 module.exports = parse;
 
-},{"./message":267,"./productdescription":268}],273:[function(require,module,exports){
+},{"./message":273,"./productdescription":274}],279:[function(require,module,exports){
 // file header as 30 byte string
 
 const parse = (raf) => {
@@ -42034,7 +42057,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],274:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 (function (Buffer){(function (){
 const bzip = require('seek-bzip');
 const { RandomAccessFile } = require('./randomaccessfile');
@@ -42181,7 +42204,7 @@ const nullLogger = {
 module.exports = nexradLevel3Data;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./headers/graphic":265,"./headers/message":267,"./headers/productdescription":268,"./headers/radialpackets":269,"./headers/symbology":270,"./headers/tabular":272,"./headers/text":273,"./products":319,"./randomaccessfile":320,"buffer":71,"seek-bzip":339}],275:[function(require,module,exports){
+},{"./headers/graphic":271,"./headers/message":273,"./headers/productdescription":274,"./headers/radialpackets":275,"./headers/symbology":276,"./headers/tabular":278,"./headers/text":279,"./products":325,"./randomaccessfile":326,"buffer":71,"seek-bzip":345}],281:[function(require,module,exports){
 const code = 1;
 const description = 'Text and Special Symbol Packets';
 
@@ -42213,7 +42236,7 @@ module.exports = {
 	parser,
 };
 
-},{}],276:[function(require,module,exports){
+},{}],282:[function(require,module,exports){
 const code = 16;
 const description = 'Digital Radial Data Array Packet';
 
@@ -42298,7 +42321,7 @@ module.exports = {
 	parser,
 };
 
-},{}],277:[function(require,module,exports){
+},{}],283:[function(require,module,exports){
 const code = 19;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42358,7 +42381,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],278:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 const code = 20;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42418,7 +42441,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],279:[function(require,module,exports){
+},{}],285:[function(require,module,exports){
 const code = 21;
 const description = 'Special Graphic Symbol Packet';
 const { ijToAzDeg } = require('./utilities/ij');
@@ -42510,7 +42533,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/ij":293}],280:[function(require,module,exports){
+},{"./utilities/ij":299}],286:[function(require,module,exports){
 const code = 22;
 const description = 'Cell Trend Data Packet';
 
@@ -42545,7 +42568,7 @@ module.exports = {
 	parser,
 };
 
-},{}],281:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 const code = 23;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42578,7 +42601,7 @@ module.exports = {
 	parser,
 };
 
-},{".":292}],282:[function(require,module,exports){
+},{".":298}],288:[function(require,module,exports){
 const code = 24;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42591,7 +42614,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":281}],283:[function(require,module,exports){
+},{"./17":287}],289:[function(require,module,exports){
 const code = 25;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42604,7 +42627,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":281}],284:[function(require,module,exports){
+},{"./17":287}],290:[function(require,module,exports){
 const code = 2;
 const description = 'Text and Special Symbol Packets';
 
@@ -42634,7 +42657,7 @@ module.exports = {
 	parser,
 };
 
-},{}],285:[function(require,module,exports){
+},{}],291:[function(require,module,exports){
 const code = 32;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42694,7 +42717,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],286:[function(require,module,exports){
+},{}],292:[function(require,module,exports){
 const code = 6;
 const description = 'Linked Vector Packet';
 
@@ -42738,7 +42761,7 @@ module.exports = {
 	parser,
 };
 
-},{}],287:[function(require,module,exports){
+},{}],293:[function(require,module,exports){
 const code = 8;
 const description = 'Text and Special Symbol Packets';
 
@@ -42768,7 +42791,7 @@ module.exports = {
 	parser,
 };
 
-},{}],288:[function(require,module,exports){
+},{}],294:[function(require,module,exports){
 const code = 10;
 const description = 'Unlinked Vector Packet';
 
@@ -42818,7 +42841,7 @@ module.exports = {
 	parser,
 };
 
-},{}],289:[function(require,module,exports){
+},{}],295:[function(require,module,exports){
 const code = 0xaf1f;
 const description = 'Radial Data Packet (16 Data Levels)';
 const rle = require('./utilities/rle');
@@ -42869,7 +42892,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/rle":294}],290:[function(require,module,exports){
+},{"./utilities/rle":300}],296:[function(require,module,exports){
 const code = 12;
 const description = 'Tornado Vortex Signautre';
 
@@ -42911,7 +42934,7 @@ module.exports = {
 	parser,
 };
 
-},{}],291:[function(require,module,exports){
+},{}],297:[function(require,module,exports){
 const code = 15;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42944,7 +42967,7 @@ module.exports = {
 	parser,
 };
 
-},{}],292:[function(require,module,exports){
+},{}],298:[function(require,module,exports){
 
 const path = require('path');
 require('./1')
@@ -42999,7 +43022,7 @@ module.exports = {
 	parser,
 };
 
-},{"./1":275,"./10":276,"./13":277,"./14":278,"./15":279,"./16":280,"./17":281,"./18":282,"./19":283,"./2":284,"./32":285,"./6":286,"./8":287,"./a":288,"./af1f":289,"./c":290,"./f":291,"path":178}],293:[function(require,module,exports){
+},{"./1":281,"./10":282,"./13":283,"./14":284,"./15":285,"./16":286,"./17":287,"./18":288,"./19":289,"./2":290,"./32":291,"./6":292,"./8":293,"./a":294,"./af1f":295,"./c":296,"./f":297,"path":178}],299:[function(require,module,exports){
 // i,j coordinate functions
 
 // i,j to azimuth/nmi
@@ -43026,7 +43049,7 @@ module.exports = {
 	ijToAzDeg,
 };
 
-},{}],294:[function(require,module,exports){
+},{}],300:[function(require,module,exports){
 // run length encoding expansion methods
 
 // expand rle from rrrrvvvv, 4-bit run, 4-bit value
@@ -43045,7 +43068,7 @@ module.exports = {
 	expand4_4,
 };
 
-},{}],295:[function(require,module,exports){
+},{}],301:[function(require,module,exports){
 const code = 134;
 const abbreviation = ['DVL'];
 const description = 'Digital Vertically Integrated Liquid';
@@ -43088,7 +43111,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],296:[function(require,module,exports){
+},{"../../randomaccessfile":326}],302:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -43151,7 +43174,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],297:[function(require,module,exports){
+},{}],303:[function(require,module,exports){
 const code = 141;
 const abbreviation = ['NMD'];
 const description = 'Mesocyclone';
@@ -43188,7 +43211,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320,"./formatter":296}],298:[function(require,module,exports){
+},{"../../randomaccessfile":326,"./formatter":302}],304:[function(require,module,exports){
 const code = 153;
 const abbreviation = ['N0B', 'N1B', 'N2B', 'N3B'];
 const description = 'Hi-Res Base Reflectivity';
@@ -43232,7 +43255,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],299:[function(require,module,exports){
+},{"../../randomaccessfile":326}],305:[function(require,module,exports){
 const code = 154;
 const abbreviation = [
 	'N0G',
@@ -43281,7 +43304,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],300:[function(require,module,exports){
+},{"../../randomaccessfile":326}],306:[function(require,module,exports){
 const code = 159;
 const abbreviation = [
 	'N0X',
@@ -43330,7 +43353,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],301:[function(require,module,exports){
+},{"../../randomaccessfile":326}],307:[function(require,module,exports){
 const code = 161;
 const abbreviation = [
 	'N0C',
@@ -43379,7 +43402,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],302:[function(require,module,exports){
+},{"../../randomaccessfile":326}],308:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -43441,7 +43464,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":320}],303:[function(require,module,exports){
+},{"../../randomaccessfile":326}],309:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -43532,7 +43555,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],304:[function(require,module,exports){
+},{"../../randomaccessfile":326}],310:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Storm Total Precipitation';
@@ -43623,7 +43646,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],305:[function(require,module,exports){
+},{"../../randomaccessfile":326}],311:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -43664,7 +43687,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":320,"../165":302}],306:[function(require,module,exports){
+},{"../../randomaccessfile":326,"../165":308}],312:[function(require,module,exports){
 const code = 30;
 const abbreviation = [
 	'NSW'
@@ -43710,7 +43733,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],307:[function(require,module,exports){
+},{"../../randomaccessfile":326}],313:[function(require,module,exports){
 const code = 56;
 const abbreviation = ['N0S', 'N1S', 'N2S', 'N3S'];
 const description = 'Storm relative velocity';
@@ -43742,7 +43765,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],308:[function(require,module,exports){
+},{"../../randomaccessfile":326}],314:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  P2     244/125   232/ 38     245/116   246/107   247/ 97   NO DATA    1.1/ 0.9"
@@ -43817,7 +43840,7 @@ const parseStringPosition = (position, kts = false) => {
 	};
 };
 
-},{}],309:[function(require,module,exports){
+},{}],315:[function(require,module,exports){
 const code = 58;
 const abbreviation = ['NST'];
 const description = 'Storm Tracking Information';
@@ -43853,7 +43876,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320,"./formatter":308}],310:[function(require,module,exports){
+},{"../../randomaccessfile":326,"./formatter":314}],316:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -43896,7 +43919,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],311:[function(require,module,exports){
+},{}],317:[function(require,module,exports){
 const code = 59;
 const abbreviation = ['NHI'];
 const description = 'Hail Index';
@@ -43914,7 +43937,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":310}],312:[function(require,module,exports){
+},{"./formatter":316}],318:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  TVS    F0    74/ 52    35    52    52/ 4.9   >11.1  < 4.9/ 16.0    16/ 4.9    "
@@ -43975,7 +43998,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],313:[function(require,module,exports){
+},{}],319:[function(require,module,exports){
 const code = 61;
 const abbreviation = ['NTV'];
 const description = 'Tornadic Vortex Signature';
@@ -43991,7 +44014,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":312}],314:[function(require,module,exports){
+},{"./formatter":318}],320:[function(require,module,exports){
 const code = 62;
 const abbreviation = ['NSS'];
 const description = 'Storm Structure';
@@ -44009,7 +44032,7 @@ module.exports = {
 	},
 };
 
-},{}],315:[function(require,module,exports){
+},{}],321:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -44041,7 +44064,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],316:[function(require,module,exports){
+},{"../../randomaccessfile":326}],322:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm Total Rainfall Accumulation';
@@ -44075,7 +44098,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],317:[function(require,module,exports){
+},{"../../randomaccessfile":326}],323:[function(require,module,exports){
 const code = 94;
 const abbreviation = ['NXQ', 'NYQ', 'NZQ', 'N0Q', 'NAQ', 'N1Q', 'NBQ', 'N2Q', 'N3Q'];
 const description = 'Digital Base Reflectivity';
@@ -44119,7 +44142,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],318:[function(require,module,exports){
+},{"../../randomaccessfile":326}],324:[function(require,module,exports){
 const code = 99;
 const abbreviation = [
 	'N0U',
@@ -44168,7 +44191,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":320}],319:[function(require,module,exports){
+},{"../../randomaccessfile":326}],325:[function(require,module,exports){
 
 const path = require('path');
 
@@ -44213,7 +44236,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./134":295,"./141":297,"./153":298,"./154":299,"./159":300,"./161":301,"./165":302,"./170":303,"./172":304,"./177":305,"./30":306,"./56":307,"./58":309,"./59":311,"./61":313,"./62":314,"./78":315,"./80":316,"./94":317,"./99":318,"path":178}],320:[function(require,module,exports){
+},{"./134":301,"./141":303,"./153":304,"./154":305,"./159":306,"./161":307,"./165":308,"./170":309,"./172":310,"./177":311,"./30":312,"./56":313,"./58":315,"./59":317,"./61":319,"./62":320,"./78":321,"./80":322,"./94":323,"./99":324,"path":178}],326:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -44328,7 +44351,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],321:[function(require,module,exports){
+},{"buffer":71}],327:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 const { keys } = require('../../../nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const Palette = require('./palette');
@@ -44470,7 +44493,7 @@ module.exports = {
 	DEFAULT_OPTIONS,
 };
 
-},{"../../../app/drawToMap":228,"../../../nexrad-level-2-plot/src/draw/palettes/hexlookup":254,"./palette":322,"canvas":335}],322:[function(require,module,exports){
+},{"../../../app/drawToMap":228,"../../../nexrad-level-2-plot/src/draw/palettes/hexlookup":260,"./palette":328,"canvas":341}],328:[function(require,module,exports){
 // pallette utilities
 
 // generate a palette as rgb[a](r,g,b)
@@ -44518,7 +44541,7 @@ module.exports = {
 	generate,
 };
 
-},{}],323:[function(require,module,exports){
+},{}],329:[function(require,module,exports){
 const NexradLevel3Data = require('../../nexrad-level-3-data/src');
 const { products, productAbbreviations } = require('./products');
 const { draw } = require('./draw');
@@ -44597,7 +44620,7 @@ module.exports = {
 	plotAndData,
 };
 
-},{"../../nexrad-level-3-data/src":274,"./draw":321,"./palletize":326,"./products":333,"./utils/file":334}],324:[function(require,module,exports){
+},{"../../nexrad-level-3-data/src":280,"./draw":327,"./palletize":332,"./products":339,"./utils/file":340}],330:[function(require,module,exports){
 // return the index of the closest color match in the palette
 
 // memoize results by provided key.
@@ -44642,7 +44665,7 @@ const geometricDistance = (a, b) => a.reduce((acc, val, idx) => acc + (val - b[i
 
 module.exports = closest;
 
-},{}],325:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 // generate a palette with the number of steps provided
 const { createCanvas } = require('canvas');
 const crypto = require('crypto');
@@ -44710,7 +44733,7 @@ const calcIntermediate = (a, b, num, den) => {
 
 module.exports = generatePalette;
 
-},{"canvas":335,"crypto":81}],326:[function(require,module,exports){
+},{"canvas":341,"crypto":81}],332:[function(require,module,exports){
 // palletize an image
 const { createCanvas } = require('canvas');
 const generatePalette = require('./generatepalette');
@@ -44776,7 +44799,7 @@ const combineOptions = (_options, product) => {
 
 module.exports = palletize;
 
-},{"../draw":321,"./closest":324,"./generatepalette":325,"canvas":335}],327:[function(require,module,exports){
+},{"../draw":327,"./closest":330,"./generatepalette":331,"canvas":341}],333:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -44809,7 +44832,7 @@ module.exports = {
 	palette,
 };
 
-},{}],328:[function(require,module,exports){
+},{}],334:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -44831,7 +44854,7 @@ module.exports = {
 	palette,
 };
 
-},{"../172":329}],329:[function(require,module,exports){
+},{"../172":335}],335:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Digital Total Accumulation';
@@ -44870,7 +44893,7 @@ module.exports = {
 	palette,
 };
 
-},{}],330:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -44903,7 +44926,7 @@ module.exports = {
 	palette,
 };
 
-},{}],331:[function(require,module,exports){
+},{}],337:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -44935,7 +44958,7 @@ module.exports = {
 	palette,
 };
 
-},{}],332:[function(require,module,exports){
+},{}],338:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm total precipitation';
@@ -44951,7 +44974,7 @@ module.exports = {
 	palette,
 };
 
-},{"../78":331}],333:[function(require,module,exports){
+},{"../78":337}],339:[function(require,module,exports){
 
 const path = require('path');
 
@@ -44982,7 +45005,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./165":327,"./170":328,"./172":329,"./177":330,"./78":331,"./80":332,"path":178}],334:[function(require,module,exports){
+},{"./165":333,"./170":334,"./172":335,"./177":336,"./78":337,"./80":338,"path":178}],340:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 const writePngToFile = (fileName, canvas) => new Promise((resolve, reject) => {
@@ -44999,7 +45022,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],335:[function(require,module,exports){
+},{"fs":1}],341:[function(require,module,exports){
 /* globals document, ImageData */
 
 const parseFont = require('./lib/parse-font')
@@ -45036,7 +45059,7 @@ exports.loadImage = function (src, options) {
   })
 }
 
-},{"./lib/parse-font":336}],336:[function(require,module,exports){
+},{"./lib/parse-font":342}],342:[function(require,module,exports){
 'use strict'
 
 /**
@@ -45139,7 +45162,7 @@ module.exports = str => {
   return (cache[str] = font)
 }
 
-},{}],337:[function(require,module,exports){
+},{}],343:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
@@ -45237,7 +45260,7 @@ BitReader.prototype.pi = function() {
 module.exports = BitReader;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],338:[function(require,module,exports){
+},{"buffer":71}],344:[function(require,module,exports){
 /* CRC32, used in Bzip2 implementation.
  * This is a port of CRC32.java from the jbzip2 implementation at
  *   https://code.google.com/p/jbzip2
@@ -45343,7 +45366,7 @@ module.exports = (function() {
   return CRC32;
 })();
 
-},{}],339:[function(require,module,exports){
+},{}],345:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
@@ -45952,7 +45975,7 @@ Bunzip.license = pjson.license;
 module.exports = Bunzip;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../package.json":341,"./bitreader":337,"./crc32":338,"./stream":340,"buffer":71}],340:[function(require,module,exports){
+},{"../package.json":347,"./bitreader":343,"./crc32":344,"./stream":346,"buffer":71}],346:[function(require,module,exports){
 /* very simple input/output stream interface */
 var Stream = function() {
 };
@@ -45996,7 +46019,7 @@ Stream.prototype.flush = function() {
 
 module.exports = Stream;
 
-},{}],341:[function(require,module,exports){
+},{}],347:[function(require,module,exports){
 module.exports={
   "name": "seek-bzip",
   "version": "2.0.0",
@@ -46032,4 +46055,4 @@ module.exports={
   }
 }
 
-},{}]},{},[235]);
+},{}]},{},[237]);

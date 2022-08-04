@@ -1,6 +1,7 @@
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('./stormTracking');
 const tt = require('./paletteTooltip');
+var map = require('./map/map');
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var settings = {};

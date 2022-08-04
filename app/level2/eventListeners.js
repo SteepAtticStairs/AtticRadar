@@ -1,4 +1,6 @@
 const { plot } = require('../../nexrad-level-2-plot/src');
+const loaders = require('../loaders');
+const mapFuncs = require('../map/mapFunctions');
 
 function loadL2Listeners(l2rad, displayElevations) {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
@@ -24,12 +26,12 @@ function loadL2Listeners(l2rad, displayElevations) {
     console.log('turned off listener')
     $('.level2btns button').on('click', function () {
         console.log(this.value)
-        removeMapLayer('baseReflectivity');
+        mapFuncs.removeMapLayer('baseReflectivity');
         if (this.value == 'load') {
-            getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+            loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
                 var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
                 console.log(phpProxy + individualFileURL)
-                loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
+                loaders.loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
             });
         }
         if (this.value == 'l2-ref') {

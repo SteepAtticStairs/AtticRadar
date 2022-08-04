@@ -1,4 +1,5 @@
 const ut = require('../utils');
+const mapFuncs = require('../map/mapFunctions');
 
 function parsePlotStormTracks(l3rad, theFileStation) {
     var stormTracksLayerArr = [];
@@ -61,22 +62,22 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                         geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
                         // add a circle for each edge on a storm track line
                         geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
-                        setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
+                        mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
                         stormTracksLayerArr.push(identifier + '_pointEdge' + key)
                     }
                 }
                 // push the finished geojson line object to a function that adds to the map
-                setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
                 // adds a blue circle at the start of the storm track
                 geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
                 geojsonLineTemplate.geometry.type = 'Point';
-                setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
                 stormTracksLayerArr.push(identifier + '_point')
             } else if (!isLine) {
                 // if the storm track does not have a forecast, display a Point geojson
                 geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
                 geojsonLineTemplate.geometry.type = 'Point';
-                setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
             }
         }
         // Z0 = line, R1 = point
@@ -89,12 +90,12 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         // setting layer orders
         for (key in stLayers) {
             if (stLayers[key].includes('_pointEdge')) {
-                moveMapLayer(stLayers[key])
+                mapFuncs.moveMapLayer(stLayers[key])
             }
         }
         for (key in stLayers) {
             if (stLayers[key].includes('_point')) {
-                moveMapLayer(stLayers[key])
+                mapFuncs.moveMapLayer(stLayers[key])
             }
         }
     });
