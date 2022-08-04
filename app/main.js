@@ -16,6 +16,8 @@ const parsePlotTornado = require('./level3/tornadoVortexSignature');
 const parsePlotMesocyclone = require('./level3/mesocycloneDetection');
 const parsePlotStormTracks = require('./level3/stormTracks');
 
+// run main code (used to be in the index.html)
+require('./index');
 
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
