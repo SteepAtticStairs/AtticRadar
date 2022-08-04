@@ -76,7 +76,7 @@ class infoControlBottom {
             border: 1px solid black;
             border-radius: 5px;
             '>
-                <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+                <input id="radarFileInput" type="file"/>
             </div>`
         return this._container;
     }

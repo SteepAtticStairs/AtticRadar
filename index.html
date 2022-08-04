@@ -328,7 +328,33 @@
             <button type="button" value="l2-zdr" id="l2-zdr" class="btn btn-outline-secondary btn-sm" disabled>Differential Reflectivity</button>
             <button type="button" value="l2-sw " id="l2-sw " class="btn btn-outline-secondary btn-sm" disabled>Spectrum Width</button>
         </div>
+        <br><br>
+        <div id="collapseBtn" style="display: none">
+            <button id="collapseBtnBtn" class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                File Info
+            </button>
+            <br><br>
+        </div>
+        <div class="collapse" id="collapseExample">
+            <div id='fileInfoDiv' style='display: none'>
+                <!-- <div id='radFileNameParent'><b><a id='radFileName'></a></b></div> -->
+                <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
+                <b>Station: </b><a id='radStation'></a>
+                <b>VCP: </b><a id='radVCP'></a>
+                <br>
+                <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+                <br>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('collapseBtnBtn').addEventListener('click', function() {
+            setTimeout(function() {
+                $("#optionsBox").animate({ scrollTop: $("#optionsBox")[0].scrollHeight }, 400);
+            }, 0)
+        })
+    </script>
 
     <div id="map"></div>
 

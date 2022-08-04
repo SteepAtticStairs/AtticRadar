@@ -38128,11 +38128,11 @@ Date.prototype.addDays = function(days) {
     date.setDate(date.getDate() + days);
     return date;
 }
-document.getElementById('fileInput').addEventListener('input', function() {
+document.getElementById('radarFileInput').addEventListener('input', function() {
     // Create the event
     var event = new CustomEvent("loadFile", { "detail": [
-        document.getElementById('fileInput').files[0],
-        'level2'
+        document.getElementById('radarFileInput').files[0],
+        'level3'
     ] });
     // Dispatch/Trigger/Fire the event
     document.dispatchEvent(event);
@@ -38213,10 +38213,9 @@ document.addEventListener('loadFile', function(event) {
                 //var url = window.URL.createObjectURL(blob);
                 //document.getElementById('decodedRadarDataURL').innerHTML = url;
                 //showPlotBtn();
-                //document.getElementById('plotRef').style.display = 'inline';
-                //document.getElementById('plotVel').style.display = 'inline';
-                document.getElementById('fileInput').style.display = 'none';
-                document.getElementById('radarInfoDiv').style.display = 'inline';
+                //document.getElementById('radarFileInput').style.display = 'none';
+                document.getElementById('fileInfoDiv').style.display = 'inline';
+                document.getElementById('collapseBtn').style.display = 'block';
 
                 document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
@@ -38251,8 +38250,9 @@ document.addEventListener('loadFile', function(event) {
                 console.log(l3rad)
 
                 //showPlotBtn();
-                document.getElementById('fileInput').style.display = 'none';
-                document.getElementById('radarInfoDiv').style.display = 'inline';
+                //document.getElementById('radarFileInput').style.display = 'none';
+                document.getElementById('fileInfoDiv').style.display = 'inline';
+                document.getElementById('collapseBtn').style.display = 'block';
 
                 document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
@@ -38402,7 +38402,7 @@ class infoControlBottom {
             border: 1px solid black;
             border-radius: 5px;
             '>
-                <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+                <input id="radarFileInput" type="file"/>
             </div>`
         return this._container;
     }
