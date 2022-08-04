@@ -44,6 +44,8 @@ if (require('./misc/detectmobilebrowser')) {
     document.getElementById('level2btns').style.display = 'none';
 } else {
     console.log('nope, not mobile');
+    // this shouldnt be here
+    document.getElementById('level2btns').style.display = 'none';
 }
 
 document.addEventListener('loadFile', function(event) {

@@ -75,6 +75,7 @@ class infoControlBottom {
             background-color: white;
             border: 1px solid black;
             border-radius: 5px;
+            display: none;
             '>
                 <input id="radarFileInput" type="file"/>
             </div>`
@@ -268,6 +269,7 @@ var theTestFile3Control = new testFile3Control;
 if (isDevelopmentMode) {
     map.addControl(theTestFile3Control, 'top-right');
     map.addControl(theTestFileControl, 'top-right');
+    document.getElementById('infoContainerBottom').style.display = 'block';
 }
 
 class curFileControl {
