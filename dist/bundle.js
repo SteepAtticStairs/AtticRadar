@@ -37483,7 +37483,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"./calculatePolygons":227,"./paletteTooltip":234,"./stormTracking":235}],229:[function(require,module,exports){
+},{"./calculatePolygons":227,"./paletteTooltip":235,"./stormTracking":236}],229:[function(require,module,exports){
 const { plot } = require('../../nexrad-level-2-plot/src');
 
 function loadL2Listeners(l2rad, displayElevations) {
@@ -37707,7 +37707,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotMesocyclone;
-},{"../utils":236}],232:[function(require,module,exports){
+},{"../utils":237}],232:[function(require,module,exports){
 const ut = require('../utils');
 
 function parsePlotStormTracks(l3rad, theFileStation) {
@@ -37811,7 +37811,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotStormTracks;
-},{"../utils":236}],233:[function(require,module,exports){
+},{"../utils":237}],233:[function(require,module,exports){
 const ut = require('../utils');
 
 function parsePlotTornado(l3rad, theFileStation) {
@@ -37854,215 +37854,24 @@ function parsePlotTornado(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotTornado;
-},{"../utils":236}],234:[function(require,module,exports){
-function initPaletteTooltip(produc, colortcanvas) {
-    var hycObj = {
-        0: 'ND: Below Threshold',
-        1: 'ND: Below Threshold',
-        2: 'BI: Biological',
-        3: 'GC: Anomalous Propagation/Ground Clutter',
-        4: 'IC: Ice Crystals',
-        5: 'DS: Dry Snow',
-        6: 'WS: Wet Snow',
-        7: 'RA: Light and/or Moderate Rain',
-        8: 'HR: Heavy Rain',
-        9: 'BD: Big Drops (rain)',
-        10: 'GR: Graupel',
-        11: 'HA: Hail, possibly with rain',
-        12: 'LH: Large Hail',
-        13: 'GH: Giant Hail',
-        14: 'UK: Unknown Classification',
-        15: 'RF: Range Folded',
-    };
-    const tooltip = bootstrap.Tooltip.getInstance('#texturecolorbar')
-    if (produc == "HHC" || produc == "N0H") {
-        function getCursorPosition(canvas, event) {
-            const rect = canvas.getBoundingClientRect()
-            const x = event.clientX - rect.left
-            const y = event.clientY - rect.top
-            return ({ "x": x, "y": y });
-        }
-        colortcanvas.addEventListener('mousemove', function (e) {
-            if (document.getElementById('curProd').innerHTML == 'hyc' || document.getElementById('curProd').innerHTML == 'hhc') {
-                var xPos = getCursorPosition(colortcanvas, e).x;
-                var thearr = [];
-                var numOfColors = 14;
-                for (var e = 0; e < numOfColors; e++) {
-                    thearr.push(Math.round((colortcanvas.width / numOfColors) * e))
-                }
-                var thearr2 = thearr;
-                thearr.push(xPos);
-                thearr2.sort(function (a, b) { return a - b });
-                var xPosIndex = thearr2.indexOf(xPos);
-                var xPosProduct = hycObj[thearr2.indexOf(xPos)];
-                //console.log(xPosProduct)
-                tooltip.enable();
-                tooltip.setContent({ '.tooltip-inner': xPosProduct })
-            }
-        })
-    } else {
-        tooltip.disable();
-    }
-    //$('#texturecolorbar').off()
-}
-
-module.exports = {
-    initPaletteTooltip
-}
-},{}],235:[function(require,module,exports){
-function loadAllStormTrackingStuff() {
-    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
-    function addStormTracksLayers() {
-        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
-    }
-    function addMesocycloneLayers() {
-        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
-    }
-    function addTornadoLayers() {
-        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
-    }
-    function arrayify(text) {
-        return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
-    }
-    function removeAMapLayer(lay) {
-        if (map.getLayer(lay)) {
-            map.removeLayer(lay);
-        }
-        if (map.getSource(lay)) {
-            map.removeSource(lay);
-        }
-    }
-    var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
-    var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
-    var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
-    var stLayers = arrayify(stLayersText);
-    var mdLayers = arrayify(mdLayersText);
-    var tvLayers = arrayify(tvLayersText);
-
-    if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
-        var station = document.getElementById('fileStation').innerHTML;
-        $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
-            var stationLat = data[station][1];
-            var stationLng = data[station][2];
-            map.flyTo({
-                center: [stationLng, stationLat],
-                zoom: 8,
-                duration: 1000,
-            });
-        })
-        for (key in stLayers) {
-            removeAMapLayer(stLayers[key]);
-        }
-        addStormTracksLayers();
-        for (key in mdLayers) {
-            removeAMapLayer(mdLayers[key]);
-        }
-        addMesocycloneLayers();
-        for (key in tvLayers) {
-            removeAMapLayer(tvLayers[key]);
-        }
-        addTornadoLayers();
-    } else {
-        for (key in stLayers) {
-            map.moveLayer(stLayers[key]);
-        }
-        for (key in mdLayers) {
-            map.moveLayer(mdLayers[key]);
-        }
-        for (key in tvLayers) {
-            map.moveLayer(tvLayers[key]);
-        }
-    }
-    document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
-    document.getElementById('testEventElem').innerHTML = 'changed'
-}
-
-module.exports = {
-    loadAllStormTrackingStuff
-}
-},{}],236:[function(require,module,exports){
-(function (Buffer){(function (){
-function toBuffer(ab) {
-    const buf = Buffer.alloc(ab.byteLength);
-    const view = new Uint8Array(ab);
-    for (let i = 0; i < buf.length; ++i) {
-        buf[i] = view[i];
-    }
-    return buf;
-}
-
-function printFancyTime(dateObj, tz) {
-    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
-}
-function msToTime(s) {
-    // Pad to 2 or 3 digits, default is 2
-    function pad(n, z) {
-        z = z || 2;
-        return ('00' + n).slice(-z);
-    }
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = (s - mins) / 60;
-    return {
-        'hours': pad(hrs),
-        'minutes': pad(mins),
-        'seconds': pad(secs),
-        'milliseconds': pad(ms, 3),
-    }
-    //return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
-}
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-}
-function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
-    var metersInNauticalMiles = 1852;
-    var startPoint = { latitude: startLat, longitude: startLng };
-    var distanceMeters = distanceNM * metersInNauticalMiles;
-    var bearing = bearingDEG;
-    const destination = geolib.computeDestinationPoint(
-        startPoint,
-        distanceMeters,
-        bearing 
-    );
-    return destination;
-}
-
-module.exports = {
-    toBuffer,
-    printFancyTime,
-    msToTime,
-    round,
-    findTerminalCoordinates
-}
-}).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],237:[function(require,module,exports){
+},{"../utils":237}],234:[function(require,module,exports){
 //const fetch = require('node-fetch');
-const { Level2Radar } = require('./nexrad-level-2-data/src');
-const Level3Radar = require('./nexrad-level-3-data/src');
-const { plot } = require('./nexrad-level-2-plot/src');
-const { map } = require('./nexrad-level-2-plot/src/draw/palettes/hexlookup');
+const { Level2Radar } = require('../nexrad-level-2-data/src');
+const Level3Radar = require('../nexrad-level-3-data/src');
+const { plot } = require('../nexrad-level-2-plot/src');
+const { map } = require('../nexrad-level-2-plot/src/draw/palettes/hexlookup');
 
 
-const { plotAndData, writePngToFile } = require('./nexrad-level-3-plot/src');
+const { plotAndData, writePngToFile } = require('../nexrad-level-3-plot/src');
 
-const ut = require('./app/utils');
+const ut = require('./utils');
 
-const l3plot = require('./app/level3/draw');
-const loadL2Listeners = require('./app/level2/eventListeners');
+const l3plot = require('./level3/draw');
+const loadL2Listeners = require('./level2/eventListeners');
 
-const parsePlotTornado = require('./app/level3/tornadoVortexSignature');
-const parsePlotMesocyclone = require('./app/level3/mesocycloneDetection');
-const parsePlotStormTracks = require('./app/level3/stormTracks');
+const parsePlotTornado = require('./level3/tornadoVortexSignature');
+const parsePlotMesocyclone = require('./level3/mesocycloneDetection');
+const parsePlotStormTracks = require('./level3/stormTracks');
 
 
 Date.prototype.addDays = function(days) {
@@ -38258,7 +38067,198 @@ document.getElementById('fileThatWorks').addEventListener('click', function() {
         console.log(l2rad)
     })
     .catch(err => console.error(err));*/
-},{"./app/level2/eventListeners":229,"./app/level3/draw":230,"./app/level3/mesocycloneDetection":231,"./app/level3/stormTracks":232,"./app/level3/tornadoVortexSignature":233,"./app/utils":236,"./nexrad-level-2-data/src":249,"./nexrad-level-2-plot/src":262,"./nexrad-level-2-plot/src/draw/palettes/hexlookup":253,"./nexrad-level-3-data/src":273,"./nexrad-level-3-plot/src":322}],238:[function(require,module,exports){
+},{"../nexrad-level-2-data/src":249,"../nexrad-level-2-plot/src":262,"../nexrad-level-2-plot/src/draw/palettes/hexlookup":253,"../nexrad-level-3-data/src":273,"../nexrad-level-3-plot/src":322,"./level2/eventListeners":229,"./level3/draw":230,"./level3/mesocycloneDetection":231,"./level3/stormTracks":232,"./level3/tornadoVortexSignature":233,"./utils":237}],235:[function(require,module,exports){
+function initPaletteTooltip(produc, colortcanvas) {
+    var hycObj = {
+        0: 'ND: Below Threshold',
+        1: 'ND: Below Threshold',
+        2: 'BI: Biological',
+        3: 'GC: Anomalous Propagation/Ground Clutter',
+        4: 'IC: Ice Crystals',
+        5: 'DS: Dry Snow',
+        6: 'WS: Wet Snow',
+        7: 'RA: Light and/or Moderate Rain',
+        8: 'HR: Heavy Rain',
+        9: 'BD: Big Drops (rain)',
+        10: 'GR: Graupel',
+        11: 'HA: Hail, possibly with rain',
+        12: 'LH: Large Hail',
+        13: 'GH: Giant Hail',
+        14: 'UK: Unknown Classification',
+        15: 'RF: Range Folded',
+    };
+    const tooltip = bootstrap.Tooltip.getInstance('#texturecolorbar')
+    if (produc == "HHC" || produc == "N0H") {
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            const x = event.clientX - rect.left
+            const y = event.clientY - rect.top
+            return ({ "x": x, "y": y });
+        }
+        colortcanvas.addEventListener('mousemove', function (e) {
+            if (document.getElementById('curProd').innerHTML == 'hyc' || document.getElementById('curProd').innerHTML == 'hhc') {
+                var xPos = getCursorPosition(colortcanvas, e).x;
+                var thearr = [];
+                var numOfColors = 14;
+                for (var e = 0; e < numOfColors; e++) {
+                    thearr.push(Math.round((colortcanvas.width / numOfColors) * e))
+                }
+                var thearr2 = thearr;
+                thearr.push(xPos);
+                thearr2.sort(function (a, b) { return a - b });
+                var xPosIndex = thearr2.indexOf(xPos);
+                var xPosProduct = hycObj[thearr2.indexOf(xPos)];
+                //console.log(xPosProduct)
+                tooltip.enable();
+                tooltip.setContent({ '.tooltip-inner': xPosProduct })
+            }
+        })
+    } else {
+        tooltip.disable();
+    }
+    //$('#texturecolorbar').off()
+}
+
+module.exports = {
+    initPaletteTooltip
+}
+},{}],236:[function(require,module,exports){
+function loadAllStormTrackingStuff() {
+    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+    function addStormTracksLayers() {
+        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+    }
+    function addMesocycloneLayers() {
+        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+    }
+    function addTornadoLayers() {
+        var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+    }
+    function arrayify(text) {
+        return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
+    }
+    function removeAMapLayer(lay) {
+        if (map.getLayer(lay)) {
+            map.removeLayer(lay);
+        }
+        if (map.getSource(lay)) {
+            map.removeSource(lay);
+        }
+    }
+    var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
+    var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
+    var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
+    var stLayers = arrayify(stLayersText);
+    var mdLayers = arrayify(mdLayersText);
+    var tvLayers = arrayify(tvLayersText);
+
+    if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
+        var station = document.getElementById('fileStation').innerHTML;
+        $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+            var stationLat = data[station][1];
+            var stationLng = data[station][2];
+            map.flyTo({
+                center: [stationLng, stationLat],
+                zoom: 8,
+                duration: 1000,
+            });
+        })
+        for (key in stLayers) {
+            removeAMapLayer(stLayers[key]);
+        }
+        addStormTracksLayers();
+        for (key in mdLayers) {
+            removeAMapLayer(mdLayers[key]);
+        }
+        addMesocycloneLayers();
+        for (key in tvLayers) {
+            removeAMapLayer(tvLayers[key]);
+        }
+        addTornadoLayers();
+    } else {
+        for (key in stLayers) {
+            map.moveLayer(stLayers[key]);
+        }
+        for (key in mdLayers) {
+            map.moveLayer(mdLayers[key]);
+        }
+        for (key in tvLayers) {
+            map.moveLayer(tvLayers[key]);
+        }
+    }
+    document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
+    document.getElementById('testEventElem').innerHTML = 'changed'
+}
+
+module.exports = {
+    loadAllStormTrackingStuff
+}
+},{}],237:[function(require,module,exports){
+(function (Buffer){(function (){
+function toBuffer(ab) {
+    const buf = Buffer.alloc(ab.byteLength);
+    const view = new Uint8Array(ab);
+    for (let i = 0; i < buf.length; ++i) {
+        buf[i] = view[i];
+    }
+    return buf;
+}
+
+function printFancyTime(dateObj, tz) {
+    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
+}
+function msToTime(s) {
+    // Pad to 2 or 3 digits, default is 2
+    function pad(n, z) {
+        z = z || 2;
+        return ('00' + n).slice(-z);
+    }
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+    return {
+        'hours': pad(hrs),
+        'minutes': pad(mins),
+        'seconds': pad(secs),
+        'milliseconds': pad(ms, 3),
+    }
+    //return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
+}
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
+    var metersInNauticalMiles = 1852;
+    var startPoint = { latitude: startLat, longitude: startLng };
+    var distanceMeters = distanceNM * metersInNauticalMiles;
+    var bearing = bearingDEG;
+    const destination = geolib.computeDestinationPoint(
+        startPoint,
+        distanceMeters,
+        bearing 
+    );
+    return destination;
+}
+
+module.exports = {
+    toBuffer,
+    printFancyTime,
+    msToTime,
+    round,
+    findTerminalCoordinates
+}
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"buffer":71}],238:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -45023,4 +45023,4 @@ module.exports={
   }
 }
 
-},{}]},{},[237]);
+},{}]},{},[234]);

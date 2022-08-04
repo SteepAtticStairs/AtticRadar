@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "browserify -t brfs index.js -o dist/bundle.js",
-    "serve": "watchify -t brfs index.js -o dist/bundle.js -v"
+    "build": "browserify -t brfs app/main.js -o dist/bundle.js",
+    "serve": "watchify -t brfs app/main.js -o dist/bundle.js -v"
   },
   "dependencies": {
     "brfs": "^2.0.2",
