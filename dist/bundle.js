@@ -38267,24 +38267,28 @@ document.addEventListener('loadFile', function(event) {
 
                 document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
-                var theFileStation = 'K' + l3rad.textHeader.id3;
-                document.getElementById('radStation').innerHTML = theFileStation;
+                var theFileProduct = l3rad.textHeader.type;
 
-                var theFileVCP = l3rad.productDescription.vcp;
-                document.getElementById('radVCP').innerHTML = theFileVCP;
+                if (theFileProduct != "NTV" && theFileProduct != "NMD" && theFileProduct != "NST") {
+                    var theFileStation = 'K' + l3rad.textHeader.id3;
+                    document.getElementById('radStation').innerHTML = theFileStation;
 
-                var theFileDate = l3rad.messageHeader.julianDate;
-                var theFileTime = l3rad.messageHeader.seconds * 1000;
-                var fileDateObj = new Date(0).addDays(theFileDate);
-                var fileHours = ut.msToTime(theFileTime).hours;
-                var fileMinutes = ut.msToTime(theFileTime).minutes;
-                var fileSeconds = ut.msToTime(theFileTime).seconds;
-                fileDateObj.setUTCHours(fileHours);
-                fileDateObj.setUTCMinutes(fileMinutes);
-                fileDateObj.setUTCSeconds(fileSeconds);
-                var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
+                    var theFileVCP = l3rad.productDescription.vcp;
+                    document.getElementById('radVCP').innerHTML = theFileVCP;
 
-                document.getElementById('radDate').innerHTML = finalRadarDateTime;
+                    var theFileDate = l3rad.messageHeader.julianDate;
+                    var theFileTime = l3rad.messageHeader.seconds * 1000;
+                    var fileDateObj = new Date(0).addDays(theFileDate);
+                    var fileHours = ut.msToTime(theFileTime).hours;
+                    var fileMinutes = ut.msToTime(theFileTime).minutes;
+                    var fileSeconds = ut.msToTime(theFileTime).seconds;
+                    fileDateObj.setUTCHours(fileHours);
+                    fileDateObj.setUTCMinutes(fileMinutes);
+                    fileDateObj.setUTCSeconds(fileSeconds);
+                    var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
+
+                    document.getElementById('radDate').innerHTML = finalRadarDateTime;
+                }
 
                 if (l3rad.textHeader.type == "NTV") {
                     parsePlotTornado(l3rad, theFileStation);
@@ -38293,7 +38297,7 @@ document.addEventListener('loadFile', function(event) {
                 } else if (l3rad.textHeader.type == "NST") {
                     parsePlotStormTracks(l3rad, theFileStation);
                 } else {
-                    document.getElementById('currentRadarProduct').innerHTML = l3rad.textHeader.type;
+                    document.getElementById('currentRadarProduct').innerHTML = theFileProduct;
                     const level3Plot = l3plot(l3rad);
                 }
 
