@@ -180,6 +180,7 @@ document.addEventListener('loadFile', function(event) {
                 } else if (l3rad.textHeader.type == "NST") {
                     parsePlotStormTracks(l3rad, theFileStation);
                 } else {
+                    document.getElementById('currentRadarProduct').innerHTML = l3rad.textHeader.type;
                     const level3Plot = l3plot(l3rad);
                 }
 
