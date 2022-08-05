@@ -6,11 +6,13 @@ var map = require('./map/map');
 function refreshCurrentRadar() {
     var curPro = document.getElementById('currentRadarProduct').innerHTML;
     console.log('LOADING LATEST FILE')
-    loaders.getLatestL3File($('#stationInp').val().slice(1), curPro, function(data) {
-        console.log(data);
-        mapFuncs.removeMapLayer('baseReflectivity');
-        loaders.loadFileObject(ut.phpProxy + data, 'sn.last', 3);
-    })
+    mapFuncs.removeMapLayer('baseReflectivity');
+    loaders.loadLatestFile(
+        'l3',
+        curPro,
+        $('#tiltDropdownBtn').attr('value'),
+        $('#stationInp').val().toLowerCase()
+    );
 }
 
 class refreshControl {

@@ -128,14 +128,15 @@ function loadLatestFile(levell, pr, tilt, stat) {
             mapFuncs.removeMapLayer('baseReflectivity');
         }
         var tiltProduct = ut.tiltObject[tilt][pr];
-        if (pr != 'ref' && pr != 'vel') {
+        console.log(tiltProduct)
+        if (pr != 'N0B' && pr != 'N0G' && pr != 'ref' && pr != 'vel') {
             // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
             // DS.165h0 = product code 165, N0H (h0)
             var level3url = `${ut.phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
             console.log(level3url)
             console.log(tiltProduct, stat)
             loadFileObject(level3url, 'sn.last', 3);
-        } else if (pr == 'ref' || pr == 'vel') {
+        } else {
             getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
                 var proxiedCbVal = `${ut.phpProxy}${cbVal}`;
                 console.log(cbVal);

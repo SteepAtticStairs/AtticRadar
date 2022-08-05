@@ -137,7 +137,9 @@ function formatBytes(bytes, decimals = 2) {
 var tiltObject = {
     'tilt1': {
         'ref': 'N0B',
+        'N0B': 'N0B',
         'vel': 'N0G',
+        'N0G': 'N0G',
         'lowres-ref': 'p94r0',
         'lowres-vel': 'p99v0',
         'rho': '161c0',
@@ -152,7 +154,9 @@ var tiltObject = {
     },
     'tilt2': {
         'ref': 'N1B',
+        'N0B': 'N1B',
         'vel': 'N1G',
+        'N0G': 'N1G',
         'lowres-ref': 'p94r1',
         'lowres-vel': 'p99v1',
         'rho': '161c1',
@@ -166,7 +170,9 @@ var tiltObject = {
     },
     'tilt3': {
         'ref': 'N2B',
+        'N0B': 'N2B',
         'vel': 'N2G',
+        'N0G': 'N2G',
         'lowres-ref': 'p94r2',
         'lowres-vel': 'p99v2',
         'rho': '161c2',
@@ -180,7 +186,9 @@ var tiltObject = {
     },
     'tilt4': {
         'ref': 'N3B',
+        'N0B': 'N3B',
         'vel': 'N3G',
+        'N0G': 'N3G',
         'lowres-ref': 'p94r3',
         'lowres-vel': 'p99v3',
         'rho': '161c3',

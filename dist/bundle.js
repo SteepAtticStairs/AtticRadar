@@ -37355,7 +37355,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         require('./visibility');
 
         // load the refresh button
-        require('./refresh');
+        // require('./refresh');
 
         STstuff.loadAllStormTrackingStuff();
     }
@@ -37490,7 +37490,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"./calculatePolygons":227,"./map/map":238,"./paletteTooltip":243,"./refresh":244,"./stormTracking":245,"./visibility":247}],229:[function(require,module,exports){
+},{"./calculatePolygons":227,"./map/map":238,"./paletteTooltip":243,"./stormTracking":244,"./visibility":246}],229:[function(require,module,exports){
 const ut = require('./utils');
 const loaders = require('./loaders');
 
@@ -37505,7 +37505,7 @@ require('./level3/eventListeners');
 
 // initialize the station markers control and code
 require('./map/stationMarkers');
-},{"./level3/eventListeners":232,"./loaders":236,"./map/map":238,"./map/stationMarkers":240,"./utils":246}],230:[function(require,module,exports){
+},{"./level3/eventListeners":232,"./loaders":236,"./map/map":238,"./map/stationMarkers":240,"./utils":245}],230:[function(require,module,exports){
 const { plot } = require('../../nexrad-level-2-plot/src');
 const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
@@ -37573,7 +37573,7 @@ function loadL2Listeners(l2rad, displayElevations) {
 }
 
 module.exports = loadL2Listeners;
-},{"../../nexrad-level-2-plot/src":272,"../loaders":236,"../map/mapFunctions":239}],231:[function(require,module,exports){
+},{"../../nexrad-level-2-plot/src":271,"../loaders":236,"../map/mapFunctions":239}],231:[function(require,module,exports){
 const drawRadarShape = require('../drawToMap');
 
 const scaleArray = (fromRange, toRange) => {
@@ -37760,7 +37760,7 @@ $('.productBtnGroup button').on('click', function () {
         }
     }
 });
-},{"../loaders":236,"../utils":246}],233:[function(require,module,exports){
+},{"../loaders":236,"../utils":245}],233:[function(require,module,exports){
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 
@@ -37805,7 +37805,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotMesocyclone;
-},{"../map/mapFunctions":239,"../utils":246}],234:[function(require,module,exports){
+},{"../map/mapFunctions":239,"../utils":245}],234:[function(require,module,exports){
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 
@@ -37910,7 +37910,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotStormTracks;
-},{"../map/mapFunctions":239,"../utils":246}],235:[function(require,module,exports){
+},{"../map/mapFunctions":239,"../utils":245}],235:[function(require,module,exports){
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 
@@ -37954,7 +37954,7 @@ function parsePlotTornado(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotTornado;
-},{"../map/mapFunctions":239,"../utils":246}],236:[function(require,module,exports){
+},{"../map/mapFunctions":239,"../utils":245}],236:[function(require,module,exports){
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
@@ -38085,14 +38085,15 @@ function loadLatestFile(levell, pr, tilt, stat) {
             mapFuncs.removeMapLayer('baseReflectivity');
         }
         var tiltProduct = ut.tiltObject[tilt][pr];
-        if (pr != 'ref' && pr != 'vel') {
+        console.log(tiltProduct)
+        if (pr != 'N0B' && pr != 'N0G' && pr != 'ref' && pr != 'vel') {
             // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
             // DS.165h0 = product code 165, N0H (h0)
             var level3url = `${ut.phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
             console.log(level3url)
             console.log(tiltProduct, stat)
             loadFileObject(level3url, 'sn.last', 3);
-        } else if (pr == 'ref' || pr == 'vel') {
+        } else {
             getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
                 var proxiedCbVal = `${ut.phpProxy}${cbVal}`;
                 console.log(cbVal);
@@ -38109,7 +38110,7 @@ module.exports = {
     loadLatestFile,
     listTilts
 }
-},{"./map/mapFunctions":239,"./utils":246}],237:[function(require,module,exports){
+},{"./map/mapFunctions":239,"./utils":245}],237:[function(require,module,exports){
 //const fetch = require('node-fetch');
 const { Level2Radar } = require('../nexrad-level-2-data/src');
 const Level3Radar = require('../nexrad-level-3-data/src');
@@ -38334,7 +38335,7 @@ document.getElementById('fileThatWorks').addEventListener('click', function() {
         console.log(l2rad)
     })
     .catch(err => console.error(err));*/
-},{"../nexrad-level-2-data/src":259,"../nexrad-level-2-plot/src":272,"../nexrad-level-2-plot/src/draw/palettes/hexlookup":263,"../nexrad-level-3-data/src":283,"../nexrad-level-3-plot/src":332,"./index":229,"./level2/eventListeners":230,"./level3/draw":231,"./level3/mesocycloneDetection":233,"./level3/stormTracks":234,"./level3/tornadoVortexSignature":235,"./misc/detectmobilebrowser":241,"./utils":246}],238:[function(require,module,exports){
+},{"../nexrad-level-2-data/src":258,"../nexrad-level-2-plot/src":271,"../nexrad-level-2-plot/src/draw/palettes/hexlookup":262,"../nexrad-level-3-data/src":282,"../nexrad-level-3-plot/src":331,"./index":229,"./level2/eventListeners":230,"./level3/draw":231,"./level3/mesocycloneDetection":233,"./level3/stormTracks":234,"./level3/tornadoVortexSignature":235,"./misc/detectmobilebrowser":241,"./utils":245}],238:[function(require,module,exports){
 const isDevelopmentMode = require('../misc/urlParser');
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
@@ -39004,58 +39005,6 @@ module.exports = {
     initPaletteTooltip
 }
 },{}],244:[function(require,module,exports){
-const loaders = require('./loaders');
-const ut = require('./utils');
-const mapFuncs = require('./map/mapFunctions');
-var map = require('./map/map');
-
-function refreshCurrentRadar() {
-    var curPro = document.getElementById('currentRadarProduct').innerHTML;
-    console.log('LOADING LATEST FILE')
-    loaders.getLatestL3File($('#stationInp').val().slice(1), curPro, function(data) {
-        console.log(data);
-        mapFuncs.removeMapLayer('baseReflectivity');
-        loaders.loadFileObject(ut.phpProxy + data, 'sn.last', 3);
-    })
-}
-
-class refreshControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-            <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                    <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                        <span class="fa fa-arrow-rotate-right icon-black" id="refreshThing" aria-hidden="true" title="Globe Toggle"></span>
-                    </button>
-                </div>
-            </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#refreshThing').hasClass('icon-selected')) {
-                //$('#refreshThing').addClass('icon-selected');
-                //$('#refreshThing').removeClass('icon-black');
-                refreshCurrentRadar();
-            } else if ($('#refreshThing').hasClass('icon-selected')) {
-                $('#refreshThing').removeClass('icon-selected');
-                $('#refreshThing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theRefreshControl = new refreshControl;
-map.addControl(theRefreshControl, 'top-right');
-
-module.exports = {
-    refreshCurrentRadar
-}
-},{"./loaders":236,"./map/map":238,"./map/mapFunctions":239,"./utils":246}],245:[function(require,module,exports){
 var map = require('./map/map');
 const loaders = require('./loaders');
 
@@ -39135,7 +39084,7 @@ function loadAllStormTrackingStuff() {
 module.exports = {
     loadAllStormTrackingStuff
 }
-},{"./loaders":236,"./map/map":238}],246:[function(require,module,exports){
+},{"./loaders":236,"./map/map":238}],245:[function(require,module,exports){
 (function (Buffer){(function (){
 const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
@@ -39276,7 +39225,9 @@ function formatBytes(bytes, decimals = 2) {
 var tiltObject = {
     'tilt1': {
         'ref': 'N0B',
+        'N0B': 'N0B',
         'vel': 'N0G',
+        'N0G': 'N0G',
         'lowres-ref': 'p94r0',
         'lowres-vel': 'p99v0',
         'rho': '161c0',
@@ -39291,7 +39242,9 @@ var tiltObject = {
     },
     'tilt2': {
         'ref': 'N1B',
+        'N0B': 'N1B',
         'vel': 'N1G',
+        'N0G': 'N1G',
         'lowres-ref': 'p94r1',
         'lowres-vel': 'p99v1',
         'rho': '161c1',
@@ -39305,7 +39258,9 @@ var tiltObject = {
     },
     'tilt3': {
         'ref': 'N2B',
+        'N0B': 'N2B',
         'vel': 'N2G',
+        'N0G': 'N2G',
         'lowres-ref': 'p94r2',
         'lowres-vel': 'p99v2',
         'rho': '161c2',
@@ -39319,7 +39274,9 @@ var tiltObject = {
     },
     'tilt4': {
         'ref': 'N3B',
+        'N0B': 'N3B',
         'vel': 'N3G',
+        'N0G': 'N3G',
         'lowres-ref': 'p94r3',
         'lowres-vel': 'p99v3',
         'rho': '161c3',
@@ -39384,7 +39341,7 @@ module.exports = {
     allL2Btns
 }
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],247:[function(require,module,exports){
+},{"buffer":71}],246:[function(require,module,exports){
 var map = require('./map/map');
 
 var hasVisibilityControl = false;
@@ -39434,7 +39391,7 @@ if (!hasVisibilityControl) {
     hasVisibilityControl = true;
 }
 //map.addControl(theVisibilityControl, 'top-left');
-},{"./map/map":238}],248:[function(require,module,exports){
+},{"./map/map":238}],247:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -39534,7 +39491,7 @@ module.exports = (raf, message, options) => {
 	return message;
 };
 
-},{}],249:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 // parse message type 2
 module.exports = (raf, message) => {
 	message.record = {
@@ -39586,7 +39543,7 @@ const alarmCodes = (raf) => {
 	return alarms;
 };
 
-},{}],250:[function(require,module,exports){
+},{}],249:[function(require,module,exports){
 const { MESSAGE_HEADER_SIZE } = require('../constants');
 
 // parse message type 31
@@ -39850,7 +39807,7 @@ const blockName = (raf) => {
 	return { name, type };
 };
 
-},{"../constants":256}],251:[function(require,module,exports){
+},{"../constants":255}],250:[function(require,module,exports){
 // parse message type 5 and 7
 module.exports = (raf, message) => {
 	message.record = {
@@ -39992,7 +39949,7 @@ const supplementalData = (raw) => ({
 	base_tilt_cut: parseBits(raw, 10),
 });
 
-},{}],252:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 const {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE,
 } = require('../constants');
@@ -40067,7 +40024,7 @@ const getRecord = (raf, recordOffset, options) => {
 
 module.exports.Level2Record = Level2Record;
 
-},{"../constants":256,"./Level2Record-1":248,"./Level2Record-2":249,"./Level2Record-31":250,"./Level2Record-5-7":251,"./Level2RecordSearch":253}],253:[function(require,module,exports){
+},{"../constants":255,"./Level2Record-1":247,"./Level2Record-2":248,"./Level2Record-31":249,"./Level2Record-5-7":250,"./Level2RecordSearch":252}],252:[function(require,module,exports){
 // attempt to search for the next message by looking for some known values
 
 const level2RecordSearch = (raf, startPos, julianDate, options) => {
@@ -40121,7 +40078,7 @@ module.exports = {
 	level2RecordSearch,
 };
 
-},{}],254:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -40304,7 +40261,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],255:[function(require,module,exports){
+},{"buffer":71}],254:[function(require,module,exports){
 // combine data returned by multiple calls to the Level2Radar constructor
 
 // individual data structures or arrays can be passed
@@ -40347,7 +40304,7 @@ const combine = (...args) => {
 
 module.exports = combine;
 
-},{}],256:[function(require,module,exports){
+},{}],255:[function(require,module,exports){
 const FILE_HEADER_SIZE = 24;
 const RADAR_DATA_SIZE = 2432;
 const CTM_HEADER_SIZE = 12;
@@ -40357,7 +40314,7 @@ module.exports = {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE, MESSAGE_HEADER_SIZE,
 };
 
-},{}],257:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 (function (Buffer){(function (){
 // decompress a nexrad level 2 archive, or return the provided file if it is not compressed
 
@@ -40464,7 +40421,7 @@ const readCompressionHeader = (raf) => ({
 module.exports = decompress;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./classes/RandomAccessFile":254,"./constants":256,"./gzipdecompress":258,"buffer":71,"seek-bzip":348}],258:[function(require,module,exports){
+},{"./classes/RandomAccessFile":253,"./constants":255,"./gzipdecompress":257,"buffer":71,"seek-bzip":347}],257:[function(require,module,exports){
 const zlib = require('zlib');
 // structured byte access
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
@@ -40474,7 +40431,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":254,"zlib":69}],259:[function(require,module,exports){
+},{"./classes/RandomAccessFile":253,"zlib":69}],258:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -40843,7 +40800,7 @@ const nullLogger = {
 module.exports.Level2Radar = Level2Radar;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./combinedata":255,"./parsedata":260,"buffer":71}],260:[function(require,module,exports){
+},{"./combinedata":254,"./parsedata":259,"buffer":71}],259:[function(require,module,exports){
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
 const { Level2Record } = require('./classes/Level2Record');
 const { RADAR_DATA_SIZE } = require('./constants');
@@ -40968,7 +40925,7 @@ const groupAndSortScans = (scans) => {
 
 module.exports = parseData;
 
-},{"./classes/Level2Record":252,"./classes/RandomAccessFile":254,"./constants":256,"./decompress":257,"./parseheader":261}],261:[function(require,module,exports){
+},{"./classes/Level2Record":251,"./classes/RandomAccessFile":253,"./constants":255,"./decompress":256,"./parseheader":260}],260:[function(require,module,exports){
 const { FILE_HEADER_SIZE } = require('./constants');
 
 const parse = (raf) => {
@@ -40994,7 +40951,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./constants":256}],262:[function(require,module,exports){
+},{"./constants":255}],261:[function(require,module,exports){
 const canvasObj = require('canvas');
 
 const { createCanvas } = canvasObj;
@@ -41301,10 +41258,10 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../app/drawToMap":228,"./palettes":264,"./palettes/ref":265,"./palettes/vel":266,"./palettize":267,"./preprocess/downsample":268,"./preprocess/filterproduct":269,"./preprocess/indexproduct":270,"./preprocess/rrle":271,"canvas":344}],263:[function(require,module,exports){
+},{"../../../app/drawToMap":228,"./palettes":263,"./palettes/ref":264,"./palettes/vel":265,"./palettize":266,"./preprocess/downsample":267,"./preprocess/filterproduct":268,"./preprocess/indexproduct":269,"./preprocess/rrle":270,"canvas":343}],262:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
-},{}],264:[function(require,module,exports){
+},{}],263:[function(require,module,exports){
 // ingest a palette and provide lookup and formatting functionality
 // {palette: [r1,g1,b1,a1, r2,g2,b2,a2, ...], limits: [1,2, ...]}
 // rgba values are returned with the the color index in the g position with 100% opacity
@@ -41423,7 +41380,7 @@ const inDeadband = (reset) => (a) => (a === null || a === reset || a === undefin
 
 module.exports = Palette;
 
-},{"./hexlookup":263}],265:[function(require,module,exports){
+},{"./hexlookup":262}],264:[function(require,module,exports){
 const palette = [
 	255, 255, 255, 0,	// transparent
 	0, 128, 128, 192,
@@ -41471,7 +41428,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],266:[function(require,module,exports){
+},{}],265:[function(require,module,exports){
 const palette = [
 	// 0: green/outbound
 	0, 255, 0, 255,
@@ -41533,7 +41490,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],267:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 
 const palettizeImage = (sourceCtx, palette) => {
@@ -41566,7 +41523,7 @@ const palettizeImage = (sourceCtx, palette) => {
 
 module.exports = palettizeImage;
 
-},{"canvas":344}],268:[function(require,module,exports){
+},{"canvas":343}],267:[function(require,module,exports){
 // downsample the moment data preserving the maximum dbz using palette.downSample
 // this includes "cropping" the data to the specified size
 
@@ -41624,7 +41581,7 @@ const downSample = (radials, scale, resolution, options, palette) => {
 
 module.exports = downSample;
 
-},{}],269:[function(require,module,exports){
+},{}],268:[function(require,module,exports){
 // accomplish some pre-processing in one loop
 
 // filter data for a specific product
@@ -41662,7 +41619,7 @@ const filterProduct = (data, product) => data.map((header) => {
 
 module.exports = filterProduct;
 
-},{}],270:[function(require,module,exports){
+},{}],269:[function(require,module,exports){
 // take the raw data values and turn them into indexed values in the palette
 // this is the first step in palettizing and in the Radial run-length encoding process
 
@@ -41680,7 +41637,7 @@ const indexProduct = (radials, palette) => radials.map((radial) => {
 
 module.exports = indexProduct;
 
-},{}],271:[function(require,module,exports){
+},{}],270:[function(require,module,exports){
 // radial run-length encoding
 // encode run length data to the adjacent radials, instead of along the length of the radial
 
@@ -41760,7 +41717,7 @@ const rrle = (radials, resolutionRad, shouldNullValues) => {
 
 module.exports = rrle;
 
-},{}],272:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 const { draw, canvas } = require('./draw');
 const { keys } = require('./draw/palettes/hexlookup');
 const { writePngToFile } = require('./utils/file');
@@ -41827,7 +41784,7 @@ module.exports = {
 	canvas,
 };
 
-},{"./draw":262,"./draw/palettes/hexlookup":263,"./utils/file":273}],273:[function(require,module,exports){
+},{"./draw":261,"./draw/palettes/hexlookup":262,"./utils/file":272}],272:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 /**
@@ -41860,7 +41817,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],274:[function(require,module,exports){
+},{"fs":1}],273:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -41913,7 +41870,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"../packets":301,"./graphic22":275}],275:[function(require,module,exports){
+},{"../packets":300,"./graphic22":274}],274:[function(require,module,exports){
 // parse data in the graphic area as packet 22 and related packets
 const { parser } = require('../packets');
 
@@ -41943,7 +41900,7 @@ const parse22 = (raf) => {
 
 module.exports = parse22;
 
-},{"../packets":301}],276:[function(require,module,exports){
+},{"../packets":300}],275:[function(require,module,exports){
 const parse = (raf) => ({
 
 	code: raf.readShort(),
@@ -41958,7 +41915,7 @@ const parse = (raf) => ({
 
 module.exports = parse;
 
-},{}],277:[function(require,module,exports){
+},{}],276:[function(require,module,exports){
 const MODE_MAINTENANCE = 0;
 const MODE_CLEAN_AIR = 1;
 const MODE_PRECIPITATION = 2;
@@ -42008,7 +41965,7 @@ module.exports = {
 	MODE_PRECIPITATION,
 };
 
-},{}],278:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 // register packet parsers
 
 const { parser } = require('../packets');
@@ -42048,7 +42005,7 @@ const parse = (raf, productDescription, layerCount, options) => {
 
 module.exports = parse;
 
-},{"../packets":301}],279:[function(require,module,exports){
+},{"../packets":300}],278:[function(require,module,exports){
 const symbologyText = require('./symbologytext');
 // some block ids just have text, this is not well documented so we do our best to parse these
 const textSymbologies = [3, 4, 5, 6, 7];
@@ -42076,7 +42033,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./symbologytext":280}],280:[function(require,module,exports){
+},{"./symbologytext":279}],279:[function(require,module,exports){
 // block id 6 is undocumented but appears to be text
 
 const parse = (raf) => {
@@ -42110,7 +42067,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],281:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 const parseMessageHeader = require('./message');
 const { parse: parseProductDescription } = require('./productdescription');
 
@@ -42173,7 +42130,7 @@ const parse = (raf, product) => {
 
 module.exports = parse;
 
-},{"./message":276,"./productdescription":277}],282:[function(require,module,exports){
+},{"./message":275,"./productdescription":276}],281:[function(require,module,exports){
 // file header as 30 byte string
 
 const parse = (raf) => {
@@ -42201,7 +42158,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],283:[function(require,module,exports){
+},{}],282:[function(require,module,exports){
 (function (Buffer){(function (){
 const bzip = require('seek-bzip');
 const { RandomAccessFile } = require('./randomaccessfile');
@@ -42348,7 +42305,7 @@ const nullLogger = {
 module.exports = nexradLevel3Data;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./headers/graphic":274,"./headers/message":276,"./headers/productdescription":277,"./headers/radialpackets":278,"./headers/symbology":279,"./headers/tabular":281,"./headers/text":282,"./products":328,"./randomaccessfile":329,"buffer":71,"seek-bzip":348}],284:[function(require,module,exports){
+},{"./headers/graphic":273,"./headers/message":275,"./headers/productdescription":276,"./headers/radialpackets":277,"./headers/symbology":278,"./headers/tabular":280,"./headers/text":281,"./products":327,"./randomaccessfile":328,"buffer":71,"seek-bzip":347}],283:[function(require,module,exports){
 const code = 1;
 const description = 'Text and Special Symbol Packets';
 
@@ -42380,7 +42337,7 @@ module.exports = {
 	parser,
 };
 
-},{}],285:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 const code = 16;
 const description = 'Digital Radial Data Array Packet';
 
@@ -42465,7 +42422,7 @@ module.exports = {
 	parser,
 };
 
-},{}],286:[function(require,module,exports){
+},{}],285:[function(require,module,exports){
 const code = 19;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42525,7 +42482,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],287:[function(require,module,exports){
+},{}],286:[function(require,module,exports){
 const code = 20;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42585,7 +42542,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],288:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 const code = 21;
 const description = 'Special Graphic Symbol Packet';
 const { ijToAzDeg } = require('./utilities/ij');
@@ -42677,7 +42634,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/ij":302}],289:[function(require,module,exports){
+},{"./utilities/ij":301}],288:[function(require,module,exports){
 const code = 22;
 const description = 'Cell Trend Data Packet';
 
@@ -42712,7 +42669,7 @@ module.exports = {
 	parser,
 };
 
-},{}],290:[function(require,module,exports){
+},{}],289:[function(require,module,exports){
 const code = 23;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42745,7 +42702,7 @@ module.exports = {
 	parser,
 };
 
-},{".":301}],291:[function(require,module,exports){
+},{".":300}],290:[function(require,module,exports){
 const code = 24;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42758,7 +42715,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":290}],292:[function(require,module,exports){
+},{"./17":289}],291:[function(require,module,exports){
 const code = 25;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42771,7 +42728,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":290}],293:[function(require,module,exports){
+},{"./17":289}],292:[function(require,module,exports){
 const code = 2;
 const description = 'Text and Special Symbol Packets';
 
@@ -42801,7 +42758,7 @@ module.exports = {
 	parser,
 };
 
-},{}],294:[function(require,module,exports){
+},{}],293:[function(require,module,exports){
 const code = 32;
 const description = 'Special Graphic Symbol Packet';
 
@@ -42861,7 +42818,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],295:[function(require,module,exports){
+},{}],294:[function(require,module,exports){
 const code = 6;
 const description = 'Linked Vector Packet';
 
@@ -42905,7 +42862,7 @@ module.exports = {
 	parser,
 };
 
-},{}],296:[function(require,module,exports){
+},{}],295:[function(require,module,exports){
 const code = 8;
 const description = 'Text and Special Symbol Packets';
 
@@ -42935,7 +42892,7 @@ module.exports = {
 	parser,
 };
 
-},{}],297:[function(require,module,exports){
+},{}],296:[function(require,module,exports){
 const code = 10;
 const description = 'Unlinked Vector Packet';
 
@@ -42985,7 +42942,7 @@ module.exports = {
 	parser,
 };
 
-},{}],298:[function(require,module,exports){
+},{}],297:[function(require,module,exports){
 const code = 0xaf1f;
 const description = 'Radial Data Packet (16 Data Levels)';
 const rle = require('./utilities/rle');
@@ -43036,7 +42993,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/rle":303}],299:[function(require,module,exports){
+},{"./utilities/rle":302}],298:[function(require,module,exports){
 const code = 12;
 const description = 'Tornado Vortex Signautre';
 
@@ -43078,7 +43035,7 @@ module.exports = {
 	parser,
 };
 
-},{}],300:[function(require,module,exports){
+},{}],299:[function(require,module,exports){
 const code = 15;
 const description = 'Special Graphic Symbol Packet';
 
@@ -43111,7 +43068,7 @@ module.exports = {
 	parser,
 };
 
-},{}],301:[function(require,module,exports){
+},{}],300:[function(require,module,exports){
 
 const path = require('path');
 require('./1')
@@ -43166,7 +43123,7 @@ module.exports = {
 	parser,
 };
 
-},{"./1":284,"./10":285,"./13":286,"./14":287,"./15":288,"./16":289,"./17":290,"./18":291,"./19":292,"./2":293,"./32":294,"./6":295,"./8":296,"./a":297,"./af1f":298,"./c":299,"./f":300,"path":178}],302:[function(require,module,exports){
+},{"./1":283,"./10":284,"./13":285,"./14":286,"./15":287,"./16":288,"./17":289,"./18":290,"./19":291,"./2":292,"./32":293,"./6":294,"./8":295,"./a":296,"./af1f":297,"./c":298,"./f":299,"path":178}],301:[function(require,module,exports){
 // i,j coordinate functions
 
 // i,j to azimuth/nmi
@@ -43193,7 +43150,7 @@ module.exports = {
 	ijToAzDeg,
 };
 
-},{}],303:[function(require,module,exports){
+},{}],302:[function(require,module,exports){
 // run length encoding expansion methods
 
 // expand rle from rrrrvvvv, 4-bit run, 4-bit value
@@ -43212,7 +43169,7 @@ module.exports = {
 	expand4_4,
 };
 
-},{}],304:[function(require,module,exports){
+},{}],303:[function(require,module,exports){
 const code = 134;
 const abbreviation = ['DVL'];
 const description = 'Digital Vertically Integrated Liquid';
@@ -43255,7 +43212,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],305:[function(require,module,exports){
+},{"../../randomaccessfile":328}],304:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -43318,7 +43275,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],306:[function(require,module,exports){
+},{}],305:[function(require,module,exports){
 const code = 141;
 const abbreviation = ['NMD'];
 const description = 'Mesocyclone';
@@ -43355,7 +43312,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329,"./formatter":305}],307:[function(require,module,exports){
+},{"../../randomaccessfile":328,"./formatter":304}],306:[function(require,module,exports){
 const code = 153;
 const abbreviation = ['N0B', 'N1B', 'N2B', 'N3B'];
 const description = 'Hi-Res Base Reflectivity';
@@ -43399,7 +43356,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],308:[function(require,module,exports){
+},{"../../randomaccessfile":328}],307:[function(require,module,exports){
 const code = 154;
 const abbreviation = [
 	'N0G',
@@ -43448,7 +43405,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],309:[function(require,module,exports){
+},{"../../randomaccessfile":328}],308:[function(require,module,exports){
 const code = 159;
 const abbreviation = [
 	'N0X',
@@ -43497,7 +43454,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],310:[function(require,module,exports){
+},{"../../randomaccessfile":328}],309:[function(require,module,exports){
 const code = 161;
 const abbreviation = [
 	'N0C',
@@ -43546,7 +43503,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],311:[function(require,module,exports){
+},{"../../randomaccessfile":328}],310:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -43608,7 +43565,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":329}],312:[function(require,module,exports){
+},{"../../randomaccessfile":328}],311:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -43699,7 +43656,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],313:[function(require,module,exports){
+},{"../../randomaccessfile":328}],312:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Storm Total Precipitation';
@@ -43790,7 +43747,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],314:[function(require,module,exports){
+},{"../../randomaccessfile":328}],313:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -43831,7 +43788,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":329,"../165":311}],315:[function(require,module,exports){
+},{"../../randomaccessfile":328,"../165":310}],314:[function(require,module,exports){
 const code = 30;
 const abbreviation = [
 	'NSW'
@@ -43877,7 +43834,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],316:[function(require,module,exports){
+},{"../../randomaccessfile":328}],315:[function(require,module,exports){
 const code = 56;
 const abbreviation = ['N0S', 'N1S', 'N2S', 'N3S'];
 const description = 'Storm relative velocity';
@@ -43909,7 +43866,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],317:[function(require,module,exports){
+},{"../../randomaccessfile":328}],316:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  P2     244/125   232/ 38     245/116   246/107   247/ 97   NO DATA    1.1/ 0.9"
@@ -43984,7 +43941,7 @@ const parseStringPosition = (position, kts = false) => {
 	};
 };
 
-},{}],318:[function(require,module,exports){
+},{}],317:[function(require,module,exports){
 const code = 58;
 const abbreviation = ['NST'];
 const description = 'Storm Tracking Information';
@@ -44020,7 +43977,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329,"./formatter":317}],319:[function(require,module,exports){
+},{"../../randomaccessfile":328,"./formatter":316}],318:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -44063,7 +44020,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],320:[function(require,module,exports){
+},{}],319:[function(require,module,exports){
 const code = 59;
 const abbreviation = ['NHI'];
 const description = 'Hail Index';
@@ -44081,7 +44038,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":319}],321:[function(require,module,exports){
+},{"./formatter":318}],320:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  TVS    F0    74/ 52    35    52    52/ 4.9   >11.1  < 4.9/ 16.0    16/ 4.9    "
@@ -44142,7 +44099,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],322:[function(require,module,exports){
+},{}],321:[function(require,module,exports){
 const code = 61;
 const abbreviation = ['NTV'];
 const description = 'Tornadic Vortex Signature';
@@ -44158,7 +44115,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":321}],323:[function(require,module,exports){
+},{"./formatter":320}],322:[function(require,module,exports){
 const code = 62;
 const abbreviation = ['NSS'];
 const description = 'Storm Structure';
@@ -44176,7 +44133,7 @@ module.exports = {
 	},
 };
 
-},{}],324:[function(require,module,exports){
+},{}],323:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -44208,7 +44165,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],325:[function(require,module,exports){
+},{"../../randomaccessfile":328}],324:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm Total Rainfall Accumulation';
@@ -44242,7 +44199,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],326:[function(require,module,exports){
+},{"../../randomaccessfile":328}],325:[function(require,module,exports){
 const code = 94;
 const abbreviation = ['NXQ', 'NYQ', 'NZQ', 'N0Q', 'NAQ', 'N1Q', 'NBQ', 'N2Q', 'N3Q'];
 const description = 'Digital Base Reflectivity';
@@ -44286,7 +44243,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],327:[function(require,module,exports){
+},{"../../randomaccessfile":328}],326:[function(require,module,exports){
 const code = 99;
 const abbreviation = [
 	'N0U',
@@ -44335,7 +44292,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":329}],328:[function(require,module,exports){
+},{"../../randomaccessfile":328}],327:[function(require,module,exports){
 
 const path = require('path');
 
@@ -44380,7 +44337,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./134":304,"./141":306,"./153":307,"./154":308,"./159":309,"./161":310,"./165":311,"./170":312,"./172":313,"./177":314,"./30":315,"./56":316,"./58":318,"./59":320,"./61":322,"./62":323,"./78":324,"./80":325,"./94":326,"./99":327,"path":178}],329:[function(require,module,exports){
+},{"./134":303,"./141":305,"./153":306,"./154":307,"./159":308,"./161":309,"./165":310,"./170":311,"./172":312,"./177":313,"./30":314,"./56":315,"./58":317,"./59":319,"./61":321,"./62":322,"./78":323,"./80":324,"./94":325,"./99":326,"path":178}],328:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -44495,7 +44452,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],330:[function(require,module,exports){
+},{"buffer":71}],329:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 const { keys } = require('../../../nexrad-level-2-plot/src/draw/palettes/hexlookup');
 const Palette = require('./palette');
@@ -44637,7 +44594,7 @@ module.exports = {
 	DEFAULT_OPTIONS,
 };
 
-},{"../../../app/drawToMap":228,"../../../nexrad-level-2-plot/src/draw/palettes/hexlookup":263,"./palette":331,"canvas":344}],331:[function(require,module,exports){
+},{"../../../app/drawToMap":228,"../../../nexrad-level-2-plot/src/draw/palettes/hexlookup":262,"./palette":330,"canvas":343}],330:[function(require,module,exports){
 // pallette utilities
 
 // generate a palette as rgb[a](r,g,b)
@@ -44685,7 +44642,7 @@ module.exports = {
 	generate,
 };
 
-},{}],332:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 const NexradLevel3Data = require('../../nexrad-level-3-data/src');
 const { products, productAbbreviations } = require('./products');
 const { draw } = require('./draw');
@@ -44764,7 +44721,7 @@ module.exports = {
 	plotAndData,
 };
 
-},{"../../nexrad-level-3-data/src":283,"./draw":330,"./palletize":335,"./products":342,"./utils/file":343}],333:[function(require,module,exports){
+},{"../../nexrad-level-3-data/src":282,"./draw":329,"./palletize":334,"./products":341,"./utils/file":342}],332:[function(require,module,exports){
 // return the index of the closest color match in the palette
 
 // memoize results by provided key.
@@ -44809,7 +44766,7 @@ const geometricDistance = (a, b) => a.reduce((acc, val, idx) => acc + (val - b[i
 
 module.exports = closest;
 
-},{}],334:[function(require,module,exports){
+},{}],333:[function(require,module,exports){
 // generate a palette with the number of steps provided
 const { createCanvas } = require('canvas');
 const crypto = require('crypto');
@@ -44877,7 +44834,7 @@ const calcIntermediate = (a, b, num, den) => {
 
 module.exports = generatePalette;
 
-},{"canvas":344,"crypto":81}],335:[function(require,module,exports){
+},{"canvas":343,"crypto":81}],334:[function(require,module,exports){
 // palletize an image
 const { createCanvas } = require('canvas');
 const generatePalette = require('./generatepalette');
@@ -44943,7 +44900,7 @@ const combineOptions = (_options, product) => {
 
 module.exports = palletize;
 
-},{"../draw":330,"./closest":333,"./generatepalette":334,"canvas":344}],336:[function(require,module,exports){
+},{"../draw":329,"./closest":332,"./generatepalette":333,"canvas":343}],335:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -44976,7 +44933,7 @@ module.exports = {
 	palette,
 };
 
-},{}],337:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -44998,7 +44955,7 @@ module.exports = {
 	palette,
 };
 
-},{"../172":338}],338:[function(require,module,exports){
+},{"../172":337}],337:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Digital Total Accumulation';
@@ -45037,7 +44994,7 @@ module.exports = {
 	palette,
 };
 
-},{}],339:[function(require,module,exports){
+},{}],338:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -45070,7 +45027,7 @@ module.exports = {
 	palette,
 };
 
-},{}],340:[function(require,module,exports){
+},{}],339:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -45102,7 +45059,7 @@ module.exports = {
 	palette,
 };
 
-},{}],341:[function(require,module,exports){
+},{}],340:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm total precipitation';
@@ -45118,7 +45075,7 @@ module.exports = {
 	palette,
 };
 
-},{"../78":340}],342:[function(require,module,exports){
+},{"../78":339}],341:[function(require,module,exports){
 
 const path = require('path');
 
@@ -45149,7 +45106,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./165":336,"./170":337,"./172":338,"./177":339,"./78":340,"./80":341,"path":178}],343:[function(require,module,exports){
+},{"./165":335,"./170":336,"./172":337,"./177":338,"./78":339,"./80":340,"path":178}],342:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 const writePngToFile = (fileName, canvas) => new Promise((resolve, reject) => {
@@ -45166,7 +45123,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],344:[function(require,module,exports){
+},{"fs":1}],343:[function(require,module,exports){
 /* globals document, ImageData */
 
 const parseFont = require('./lib/parse-font')
@@ -45203,7 +45160,7 @@ exports.loadImage = function (src, options) {
   })
 }
 
-},{"./lib/parse-font":345}],345:[function(require,module,exports){
+},{"./lib/parse-font":344}],344:[function(require,module,exports){
 'use strict'
 
 /**
@@ -45306,7 +45263,7 @@ module.exports = str => {
   return (cache[str] = font)
 }
 
-},{}],346:[function(require,module,exports){
+},{}],345:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
@@ -45404,7 +45361,7 @@ BitReader.prototype.pi = function() {
 module.exports = BitReader;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":71}],347:[function(require,module,exports){
+},{"buffer":71}],346:[function(require,module,exports){
 /* CRC32, used in Bzip2 implementation.
  * This is a port of CRC32.java from the jbzip2 implementation at
  *   https://code.google.com/p/jbzip2
@@ -45510,7 +45467,7 @@ module.exports = (function() {
   return CRC32;
 })();
 
-},{}],348:[function(require,module,exports){
+},{}],347:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
@@ -46119,7 +46076,7 @@ Bunzip.license = pjson.license;
 module.exports = Bunzip;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../package.json":350,"./bitreader":346,"./crc32":347,"./stream":349,"buffer":71}],349:[function(require,module,exports){
+},{"../package.json":349,"./bitreader":345,"./crc32":346,"./stream":348,"buffer":71}],348:[function(require,module,exports){
 /* very simple input/output stream interface */
 var Stream = function() {
 };
@@ -46163,7 +46120,7 @@ Stream.prototype.flush = function() {
 
 module.exports = Stream;
 
-},{}],350:[function(require,module,exports){
+},{}],349:[function(require,module,exports){
 module.exports={
   "name": "seek-bzip",
   "version": "2.0.0",

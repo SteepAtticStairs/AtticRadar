@@ -80,7 +80,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         require('./visibility');
 
         // load the refresh button
-        require('./refresh');
+        // require('./refresh');
 
         STstuff.loadAllStormTrackingStuff();
     }
