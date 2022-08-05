@@ -21,6 +21,8 @@ function draw(data) {
 	var divider = 1;
 	if (product == "N0U" || product == "N0G") {
 		adder = 65;
+	} else if (product == "N0B" || product == "NXQ") {
+		adder = 30;
 	}
 	// generate a palette
 	//const palette = Palette.generate(product.palette);
