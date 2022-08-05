@@ -37149,7 +37149,7 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
         multiplier = gateRes*2;
     }
 
-    console.log(gateRes, multiplier)
+    //console.log(gateRes, multiplier)
 
     function radians(deg) {
         return (3.141592654/180.)*deg;
@@ -37294,7 +37294,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var divider;
     function createTexture(gl) {
         $.getJSON(`./app/products/${produc}.json`, function(data) {
-            console.log(data);
+            //console.log(data);
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
             var colortcanvas = document.getElementById("texturecolorbar");
@@ -37315,6 +37315,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             imagedata = ctxt.getImageData(0, 0, colortcanvas.width, colortcanvas.height);
             imagetexture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
+            pageState.imagedata = imagedata;
             pageState.imagetexture = imagetexture;
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -37363,8 +37364,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     $.getJSON(`./app/products/${produc}.json`, function(data) {
         divider = data.divider;
     }).then(function() {
-        console.log('NEW!!!!')
-        console.log(divider)
+        //console.log('NEW!!!!')
+        //console.log(divider)
         //compile shaders
         var vertexSource = `
             //x: azimuth
@@ -37448,7 +37449,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
 
                 gl.bindTexture(gl.TEXTURE_2D, pageState.imagetexture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pageState.imagedata)
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -37658,13 +37659,13 @@ function draw(data) {
 		}
 	}
 
-	console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
+	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
 	json.version = 'l3';
 	if (product == "NXQ" || product == "N0S") {
 		json.version = product;
 	}
-	console.log(json)
+	//console.log(json)
 	var blob = new Blob([JSON.stringify(json)], {type: "text/plain"});
     var url = window.URL.createObjectURL(blob);
 	document.getElementById('level3json').innerHTML = url;
@@ -37720,7 +37721,7 @@ $('.productBtnGroup button').on('click', function () {
     if (this.value == 'load') {
         loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-            console.log(phpProxy + individualFileURL)
+            //console.log(phpProxy + individualFileURL)
             loaders.loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
         });
     }
@@ -37743,7 +37744,7 @@ $('.productBtnGroup button').on('click', function () {
     document.getElementById('curProd').innerHTML = this.value;
 
     if (this.value.includes('l2')) {
-        console.log('level twoo')
+        //console.log('level twoo')
     } else {
         loaders.listTilts(numOfTiltsObj[this.value]);
         $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
@@ -37834,7 +37835,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         var staLng = data[theFileStation][2];
 
         var stormTracks = l3rad.formatted.storms;
-        console.log(stormTracks)
+        //console.log(stormTracks)
         var stormTracksList = Object.keys(stormTracks);
 
         function loadStormTrack(identifier) {
@@ -37929,7 +37930,7 @@ function parsePlotTornado(l3rad, theFileStation) {
         var staLng = data[theFileStation][2];
 
         var tornadoObj = l3rad.formatted.tvs;
-        console.log(tornadoObj)
+        //console.log(tornadoObj)
         var tornadoList = Object.keys(tornadoObj);
 
         function loadTornado(identifier) {
@@ -38014,7 +38015,7 @@ function loadFileObject(path, name, level, product) {
         // event.total is only available if server sends `Content-Length` header
         //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
         //var complete = (event.loaded / event.total * 50 | 0);
-        console.log(ut.formatBytes(event.loaded))
+        console.log(`${product} - ${ut.formatBytes(event.loaded)}`)
     }
     xhr.send();
 }
@@ -38059,7 +38060,7 @@ function getLatestL3File(sta, pro, cb) {
     $.get(ut.phpProxy + fullURL, function (data) {
         var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
         dataToWorkWith = JSON.parse(dataToWorkWith)
-        console.log(dataToWorkWith)
+        //console.log(dataToWorkWith)
         var contentsBase = dataToWorkWith.ListBucketResult.Contents;
         var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
@@ -38077,7 +38078,7 @@ function loadLatestFile(levell, pr, tilt, stat) {
         mapFuncs.removeMapLayer('baseReflectivity');
         getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-            console.log(ut.phpProxy + individualFileURL)
+            //console.log(ut.phpProxy + individualFileURL)
             loadFileObject(ut.phpProxy + individualFileURL, fileName, numLevel, pr);
         });
     } else if (levell == 'l3') {
@@ -38085,19 +38086,19 @@ function loadLatestFile(levell, pr, tilt, stat) {
             mapFuncs.removeMapLayer('baseReflectivity');
         }
         var tiltProduct = ut.tiltObject[tilt][pr];
-        console.log(tiltProduct)
+        //console.log(tiltProduct)
         if (pr != 'N0B' && pr != 'N0G' && pr != 'ref' && pr != 'vel') {
             // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
             // DS.165h0 = product code 165, N0H (h0)
             var level3url = `${ut.phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
-            console.log(level3url)
-            console.log(tiltProduct, stat)
-            loadFileObject(level3url, 'sn.last', 3);
+            //console.log(level3url)
+            //console.log(tiltProduct, stat)
+            loadFileObject(level3url, 'sn.last', 3, pr);
         } else {
             getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
                 var proxiedCbVal = `${ut.phpProxy}${cbVal}`;
-                console.log(cbVal);
-                loadFileObject(proxiedCbVal, 'sn.last', 3);
+                //console.log(cbVal);
+                loadFileObject(proxiedCbVal, 'sn.last', 3, pr);
             });
         }
     }
@@ -38153,10 +38154,10 @@ setTimeout(function() {
 }, 1000)
 
 if (require('./misc/detectmobilebrowser')) {
-    console.log('yup, its mobile');
+    //console.log('yup, its mobile');
     document.getElementById('level2btns').style.display = 'none';
 } else {
-    console.log('nope, not mobile');
+    //console.log('nope, not mobile');
     // this shouldnt be here
     document.getElementById('level2btns').style.display = 'none';
 }
@@ -38174,13 +38175,13 @@ document.addEventListener('loadFile', function(event) {
         const reader = new FileReader();
 
         reader.addEventListener("load", function () {
-            console.log('file uploaded, parsing now');
+            //console.log('file uploaded, parsing now');
             if (fileLevel == 'level2') {
                 var wholeOrPart = event.detail[2];
                 document.getElementById('elevStuff').style.display = 'block';
                 document.getElementById('extraStuff').style.display = 'block';
                 var l2rad = new Level2Radar(ut.toBuffer(this.result), {wholeOrPart})
-                console.log(l2rad)
+                //console.log(l2rad)
                 var theFileVersion = l2rad.header.version;
                 document.getElementById('fileVersion').innerHTML = theFileVersion;
 
@@ -38256,9 +38257,9 @@ document.addEventListener('loadFile', function(event) {
 
                 loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
-                console.log('level 3 file')
+                //console.log('level 3 file')
                 var l3rad = Level3Radar(ut.toBuffer(this.result))
-                console.log(l3rad)
+                //console.log(l3rad)
 
                 //showPlotBtn();
                 //document.getElementById('radarFileInput').style.display = 'none';
@@ -38269,8 +38270,8 @@ document.addEventListener('loadFile', function(event) {
 
                 var theFileProduct = l3rad.textHeader.type;
 
+                var theFileStation = 'K' + l3rad.textHeader.id3;
                 if (theFileProduct != "NTV" && theFileProduct != "NMD" && theFileProduct != "NST") {
-                    var theFileStation = 'K' + l3rad.textHeader.id3;
                     document.getElementById('radStation').innerHTML = theFileStation;
 
                     var theFileVCP = l3rad.productDescription.vcp;
@@ -38390,7 +38391,7 @@ class infoControl {
                 </div>
             </div>`
         this._container.addEventListener('click', function () {
-            console.log('sus')
+            //console.log('sus')
         })
         return this._container;
     }
@@ -38935,19 +38936,19 @@ module.exports = isMobile;
 },{}],242:[function(require,module,exports){
 var parser = document.createElement('a');
 parser.href = window.location.href;
-console.log(parser.hash);
+//console.log(parser.hash);
 
 var allParserArgs = parser.hash.split('&');
-console.log(allParserArgs)
+//console.log(allParserArgs)
 
 var isDevelopmentMode = false;
 for (key in allParserArgs) {
     if (allParserArgs[key].includes('#station=')) {
-        console.log('we got a station URL parameter!');
+        //console.log('we got a station URL parameter!');
         $('#stationInp').val(allParserArgs[key].slice(9, 13));
     }
     if (allParserArgs[key].includes('#development')) {
-        console.log('we got a development mode URL parameter!');
+        //console.log('we got a development mode URL parameter!');
         isDevelopmentMode = true;
     }
 }
@@ -39016,18 +39017,18 @@ function loadAllStormTrackingStuff() {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        //console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '58sti');
     }
     function addMesocycloneLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        //console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '141md');
     }
     function addTornadoLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        //console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '61tvs');
     }
     function arrayify(text) {
         return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
@@ -39072,13 +39073,19 @@ function loadAllStormTrackingStuff() {
         addTornadoLayers();
     } else {
         for (key in stLayers) {
-            map.moveLayer(stLayers[key]);
+            if (map.getLayer(stLayers[key])) {
+                map.moveLayer(stLayers[key]);
+            }
         }
         for (key in mdLayers) {
-            map.moveLayer(mdLayers[key]);
+            if (map.getLayer(mdLayers[key])) {
+                map.moveLayer(mdLayers[key]);
+            }
         }
         for (key in tvLayers) {
-            map.moveLayer(tvLayers[key]);
+            if (map.getLayer(tvLayers[key])) {
+                map.moveLayer(tvLayers[key]);
+            }
         }
     }
     document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;

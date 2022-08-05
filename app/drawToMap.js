@@ -19,7 +19,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var divider;
     function createTexture(gl) {
         $.getJSON(`./app/products/${produc}.json`, function(data) {
-            console.log(data);
+            //console.log(data);
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
             var colortcanvas = document.getElementById("texturecolorbar");
@@ -40,6 +40,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             imagedata = ctxt.getImageData(0, 0, colortcanvas.width, colortcanvas.height);
             imagetexture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
+            pageState.imagedata = imagedata;
             pageState.imagetexture = imagetexture;
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -88,8 +89,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     $.getJSON(`./app/products/${produc}.json`, function(data) {
         divider = data.divider;
     }).then(function() {
-        console.log('NEW!!!!')
-        console.log(divider)
+        //console.log('NEW!!!!')
+        //console.log(divider)
         //compile shaders
         var vertexSource = `
             //x: azimuth
@@ -173,7 +174,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
 
                 gl.bindTexture(gl.TEXTURE_2D, pageState.imagetexture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pageState.imagedata)
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);

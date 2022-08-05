@@ -33,7 +33,7 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
         multiplier = gateRes*2;
     }
 
-    console.log(gateRes, multiplier)
+    //console.log(gateRes, multiplier)
 
     function radians(deg) {
         return (3.141592654/180.)*deg;

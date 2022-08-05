@@ -5,7 +5,7 @@ var map = require('./map/map');
 
 function refreshCurrentRadar() {
     var curPro = document.getElementById('currentRadarProduct').innerHTML;
-    console.log('LOADING LATEST FILE')
+    //console.log('LOADING LATEST FILE')
     mapFuncs.removeMapLayer('baseReflectivity');
     loaders.loadLatestFile(
         'l3',

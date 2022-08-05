@@ -82,13 +82,13 @@ function draw(data) {
 		}
 	}
 
-	console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
+	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
 	json.version = 'l3';
 	if (product == "NXQ" || product == "N0S") {
 		json.version = product;
 	}
-	console.log(json)
+	//console.log(json)
 	var blob = new Blob([JSON.stringify(json)], {type: "text/plain"});
     var url = window.URL.createObjectURL(blob);
 	document.getElementById('level3json').innerHTML = url;

@@ -16,7 +16,7 @@ function parsePlotTornado(l3rad, theFileStation) {
         var staLng = data[theFileStation][2];
 
         var tornadoObj = l3rad.formatted.tvs;
-        console.log(tornadoObj)
+        //console.log(tornadoObj)
         var tornadoList = Object.keys(tornadoObj);
 
         function loadTornado(identifier) {

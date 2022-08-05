@@ -57,7 +57,7 @@ function loadFileObject(path, name, level, product) {
         // event.total is only available if server sends `Content-Length` header
         //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
         //var complete = (event.loaded / event.total * 50 | 0);
-        console.log(ut.formatBytes(event.loaded))
+        console.log(`${product} - ${ut.formatBytes(event.loaded)}`)
     }
     xhr.send();
 }
@@ -102,7 +102,7 @@ function getLatestL3File(sta, pro, cb) {
     $.get(ut.phpProxy + fullURL, function (data) {
         var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
         dataToWorkWith = JSON.parse(dataToWorkWith)
-        console.log(dataToWorkWith)
+        //console.log(dataToWorkWith)
         var contentsBase = dataToWorkWith.ListBucketResult.Contents;
         var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
@@ -120,7 +120,7 @@ function loadLatestFile(levell, pr, tilt, stat) {
         mapFuncs.removeMapLayer('baseReflectivity');
         getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-            console.log(ut.phpProxy + individualFileURL)
+            //console.log(ut.phpProxy + individualFileURL)
             loadFileObject(ut.phpProxy + individualFileURL, fileName, numLevel, pr);
         });
     } else if (levell == 'l3') {
@@ -128,19 +128,19 @@ function loadLatestFile(levell, pr, tilt, stat) {
             mapFuncs.removeMapLayer('baseReflectivity');
         }
         var tiltProduct = ut.tiltObject[tilt][pr];
-        console.log(tiltProduct)
+        //console.log(tiltProduct)
         if (pr != 'N0B' && pr != 'N0G' && pr != 'ref' && pr != 'vel') {
             // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
             // DS.165h0 = product code 165, N0H (h0)
             var level3url = `${ut.phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
-            console.log(level3url)
-            console.log(tiltProduct, stat)
-            loadFileObject(level3url, 'sn.last', 3);
+            //console.log(level3url)
+            //console.log(tiltProduct, stat)
+            loadFileObject(level3url, 'sn.last', 3, pr);
         } else {
             getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
                 var proxiedCbVal = `${ut.phpProxy}${cbVal}`;
-                console.log(cbVal);
-                loadFileObject(proxiedCbVal, 'sn.last', 3);
+                //console.log(cbVal);
+                loadFileObject(proxiedCbVal, 'sn.last', 3, pr);
             });
         }
     }

@@ -23,7 +23,7 @@ $('.productBtnGroup button').on('click', function () {
     if (this.value == 'load') {
         loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
-            console.log(phpProxy + individualFileURL)
+            //console.log(phpProxy + individualFileURL)
             loaders.loadFileObject(phpProxy + individualFileURL, 'balls', 2, 'REF');
         });
     }
@@ -46,7 +46,7 @@ $('.productBtnGroup button').on('click', function () {
     document.getElementById('curProd').innerHTML = this.value;
 
     if (this.value.includes('l2')) {
-        console.log('level twoo')
+        //console.log('level twoo')
     } else {
         loaders.listTilts(numOfTiltsObj[this.value]);
         $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);

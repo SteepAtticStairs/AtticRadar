@@ -26,7 +26,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         var staLng = data[theFileStation][2];
 
         var stormTracks = l3rad.formatted.storms;
-        console.log(stormTracks)
+        //console.log(stormTracks)
         var stormTracksList = Object.keys(stormTracks);
 
         function loadStormTrack(identifier) {

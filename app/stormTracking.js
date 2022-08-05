@@ -5,18 +5,18 @@ function loadAllStormTrackingStuff() {
     var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        //console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '58sti');
     }
     function addMesocycloneLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        //console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '141md');
     }
     function addTornadoLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3);
+        //console.log(fileUrl, $('#stationInp').val().toLowerCase())
+        loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '61tvs');
     }
     function arrayify(text) {
         return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
@@ -61,13 +61,19 @@ function loadAllStormTrackingStuff() {
         addTornadoLayers();
     } else {
         for (key in stLayers) {
-            map.moveLayer(stLayers[key]);
+            if (map.getLayer(stLayers[key])) {
+                map.moveLayer(stLayers[key]);
+            }
         }
         for (key in mdLayers) {
-            map.moveLayer(mdLayers[key]);
+            if (map.getLayer(mdLayers[key])) {
+                map.moveLayer(mdLayers[key]);
+            }
         }
         for (key in tvLayers) {
-            map.moveLayer(tvLayers[key]);
+            if (map.getLayer(tvLayers[key])) {
+                map.moveLayer(tvLayers[key]);
+            }
         }
     }
     document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;

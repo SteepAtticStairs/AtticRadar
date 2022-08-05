@@ -48,7 +48,7 @@ class infoControl {
                 </div>
             </div>`
         this._container.addEventListener('click', function () {
-            console.log('sus')
+            //console.log('sus')
         })
         return this._container;
     }

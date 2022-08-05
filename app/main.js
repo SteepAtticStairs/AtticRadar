@@ -40,10 +40,10 @@ setTimeout(function() {
 }, 1000)
 
 if (require('./misc/detectmobilebrowser')) {
-    console.log('yup, its mobile');
+    //console.log('yup, its mobile');
     document.getElementById('level2btns').style.display = 'none';
 } else {
-    console.log('nope, not mobile');
+    //console.log('nope, not mobile');
     // this shouldnt be here
     document.getElementById('level2btns').style.display = 'none';
 }
@@ -61,13 +61,13 @@ document.addEventListener('loadFile', function(event) {
         const reader = new FileReader();
 
         reader.addEventListener("load", function () {
-            console.log('file uploaded, parsing now');
+            //console.log('file uploaded, parsing now');
             if (fileLevel == 'level2') {
                 var wholeOrPart = event.detail[2];
                 document.getElementById('elevStuff').style.display = 'block';
                 document.getElementById('extraStuff').style.display = 'block';
                 var l2rad = new Level2Radar(ut.toBuffer(this.result), {wholeOrPart})
-                console.log(l2rad)
+                //console.log(l2rad)
                 var theFileVersion = l2rad.header.version;
                 document.getElementById('fileVersion').innerHTML = theFileVersion;
 
@@ -143,9 +143,9 @@ document.addEventListener('loadFile', function(event) {
 
                 loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
-                console.log('level 3 file')
+                //console.log('level 3 file')
                 var l3rad = Level3Radar(ut.toBuffer(this.result))
-                console.log(l3rad)
+                //console.log(l3rad)
 
                 //showPlotBtn();
                 //document.getElementById('radarFileInput').style.display = 'none';
@@ -156,8 +156,8 @@ document.addEventListener('loadFile', function(event) {
 
                 var theFileProduct = l3rad.textHeader.type;
 
+                var theFileStation = 'K' + l3rad.textHeader.id3;
                 if (theFileProduct != "NTV" && theFileProduct != "NMD" && theFileProduct != "NST") {
-                    var theFileStation = 'K' + l3rad.textHeader.id3;
                     document.getElementById('radStation').innerHTML = theFileStation;
 
                     var theFileVCP = l3rad.productDescription.vcp;
