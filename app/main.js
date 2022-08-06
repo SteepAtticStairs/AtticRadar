@@ -159,9 +159,13 @@ document.addEventListener('loadFile', function(event) {
                 var theFileStation = 'K' + l3rad.textHeader.id3;
                 if (theFileProduct != "NTV" && theFileProduct != "NMD" && theFileProduct != "NST") {
                     document.getElementById('radStation').innerHTML = theFileStation;
+                    document.getElementById('radarStation').innerHTML = theFileStation;
 
                     var theFileVCP = l3rad.productDescription.vcp;
                     document.getElementById('radVCP').innerHTML = theFileVCP;
+                    document.getElementById('radarVCP').innerHTML = theFileVCP;
+
+                    var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
                     var theFileDate = l3rad.messageHeader.julianDate;
                     var theFileTime = l3rad.messageHeader.seconds * 1000;
@@ -172,9 +176,10 @@ document.addEventListener('loadFile', function(event) {
                     fileDateObj.setUTCHours(fileHours);
                     fileDateObj.setUTCMinutes(fileMinutes);
                     fileDateObj.setUTCSeconds(fileSeconds);
-                    var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
+                    var finalRadarDateTime = ut.printFancyTime(fileDateObj, userTimeZone);
 
                     document.getElementById('radDate').innerHTML = finalRadarDateTime;
+                    document.getElementById('radarTime').innerHTML = finalRadarDateTime;
                 }
 
                 if (l3rad.textHeader.type == "NTV") {

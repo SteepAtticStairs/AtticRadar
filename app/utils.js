@@ -10,7 +10,8 @@ function toBuffer(ab) {
 }
 
 function printFancyTime(dateObj, tz) {
-    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
+    var timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
+    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${timeZ}`;
 }
 function msToTime(s) {
     // Pad to 2 or 3 digits, default is 2

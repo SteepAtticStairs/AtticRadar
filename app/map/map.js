@@ -331,7 +331,10 @@ class showOptionsBoxControl {
                 $('#showOptionsBoxThing').addClass('fa-circle-chevron-down');
 
                 $('#showOptionsBoxThing').removeClass('icon-black');
-                $('#optionsBox').show("slide", { direction: "down" }, 200);
+                //$('#optionsBox').show("slide", { direction: "down" }, 200);
+                $('#optionsBox').animate({height: 200}, 200);
+                document.getElementById('mainInfo').style.display = 'block';
+                document.getElementById('smallInfo').style.display = 'none';
             } else if ($('#showOptionsBoxThing').hasClass('icon-selected')) {
                 $('#showOptionsBoxThing').removeClass('icon-selected');
 
@@ -339,7 +342,11 @@ class showOptionsBoxControl {
                 $('#showOptionsBoxThing').addClass('fa-circle-chevron-up');
 
                 $('#showOptionsBoxThing').addClass('icon-black');
-                $('#optionsBox').hide("slide", { direction: "down" }, 200);
+                //$('#optionsBox').hide("slide", { direction: "down" }, 200);
+                //$('#optionsBox').animate({height: 'auto'}, 200);
+                document.getElementById('smallInfo').style.display = 'block';
+                document.getElementById('mainInfo').style.display = 'none';
+                $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 200);
             }
         })
         return this._container;

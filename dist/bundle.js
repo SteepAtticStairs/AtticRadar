@@ -38277,9 +38277,13 @@ document.addEventListener('loadFile', function(event) {
                 var theFileStation = 'K' + l3rad.textHeader.id3;
                 if (theFileProduct != "NTV" && theFileProduct != "NMD" && theFileProduct != "NST") {
                     document.getElementById('radStation').innerHTML = theFileStation;
+                    document.getElementById('radarStation').innerHTML = theFileStation;
 
                     var theFileVCP = l3rad.productDescription.vcp;
                     document.getElementById('radVCP').innerHTML = theFileVCP;
+                    document.getElementById('radarVCP').innerHTML = theFileVCP;
+
+                    var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
                     var theFileDate = l3rad.messageHeader.julianDate;
                     var theFileTime = l3rad.messageHeader.seconds * 1000;
@@ -38290,9 +38294,10 @@ document.addEventListener('loadFile', function(event) {
                     fileDateObj.setUTCHours(fileHours);
                     fileDateObj.setUTCMinutes(fileMinutes);
                     fileDateObj.setUTCSeconds(fileSeconds);
-                    var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
+                    var finalRadarDateTime = ut.printFancyTime(fileDateObj, userTimeZone);
 
                     document.getElementById('radDate').innerHTML = finalRadarDateTime;
+                    document.getElementById('radarTime').innerHTML = finalRadarDateTime;
                 }
 
                 if (l3rad.textHeader.type == "NTV") {
@@ -38678,7 +38683,10 @@ class showOptionsBoxControl {
                 $('#showOptionsBoxThing').addClass('fa-circle-chevron-down');
 
                 $('#showOptionsBoxThing').removeClass('icon-black');
-                $('#optionsBox').show("slide", { direction: "down" }, 200);
+                //$('#optionsBox').show("slide", { direction: "down" }, 200);
+                $('#optionsBox').animate({height: 200}, 200);
+                document.getElementById('mainInfo').style.display = 'block';
+                document.getElementById('smallInfo').style.display = 'none';
             } else if ($('#showOptionsBoxThing').hasClass('icon-selected')) {
                 $('#showOptionsBoxThing').removeClass('icon-selected');
 
@@ -38686,7 +38694,11 @@ class showOptionsBoxControl {
                 $('#showOptionsBoxThing').addClass('fa-circle-chevron-up');
 
                 $('#showOptionsBoxThing').addClass('icon-black');
-                $('#optionsBox').hide("slide", { direction: "down" }, 200);
+                //$('#optionsBox').hide("slide", { direction: "down" }, 200);
+                //$('#optionsBox').animate({height: 'auto'}, 200);
+                document.getElementById('smallInfo').style.display = 'block';
+                document.getElementById('mainInfo').style.display = 'none';
+                $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 200);
             }
         })
         return this._container;
@@ -39113,7 +39125,8 @@ function toBuffer(ab) {
 }
 
 function printFancyTime(dateObj, tz) {
-    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${tz}`;
+    var timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
+    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${timeZ}`;
 }
 function msToTime(s) {
     // Pad to 2 or 3 digits, default is 2
