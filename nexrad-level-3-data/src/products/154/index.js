@@ -4,6 +4,7 @@ const abbreviation = [
 	'N1G',
 	'N2G',
 	'N3G',
+	'NAG'
 ];
 const description = 'Hi-Res Base Velocity';
 const { RandomAccessFile } = require('../../randomaccessfile');

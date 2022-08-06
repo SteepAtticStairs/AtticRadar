@@ -37718,6 +37718,7 @@ function tiltClickFunc() {
     }
 }
 $('.productBtnGroup button').on('click', function () {
+    console.log('Clicked on a product button')
     if (this.value == 'load') {
         loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
@@ -37746,9 +37747,10 @@ $('.productBtnGroup button').on('click', function () {
     if (this.value.includes('l2')) {
         //console.log('level twoo')
     } else {
-        loaders.listTilts(numOfTiltsObj[this.value]);
+        loaders.listTilts(numOfTiltsObj[this.value], function() {
+            $('#tiltDropdown a').on('click', tiltClickFunc);
+        });
         $('#tiltDropdownBtn').attr('value', 'tilt' + numOfTiltsObj[this.value][0]);
-        $('#tiltDropdown a').on('click', tiltClickFunc);
         if (!allL2Btns.includes(this.value)) {
             loaders.loadLatestFile(
                 'l3',
@@ -37761,6 +37763,7 @@ $('.productBtnGroup button').on('click', function () {
         }
     }
 });
+$('#tiltDropdown a').on('click', tiltClickFunc);
 },{"../loaders":236,"../utils":245}],233:[function(require,module,exports){
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
@@ -37959,7 +37962,7 @@ module.exports = parsePlotTornado;
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
-function listTilts(tiltsArr) {
+function listTilts(tiltsArr, callback) {
     //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
     $('#tiltMenu').empty();
     for (key in tiltsArr) {
@@ -37977,6 +37980,7 @@ function listTilts(tiltsArr) {
             document.getElementById('tiltDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
         }
     }
+    if (callback) callback();
 }
 
 function loadFileObject(path, name, level, product) {
@@ -39254,8 +39258,8 @@ var tiltObject = {
     'tilt2': {
         'ref': 'N1B',
         'N0B': 'N1B',
-        'vel': 'N1G',
-        'N0G': 'N1G',
+        'vel': 'NAG',
+        'N0G': 'NAG',
         'lowres-ref': 'p94r1',
         'lowres-vel': 'p99v1',
         'rho': '161c1',
@@ -39270,8 +39274,8 @@ var tiltObject = {
     'tilt3': {
         'ref': 'N2B',
         'N0B': 'N2B',
-        'vel': 'N2G',
-        'N0G': 'N2G',
+        'vel': 'N1G',
+        'N0G': 'N1G',
         'lowres-ref': 'p94r2',
         'lowres-vel': 'p99v2',
         'rho': '161c2',
@@ -39316,7 +39320,7 @@ var numOfTiltsObj = {
 }
 var numOfTiltsObj = {
     'ref': [1, 2, 3, 4],
-    'vel': [1, 2],
+    'vel': [1, 2, 3],
     'lowres-ref': [1, 2, 3, 4],
     'lowres-vel': [1, 2, 3, 4],
     'rho': [1, 2, 3, 4],
@@ -43374,6 +43378,7 @@ const abbreviation = [
 	'N1G',
 	'N2G',
 	'N3G',
+	'NAG'
 ];
 const description = 'Hi-Res Base Velocity';
 const { RandomAccessFile } = require('../../randomaccessfile');

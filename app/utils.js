@@ -155,8 +155,8 @@ var tiltObject = {
     'tilt2': {
         'ref': 'N1B',
         'N0B': 'N1B',
-        'vel': 'N1G',
-        'N0G': 'N1G',
+        'vel': 'NAG',
+        'N0G': 'NAG',
         'lowres-ref': 'p94r1',
         'lowres-vel': 'p99v1',
         'rho': '161c1',
@@ -171,8 +171,8 @@ var tiltObject = {
     'tilt3': {
         'ref': 'N2B',
         'N0B': 'N2B',
-        'vel': 'N2G',
-        'N0G': 'N2G',
+        'vel': 'N1G',
+        'N0G': 'N1G',
         'lowres-ref': 'p94r2',
         'lowres-vel': 'p99v2',
         'rho': '161c2',
@@ -217,7 +217,7 @@ var numOfTiltsObj = {
 }
 var numOfTiltsObj = {
     'ref': [1, 2, 3, 4],
-    'vel': [1, 2],
+    'vel': [1, 2, 3],
     'lowres-ref': [1, 2, 3, 4],
     'lowres-vel': [1, 2, 3, 4],
     'rho': [1, 2, 3, 4],

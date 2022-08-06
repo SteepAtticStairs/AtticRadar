@@ -1,7 +1,7 @@
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
-function listTilts(tiltsArr) {
+function listTilts(tiltsArr, callback) {
     //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
     $('#tiltMenu').empty();
     for (key in tiltsArr) {
@@ -19,6 +19,7 @@ function listTilts(tiltsArr) {
             document.getElementById('tiltDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
         }
     }
+    if (callback) callback();
 }
 
 function loadFileObject(path, name, level, product) {
