@@ -190,9 +190,37 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        #mapHeader {
+            position: relative;
+            z-index: 15;
+            margin: auto;
+            height: auto;
+            width: fit-content;
+            top: 10px;
+            padding: 0.1px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
+    <!-- <div class="progress" id="progBarParent">
+        <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div> -->
+    <!-- https://stackoverflow.com/a/20362024
+    ms-auto - left
+    mx-auto - center
+    ms-auto - right -->
+    <nav class="navbar bg-light" id="mapHeader">
+        <div class="container-fluid">
+            <span class="navbar-text mx-auto text-center" style="font-size: 13px">
+                <div id="radarTime"></div>
+                <b>Station: </b><a id='radarStation'>None</a>
+                <br>
+                <b>VCP: </b><a id='radarVCP'>None</a>
+            </span>
+        </div>
+    </nav>
     <div id="spinnerParent" style="display: none">
         <!-- <div id="spinnerDisplayText">The radar is currently loading. Patience here is key - this should be quick.</div> -->
         <div class="sk-chase">
@@ -281,9 +309,10 @@
 
     <div id='optionsBox'>
         <div id="smallInfo">
-            <div id="radarTime"></div>
+            <div id="curRadProd">Please select a radar product.</div>
+            <!-- <div id="radarTime"></div>
             <b>Station: </b><a id='radarStation'></a>
-            <b>VCP: </b><a id='radarVCP'></a>
+            <b>VCP: </b><a id='radarVCP'></a> -->
         </div>
         <div id="mainInfo">
             <label for="stationInp">Station</label>
@@ -359,9 +388,25 @@
     <script>
         document.getElementById('collapseBtnBtn').addEventListener('click', function() {
             setTimeout(function() {
-                $("#optionsBox").animate({ scrollTop: $("#optionsBox")[0].scrollHeight }, 400);
+                $("#optionsBox").animate({ scrollTop: $("#optionsBox").scrollHeight }, 400);
             }, 0)
         })
+        //$('#mapHeader').height($('#mapHeader').height() - 10);
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        var val = 0;
+        $('#progBar').css('width', val + '%').attr('aria-valuenow', val);  
+        (function myLoop(i, b) {
+            setTimeout(function() {
+                $('#progBar').css('width', val + '%').attr('aria-valuenow', val);
+                var ranInt = getRandomInt(0, 100);
+                val++;
+                if (--i) myLoop(i, ranInt);
+            }, b)
+        })(101, 50);
     </script>
 
     <div id="map"></div>

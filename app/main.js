@@ -145,7 +145,7 @@ document.addEventListener('loadFile', function(event) {
             } else if (fileLevel == 'level3') {
                 //console.log('level 3 file')
                 var l3rad = Level3Radar(ut.toBuffer(this.result))
-                //console.log(l3rad)
+                console.log(l3rad)
 
                 //showPlotBtn();
                 //document.getElementById('radarFileInput').style.display = 'none';
@@ -162,8 +162,9 @@ document.addEventListener('loadFile', function(event) {
                     document.getElementById('radarStation').innerHTML = theFileStation;
 
                     var theFileVCP = l3rad.productDescription.vcp;
-                    document.getElementById('radVCP').innerHTML = theFileVCP;
-                    document.getElementById('radarVCP').innerHTML = theFileVCP;
+                    var vcpDesc = ut.vcpObj[theFileVCP];
+                    document.getElementById('radVCP').innerHTML = `${theFileVCP} (${vcpDesc})`;
+                    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${vcpDesc})`;
 
                     var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 

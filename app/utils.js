@@ -239,6 +239,23 @@ var allL2Btns = [
     'l2-sw '
 ];
 
+// https://wdssii.nssl.noaa.gov/web/wdss2/products/radar/systems/w2vcp.shtml
+// https://www.weather.gov/jetstream/vcp_max
+// https://www.roc.noaa.gov/WSR88D/Operations/VCP.aspx
+var vcpObj = {
+    '12': 'Precipitation Mode',
+    '31': 'Clean Air Mode',
+    '32': 'Clean Air Mode',
+    '35': 'Clean Air Mode',
+    '112': 'Precipitation Mode',
+    '121': 'Precipitation Mode',
+    '212': 'Precipitation Mode',
+    '215': 'Precipitation Mode',
+
+    '80': 'Precipitation Mode',
+    '90': 'Precipitation Mode',
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -251,5 +268,6 @@ module.exports = {
     formatBytes,
     tiltObject,
     numOfTiltsObj,
-    allL2Btns
+    allL2Btns,
+    vcpObj
 }

@@ -37718,7 +37718,8 @@ function tiltClickFunc() {
     }
 }
 $('.productBtnGroup button').on('click', function () {
-    console.log('Clicked on a product button')
+    console.log('Clicked on a product button');
+    document.getElementById('curRadProd').innerHTML = this.innerHTML;
     if (this.value == 'load') {
         loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
@@ -38263,7 +38264,7 @@ document.addEventListener('loadFile', function(event) {
             } else if (fileLevel == 'level3') {
                 //console.log('level 3 file')
                 var l3rad = Level3Radar(ut.toBuffer(this.result))
-                //console.log(l3rad)
+                console.log(l3rad)
 
                 //showPlotBtn();
                 //document.getElementById('radarFileInput').style.display = 'none';
@@ -38280,8 +38281,9 @@ document.addEventListener('loadFile', function(event) {
                     document.getElementById('radarStation').innerHTML = theFileStation;
 
                     var theFileVCP = l3rad.productDescription.vcp;
-                    document.getElementById('radVCP').innerHTML = theFileVCP;
-                    document.getElementById('radarVCP').innerHTML = theFileVCP;
+                    var vcpDesc = ut.vcpObj[theFileVCP];
+                    document.getElementById('radVCP').innerHTML = `${theFileVCP} (${vcpDesc})`;
+                    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${vcpDesc})`;
 
                     var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -39354,6 +39356,23 @@ var allL2Btns = [
     'l2-sw '
 ];
 
+// https://wdssii.nssl.noaa.gov/web/wdss2/products/radar/systems/w2vcp.shtml
+// https://www.weather.gov/jetstream/vcp_max
+// https://www.roc.noaa.gov/WSR88D/Operations/VCP.aspx
+var vcpObj = {
+    '12': 'Precipitation Mode',
+    '31': 'Clean Air Mode',
+    '32': 'Clean Air Mode',
+    '35': 'Clean Air Mode',
+    '112': 'Precipitation Mode',
+    '121': 'Precipitation Mode',
+    '212': 'Precipitation Mode',
+    '215': 'Precipitation Mode',
+
+    '80': 'Precipitation Mode',
+    '90': 'Precipitation Mode',
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -39366,7 +39385,8 @@ module.exports = {
     formatBytes,
     tiltObject,
     numOfTiltsObj,
-    allL2Btns
+    allL2Btns,
+    vcpObj
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":71}],246:[function(require,module,exports){

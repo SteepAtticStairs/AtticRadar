@@ -20,7 +20,8 @@ function tiltClickFunc() {
     }
 }
 $('.productBtnGroup button').on('click', function () {
-    console.log('Clicked on a product button')
+    console.log('Clicked on a product button');
+    document.getElementById('curRadProd').innerHTML = this.innerHTML;
     if (this.value == 'load') {
         loaders.getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
             var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
