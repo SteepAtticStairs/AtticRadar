@@ -135,6 +135,12 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+function colorLog(content, color, otherCss) {
+    // https://stackoverflow.com/a/13017382
+    // console.log('%cHello', 'color: green');
+    console.log(`%c${content}`, `color: ${color}; ${otherCss}`);
+}
+
 var tiltObject = {
     'tilt1': {
         'ref': 'N0B',
@@ -266,6 +272,7 @@ module.exports = {
     logToModal,
     xmlToJson,
     formatBytes,
+    colorLog,
     tiltObject,
     numOfTiltsObj,
     allL2Btns,

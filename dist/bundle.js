@@ -37995,10 +37995,12 @@ function loadFileObject(path, name, level, product) {
     } else if (level == 3) {
         radLevel = 'level3';
     }
+    console.log('XMLHttpRequest initialized - data requested');
     var xhr = new XMLHttpRequest();
     xhr.open("GET", path);
     xhr.responseType = "blob";
     xhr.addEventListener('load', function () {
+        console.log('File finished downloading');
         var blob = xhr.response;
         blob.lastModifiedDate = new Date();
         blob.name = name;
@@ -38263,7 +38265,13 @@ document.addEventListener('loadFile', function(event) {
                 loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
                 //console.log('level 3 file')
-                var l3rad = Level3Radar(ut.toBuffer(this.result))
+                ut.colorLog("NEW LEVEL 3 FILE", '#0080FF', 'font-weight: bold');
+                console.log('Parsing Level 3 file...');
+                var startl3 = window.performance.now();
+                var l3rad = Level3Radar(ut.toBuffer(this.result));
+                var endl3 = window.performance.now();
+                var time = endl3 - startl3;
+                console.log(`Finished parsing Level 3 file in ${Math.round(time)} ms`);
                 console.log(l3rad)
 
                 //showPlotBtn();
@@ -39252,6 +39260,12 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+function colorLog(content, color, otherCss) {
+    // https://stackoverflow.com/a/13017382
+    // console.log('%cHello', 'color: green');
+    console.log(`%c${content}`, `color: ${color}; ${otherCss}`);
+}
+
 var tiltObject = {
     'tilt1': {
         'ref': 'N0B',
@@ -39383,6 +39397,7 @@ module.exports = {
     logToModal,
     xmlToJson,
     formatBytes,
+    colorLog,
     tiltObject,
     numOfTiltsObj,
     allL2Btns,

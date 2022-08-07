@@ -33,10 +33,12 @@ function loadFileObject(path, name, level, product) {
     } else if (level == 3) {
         radLevel = 'level3';
     }
+    console.log('XMLHttpRequest initialized - data requested');
     var xhr = new XMLHttpRequest();
     xhr.open("GET", path);
     xhr.responseType = "blob";
     xhr.addEventListener('load', function () {
+        console.log('File finished downloading');
         var blob = xhr.response;
         blob.lastModifiedDate = new Date();
         blob.name = name;

@@ -144,7 +144,13 @@ document.addEventListener('loadFile', function(event) {
                 loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
                 //console.log('level 3 file')
-                var l3rad = Level3Radar(ut.toBuffer(this.result))
+                ut.colorLog("NEW LEVEL 3 FILE", '#0080FF', 'font-weight: bold');
+                console.log('Parsing Level 3 file...');
+                var startl3 = window.performance.now();
+                var l3rad = Level3Radar(ut.toBuffer(this.result));
+                var endl3 = window.performance.now();
+                var time = endl3 - startl3;
+                console.log(`Finished parsing Level 3 file in ${Math.round(time)} ms`);
                 console.log(l3rad)
 
                 //showPlotBtn();
