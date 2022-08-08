@@ -249,7 +249,9 @@ class testFile3Control {
                 // KILX_NTV
                 // ILX_N0Q_2021_07_15_22_19_15
 
-                var fileToLoad = 'KILX_NTV';
+                // Level3_NKX_N0B_20220808_0100.nids
+
+                var fileToLoad = 'Level3_NKX_N0B_20220808_0100.nids';
                 loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
             } else if ($('#testFile3Thing').hasClass('icon-selected')) {
                 $('#testFile3Thing').removeClass('icon-selected');

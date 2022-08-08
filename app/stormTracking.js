@@ -1,9 +1,13 @@
 var map = require('./map/map');
 const loaders = require('./loaders');
+const ut = require('./utils');
+const phpProxy = ut.phpProxy;
 
 function loadAllStormTrackingStuff() {
-    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {
+        // loaders.getLatestL3File($('#stationInp').val().slice(1), 'NST', function (fileName) {
+        //     loaders.loadFileObject(phpProxy + fileName, document.getElementById('radFileName').innerHTML, 3, 'NST');
+        // });
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
         loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '58sti');

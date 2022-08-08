@@ -141,6 +141,19 @@ function colorLog(content, color, otherCss) {
     console.log(`%c${content}`, `color: ${color}; ${otherCss}`);
 }
 
+const Elem = e => ({
+    tagName: 
+        e.tagName,
+    textContent:
+        e.textContent,
+    attributes:
+        Array.from(e.attributes, ({name, value}) => [name, value]),
+    children:
+        Array.from(e.children, Elem)
+})
+const html2json = e =>
+    JSON.stringify(Elem(e), null, '  ')
+
 var tiltObject = {
     'tilt1': {
         'ref': 'N0B',
@@ -262,6 +275,16 @@ var vcpObj = {
     '90': 'Precipitation Mode',
 }
 
+function blobToString(b) {
+    var u, x;
+    u = URL.createObjectURL(b);
+    x = new XMLHttpRequest();
+    x.open('GET', u, false); // although sync, you're not fetching over internet
+    x.send();
+    URL.revokeObjectURL(u);
+    return x.responseText;
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -273,8 +296,10 @@ module.exports = {
     xmlToJson,
     formatBytes,
     colorLog,
+    html2json,
     tiltObject,
     numOfTiltsObj,
     allL2Btns,
-    vcpObj
+    vcpObj,
+    blobToString
 }

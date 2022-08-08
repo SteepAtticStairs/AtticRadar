@@ -37696,7 +37696,7 @@ function draw(data) {
 
 module.exports = draw
 },{"../drawToMap":228}],232:[function(require,module,exports){
-const utilFuncs = require('../utils');
+const ut = require('../utils');
 const loaders = require('../loaders');
 const phpProxy = require('../utils').phpProxy;
 
@@ -38001,7 +38001,26 @@ function loadFileObject(path, name, level, product) {
     xhr.responseType = "blob";
     xhr.addEventListener('load', function () {
         console.log('File finished downloading');
-        var blob = xhr.response;
+        var response = xhr.response;
+        var blob;
+
+        /*
+        this block of code is an attempt to catch a level 3 file where the data doesn't
+        start until 11 bytes out. This will detect if the first four bytes are "SDUS"
+        (something like SDUS32) and if they are not, remove the first 11 bytes
+        (the first 11 bytes are the bytes that should be removed to allow the parser to work)
+        */
+        // store the first eleven bytes for checking
+        var fileEarlyBytes = ut.blobToString(response.slice(0, 11));
+        // if the first four bytes are not "SDUS"
+        if (fileEarlyBytes.slice(0, 4) != "SDUS") {
+            // remove those pesky 11 bytes!
+            blob = response.slice(11);
+        } else {
+            // the file is fine, proceed as normal
+            blob = response;
+        }
+
         blob.lastModifiedDate = new Date();
         blob.name = name;
         // Create the event
@@ -38074,6 +38093,24 @@ function getLatestL3File(sta, pro, cb) {
         var finishedURL = `${urlBase}${filenameKey}`;
         cb(finishedURL);
     })
+    // var curTime = new Date();
+    // var year = curTime.getUTCFullYear();
+    // var month = curTime.getUTCMonth() + 1;
+    // month = "0" + month.toString();
+    // var day = curTime.getUTCDate();
+    // day = "0" + day.toString();
+    // var yyyymmdd = `${year}${month}${day}`
+    // var l3FileURL = `https://unidata3.ssec.wisc.edu/native/radar/level3/nexrad/${pro}/${sta}/${yyyymmdd}/`;
+    // $.get(ut.phpProxy + l3FileURL, function(data) {
+    //     var div = document.createElement('div')
+    //     div.innerHTML = data;
+    //     var jsonWithFileList = JSON.parse(ut.html2json(div));
+    //     var fileListLength = jsonWithFileList.children[2].children.length;
+    //     var filenameKey = jsonWithFileList.children[2].children[fileListLength - 2].attributes[0][1];
+
+    //     var finishedURL = `${l3FileURL}${filenameKey}`;
+    //     cb(finishedURL);
+    // })
 }
 
 function loadLatestFile(levell, pr, tilt, stat) {
@@ -38611,7 +38648,9 @@ class testFile3Control {
                 // KILX_NTV
                 // ILX_N0Q_2021_07_15_22_19_15
 
-                var fileToLoad = 'KILX_NTV';
+                // Level3_NKX_N0B_20220808_0100.nids
+
+                var fileToLoad = 'Level3_NKX_N0B_20220808_0100.nids';
                 loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
             } else if ($('#testFile3Thing').hasClass('icon-selected')) {
                 $('#testFile3Thing').removeClass('icon-selected');
@@ -39038,10 +39077,14 @@ module.exports = {
 },{}],244:[function(require,module,exports){
 var map = require('./map/map');
 const loaders = require('./loaders');
+const ut = require('./utils');
+const phpProxy = ut.phpProxy;
 
 function loadAllStormTrackingStuff() {
-    var phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
     function addStormTracksLayers() {
+        // loaders.getLatestL3File($('#stationInp').val().slice(1), 'NST', function (fileName) {
+        //     loaders.loadFileObject(phpProxy + fileName, document.getElementById('radFileName').innerHTML, 3, 'NST');
+        // });
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
         loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '58sti');
@@ -39121,7 +39164,7 @@ function loadAllStormTrackingStuff() {
 module.exports = {
     loadAllStormTrackingStuff
 }
-},{"./loaders":236,"./map/map":238}],245:[function(require,module,exports){
+},{"./loaders":236,"./map/map":238,"./utils":245}],245:[function(require,module,exports){
 (function (Buffer){(function (){
 const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
@@ -39266,6 +39309,19 @@ function colorLog(content, color, otherCss) {
     console.log(`%c${content}`, `color: ${color}; ${otherCss}`);
 }
 
+const Elem = e => ({
+    tagName: 
+        e.tagName,
+    textContent:
+        e.textContent,
+    attributes:
+        Array.from(e.attributes, ({name, value}) => [name, value]),
+    children:
+        Array.from(e.children, Elem)
+})
+const html2json = e =>
+    JSON.stringify(Elem(e), null, '  ')
+
 var tiltObject = {
     'tilt1': {
         'ref': 'N0B',
@@ -39387,6 +39443,16 @@ var vcpObj = {
     '90': 'Precipitation Mode',
 }
 
+function blobToString(b) {
+    var u, x;
+    u = URL.createObjectURL(b);
+    x = new XMLHttpRequest();
+    x.open('GET', u, false); // although sync, you're not fetching over internet
+    x.send();
+    URL.revokeObjectURL(u);
+    return x.responseText;
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -39398,10 +39464,12 @@ module.exports = {
     xmlToJson,
     formatBytes,
     colorLog,
+    html2json,
     tiltObject,
     numOfTiltsObj,
     allL2Btns,
-    vcpObj
+    vcpObj,
+    blobToString
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":71}],246:[function(require,module,exports){

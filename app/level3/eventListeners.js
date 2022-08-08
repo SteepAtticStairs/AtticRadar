@@ -1,4 +1,4 @@
-const utilFuncs = require('../utils');
+const ut = require('../utils');
 const loaders = require('../loaders');
 const phpProxy = require('../utils').phpProxy;
 
