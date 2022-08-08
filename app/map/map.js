@@ -312,6 +312,20 @@ class curFileControl {
 var theCurFileControl = new curFileControl;
 //map.addControl(theCurFileControl, 'top-right');
 
+function showOptionsBox() {
+    //$('#optionsBox').show("slide", { direction: "down" }, 200);
+    $('#optionsBox').animate({height: 200}, 200);
+    document.getElementById('mainInfo').style.display = 'block';
+    document.getElementById('smallInfo').style.display = 'none';
+}
+function hideOptionsBox() {
+    //$('#optionsBox').hide("slide", { direction: "down" }, 200);
+    //$('#optionsBox').animate({height: 'auto'}, 200);
+    document.getElementById('smallInfo').style.display = 'block';
+    document.getElementById('mainInfo').style.display = 'none';
+    $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 200);
+}
+
 class showOptionsBoxControl {
     onAdd(map) {
         this._map = map;
@@ -333,10 +347,7 @@ class showOptionsBoxControl {
                 $('#showOptionsBoxThing').addClass('fa-circle-chevron-down');
 
                 $('#showOptionsBoxThing').removeClass('icon-black');
-                //$('#optionsBox').show("slide", { direction: "down" }, 200);
-                $('#optionsBox').animate({height: 200}, 200);
-                document.getElementById('mainInfo').style.display = 'block';
-                document.getElementById('smallInfo').style.display = 'none';
+                showOptionsBox();
             } else if ($('#showOptionsBoxThing').hasClass('icon-selected')) {
                 $('#showOptionsBoxThing').removeClass('icon-selected');
 
@@ -344,11 +355,7 @@ class showOptionsBoxControl {
                 $('#showOptionsBoxThing').addClass('fa-circle-chevron-up');
 
                 $('#showOptionsBoxThing').addClass('icon-black');
-                //$('#optionsBox').hide("slide", { direction: "down" }, 200);
-                //$('#optionsBox').animate({height: 'auto'}, 200);
-                document.getElementById('smallInfo').style.display = 'block';
-                document.getElementById('mainInfo').style.display = 'none';
-                $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 200);
+                hideOptionsBox();
             }
         })
         return this._container;
@@ -359,8 +366,23 @@ class showOptionsBoxControl {
         this._map = undefined;
     }
 }
-var theShowOptionsBoxControl = new showOptionsBoxControl;
-map.addControl(theShowOptionsBoxControl, 'bottom-left');
+//var theShowOptionsBoxControl = new showOptionsBoxControl;
+//map.addControl(theShowOptionsBoxControl, 'bottom-left');
+
+document.getElementById('mainInfo').style.display = 'none';
+document.getElementById('smallInfo').style.display = 'block';
+$('#dataDiv').data('optionsBoxShown', false);
+$('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 0);
+
+$('#optionsBox').on('click', function() {
+    if ($('#dataDiv').data('optionsBoxShown')) {
+        $('#dataDiv').data('optionsBoxShown', false);
+        hideOptionsBox();
+    } else if (!$('#dataDiv').data('optionsBoxShown')) {
+        $('#dataDiv').data('optionsBoxShown', true);
+        showOptionsBox();
+    }
+})
 
 //$('#optionsBox').hide();
 $('.optionsBoxControl').trigger('click');

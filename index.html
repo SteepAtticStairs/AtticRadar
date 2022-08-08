@@ -178,6 +178,11 @@
             background-color: white;
             border: 1px solid black;
             border-radius: 5px;
+
+            cursor: pointer;
+        }
+        #optionsBox:hover { 
+            background-color: rgb(212, 212, 212);
         }
         .customMarker {
             text-align: center;
@@ -245,6 +250,12 @@
     <div id="currentRadarProduct" style="display: none"></div>
     <div id="prevStat" style="display: none"></div>
     <div id="testEventElem" style="display: none"></div>
+
+
+    <div id="dataDiv" style="display: none"></div>
+
+
+
     <!-- <a id="fileThatWorks" class="false-anchor">KTLX20130520_200356_V06.gz</a>
     <br>
     <a id="fileThatDoesnt" class="false-anchor">KLWX20220623_014344_V06</a>
@@ -308,16 +319,18 @@
     </div>
 
     <div id='optionsBox'>
-        <div id="smallInfo">
-            <div id="curRadProd">Please select a radar product.</div>
+        <div id="smallInfo" style="display: none">
+            <div id="curRadProd">Click to open menu.</div>
             <!-- <div id="radarTime"></div>
             <b>Station: </b><a id='radarStation'></a>
             <b>VCP: </b><a id='radarVCP'></a> -->
         </div>
-        <div id="mainInfo">
-            <label for="stationInp">Station</label>
-            <input type="text" class="form-control" id="stationInp" value="KMHX">
-            <br>
+        <div id="mainInfo" style="display: none">
+            <div style="display: none">
+                <label for="stationInp">Station</label>
+                <input type="text" class="form-control" id="stationInp" value="KMHX">
+            <!-- <br> -->
+            </div>
             <div class="dropdown-center" id="tiltDropdown">
                 <button class="btn btn-secondary btn-sm dropdown-toggle" id="tiltDropdownBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false" value="tilt1">
                     Tilt 1</button>
@@ -364,22 +377,24 @@
                 <button type="button" value="l2-zdr" id="l2-zdr" class="btn btn-outline-secondary btn-sm" disabled>Differential Reflectivity</button>
                 <button type="button" value="l2-sw " id="l2-sw " class="btn btn-outline-secondary btn-sm" disabled>Spectrum Width</button>
             </div>
-            <br><br>
-            <div id="collapseBtn" style="display: none">
-                <button id="collapseBtnBtn" class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    File Info
-                </button>
-                <br><br>
-            </div>
-            <div class="collapse" id="collapseExample">
-                <div id='fileInfoDiv' style='display: none'>
-                    <!-- <div id='radFileNameParent'><b><a id='radFileName'></a></b></div> -->
-                    <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
-                    <b>Station: </b><a id='radStation'></a>
-                    <b>VCP: </b><a id='radVCP'></a>
-                    <br>
-                    <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
-                    <br>
+            <br>
+            <div style="display: none">
+                <div id="collapseBtn" style="display: none">
+                    <button id="collapseBtnBtn" class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        File Info
+                    </button>
+                    <br><br>
+                </div>
+                <div class="collapse" id="collapseExample">
+                    <div id='fileInfoDiv' style='display: none'>
+                        <!-- <div id='radFileNameParent'><b><a id='radFileName'></a></b></div> -->
+                        <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
+                        <b>Station: </b><a id='radStation'></a>
+                        <b>VCP: </b><a id='radVCP'></a>
+                        <br>
+                        <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+                        <br>
+                    </div>
                 </div>
             </div>
         </div>
