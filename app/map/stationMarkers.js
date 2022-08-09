@@ -1,5 +1,6 @@
 var map = require('./map');
 const loaders = require('../loaders');
+const createControl = require('./createControl');
 
 var statMarkerArr = [];
 function showStations() {
@@ -58,38 +59,21 @@ function showStations() {
     })
 }
 
-class stationControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-                    <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                            <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                                <span class="fa fa-satellite-dish icon-black" id="stationThing" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#stationThing').hasClass('icon-selected')) {
-                $('#stationThing').addClass('icon-selected');
-                $('#stationThing').removeClass('icon-black');
-                showStations();
-            } else if ($('#stationThing').hasClass('icon-selected')) {
-                $('#stationThing').removeClass('icon-selected');
-                $('#stationThing').addClass('icon-black');
-                for (key in statMarkerArr) {
-                    statMarkerArr[key].remove();
-                }
-            }
-        })
-        return this._container;
+createControl({
+    'id': 'stationThing',
+    'position': 'top-left',
+    'icon': 'fa-satellite-dish',
+    'css': 'margin-top: 100%;'
+}, function() {
+    if (!$('#stationThing').hasClass('icon-selected')) {
+        $('#stationThing').addClass('icon-selected');
+        $('#stationThing').removeClass('icon-black');
+        showStations();
+    } else if ($('#stationThing').hasClass('icon-selected')) {
+        $('#stationThing').removeClass('icon-selected');
+        $('#stationThing').addClass('icon-black');
+        for (key in statMarkerArr) {
+            statMarkerArr[key].remove();
+        }
     }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theStationControl = new stationControl;
-map.addControl(theStationControl, 'top-left');
+})
