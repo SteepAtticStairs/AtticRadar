@@ -296,6 +296,29 @@ $('#optionsBox').on('click', function(e) {
         showOptionsBox();
     }
 })
+function mouseEnter(thisObj) {
+    $(thisObj).animate({
+        backgroundColor: 'rgb(212, 212, 212)',
+    }, 150);
+}
+function mouseLeave(thisObj) {
+    $(thisObj).animate({
+        backgroundColor: 'white',
+    }, 150);
+}
+
+$('#optionsBox').on('mouseenter', function(e) {
+    mouseEnter(this);
+})
+$('#optionsBox').on('mouseleave', function(e) {
+    mouseLeave(this);
+})
+// $('.productBtnGroup').on('mouseenter', function(e) {
+//     mouseLeave($('#optionsBox'));
+// })
+// $('.productBtnGroup').on('mouseleave', function(e) {
+//     mouseEnter($('#optionsBox'));
+// })
 
 //$('#optionsBox').hide();
 $('.optionsBoxControl').trigger('click');
