@@ -141,6 +141,9 @@ document.addEventListener('loadFile', function(event) {
 
                 document.getElementById('radDate').innerHTML = finalRadarDateTime;
 
+                const level2Plot = plot(l2rad, 'REF', {
+                    elevations: 1,
+                });
                 loadL2Listeners(l2rad, displayElevations);
             } else if (fileLevel == 'level3') {
                 //console.log('level 3 file')

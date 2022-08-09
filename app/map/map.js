@@ -1,5 +1,3 @@
-const isDevelopmentMode = require('../misc/urlParser');
-
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
 const map = new mapboxgl.Map({
     container: 'map',
@@ -185,95 +183,6 @@ class settingsControl {
 var theSettingsControl = new settingsControl;
 //map.addControl(theSettingsControl, 'top-right');
 
-class testFileControl {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-            <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                    <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                        <span class="fa fa-flask-vial icon-black" id="testFileThing" aria-hidden="true" title="Globe Toggle"></span>
-                    </button>
-                </div>
-            </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#testFileThing').hasClass('icon-selected')) {
-                $('#testFileThing').addClass('icon-selected');
-                $('#testFileThing').removeClass('icon-black');
-                // KLIX20050829_061516.gz
-                // KTLX20130520_200356_V06.gz
-                var fileToLoad = 'KTLX20130520_200356_V06.gz';
-                loadFileObject('data/' + fileToLoad, fileToLoad, 2);
-            } else if ($('#testFileThing').hasClass('icon-selected')) {
-                $('#testFileThing').removeClass('icon-selected');
-                $('#testFileThing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theTestFileControl = new testFileControl;
-
-class testFile3Control {
-    onAdd(map) {
-        this._map = map;
-        this._container = document.createElement('div');
-        this._container.innerHTML = `
-            <div class="mapboxgl-control-container" style="margin-top: 100%;">
-                <div class="mapboxgl-ctrl mapboxgl-ctrl-group">
-                    <button class="mapboxgl-ctrl-fullscreen" type="button" aria-label="Globe Toggle">
-                        <span class="fa fa-3 icon-black" id="testFile3Thing" aria-hidden="true" title="Globe Toggle"></span>
-                    </button>
-                </div>
-            </div>`
-        this._container.addEventListener('click', function () {
-            if (!$('#testFile3Thing').hasClass('icon-selected')) {
-                $('#testFile3Thing').addClass('icon-selected');
-                $('#testFile3Thing').removeClass('icon-black');
-                // LWX_N0H_2022_04_18_15_21_24
-                // LWX_N0Q_2022_04_18_15_21_24
-                // KOUN_SDUS54_N0STLX_201305200301
-                // KCRP_SDUS54_N0UCRP_201708252357
-                // KCRP_SDUS54_N0QCRP_201708252357
-                // KOUN_SDUS54_DVLTLX_201305200301
-                // KOUN_SDUS34_NSTTLX_201305200301
-
-                // LOT_NMD_2021_06_21_04_22_17
-                // LOT_NMD_2021_06_21_04_27_31
-                // KILX_NTV
-                // ILX_N0Q_2021_07_15_22_19_15
-
-                // Level3_NKX_N0B_20220808_0100.nids
-
-                var fileToLoad = 'Level3_NKX_N0B_20220808_0100.nids';
-                loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
-            } else if ($('#testFile3Thing').hasClass('icon-selected')) {
-                $('#testFile3Thing').removeClass('icon-selected');
-                $('#testFile3Thing').addClass('icon-black');
-            }
-        })
-        return this._container;
-    }
-
-    onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-    }
-}
-var theTestFile3Control = new testFile3Control;
-
-if (isDevelopmentMode) {
-    map.addControl(theTestFile3Control, 'top-right');
-    map.addControl(theTestFileControl, 'top-right');
-    document.getElementById('infoContainerBottom').style.display = 'block';
-}
-
 class curFileControl {
     onAdd(map) {
         this._map = map;
@@ -374,7 +283,11 @@ document.getElementById('smallInfo').style.display = 'block';
 $('#dataDiv').data('optionsBoxShown', false);
 $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 0);
 
-$('#optionsBox').on('click', function() {
+$('#optionsBox').on('click', function(e) {
+    // https://stackoverflow.com/a/9183467
+    console.log($(e.target).parent())
+    if ($(e.target).parent() === $('.productBtnGroup')) return;
+
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);
         hideOptionsBox();
@@ -426,3 +339,6 @@ $('#fileStation').on('DOMSubtreeModified', function () {
 });
 
 module.exports = map;
+
+// load some controls
+require('./testFileControls');

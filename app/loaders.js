@@ -42,20 +42,24 @@ function loadFileObject(path, name, level, product) {
         var response = xhr.response;
         var blob;
 
-        /*
-        this block of code is an attempt to catch a level 3 file where the data doesn't
-        start until 11 bytes out. This will detect if the first four bytes are "SDUS"
-        (something like SDUS32) and if they are not, remove the first 11 bytes
-        (the first 11 bytes are the bytes that should be removed to allow the parser to work)
-        */
-        // store the first eleven bytes for checking
-        var fileEarlyBytes = ut.blobToString(response.slice(0, 11));
-        // if the first four bytes are not "SDUS"
-        if (fileEarlyBytes.slice(0, 4) != "SDUS") {
-            // remove those pesky 11 bytes!
-            blob = response.slice(11);
+        if (level != 2) {
+            /*
+            this block of code is an attempt to catch a level 3 file where the data doesn't
+            start until 11 bytes out. This will detect if the first four bytes are "SDUS"
+            (something like SDUS32) and if they are not, remove the first 11 bytes
+            (the first 11 bytes are the bytes that should be removed to allow the parser to work)
+            */
+            // store the first eleven bytes for checking
+            var fileEarlyBytes = ut.blobToString(response.slice(0, 11));
+            // if the first four bytes are not "SDUS"
+            if (fileEarlyBytes.slice(0, 4) != "SDUS") {
+                // remove those pesky 11 bytes!
+                blob = response.slice(11);
+            } else {
+                // the file is fine, proceed as normal
+                blob = response;
+            }
         } else {
-            // the file is fine, proceed as normal
             blob = response;
         }
 

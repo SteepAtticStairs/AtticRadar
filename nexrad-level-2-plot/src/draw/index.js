@@ -194,7 +194,7 @@ const draw = (data, _options) => {
 	}
 	var adder;
 	if (options.product == "REF") {
-		adder = 0;
+		adder = 30;
 	} else if (options.product == "VEL") {
 		adder = 30;
 	} else if (options.product == "RHO") {

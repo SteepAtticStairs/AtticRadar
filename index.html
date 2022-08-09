@@ -183,6 +183,9 @@
         }
         #optionsBox:hover { 
             background-color: rgb(212, 212, 212);
+            -webkit-transition: background-color 150ms linear;
+            -ms-transition: background-color 150ms linear;
+            transition: background-color 150ms linear;
         }
         .customMarker {
             text-align: center;
@@ -345,7 +348,7 @@
             <div class="btn-group-vertical productBtnGroup">
                 <div>Super Resolution</div>
                 <!-- <button type="button" value="mcy" class="btn btn-outline-primary btn-sm">Mesocyclone</button> -->
-                <button type="button" value="ref" class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
+                <button type="button" value="ref" id='srResBtn' class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
                 <button type="button" value="vel"  class="btn btn-outline-primary btn-sm"><b>HR</b> Base Velocity</button> <!-- vel -->
             </div>
             <div class="btn-group-vertical productBtnGroup">

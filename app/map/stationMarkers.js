@@ -44,6 +44,9 @@ function showStations() {
 
             $('#stationInp').val(this.innerHTML)
 
+            $('#srResBtn').trigger('click');
+            //document.getElementById('curRadProd').innerHTML = $('#srResBtn').html();
+
             document.getElementById('curProd').innerHTML = 'ref';
             loaders.loadLatestFile(
                 'l3',
