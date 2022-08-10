@@ -16910,7 +16910,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
     document.getElementById('radarStation').innerHTML = theFileStation;
 
     var theFileVCP = l3rad.productDescription.vcp;
-    document.getElementById('radarVCP').innerHTML = theFileVCP;
+    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var theFileDate = l3rad.messageHeader.julianDate;
     var theFileTime = l3rad.messageHeader.seconds * 1000;
