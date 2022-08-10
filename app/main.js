@@ -7,6 +7,7 @@ const { plot } = require('../nexrad-level-2-plot/src');
 
 const l3parse = require('../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
+const l3info = require('./dom/l3info');
 
 $('.productBtnGroup button').on('click', function() {
     var clickedProduct = ut.tiltObject[$('#tiltInput').val()][this.value];
@@ -34,9 +35,7 @@ document.addEventListener('loadFile', function(event) {
             var l3rad = l3parse(ut.toBuffer(this.result));
             console.log(l3rad);
 
-            const l3info = require('./dom/l3info');
             l3info(l3rad);
-
             l3plot(l3rad);
         }
     }, false);

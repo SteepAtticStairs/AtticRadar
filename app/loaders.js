@@ -143,28 +143,33 @@ function getLatestL2(station, callback) {
 in this function, this will be a string with the latest file's URL.
 */
 function getLatestL3(station, product, callback) {
-    document.getElementById('spinnerParent').style.display = 'block';
-    var curTime = new Date();
-    var year = curTime.getUTCFullYear();
-    var month = curTime.getUTCMonth() + 1;
-    if (month.toString().length == 1) month = "0" + month.toString();
-    var day = curTime.getUTCDate();
-    if (day.toString().length == 1) day = "0" + day.toString();
-    var stationToGet = station.toUpperCase().replace(/ /g, '')
-    var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
-    var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
-    var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
-    var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
-    $.get(ut.phpProxy + fullURL, function (data) {
-        var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
-        dataToWorkWith = JSON.parse(dataToWorkWith)
-        //console.log(dataToWorkWith)
-        var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-        var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
+    if (!(product.length > 3)) {
+        document.getElementById('spinnerParent').style.display = 'block';
+        var curTime = new Date();
+        var year = curTime.getUTCFullYear();
+        var month = curTime.getUTCMonth() + 1;
+        if (month.toString().length == 1) month = "0" + month.toString();
+        var day = curTime.getUTCDate();
+        if (day.toString().length == 1) day = "0" + day.toString();
+        var stationToGet = station.toUpperCase().replace(/ /g, '')
+        var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
+        var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
+        var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+        var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+        $.get(ut.phpProxy + fullURL, function (data) {
+            var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
+            dataToWorkWith = JSON.parse(dataToWorkWith)
+            //console.log(dataToWorkWith)
+            var contentsBase = dataToWorkWith.ListBucketResult.Contents;
+            var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
-        var finishedURL = `${urlBase}${filenameKey}`;
-        callback(finishedURL);
-    })
+            var finishedURL = `${urlBase}${filenameKey}`;
+            callback(finishedURL);
+        })
+    } else {
+        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        callback(fileUrl);
+    }
 
     /*
     * Below is all unused code to retrieve the latest file from a different data source.

@@ -17676,28 +17676,33 @@ function getLatestL2(station, callback) {
 in this function, this will be a string with the latest file's URL.
 */
 function getLatestL3(station, product, callback) {
-    document.getElementById('spinnerParent').style.display = 'block';
-    var curTime = new Date();
-    var year = curTime.getUTCFullYear();
-    var month = curTime.getUTCMonth() + 1;
-    if (month.toString().length == 1) month = "0" + month.toString();
-    var day = curTime.getUTCDate();
-    if (day.toString().length == 1) day = "0" + day.toString();
-    var stationToGet = station.toUpperCase().replace(/ /g, '')
-    var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
-    var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
-    var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
-    var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
-    $.get(ut.phpProxy + fullURL, function (data) {
-        var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
-        dataToWorkWith = JSON.parse(dataToWorkWith)
-        //console.log(dataToWorkWith)
-        var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-        var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
+    if (!(product.length > 3)) {
+        document.getElementById('spinnerParent').style.display = 'block';
+        var curTime = new Date();
+        var year = curTime.getUTCFullYear();
+        var month = curTime.getUTCMonth() + 1;
+        if (month.toString().length == 1) month = "0" + month.toString();
+        var day = curTime.getUTCDate();
+        if (day.toString().length == 1) day = "0" + day.toString();
+        var stationToGet = station.toUpperCase().replace(/ /g, '')
+        var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
+        var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
+        var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+        var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+        $.get(ut.phpProxy + fullURL, function (data) {
+            var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
+            dataToWorkWith = JSON.parse(dataToWorkWith)
+            //console.log(dataToWorkWith)
+            var contentsBase = dataToWorkWith.ListBucketResult.Contents;
+            var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
-        var finishedURL = `${urlBase}${filenameKey}`;
-        callback(finishedURL);
-    })
+            var finishedURL = `${urlBase}${filenameKey}`;
+            callback(finishedURL);
+        })
+    } else {
+        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        callback(fileUrl);
+    }
 
     /*
     * Below is all unused code to retrieve the latest file from a different data source.
@@ -17768,6 +17773,7 @@ const { plot } = require('../nexrad-level-2-plot/src');
 
 const l3parse = require('../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
+const l3info = require('./dom/l3info');
 
 $('.productBtnGroup button').on('click', function() {
     var clickedProduct = ut.tiltObject[$('#tiltInput').val()][this.value];
@@ -17795,9 +17801,7 @@ document.addEventListener('loadFile', function(event) {
             var l3rad = l3parse(ut.toBuffer(this.result));
             console.log(l3rad);
 
-            const l3info = require('./dom/l3info');
             l3info(l3rad);
-
             l3plot(l3rad);
         }
     }, false);
@@ -18449,11 +18453,11 @@ var tiltObject = {
         'lowres-vel': 'p99v0',
         'rho': 'N0C',
         'zdr': 'N0X',
-        'sw ': 'NSW',
+        'sw ': 'p30sw',
         'hhc': 'HHC',
         'hyc': 'N0H',
         'srv': 'N0S',
-        'vil': 'NVL',
+        'vil': '134il',
         'sti': 'NST',
         'mcy': 'NMD',
     },
@@ -18466,11 +18470,11 @@ var tiltObject = {
         'lowres-vel': 'p99v1',
         'rho': 'N1C',
         'zdr': 'N1X',
-        'sw ': 'NSW',
+        'sw ': 'p30sw',
         'hhc': 'HHC',
         'hyc': 'N1H',
         'srv': 'N1S',
-        'vil': 'NVL',
+        'vil': '134il',
         'sti': 'NST',
     },
     'tilt3': {
@@ -18482,11 +18486,11 @@ var tiltObject = {
         'lowres-vel': 'p99v2',
         'rho': 'N2C',
         'zdr': 'N2X',
-        'sw ': 'NSW',
+        'sw ': 'p30sw',
         'hhc': 'HHC',
         'hyc': 'N2H',
         'srv': 'N2S',
-        'vil': 'NVL',
+        'vil': '134il',
         'sti': 'NST',
     },
     'tilt4': {
@@ -18498,11 +18502,11 @@ var tiltObject = {
         'lowres-vel': 'p99v3',
         'rho': 'N3C',
         'zdr': 'N3X',
-        'sw ': 'NSW',
+        'sw ': 'p30sw',
         'hhc': 'HHC',
         'hyc': 'N3H',
         'srv': 'N3S',
-        'vil': 'NVL',
+        'vil': '134il',
         'sti': 'NST',
     },
 }
