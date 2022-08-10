@@ -1,4 +1,4 @@
-const drawRadarShape = require('../drawToMap');
+const drawRadarShape = require('../draw/drawToMap');
 
 const scaleArray = (fromRange, toRange) => {
 	const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);

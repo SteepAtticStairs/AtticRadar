@@ -1,7 +1,7 @@
 const calcPolys = require('./calculatePolygons');
-const STstuff = require('./stormTracking');
-const tt = require('./paletteTooltip');
-var map = require('./map/map');
+const STstuff = require('../level3/stormTracking/stormTrackingMain');
+const tt = require('../misc/paletteTooltip');
+var map = require('../map/map');
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var settings = {};
@@ -77,8 +77,10 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         //console.log(Math.max(...[...new Set(colors)]))
         map.addLayer(layer);
 
+        document.getElementById('spinnerParent').style.display = 'none';
+
         // load the visibility button
-        require('./visibility');
+        require('../map/controls/visibility');
 
         // load the refresh button
         // require('./refresh');

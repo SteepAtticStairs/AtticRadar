@@ -1,4 +1,4 @@
-var map = require('./map/map');
+var map = require('../map');
 
 var hasVisibilityControl = false;
 class visibilityControl {

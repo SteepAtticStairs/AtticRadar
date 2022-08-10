@@ -1,4 +1,4 @@
-var map = require('./map');
+var map = require('../map');
 
 function createControl(options, clickFunc) {
     var divId = options.id;

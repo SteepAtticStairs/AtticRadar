@@ -1,5 +1,5 @@
-var map = require('./map');
-const loaders = require('../loaders');
+var map = require('../map');
+const loaders = require('../../loaders');
 const createControl = require('./createControl');
 
 var statMarkerArr = [];

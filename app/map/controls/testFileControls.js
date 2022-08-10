@@ -1,7 +1,7 @@
-const loaders = require('../loaders');
-const isDevelopmentMode = require('../misc/urlParser');
+const loaders = require('../../loaders');
+const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
-var map = require('./map');
+var map = require('../map');
 
 if (isDevelopmentMode) {
     createControl({

@@ -1,5 +1,5 @@
-const ut = require('../utils');
-const mapFuncs = require('../map/mapFunctions');
+const ut = require('../../utils');
+const mapFuncs = require('../../map/mapFunctions');
 
 function parsePlotTornado(l3rad, theFileStation) {
     var tornadoLayersArr = [];

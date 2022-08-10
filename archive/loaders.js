@@ -22,30 +22,20 @@ function listTilts(tiltsArr, callback) {
     if (callback) callback();
 }
 
-/**
-* Function to load a radar plot onto the map from a URL.
-*
-* @param {any} url - The location to the file. This can be a relative path, or a URL
-to a file hosted on a server.
-* @param {any} level - What level file this is. This is a temporary parameter, it will be
-removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 for a level 2
-file where you only want to load the first chunk of the file (reflectivity data) for a quicker
-loading speed.
-*/
-function loadFileObject(url, level) {
+function loadFileObject(path, name, level, product) {
     var radLevel;
     var wholeOrPart = 'whole';
     if (level == 2) {
-        radLevel = 2;
+        radLevel = 'level2';
     } if (level == 22) {
-        radLevel = 2;
+        radLevel = 'level2';
         wholeOrPart = 'part';
     } else if (level == 3) {
-        radLevel = 3;
+        radLevel = 'level3';
     }
     console.log('XMLHttpRequest initialized - data requested');
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", url);
+    xhr.open("GET", path);
     xhr.responseType = "blob";
     xhr.addEventListener('load', function () {
         console.log('File finished downloading');
@@ -74,13 +64,14 @@ function loadFileObject(url, level) {
         }
 
         blob.lastModifiedDate = new Date();
-        blob.name = url;
+        blob.name = name;
         // Create the event
         var event = new CustomEvent("loadFile", {
             "detail": [
                 blob,
                 radLevel,
-                wholeOrPart
+                wholeOrPart,
+                product
             ]
         });
         // Dispatch/Trigger/Fire the event
@@ -92,32 +83,22 @@ function loadFileObject(url, level) {
         // event.total is only available if server sends `Content-Length` header
         //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
         //var complete = (event.loaded / event.total * 50 | 0);
-        console.log(`${ut.formatBytes(event.loaded)}`)
+        console.log(`${product} - ${ut.formatBytes(event.loaded)}`)
     }
     xhr.send();
 }
 
-/**
-* Sub-function to get the latest Level 2 file for a station. This should not be used by itself,
-* rather it should be called from the main function getLatestFile().
-*
-* @param {any} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
-* @param {any} callback - The function to run after the retrieval. Use a single variable
-in this function, this will be a string with the latest file's URL.
-*/
-function getLatestL2(station, callback) {
-    //document.getElementById('spinnerParent').style.display = 'block';
+function getLatestFile(sta, callbck) {
+    document.getElementById('spinnerParent').style.display = 'block';
     var curTime = new Date();
     var year = curTime.getUTCFullYear();
     var month = curTime.getUTCMonth() + 1;
-    if (month.toString().length == 1) month = "0" + month.toString();
+    month = "0" + month.toString();
     var day = curTime.getUTCDate();
-    if (day.toString().length == 1) day = "0" + day.toString();
-    var stationToGet = station.toUpperCase().replace(/ /g, '')
+    day = "0" + day.toString();
+    var stationToGet = sta.toUpperCase().replace(/ /g, '')
     var fullURL = "https://noaa-nexrad-level2.s3.amazonaws.com/?list-type=2&delimiter=%2F&prefix=" + year + "%2F" + month + "%2F" + day + "%2F" + stationToGet + "%2F"
     //console.log(fullURL)
-    var baseURL = 'https://noaa-nexrad-level2.s3.amazonaws.com';
-    //https://noaa-nexrad-level2.s3.amazonaws.com/2022/08/09/KATX/KATX20220809_004942_V06
     $.get(ut.phpProxy + fullURL, function (data) {
         var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
         dataToWorkWith = JSON.parse(dataToWorkWith)
@@ -127,32 +108,21 @@ function getLatestL2(station, callback) {
         if (latestFileName.includes('MDM')) {
             latestFileName = filenameKey[filenameKey.length - 2].Key.HASHtext.slice(16);
         }
-
-        var finishedURL = `${baseURL}/${year}/${month}/${day}/${station}/${latestFileName}`;
-        callback(finishedURL);
+        callbck(latestFileName, year, month, day, stationToGet);
     })
-}
+};
 
-/**
-* Sub-function to get the latest Level 3 file for a station. This should not be used by itself,
-* rather it should be called from the main function getLatestFile().
-*
-* @param {any} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
-* @param {any} product - Three letter abbreviation of the Level 3 product being retrieved. e.g. "NST", "N0B", "N0G"
-* @param {any} callback - The function to run after the retrieval. Use a single variable
-in this function, this will be a string with the latest file's URL.
-*/
-function getLatestL3(station, product, callback) {
+function getLatestL3File(sta, pro, cb) {
     document.getElementById('spinnerParent').style.display = 'block';
     var curTime = new Date();
     var year = curTime.getUTCFullYear();
     var month = curTime.getUTCMonth() + 1;
-    if (month.toString().length == 1) month = "0" + month.toString();
+    month = "0" + month.toString();
     var day = curTime.getUTCDate();
-    if (day.toString().length == 1) day = "0" + day.toString();
-    var stationToGet = station.toUpperCase().replace(/ /g, '')
+    day = "0" + day.toString();
+    var stationToGet = sta.toUpperCase().replace(/ /g, '')
     var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
-    var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
+    var filenamePrefix = `${sta}_${pro}_${year}_${month}_${day}`;
     var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
     var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
     $.get(ut.phpProxy + fullURL, function (data) {
@@ -163,12 +133,8 @@ function getLatestL3(station, product, callback) {
         var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
         var finishedURL = `${urlBase}${filenameKey}`;
-        callback(finishedURL);
+        cb(finishedURL);
     })
-
-    /*
-    * Below is all unused code to retrieve the latest file from a different data source.
-    */
     // var curTime = new Date();
     // var year = curTime.getUTCFullYear();
     // var month = curTime.getUTCMonth() + 1;
@@ -189,39 +155,45 @@ function getLatestL3(station, product, callback) {
     // })
 }
 
-/**
-* Fetches the filename of the latest file for a given station.
-*
-* @param {any} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
-* @param {any} levelProduct - This parameter is an object that specifies if the user is
-retrieving a level 2 file (use 2 for this parameter), or a level 3 file (in that case,
-use an array with two values, specifying both the level (3), and the product you want to retrieve. 
-e.g. [3, "NST"])
-* @param {any} callback - The function to run after the retrieval. Use a single variable
-in this function, this will be a string with the latest file's URL.
-*/
-function getLatestFile(station, levelProduct, callback) {
-    // obviously, the user wants a level 2 file
-    if (levelProduct == 2) {
-        getLatestL2(station, function(url) {
-            callback(url);
-        })
-    } else {
-        // assume this is a level 3 file - and fail if it is not an array
-        if (!Array.isArray(levelProduct)) {
-            throw new Error('You must provide an array for a level 3 product/level parameter.');
-        }
-        const product = levelProduct[1];
-        /* we need to slice(1) here (remove the first letter) because the level 3 source we
-        * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
-        getLatestL3(station.slice(1), product, function(url) {
-            callback(url);
-        })
+function loadLatestFile(levell, pr, tilt, stat) {
+    var numLevel = 2;
+    if (levell == 'l22') {
+        numLevel = 22;
     }
-};
+    if (levell == 'l2' || levell == 'l22') {
+        mapFuncs.removeMapLayer('baseReflectivity');
+        getLatestFile($('#stationInp').val(), function (fileName, y, m, d, s) {
+            var individualFileURL = `https://noaa-nexrad-level2.s3.amazonaws.com/${y}/${m}/${d}/${s}/${fileName}`
+            //console.log(ut.phpProxy + individualFileURL)
+            loadFileObject(ut.phpProxy + individualFileURL, fileName, numLevel, pr);
+        });
+    } else if (levell == 'l3') {
+        if ($('#productInput').val() != 'sti') {
+            mapFuncs.removeMapLayer('baseReflectivity');
+        }
+        var tiltProduct = ut.tiltObject[tilt][pr];
+        //console.log(tiltProduct)
+        if (pr != 'N0B' && pr != 'N0G' && pr != 'ref' && pr != 'vel') {
+            // https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.165h0/SI.kgld/sn.last
+            // DS.165h0 = product code 165, N0H (h0)
+            var level3url = `${ut.phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${tiltProduct}/SI.${stat}/sn.last`
+            //console.log(level3url)
+            //console.log(tiltProduct, stat)
+            loadFileObject(level3url, 'sn.last', 3, pr);
+        } else {
+            getLatestL3File(stat.toUpperCase().slice(1), tiltProduct, function (cbVal) {
+                var proxiedCbVal = `${ut.phpProxy}${cbVal}`;
+                //console.log(cbVal);
+                loadFileObject(proxiedCbVal, 'sn.last', 3, pr);
+            });
+        }
+    }
+}
 
 module.exports = {
     loadFileObject,
     getLatestFile,
+    getLatestL3File,
+    loadLatestFile,
     listTilts
 }
