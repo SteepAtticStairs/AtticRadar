@@ -1,6 +1,7 @@
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
+const mapFuncs = require('../map/mapFunctions');
 var map = require('../map/map');
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
@@ -75,6 +76,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         pageState.indices = indices;
         pageState.colors = colors;
         //console.log(Math.max(...[...new Set(colors)]))
+        mapFuncs.removeMapLayer('baseReflectivity');
         map.addLayer(layer);
 
         document.getElementById('spinnerParent').style.display = 'none';

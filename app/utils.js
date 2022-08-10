@@ -13,6 +13,8 @@ function printFancyTime(dateObj, tz) {
     var timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
     return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${timeZ}`;
 }
+const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 function msToTime(s) {
     // Pad to 2 or 3 digits, default is 2
     function pad(n, z) {
@@ -162,15 +164,15 @@ var tiltObject = {
         'N0G': 'N0G',
         'lowres-ref': 'p94r0',
         'lowres-vel': 'p99v0',
-        'rho': '161c0',
-        'zdr': '159x0',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h0',
-        'srv': '56rm0',
-        'vil': '134il',
-        'sti': '58sti',
-        'mcy': '141md',
+        'rho': 'N0C',
+        'zdr': 'N0X',
+        'sw ': 'NSW',
+        'hhc': 'HHC',
+        'hyc': 'N0H',
+        'srv': 'N0S',
+        'vil': 'NVL',
+        'sti': 'NST',
+        'mcy': 'NMD',
     },
     'tilt2': {
         'ref': 'N1B',
@@ -179,14 +181,14 @@ var tiltObject = {
         'N0G': 'NAG',
         'lowres-ref': 'p94r1',
         'lowres-vel': 'p99v1',
-        'rho': '161c1',
-        'zdr': '159x1',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h1',
-        'srv': '56rm1',
-        'vil': '134il',
-        'sti': '58sti',
+        'rho': 'N1C',
+        'zdr': 'N1X',
+        'sw ': 'NSW',
+        'hhc': 'HHC',
+        'hyc': 'N1H',
+        'srv': 'N1S',
+        'vil': 'NVL',
+        'sti': 'NST',
     },
     'tilt3': {
         'ref': 'N2B',
@@ -195,14 +197,14 @@ var tiltObject = {
         'N0G': 'N1G',
         'lowres-ref': 'p94r2',
         'lowres-vel': 'p99v2',
-        'rho': '161c2',
-        'zdr': '159x2',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h2',
-        'srv': '56rm2',
-        'vil': '134il',
-        'sti': '58sti',
+        'rho': 'N2C',
+        'zdr': 'N2X',
+        'sw ': 'NSW',
+        'hhc': 'HHC',
+        'hyc': 'N2H',
+        'srv': 'N2S',
+        'vil': 'NVL',
+        'sti': 'NST',
     },
     'tilt4': {
         'ref': 'N3B',
@@ -211,14 +213,14 @@ var tiltObject = {
         'N0G': 'N3G',
         'lowres-ref': 'p94r3',
         'lowres-vel': 'p99v3',
-        'rho': '161c3',
-        'zdr': '159x3',
-        'sw ': 'p30sw',
-        'hhc': '177hh',
-        'hyc': '165h3',
-        'srv': '56rm3',
-        'vil': '134il',
-        'sti': '58sti',
+        'rho': 'N3C',
+        'zdr': 'N3X',
+        'sw ': 'NSW',
+        'hhc': 'HHC',
+        'hyc': 'N3H',
+        'srv': 'N3S',
+        'vil': 'NVL',
+        'sti': 'NST',
     },
 }
 var numOfTiltsObj = {
@@ -285,10 +287,17 @@ function blobToString(b) {
     return x.responseText;
 }
 
+function addDays(startDateObj, daysToAdd) {
+    var date = startDateObj;
+    date.setDate(date.getDate() + daysToAdd);
+    return date;
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
     printFancyTime,
+    userTimeZone,
     msToTime,
     round,
     findTerminalCoordinates,
@@ -301,5 +310,6 @@ module.exports = {
     numOfTiltsObj,
     allL2Btns,
     vcpObj,
-    blobToString
+    blobToString,
+    addDays
 }

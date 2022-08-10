@@ -9,10 +9,11 @@ const l3parse = require('../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
 
 $('.productBtnGroup button').on('click', function() {
-    //console.log(this.value)
-    loaders.getLatestFile('KMHX', 2, function(url) {
+    var clickedProduct = ut.tiltObject[$('#tiltInput').val()][this.value];
+    var currentStation = $('#stationInp').val();
+    loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {
         console.log(url);
-        loaders.loadFileObject(ut.phpProxy + url, 2);
+        loaders.loadFileObject(ut.phpProxy + url, 3);
     })
 })
 
@@ -32,6 +33,10 @@ document.addEventListener('loadFile', function(event) {
         } else if (fileLevel == 3) {
             var l3rad = l3parse(ut.toBuffer(this.result));
             console.log(l3rad);
+
+            const l3info = require('./dom/l3info');
+            l3info(l3rad);
+
             l3plot(l3rad);
         }
     }, false);
