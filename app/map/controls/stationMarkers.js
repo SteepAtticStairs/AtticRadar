@@ -62,6 +62,8 @@ function showStations() {
             tilts.resetTilts();
             tilts.listTilts(ut.numOfTiltsObj['ref']);
 
+            $('#dataDiv').data('curProd', 'ref');
+
             loaders.getLatestFile(this.innerHTML, [3, 'N0B'], function(url) {
                 console.log(url);
                 loaders.loadFileObject(ut.phpProxy + url, 3);

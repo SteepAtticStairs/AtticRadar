@@ -17912,6 +17912,8 @@ function showStations() {
             tilts.resetTilts();
             tilts.listTilts(ut.numOfTiltsObj['ref']);
 
+            $('#dataDiv').data('curProd', 'ref');
+
             loaders.getLatestFile(this.innerHTML, [3, 'N0B'], function(url) {
                 console.log(url);
                 loaders.loadFileObject(ut.phpProxy + url, 3);
@@ -18234,6 +18236,9 @@ module.exports = {
     moveMapLayer
 }
 },{"./map":78}],80:[function(require,module,exports){
+const ut = require('../utils');
+const loaders = require('../loaders');
+
 /**
 * Function to list a number of tilts to the dropdown menu.
 *
@@ -18273,6 +18278,13 @@ function tiltEventListeners() {
             var clickedValue = clickTarget.attr('value');
             document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${clickedValue.slice(-1)}`;
             $('#tiltsDropdownBtn').attr('value', clickedValue);
+
+            var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][$('#dataDiv').data('curProd')];
+            var currentStation = $('#stationInp').val();
+            loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {
+                console.log(url);
+                loaders.loadFileObject(ut.phpProxy + url, 3);
+            })
         }
     })
 }
@@ -18287,7 +18299,7 @@ module.exports = {
     tiltEventListeners,
     resetTilts
 }
-},{}],81:[function(require,module,exports){
+},{"../loaders":72,"../utils":83}],81:[function(require,module,exports){
 function initPaletteTooltip(produc, colortcanvas) {
     var hycObj = {
         0: 'ND: Below Threshold',

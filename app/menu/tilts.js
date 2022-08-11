@@ -1,3 +1,6 @@
+const ut = require('../utils');
+const loaders = require('../loaders');
+
 /**
 * Function to list a number of tilts to the dropdown menu.
 *
@@ -37,6 +40,13 @@ function tiltEventListeners() {
             var clickedValue = clickTarget.attr('value');
             document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${clickedValue.slice(-1)}`;
             $('#tiltsDropdownBtn').attr('value', clickedValue);
+
+            var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][$('#dataDiv').data('curProd')];
+            var currentStation = $('#stationInp').val();
+            loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {
+                console.log(url);
+                loaders.loadFileObject(ut.phpProxy + url, 3);
+            })
         }
     })
 }
