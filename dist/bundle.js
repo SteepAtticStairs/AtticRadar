@@ -17565,6 +17565,29 @@ removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 f
 file where you only want to load the first chunk of the file (reflectivity data) for a quicker
 loading speed.
 */
+
+// https://stackoverflow.com/a/64123890
+// https://github.com/samundrak/fetch-progress
+async function fetchWithProgress(url, callback) {
+    const response = await fetch(url);
+    let loaded = 0;
+
+    const res = new Response(new ReadableStream({
+        async start(controller) {
+            const reader = response.body.getReader();
+            for (;;) {
+                const {done, value} = await reader.read();
+                if (done) break;
+                loaded += value.byteLength;
+                console.log(ut.formatBytes(loaded));
+                controller.enqueue(value);
+            }
+            controller.close();
+        },
+    }));
+    callback(await res.blob());
+}
+
 function loadFileObject(url, level) {
     var radLevel;
     var wholeOrPart = 'whole';
@@ -17576,13 +17599,10 @@ function loadFileObject(url, level) {
     } else if (level == 3) {
         radLevel = 3;
     }
-    console.log('XMLHttpRequest initialized - data requested');
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url);
-    xhr.responseType = "blob";
-    xhr.addEventListener('load', function () {
+    console.log('Fetch initialized - data requested');
+    fetchWithProgress(url, function(resp) {
         console.log('File finished downloading');
-        var response = xhr.response;
+        var response = resp;
         var blob;
 
         if (level != 2) {
@@ -17618,16 +17638,7 @@ function loadFileObject(url, level) {
         });
         // Dispatch/Trigger/Fire the event
         document.dispatchEvent(event);
-    });
-    xhr.onprogress = (event) => {
-        // event.loaded returns how many bytes are downloaded
-        // event.total returns the total number of bytes
-        // event.total is only available if server sends `Content-Length` header
-        //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
-        //var complete = (event.loaded / event.total * 50 | 0);
-        console.log(`${ut.formatBytes(event.loaded)}`)
-    }
-    xhr.send();
+    })
 }
 
 /**
