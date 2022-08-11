@@ -1,26 +1,6 @@
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
-function listTilts(tiltsArr, callback) {
-    //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-    $('#tiltMenu').empty();
-    for (key in tiltsArr) {
-        var anchorElem = document.createElement('a');
-        anchorElem.className = 'dropdown-item';
-        anchorElem.href = '#';
-        anchorElem.setAttribute('value', `tilt${tiltsArr[key]}`);
-        anchorElem.innerHTML = `Tilt ${tiltsArr[key]}`
-
-        var lineElem = document.createElement('li');
-        lineElem.appendChild(anchorElem)
-        //console.log(lineElem)
-        document.getElementById('tiltMenu').appendChild(lineElem);
-        if (key == 0) {
-            document.getElementById('tiltDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
-        }
-    }
-    if (callback) callback();
-}
 
 // https://stackoverflow.com/a/64123890
 // https://github.com/samundrak/fetch-progress
@@ -237,6 +217,5 @@ function getLatestFile(station, levelProduct, callback) {
 
 module.exports = {
     loadFileObject,
-    getLatestFile,
-    listTilts
+    getLatestFile
 }

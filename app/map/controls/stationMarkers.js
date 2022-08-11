@@ -2,6 +2,7 @@ var map = require('../map');
 const loaders = require('../../loaders');
 const ut = require('../../utils');
 const createControl = require('./createControl');
+const tilts = require('../../menu/tilts');
 
 var statMarkerArr = [];
 function showStations() {
@@ -56,7 +57,10 @@ function showStations() {
             //     $('#tiltDropdownBtn').attr('value'),
             //     $('#stationInp').val().toLowerCase()
             // );
-            $('#stationInp').val(this.innerHTML)
+            $('#stationInp').val(this.innerHTML);
+
+            tilts.resetTilts();
+            tilts.listTilts(ut.numOfTiltsObj['ref']);
 
             loaders.getLatestFile(this.innerHTML, [3, 'N0B'], function(url) {
                 console.log(url);

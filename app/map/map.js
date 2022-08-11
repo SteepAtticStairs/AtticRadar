@@ -48,6 +48,11 @@ $('#dataDiv').data('optionsBoxShown', false);
 $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 0);
 
 $('#optionsBox').on('click', function(e) {
+    // if the user clicks on the dropdown button
+    if ($(e.target).parents().eq(0).attr('id') == 'tiltsDropdown') return;
+    // if the user clicks on one of the dropdown menu items
+    if ($(e.target).parents().eq(1).attr('id') == 'tiltsMenu') return;
+
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);
         hideOptionsBox();
