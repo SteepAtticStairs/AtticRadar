@@ -17555,17 +17555,6 @@ function listTilts(tiltsArr, callback) {
     if (callback) callback();
 }
 
-/**
-* Function to load a radar plot onto the map from a URL.
-*
-* @param {any} url - The location to the file. This can be a relative path, or a URL
-to a file hosted on a server.
-* @param {any} level - What level file this is. This is a temporary parameter, it will be
-removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 for a level 2
-file where you only want to load the first chunk of the file (reflectivity data) for a quicker
-loading speed.
-*/
-
 // https://stackoverflow.com/a/64123890
 // https://github.com/samundrak/fetch-progress
 async function fetchWithProgress(url, callback) {
@@ -17588,6 +17577,16 @@ async function fetchWithProgress(url, callback) {
     callback(await res.blob());
 }
 
+/**
+* Function to load a radar plot onto the map from a URL.
+*
+* @param {any} url - The location to the file. This can be a relative path, or a URL
+to a file hosted on a server.
+* @param {any} level - What level file this is. This is a temporary parameter, it will be
+removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 for a level 2
+file where you only want to load the first chunk of the file (reflectivity data) for a quicker
+loading speed.
+*/
 function loadFileObject(url, level) {
     var radLevel;
     var wholeOrPart = 'whole';
