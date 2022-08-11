@@ -52,6 +52,8 @@ $('#optionsBox').on('click', function(e) {
     if ($(e.target).parents().eq(0).attr('id') == 'tiltsDropdown') return;
     // if the user clicks on one of the dropdown menu items
     if ($(e.target).parents().eq(1).attr('id') == 'tiltsMenu') return;
+    // if the user clicks on one of the product buttons
+    if ($(e.target).parents().eq(1).attr('id') == 'mainInfo') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);

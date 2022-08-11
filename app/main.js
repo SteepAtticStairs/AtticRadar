@@ -18,10 +18,9 @@ tilts.listTilts([1, 2, 3, 4], function() {
 $('.productBtnGroup button').on('click', function() {
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
+        tilts.listTilts(ut.numOfTiltsObj[this.value]);
     }
     $('#dataDiv').data('curProd', this.value);
-
-    tilts.listTilts(ut.numOfTiltsObj[this.value]);
     var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {

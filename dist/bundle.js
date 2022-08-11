@@ -17773,10 +17773,9 @@ tilts.listTilts([1, 2, 3, 4], function() {
 $('.productBtnGroup button').on('click', function() {
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
+        tilts.listTilts(ut.numOfTiltsObj[this.value]);
     }
     $('#dataDiv').data('curProd', this.value);
-
-    tilts.listTilts(ut.numOfTiltsObj[this.value]);
     var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {
@@ -18112,6 +18111,8 @@ $('#optionsBox').on('click', function(e) {
     if ($(e.target).parents().eq(0).attr('id') == 'tiltsDropdown') return;
     // if the user clicks on one of the dropdown menu items
     if ($(e.target).parents().eq(1).attr('id') == 'tiltsMenu') return;
+    // if the user clicks on one of the product buttons
+    if ($(e.target).parents().eq(1).attr('id') == 'mainInfo') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);
