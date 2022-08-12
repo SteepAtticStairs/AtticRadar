@@ -20,6 +20,9 @@ class RandomAccessFile {
 			this.buffer = file;
 		}
 
+		// need to set the prototype because it can't access the methods in a web worker
+		Object.setPrototypeOf(this.buffer, Buffer(0));
+
 		// set up local read functions so we don't constantly query endianess
 		if (this.bigEndian) {
 			this.readFloatLocal = this.buffer.readFloatBE.bind(this.buffer);
