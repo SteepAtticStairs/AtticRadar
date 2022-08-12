@@ -293,6 +293,54 @@ function addDays(startDateObj, daysToAdd) {
     return date;
 }
 
+// https://stackoverflow.com/a/23202637
+function scale(number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
+
+/**
+* Various functions to do with the progress bar.
+*
+* @param {any} whatToDo - What action to perform to the progress bar.
+
+'set': sets the bar to a fixed value. e.g. progressBarVal('set', 36);
+
+'add': adds a value to the current progress bar value. e.g. progressBarVal('add', 14.7);
+
+'getRemaining': gets the amount of space left on the progress bar until it is full. e.g. console.log(progressBarVal('getRemaining'));
+
+* @param {any} value - The value specifying how much to set / add / etc. Not required for all actions.
+*/
+function progressBarVal(whatToDo, value) {
+    if (whatToDo == 'set') {
+        var actualPercent = value;
+        if (value > 1000) {
+            actualPercent = scale(value, 0, 150, 0, $('#progBar').attr('aria-valuemax'));
+            console.log(actualPercent);
+        }
+        $('#progBar').css('width', actualPercent + '%').attr('aria-valuenow', value);
+    } else if (whatToDo == 'add') {
+        var curVal = $('#progBar').attr('aria-valuenow');
+        $('#progBar').css('width', (value + parseInt(curVal)) + '%').attr('aria-valuenow', (value + parseInt(curVal)));
+    } else if (whatToDo == 'getRemaining') {
+        var curVal = $('#progBar').attr('aria-valuenow');
+        var totalVal = $('#progBar').attr('aria-valuemax');
+        return totalVal - curVal;
+    } else if (whatToDo == 'hide') {
+        $('#progBarParent').hide();
+    } else if (whatToDo == 'show') {
+        $('#progBarParent').show();
+    }
+}
+function getDividedArray(num) {
+    var divider = 4;
+    var finishedArr = [];
+    for (var i = 1; i < divider + 1; i++) {
+        finishedArr.push((num / divider) * i);
+    }
+    return finishedArr;
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -311,5 +359,8 @@ module.exports = {
     allL2Btns,
     vcpObj,
     blobToString,
-    addDays
+    addDays,
+    progressBarVal,
+    getDividedArray,
+    scale
 }

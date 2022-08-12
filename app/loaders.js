@@ -15,7 +15,8 @@ async function fetchWithProgress(url, callback) {
                 const {done, value} = await reader.read();
                 if (done) break;
                 loaded += value.byteLength;
-                console.log(ut.formatBytes(loaded));
+                //console.log(ut.formatBytes(loaded));
+                ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
                 controller.enqueue(value);
             }
             controller.close();
@@ -35,6 +36,7 @@ file where you only want to load the first chunk of the file (reflectivity data)
 loading speed.
 */
 function loadFileObject(url, level) {
+    ut.progressBarVal('show');
     var radLevel;
     var wholeOrPart = 'whole';
     if (level == 2) {
@@ -134,7 +136,7 @@ in this function, this will be a string with the latest file's URL.
 */
 function getLatestL3(station, product, callback) {
     if (!(product.length > 3)) {
-        document.getElementById('spinnerParent').style.display = 'block';
+        //document.getElementById('spinnerParent').style.display = 'block';
         var curTime = new Date();
         var year = curTime.getUTCFullYear();
         var month = curTime.getUTCMonth() + 1;
@@ -144,8 +146,10 @@ function getLatestL3(station, product, callback) {
         var stationToGet = station.toUpperCase().replace(/ /g, '')
         var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
         var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
-        var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+        // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+        var urlPrefInfo = '?prefix=';
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+        console.log(fullURL)
         $.get(ut.phpProxy + fullURL, function (data) {
             var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
             dataToWorkWith = JSON.parse(dataToWorkWith)
@@ -196,6 +200,7 @@ e.g. [3, "NST"])
 in this function, this will be a string with the latest file's URL.
 */
 function getLatestFile(station, levelProduct, callback) {
+    ut.progressBarVal('show');
     // obviously, the user wants a level 2 file
     if (levelProduct == 2) {
         getLatestL2(station, function(url) {

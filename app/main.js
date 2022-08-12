@@ -15,7 +15,11 @@ tilts.listTilts([1, 2, 3, 4], function() {
     tilts.tiltEventListeners();
 });
 
+// initially hide the progress bar
+ut.progressBarVal('hide');
+
 $('.productBtnGroup button').on('click', function() {
+    ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
         tilts.listTilts(ut.numOfTiltsObj[this.value]);
@@ -43,10 +47,20 @@ document.addEventListener('loadFile', function(event) {
                 elevations: 1,
             });
         } else if (fileLevel == 3) {
+            // just to have a consistent starting point
+            //ut.progressBarVal('set', 120);
+            var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
+
+            console.log('File queued for parsing');
+            ut.progressBarVal('add', dividedArr[0] * 1);
             var l3rad = l3parse(ut.toBuffer(this.result));
             console.log(l3rad);
+            console.log('File parsing complete');
+            ut.progressBarVal('set', dividedArr[0] * 2);
 
             l3info(l3rad);
+            console.log('File queued for plotting');
+            ut.progressBarVal('set', dividedArr[0] * 3);
             l3plot(l3rad);
         }
     }, false);

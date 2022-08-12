@@ -209,12 +209,26 @@
             padding: 0.1px;
             border-radius: 5px;
         }
+
+        #progBarParent {
+            /*position: relative;
+            z-index: 55;
+            top: 50vh;
+            left: 25%;
+            right: 25%;*/
+            position: absolute;
+            z-index: 100;
+            left: 20%;
+            right: 20%;
+            width: auto;
+            top: 50vh;
+        }
     </style>
 </head>
 <body>
-    <!-- <div class="progress" id="progBarParent">
-        <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-    </div> -->
+    <div class="progress align-middle" id="progBarParent">
+        <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="150"></div>
+    </div>
     <!-- https://stackoverflow.com/a/20362024
     ms-auto - left
     mx-auto - center
@@ -351,6 +365,7 @@
                 <button type="button" value="ref" id='srResBtn' class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
                 <button type="button" value="vel"  class="btn btn-outline-primary btn-sm"><b>HR</b> Base Velocity</button> <!-- vel -->
             </div>
+            <br>
             <div class="btn-group-vertical productBtnGroup">
                 <br>
                 <div>Digital</div>
@@ -363,6 +378,7 @@
                 <button type="button" value="lowres-vel" class="btn btn-outline-primary btn-sm">Digital Base Velocity</button>
                 <button type="button" value="vil"  class="btn btn-outline-primary btn-sm">Vertically Integrated Liquid</button> <!-- vil -->
             </div>
+            <br>
             <div class="btn-group-vertical productBtnGroup">
                 <br>
                 <div>Classic</div>
@@ -417,14 +433,14 @@
         }
         var val = 0;
         $('#progBar').css('width', val + '%').attr('aria-valuenow', val);  
-        (function myLoop(i, b) {
-            setTimeout(function() {
-                $('#progBar').css('width', val + '%').attr('aria-valuenow', val);
-                var ranInt = getRandomInt(0, 100);
-                val++;
-                if (--i) myLoop(i, ranInt);
-            }, b)
-        })(101, 50);
+        // (function myLoop(i, b) {
+        //     setTimeout(function() {
+        //         $('#progBar').css('width', val + '%').attr('aria-valuenow', val);
+        //         var ranInt = getRandomInt(0, 100);
+        //         val++;
+        //         if (--i) myLoop(i, ranInt);
+        //     }, b)
+        // })(101, 50);
     </script>
 
     <div id="map"></div>

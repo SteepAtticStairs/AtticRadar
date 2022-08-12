@@ -17090,6 +17090,7 @@ module.exports = {
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
+const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 var map = require('../map/map');
 
@@ -17177,6 +17178,15 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         // require('./refresh');
 
         STstuff.loadAllStormTrackingStuff();
+
+        var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
+
+        console.log('File plotting complete');
+        ut.progressBarVal('add', dividedArr[0] * 1);
+        // this is just to give the illusion that the progress bar finishes
+        setTimeout(function() {
+            ut.progressBarVal('hide');
+        }, 500)
     }
 
     $.getJSON(`./app/products/${produc}.json`, function(data) {
@@ -17309,7 +17319,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"../level3/stormTracking/stormTrackingMain":71,"../map/controls/visibility":77,"../map/map":78,"../map/mapFunctions":79,"../misc/paletteTooltip":81,"./calculatePolygons":67}],69:[function(require,module,exports){
+},{"../level3/stormTracking/stormTrackingMain":71,"../map/controls/visibility":77,"../map/map":78,"../map/mapFunctions":79,"../misc/paletteTooltip":81,"../utils":83,"./calculatePolygons":67}],69:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.
 */
@@ -17548,7 +17558,8 @@ async function fetchWithProgress(url, callback) {
                 const {done, value} = await reader.read();
                 if (done) break;
                 loaded += value.byteLength;
-                console.log(ut.formatBytes(loaded));
+                //console.log(ut.formatBytes(loaded));
+                ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
                 controller.enqueue(value);
             }
             controller.close();
@@ -17568,6 +17579,7 @@ file where you only want to load the first chunk of the file (reflectivity data)
 loading speed.
 */
 function loadFileObject(url, level) {
+    ut.progressBarVal('show');
     var radLevel;
     var wholeOrPart = 'whole';
     if (level == 2) {
@@ -17667,7 +17679,7 @@ in this function, this will be a string with the latest file's URL.
 */
 function getLatestL3(station, product, callback) {
     if (!(product.length > 3)) {
-        document.getElementById('spinnerParent').style.display = 'block';
+        //document.getElementById('spinnerParent').style.display = 'block';
         var curTime = new Date();
         var year = curTime.getUTCFullYear();
         var month = curTime.getUTCMonth() + 1;
@@ -17677,8 +17689,10 @@ function getLatestL3(station, product, callback) {
         var stationToGet = station.toUpperCase().replace(/ /g, '')
         var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
         var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
-        var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+        // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+        var urlPrefInfo = '?prefix=';
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+        console.log(fullURL)
         $.get(ut.phpProxy + fullURL, function (data) {
             var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
             dataToWorkWith = JSON.parse(dataToWorkWith)
@@ -17729,6 +17743,7 @@ e.g. [3, "NST"])
 in this function, this will be a string with the latest file's URL.
 */
 function getLatestFile(station, levelProduct, callback) {
+    ut.progressBarVal('show');
     // obviously, the user wants a level 2 file
     if (levelProduct == 2) {
         getLatestL2(station, function(url) {
@@ -17770,7 +17785,11 @@ tilts.listTilts([1, 2, 3, 4], function() {
     tilts.tiltEventListeners();
 });
 
+// initially hide the progress bar
+ut.progressBarVal('hide');
+
 $('.productBtnGroup button').on('click', function() {
+    ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
         tilts.listTilts(ut.numOfTiltsObj[this.value]);
@@ -17798,10 +17817,20 @@ document.addEventListener('loadFile', function(event) {
                 elevations: 1,
             });
         } else if (fileLevel == 3) {
+            // just to have a consistent starting point
+            //ut.progressBarVal('set', 120);
+            var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
+
+            console.log('File queued for parsing');
+            ut.progressBarVal('add', dividedArr[0] * 1);
             var l3rad = l3parse(ut.toBuffer(this.result));
             console.log(l3rad);
+            console.log('File parsing complete');
+            ut.progressBarVal('set', dividedArr[0] * 2);
 
             l3info(l3rad);
+            console.log('File queued for plotting');
+            ut.progressBarVal('set', dividedArr[0] * 3);
             l3plot(l3rad);
         }
     }, false);
@@ -18672,6 +18701,54 @@ function addDays(startDateObj, daysToAdd) {
     return date;
 }
 
+// https://stackoverflow.com/a/23202637
+function scale(number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
+
+/**
+* Various functions to do with the progress bar.
+*
+* @param {any} whatToDo - What action to perform to the progress bar.
+
+'set': sets the bar to a fixed value. e.g. progressBarVal('set', 36);
+
+'add': adds a value to the current progress bar value. e.g. progressBarVal('add', 14.7);
+
+'getRemaining': gets the amount of space left on the progress bar until it is full. e.g. console.log(progressBarVal('getRemaining'));
+
+* @param {any} value - The value specifying how much to set / add / etc. Not required for all actions.
+*/
+function progressBarVal(whatToDo, value) {
+    if (whatToDo == 'set') {
+        var actualPercent = value;
+        if (value > 1000) {
+            actualPercent = scale(value, 0, 150, 0, $('#progBar').attr('aria-valuemax'));
+            console.log(actualPercent);
+        }
+        $('#progBar').css('width', actualPercent + '%').attr('aria-valuenow', value);
+    } else if (whatToDo == 'add') {
+        var curVal = $('#progBar').attr('aria-valuenow');
+        $('#progBar').css('width', (value + parseInt(curVal)) + '%').attr('aria-valuenow', (value + parseInt(curVal)));
+    } else if (whatToDo == 'getRemaining') {
+        var curVal = $('#progBar').attr('aria-valuenow');
+        var totalVal = $('#progBar').attr('aria-valuemax');
+        return totalVal - curVal;
+    } else if (whatToDo == 'hide') {
+        $('#progBarParent').hide();
+    } else if (whatToDo == 'show') {
+        $('#progBarParent').show();
+    }
+}
+function getDividedArray(num) {
+    var divider = 4;
+    var finishedArr = [];
+    for (var i = 1; i < divider + 1; i++) {
+        finishedArr.push((num / divider) * i);
+    }
+    return finishedArr;
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -18690,7 +18767,10 @@ module.exports = {
     allL2Btns,
     vcpObj,
     blobToString,
-    addDays
+    addDays,
+    progressBarVal,
+    getDividedArray,
+    scale
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":11}],84:[function(require,module,exports){

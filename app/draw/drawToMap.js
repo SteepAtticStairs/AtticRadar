@@ -1,6 +1,7 @@
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
+const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 var map = require('../map/map');
 
@@ -88,6 +89,15 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         // require('./refresh');
 
         STstuff.loadAllStormTrackingStuff();
+
+        var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
+
+        console.log('File plotting complete');
+        ut.progressBarVal('add', dividedArr[0] * 1);
+        // this is just to give the illusion that the progress bar finishes
+        setTimeout(function() {
+            ut.progressBarVal('hide');
+        }, 500)
     }
 
     $.getJSON(`./app/products/${produc}.json`, function(data) {
