@@ -17823,15 +17823,18 @@ document.addEventListener('loadFile', function(event) {
 
             console.log('File queued for parsing');
             ut.progressBarVal('add', dividedArr[0] * 1);
-            var l3rad = l3parse(ut.toBuffer(this.result));
-            console.log(l3rad);
-            console.log('File parsing complete');
-            ut.progressBarVal('set', dividedArr[0] * 2);
+            var result = this.result;
+            setTimeout(function() {
+                var l3rad = l3parse(ut.toBuffer(result));
+                console.log(l3rad);
+                console.log('File parsing complete');
+                ut.progressBarVal('set', dividedArr[0] * 2);
 
-            l3info(l3rad);
-            console.log('File queued for plotting');
-            ut.progressBarVal('set', dividedArr[0] * 3);
-            l3plot(l3rad);
+                l3info(l3rad);
+                console.log('File queued for plotting');
+                ut.progressBarVal('set', dividedArr[0] * 3);
+                l3plot(l3rad);
+            }, 500)
         }
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
@@ -17942,6 +17945,8 @@ function showStations() {
             tilts.listTilts(ut.numOfTiltsObj['ref']);
 
             $('#dataDiv').data('curProd', 'ref');
+
+            ut.progressBarVal('set', 0);
 
             loaders.getLatestFile(this.innerHTML, [3, 'N0B'], function(url) {
                 console.log(url);

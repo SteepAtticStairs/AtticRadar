@@ -64,6 +64,8 @@ function showStations() {
 
             $('#dataDiv').data('curProd', 'ref');
 
+            ut.progressBarVal('set', 0);
+
             loaders.getLatestFile(this.innerHTML, [3, 'N0B'], function(url) {
                 console.log(url);
                 loaders.loadFileObject(ut.phpProxy + url, 3);
