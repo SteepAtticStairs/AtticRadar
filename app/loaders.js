@@ -15,7 +15,7 @@ async function fetchWithProgress(url, callback) {
                 const {done, value} = await reader.read();
                 if (done) break;
                 loaded += value.byteLength;
-                //console.log(ut.formatBytes(loaded));
+                ut.progressBarVal('label', ut.formatBytes(loaded));
                 ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
                 controller.enqueue(value);
             }

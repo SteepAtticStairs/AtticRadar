@@ -330,6 +330,9 @@ function progressBarVal(whatToDo, value) {
         $('#progBarParent').hide();
     } else if (whatToDo == 'show') {
         $('#progBarParent').show();
+    } else if (whatToDo == 'label') {
+        console.log(value);
+        document.getElementById('progBar').innerHTML = value;
     }
 }
 function getDividedArray(num) {

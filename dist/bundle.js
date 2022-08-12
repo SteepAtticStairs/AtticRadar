@@ -17558,7 +17558,7 @@ async function fetchWithProgress(url, callback) {
                 const {done, value} = await reader.read();
                 if (done) break;
                 loaded += value.byteLength;
-                //console.log(ut.formatBytes(loaded));
+                ut.progressBarVal('label', ut.formatBytes(loaded));
                 ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
                 controller.enqueue(value);
             }
@@ -17821,17 +17821,21 @@ document.addEventListener('loadFile', function(event) {
             //ut.progressBarVal('set', 120);
             var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
-            console.log('File queued for parsing');
-            ut.progressBarVal('add', dividedArr[0] * 1);
             var result = this.result;
             setTimeout(function() {
+                // parsing the file
+                ut.progressBarVal('label', 'Parsing file');
+                ut.progressBarVal('add', dividedArr[0] * 1);
                 var l3rad = l3parse(ut.toBuffer(result));
                 console.log(l3rad);
-                console.log('File parsing complete');
+                // completed parsing
+                ut.progressBarVal('label', 'File parsing complete');
                 ut.progressBarVal('set', dividedArr[0] * 2);
 
+                // display file info
                 l3info(l3rad);
-                console.log('File queued for plotting');
+                // plot the file
+                ut.progressBarVal('label', 'Plotting file');
                 ut.progressBarVal('set', dividedArr[0] * 3);
                 l3plot(l3rad);
             }, 500)
@@ -18743,6 +18747,9 @@ function progressBarVal(whatToDo, value) {
         $('#progBarParent').hide();
     } else if (whatToDo == 'show') {
         $('#progBarParent').show();
+    } else if (whatToDo == 'label') {
+        console.log(value);
+        document.getElementById('progBar').innerHTML = value;
     }
 }
 function getDividedArray(num) {
