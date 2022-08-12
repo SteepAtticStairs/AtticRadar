@@ -16954,7 +16954,11 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
         gateRes = 125;
         multiplier = gateRes*2;
     } else if (radVersion == "NXQ" || radVersion == "N0S") {
-        // different resolution for l3 base reflectivity, storm relative velocity
+        // different resolution for l3 base reflectivity
+        gateRes = 500;
+        multiplier = gateRes*2;
+    } else if (radVersion == "DVL" || radVersion == "NSW") {
+        // different resolution for vertically integrated liquid
         gateRes = 500;
         multiplier = gateRes*2;
     } else {
@@ -17417,7 +17421,7 @@ function draw(data) {
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
 	json.version = 'l3';
-	if (product == "NXQ" || product == "N0S") {
+	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW") {
 		json.version = product;
 	}
 	//console.log(json)

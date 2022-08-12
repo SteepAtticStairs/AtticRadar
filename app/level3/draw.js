@@ -85,7 +85,7 @@ function draw(data) {
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
 	json.version = 'l3';
-	if (product == "NXQ" || product == "N0S") {
+	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW") {
 		json.version = product;
 	}
 	//console.log(json)
