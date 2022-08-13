@@ -17876,57 +17876,58 @@ function getLatestL2(station, callback) {
 in this function, this will be a string with the latest file's URL.
 */
 function getLatestL3(station, product, callback) {
-    if (!(product.length > 3)) {
-        //document.getElementById('spinnerParent').style.display = 'block';
-        var curTime = new Date();
-        var year = curTime.getUTCFullYear();
-        var month = curTime.getUTCMonth() + 1;
-        if (month.toString().length == 1) month = "0" + month.toString();
-        var day = curTime.getUTCDate();
-        if (day.toString().length == 1) day = "0" + day.toString();
-        var stationToGet = station.toUpperCase().replace(/ /g, '')
-        var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
-        var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
-        // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
-        var urlPrefInfo = '?prefix=';
-        var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
-        console.log(fullURL)
-        $.get(ut.phpProxy + fullURL, function (data) {
-            var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
-            dataToWorkWith = JSON.parse(dataToWorkWith)
-            //console.log(dataToWorkWith)
-            var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-            var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
+    // if (!(product.length > 3)) {
+    //     //document.getElementById('spinnerParent').style.display = 'block';
+    //     var curTime = new Date();
+    //     var year = curTime.getUTCFullYear();
+    //     var month = curTime.getUTCMonth() + 1;
+    //     if (month.toString().length == 1) month = "0" + month.toString();
+    //     var day = curTime.getUTCDate();
+    //     if (day.toString().length == 1) day = "0" + day.toString();
+    //     var stationToGet = station.toUpperCase().replace(/ /g, '')
+    //     var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
+    //     var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
+    //     // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
+    //     var urlPrefInfo = '?prefix=';
+    //     var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+    //     console.log(fullURL)
+    //     $.get(ut.phpProxy + fullURL, function (data) {
+    //         var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
+    //         dataToWorkWith = JSON.parse(dataToWorkWith)
+    //         //console.log(dataToWorkWith)
+    //         var contentsBase = dataToWorkWith.ListBucketResult.Contents;
+    //         var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
 
-            var finishedURL = `${urlBase}${filenameKey}`;
-            callback(finishedURL);
-        })
-    } else {
-        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
-        callback(fileUrl);
-    }
+    //         var finishedURL = `${urlBase}${filenameKey}`;
+    //         callback(finishedURL);
+    //     })
+    // } else {
+    //     var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+    //     callback(fileUrl);
+    // }
 
     /*
     * Below is all unused code to retrieve the latest file from a different data source.
     */
-    // var curTime = new Date();
-    // var year = curTime.getUTCFullYear();
-    // var month = curTime.getUTCMonth() + 1;
-    // month = "0" + month.toString();
-    // var day = curTime.getUTCDate();
-    // day = "0" + day.toString();
-    // var yyyymmdd = `${year}${month}${day}`
-    // var l3FileURL = `https://unidata3.ssec.wisc.edu/native/radar/level3/nexrad/${pro}/${sta}/${yyyymmdd}/`;
-    // $.get(ut.phpProxy + l3FileURL, function(data) {
-    //     var div = document.createElement('div')
-    //     div.innerHTML = data;
-    //     var jsonWithFileList = JSON.parse(ut.html2json(div));
-    //     var fileListLength = jsonWithFileList.children[2].children.length;
-    //     var filenameKey = jsonWithFileList.children[2].children[fileListLength - 2].attributes[0][1];
+    var curTime = new Date();
+    var year = curTime.getUTCFullYear();
+    var month = curTime.getUTCMonth() + 1;
+    if (month.toString().length == 1) month = "0" + month.toString();
+    var day = curTime.getUTCDate();
+    if (day.toString().length == 1) day = "0" + day.toString();
+    var yyyymmdd = `${year}${month}${day}`
+    var l3FileURL = `https://unidata3.ssec.wisc.edu/native/radar/level3/nexrad/${product}/${station}/${yyyymmdd}/`;
+    console.log(l3FileURL);
+    $.get(ut.phpProxy + l3FileURL, function(data) {
+        var div = document.createElement('div')
+        div.innerHTML = data;
+        var jsonWithFileList = JSON.parse(ut.html2json(div));
+        var fileListLength = jsonWithFileList.children[2].children.length;
+        var filenameKey = jsonWithFileList.children[2].children[fileListLength - 2].attributes[0][1];
 
-    //     var finishedURL = `${l3FileURL}${filenameKey}`;
-    //     cb(finishedURL);
-    // })
+        var finishedURL = `${l3FileURL}${filenameKey}`;
+        callback(finishedURL);
+    })
 }
 
 /**
