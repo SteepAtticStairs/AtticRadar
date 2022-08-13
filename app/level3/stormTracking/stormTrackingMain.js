@@ -10,17 +10,17 @@ function loadAllStormTrackingStuff() {
         // });
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        //loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '58sti');
+        loaders.loadFileObject(fileUrl, 3);
     }
     function addMesocycloneLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        //loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '141md');
+        loaders.loadFileObject(fileUrl, 3);
     }
     function addTornadoLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.61tvs/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        //loaders.loadFileObject(fileUrl, document.getElementById('radFileName').innerHTML, 3, '61tvs');
+        loaders.loadFileObject(fileUrl, 3);
     }
     function arrayify(text) {
         return text.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');

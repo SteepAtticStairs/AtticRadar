@@ -10,6 +10,10 @@ const l3parse = require('../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
 const l3info = require('./dom/l3info');
 
+const parsePlotTornado = require('./level3/stormTracking/tornadoVortexSignature');
+const parsePlotMesocyclone = require('./level3/stormTracking/mesocycloneDetection');
+const parsePlotStormTracks = require('./level3/stormTracking/stormTracks');
+
 // load the initial four tilts and initiate event listeners
 tilts.listTilts([1, 2, 3, 4], function() {
     tilts.tiltEventListeners();
@@ -67,6 +71,16 @@ document.addEventListener('loadFile', function(event) {
                 // plot the file
                 ut.progressBarVal('label', 'Plotting file');
                 ut.progressBarVal('set', dividedArr[0] * 3);
+
+                if (l3rad.textHeader.type == "NTV") {
+                    parsePlotTornado(l3rad, document.getElementById('radarStation').innerHTML);
+                } else if (l3rad.textHeader.type == "NMD") {
+                    parsePlotMesocyclone(l3rad, document.getElementById('radarStation').innerHTML);
+                } else if (l3rad.textHeader.type == "NST") {
+                    parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
+                } else {
+                    const level3Plot = l3plot(l3rad);
+                }
                 l3plot(l3rad);
             }, 500)
         }
