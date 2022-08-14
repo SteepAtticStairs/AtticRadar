@@ -20,7 +20,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
     var divider;
     function createTexture(gl) {
-        $.getJSON(`./app/products/${produc}.json`, function(data) {
+        $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
             //console.log(data);
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
@@ -100,7 +100,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         }, 500)
     }
 
-    $.getJSON(`./app/products/${produc}.json`, function(data) {
+    $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
         divider = data.divider;
     }).then(function() {
         //console.log('NEW!!!!')

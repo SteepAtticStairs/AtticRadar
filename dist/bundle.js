@@ -17113,7 +17113,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
     var divider;
     function createTexture(gl) {
-        $.getJSON(`./app/products/${produc}.json`, function(data) {
+        $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
             //console.log(data);
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
@@ -17193,7 +17193,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         }, 500)
     }
 
-    $.getJSON(`./app/products/${produc}.json`, function(data) {
+    $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
         divider = data.divider;
     }).then(function() {
         //console.log('NEW!!!!')
@@ -17972,10 +17972,10 @@ const ut = require('./utils');
 const loaders = require('./loaders');
 const tilts = require('./menu/tilts');
 
-const { Level2Radar } = require('../nexrad-level-2-data/src');
-const { plot } = require('../nexrad-level-2-plot/src');
+const { Level2Radar } = require('../../nexrad-level-2-data/src');
+const { plot } = require('../../nexrad-level-2-plot/src');
 
-const l3parse = require('../nexrad-level-3-data/src');
+const l3parse = require('../../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
 const l3info = require('./dom/l3info');
 
@@ -18056,7 +18056,7 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
-},{"../nexrad-level-2-data/src":98,"../nexrad-level-2-plot/src":111,"../nexrad-level-3-data/src":122,"./dom/l3info":66,"./level3/draw":70,"./level3/stormTracking/mesocycloneDetection":71,"./level3/stormTracking/stormTracks":73,"./level3/stormTracking/tornadoVortexSignature":74,"./loaders":75,"./map/map":81,"./menu/tilts":83,"./utils":86}],77:[function(require,module,exports){
+},{"../../nexrad-level-2-data/src":98,"../../nexrad-level-2-plot/src":111,"../../nexrad-level-3-data/src":122,"./dom/l3info":66,"./level3/draw":70,"./level3/stormTracking/mesocycloneDetection":71,"./level3/stormTracking/stormTracks":73,"./level3/stormTracking/tornadoVortexSignature":74,"./loaders":75,"./map/map":81,"./menu/tilts":83,"./utils":86}],77:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -20572,7 +20572,7 @@ const downSample = require('./preprocess/downsample');
 const indexProduct = require('./preprocess/indexproduct');
 const rrle = require('./preprocess/rrle');
 
-const drawRadarShape = require('../../../app/draw/drawToMap');
+const drawRadarShape = require('../../../app/radar/draw/drawToMap');
 
 // names of data structures keyed to product name
 const dataNames = {
@@ -20865,7 +20865,7 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../app/draw/drawToMap":68,"./palettes":103,"./palettes/ref":104,"./palettes/vel":105,"./palettize":106,"./preprocess/downsample":107,"./preprocess/filterproduct":108,"./preprocess/indexproduct":109,"./preprocess/rrle":110,"canvas":169}],102:[function(require,module,exports){
+},{"../../../app/radar/draw/drawToMap":68,"./palettes":103,"./palettes/ref":104,"./palettes/vel":105,"./palettize":106,"./preprocess/downsample":107,"./preprocess/filterproduct":108,"./preprocess/indexproduct":109,"./preprocess/rrle":110,"canvas":169}],102:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
 },{}],103:[function(require,module,exports){

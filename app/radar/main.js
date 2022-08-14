@@ -3,10 +3,10 @@ const ut = require('./utils');
 const loaders = require('./loaders');
 const tilts = require('./menu/tilts');
 
-const { Level2Radar } = require('../nexrad-level-2-data/src');
-const { plot } = require('../nexrad-level-2-plot/src');
+const { Level2Radar } = require('../../nexrad-level-2-data/src');
+const { plot } = require('../../nexrad-level-2-plot/src');
 
-const l3parse = require('../nexrad-level-3-data/src');
+const l3parse = require('../../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
 const l3info = require('./dom/l3info');
 
