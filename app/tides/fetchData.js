@@ -21,14 +21,16 @@ function fetchData(stationID, callback) {
 
     var tidesURL = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=NOS.COOPS.TAC.WL&begin_date=${startDay}&end_date=${endDay}&datum=MLLW&station=${stationID}&time_zone=lst_ldt&units=english&interval=hilo&format=json`;
     $.getJSON(tidesURL, function(data) {
+        console.log(tidesURL)
         var tideHeightArr = [];
+        tideHeightArr.push([new Date(), "", null, 0]);
         // tideHeightArr.push(['Time', 'Height'])
         for (key in data.predictions) {
             var value = parseFloat(data.predictions[key].v);
             var time = new Date(data.predictions[key].t);
             var formattedTime = `${time.getMonth()}/${time.getDate()}`;
 
-            tideHeightArr.push([time, value]);
+            tideHeightArr.push([time, null, value, value + 2]);
         }
         callback(tideHeightArr);
     })

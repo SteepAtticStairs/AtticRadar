@@ -5,6 +5,7 @@ const fetchData = require('./fetchData');
 https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=NOS.COOPS.TAC.WL&begin_date=20220813&end_date=20221014&datum=MLLW&station=8656590&time_zone=lst_ldt&units=english&interval=hilo&format=json
 https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8656590
 https://tidesandcurrents.noaa.gov/map/index.html?type=TidePredictions
+https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/8656590.json
 */
 
 // initialize the modal
@@ -16,7 +17,6 @@ $('#modalBtn').trigger('click');
 var stationID = '8656590';
 function loadChart(divName) {
     fetchData(stationID, function(tideHeightArr) {
-        console.log(tideHeightArr);
         drawChart(divName, tideHeightArr);
     })
 }
