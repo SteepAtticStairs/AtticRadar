@@ -1,4 +1,7 @@
 function drawChart(divName, dataArray) {
+    // initialize the modal
+    $('#modalBtn').trigger('click');
+
     var valueArray = [];
     for (key in dataArray) {
         if (key != 0) {

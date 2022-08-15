@@ -7,3 +7,6 @@ require('../main');
 
 // load the station markers control (this has to be after everything else is loaded)
 require('../map/controls/stationMarkers');
+
+// load the tides chart
+require('../../tides/main').tideChartInit('container');

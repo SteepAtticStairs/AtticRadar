@@ -14,8 +14,6 @@ const parsePlotTornado = require('./level3/stormTracking/tornadoVortexSignature'
 const parsePlotMesocyclone = require('./level3/stormTracking/mesocycloneDetection');
 const parsePlotStormTracks = require('./level3/stormTracking/stormTracks');
 
-//const tidesMain = require('../tides/main');
-
 // load the initial four tilts and initiate event listeners
 tilts.listTilts([1, 2, 3, 4], function() {
     tilts.tiltEventListeners();
@@ -23,9 +21,6 @@ tilts.listTilts([1, 2, 3, 4], function() {
 
 // initially hide the progress bar
 ut.progressBarVal('hide');
-
-// load the tides chart
-//tidesMain.loadChart('container');
 
 $('.productBtnGroup button').on('click', function() {
     ut.progressBarVal('set', 0);
