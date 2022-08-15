@@ -19193,6 +19193,7 @@ function loadTideStationMarkers(divName) {
             // .setHTML(description)
             // .addTo(map);
             console.log(name)
+            document.getElementById('exampleModalLabel').innerHTML = `${name} [${id}]`;
             fetchData(id, function(tideHeightArr) {
                 drawChart(divName, tideHeightArr);
             })
