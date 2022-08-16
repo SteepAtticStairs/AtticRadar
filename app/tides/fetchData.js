@@ -37,7 +37,7 @@ function fetchData(stationID, callback) {
         for (key in data.predictions) {
             var value = parseFloat(data.predictions[key].v);
             // we need to replace the space in the middle with a T and append a Z, because safari won't parse the string otherwise
-            var time = new Date(data.predictions[key].t.replace(' ', 'T') + 'Z');
+            var time = new Date(data.predictions[key].t.replace(' ', 'T'));
             var formattedTime = `${time.getMonth()}/${time.getDate()}`;
 
             tideHeightArr.push([time, null, value, value + 2]);
