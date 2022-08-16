@@ -44,13 +44,18 @@ https://steepatticstairs.github.io/NexradJS/**
 You can add some parameters to the URL to make the app easier to use / bookmark. You can add 
 * `#development`
 * `#station=ICAO`
+* `#tideStation=TIDESTATIONID`
 
-The first one is to allow for extra development features (this is mainly for my own use, I wouldn't recommend trying this), and the second one is to set the app's initial station view. (The default will likely be either `KLWX` or `KMHX`, because those are the stations I use the most.) Here are some examples:
+The first one is to allow for extra development features (this is mainly for my own use, I wouldn't recommend trying this). The second one is to set the app's initial station view. (The default will likely be either `KLWX` or `KMHX`, because those are the stations I use the most.)  The third one is to set the default tide station. Here are some examples:
 <br>
 
 Sets the app's initial station to `KHGX`:
 ```
 https://steepatticstairs.github.io/NexradJS/#station=KHGX
+```
+Sets the app's initial tide station to `8724698` (Loggerhead Key):
+```
+https://steepatticstairs.github.io/NexradJS/#tideStation=8724698
 ```
 Sets the app into development mode:
 ```

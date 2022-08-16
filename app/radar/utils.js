@@ -344,6 +344,8 @@ function getDividedArray(num) {
     return finishedArr;
 }
 
+const tideChartDivName = 'container';
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -365,5 +367,6 @@ module.exports = {
     addDays,
     progressBarVal,
     getDividedArray,
-    scale
+    scale,
+    tideChartDivName
 }

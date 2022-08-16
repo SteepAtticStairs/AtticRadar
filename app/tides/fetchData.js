@@ -16,6 +16,15 @@ function getYYMMDD(dateObj, type, modifier) {
 }
 
 function fetchData(stationID, callback) {
+    // load station information
+    var stationIdUrl = `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${stationID}.json`
+    $.getJSON(stationIdUrl, function(data) {
+        const name = data.stations[0].name;
+        const id = data.stations[0].id;
+
+        document.getElementById('exampleModalLabel').innerHTML = `${name} [${id}]`;
+    })
+
     var startDay = getYYMMDD(new Date(), 'start', 1);
     var endDay = getYYMMDD(new Date(), 'end', 1);
 
