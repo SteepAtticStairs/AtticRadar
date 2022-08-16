@@ -1,3 +1,5 @@
+const ut = require('../radar/utils');
+
 function drawChart(divName, dataArray) {
     // initialize the modal
     $('#modalBtn').trigger('click');
@@ -14,7 +16,8 @@ function drawChart(divName, dataArray) {
     // console.log(minValue, maxValue)
 
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback(drawChart);
+    //google.charts.setOnLoadCallback(drawChart);
+    ut.waitVisible(document.getElementById(divName), drawChart);
 
     function drawChart() {
         // https://stackoverflow.com/a/40262183 - code to add annotation line

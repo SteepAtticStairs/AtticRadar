@@ -346,6 +346,26 @@ function getDividedArray(num) {
 
 const tideChartDivName = 'container';
 
+// https://dev.to/kapantzak/waiting-for-visible-element-4ck9
+function elementVisible(elem) {
+    return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+}
+function waitVisible(elem, callback, timeout) {
+    let timer = setInterval(() => {
+        if (elementVisible(elem)) {
+            callback();
+            clearInterval(timer);
+            timer = null;
+        }
+    }, 10);
+    const tm = timeout || 5000;
+    setTimeout(() => {
+        if (timer) {
+            clearInterval(timer);
+        }
+    }, tm);
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -368,5 +388,6 @@ module.exports = {
     progressBarVal,
     getDividedArray,
     scale,
-    tideChartDivName
+    tideChartDivName,
+    waitVisible
 }

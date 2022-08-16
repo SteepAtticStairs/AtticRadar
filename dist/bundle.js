@@ -18988,6 +18988,26 @@ function getDividedArray(num) {
 
 const tideChartDivName = 'container';
 
+// https://dev.to/kapantzak/waiting-for-visible-element-4ck9
+function elementVisible(elem) {
+    return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+}
+function waitVisible(elem, callback, timeout) {
+    let timer = setInterval(() => {
+        if (elementVisible(elem)) {
+            callback();
+            clearInterval(timer);
+            timer = null;
+        }
+    }, 10);
+    const tm = timeout || 5000;
+    setTimeout(() => {
+        if (timer) {
+            clearInterval(timer);
+        }
+    }, tm);
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -19010,10 +19030,13 @@ module.exports = {
     progressBarVal,
     getDividedArray,
     scale,
-    tideChartDivName
+    tideChartDivName,
+    waitVisible
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":11}],87:[function(require,module,exports){
+const ut = require('../radar/utils');
+
 function drawChart(divName, dataArray) {
     // initialize the modal
     $('#modalBtn').trigger('click');
@@ -19030,7 +19053,8 @@ function drawChart(divName, dataArray) {
     // console.log(minValue, maxValue)
 
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback(drawChart);
+    //google.charts.setOnLoadCallback(drawChart);
+    ut.waitVisible(document.getElementById(divName), drawChart);
 
     function drawChart() {
         // https://stackoverflow.com/a/40262183 - code to add annotation line
@@ -19088,7 +19112,7 @@ function drawChart(divName, dataArray) {
 }
 
 module.exports = drawChart;
-},{}],88:[function(require,module,exports){
+},{"../radar/utils":86}],88:[function(require,module,exports){
 function getYYMMDD(dateObj, type, modifier) {
     // https://stackoverflow.com/a/1296374
     if (type == 'start') {
