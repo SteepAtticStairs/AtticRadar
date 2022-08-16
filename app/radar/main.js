@@ -66,8 +66,11 @@ document.addEventListener('loadFile', function(event) {
                 ut.progressBarVal('label', 'File parsing complete');
                 ut.progressBarVal('set', dividedArr[0] * 2);
 
-                // display file info
-                l3info(l3rad);
+                var product = l3rad.textHeader.type;
+                if (product != 'NTV' && product != 'NMD' && product != 'NST') {
+                    // display file info, but not if it is storm tracks
+                    l3info(l3rad);
+                }
                 // plot the file
                 ut.progressBarVal('label', 'Plotting file');
                 ut.progressBarVal('set', dividedArr[0] * 3);

@@ -34,11 +34,11 @@ function loadAllStormTrackingStuff() {
         }
     }
     var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
-    var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
-    var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
+    // var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
+    // var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
     var stLayers = arrayify(stLayersText);
-    var mdLayers = arrayify(mdLayersText);
-    var tvLayers = arrayify(tvLayersText);
+    // var mdLayers = arrayify(mdLayersText);
+    // var tvLayers = arrayify(tvLayersText);
 
     if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
         var station = document.getElementById('fileStation').innerHTML;
@@ -55,30 +55,30 @@ function loadAllStormTrackingStuff() {
             removeAMapLayer(stLayers[key]);
         }
         addStormTracksLayers();
-        for (key in mdLayers) {
-            removeAMapLayer(mdLayers[key]);
-        }
-        addMesocycloneLayers();
-        for (key in tvLayers) {
-            removeAMapLayer(tvLayers[key]);
-        }
-        addTornadoLayers();
+        // for (key in mdLayers) {
+        //     removeAMapLayer(mdLayers[key]);
+        // }
+        // addMesocycloneLayers();
+        // for (key in tvLayers) {
+        //     removeAMapLayer(tvLayers[key]);
+        // }
+        // addTornadoLayers();
     } else {
         for (key in stLayers) {
             if (map.getLayer(stLayers[key])) {
                 map.moveLayer(stLayers[key]);
             }
         }
-        for (key in mdLayers) {
-            if (map.getLayer(mdLayers[key])) {
-                map.moveLayer(mdLayers[key]);
-            }
-        }
-        for (key in tvLayers) {
-            if (map.getLayer(tvLayers[key])) {
-                map.moveLayer(tvLayers[key]);
-            }
-        }
+        // for (key in mdLayers) {
+        //     if (map.getLayer(mdLayers[key])) {
+        //         map.moveLayer(mdLayers[key]);
+        //     }
+        // }
+        // for (key in tvLayers) {
+        //     if (map.getLayer(tvLayers[key])) {
+        //         map.moveLayer(tvLayers[key]);
+        //     }
+        // }
     }
     document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
     document.getElementById('testEventElem').innerHTML = 'changed'

@@ -17539,11 +17539,11 @@ function loadAllStormTrackingStuff() {
         }
     }
     var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
-    var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
-    var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
+    // var mdLayersText = document.getElementById('allMesocycloneLayers').innerHTML;
+    // var tvLayersText = document.getElementById('allTornadoLayers').innerHTML;
     var stLayers = arrayify(stLayersText);
-    var mdLayers = arrayify(mdLayersText);
-    var tvLayers = arrayify(tvLayersText);
+    // var mdLayers = arrayify(mdLayersText);
+    // var tvLayers = arrayify(tvLayersText);
 
     if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
         var station = document.getElementById('fileStation').innerHTML;
@@ -17560,30 +17560,30 @@ function loadAllStormTrackingStuff() {
             removeAMapLayer(stLayers[key]);
         }
         addStormTracksLayers();
-        for (key in mdLayers) {
-            removeAMapLayer(mdLayers[key]);
-        }
-        addMesocycloneLayers();
-        for (key in tvLayers) {
-            removeAMapLayer(tvLayers[key]);
-        }
-        addTornadoLayers();
+        // for (key in mdLayers) {
+        //     removeAMapLayer(mdLayers[key]);
+        // }
+        // addMesocycloneLayers();
+        // for (key in tvLayers) {
+        //     removeAMapLayer(tvLayers[key]);
+        // }
+        // addTornadoLayers();
     } else {
         for (key in stLayers) {
             if (map.getLayer(stLayers[key])) {
                 map.moveLayer(stLayers[key]);
             }
         }
-        for (key in mdLayers) {
-            if (map.getLayer(mdLayers[key])) {
-                map.moveLayer(mdLayers[key]);
-            }
-        }
-        for (key in tvLayers) {
-            if (map.getLayer(tvLayers[key])) {
-                map.moveLayer(tvLayers[key]);
-            }
-        }
+        // for (key in mdLayers) {
+        //     if (map.getLayer(mdLayers[key])) {
+        //         map.moveLayer(mdLayers[key]);
+        //     }
+        // }
+        // for (key in tvLayers) {
+        //     if (map.getLayer(tvLayers[key])) {
+        //         map.moveLayer(tvLayers[key]);
+        //     }
+        // }
     }
     document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
     document.getElementById('testEventElem').innerHTML = 'changed'
@@ -18038,8 +18038,11 @@ document.addEventListener('loadFile', function(event) {
                 ut.progressBarVal('label', 'File parsing complete');
                 ut.progressBarVal('set', dividedArr[0] * 2);
 
-                // display file info
-                l3info(l3rad);
+                var product = l3rad.textHeader.type;
+                if (product != 'NTV' && product != 'NMD' && product != 'NST') {
+                    // display file info, but not if it is storm tracks
+                    l3info(l3rad);
+                }
                 // plot the file
                 ut.progressBarVal('label', 'Plotting file');
                 ut.progressBarVal('set', dividedArr[0] * 3);
