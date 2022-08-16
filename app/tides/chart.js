@@ -37,6 +37,8 @@ function drawChart(divName, dataArray) {
         }); 
         date_formatter.format(data, 0);
 
+        var curDate = new Date();
+
         const options = {
             curveType: 'function',
             series: {
@@ -50,6 +52,10 @@ function drawChart(divName, dataArray) {
             },
             hAxis: {
                 title: 'Time',
+                viewWindow: {
+                    min: new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 0),
+                    max: new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), 24)
+                },
             },
             vAxis: {
                 title: 'Height',
