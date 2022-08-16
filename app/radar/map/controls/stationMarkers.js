@@ -66,7 +66,7 @@ function showStations() {
 
             ut.progressBarVal('set', 0);
 
-            loaders.getLatestFile(this.innerHTML, [3, 'N0B'], function(url) {
+            loaders.getLatestFile(this.innerHTML, [3, 'N0B', 0], function(url) {
                 console.log(url);
                 loaders.loadFileObject(ut.phpProxy + url, 3);
             })

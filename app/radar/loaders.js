@@ -131,10 +131,11 @@ function getLatestL2(station, callback) {
 *
 * @param {any} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
 * @param {any} product - Three letter abbreviation of the Level 3 product being retrieved. e.g. "NST", "N0B", "N0G"
+* @param {any} index - A number. This represents the time of the file to load. e.g. 0 for the latest file, 5 for 5 files back, etc.
 * @param {any} callback - The function to run after the retrieval. Use a single variable
 in this function, this will be a string with the latest file's URL.
 */
-function getLatestL3(station, product, callback) {
+function getLatestL3(station, product, index, callback) {
     if (!(product.length > 3)) {
         //document.getElementById('spinnerParent').style.display = 'block';
         var curTime = new Date();
@@ -155,7 +156,7 @@ function getLatestL3(station, product, callback) {
             dataToWorkWith = JSON.parse(dataToWorkWith)
             //console.log(dataToWorkWith)
             var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-            var filenameKey = contentsBase[contentsBase.length - 1].Key.HASHtext;
+            var filenameKey = contentsBase[contentsBase.length - (index + 1)].Key.HASHtext;
 
             var finishedURL = `${urlBase}${filenameKey}`;
             callback(finishedURL);
@@ -195,8 +196,9 @@ function getLatestL3(station, product, callback) {
 * @param {any} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
 * @param {any} levelProduct - This parameter is an object that specifies if the user is
 retrieving a level 2 file (use 2 for this parameter), or a level 3 file (in that case,
-use an array with two values, specifying both the level (3), and the product you want to retrieve. 
-e.g. [3, "NST"])
+use an array with three values, specifying the level (3), the product you want to retrieve, 
+e.g. [3, "NST"], and a number that represents the time of the file to load. e.g. 0 for the latest file,
+5 for 5 files back, etc.)
 * @param {any} callback - The function to run after the retrieval. Use a single variable
 in this function, this will be a string with the latest file's URL.
 */
@@ -213,9 +215,10 @@ function getLatestFile(station, levelProduct, callback) {
             throw new Error('You must provide an array for a level 3 product/level parameter.');
         }
         const product = levelProduct[1];
+        const fileIndex = levelProduct[2];
         /* we need to slice(1) here (remove the first letter) because the level 3 source we
         * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
-        getLatestL3(station.slice(1), product, function(url) {
+        getLatestL3(station.slice(1), product, fileIndex, function(url) {
             callback(url);
         })
     }

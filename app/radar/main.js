@@ -31,7 +31,7 @@ $('.productBtnGroup button').on('click', function() {
     $('#dataDiv').data('curProd', this.value);
     var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
     var currentStation = $('#stationInp').val();
-    loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {
+    loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         console.log(url);
         loaders.loadFileObject(ut.phpProxy + url, 3);
     })
@@ -62,6 +62,7 @@ document.addEventListener('loadFile', function(event) {
                 ut.progressBarVal('add', dividedArr[0] * 1);
                 var l3rad = l3parse(ut.toBuffer(result));
                 console.log(l3rad);
+                ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
                 // completed parsing
                 ut.progressBarVal('label', 'File parsing complete');
                 ut.progressBarVal('set', dividedArr[0] * 2);
