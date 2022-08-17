@@ -22,8 +22,11 @@ tilts.listTilts([1, 2, 3, 4], function() {
 // initially hide the progress bar
 ut.progressBarVal('hide');
 
+// initialize the div that will track all radar layers added to map
+ut.radarLayersDiv('init');
+
 $('.productBtnGroup button').on('click', function() {
-    ut.progressBarVal('set', 0);
+    //ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
         tilts.listTilts(ut.numOfTiltsObj[this.value]);
@@ -32,8 +35,8 @@ $('.productBtnGroup button').on('click', function() {
     var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
-        console.log(url);
-        loaders.loadFileObject(ut.phpProxy + url, 3);
+        //console.log(url);
+        loaders.loadFileObject(ut.phpProxy + url, 3, 'radarLayer0');
     })
 })
 
@@ -41,6 +44,7 @@ document.addEventListener('loadFile', function(event) {
     var uploadedFile = event.detail[0];
     var fileLevel = event.detail[1];
     var wholeOrPart = event.detail[2];
+    var layerName = event.detail[3];
     const reader = new FileReader();
 
     reader.addEventListener("load", function () {
@@ -58,14 +62,14 @@ document.addEventListener('loadFile', function(event) {
             var result = this.result;
             setTimeout(function() {
                 // parsing the file
-                ut.progressBarVal('label', 'Parsing file');
-                ut.progressBarVal('add', dividedArr[0] * 1);
+                //ut.progressBarVal('label', 'Parsing file');
+                //ut.progressBarVal('add', dividedArr[0] * 1);
                 var l3rad = l3parse(ut.toBuffer(result));
-                console.log(l3rad);
-                ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
+                //console.log(l3rad);
+                //ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
                 // completed parsing
-                ut.progressBarVal('label', 'File parsing complete');
-                ut.progressBarVal('set', dividedArr[0] * 2);
+                //ut.progressBarVal('label', 'File parsing complete');
+                //ut.progressBarVal('set', dividedArr[0] * 2);
 
                 var product = l3rad.textHeader.type;
                 if (product != 'NTV' && product != 'NMD' && product != 'NST') {
@@ -73,8 +77,8 @@ document.addEventListener('loadFile', function(event) {
                     l3info(l3rad);
                 }
                 // plot the file
-                ut.progressBarVal('label', 'Plotting file');
-                ut.progressBarVal('set', dividedArr[0] * 3);
+                //ut.progressBarVal('label', 'Plotting file');
+                //ut.progressBarVal('set', dividedArr[0] * 3);
 
                 if (l3rad.textHeader.type == "NTV") {
                     parsePlotTornado(l3rad, document.getElementById('radarStation').innerHTML);
@@ -83,9 +87,8 @@ document.addEventListener('loadFile', function(event) {
                 } else if (l3rad.textHeader.type == "NST") {
                     parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
                 } else {
-                    const level3Plot = l3plot(l3rad);
+                    l3plot(l3rad, layerName);
                 }
-                l3plot(l3rad);
             }, 500)
         }
     }, false);

@@ -1,4 +1,5 @@
 var map = require('../map');
+var ut = require('../../utils');
 
 var hasVisibilityControl = false;
 class visibilityControl {
@@ -21,7 +22,7 @@ class visibilityControl {
                 $('#visibilityThing').addClass('fa-eye-slash');
 
                 $('#visibilityThing').removeClass('icon-black');
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+                map.setLayoutProperty($('#dataDiv').data('curFrame'), 'visibility', 'none');
             } else if ($('#visibilityThing').hasClass('icon-selected')) {
                 $('#visibilityThing').removeClass('icon-selected');
 
@@ -30,7 +31,7 @@ class visibilityControl {
 
                 
                 $('#visibilityThing').addClass('icon-black');
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+                map.setLayoutProperty($('#dataDiv').data('curFrame'), 'visibility', 'visible');
             }
         })
         return this._container;

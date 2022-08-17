@@ -5,7 +5,7 @@ const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 var map = require('../map/map');
 
-function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
+function drawRadarShape(jsonObj, lati, lngi, produc, layerName, shouldFilter) {
     var settings = {};
     settings["rlat"] = lati;
     settings["rlon"] = lngi;
@@ -85,6 +85,9 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         // load the visibility button
         require('../map/controls/visibility');
 
+        // show the pause play button
+        require('../map/controls/pausePlay');
+
         // load the refresh button
         // require('./refresh');
 
@@ -92,11 +95,15 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
         var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
-        console.log('File plotting complete');
-        ut.progressBarVal('add', dividedArr[0] * 1);
+        //console.log('File plotting complete');
+
+        if (layerName != 'init') {
+            map.setLayoutProperty(layerName, 'visibility', 'none');
+        }
+        //ut.progressBarVal('add', dividedArr[0] * 1);
         // this is just to give the illusion that the progress bar finishes
         setTimeout(function() {
-            ut.progressBarVal('hide');
+            //ut.progressBarVal('hide');
         }, 500)
     }
 
@@ -130,8 +137,10 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 //gl_FragColor = vec4(1.0,0.0,0.0,1.0);
             }`
         var masterGl;
+        //console.log(layerName)
+        console.log('Loading layer ' + layerName);
         var layer = {
-            id: "baseReflectivity",
+            id: layerName,
             type: "custom",
             minzoom: 0,
             maxzoom: 18,

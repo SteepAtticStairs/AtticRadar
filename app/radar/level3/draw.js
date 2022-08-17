@@ -5,7 +5,7 @@ const scaleArray = (fromRange, toRange) => {
   	return from =>  (from - fromRange[0]) * d + toRange[0];
 };
 
-function draw(data) {
+function draw(data, layerName) {
     var product = data.productDescription.abbreviation;
     if (Array.isArray(product)) {
         product = product[0];
@@ -109,7 +109,7 @@ function draw(data) {
 		var statLng = data[currentStation][2];
 		// ../../../data/json/KLWX20220623_014344_V06.json
 		// product.abbreviation
-		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+		drawRadarShape(url, statLat, statLng, product, layerName, !$('#shouldLowFilter').prop("checked"));
 
 		//new mapboxgl.Marker()
 		//    .setLngLat([stationLng, stationLat])

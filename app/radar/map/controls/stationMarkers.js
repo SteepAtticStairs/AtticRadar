@@ -3,6 +3,7 @@ const loaders = require('../../loaders');
 const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
+const mapFuncs = require('../mapFunctions');
 
 var statMarkerArr = [];
 function showStations() {
@@ -28,6 +29,16 @@ function showStations() {
         }
     }).then(function () {
         $('.customMarker').on('click', function () {
+            var stat = this.innerHTML;
+            $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+                var stationLat = data[stat][1];
+                var stationLng = data[stat][2];
+                map.flyTo({
+                    center: [stationLng, stationLat],
+                    zoom: 8,
+                    duration: 1000,
+                });
+            })
             //$('.productBtnGroup button').off()
             // var btnsArr = [
             //     "l2-ref",
@@ -64,11 +75,19 @@ function showStations() {
 
             $('#dataDiv').data('curProd', 'ref');
 
-            ut.progressBarVal('set', 0);
+            var arr = ut.radarLayersDiv('get');
+            mapFuncs.removeMapLayer('init');
+            for (key in arr) {
+                mapFuncs.removeMapLayer(arr[key]);
+            }
+            ut.radarLayersDiv('init');
+
+            $('#dataDiv').data('curFrame', 'init')
+
+            //ut.progressBarVal('set', 0);
 
             loaders.getLatestFile(this.innerHTML, [3, 'N0B', 0], function(url) {
-                console.log(url);
-                loaders.loadFileObject(ut.phpProxy + url, 3);
+                loaders.loadFileObject(ut.phpProxy + url, 3, 'init');
             })
         })
     })

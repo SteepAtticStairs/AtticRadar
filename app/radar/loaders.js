@@ -15,8 +15,8 @@ async function fetchWithProgress(url, callback) {
                 const {done, value} = await reader.read();
                 if (done) break;
                 loaded += value.byteLength;
-                ut.progressBarVal('label', ut.formatBytes(loaded));
-                ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
+                //ut.progressBarVal('label', ut.formatBytes(loaded));
+                //ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
                 controller.enqueue(value);
             }
             controller.close();
@@ -35,8 +35,8 @@ removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 f
 file where you only want to load the first chunk of the file (reflectivity data) for a quicker
 loading speed.
 */
-function loadFileObject(url, level) {
-    ut.progressBarVal('show');
+function loadFileObject(url, level, layerName) {
+    //ut.progressBarVal('show');
     var radLevel;
     var wholeOrPart = 'whole';
     if (level == 2) {
@@ -47,9 +47,9 @@ function loadFileObject(url, level) {
     } else if (level == 3) {
         radLevel = 3;
     }
-    console.log('Fetch initialized - data requested');
+    //console.log('Fetch initialized - data requested');
     fetchWithProgress(url, function(resp) {
-        console.log('File finished downloading');
+        //console.log('File finished downloading');
         var response = resp;
         var blob;
 
@@ -81,7 +81,8 @@ function loadFileObject(url, level) {
             "detail": [
                 blob,
                 radLevel,
-                wholeOrPart
+                wholeOrPart,
+                layerName
             ]
         });
         // Dispatch/Trigger/Fire the event
@@ -150,7 +151,7 @@ function getLatestL3(station, product, index, callback) {
         // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
         var urlPrefInfo = '?prefix=';
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
-        console.log(fullURL)
+        //(fullURL)
         $.get(ut.phpProxy + fullURL, function (data) {
             var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
             dataToWorkWith = JSON.parse(dataToWorkWith)
@@ -203,7 +204,7 @@ e.g. [3, "NST"], and a number that represents the time of the file to load. e.g.
 in this function, this will be a string with the latest file's URL.
 */
 function getLatestFile(station, levelProduct, callback) {
-    ut.progressBarVal('show');
+    //ut.progressBarVal('show');
     // obviously, the user wants a level 2 file
     if (levelProduct == 2) {
         getLatestL2(station, function(url) {

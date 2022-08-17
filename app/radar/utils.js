@@ -1,5 +1,9 @@
 const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
+const numOfFrames = 6;
+// loopSpeed is in ms
+const loopSpeed = 350;
+
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
     const view = new Uint8Array(ab);
@@ -331,7 +335,7 @@ function progressBarVal(whatToDo, value) {
     } else if (whatToDo == 'show') {
         $('#progBarParent').show();
     } else if (whatToDo == 'label') {
-        console.log(value);
+        //console.log(value);
         document.getElementById('progBar').innerHTML = value;
     }
 }
@@ -366,8 +370,24 @@ function waitVisible(elem, callback, timeout) {
     }, tm);
 }
 
+function radarLayersDiv(action, value) {
+    if (action == 'push') {
+        var arr = $('#dataDiv').data('radarLayers');
+        arr.push(value)
+        $('#dataDiv').data('radarLayers', arr);
+    } else if (action == 'set') {
+        $('#dataDiv').data('radarLayers', value);
+    } else if (action == 'init') {
+        $('#dataDiv').data('radarLayers', []);
+    } else if (action == 'get') {
+        return $('#dataDiv').data('radarLayers');
+    }
+}
+
 module.exports = {
     phpProxy,
+    numOfFrames,
+    loopSpeed,
     toBuffer,
     printFancyTime,
     userTimeZone,
@@ -389,5 +409,6 @@ module.exports = {
     getDividedArray,
     scale,
     tideChartDivName,
-    waitVisible
+    waitVisible,
+    radarLayersDiv
 }
