@@ -17170,7 +17170,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, layerName, shouldFilter) {
         pageState.indices = indices;
         pageState.colors = colors;
         //console.log(Math.max(...[...new Set(colors)]))
-        mapFuncs.removeMapLayer('baseReflectivity');
+        mapFuncs.removeMapLayer('init');
         map.addLayer(layer);
 
         document.getElementById('spinnerParent').style.display = 'none';
@@ -17232,6 +17232,9 @@ function drawRadarShape(jsonObj, lati, lngi, produc, layerName, shouldFilter) {
         var masterGl;
         //console.log(layerName)
         console.log('Loading layer ' + layerName);
+        ut.radarLayersDiv('push', layerName);
+        var adder = 100 / ut.numOfFrames;
+        ut.progressBarVal('add', adder);
         var layer = {
             id: layerName,
             type: "custom",
@@ -17977,6 +17980,7 @@ module.exports = {
 var map = require('./map/map');
 const ut = require('./utils');
 const loaders = require('./loaders');
+const mapFuncs = require('./map/mapFunctions');
 const tilts = require('./menu/tilts');
 
 const { Level2Radar } = require('../../nexrad-level-2-data/src');
@@ -18009,10 +18013,20 @@ $('.productBtnGroup button').on('click', function() {
     }
     $('#dataDiv').data('curProd', this.value);
     var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
+    if (clickedProduct != 'N0B') {
+        $('.pausePlayBtn').hide();
+    } else {
+        $('.pausePlayBtn').show();
+    }
+    var arr = ut.radarLayersDiv('get');
+    for (key in arr) {
+        map.setLayoutProperty(arr[key], 'visibility', 'none');
+        mapFuncs.removeMapLayer(arr[key]);
+    }
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         //console.log(url);
-        loaders.loadFileObject(ut.phpProxy + url, 3, 'radarLayer0');
+        loaders.loadFileObject(ut.phpProxy + url, 3, 'init');
     })
 })
 
@@ -18070,7 +18084,7 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
-},{"../../nexrad-level-2-data/src":104,"../../nexrad-level-2-plot/src":117,"../../nexrad-level-3-data/src":128,"./dom/l3info":66,"./level3/draw":70,"./level3/stormTracking/mesocycloneDetection":71,"./level3/stormTracking/stormTracks":73,"./level3/stormTracking/tornadoVortexSignature":74,"./loaders":75,"./map/map":82,"./menu/tilts":84,"./utils":87}],77:[function(require,module,exports){
+},{"../../nexrad-level-2-data/src":104,"../../nexrad-level-2-plot/src":117,"../../nexrad-level-3-data/src":128,"./dom/l3info":66,"./level3/draw":70,"./level3/stormTracking/mesocycloneDetection":71,"./level3/stormTracking/stormTracks":73,"./level3/stormTracking/tornadoVortexSignature":74,"./loaders":75,"./map/map":82,"./map/mapFunctions":83,"./menu/tilts":84,"./utils":87}],77:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -18118,6 +18132,7 @@ var map = require('../map');
 
 createControl({
     'id': 'pausePlayThing',
+    'class': 'pausePlayBtn',
     'position': 'top-right',
     'icon': 'fa-play',
     'css': 'margin-top: 100%;'
@@ -18129,10 +18144,11 @@ createControl({
         $('#pausePlayThing').addClass('fa-pause');
         $('#pausePlayThing').addClass('icon-red');
 
+        ut.progressBarVal('show');
+        ut.progressBarVal('set', 0);
         var thisStation = $('#stationInp').val();
         function loadLayerIter(i, totalFrames) {
             var layerName = `radarLayer${i}`
-            ut.radarLayersDiv('push', layerName);
             loaders.getLatestFile(thisStation, [3, 'N0B', i], function(url) {
                 //console.log(url);
                 loaders.loadFileObject(ut.phpProxy + url, 3, layerName);
@@ -18145,6 +18161,7 @@ createControl({
                     function myFunction() {
                         if (ut.radarLayersDiv('get').length == totalFrames + 1) {
                             clearInterval(timer);
+                            ut.progressBarVal('hide');
                             setAnimLoop();
                             return;
                         }
@@ -18152,12 +18169,17 @@ createControl({
                 }
             })
         }
-        if (ut.radarLayersDiv('get') == '') {
+        if (ut.radarLayersDiv('get').includes('init')) {
+            ut.radarLayersDiv('set', []);
             loadLayerIter(0, ut.numOfFrames);
+        } else {
+            ut.progressBarVal('hide');
+            setAnimLoop();
         }
 
         function setAnimLoop() {
             var arr = ut.radarLayersDiv('get');
+            arr.sort();
             arr.reverse();
             //console.log(arr)
 
@@ -18165,7 +18187,9 @@ createControl({
             function myLoop() {
                 var radarLoopTimeout = setTimeout(function() {
                     for (key in arr) {
-                        map.setLayoutProperty('init', 'visibility', 'none');
+                        if (map.getLayer('init')) {
+                            map.setLayoutProperty('init', 'visibility', 'none');
+                        }
                         map.setLayoutProperty(arr[key], 'visibility', 'none');
                     }
                     $('#dataDiv').data('curFrame', arr[i]);

@@ -5,6 +5,7 @@ var map = require('../map');
 
 createControl({
     'id': 'pausePlayThing',
+    'class': 'pausePlayBtn',
     'position': 'top-right',
     'icon': 'fa-play',
     'css': 'margin-top: 100%;'
@@ -16,10 +17,11 @@ createControl({
         $('#pausePlayThing').addClass('fa-pause');
         $('#pausePlayThing').addClass('icon-red');
 
+        ut.progressBarVal('show');
+        ut.progressBarVal('set', 0);
         var thisStation = $('#stationInp').val();
         function loadLayerIter(i, totalFrames) {
             var layerName = `radarLayer${i}`
-            ut.radarLayersDiv('push', layerName);
             loaders.getLatestFile(thisStation, [3, 'N0B', i], function(url) {
                 //console.log(url);
                 loaders.loadFileObject(ut.phpProxy + url, 3, layerName);
@@ -32,6 +34,7 @@ createControl({
                     function myFunction() {
                         if (ut.radarLayersDiv('get').length == totalFrames + 1) {
                             clearInterval(timer);
+                            ut.progressBarVal('hide');
                             setAnimLoop();
                             return;
                         }
@@ -39,12 +42,17 @@ createControl({
                 }
             })
         }
-        if (ut.radarLayersDiv('get') == '') {
+        if (ut.radarLayersDiv('get').includes('init')) {
+            ut.radarLayersDiv('set', []);
             loadLayerIter(0, ut.numOfFrames);
+        } else {
+            ut.progressBarVal('hide');
+            setAnimLoop();
         }
 
         function setAnimLoop() {
             var arr = ut.radarLayersDiv('get');
+            arr.sort();
             arr.reverse();
             //console.log(arr)
 
@@ -52,7 +60,9 @@ createControl({
             function myLoop() {
                 var radarLoopTimeout = setTimeout(function() {
                     for (key in arr) {
-                        map.setLayoutProperty('init', 'visibility', 'none');
+                        if (map.getLayer('init')) {
+                            map.setLayoutProperty('init', 'visibility', 'none');
+                        }
                         map.setLayoutProperty(arr[key], 'visibility', 'none');
                     }
                     $('#dataDiv').data('curFrame', arr[i]);

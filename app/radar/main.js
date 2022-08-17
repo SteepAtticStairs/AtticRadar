@@ -1,6 +1,7 @@
 var map = require('./map/map');
 const ut = require('./utils');
 const loaders = require('./loaders');
+const mapFuncs = require('./map/mapFunctions');
 const tilts = require('./menu/tilts');
 
 const { Level2Radar } = require('../../nexrad-level-2-data/src');
@@ -33,10 +34,20 @@ $('.productBtnGroup button').on('click', function() {
     }
     $('#dataDiv').data('curProd', this.value);
     var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
+    if (clickedProduct != 'N0B') {
+        $('.pausePlayBtn').hide();
+    } else {
+        $('.pausePlayBtn').show();
+    }
+    var arr = ut.radarLayersDiv('get');
+    for (key in arr) {
+        map.setLayoutProperty(arr[key], 'visibility', 'none');
+        mapFuncs.removeMapLayer(arr[key]);
+    }
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         //console.log(url);
-        loaders.loadFileObject(ut.phpProxy + url, 3, 'radarLayer0');
+        loaders.loadFileObject(ut.phpProxy + url, 3, 'init');
     })
 })
 

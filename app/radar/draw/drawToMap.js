@@ -77,7 +77,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, layerName, shouldFilter) {
         pageState.indices = indices;
         pageState.colors = colors;
         //console.log(Math.max(...[...new Set(colors)]))
-        mapFuncs.removeMapLayer('baseReflectivity');
+        mapFuncs.removeMapLayer('init');
         map.addLayer(layer);
 
         document.getElementById('spinnerParent').style.display = 'none';
@@ -139,6 +139,9 @@ function drawRadarShape(jsonObj, lati, lngi, produc, layerName, shouldFilter) {
         var masterGl;
         //console.log(layerName)
         console.log('Loading layer ' + layerName);
+        ut.radarLayersDiv('push', layerName);
+        var adder = 100 / ut.numOfFrames;
+        ut.progressBarVal('add', adder);
         var layer = {
             id: layerName,
             type: "custom",
