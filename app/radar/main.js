@@ -3,6 +3,7 @@ const ut = require('./utils');
 const loaders = require('./loaders');
 const mapFuncs = require('./map/mapFunctions');
 const tilts = require('./menu/tilts');
+const pausePlay = require('./map/controls/pausePlay');
 
 const { Level2Radar } = require('../../nexrad-level-2-data/src');
 const { plot } = require('../../nexrad-level-2-plot/src');
@@ -27,6 +28,7 @@ ut.progressBarVal('hide');
 ut.radarLayersDiv('init');
 
 $('.productBtnGroup button').on('click', function() {
+    pausePlay.pause();
     //ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();

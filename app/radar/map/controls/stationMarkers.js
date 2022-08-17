@@ -4,6 +4,7 @@ const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
 const mapFuncs = require('../mapFunctions');
+const pausePlay = require('./pausePlay');
 
 var statMarkerArr = [];
 function showStations() {
@@ -69,6 +70,8 @@ function showStations() {
             //     $('#stationInp').val().toLowerCase()
             // );
             $('#stationInp').val(this.innerHTML);
+
+            pausePlay.pause();
 
             tilts.resetTilts();
             tilts.listTilts(ut.numOfTiltsObj['ref']);

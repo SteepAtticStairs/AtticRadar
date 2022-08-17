@@ -92,3 +92,15 @@ createControl({
 })
 $('#pausePlayThing').removeClass('icon-black');
 $('#pausePlayThing').addClass('icon-green');
+
+function pause() {
+    $('#pausePlayThing').removeClass('fa-pause');
+    $('#pausePlayThing').removeClass('icon-red');
+
+    $('#pausePlayThing').addClass('fa-play');
+    $('#pausePlayThing').addClass('icon-green');
+}
+
+module.exports = {
+    pause
+}

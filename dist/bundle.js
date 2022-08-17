@@ -17982,6 +17982,7 @@ const ut = require('./utils');
 const loaders = require('./loaders');
 const mapFuncs = require('./map/mapFunctions');
 const tilts = require('./menu/tilts');
+const pausePlay = require('./map/controls/pausePlay');
 
 const { Level2Radar } = require('../../nexrad-level-2-data/src');
 const { plot } = require('../../nexrad-level-2-plot/src');
@@ -18006,6 +18007,7 @@ ut.progressBarVal('hide');
 ut.radarLayersDiv('init');
 
 $('.productBtnGroup button').on('click', function() {
+    pausePlay.pause();
     //ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
@@ -18084,7 +18086,7 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
-},{"../../nexrad-level-2-data/src":104,"../../nexrad-level-2-plot/src":117,"../../nexrad-level-3-data/src":128,"./dom/l3info":66,"./level3/draw":70,"./level3/stormTracking/mesocycloneDetection":71,"./level3/stormTracking/stormTracks":73,"./level3/stormTracking/tornadoVortexSignature":74,"./loaders":75,"./map/map":82,"./map/mapFunctions":83,"./menu/tilts":84,"./utils":87}],77:[function(require,module,exports){
+},{"../../nexrad-level-2-data/src":104,"../../nexrad-level-2-plot/src":117,"../../nexrad-level-3-data/src":128,"./dom/l3info":66,"./level3/draw":70,"./level3/stormTracking/mesocycloneDetection":71,"./level3/stormTracking/stormTracks":73,"./level3/stormTracking/tornadoVortexSignature":74,"./loaders":75,"./map/controls/pausePlay":78,"./map/map":82,"./map/mapFunctions":83,"./menu/tilts":84,"./utils":87}],77:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -18219,6 +18221,18 @@ createControl({
 })
 $('#pausePlayThing').removeClass('icon-black');
 $('#pausePlayThing').addClass('icon-green');
+
+function pause() {
+    $('#pausePlayThing').removeClass('fa-pause');
+    $('#pausePlayThing').removeClass('icon-red');
+
+    $('#pausePlayThing').addClass('fa-play');
+    $('#pausePlayThing').addClass('icon-green');
+}
+
+module.exports = {
+    pause
+}
 },{"../../loaders":75,"../../utils":87,"../map":82,"./createControl":77}],79:[function(require,module,exports){
 var map = require('../map');
 const loaders = require('../../loaders');
@@ -18226,6 +18240,7 @@ const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
 const mapFuncs = require('../mapFunctions');
+const pausePlay = require('./pausePlay');
 
 var statMarkerArr = [];
 function showStations() {
@@ -18292,6 +18307,8 @@ function showStations() {
             // );
             $('#stationInp').val(this.innerHTML);
 
+            pausePlay.pause();
+
             tilts.resetTilts();
             tilts.listTilts(ut.numOfTiltsObj['ref']);
 
@@ -18341,7 +18358,7 @@ window.addEventListener('load', (event) => {
         showStations();
     }, 200)
 })
-},{"../../loaders":75,"../../menu/tilts":84,"../../utils":87,"../map":82,"../mapFunctions":83,"./createControl":77}],80:[function(require,module,exports){
+},{"../../loaders":75,"../../menu/tilts":84,"../../utils":87,"../map":82,"../mapFunctions":83,"./createControl":77,"./pausePlay":78}],80:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
