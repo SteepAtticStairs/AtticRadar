@@ -18229,8 +18229,9 @@ if (isDevelopmentMode) {
             // KTLX20130520_200356_V06.gz
             // KTLX20130520_201643_V06.gz
             // KMHX20180914_050219_V06
-            var fileToLoad = 'KTLX20130520_201643_V06.gz';
-            loaders.loadFileObject('data/' + fileToLoad, fileToLoad, 2);
+            // KMLB19920824_134828.gz
+            var fileToLoad = 'KMHX20180914_050219_V06';
+            loaders.loadFileObject('data/' + fileToLoad, 2);
         } else if ($('#testFileThing').hasClass('icon-selected')) {
             $('#testFileThing').removeClass('icon-selected');
             $('#testFileThing').addClass('icon-black');
@@ -18262,7 +18263,7 @@ if (isDevelopmentMode) {
             // Level3_NKX_N0B_20220808_0100.nids
 
             var fileToLoad = 'KCRP_SDUS54_N0UCRP_201708252357';
-            loaders.loadFileObject('data/level3/' + fileToLoad, fileToLoad, 3);
+            loaders.loadFileObject('data/level3/' + fileToLoad, 3);
         } else if ($('#testFile3Thing').hasClass('icon-selected')) {
             $('#testFile3Thing').removeClass('icon-selected');
             $('#testFile3Thing').addClass('icon-black');
