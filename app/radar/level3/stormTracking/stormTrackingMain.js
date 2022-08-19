@@ -41,16 +41,7 @@ function loadAllStormTrackingStuff() {
     // var tvLayers = arrayify(tvLayersText);
 
     if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
-        var station = document.getElementById('fileStation').innerHTML;
-        $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
-            var stationLat = data[station][1];
-            var stationLng = data[station][2];
-            map.flyTo({
-                center: [stationLng, stationLat],
-                zoom: 8,
-                duration: 1000,
-            });
-        })
+        ut.flyToStation();
         for (key in stLayers) {
             removeAMapLayer(stLayers[key]);
         }

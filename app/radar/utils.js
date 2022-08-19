@@ -366,6 +366,26 @@ function waitVisible(elem, callback, timeout) {
     }, tm);
 }
 
+function flyToStation() {
+    var map = require('./map/map');
+
+    var station = document.getElementById('fileStation').innerHTML;
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+        var stationLat = data[station][1];
+        var stationLng = data[station][2];
+        map.flyTo({
+            center: [stationLng, stationLat],
+            zoom: 8,
+            duration: 1000,
+        });
+    })
+}
+
+function disableModeBtn() {
+    $('#dataDiv').data('noMoreClicks', true);
+    $('#modeThing').css('opacity', 0.5);
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -389,5 +409,7 @@ module.exports = {
     getDividedArray,
     scale,
     tideChartDivName,
-    waitVisible
+    waitVisible,
+    flyToStation,
+    disableModeBtn
 }

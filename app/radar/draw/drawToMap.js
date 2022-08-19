@@ -88,7 +88,11 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         // load the refresh button
         // require('./refresh');
 
-        STstuff.loadAllStormTrackingStuff();
+        if ($('#dataDiv').data('fromFileUpload')) {
+            ut.flyToStation();
+        } else {
+            STstuff.loadAllStormTrackingStuff();
+        }
 
         var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 

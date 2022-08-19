@@ -1,22 +1,25 @@
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
 
-function showL3Info(l3rad) {// //showPlotBtn();
+function showL2Info(l2rad) {
     $('#fileUploadSpan').hide();
     $('#radarInfoSpan').show();
-    // document.getElementById('fileInput').style.display = 'none';
-    // document.getElementById('radarInfoDiv').style.display = 'inline';
 
-    // document.getElementById('radFileName').innerHTML = uploadedFile.name;
+    var theFileVersion = l2rad.header.version;
 
-    var theFileStation = 'K' + l3rad.textHeader.id3;
+    var theFileStation = l2rad.header.ICAO;
     document.getElementById('radarStation').innerHTML = theFileStation;
 
-    var theFileVCP = l3rad.productDescription.vcp;
+    var theFileVCP;
+    if (!(theFileVersion == "01")) {
+        theFileVCP = l2rad.vcp.record.pattern_number;
+    } else {
+        theFileVCP = l2rad.data[1][0].record.vcp;
+    }
     document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
-    var theFileDate = l3rad.messageHeader.julianDate;
-    var theFileTime = l3rad.messageHeader.seconds * 1000;
+    var theFileDate = l2rad.header.modified_julian_date;
+    var theFileTime = l2rad.header.milliseconds;
     var fileDateObj = addDays(new Date(0), theFileDate);
     var fileHours = ut.msToTime(theFileTime).hours;
     var fileMinutes = ut.msToTime(theFileTime).minutes;
@@ -24,9 +27,9 @@ function showL3Info(l3rad) {// //showPlotBtn();
     fileDateObj.setUTCHours(fileHours);
     fileDateObj.setUTCMinutes(fileMinutes);
     fileDateObj.setUTCSeconds(fileSeconds);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
     document.getElementById('radarTime').innerHTML = finalRadarDateTime;
 }
 
-module.exports = showL3Info;
+module.exports = showL2Info;

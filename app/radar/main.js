@@ -5,6 +5,7 @@ const tilts = require('./menu/tilts');
 
 const { Level2Radar } = require('../../nexrad-level-2-data/src');
 const { plot } = require('../../nexrad-level-2-plot/src');
+const l2info = require('./dom/l2info');
 
 const l3parse = require('../../nexrad-level-3-data/src');
 const l3plot = require('./level3/draw');
@@ -22,7 +23,14 @@ tilts.listTilts([1, 2, 3, 4], function() {
 // initially hide the progress bar
 ut.progressBarVal('hide');
 
+// add file upload listeners
+require('./dom/fileUpload');
+
+// load the mode control
+require('./map/controls/mode');
+
 $('.productBtnGroup button').on('click', function() {
+    ut.disableModeBtn();
     ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != this.value) {
         tilts.resetTilts();
@@ -47,6 +55,7 @@ document.addEventListener('loadFile', function(event) {
         if (fileLevel == 2 || fileLevel == 22) {
             var l2rad = new Level2Radar(ut.toBuffer(this.result));
             console.log(l2rad);
+            l2info(l2rad);
             plot(l2rad, 'REF', {
                 elevations: 1,
             });

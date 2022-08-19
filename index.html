@@ -55,6 +55,15 @@
         .icon-selected {
             color:rgb(0, 132, 255);
         }
+        .icon-green {
+            color:rgb(17, 167, 17);
+        }
+        .icon-red {
+            color:red;
+        }
+        .icon-blue {
+            color:rgb(92, 157, 255);
+        }
 
         .mapboxgl-ctrl-top-center {
             position: relative !important;
@@ -204,14 +213,40 @@
         }
 
         #mapHeader {
+            /*position: relative;
+            z-index: 15;
+            margin: auto;
+            height: auto;
+            width: fit-content;
+            top: 10px;
+            border-radius: 5px;*/
+
             position: relative;
             z-index: 15;
             margin: auto;
             height: auto;
             width: fit-content;
             top: 10px;
-            padding: 0.1px;
+            padding: 5px 10px;
+            /* line-height: 25px; */
+            background-color: white;
+            border: 1px solid black;
             border-radius: 5px;
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        #drop_zone {
+            height: 40px;
+            width: 150px;
+            line-height: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border: 1px solid rgb(72, 72, 72);
+            border-style: dashed;
         }
 
         #progBarParent {
@@ -246,16 +281,34 @@
     ms-auto - left
     mx-auto - center
     ms-auto - right -->
-    <nav class="navbar bg-light" id="mapHeader">
+    <!-- <nav class="navbar bg-light" id="mapHeader">
         <div class="container-fluid">
             <span class="navbar-text mx-auto text-center" style="font-size: 13px">
-                <div id="radarTime"></div>
-                <b>Station: </b><a id='radarStation'>None</a>
-                <br>
-                <b>VCP: </b><a id='radarVCP'>None</a>
+                <span>
+                    <div id="drop_zone">Drop files here</div>
+                </span>
+                <span style="display: none">
+                    <div id="radarTime"></div>
+                    <b>Station: </b><a id='radarStation'>None</a>
+                    <br>
+                    <b>VCP: </b><a id='radarVCP'>None</a>
+                </span>
             </span>
         </div>
-    </nav>
+    </nav> -->
+    <div id="mapHeader">
+        <span id="fileUploadSpan" style="display: none">
+            <input type="file" id="hiddenFileUploader" style="display: none">
+            <div id="drop_zone">Drop L2 file here</div>
+        </span>
+        <span id="radarInfoSpan">
+            <div id="radarTime"></div>
+            <b>Station: </b><a id='radarStation'>None</a>
+            <br>
+            <b>VCP: </b><a id='radarVCP'>None</a>
+        </span>
+    </div>
+
     <div id="spinnerParent" style="display: none">
         <!-- <div id="spinnerDisplayText">The radar is currently loading. Patience here is key - this should be quick.</div> -->
         <div class="sk-chase">
@@ -373,87 +426,92 @@
     </div>
 
     <div id='optionsBox'>
-        <div id="smallInfo" style="display: none">
-            <div id="curRadProd">Click to open menu.</div>
-            <!-- <div id="radarTime"></div>
-            <b>Station: </b><a id='radarStation'></a>
-            <b>VCP: </b><a id='radarVCP'></a> -->
-        </div>
-        <div id="mainInfo" style="display: none">
-            <div style="display: none">
-                <label for="stationInp">Station</label>
-                <input type="text" class="form-control" id="stationInp" value="KMHX">
-            <!-- <br> -->
+        <span id="uploadModeSpan" style="display: none">
+            <div>Currently in upload mode, settings coming soon.</div>
+        </span>
+        <span id="currentModeSpan">
+            <div id="smallInfo" style="display: none">
+                <div id="curRadProd">Click to open menu.</div>
+                <!-- <div id="radarTime"></div>
+                <b>Station: </b><a id='radarStation'></a>
+                <b>VCP: </b><a id='radarVCP'></a> -->
             </div>
-            <div class="dropdown-center" id="tiltsDropdown">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" id="tiltsDropdownBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false" value="tilt1">
-                    Tilt 1</button>
-                <ul class="dropdown-menu" id="tiltsMenu">
-                    <!-- <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-                    <li><a class="dropdown-item" href="#" value="tilt2">Tilt 2</a></li>
-                    <li><a class="dropdown-item" href="#" value="tilt3">Tilt 3</a></li>
-                    <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li> -->
-                </ul>
-            </div>
-            <br>
-            <div class="btn-group-vertical productBtnGroup">
-                <div>Super Resolution</div>
-                <!-- <button type="button" value="mcy" class="btn btn-outline-primary btn-sm">Mesocyclone</button> -->
-                <button type="button" value="ref" id='srResBtn' class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
-                <button type="button" value="vel"  class="btn btn-outline-primary btn-sm"><b>HR</b> Base Velocity</button> <!-- vel -->
-            </div>
-            <br>
-            <div class="btn-group-vertical productBtnGroup">
-                <br>
-                <div>Digital</div>
-                <button type="button" value="rho" class="btn btn-outline-primary btn-sm">Correlation Coefficient</button>
-                <button type="button" value="zdr" class="btn btn-outline-primary btn-sm">Differential Reflectivity</button>
-                <button type="button" value="sw " class="btn btn-outline-primary btn-sm">Base Spectrum Width (124 nmi)</button>
-                <button type="button" value="hyc"  class="btn btn-outline-primary btn-sm">Hydrometer Classification</button> <!-- hyc -->
-                <button type="button" value="hhc"  class="btn btn-outline-primary btn-sm">Hybrid Hydrometer Classification</button> <!-- hhc -->
-                <button type="button" value="lowres-ref" class="btn btn-outline-primary btn-sm">Digital Base Reflectivity</button> <!-- ref -->
-                <button type="button" value="lowres-vel" class="btn btn-outline-primary btn-sm">Digital Base Velocity</button>
-                <button type="button" value="vil"  class="btn btn-outline-primary btn-sm">Vertically Integrated Liquid</button> <!-- vil -->
-            </div>
-            <br>
-            <div class="btn-group-vertical productBtnGroup">
-                <br>
-                <div>Classic</div>
-                <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
-            </div>
-            <br>
-            <div class="btn-group-vertical productBtnGroup level2btns" id="level2btns">
-                <br>
-                <div>Level 2</div>
-                <button type="button" value="load" id="loadl2" class="btn btn-outline-primary btn-sm">Load Level 2 File</button>
-                <button type="button" value="l2-ref" id="l2-ref" class="btn btn-outline-secondary btn-sm" disabled>Base Reflectivity</button>
-                <button type="button" value="l2-vel" id="l2-vel" class="btn btn-outline-secondary btn-sm" disabled>Base Velocity</button>
-                <button type="button" value="l2-rho" id="l2-rho" class="btn btn-outline-secondary btn-sm" disabled>Correlation Coefficient</button>
-                <button type="button" value="l2-phi" id="l2-phi" class="btn btn-outline-secondary btn-sm" disabled>Differential Phase Shift</button>
-                <button type="button" value="l2-zdr" id="l2-zdr" class="btn btn-outline-secondary btn-sm" disabled>Differential Reflectivity</button>
-                <button type="button" value="l2-sw " id="l2-sw " class="btn btn-outline-secondary btn-sm" disabled>Spectrum Width</button>
-            </div>
-            <br>
-            <div style="display: none">
-                <div id="collapseBtn" style="display: none">
-                    <button id="collapseBtnBtn" class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        File Info
-                    </button>
-                    <br><br>
+            <div id="mainInfo" style="display: none">
+                <div style="display: none">
+                    <label for="stationInp">Station</label>
+                    <input type="text" class="form-control" id="stationInp" value="KMHX">
+                <!-- <br> -->
                 </div>
-                <div class="collapse" id="collapseExample">
-                    <div id='fileInfoDiv' style='display: none'>
-                        <!-- <div id='radFileNameParent'><b><a id='radFileName'></a></b></div> -->
-                        <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
-                        <b>Station: </b><a id='radStation'></a>
-                        <b>VCP: </b><a id='radVCP'></a>
-                        <br>
-                        <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
-                        <br>
+                <div class="dropdown-center" id="tiltsDropdown">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" id="tiltsDropdownBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false" value="tilt1">
+                        Tilt 1</button>
+                    <ul class="dropdown-menu" id="tiltsMenu">
+                        <!-- <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
+                        <li><a class="dropdown-item" href="#" value="tilt2">Tilt 2</a></li>
+                        <li><a class="dropdown-item" href="#" value="tilt3">Tilt 3</a></li>
+                        <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li> -->
+                    </ul>
+                </div>
+                <br>
+                <div class="btn-group-vertical productBtnGroup">
+                    <div>Super Resolution</div>
+                    <!-- <button type="button" value="mcy" class="btn btn-outline-primary btn-sm">Mesocyclone</button> -->
+                    <button type="button" value="ref" id='srResBtn' class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
+                    <button type="button" value="vel"  class="btn btn-outline-primary btn-sm"><b>HR</b> Base Velocity</button> <!-- vel -->
+                </div>
+                <br>
+                <div class="btn-group-vertical productBtnGroup">
+                    <br>
+                    <div>Digital</div>
+                    <button type="button" value="rho" class="btn btn-outline-primary btn-sm">Correlation Coefficient</button>
+                    <button type="button" value="zdr" class="btn btn-outline-primary btn-sm">Differential Reflectivity</button>
+                    <button type="button" value="sw " class="btn btn-outline-primary btn-sm">Base Spectrum Width (124 nmi)</button>
+                    <button type="button" value="hyc"  class="btn btn-outline-primary btn-sm">Hydrometer Classification</button> <!-- hyc -->
+                    <button type="button" value="hhc"  class="btn btn-outline-primary btn-sm">Hybrid Hydrometer Classification</button> <!-- hhc -->
+                    <button type="button" value="lowres-ref" class="btn btn-outline-primary btn-sm">Digital Base Reflectivity</button> <!-- ref -->
+                    <button type="button" value="lowres-vel" class="btn btn-outline-primary btn-sm">Digital Base Velocity</button>
+                    <button type="button" value="vil"  class="btn btn-outline-primary btn-sm">Vertically Integrated Liquid</button> <!-- vil -->
+                </div>
+                <br>
+                <div class="btn-group-vertical productBtnGroup">
+                    <br>
+                    <div>Classic</div>
+                    <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
+                </div>
+                <br>
+                <div class="btn-group-vertical productBtnGroup level2btns" id="level2btns">
+                    <br>
+                    <div>Level 2</div>
+                    <button type="button" value="load" id="loadl2" class="btn btn-outline-primary btn-sm">Load Level 2 File</button>
+                    <button type="button" value="l2-ref" id="l2-ref" class="btn btn-outline-secondary btn-sm" disabled>Base Reflectivity</button>
+                    <button type="button" value="l2-vel" id="l2-vel" class="btn btn-outline-secondary btn-sm" disabled>Base Velocity</button>
+                    <button type="button" value="l2-rho" id="l2-rho" class="btn btn-outline-secondary btn-sm" disabled>Correlation Coefficient</button>
+                    <button type="button" value="l2-phi" id="l2-phi" class="btn btn-outline-secondary btn-sm" disabled>Differential Phase Shift</button>
+                    <button type="button" value="l2-zdr" id="l2-zdr" class="btn btn-outline-secondary btn-sm" disabled>Differential Reflectivity</button>
+                    <button type="button" value="l2-sw " id="l2-sw " class="btn btn-outline-secondary btn-sm" disabled>Spectrum Width</button>
+                </div>
+                <br>
+                <div style="display: none">
+                    <div id="collapseBtn" style="display: none">
+                        <button id="collapseBtnBtn" class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            File Info
+                        </button>
+                        <br><br>
+                    </div>
+                    <div class="collapse" id="collapseExample">
+                        <div id='fileInfoDiv' style='display: none'>
+                            <!-- <div id='radFileNameParent'><b><a id='radFileName'></a></b></div> -->
+                            <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
+                            <b>Station: </b><a id='radStation'></a>
+                            <b>VCP: </b><a id='radVCP'></a>
+                            <br>
+                            <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+                            <br>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </span>
     </div>
 
     <script>
