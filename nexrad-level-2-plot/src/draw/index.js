@@ -214,7 +214,7 @@ const draw = (data, _options) => {
 		// calculate plotting parameters
 
 		var deadZone;
-		if (data.header.version == "01") {
+		if (data.header.version == "01" || data.header.version == "E2") {
 			deadZone = radial.first_gate / radial.gate_size / scale * gateSizeScaling;
 		} else {
 			deadZone = radial.first_gate / radial.gate_size / scale;
@@ -270,13 +270,17 @@ const draw = (data, _options) => {
 	//testHello('yeet')
 	var shtation = document.getElementById('fileStation').innerHTML;
     $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-        var statLat = data[shtation][1];
-        var statLng = data[shtation][2];
+		var statLat;
+		var statLng;
+		if (data.hasOwnProperty(shtation)) {
+			statLat = data[shtation][1];
+			statLng = data[shtation][2];
+		} else {
+			var fileNameStation = $('#dataDiv').data('fileName').slice(0, 4);
+			statLat = data[fileNameStation][1];
+			statLng = data[fileNameStation][2];
+		}
 		drawRadarShape(url, statLat, statLng, options.product, !$('#shouldLowFilter').prop("checked"));
-
-        //new mapboxgl.Marker()
-        //    .setLngLat([stationLng, stationLat])
-        //    .addTo(map);
     });
 
     document.getElementById('spinnerParent').style.display = 'none';

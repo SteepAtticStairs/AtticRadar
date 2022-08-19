@@ -32,10 +32,12 @@ function handleDragOver(evt) {
 }
 
 document.getElementById('hiddenFileUploader').addEventListener('input', function() {
+    var files = document.getElementById('hiddenFileUploader').files;
+    $('#dataDiv').data('fileName', files[0].name)
     // Create the event
     var event = new CustomEvent("loadFile", {
         "detail": [
-            document.getElementById('hiddenFileUploader').files[0],
+            files[0],
             2,
             'whole'
         ]

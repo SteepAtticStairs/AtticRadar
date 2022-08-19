@@ -11,7 +11,7 @@ function showL2Info(l2rad) {
     document.getElementById('radarStation').innerHTML = theFileStation;
 
     var theFileVCP;
-    if (!(theFileVersion == "01")) {
+    if (theFileVersion != "01" && theFileVersion != "E2") {
         theFileVCP = l2rad.vcp.record.pattern_number;
     } else {
         theFileVCP = l2rad.data[1][0].record.vcp;

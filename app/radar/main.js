@@ -5,6 +5,7 @@ const tilts = require('./menu/tilts');
 
 const { Level2Radar } = require('../../nexrad-level-2-data/src');
 const { plot } = require('../../nexrad-level-2-plot/src');
+const l2listeners = require('./level2/eventListeners');
 const l2info = require('./dom/l2info');
 
 const l3parse = require('../../nexrad-level-3-data/src');
@@ -59,6 +60,7 @@ document.addEventListener('loadFile', function(event) {
             plot(l2rad, 'REF', {
                 elevations: 1,
             });
+            l2listeners(l2rad);
         } else if (fileLevel == 3) {
             // just to have a consistent starting point
             //ut.progressBarVal('set', 120);

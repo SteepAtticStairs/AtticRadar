@@ -54,6 +54,8 @@ $('#optionsBox').on('click', function(e) {
     if ($(e.target).parents().eq(1).attr('id') == 'tiltsMenu') return;
     // if the user clicks on one of the product buttons
     if ($(e.target).parents().eq(1).attr('id') == 'mainInfo') return;
+    // if the user clicks on one of the product buttons in upload mode
+    if ($(e.target).parents().eq(1).attr('id') == 'uploadModeSpan') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);

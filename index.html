@@ -426,17 +426,25 @@
     </div>
 
     <div id='optionsBox'>
-        <span id="uploadModeSpan" style="display: none">
-            <div>Currently in upload mode, settings coming soon.</div>
-        </span>
-        <span id="currentModeSpan">
-            <div id="smallInfo" style="display: none">
-                <div id="curRadProd">Click to open menu.</div>
-                <!-- <div id="radarTime"></div>
-                <b>Station: </b><a id='radarStation'></a>
-                <b>VCP: </b><a id='radarVCP'></a> -->
-            </div>
-            <div id="mainInfo" style="display: none">
+        <div id="smallInfo" style="display: none">
+            <div id="curRadProd">Click to open menu.</div>
+            <!-- <div id="radarTime"></div>
+            <b>Station: </b><a id='radarStation'></a>
+            <b>VCP: </b><a id='radarVCP'></a> -->
+        </div>
+        <div id="mainInfo" style="display: none">
+            <span id="uploadModeSpan" style="display: none">
+                <div>Select a product.</div>
+                <div class="btn-group-vertical l2BtnGroup">
+                    <button type="button" value="level2-ref" id="level2-ref" class="btn btn-outline-primary btn-sm" disabled>Base Reflectivity</button>
+                    <button type="button" value="level2-vel" id="level2-vel" class="btn btn-outline-primary btn-sm" disabled>Base Velocity</button>
+                    <button type="button" value="level2-rho" id="level2-rho" class="btn btn-outline-primary btn-sm" disabled>Correlation Coefficient</button>
+                    <button type="button" value="level2-phi" id="level2-phi" class="btn btn-outline-primary btn-sm" disabled>Differential Phase Shift</button>
+                    <button type="button" value="level2-zdr" id="level2-zdr" class="btn btn-outline-primary btn-sm" disabled>Differential Reflectivity</button>
+                    <button type="button" value="level2-sw " id="level2-sw " class="btn btn-outline-primary btn-sm" disabled>Spectrum Width</button>
+                </div>
+            </span>
+            <span id="currentModeSpan">
                 <div style="display: none">
                     <label for="stationInp">Station</label>
                     <input type="text" class="form-control" id="stationInp" value="KMHX">
@@ -479,7 +487,7 @@
                     <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
                 </div>
                 <br>
-                <div class="btn-group-vertical productBtnGroup level2btns" id="level2btns">
+                <div class="btn-group-vertical productBtnGroup level2btns" id="level2btns" style="display: none">
                     <br>
                     <div>Level 2</div>
                     <button type="button" value="load" id="loadl2" class="btn btn-outline-primary btn-sm">Load Level 2 File</button>
@@ -510,8 +518,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </span>
+            </span>
+        </div>
     </div>
 
     <script>

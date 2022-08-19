@@ -369,16 +369,24 @@ function waitVisible(elem, callback, timeout) {
 function flyToStation() {
     var map = require('./map/map');
 
-    var station = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
-        var stationLat = data[station][1];
-        var stationLng = data[station][2];
-        map.flyTo({
-            center: [stationLng, stationLat],
+    var shtation = document.getElementById('fileStation').innerHTML;
+    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+		var statLat;
+		var statLng;
+		if (data.hasOwnProperty(shtation)) {
+			statLat = data[shtation][1];
+			statLng = data[shtation][2];
+		} else {
+			var fileNameStation = $('#dataDiv').data('fileName').slice(0, 4);
+			statLat = data[fileNameStation][1];
+			statLng = data[fileNameStation][2];
+		}
+		map.flyTo({
+            center: [statLng, statLat],
             zoom: 8,
             duration: 1000,
         });
-    })
+    });
 }
 
 function disableModeBtn() {
