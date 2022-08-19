@@ -2,6 +2,7 @@ const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
 const createControl = require('../radar/map/controls/createControl');
 const mapClick = require ('./mapClick');
+const simplify = require('simplify-geojson')
 var map = require('../radar/map/map');
 
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
@@ -28,6 +29,7 @@ createControl({
             map.getCanvas().style.cursor = "crosshair";
             map.on('click', mapClick)
             fetchPolygonData([allAlertsURL], function(data) {
+                var data = simplify(data, 0.01);
                 map.addLayer({
                     'id': `newAlertsLayer`,
                     'type': 'fill',
@@ -55,6 +57,12 @@ createControl({
                 });
                 newAlertsArr.push(`newAlertsLayerOutline`);
                 newAlertsArr.push(`newAlertsLayer`);
+
+                // map.on('click', 'newAlertsLayer', (e) => {
+                //     for (key in e.features) {
+                //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
+                //     }
+                // });
             })
         }
     } else if ($('#alertsThing').hasClass('icon-selected')) {

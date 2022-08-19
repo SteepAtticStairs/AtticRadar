@@ -16901,6 +16901,7 @@ const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
 const createControl = require('../radar/map/controls/createControl');
 const mapClick = require ('./mapClick');
+const simplify = require('simplify-geojson')
 var map = require('../radar/map/map');
 
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
@@ -16927,6 +16928,7 @@ createControl({
             map.getCanvas().style.cursor = "crosshair";
             map.on('click', mapClick)
             fetchPolygonData([allAlertsURL], function(data) {
+                var data = simplify(data, 0.01);
                 map.addLayer({
                     'id': `newAlertsLayer`,
                     'type': 'fill',
@@ -16954,6 +16956,12 @@ createControl({
                 });
                 newAlertsArr.push(`newAlertsLayerOutline`);
                 newAlertsArr.push(`newAlertsLayer`);
+
+                // map.on('click', 'newAlertsLayer', (e) => {
+                //     for (key in e.features) {
+                //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
+                //     }
+                // });
             })
         }
     } else if ($('#alertsThing').hasClass('icon-selected')) {
@@ -16967,7 +16975,7 @@ createControl({
         map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
     }
 })
-},{"../radar/map/controls/createControl":84,"../radar/map/map":90,"../radar/utils":95,"./fetchData":68,"./mapClick":69}],67:[function(require,module,exports){
+},{"../radar/map/controls/createControl":84,"../radar/map/map":90,"../radar/utils":95,"./fetchData":68,"./mapClick":69,"simplify-geojson":190}],67:[function(require,module,exports){
 /*
 * This file is the entry point for the alerts module.
 */
@@ -25959,5 +25967,178 @@ module.exports={
     "test": "mocha"
   }
 }
+
+},{}],190:[function(require,module,exports){
+var simplify = require('simplify-geometry')
+
+module.exports = function (geojson, tolerance, dontClone) {
+  if (!dontClone) geojson = JSON.parse(JSON.stringify(geojson)) // clone obj
+  if (geojson.features) return simplifyFeatureCollection(geojson, tolerance)
+  else if (geojson.type && geojson.type === 'Feature') return simplifyFeature(geojson, tolerance)
+  else return new Error('FeatureCollection or individual Feature required')
+}
+
+module.exports.simplify = function (coordinates, tolerance) {
+  return simplify(coordinates, tolerance)
+}
+
+// modifies in-place
+function simplifyFeature (feat, tolerance) {
+  var geom = feat.geometry
+  var type = geom.type
+  if (type === 'LineString') {
+    geom.coordinates = module.exports.simplify(geom.coordinates, tolerance)
+  } else if (type === 'Polygon' || type === 'MultiLineString') {
+    for (var j = 0; j < geom.coordinates.length; j++) {
+      geom.coordinates[j] = module.exports.simplify(geom.coordinates[j], tolerance)
+    }
+  } else if (type === 'MultiPolygon') {
+    for (var k = 0; k < geom.coordinates.length; k++) {
+      for (var l = 0; l < geom.coordinates[k].length; l++) {
+        geom.coordinates[k][l] = module.exports.simplify(geom.coordinates[k][l], tolerance)
+      }
+    }
+  }
+  return feat
+}
+
+// modifies in-place
+function simplifyFeatureCollection (fc, tolerance) {
+  // process all LineString features, skip non LineStrings
+  for (var i = 0; i < fc.features.length; i++) {
+    fc.features[i] = simplifyFeature(fc.features[i], tolerance)
+  }
+  return fc
+}
+
+},{"simplify-geometry":191}],191:[function(require,module,exports){
+var Line = require('./line');
+
+var simplifyGeometry = function(points, tolerance){
+
+  var dmax = 0;
+  var index = 0;
+
+  for (var i = 1; i <= points.length - 2; i++){
+    var d = new Line(points[0], points[points.length - 1]).perpendicularDistance(points[i]);
+    if (d > dmax){
+      index = i;
+      dmax = d;
+    }
+  }
+
+  if (dmax > tolerance){
+    var results_one = simplifyGeometry(points.slice(0, index), tolerance);
+    var results_two = simplifyGeometry(points.slice(index, points.length), tolerance);
+
+    var results = results_one.concat(results_two);
+
+  }
+
+  else if (points.length > 1) {
+
+    results = [points[0], points[points.length - 1]];
+
+  }
+
+  else {
+
+    results = [points[0]];
+
+  }
+
+  return results;
+
+
+}
+
+module.exports = simplifyGeometry;
+
+},{"./line":192}],192:[function(require,module,exports){
+var Line = function(p1, p2){
+
+  this.p1 = p1;
+  this.p2 = p2;
+
+};
+
+Line.prototype.rise = function() {
+
+  return this.p2[1] - this.p1[1];
+
+};
+
+Line.prototype.run = function() {
+
+  return this.p2[0] - this.p1[0];
+
+};
+
+Line.prototype.slope = function(){
+
+  return  this.rise() / this.run();
+
+};
+
+Line.prototype.yIntercept = function(){
+
+  return this.p1[1] - (this.p1[0] * this.slope(this.p1, this.p2));
+
+};
+
+Line.prototype.isVertical = function() {
+
+  return !isFinite(this.slope());
+
+};
+
+Line.prototype.isHorizontal = function() {
+
+  return this.p1[1] == this.p2[1];
+
+};
+
+Line.prototype._perpendicularDistanceHorizontal = function(point){
+
+  return Math.abs(this.p1[1] - point[1]);
+
+};
+
+Line.prototype._perpendicularDistanceVertical = function(point){
+
+  return Math.abs(this.p1[0] - point[0]);
+
+};
+
+Line.prototype._perpendicularDistanceHasSlope = function(point){
+  var slope = this.slope();
+  var y_intercept = this.yIntercept();
+
+  return Math.abs((slope * point[0]) - point[1] + y_intercept) / Math.sqrt((Math.pow(slope, 2)) + 1);
+
+};
+
+Line.prototype.perpendicularDistance = function(point){
+  if (this.isVertical()) {
+
+    return this._perpendicularDistanceVertical(point);
+
+  }
+
+  else if (this.isHorizontal()){
+
+    return this._perpendicularDistanceHorizontal(point);
+
+  }
+
+  else {
+
+    return this._perpendicularDistanceHasSlope(point);
+
+  }
+
+};
+
+module.exports = Line;
 
 },{}]},{},[75]);
