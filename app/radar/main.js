@@ -30,6 +30,9 @@ require('./dom/fileUpload');
 // load the mode control
 require('./map/controls/mode');
 
+// add the reload control
+require('./map/controls/reload');
+
 $('.productBtnGroup button').on('click', function() {
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
