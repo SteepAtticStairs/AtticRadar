@@ -240,7 +240,6 @@
         #drop_zone {
             height: 40px;
             width: 150px;
-            line-height: 75px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -299,7 +298,14 @@
     <div id="mapHeader">
         <span id="fileUploadSpan" style="display: none">
             <input type="file" id="hiddenFileUploader" style="display: none">
-            <div id="drop_zone">Drop L2 file here</div>
+            <div id="drop_zone">Drop Level 2 file here</div>
+
+            <div id="levelRadios">
+                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="2" checked>
+                <label class="form-check-label levelRadioInputs" for="inlineRadio1">Level 2</label>
+                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="3" style="float: right">
+                <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 3px;">Level 3</label>
+            </div>
         </span>
         <span id="radarInfoSpan">
             <div id="radarTime"></div>
@@ -522,7 +528,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         document.getElementById('collapseBtnBtn').addEventListener('click', function() {
             setTimeout(function() {
                 $("#optionsBox").animate({ scrollTop: $("#optionsBox").scrollHeight }, 400);
@@ -544,7 +550,7 @@
         //         if (--i) myLoop(i, ranInt);
         //     }, b)
         // })(101, 50);
-    </script>
+    </script> -->
 
     <div id="map"></div>
 
