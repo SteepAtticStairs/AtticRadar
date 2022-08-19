@@ -6,7 +6,7 @@ function addTideStationsControl(divName) {
     createControl({
         'id': 'tideStationsThing',
         'position': 'top-left',
-        'icon': 'fa-water',
+        'icon': 'fa-person-swimming',
         'css': 'margin-top: 100%;'
     }, function() {
         if (!$('#tideStationsThing').hasClass('icon-selected')) {

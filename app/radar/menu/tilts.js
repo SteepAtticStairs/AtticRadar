@@ -43,9 +43,9 @@ function tiltEventListeners() {
 
             var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][$('#dataDiv').data('curProd')];
             var currentStation = $('#stationInp').val();
-            loaders.getLatestFile(currentStation, [3, clickedProduct], function(url) {
+            loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
                 console.log(url);
-                loaders.loadFileObject(ut.phpProxy + url, 3);
+                loaders.loadFileObject(ut.phpProxy + url, 3, 0);
             })
         }
     })
