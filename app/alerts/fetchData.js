@@ -1,6 +1,8 @@
 const ut = require('../radar/utils');
 
 function fetchPolygonData(url, callback) {
+
+    ut.progressBarVal('show');
     // https://preview.weather.gov/edd/
     for (var y = 0; y < url.length; y++) {
         var alertsXHTTP = new XMLHttpRequest();
@@ -12,10 +14,15 @@ function fetchPolygonData(url, callback) {
             //var complete = (event.loaded / event.total * 50 | 0);
             //document.getElementById('timestampProgress').innerHTML = formatBytes(event.loaded)
 
-            console.log(ut.formatBytes(event.loaded))
+            // re-scale the bytes loaded value from 0 to 150
+            ut.progressBarVal('set', ut.scale(event.loaded / 1000000, 0, 40, 0, 150))
+            ut.progressBarVal('label', ut.formatBytes(event.loaded))
         }
         alertsXHTTP.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
+                setTimeout(function() {
+                    ut.progressBarVal('hide');
+                }, 500)
                 var data = JSON.parse(this.responseText);
                 callback(data);
             }

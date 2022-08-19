@@ -1,6 +1,7 @@
 const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
 const createControl = require('../radar/map/controls/createControl');
+const mapClick = require ('./mapClick');
 var map = require('../radar/map/map');
 
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
@@ -24,6 +25,8 @@ createControl({
             map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
         } else {
+            map.getCanvas().style.cursor = "crosshair";
+            map.on('click', mapClick)
             fetchPolygonData([allAlertsURL], function(data) {
                 map.addLayer({
                     'id': `newAlertsLayer`,
@@ -57,6 +60,9 @@ createControl({
     } else if ($('#alertsThing').hasClass('icon-selected')) {
         $('#alertsThing').removeClass('icon-selected');
         $('#alertsThing').addClass('icon-black');
+
+        map.getCanvas().style.cursor = "default";
+        map.off('click', mapClick)
 
         map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');
         map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
