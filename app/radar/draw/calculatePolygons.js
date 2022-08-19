@@ -15,6 +15,10 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
         // version 01 is non hi-res data
         gateRes = 2000;
         multiplier = gateRes*8;
+    } else if (radVersion == "E2") {
+        // version 01 is non hi-res data
+        gateRes = 500;
+        multiplier = gateRes*32;
     } else if (radVersion == "08") {
         // version 08 is TDWR
         gateRes = 150;

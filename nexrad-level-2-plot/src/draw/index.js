@@ -189,7 +189,7 @@ const draw = (data, _options) => {
 		'version': [],
 	};
 	// loop through data
-	if (data.header.version == "01") {
+	if (data.header.version == "01" || data.header.version == "E2") {
 		gateSizeScaling = rrlEncoded[0].gate_size * 0.25;
 	}
 	var adder;

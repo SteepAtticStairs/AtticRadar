@@ -17060,6 +17060,10 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
         // version 01 is non hi-res data
         gateRes = 2000;
         multiplier = gateRes*8;
+    } else if (radVersion == "E2") {
+        // version 01 is non hi-res data
+        gateRes = 500;
+        multiplier = gateRes*32;
     } else if (radVersion == "08") {
         // version 08 is TDWR
         gateRes = 150;
@@ -21359,7 +21363,7 @@ const draw = (data, _options) => {
 		'version': [],
 	};
 	// loop through data
-	if (data.header.version == "01") {
+	if (data.header.version == "01" || data.header.version == "E2") {
 		gateSizeScaling = rrlEncoded[0].gate_size * 0.25;
 	}
 	var adder;
