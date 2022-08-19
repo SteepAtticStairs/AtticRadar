@@ -16897,6 +16897,107 @@ module.exports = function whichTypedArray(value) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"available-typed-arrays":6,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22,"is-typed-array":29}],66:[function(require,module,exports){
+const fetchPolygonData = require('./fetchData');
+const ut = require('../radar/utils');
+const createControl = require('../radar/map/controls/createControl');
+var map = require('../radar/map/map');
+
+var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
+var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
+// https://realearth.ssec.wisc.edu/products/?app=_ALL_
+var allAlertsURL = `https://realearth.ssec.wisc.edu/api/shapes?products=NWS-Alerts-All`;
+var newAlertsArr = [];
+var y = 0;
+
+createControl({
+    'id': 'alertsThing',
+    'position': 'top-left',
+    'icon': 'fa-circle-exclamation',
+    'css': 'margin-top: 100%;'
+}, function() {
+    if (!$('#alertsThing').hasClass('icon-selected')) {
+        $('#alertsThing').addClass('icon-selected');
+        $('#alertsThing').removeClass('icon-black');
+
+        if (map.getLayer('newAlertsLayer')) {
+            map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
+            map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
+        } else {
+            fetchPolygonData([allAlertsURL], function(data) {
+                map.addLayer({
+                    'id': `newAlertsLayer`,
+                    'type': 'fill',
+                    'source': {
+                        type: 'geojson',
+                        data: data,
+                    },
+                    paint: {
+                        //#0080ff blue
+                        //#ff7d7d red
+                        'fill-color': '#0080ff',
+                        'fill-opacity': 0.5
+                    }
+                });
+                map.addLayer({
+                    'id': `newAlertsLayerOutline`,
+                    'type': 'line',
+                    'source': `newAlertsLayer`,
+                    'paint': {
+                        //#014385 blue
+                        //#850101 red
+                        'line-color': '#014385',
+                        'line-width': 3
+                    }
+                });
+                newAlertsArr.push(`newAlertsLayerOutline`);
+                newAlertsArr.push(`newAlertsLayer`);
+            })
+        }
+    } else if ($('#alertsThing').hasClass('icon-selected')) {
+        $('#alertsThing').removeClass('icon-selected');
+        $('#alertsThing').addClass('icon-black');
+
+        map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');
+        map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
+    }
+})
+},{"../radar/map/controls/createControl":83,"../radar/map/map":89,"../radar/utils":94,"./fetchData":68}],67:[function(require,module,exports){
+/*
+* This file is the entry point for the alerts module.
+*/
+
+// load the starting file
+require('./drawAlertShapes');
+},{"./drawAlertShapes":66}],68:[function(require,module,exports){
+const ut = require('../radar/utils');
+
+function fetchPolygonData(url, callback) {
+    // https://preview.weather.gov/edd/
+    for (var y = 0; y < url.length; y++) {
+        var alertsXHTTP = new XMLHttpRequest();
+        alertsXHTTP.onprogress = (event) => {
+            // event.loaded returns how many bytes are downloaded
+            // event.total returns the total number of bytes
+            // event.total is only available if server sends `Content-Length` header
+            //console.log(`%c Downloaded ${formatBytes(event.loaded)} of ${formatBytes(event.total)}`, 'color: #bada55');
+            //var complete = (event.loaded / event.total * 50 | 0);
+            //document.getElementById('timestampProgress').innerHTML = formatBytes(event.loaded)
+
+            console.log(ut.formatBytes(event.loaded))
+        }
+        alertsXHTTP.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText);
+                callback(data);
+            }
+        };
+        alertsXHTTP.open("GET", url[y], true);
+        alertsXHTTP.send();
+    }
+}
+
+module.exports = fetchPolygonData
+},{"../radar/utils":94}],69:[function(require,module,exports){
 const ut = require('../utils');
 
 /*
@@ -16986,7 +17087,7 @@ $('.levelRadioInputs').on('click', function() {
     $('#dataDiv').data('currentLevelInput', this.value);
     document.getElementById('drop_zone').innerHTML = `Drop Level ${this.value} file here`;
 })
-},{"../utils":91}],67:[function(require,module,exports){
+},{"../utils":94}],70:[function(require,module,exports){
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
 
@@ -17022,7 +17123,7 @@ function showL2Info(l2rad) {
 }
 
 module.exports = showL2Info;
-},{"../utils":91}],68:[function(require,module,exports){
+},{"../utils":94}],71:[function(require,module,exports){
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
 
@@ -17055,7 +17156,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 }
 
 module.exports = showL3Info;
-},{"../utils":91}],69:[function(require,module,exports){
+},{"../utils":94}],72:[function(require,module,exports){
 //onmessage=function(oEvent) {
 function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     //var url = oEvent.data[0];
@@ -17222,7 +17323,7 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
 module.exports = {
     calcPolygons
 }
-},{}],70:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
@@ -17459,7 +17560,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"../level3/stormTracking/stormTrackingMain":75,"../map/controls/visibility":85,"../map/map":86,"../map/mapFunctions":87,"../misc/paletteTooltip":89,"../utils":91,"./calculatePolygons":69}],71:[function(require,module,exports){
+},{"../level3/stormTracking/stormTrackingMain":78,"../map/controls/visibility":88,"../map/map":89,"../map/mapFunctions":90,"../misc/paletteTooltip":92,"../utils":94,"./calculatePolygons":72}],74:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.
 */
@@ -17471,8 +17572,11 @@ require('../main');
 require('../map/controls/stationMarkers');
 
 // load the tides chart
-require('../../tides/main').tideChartInit('container');
-},{"../../tides/main":95,"../main":79,"../map/controls/stationMarkers":83}],72:[function(require,module,exports){
+// require('../../tides/main').tideChartInit('container');
+
+// initialize the alerts
+require('../../alerts/entry');
+},{"../../alerts/entry":67,"../main":82,"../map/controls/stationMarkers":86}],75:[function(require,module,exports){
 const { plot } = require('../../../nexrad-level-2-plot/src');
 const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
@@ -17521,7 +17625,7 @@ function loadL2Listeners(l2rad) {
 }
 
 module.exports = loadL2Listeners;
-},{"../../../nexrad-level-2-plot/src":121,"../loaders":78,"../map/mapFunctions":87}],73:[function(require,module,exports){
+},{"../../../nexrad-level-2-plot/src":121,"../loaders":81,"../map/mapFunctions":90}],76:[function(require,module,exports){
 const drawRadarShape = require('../draw/drawToMap');
 
 const scaleArray = (fromRange, toRange) => {
@@ -17642,7 +17746,7 @@ function draw(data) {
 }
 
 module.exports = draw
-},{"../draw/drawToMap":70}],74:[function(require,module,exports){
+},{"../draw/drawToMap":73}],77:[function(require,module,exports){
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
 
@@ -17687,7 +17791,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotMesocyclone;
-},{"../../map/mapFunctions":87,"../../utils":91}],75:[function(require,module,exports){
+},{"../../map/mapFunctions":90,"../../utils":94}],78:[function(require,module,exports){
 var map = require('../../map/map');
 const loaders = require('../../loaders');
 const ut = require('../../utils');
@@ -17768,7 +17872,7 @@ function loadAllStormTrackingStuff() {
 module.exports = {
     loadAllStormTrackingStuff
 }
-},{"../../loaders":78,"../../map/map":86,"../../utils":91}],76:[function(require,module,exports){
+},{"../../loaders":81,"../../map/map":89,"../../utils":94}],79:[function(require,module,exports){
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
 
@@ -17873,7 +17977,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotStormTracks;
-},{"../../map/mapFunctions":87,"../../utils":91}],77:[function(require,module,exports){
+},{"../../map/mapFunctions":90,"../../utils":94}],80:[function(require,module,exports){
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
 
@@ -17917,7 +18021,7 @@ function parsePlotTornado(l3rad, theFileStation) {
 }
 
 module.exports = parsePlotTornado;
-},{"../../map/mapFunctions":87,"../../utils":91}],78:[function(require,module,exports){
+},{"../../map/mapFunctions":90,"../../utils":94}],81:[function(require,module,exports){
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
@@ -18148,7 +18252,7 @@ module.exports = {
     loadFileObject,
     getLatestFile
 }
-},{"./map/mapFunctions":87,"./utils":91}],79:[function(require,module,exports){
+},{"./map/mapFunctions":90,"./utils":94}],82:[function(require,module,exports){
 var map = require('./map/map');
 const ut = require('./utils');
 const loaders = require('./loaders');
@@ -18256,7 +18360,7 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
-},{"../../nexrad-level-2-data/src":108,"../../nexrad-level-2-plot/src":121,"../../nexrad-level-3-data/src":132,"./dom/fileUpload":66,"./dom/l2info":67,"./dom/l3info":68,"./level2/eventListeners":72,"./level3/draw":73,"./level3/stormTracking/mesocycloneDetection":74,"./level3/stormTracking/stormTracks":76,"./level3/stormTracking/tornadoVortexSignature":77,"./loaders":78,"./map/controls/mode":81,"./map/controls/reload":82,"./map/map":86,"./menu/tilts":88,"./utils":91}],80:[function(require,module,exports){
+},{"../../nexrad-level-2-data/src":108,"../../nexrad-level-2-plot/src":121,"../../nexrad-level-3-data/src":132,"./dom/fileUpload":69,"./dom/l2info":70,"./dom/l3info":71,"./level2/eventListeners":75,"./level3/draw":76,"./level3/stormTracking/mesocycloneDetection":77,"./level3/stormTracking/stormTracks":79,"./level3/stormTracking/tornadoVortexSignature":80,"./loaders":81,"./map/controls/mode":84,"./map/controls/reload":85,"./map/map":89,"./menu/tilts":91,"./utils":94}],83:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -18296,7 +18400,7 @@ function createControl(options, clickFunc) {
 }
 
 module.exports = createControl;
-},{"../map":86}],81:[function(require,module,exports){
+},{"../map":89}],84:[function(require,module,exports){
 const loaders = require('../../loaders');
 const ut = require('../../utils');
 const createControl = require('./createControl');
@@ -18352,7 +18456,7 @@ createControl({
 })
 $('#modeThing').removeClass('icon-black');
 $('#modeThing').addClass('icon-green');
-},{"../../loaders":78,"../../utils":91,"../map":86,"./createControl":80}],82:[function(require,module,exports){
+},{"../../loaders":81,"../../utils":94,"../map":89,"./createControl":83}],85:[function(require,module,exports){
 const loaders = require('../../loaders');
 const ut = require('../../utils');
 const createControl = require('./createControl');
@@ -18366,7 +18470,7 @@ createControl({
 }, function() {
     window.location.reload();
 })
-},{"../../loaders":78,"../../utils":91,"../map":86,"./createControl":80}],83:[function(require,module,exports){
+},{"../../loaders":81,"../../utils":94,"../map":89,"./createControl":83}],86:[function(require,module,exports){
 var map = require('../map');
 const loaders = require('../../loaders');
 const ut = require('../../utils');
@@ -18474,7 +18578,7 @@ window.addEventListener('load', (event) => {
         showStations();
     }, 200)
 })
-},{"../../loaders":78,"../../menu/tilts":88,"../../utils":91,"../map":86,"./createControl":80}],84:[function(require,module,exports){
+},{"../../loaders":81,"../../menu/tilts":91,"../../utils":94,"../map":89,"./createControl":83}],87:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
@@ -18535,7 +18639,7 @@ if (isDevelopmentMode) {
         }
     })
 }
-},{"../../loaders":78,"../../misc/urlParser":90,"../map":86,"./createControl":80}],85:[function(require,module,exports){
+},{"../../loaders":81,"../../misc/urlParser":93,"../map":89,"./createControl":83}],88:[function(require,module,exports){
 var map = require('../map');
 
 var hasVisibilityControl = false;
@@ -18585,7 +18689,7 @@ if (!hasVisibilityControl) {
     hasVisibilityControl = true;
 }
 //map.addControl(theVisibilityControl, 'top-left');
-},{"../map":86}],86:[function(require,module,exports){
+},{"../map":89}],89:[function(require,module,exports){
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
 const map = new mapboxgl.Map({
     container: 'map',
@@ -18684,7 +18788,7 @@ module.exports = map;
 
 // load some controls
 require('./controls/testFileControls');
-},{"./controls/testFileControls":84}],87:[function(require,module,exports){
+},{"./controls/testFileControls":87}],90:[function(require,module,exports){
 var map = require('./map');
 
 function removeMapLayer(layername) {
@@ -18764,7 +18868,7 @@ module.exports = {
     setGeojsonLayer,
     moveMapLayer
 }
-},{"./map":86}],88:[function(require,module,exports){
+},{"./map":89}],91:[function(require,module,exports){
 const ut = require('../utils');
 const loaders = require('../loaders');
 
@@ -18828,7 +18932,7 @@ module.exports = {
     tiltEventListeners,
     resetTilts
 }
-},{"../loaders":78,"../utils":91}],89:[function(require,module,exports){
+},{"../loaders":81,"../utils":94}],92:[function(require,module,exports){
 function initPaletteTooltip(produc, colortcanvas) {
     var hycObj = {
         0: 'ND: Below Threshold',
@@ -18883,7 +18987,7 @@ function initPaletteTooltip(produc, colortcanvas) {
 module.exports = {
     initPaletteTooltip
 }
-},{}],90:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 const drawChart = require('../../tides/chart');
 const fetchData = require('../../tides/fetchData');
 const ut = require('../utils');
@@ -18913,7 +19017,7 @@ for (key in allParserArgs) {
 }
 
 module.exports = isDevelopmentMode;
-},{"../../tides/chart":92,"../../tides/fetchData":93,"../utils":91}],91:[function(require,module,exports){
+},{"../../tides/chart":95,"../../tides/fetchData":96,"../utils":94}],94:[function(require,module,exports){
 (function (Buffer){(function (){
 const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
@@ -19339,7 +19443,7 @@ module.exports = {
     disableModeBtn
 }
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./map/map":86,"buffer":11}],92:[function(require,module,exports){
+},{"./map/map":89,"buffer":11}],95:[function(require,module,exports){
 const ut = require('../radar/utils');
 
 function drawChart(divName, dataArray) {
@@ -19423,7 +19527,7 @@ function drawChart(divName, dataArray) {
 }
 
 module.exports = drawChart;
-},{"../radar/utils":91}],93:[function(require,module,exports){
+},{"../radar/utils":94}],96:[function(require,module,exports){
 function getYYMMDD(dateObj, type, modifier) {
     // https://stackoverflow.com/a/1296374
     if (type == 'start') {
@@ -19473,175 +19577,7 @@ function fetchData(stationID, callback) {
 }
 
 module.exports = fetchData;
-},{}],94:[function(require,module,exports){
-var map = require('../radar/map/map');
-const drawChart = require('./chart');
-const fetchData = require('./fetchData');
-const mapFuncs = require('../radar/map/mapFunctions');
-
-var geojsonTemplate = {
-    "type": "FeatureCollection",
-    "features": []
-}
-
-function loadTideStationMarkers(divName) {
-    var allStationsURL = 'https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions';
-    $.getJSON(allStationsURL, function(data) {
-        for (var i = 0; i < data.stations.length; i++) {
-            var tideStationLat = data.stations[i].lat;
-            var tideStationLng = data.stations[i].lng;
-            var tideStationName = data.stations[i].name;
-            var tideStationID = data.stations[i].id;
-
-            var popupContent = `
-            <div id='tideStationPopup'>
-                <div>
-                    <b>
-                        ${tideStationName}
-                    </b>
-                </div>
-                <div>
-                    ${tideStationID}
-                </div>
-            </div>`
-
-            // var tideStationMarker = new mapboxgl.Marker({
-            //     color: "#4287f5",
-            // }).setLngLat([tideStationLng, tideStationLat])
-            //     .setPopup(new mapboxgl.Popup().setHTML(popupContent))
-            //     .addTo(map);
-            geojsonTemplate.features.push({
-                'properties': {
-                    'stationName': tideStationName,
-                    'stationID': tideStationID,
-                    'description': popupContent
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates":
-                        [tideStationLng, tideStationLat]
-                }
-            });
-        }
-        map.addLayer({
-            id: 'tideStationDots',
-            type: 'circle',
-            source: {
-                type: 'geojson',
-                data: geojsonTemplate,
-            },
-            'paint': {
-                'circle-radius': 4,
-                'circle-stroke-width': 3,
-                'circle-color': '#4287f5',
-                'circle-stroke-color': '#002b70',
-            }
-        });
-
-        map.on('click', 'tideStationDots', (e) => {
-            // Copy coordinates array.
-            const coordinates = e.features[0].geometry.coordinates.slice();
-            const description = e.features[0].properties.description;
-            const name = e.features[0].properties.stationName;
-            const id = e.features[0].properties.stationID;
-
-            // new mapboxgl.Popup()
-            // .setLngLat(coordinates)
-            // .setHTML(description)
-            // .addTo(map);
-            fetchData(id, function(tideHeightArr) {
-                drawChart(divName, tideHeightArr);
-            })
-        });
-    })
-    map.on('mouseenter', 'tideStationDots', () => {
-        map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', 'tideStationDots', () => {
-        map.getCanvas().style.cursor = '';
-    });
-}
-
-function toggleTideStationMarkers(showHide) {
-    if (showHide == 'hide') {
-        map.setLayoutProperty('tideStationDots', 'visibility', 'none');
-        //mapFuncs.removeMapLayer('tideStationDots');
-    } else if (showHide == 'show') {
-        map.setLayoutProperty('tideStationDots', 'visibility', 'visible');
-    }
-}
-
-module.exports = {
-    loadTideStationMarkers,
-    toggleTideStationMarkers
-};
-},{"../radar/map/map":86,"../radar/map/mapFunctions":87,"./chart":92,"./fetchData":93}],95:[function(require,module,exports){
-const drawChart = require('./chart');
-const fetchData = require('./fetchData');
-const loadMarkers = require('./loadMarkers');
-const tideStationsControl = require('./mapControl');
-
-/*
-https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=NOS.COOPS.TAC.WL&begin_date=20220813&end_date=20221014&datum=MLLW&station=8656590&time_zone=lst_ldt&units=english&interval=hilo&format=json
-https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8656590
-https://tidesandcurrents.noaa.gov/map/index.html?type=TidePredictions
-https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/8656590.json
-
-https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions
-*/
-
-
-// 8656590 - north carolina station
-// 8634214 - virginia station
-// 9455934 - alaska station
-var stationID = '8656590';
-function tideChartInit(divName) {
-    tideStationsControl.addTideStationsControl(divName);
-    // loadMarkers.loadTideStationMarkers(divName)
-    // fetchData(stationID, function(tideHeightArr) {
-    //     drawChart(divName, tideHeightArr);
-    // })
-}
-
-module.exports = {
-    tideChartInit
-}
-},{"./chart":92,"./fetchData":93,"./loadMarkers":94,"./mapControl":96}],96:[function(require,module,exports){
-const createControl = require('../radar/map/controls/createControl');
-const loadMarkers = require('./loadMarkers');
-var map = require('../radar/map/map');
-
-function addTideStationsControl(divName) {
-    createControl({
-        'id': 'tideStationsThing',
-        'position': 'top-left',
-        'icon': 'fa-water',
-        'css': 'margin-top: 100%;'
-    }, function() {
-        if (!$('#tideStationsThing').hasClass('icon-selected')) {
-            $('#tideStationsThing').addClass('icon-selected');
-            $('#tideStationsThing').removeClass('icon-black');
-
-            if (map.getLayer('tideStationDots')) {
-                // layer does exist - toggle the visibility to on
-                loadMarkers.toggleTideStationMarkers('show');
-            } else {
-                // layer doesn't exist - load it onto the map for the first time
-                loadMarkers.loadTideStationMarkers(divName);
-            }
-        } else if ($('#tideStationsThing').hasClass('icon-selected')) {
-            $('#tideStationsThing').removeClass('icon-selected');
-            $('#tideStationsThing').addClass('icon-black');
-            // layer does exist - toggle the visibility to off
-            loadMarkers.toggleTideStationMarkers('hide');
-        }
-    })
-}
-
-module.exports = {
-    addTideStationsControl
-}
-},{"../radar/map/controls/createControl":80,"../radar/map/map":86,"./loadMarkers":94}],97:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -21512,7 +21448,7 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../app/radar/draw/drawToMap":70,"./palettes":113,"./palettes/ref":114,"./palettes/vel":115,"./palettize":116,"./preprocess/downsample":117,"./preprocess/filterproduct":118,"./preprocess/indexproduct":119,"./preprocess/rrle":120,"canvas":179}],112:[function(require,module,exports){
+},{"../../../app/radar/draw/drawToMap":73,"./palettes":113,"./palettes/ref":114,"./palettes/vel":115,"./palettize":116,"./preprocess/downsample":117,"./preprocess/filterproduct":118,"./preprocess/indexproduct":119,"./preprocess/rrle":120,"canvas":179}],112:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
 },{}],113:[function(require,module,exports){
@@ -25743,4 +25679,4 @@ module.exports={
   }
 }
 
-},{}]},{},[71]);
+},{}]},{},[74]);

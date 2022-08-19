@@ -9,4 +9,7 @@ require('../main');
 require('../map/controls/stationMarkers');
 
 // load the tides chart
-require('../../tides/main').tideChartInit('container');
+// require('../../tides/main').tideChartInit('container');
+
+// initialize the alerts
+require('../../alerts/entry');
