@@ -440,14 +440,25 @@
         </div>
         <div id="mainInfo" style="display: none">
             <span id="uploadModeSpan" style="display: none">
-                <div>Select a product.</div>
-                <div class="btn-group-vertical l2BtnGroup">
-                    <button type="button" value="level2-ref" id="level2-ref" class="btn btn-outline-primary btn-sm" disabled>Base Reflectivity</button>
-                    <button type="button" value="level2-vel" id="level2-vel" class="btn btn-outline-primary btn-sm" disabled>Base Velocity</button>
-                    <button type="button" value="level2-rho" id="level2-rho" class="btn btn-outline-primary btn-sm" disabled>Correlation Coefficient</button>
-                    <button type="button" value="level2-phi" id="level2-phi" class="btn btn-outline-primary btn-sm" disabled>Differential Phase Shift</button>
-                    <button type="button" value="level2-zdr" id="level2-zdr" class="btn btn-outline-primary btn-sm" disabled>Differential Reflectivity</button>
-                    <button type="button" value="level2-sw " id="level2-sw " class="btn btn-outline-primary btn-sm" disabled>Spectrum Width</button>
+                <div class="dropdown-center" id="l2ProductDropdown">
+                    <button class="btn btn-outline-primary btn-sm dropdown-toggle" id="l2ProductBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Products</button>
+                    <ul class="dropdown-menu" id="l2ProductMenu">
+                        <!-- <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
+                        <li><a class="dropdown-item" href="#" value="tilt2">Tilt 2</a></li>
+                        <li><a class="dropdown-item" href="#" value="tilt3">Tilt 3</a></li>
+                        <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li> -->
+                    </ul>
+                </div>
+                <br>
+                <div id="l2ElevBtns">
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup0" role="group"></div><br>
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup1" role="group"></div><br>
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup2" role="group"></div><br>
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup3" role="group"></div><br>
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup4" role="group"></div><br>
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup5" role="group"></div><br>
+                    <div class="btn-group l2BtnGroup" id="l2ElevBtnGroup6" role="group"></div><br>
                 </div>
             </span>
             <span id="currentModeSpan">

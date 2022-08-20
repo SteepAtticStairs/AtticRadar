@@ -53,9 +53,11 @@ $('#optionsBox').on('click', function(e) {
     // if the user clicks on one of the dropdown menu items
     if ($(e.target).parents().eq(1).attr('id') == 'tiltsMenu') return;
     // if the user clicks on one of the product buttons
-    if ($(e.target).parents().eq(1).attr('id') == 'mainInfo') return;
-    // if the user clicks on one of the product buttons in upload mode
-    if ($(e.target).parents().eq(1).attr('id') == 'uploadModeSpan') return;
+    if ($(e.target).parents().eq(1).attr('id') == 'mainInfo' && $('#modeThing').hasClass('fa-clock')) return;
+    // if the user clicks on one of the elevation buttons in upload mode
+    if ($(e.target).attr('id').slice(0, 7) == 'elevBtn') return;
+    // if the user clicks on the product dropdown in upload mode
+    if ($(e.target).attr('id') == 'l2ProductBtn') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);

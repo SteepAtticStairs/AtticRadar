@@ -56,7 +56,7 @@ const DEFAULT_OPTIONS = {
 	cropTo: 3600,
 	background: 'black',
 	lineWidth: 2,
-	usePreferredWaveforms: true,
+	usePreferredWaveforms: false,
 	alpha: true,
 	imageSmoothingEnabled: true,
 	antialias: 'default',

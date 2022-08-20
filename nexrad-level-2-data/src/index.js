@@ -326,6 +326,46 @@ class Level2Radar {
 		}
 	}
 
+	// REF: 'reflect'
+	// VEL: 'velocity'
+	// SW : 'spectrum width'
+	// ZDR: 'differential reflectivity'
+	// PHI: 'differential phase phift'
+	// RHO: 'correlation coefficient'
+	listElevationsAndProducts() {
+		if (this.header.version != "01" && this.header.version != "E2") {
+			console.log('hi-res data');
+			var elevAngleArr = [];
+			for (var key in this.vcp.record.elevations) {
+				// var base = this.vcp.record.elevations[key]
+				var base = this.data[key][0].record;
+
+				var allProductsArr = [];
+				if (base.hasOwnProperty('reflect')) {
+					allProductsArr.push('REF')
+				}
+				if (base.hasOwnProperty('velocity')) {
+					allProductsArr.push('VEL')
+				}
+				if (base.hasOwnProperty('rho')) {
+					allProductsArr.push('RHO')
+				}
+				if (base.hasOwnProperty('phi')) {
+					allProductsArr.push('PHI')
+				}
+				if (base.hasOwnProperty('zdr')) {
+					allProductsArr.push('ZDR')
+				}
+				if (base.hasOwnProperty('spectrum')) {
+					allProductsArr.push('SW ')
+				}
+
+				elevAngleArr.push([base.elevation_angle, base.elevation_number, allProductsArr]);
+			}
+			return elevAngleArr;
+		}
+	}
+
 	_checkData() {
 		if (this.data.length === 0) throw new Error('No data found in file');
 	}
