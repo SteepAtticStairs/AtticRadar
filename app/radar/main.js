@@ -33,6 +33,12 @@ require('./map/controls/mode');
 // add the reload control
 require('./map/controls/reload');
 
+var startTimer = Date.now();
+$.get(ut.phpProxy + "https://google.com", function(data) {
+    var endTimer = Date.now();
+    console.log(`Established connection to proxy in ${endTimer - startTimer} ms`)
+})
+
 $('.productBtnGroup button').on('click', function() {
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
