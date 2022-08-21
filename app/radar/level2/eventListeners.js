@@ -51,16 +51,20 @@ function loadL2Listeners(l2rad) {
         return dropdownItem;
     }
     $('#l2ProductBtn').attr('value', 'REF');
-    $('.l2BtnGroup').on('click', function (e) {
+    $('#l2ElevBtns').on('click', function(e) {
         var clickedValue = $(e.target).attr('value');
         $('#dataDiv').data('currentElevation', clickedValue);
         var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
 
-        document.getElementById('l2ProductBtn').innerHTML = 'Products';
-
         document.getElementById('l2ProductMenu').innerHTML = '';
         for (key in allProdsForElev) {
             document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProdsForElev[key])
+        }
+
+        var dropdownBtn = document.getElementById('l2ProductBtn');
+        if (!(allProdsForElev.includes(dropdownBtn.innerHTML))) {
+            dropdownBtn.innerHTML = 'REF';
+            $(dropdownBtn).attr('value', 'REF');
         }
 
         plot(l2rad, $('#l2ProductBtn').attr('value'), {
@@ -73,6 +77,15 @@ function loadL2Listeners(l2rad) {
 
         document.getElementById('l2ProductBtn').innerHTML = clickedVal;
         $('#l2ProductBtn').attr('value', clickedVal);
+
+        $("[valTag]").hide();
+        var elevsAndProds = $('#dataDiv').data('elevsAndProds');
+        for (key in elevsAndProds) {
+            var elevNum = elevsAndProds[key][1];
+            if (elevsAndProds[key][2].includes(clickedVal)) {
+                $(`[valTag=${parseInt(key) + 1}]`).show();
+            }
+        }
 
         plot(l2rad, clickedVal, {
             elevations: parseInt($('#dataDiv').data('currentElevation')),

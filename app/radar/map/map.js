@@ -48,6 +48,7 @@ $('#dataDiv').data('optionsBoxShown', false);
 $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 0);
 
 $('#optionsBox').on('click', function(e) {
+    console.log($(e.target).parents().eq(1).attr('id'))
     // if the user clicks on the dropdown button
     if ($(e.target).parents().eq(0).attr('id') == 'tiltsDropdown') return;
     // if the user clicks on one of the dropdown menu items
@@ -55,9 +56,11 @@ $('#optionsBox').on('click', function(e) {
     // if the user clicks on one of the product buttons
     if ($(e.target).parents().eq(1).attr('id') == 'mainInfo' && $('#modeThing').hasClass('fa-clock')) return;
     // if the user clicks on one of the elevation buttons in upload mode
-    if ($(e.target).attr('id').slice(0, 7) == 'elevBtn') return;
+    if ($(e.target).parents().eq(0).attr('id') == 'l2ElevBtns') return;
     // if the user clicks on the product dropdown in upload mode
     if ($(e.target).attr('id') == 'l2ProductBtn') return;
+    // if the user clicks on the product dropdown options in upload mode
+    if ($(e.target).parents().eq(1).attr('id') == 'l2ProductMenu') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);

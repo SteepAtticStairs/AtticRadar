@@ -17807,16 +17807,20 @@ function loadL2Listeners(l2rad) {
         return dropdownItem;
     }
     $('#l2ProductBtn').attr('value', 'REF');
-    $('.l2BtnGroup').on('click', function (e) {
+    $('#l2ElevBtns').on('click', function(e) {
         var clickedValue = $(e.target).attr('value');
         $('#dataDiv').data('currentElevation', clickedValue);
         var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
 
-        document.getElementById('l2ProductBtn').innerHTML = 'Products';
-
         document.getElementById('l2ProductMenu').innerHTML = '';
         for (key in allProdsForElev) {
             document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProdsForElev[key])
+        }
+
+        var dropdownBtn = document.getElementById('l2ProductBtn');
+        if (!(allProdsForElev.includes(dropdownBtn.innerHTML))) {
+            dropdownBtn.innerHTML = 'REF';
+            $(dropdownBtn).attr('value', 'REF');
         }
 
         plot(l2rad, $('#l2ProductBtn').attr('value'), {
@@ -17829,6 +17833,15 @@ function loadL2Listeners(l2rad) {
 
         document.getElementById('l2ProductBtn').innerHTML = clickedVal;
         $('#l2ProductBtn').attr('value', clickedVal);
+
+        $("[valTag]").hide();
+        var elevsAndProds = $('#dataDiv').data('elevsAndProds');
+        for (key in elevsAndProds) {
+            var elevNum = elevsAndProds[key][1];
+            if (elevsAndProds[key][2].includes(clickedVal)) {
+                $(`[valTag=${parseInt(key) + 1}]`).show();
+            }
+        }
 
         plot(l2rad, clickedVal, {
             elevations: parseInt($('#dataDiv').data('currentElevation')),
@@ -17844,21 +17857,24 @@ function loadL2Menu(elevsAndProds) {
     $('#dataDiv').data('elevsAndProds', elevsAndProds);
     console.log(elevsAndProds)
     function returnBtnTemplate(elevAngle, elevNum) {
+        // var btnTemplate = `
+        //     <button type="button"
+        //     value="${elevNum}"
+        //     id="elevBtn${elevNum}"
+        //     class="btn btn-secondary btn-sm">
+        //         ${elevAngle}
+        //     </button>`
         var btnTemplate = `
-            <button type="button"
-            value="${elevNum}"
-            id="elevBtn${elevNum}"
-            class="btn btn-secondary btn-sm">
-                ${elevAngle}
-            </button>`
+            <input class="form-check-input radio-inline" type="radio" name="radios" id="elev${elevNum}" value="${elevNum}" valTag="${elevNum}">
+            <label class="form-check-label" valTag="${elevNum}">${elevAngle}
+            &nbsp;&nbsp;&nbsp;&nbsp;`
         return btnTemplate;
     }
 
-    var l2btnsElem = document.getElementById('l2ElevBtns').innerHTML;
-    var amountPerRow = 5;
+    var l2btnsElem = document.getElementById('l2ElevBtns');
     for (key in elevsAndProds) {
-        if (key % amountPerRow == 0) {
-            $('#dataDiv').data('curElevBtnGroupIter', `l2ElevBtnGroup${key / amountPerRow}`);
+        if (key % 3 == 0 && key != 0) {
+            l2btnsElem.innerHTML += '<br>'
         }
         var curElevAngle = elevsAndProds[key][0];
         // round to one decimal place
@@ -17866,8 +17882,10 @@ function loadL2Menu(elevsAndProds) {
         curElevAngle = curElevAngle.toFixed(1);
         var curElevNum = elevsAndProds[key][1];
 
-        document.getElementById($('#dataDiv').data('curElevBtnGroupIter')).innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
+        l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
     }
+    // add some space at the bottom to allow the user to see the entire dropdown menu
+    l2btnsElem.innerHTML += '<br><br><br><br>'
 }
 
 module.exports = loadL2Menu;
@@ -19017,6 +19035,7 @@ $('#dataDiv').data('optionsBoxShown', false);
 $('#optionsBox').animate({height: $('#smallInfo').height() + 12}, 0);
 
 $('#optionsBox').on('click', function(e) {
+    console.log($(e.target).parents().eq(1).attr('id'))
     // if the user clicks on the dropdown button
     if ($(e.target).parents().eq(0).attr('id') == 'tiltsDropdown') return;
     // if the user clicks on one of the dropdown menu items
@@ -19024,9 +19043,11 @@ $('#optionsBox').on('click', function(e) {
     // if the user clicks on one of the product buttons
     if ($(e.target).parents().eq(1).attr('id') == 'mainInfo' && $('#modeThing').hasClass('fa-clock')) return;
     // if the user clicks on one of the elevation buttons in upload mode
-    if ($(e.target).attr('id').slice(0, 7) == 'elevBtn') return;
+    if ($(e.target).parents().eq(0).attr('id') == 'l2ElevBtns') return;
     // if the user clicks on the product dropdown in upload mode
     if ($(e.target).attr('id') == 'l2ProductBtn') return;
+    // if the user clicks on the product dropdown options in upload mode
+    if ($(e.target).parents().eq(1).attr('id') == 'l2ProductMenu') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);
