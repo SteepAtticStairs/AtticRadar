@@ -65,6 +65,7 @@ function loadL2Listeners(l2rad) {
         if (!(allProdsForElev.includes(dropdownBtn.innerHTML))) {
             dropdownBtn.innerHTML = 'REF';
             $(dropdownBtn).attr('value', 'REF');
+            $('#dataDiv').data('currentL2Product', 'REF');
         }
 
         plot(l2rad, $('#l2ProductBtn').attr('value'), {
@@ -72,24 +73,46 @@ function loadL2Listeners(l2rad) {
         });
     })
 
-    $('#l2ProductMenu').on('click', function(e) {
-        var clickedVal = $(e.target).attr('value');
-
-        document.getElementById('l2ProductBtn').innerHTML = clickedVal;
-        $('#l2ProductBtn').attr('value', clickedVal);
-
+    function showSpecificElevs(val) {
         $("[valTag]").hide();
         var elevsAndProds = $('#dataDiv').data('elevsAndProds');
         for (key in elevsAndProds) {
             var elevNum = elevsAndProds[key][1];
-            if (elevsAndProds[key][2].includes(clickedVal)) {
+            if (elevsAndProds[key][2].includes(val)) {
                 $(`[valTag=${parseInt(key) + 1}]`).show();
             }
+        }
+    }
+
+    $('#dataDiv').data('currentL2Product', 'REF');
+    $('#l2ProductMenu').on('click', function(e) {
+        var clickedVal = $(e.target).attr('value');
+        $('#dataDiv').data('currentL2Product', clickedVal);
+
+        document.getElementById('l2ProductBtn').innerHTML = clickedVal;
+        $('#l2ProductBtn').attr('value', clickedVal);
+
+        if (!$('#elevOptionsSwitch').is(':checked')) {
+            showSpecificElevs(clickedVal);
         }
 
         plot(l2rad, clickedVal, {
             elevations: parseInt($('#dataDiv').data('currentElevation')),
         });
+    })
+
+    $('#elevOptionsSwitch').on('input', function() {
+        // https://stackoverflow.com/a/68162025
+        var isChecked = $(this).is(':checked');
+
+        // if it is checked, show all elevations regardless of the products avaliable.
+        // if it is not checked, only show elevations that have the selected product.
+
+        if (isChecked) {
+            $("[valTag]").show();
+        } else if (!isChecked) {
+            showSpecificElevs($('#dataDiv').data('currentL2Product'));
+        }
     })
 }
 
