@@ -1,23 +1,51 @@
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
 
+function updateAccordion(number, title, expanded, body) {
+    var content = 
+    `<div class="accordion-item">
+        <h2 class="accordion-header" id="accordionHeader${number}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionContent${number}"
+                aria-expanded="${expanded}" aria-controls="collapseOne">
+                ${title}
+            </button>
+        </h2>
+        <div id="accordionContent${number}" class="accordion-collapse collapse" aria-labelledby="accordionHeader${number}"
+            data-bs-parent="#alertModalAccordion">
+            <div class="accordion-body alertAccordionBody">${body}</div>
+        </div>
+    </div>`
+
+    if (parseInt(number) == 0) {
+        document.getElementById('alertModalAccordion').innerHTML = '';
+    }
+    document.getElementById('alertModalAccordion').innerHTML += content;
+}
+
 function addMarker(e) {
-    var alertURL = e.features[0].properties['@id'];
+    for (key in e.features) {
+        var properties = e.features[key].properties;
+        var parameters = JSON.parse(properties.parameters);
 
-    var parameters = JSON.parse(e.features[0].properties.parameters);
+        var alertURL = properties['@id'];
 
-    var alertModalBody = 
-        `<b>${e.features[0].properties.event}
-        <br>${e.features[0].properties.senderName}
-        <br>${e.features[0].properties.headline}</b>
-        <br><u>${ut.printFancyTime(new Date(e.features[0].properties.sent))}</u>
-        <br><u>${parameters.WMOidentifier}</u>
-        <br><u>${parameters.VTEC}</u>
-        <br><u>${e.features[0].properties.areaDesc}</u>
-        <br>${parameters.NWSheadline}
-        <br>${e.features[0].properties.description}
-        <br>${e.features[0].properties.instruction}`
-    document.getElementById('alertModalBody').innerHTML = alertModalBody;
+        var alertModalBody = 
+            `<b>${properties.event}
+            <br>${properties.senderName}
+            <br>${properties.headline}</b>
+            <br><u>${ut.printFancyTime(new Date(properties.sent))}</u>
+            <br><u>${parameters.WMOidentifier}</u>
+            <br><u>${parameters.VTEC}</u>
+            <br><u>${properties.areaDesc}</u>
+            <br>${parameters.NWSheadline}
+            <br>${properties.description}
+            <br>${properties.instruction}`
+        //document.getElementById('alertModalBody').innerHTML = alertModalBody;
+        //var alertTitle = `Alert #${parseInt(key) + 1}`;
+        var alertTitle = properties.event;
+
+        updateAccordion(key, alertTitle, false, alertModalBody);
+    }
 
     // open the modal
     $('#alertModalTrigger').click();

@@ -272,9 +272,11 @@
         }
 
         #alertModalBody {
-            white-space: pre-wrap;
-            height: 200px;
+            height: 50vh;
             overflow: scroll;
+        }
+        .alertAccordionBody {
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -449,6 +451,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="alertModalBody">
+                    <div class="accordion" id="alertModalAccordion">
+                        
+                    </div>
                 </div>
                 <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
