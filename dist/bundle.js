@@ -16941,7 +16941,7 @@ createControl({
                     paint: {
                         //#0080ff blue
                         //#ff7d7d red
-                        'fill-color': '#0080ff',
+                        'fill-color': '#ff7d7d',
                         'fill-opacity': 0.5
                     }
                 });
@@ -16952,7 +16952,7 @@ createControl({
                     'paint': {
                         //#014385 blue
                         //#850101 red
-                        'line-color': '#014385',
+                        'line-color': '#850101',
                         'line-width': 3
                     }
                 });
