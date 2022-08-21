@@ -94,6 +94,9 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             STstuff.loadAllStormTrackingStuff();
         }
 
+        // make sure the alerts are always on top
+        mapFuncs.moveMapLayer('newAlertsLayer');
+
         var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
         console.log('File plotting complete');

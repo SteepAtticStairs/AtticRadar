@@ -9,6 +9,7 @@ var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/h
 var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
 // https://realearth.ssec.wisc.edu/products/?app=_ALL_
 var allAlertsURL = `https://realearth.ssec.wisc.edu/api/shapes?products=NWS-Alerts-All`;
+var noaaAlertsURL = `https://api.weather.gov/alerts/active`;
 var newAlertsArr = [];
 var y = 0;
 
@@ -23,13 +24,14 @@ createControl({
         $('#alertsThing').removeClass('icon-black');
 
         if (map.getLayer('newAlertsLayer')) {
+            map.getCanvas().style.cursor = "crosshair";
+            map.on('click', 'newAlertsLayer', mapClick)
             map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
         } else {
             map.getCanvas().style.cursor = "crosshair";
-            map.on('click', mapClick)
-            fetchPolygonData([allAlertsURL], function(data) {
-                var data = simplify(data, 0.01);
+            map.on('click', 'newAlertsLayer', mapClick)
+            fetchPolygonData([noaaAlertsURL], function(data) {
                 map.addLayer({
                     'id': `newAlertsLayer`,
                     'type': 'fill',
@@ -55,14 +57,14 @@ createControl({
                         'line-width': 3
                     }
                 });
-                newAlertsArr.push(`newAlertsLayerOutline`);
-                newAlertsArr.push(`newAlertsLayer`);
+                // newAlertsArr.push(`newAlertsLayerOutline`);
+                // newAlertsArr.push(`newAlertsLayer`);
 
-                // map.on('click', 'newAlertsLayer', (e) => {
-                //     for (key in e.features) {
-                //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
-                //     }
-                // });
+                // // map.on('click', 'newAlertsLayer', (e) => {
+                // //     for (key in e.features) {
+                // //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
+                // //     }
+                // // });
             })
         }
     } else if ($('#alertsThing').hasClass('icon-selected')) {
@@ -70,7 +72,7 @@ createControl({
         $('#alertsThing').addClass('icon-black');
 
         map.getCanvas().style.cursor = "default";
-        map.off('click', mapClick)
+        map.off('click', 'newAlertsLayer', mapClick)
 
         map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');
         map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
