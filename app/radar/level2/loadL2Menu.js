@@ -45,7 +45,7 @@ function loadL2Menu(elevsAndProds) {
 
     var l2btnsElem = document.getElementById('l2ElevBtns');
     for (key in elevsAndProds) {
-        if (key % 3 == 0 && key != 0) {
+        if (key % 2 == 0 && key != 0) {
             l2btnsElem.innerHTML += '<br>'
         }
         var curElevAngle = elevsAndProds[key][0];
