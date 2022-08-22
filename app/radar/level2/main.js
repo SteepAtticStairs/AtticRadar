@@ -8,18 +8,19 @@ const loadL2Menu = require('./loadL2Menu');
 const ut = require('../utils');
 
 function mainL2Loading(thisObj) {
-    var l2rad = new Level2Radar(ut.toBuffer(thisObj.result));
-    console.log(l2rad);
+    var l2rad = new Level2Radar(ut.toBuffer(thisObj.result), function(l2rad) {
+        console.log(l2rad);
 
-    l2info(l2rad);
+        l2info(l2rad);
 
-    plot(l2rad, 'REF', {
-        elevations: 1,
+        plot(l2rad, 'REF', {
+            elevations: 1,
+        });
+
+        l2listeners(l2rad);
+
+        loadL2Menu(l2rad.listElevationsAndProducts());
     });
-
-    l2listeners(l2rad);
-
-    loadL2Menu(l2rad.listElevationsAndProducts());
 }
 
 module.exports = mainL2Loading;

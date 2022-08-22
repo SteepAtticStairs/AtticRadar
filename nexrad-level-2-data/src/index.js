@@ -6,6 +6,13 @@ const combineData = require('./combinedata');
  * @property {(object | boolean)} [logger=console] By default error and information messages will be written to the console. These can be suppressed by passing false, or a custom logger can be provided. A custom logger must provide the log() and error() functions.
  */
 
+/*
+*
+* Last commit before redoing with callbacks:
+* https://github.com/SteepAtticStairs/NexradJS/tree/a7814678d0b415f415c4054dc313c12378fb51e7/nexrad-level-2-data
+*
+*/
+
 class Level2Radar {
 	/**
 	 * Parses a Nexrad Level 2 Data archive or chunk. Provide `rawData` as a `Buffer`. Returns an object formatted per the [ICD FOR RDA/RPG - Build RDA 20.0/RPG 20.0 (PDF)](https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620002U.pdf), or as close as can reasonably be represented in a javascript object. Additional data accessors are provided in the returned object to pull out typical data in a format ready for processing.
@@ -15,46 +22,51 @@ class Level2Radar {
 	 * @param {ParserOptions} [options] Parser options
 	 */
 
-	constructor(file, options) {
+	constructor(file, callback, options) {
 		// combine options with defaults
 		this.elevation = 1;	// 1 based per NOAA documentation
 		// default mode, parse file from buffer
 		if (file instanceof Buffer) {
 		// options and defaults
 			this.options = combineOptions(options);
-			const {
-				data, header, vcp, hasGaps, isTruncated,
-			} = parseData(file, this.options);
-			this.data = data;
+			var thisObj = this;
+			// const {
+			// 	data, header, vcp, hasGaps, isTruncated,
+			// } = parseData(file, this.options);
+			parseData(file, this.options, function(data, header, vcp, hasGaps, isTruncated) {
+				thisObj.data = data;
 
-			/**
-			 * @type {Header}
-			 * @category Metadata
-			 */
-			this.header = header;
+				/**
+				 * @type {Header}
+				 * @category Metadata
+				 */
+				thisObj.header = header;
 
-			/**
-			 * @type {Vcp}
-			 * @category Metadata
-			 */
-			this.vcp = vcp;
+				/**
+				 * @type {Vcp}
+				 * @category Metadata
+				 */
+				thisObj.vcp = vcp;
 
-			/**
-			 * Gaps were found in the source data
-			 *
-			 * @type {boolean}
-			 * @category Metadata
-			 */
+				/**
+				 * Gaps were found in the source data
+				 *
+				 * @type {boolean}
+				 * @category Metadata
+				 */
 
-			this.hasGaps = hasGaps;
+				thisObj.hasGaps = hasGaps;
 
-			/**
-			 * Source data was truncated
-			 *
-			 * @type {boolean}
-			 * @category Metadata
-			 */
-			this.isTruncated = isTruncated;
+				/**
+				 * Source data was truncated
+				 *
+				 * @type {boolean}
+				 * @category Metadata
+				 */
+				thisObj.isTruncated = isTruncated;
+
+				callback(thisObj);
+			})
 		} else if (typeof file === 'object' && (file.data && file.header && file.vcp)) {
 		// alternative mode data is fed in as a pre-formatted object as the result of the combine static function
 			this.data = file.data;

@@ -17959,18 +17959,19 @@ const loadL2Menu = require('./loadL2Menu');
 const ut = require('../utils');
 
 function mainL2Loading(thisObj) {
-    var l2rad = new Level2Radar(ut.toBuffer(thisObj.result));
-    console.log(l2rad);
+    var l2rad = new Level2Radar(ut.toBuffer(thisObj.result), function(l2rad) {
+        console.log(l2rad);
 
-    l2info(l2rad);
+        l2info(l2rad);
 
-    plot(l2rad, 'REF', {
-        elevations: 1,
+        plot(l2rad, 'REF', {
+            elevations: 1,
+        });
+
+        l2listeners(l2rad);
+
+        loadL2Menu(l2rad.listElevationsAndProducts());
     });
-
-    l2listeners(l2rad);
-
-    loadL2Menu(l2rad.listElevationsAndProducts());
 }
 
 module.exports = mainL2Loading;
@@ -21066,13 +21067,15 @@ const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
 // constants
 const { FILE_HEADER_SIZE } = require('./constants');
 
-const decompress = (raf, opt) => {
+const ut = require('../../app/radar/utils');
+
+const decompress = (raf, opt, callback) => {
 	// detect gzip header
 	const gZipHeader = raf.read(2);
 	raf.seek(0);
 	if (gZipHeader[0] === 31 && gZipHeader[1] === 139) {
 		console.log('file is gzipped, decompressing...')
-		return gzipDecompress(raf);
+		callback(gzipDecompress(raf));
 	}
 	console.log('file is not gzipped, reading contents...')
 
@@ -21126,25 +21129,38 @@ const decompress = (raf, opt) => {
 		itersBeforeStop = 10;
 	}
 	var iters = 1;
-	// loop through each block and decompress it
-	positions.forEach((block) => {
-		if (iters < itersBeforeStop) {
-			console.log('decompressing block ' + iters);
-			iters++;
-			// extract the block from the buffer
-			const compressed = raf.buffer.slice(block.pos, block.pos + block.size);
-			if (JSON.stringify(compressed) != '{"type":"Buffer","data":[]}') {
-				const output = bzip.decodeBlock(compressed, 32); // skip 32 bits 'BZh9' header
-				outBuffers.push(output);
+
+	// create a promise that will resolve on the next tick of the event loop
+	function sleep() { 
+		return new Promise(r => setTimeout(r));
+	}
+	async function handleHeavyLifting() {
+		ut.progressBarVal('show');
+		ut.progressBarVal('label', '')
+		// loop through each block and decompress it
+		for (const block of positions) {
+			if (iters < itersBeforeStop) {
+				console.log('decompressing block ' + iters);
+				iters++;
+				// extract the block from the buffer
+				const compressed = raf.buffer.slice(block.pos, block.pos + block.size);
+				if (JSON.stringify(compressed) != '{"type":"Buffer","data":[]}') {
+					const output = bzip.decodeBlock(compressed, 32); // skip 32 bits 'BZh9' header
+					outBuffers.push(output);
+
+					ut.progressBarVal('set', ut.scale(iters, 0, positions.length, 0, 100));
+					await sleep();
+				}
 			}
-		}
-	});
+		};
+		// combine the buffers
+		const outBuffer = Buffer.concat(outBuffers);
 
-	// combine the buffers
-	const outBuffer = Buffer.concat(outBuffers);
-
-	// pass the buffer to RandomAccessFile and return the result
-	return new RandomAccessFile(outBuffer, BIG_ENDIAN);
+		// pass the buffer to RandomAccessFile and return the result
+		callback(new RandomAccessFile(outBuffer, BIG_ENDIAN));
+		//return new RandomAccessFile(outBuffer, BIG_ENDIAN);
+	}
+	handleHeavyLifting();
 };
 
 // compression header is (int) size of block + 'BZh' + one character block size
@@ -21157,7 +21173,7 @@ const readCompressionHeader = (raf) => ({
 module.exports = decompress;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./classes/RandomAccessFile":111,"./constants":113,"./gzipdecompress":115,"buffer":11,"seek-bzip":191}],115:[function(require,module,exports){
+},{"../../app/radar/utils":99,"./classes/RandomAccessFile":111,"./constants":113,"./gzipdecompress":115,"buffer":11,"seek-bzip":191}],115:[function(require,module,exports){
 const zlib = require('zlib');
 // structured byte access
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
@@ -21177,6 +21193,13 @@ const combineData = require('./combinedata');
  * @property {(object | boolean)} [logger=console] By default error and information messages will be written to the console. These can be suppressed by passing false, or a custom logger can be provided. A custom logger must provide the log() and error() functions.
  */
 
+/*
+*
+* Last commit before redoing with callbacks:
+* https://github.com/SteepAtticStairs/NexradJS/tree/a7814678d0b415f415c4054dc313c12378fb51e7/nexrad-level-2-data
+*
+*/
+
 class Level2Radar {
 	/**
 	 * Parses a Nexrad Level 2 Data archive or chunk. Provide `rawData` as a `Buffer`. Returns an object formatted per the [ICD FOR RDA/RPG - Build RDA 20.0/RPG 20.0 (PDF)](https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620002U.pdf), or as close as can reasonably be represented in a javascript object. Additional data accessors are provided in the returned object to pull out typical data in a format ready for processing.
@@ -21186,46 +21209,51 @@ class Level2Radar {
 	 * @param {ParserOptions} [options] Parser options
 	 */
 
-	constructor(file, options) {
+	constructor(file, callback, options) {
 		// combine options with defaults
 		this.elevation = 1;	// 1 based per NOAA documentation
 		// default mode, parse file from buffer
 		if (file instanceof Buffer) {
 		// options and defaults
 			this.options = combineOptions(options);
-			const {
-				data, header, vcp, hasGaps, isTruncated,
-			} = parseData(file, this.options);
-			this.data = data;
+			var thisObj = this;
+			// const {
+			// 	data, header, vcp, hasGaps, isTruncated,
+			// } = parseData(file, this.options);
+			parseData(file, this.options, function(data, header, vcp, hasGaps, isTruncated) {
+				thisObj.data = data;
 
-			/**
-			 * @type {Header}
-			 * @category Metadata
-			 */
-			this.header = header;
+				/**
+				 * @type {Header}
+				 * @category Metadata
+				 */
+				thisObj.header = header;
 
-			/**
-			 * @type {Vcp}
-			 * @category Metadata
-			 */
-			this.vcp = vcp;
+				/**
+				 * @type {Vcp}
+				 * @category Metadata
+				 */
+				thisObj.vcp = vcp;
 
-			/**
-			 * Gaps were found in the source data
-			 *
-			 * @type {boolean}
-			 * @category Metadata
-			 */
+				/**
+				 * Gaps were found in the source data
+				 *
+				 * @type {boolean}
+				 * @category Metadata
+				 */
 
-			this.hasGaps = hasGaps;
+				thisObj.hasGaps = hasGaps;
 
-			/**
-			 * Source data was truncated
-			 *
-			 * @type {boolean}
-			 * @category Metadata
-			 */
-			this.isTruncated = isTruncated;
+				/**
+				 * Source data was truncated
+				 *
+				 * @type {boolean}
+				 * @category Metadata
+				 */
+				thisObj.isTruncated = isTruncated;
+
+				callback(thisObj);
+			})
 		} else if (typeof file === 'object' && (file.data && file.header && file.vcp)) {
 		// alternative mode data is fed in as a pre-formatted object as the result of the combine static function
 			this.data = file.data;
@@ -21583,6 +21611,8 @@ const { RADAR_DATA_SIZE } = require('./constants');
 const decompress = require('./decompress');
 const parseHeader = require('./parseheader');
 
+const ut = require('../../app/radar/utils');
+
 /**
  * @typedef {object} ParsedData Intermediate parsed radar data, further processed by Level2Radar
 	*	@property {object} data Grouped and sorted data
@@ -21601,78 +21631,83 @@ const parseHeader = require('./parseheader');
  * @param {(object | boolean)} [options.logger=console] By default error and information messages will be written to the console. These can be suppressed by passing false, or a custom logger can be provided. A custom logger must provide the log(), warn() and error() function.
  * @returns {object} Intermediate data for use with Level2Radar
  */
-const parseData = (file, options) => {
+const parseData = (file, options, callback) => {
 	const rafCompressed = new RandomAccessFile(file, BIG_ENDIAN);
 	const data = [];
 
 	// decompress file if necessary, returns original file if no compression exists
-	const raf = decompress(rafCompressed, options.wholeOrPart);
+	decompress(rafCompressed, options.wholeOrPart, function(raf) {
+		// read the file header
+		const header = parseHeader(raf);
+		if (document.getElementById('fileStation').innerHTML != header.ICAO) {
+			document.getElementById('fileStation').innerHTML = header.ICAO;
+		}
 
-	// read the file header
-	const header = parseHeader(raf);
-	if (document.getElementById('fileStation').innerHTML != header.ICAO) {
-		document.getElementById('fileStation').innerHTML = header.ICAO;
-	}
+		let messageOffset31 = 0; // the current message 31 offset
+		let recordNumber = 0; // the record number
 
-	let messageOffset31 = 0; // the current message 31 offset
-	let recordNumber = 0; // the record number
+		// Loop through all of the messages contained within the radar archive file. Save all the data we find to it's respective array.
+		let r;
+		let vcp = {};
+		let hasGaps = false;
+		let isTruncated = false;
 
-	// Loop through all of the messages contained within the radar archive file. Save all the data we find to it's respective array.
-	let r;
-	let vcp = {};
-	let hasGaps = false;
-	let isTruncated = false;
+		var iters = 0;
 
-	// make sure there's more data, it's possible we're only decoding the header
-	if (raf.getPos() < raf.getLength()) {
-		do {
-			try {
-				r = Level2Record(raf, recordNumber, messageOffset31, header, options);
-				recordNumber += 1;
-			} catch (e) {
-			// parsing error, report error then set this chunk as finished
-				options.logger.warn(e);
-				isTruncated = true;
-				r = { finished: true };
-			}
-
-			if (!r.finished) {
-				if (recordNumber % 200 == 0) {
-					console.log('reading record ' + recordNumber);
-				}
-				if (r.message_type === 31) {
-				// found a message 31 type, update the offset using an actual (from search) size if provided
-					const messageSize = r.actual_size ?? r.message_size;
-					// if actual_size is present set gaps flag
-					hasGaps = true;
-					messageOffset31 += (messageSize * 2 + 12 - RADAR_DATA_SIZE);
+		// make sure there's more data, it's possible we're only decoding the header
+		if (raf.getPos() < raf.getLength()) {
+			do {
+				try {
+					r = Level2Record(raf, recordNumber, messageOffset31, header, options);
+					recordNumber += 1;
+				} catch (e) {
+				// parsing error, report error then set this chunk as finished
+					options.logger.warn(e);
+					isTruncated = true;
+					r = { finished: true };
 				}
 
-				// only process specific message types
-				if ([1, 5, 7, 31].includes(r.message_type)) {
-				// If data is found, push the record to the data array
-					if (r?.record?.reflect
-					|| r?.record?.velocity
-					|| r?.record?.spectrum
-					|| r?.record?.zdr
-					|| r?.record?.phi
-					|| r?.record?.rho) data.push(r);
+				if (!r.finished) {
+					if (recordNumber % 200 == 0) {
+						console.log('reading record ' + recordNumber);
+						iters++;
+						//ut.progressBarVal('set', ut.scale(iters, 0, 50, 75, 150));
+					}
+					if (r.message_type === 31) {
+					// found a message 31 type, update the offset using an actual (from search) size if provided
+						const messageSize = r.actual_size ?? r.message_size;
+						// if actual_size is present set gaps flag
+						hasGaps = true;
+						messageOffset31 += (messageSize * 2 + 12 - RADAR_DATA_SIZE);
+					}
 
-					if ([5, 7].includes(r.message_type)) vcp = r;
+					// only process specific message types
+					if ([1, 5, 7, 31].includes(r.message_type)) {
+					// If data is found, push the record to the data array
+						if (r?.record?.reflect
+						|| r?.record?.velocity
+						|| r?.record?.spectrum
+						|| r?.record?.zdr
+						|| r?.record?.phi
+						|| r?.record?.rho) data.push(r);
+
+						if ([5, 7].includes(r.message_type)) vcp = r;
+					}
 				}
-			}
-		} while (!r.finished);
-	}
-    document.getElementById('spinnerParent').style.display = 'none';
+			} while (!r.finished);
+		}
+		document.getElementById('spinnerParent').style.display = 'none';
 
-	// sort and group the scans by elevation asc
-	return {
-		data: groupAndSortScans(data),
-		header,
-		vcp,
-		isTruncated,
-		hasGaps,
-	};
+		// sort and group the scans by elevation asc
+		callback(groupAndSortScans(data), header, vcp, isTruncated, hasGaps);
+		// return {
+		// 	data: groupAndSortScans(data),
+		// 	header,
+		// 	vcp,
+		// 	isTruncated,
+		// 	hasGaps,
+		// };
+	});
 };
 
 // This takes the scans (aka sweeps) and groups them
@@ -21701,7 +21736,7 @@ const groupAndSortScans = (scans) => {
 
 module.exports = parseData;
 
-},{"./classes/Level2Record":109,"./classes/RandomAccessFile":111,"./constants":113,"./decompress":114,"./parseheader":118}],118:[function(require,module,exports){
+},{"../../app/radar/utils":99,"./classes/Level2Record":109,"./classes/RandomAccessFile":111,"./constants":113,"./decompress":114,"./parseheader":118}],118:[function(require,module,exports){
 const { FILE_HEADER_SIZE } = require('./constants');
 
 const parse = (raf) => {
@@ -26132,7 +26167,7 @@ Bunzip.decodeBlock = function(input, pos, output) {
     bz._read_bunzip();
     // XXX keep writing?
   }
-  if ('getBuffer' in outputStream)
+  if ('getBuffer' in outputStream) 
     return outputStream.getBuffer();
 };
 /* Reads bzip2 file from stream or buffer `input`, and invoke
