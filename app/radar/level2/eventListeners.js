@@ -50,18 +50,27 @@ function loadL2Listeners(l2rad) {
         var dropdownItem = `<li><a class="dropdown-item" href="#" value="${value}">${value}</a></li>`;
         return dropdownItem;
     }
+
+    var dropdownBtn = document.getElementById('l2ProductBtn');
+    var allProds = ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW '];
+    for (key in allProds) {
+        document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProds[key])
+    }
+    dropdownBtn.innerHTML = 'REF';
+    $(dropdownBtn).attr('value', 'REF');
+    $('#dataDiv').data('currentL2Product', 'REF');
+
     $('#l2ProductBtn').attr('value', 'REF');
     $('#l2ElevBtns').on('click', function(e) {
         var clickedValue = $(e.target).attr('value');
         $('#dataDiv').data('currentElevation', clickedValue);
         var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
 
-        document.getElementById('l2ProductMenu').innerHTML = '';
-        for (key in allProdsForElev) {
-            document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProdsForElev[key])
-        }
+        // document.getElementById('l2ProductMenu').innerHTML = '';
+        // for (key in allProdsForElev) {
+        //     document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProdsForElev[key])
+        // }
 
-        var dropdownBtn = document.getElementById('l2ProductBtn');
         if (!(allProdsForElev.includes(dropdownBtn.innerHTML))) {
             dropdownBtn.innerHTML = 'REF';
             $(dropdownBtn).attr('value', 'REF');
@@ -96,9 +105,9 @@ function loadL2Listeners(l2rad) {
             showSpecificElevs(clickedVal);
         }
 
-        plot(l2rad, clickedVal, {
-            elevations: parseInt($('#dataDiv').data('currentElevation')),
-        });
+        // plot(l2rad, clickedVal, {
+        //     elevations: parseInt($('#dataDiv').data('currentElevation')),
+        // });
     })
 
     $('#elevOptionsSwitch').on('input', function() {

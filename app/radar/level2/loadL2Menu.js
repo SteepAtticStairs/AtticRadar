@@ -58,6 +58,8 @@ function loadL2Menu(elevsAndProds) {
     }
     // add some space at the bottom to allow the user to see the entire dropdown menu
     l2btnsElem.innerHTML += '<br><br><br><br>'
+
+    $("[valTag=1]").prop("checked", true);
 }
 
 module.exports = loadL2Menu;
