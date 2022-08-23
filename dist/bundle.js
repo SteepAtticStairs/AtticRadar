@@ -17810,6 +17810,8 @@ function loadL2Listeners(l2rad) {
                     $('.elevNavBtns').show();
                 } else {
                     $('.elevNavBtns').hide();
+                    document.getElementById('numOfElevsForArrows').innerHTML = '';
+                    $('#dataDiv').data('curArrowElev', 0);
                 }
             }
         }
