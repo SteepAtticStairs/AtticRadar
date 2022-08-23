@@ -17801,6 +17801,20 @@ function loadL2Listeners(l2rad) {
     // })
 
 
+    function hideShowArrows(val) {
+        console.log(val)
+        var dupElevObj = $('#dataDiv').data('duplicateElevs');
+        for (const key in dupElevObj) {
+            if (dupElevObj[key].includes(val.toString())) {
+                if (dupElevObj[key].length > 1) {
+                    $('.elevNavBtns').show();
+                } else {
+                    $('.elevNavBtns').hide();
+                }
+            }
+        }
+    }
+
     // <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
     function returnDropdownItem(value) {
         var dropdownItem = `<li><a class="dropdown-item" href="#" value="${value}">${value}</a></li>`;
@@ -17815,12 +17829,15 @@ function loadL2Listeners(l2rad) {
     dropdownBtn.innerHTML = 'REF';
     $(dropdownBtn).attr('value', 'REF');
     $('#dataDiv').data('currentL2Product', 'REF');
+    $('#dataDiv').data('currentElevation', 1);
 
     $('#l2ProductBtn').attr('value', 'REF');
     $('#l2ElevBtns').on('click', function(e) {
         var clickedValue = $(e.target).attr('value');
         $('#dataDiv').data('currentElevation', clickedValue);
         var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
+
+        hideShowArrows(clickedValue);
 
         // document.getElementById('l2ProductMenu').innerHTML = '';
         // for (key in allProdsForElev) {
@@ -17879,6 +17896,46 @@ function loadL2Listeners(l2rad) {
             showSpecificElevs($('#dataDiv').data('currentL2Product'));
         }
     })
+
+    $('#dataDiv').data('curArrowElev', 0);
+    $('#elevNavBtns button').on('click', function() {
+        var leftOrRight = $(this).attr('value');
+        var curElevNum = $('#dataDiv').data('currentElevation');
+        var dupElevObj = $('#dataDiv').data('duplicateElevs');
+
+        for (const key in dupElevObj) {
+            if (dupElevObj[key].includes(curElevNum.toString())) {
+                if (dupElevObj[key].length > 1) {
+                    var elevToGoTo;
+                    var max = dupElevObj[key].length - 1;
+                    var min = 0;
+
+                    if (leftOrRight == 'left') {
+                        var subtractor = 0;
+                        if (!($('#dataDiv').data('curArrowElev') == min)) {
+                            subtractor = 1;
+                        }
+                        $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') - subtractor);
+                        elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')])
+                    } else if (leftOrRight == 'right') {
+                        var adder = 0;
+                        if (!($('#dataDiv').data('curArrowElev') == max)) {
+                            adder = 1;
+                        }
+                        $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') + adder);
+                        elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')]);
+                    }
+
+                    var curOverMax = `${$('#dataDiv').data('curArrowElev')} / ${max}`
+                    document.getElementById('numOfElevsForArrows').innerHTML = curOverMax;
+
+                    plot(l2rad, $('#dataDiv').data('currentL2Product'), {
+                        elevations: elevToGoTo,
+                    });
+                }
+            }
+        }
+    })
 }
 
 module.exports = loadL2Listeners;
@@ -17928,9 +17985,12 @@ function loadL2Menu(elevsAndProds) {
         warningModal.modal('show');
     }
 
+    var duplicateElevs = {};
+
     var l2btnsElem = document.getElementById('l2ElevBtns');
+    var iters = 0;
     for (key in elevsAndProds) {
-        if (key % 2 == 0 && key != 0) {
+        if (iters % 2 == 0 && iters != 0) {
             l2btnsElem.innerHTML += '<br>'
         }
         var curElevAngle = elevsAndProds[key][0];
@@ -17938,9 +17998,27 @@ function loadL2Menu(elevsAndProds) {
         // curElevAngle = Math.round(curElevAngle * 10) / 10;
         curElevAngle = curElevAngle.toFixed(1);
         var curElevNum = elevsAndProds[key][1];
+        var curElevWaveformType = elevsAndProds[key][3];
 
-        l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
+        // WVT = waveform type
+        var curElevCurWVT = `${curElevAngle}_${curElevWaveformType}`;
+
+        if (duplicateElevs.hasOwnProperty(curElevCurWVT)) {
+            duplicateElevs[curElevCurWVT].push(curElevNum);
+            // // if (the current elevation's waveform type == the current iteration elevation's waveform type)
+            // console.log(elevsAndProds[curElevNum - 1][3], curElevWaveformType)
+            // if (elevsAndProds[curElevNum - 1][3] == curElevWaveformType) {
+            //     duplicateElevs[curElevAngle].push(curElevNum);
+            // }
+        } else {
+            duplicateElevs[curElevCurWVT] = [curElevNum];
+            l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
+            iters++;
+        }
     }
+    console.log(duplicateElevs)
+    $('#dataDiv').data('duplicateElevs', duplicateElevs);
+
     // add some space at the bottom to allow the user to see the entire dropdown menu
     l2btnsElem.innerHTML += '<br><br><br><br>'
 
@@ -19109,6 +19187,8 @@ $('#optionsBox').on('click', function(e) {
     if ($(e.target).parents().eq(1).attr('id') == 'l2ProductMenu') return;
     // if the user clicks on the switch to toggle elevation display mode
     if ($(e.target).attr('id') == 'elevOptionsSwitch') return;
+    // if the user clicks on one of the elevation navigation buttons in upload mode
+    if ($(e.target).parents().eq(0).attr('id') == 'elevNavBtns') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);
@@ -19785,11 +19865,11 @@ function flyToStation() {
 			statLat = data[fileNameStation][1];
 			statLng = data[fileNameStation][2];
 		}
-		map.flyTo({
-            center: [statLng, statLat],
-            zoom: 8,
-            duration: 1000,
-        });
+		// map.flyTo({
+        //     center: [statLng, statLat],
+        //     zoom: 8,
+        //     duration: 1000,
+        // });
     });
 }
 
@@ -21533,33 +21613,32 @@ class Level2Radar {
 	// RHO: 'correlation coefficient'
 	listElevationsAndProducts() {
 		if (this.header.version != "01" && this.header.version != "E2") {
-			console.log('hi-res data');
 			var elevAngleArr = [];
 			for (var key in this.vcp.record.elevations) {
-				// var base = this.vcp.record.elevations[key]
-				var base = this.data[key][0].record;
+				var elevationsBase = this.vcp.record.elevations[key]
+				var productBase = this.data[key][0].record;
 
 				var allProductsArr = [];
-				if (base.hasOwnProperty('reflect')) {
+				if (productBase.hasOwnProperty('reflect')) {
 					allProductsArr.push('REF')
 				}
-				if (base.hasOwnProperty('velocity')) {
+				if (productBase.hasOwnProperty('velocity')) {
 					allProductsArr.push('VEL')
 				}
-				if (base.hasOwnProperty('rho')) {
+				if (productBase.hasOwnProperty('rho')) {
 					allProductsArr.push('RHO')
 				}
-				if (base.hasOwnProperty('phi')) {
+				if (productBase.hasOwnProperty('phi')) {
 					allProductsArr.push('PHI')
 				}
-				if (base.hasOwnProperty('zdr')) {
+				if (productBase.hasOwnProperty('zdr')) {
 					allProductsArr.push('ZDR')
 				}
-				if (base.hasOwnProperty('spectrum')) {
+				if (productBase.hasOwnProperty('spectrum')) {
 					allProductsArr.push('SW ')
 				}
 
-				elevAngleArr.push([base.elevation_angle, base.elevation_number, allProductsArr]);
+				elevAngleArr.push([elevationsBase.elevation_angle, key, allProductsArr, elevationsBase.waveform_type]);
 			}
 			return elevAngleArr;
 		}

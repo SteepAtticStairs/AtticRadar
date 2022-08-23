@@ -45,6 +45,20 @@ function loadL2Listeners(l2rad) {
     // })
 
 
+    function hideShowArrows(val) {
+        console.log(val)
+        var dupElevObj = $('#dataDiv').data('duplicateElevs');
+        for (const key in dupElevObj) {
+            if (dupElevObj[key].includes(val.toString())) {
+                if (dupElevObj[key].length > 1) {
+                    $('.elevNavBtns').show();
+                } else {
+                    $('.elevNavBtns').hide();
+                }
+            }
+        }
+    }
+
     // <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
     function returnDropdownItem(value) {
         var dropdownItem = `<li><a class="dropdown-item" href="#" value="${value}">${value}</a></li>`;
@@ -59,12 +73,15 @@ function loadL2Listeners(l2rad) {
     dropdownBtn.innerHTML = 'REF';
     $(dropdownBtn).attr('value', 'REF');
     $('#dataDiv').data('currentL2Product', 'REF');
+    $('#dataDiv').data('currentElevation', 1);
 
     $('#l2ProductBtn').attr('value', 'REF');
     $('#l2ElevBtns').on('click', function(e) {
         var clickedValue = $(e.target).attr('value');
         $('#dataDiv').data('currentElevation', clickedValue);
         var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
+
+        hideShowArrows(clickedValue);
 
         // document.getElementById('l2ProductMenu').innerHTML = '';
         // for (key in allProdsForElev) {
@@ -121,6 +138,46 @@ function loadL2Listeners(l2rad) {
             $("[valTag]").show();
         } else if (!isChecked) {
             showSpecificElevs($('#dataDiv').data('currentL2Product'));
+        }
+    })
+
+    $('#dataDiv').data('curArrowElev', 0);
+    $('#elevNavBtns button').on('click', function() {
+        var leftOrRight = $(this).attr('value');
+        var curElevNum = $('#dataDiv').data('currentElevation');
+        var dupElevObj = $('#dataDiv').data('duplicateElevs');
+
+        for (const key in dupElevObj) {
+            if (dupElevObj[key].includes(curElevNum.toString())) {
+                if (dupElevObj[key].length > 1) {
+                    var elevToGoTo;
+                    var max = dupElevObj[key].length - 1;
+                    var min = 0;
+
+                    if (leftOrRight == 'left') {
+                        var subtractor = 0;
+                        if (!($('#dataDiv').data('curArrowElev') == min)) {
+                            subtractor = 1;
+                        }
+                        $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') - subtractor);
+                        elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')])
+                    } else if (leftOrRight == 'right') {
+                        var adder = 0;
+                        if (!($('#dataDiv').data('curArrowElev') == max)) {
+                            adder = 1;
+                        }
+                        $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') + adder);
+                        elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')]);
+                    }
+
+                    var curOverMax = `${$('#dataDiv').data('curArrowElev')} / ${max}`
+                    document.getElementById('numOfElevsForArrows').innerHTML = curOverMax;
+
+                    plot(l2rad, $('#dataDiv').data('currentL2Product'), {
+                        elevations: elevToGoTo,
+                    });
+                }
+            }
         }
     })
 }

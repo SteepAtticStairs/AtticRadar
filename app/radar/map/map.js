@@ -62,6 +62,8 @@ $('#optionsBox').on('click', function(e) {
     if ($(e.target).parents().eq(1).attr('id') == 'l2ProductMenu') return;
     // if the user clicks on the switch to toggle elevation display mode
     if ($(e.target).attr('id') == 'elevOptionsSwitch') return;
+    // if the user clicks on one of the elevation navigation buttons in upload mode
+    if ($(e.target).parents().eq(0).attr('id') == 'elevNavBtns') return;
 
     if ($('#dataDiv').data('optionsBoxShown')) {
         $('#dataDiv').data('optionsBoxShown', false);

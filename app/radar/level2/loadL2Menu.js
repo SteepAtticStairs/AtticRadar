@@ -43,9 +43,12 @@ function loadL2Menu(elevsAndProds) {
         warningModal.modal('show');
     }
 
+    var duplicateElevs = {};
+
     var l2btnsElem = document.getElementById('l2ElevBtns');
+    var iters = 0;
     for (key in elevsAndProds) {
-        if (key % 2 == 0 && key != 0) {
+        if (iters % 2 == 0 && iters != 0) {
             l2btnsElem.innerHTML += '<br>'
         }
         var curElevAngle = elevsAndProds[key][0];
@@ -53,9 +56,27 @@ function loadL2Menu(elevsAndProds) {
         // curElevAngle = Math.round(curElevAngle * 10) / 10;
         curElevAngle = curElevAngle.toFixed(1);
         var curElevNum = elevsAndProds[key][1];
+        var curElevWaveformType = elevsAndProds[key][3];
 
-        l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
+        // WVT = waveform type
+        var curElevCurWVT = `${curElevAngle}_${curElevWaveformType}`;
+
+        if (duplicateElevs.hasOwnProperty(curElevCurWVT)) {
+            duplicateElevs[curElevCurWVT].push(curElevNum);
+            // // if (the current elevation's waveform type == the current iteration elevation's waveform type)
+            // console.log(elevsAndProds[curElevNum - 1][3], curElevWaveformType)
+            // if (elevsAndProds[curElevNum - 1][3] == curElevWaveformType) {
+            //     duplicateElevs[curElevAngle].push(curElevNum);
+            // }
+        } else {
+            duplicateElevs[curElevCurWVT] = [curElevNum];
+            l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
+            iters++;
+        }
     }
+    console.log(duplicateElevs)
+    $('#dataDiv').data('duplicateElevs', duplicateElevs);
+
     // add some space at the bottom to allow the user to see the entire dropdown menu
     l2btnsElem.innerHTML += '<br><br><br><br>'
 

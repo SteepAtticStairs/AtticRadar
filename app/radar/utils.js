@@ -381,11 +381,11 @@ function flyToStation() {
 			statLat = data[fileNameStation][1];
 			statLng = data[fileNameStation][2];
 		}
-		map.flyTo({
-            center: [statLng, statLat],
-            zoom: 8,
-            duration: 1000,
-        });
+		// map.flyTo({
+        //     center: [statLng, statLat],
+        //     zoom: 8,
+        //     duration: 1000,
+        // });
     });
 }
 

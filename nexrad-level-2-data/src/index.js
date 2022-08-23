@@ -346,33 +346,32 @@ class Level2Radar {
 	// RHO: 'correlation coefficient'
 	listElevationsAndProducts() {
 		if (this.header.version != "01" && this.header.version != "E2") {
-			console.log('hi-res data');
 			var elevAngleArr = [];
 			for (var key in this.vcp.record.elevations) {
-				// var base = this.vcp.record.elevations[key]
-				var base = this.data[key][0].record;
+				var elevationsBase = this.vcp.record.elevations[key]
+				var productBase = this.data[key][0].record;
 
 				var allProductsArr = [];
-				if (base.hasOwnProperty('reflect')) {
+				if (productBase.hasOwnProperty('reflect')) {
 					allProductsArr.push('REF')
 				}
-				if (base.hasOwnProperty('velocity')) {
+				if (productBase.hasOwnProperty('velocity')) {
 					allProductsArr.push('VEL')
 				}
-				if (base.hasOwnProperty('rho')) {
+				if (productBase.hasOwnProperty('rho')) {
 					allProductsArr.push('RHO')
 				}
-				if (base.hasOwnProperty('phi')) {
+				if (productBase.hasOwnProperty('phi')) {
 					allProductsArr.push('PHI')
 				}
-				if (base.hasOwnProperty('zdr')) {
+				if (productBase.hasOwnProperty('zdr')) {
 					allProductsArr.push('ZDR')
 				}
-				if (base.hasOwnProperty('spectrum')) {
+				if (productBase.hasOwnProperty('spectrum')) {
 					allProductsArr.push('SW ')
 				}
 
-				elevAngleArr.push([base.elevation_angle, base.elevation_number, allProductsArr]);
+				elevAngleArr.push([elevationsBase.elevation_angle, key, allProductsArr, elevationsBase.waveform_type]);
 			}
 			return elevAngleArr;
 		}
