@@ -52,6 +52,9 @@ function loadL2Listeners(l2rad) {
             if (dupElevObj[key].includes(val.toString())) {
                 if (dupElevObj[key].length > 1) {
                     $('.elevNavBtns').show();
+                    var max = dupElevObj[$('#dataDiv').data('firstElev')].length - 1;
+                    var min = 0;
+                    document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
                 } else {
                     $('.elevNavBtns').hide();
                     document.getElementById('numOfElevsForArrows').innerHTML = '';

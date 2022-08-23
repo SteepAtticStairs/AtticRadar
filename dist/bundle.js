@@ -17808,6 +17808,9 @@ function loadL2Listeners(l2rad) {
             if (dupElevObj[key].includes(val.toString())) {
                 if (dupElevObj[key].length > 1) {
                     $('.elevNavBtns').show();
+                    var max = dupElevObj[$('#dataDiv').data('firstElev')].length - 1;
+                    var min = 0;
+                    document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
                 } else {
                     $('.elevNavBtns').hide();
                     document.getElementById('numOfElevsForArrows').innerHTML = '';
@@ -17991,6 +17994,7 @@ function loadL2Menu(elevsAndProds) {
 
     var l2btnsElem = document.getElementById('l2ElevBtns');
     var iters = 0;
+    var firstElev;
     for (key in elevsAndProds) {
         if (iters % 2 == 0 && iters != 0) {
             l2btnsElem.innerHTML += '<br>'
@@ -18004,6 +18008,10 @@ function loadL2Menu(elevsAndProds) {
 
         // WVT = waveform type
         var curElevCurWVT = `${curElevAngle}_${curElevWaveformType}`;
+        if (iters == 0) {
+            $('#dataDiv').data('firstElev', curElevCurWVT);
+            firstElev = curElevCurWVT;
+        }
 
         if (duplicateElevs.hasOwnProperty(curElevCurWVT)) {
             duplicateElevs[curElevCurWVT].push(curElevNum);
@@ -18020,6 +18028,15 @@ function loadL2Menu(elevsAndProds) {
     }
     console.log(duplicateElevs)
     $('#dataDiv').data('duplicateElevs', duplicateElevs);
+
+    var max = duplicateElevs[firstElev].length - 1;
+    var min = 0;
+    document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
+    if (duplicateElevs[firstElev].length == 1) {
+        $('.elevNavBtns').hide();
+        document.getElementById('numOfElevsForArrows').innerHTML = '';
+        $('#dataDiv').data('curArrowElev', 0);
+    }
 
     // add some space at the bottom to allow the user to see the entire dropdown menu
     l2btnsElem.innerHTML += '<br><br><br><br>'
