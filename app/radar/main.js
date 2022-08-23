@@ -23,6 +23,9 @@ require('./map/controls/mode');
 // add the reload control
 require('./map/controls/reload');
 
+// add the help control
+require('./map/controls/help/helpControl');
+
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
     var endTimer = Date.now();

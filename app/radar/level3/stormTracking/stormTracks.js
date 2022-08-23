@@ -62,10 +62,12 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                         geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
                         // add a circle for each edge on a storm track line
                         geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
-                        mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge' + key)
-                        stormTracksLayerArr.push(identifier + '_pointEdge' + key)
                     }
                 }
+                // push white circles to map
+                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge')
+                stormTracksLayerArr.push(identifier + '_pointEdge')
+
                 // push the finished geojson line object to a function that adds to the map
                 mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
                 // adds a blue circle at the start of the storm track
