@@ -3,8 +3,20 @@ const loaders = require('../../loaders');
 const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
+const getStationStatus = require('../../misc/getStationStatus');
 
 const blueColor = 'rgb(0, 157, 255)';
+const redColor = 'rgb(255, 78, 78)';
+
+function stationStatusColor() {
+    getStationStatus(function(data) {
+        $('.customMarker').each(function() {
+            if (data[this.innerHTML].status == 'down') {
+                $(this).css('background-color', redColor);
+            }
+        })
+    })
+}
 
 var statMarkerArr = [];
 function showStations() {
@@ -29,14 +41,16 @@ function showStations() {
             }
         }
     }).then(function () {
+        stationStatusColor();
+
         $('.customMarker').each(function() {
             if (this.innerHTML == $('#dataDiv').data('blueStationMarker')) {
                 $(this).css('background-color', blueColor);
             }
         })
+
         $('.customMarker').on('click', function () {
-            var thisObj = this;
-            if (!$('#dataDiv').data('isFileUpload')) {
+            if (!$('#dataDiv').data('isFileUpload') && $(this).css('background-color') != redColor) {
                 // remove all other blue
                 $('.customMarker').each(function() {
                     if ($(this).css('background-color') == blueColor) {
@@ -94,14 +108,14 @@ function showStations() {
         })
 
         function mouseEnter(thisObj) {
-            if ($(thisObj).css('background-color') != blueColor) {
+            if ($(thisObj).css('background-color') != blueColor && $(thisObj).css('background-color') != redColor) {
                 $(thisObj).animate({
                     backgroundColor: 'rgb(200, 200, 200)',
                 }, 150);
             }
         }
         function mouseLeave(thisObj) {
-            if ($(thisObj).css('background-color') != blueColor) {
+            if ($(thisObj).css('background-color') != blueColor && $(thisObj).css('background-color') != redColor) {
                 $(thisObj).animate({
                     backgroundColor: 'rgb(136, 136, 136)',
                 }, 150);
