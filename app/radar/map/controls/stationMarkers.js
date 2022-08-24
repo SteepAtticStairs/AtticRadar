@@ -4,6 +4,8 @@ const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
 
+const blueColor = 'rgb(0, 157, 255)';
+
 var statMarkerArr = [];
 function showStations() {
     $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
@@ -27,8 +29,23 @@ function showStations() {
             }
         }
     }).then(function () {
+        $('.customMarker').each(function() {
+            if (this.innerHTML == $('#dataDiv').data('blueStationMarker')) {
+                $(this).css('background-color', blueColor);
+            }
+        })
         $('.customMarker').on('click', function () {
+            var thisObj = this;
             if (!$('#dataDiv').data('isFileUpload')) {
+                // remove all other blue
+                $('.customMarker').each(function() {
+                    if ($(this).css('background-color') == blueColor) {
+                        $(this).css('background-color', 'rgb(136, 136, 136)');
+                    }
+                })
+                $('#dataDiv').data('blueStationMarker', this.innerHTML);
+                // change background to blue
+                $(this).css('background-color', blueColor);
                 //$('.productBtnGroup button').off()
                 // var btnsArr = [
                 //     "l2-ref",
@@ -74,6 +91,27 @@ function showStations() {
                     loaders.loadFileObject(ut.phpProxy + url, 3);
                 })
             }
+        })
+
+        function mouseEnter(thisObj) {
+            if ($(thisObj).css('background-color') != blueColor) {
+                $(thisObj).animate({
+                    backgroundColor: 'rgb(200, 200, 200)',
+                }, 150);
+            }
+        }
+        function mouseLeave(thisObj) {
+            if ($(thisObj).css('background-color') != blueColor) {
+                $(thisObj).animate({
+                    backgroundColor: 'rgb(136, 136, 136)',
+                }, 150);
+            }
+        }
+        $('.customMarker').on('mouseenter', function () {
+            mouseEnter(this)
+        })
+        $('.customMarker').on('mouseleave', function () {
+            mouseLeave(this)
         })
     })
 }
