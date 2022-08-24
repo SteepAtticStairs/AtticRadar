@@ -4,6 +4,7 @@ const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
 const getStationStatus = require('../../misc/getStationStatus');
+const isMobile = require('../../misc/detectmobilebrowser');
 
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';
@@ -121,12 +122,14 @@ function showStations() {
                 }, 150);
             }
         }
-        $('.customMarker').on('mouseenter', function () {
-            mouseEnter(this)
-        })
-        $('.customMarker').on('mouseleave', function () {
-            mouseLeave(this)
-        })
+        if (!isMobile) {
+            $('.customMarker').on('mouseenter', function () {
+                mouseEnter(this)
+            })
+            $('.customMarker').on('mouseleave', function () {
+                mouseLeave(this)
+            })
+        }
     })
 }
 

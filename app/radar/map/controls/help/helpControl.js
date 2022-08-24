@@ -17,16 +17,16 @@ function createModal(title, headerColor, body) {
     return modalContent;
 }
 
-// $.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
-//     var warningModal = $(createModal(
-//         'Help', 'alert-info', data));
+$.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
+    var warningModal = $(createModal(
+        'Help', 'alert-info', data));
 
-//     createControl({
-//         'id': 'helpThing',
-//         'position': 'bottom-left',
-//         'icon': 'fa-question',
-//         'css': 'margin-top: 100%;'
-//     }, function() {
-//         warningModal.modal('show');
-//     })
-// })
+    createControl({
+        'id': 'helpThing',
+        'position': 'bottom-left',
+        'icon': 'fa-question',
+        'css': 'margin-top: 100%;'
+    }, function() {
+        warningModal.modal('show');
+    })
+})

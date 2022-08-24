@@ -18878,19 +18878,19 @@ function createModal(title, headerColor, body) {
     return modalContent;
 }
 
-// $.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
-//     var warningModal = $(createModal(
-//         'Help', 'alert-info', data));
+$.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
+    var warningModal = $(createModal(
+        'Help', 'alert-info', data));
 
-//     createControl({
-//         'id': 'helpThing',
-//         'position': 'bottom-left',
-//         'icon': 'fa-question',
-//         'css': 'margin-top: 100%;'
-//     }, function() {
-//         warningModal.modal('show');
-//     })
-// })
+    createControl({
+        'id': 'helpThing',
+        'position': 'bottom-left',
+        'icon': 'fa-question',
+        'css': 'margin-top: 100%;'
+    }, function() {
+        warningModal.modal('show');
+    })
+})
 },{"../../../loaders":85,"../createControl":87}],89:[function(require,module,exports){
 const loaders = require('../../loaders');
 const ut = require('../../utils');
@@ -18968,6 +18968,7 @@ const ut = require('../../utils');
 const createControl = require('./createControl');
 const tilts = require('../../menu/tilts');
 const getStationStatus = require('../../misc/getStationStatus');
+const isMobile = require('../../misc/detectmobilebrowser');
 
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';
@@ -19085,12 +19086,14 @@ function showStations() {
                 }, 150);
             }
         }
-        $('.customMarker').on('mouseenter', function () {
-            mouseEnter(this)
-        })
-        $('.customMarker').on('mouseleave', function () {
-            mouseLeave(this)
-        })
+        if (!isMobile) {
+            $('.customMarker').on('mouseenter', function () {
+                mouseEnter(this)
+            })
+            $('.customMarker').on('mouseleave', function () {
+                mouseLeave(this)
+            })
+        }
     })
 }
 
@@ -19121,7 +19124,7 @@ window.addEventListener('load', (event) => {
         showStations();
     }, 200)
 })
-},{"../../loaders":85,"../../menu/tilts":96,"../../misc/getStationStatus":98,"../../utils":101,"../map":94,"./createControl":87}],92:[function(require,module,exports){
+},{"../../loaders":85,"../../menu/tilts":96,"../../misc/detectmobilebrowser":97,"../../misc/getStationStatus":98,"../../utils":101,"../map":94,"./createControl":87}],92:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
