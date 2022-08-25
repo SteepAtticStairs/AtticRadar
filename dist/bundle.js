@@ -17580,7 +17580,19 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         pageState.colors = colors;
         //console.log(Math.max(...[...new Set(colors)]))
         mapFuncs.removeMapLayer('baseReflectivity');
+
+        const layers = map.getStyle().layers;
+        var allRoadLayers = [];
+        for (const layer of layers) {
+            console.log(layer.id)
+            if (layer.type === 'symbol'/* || layer.type === 'line'*/) {
+                allRoadLayers.push(layer.id);
+            }
+        }
         map.addLayer(layer);
+        for (item in allRoadLayers) {
+            mapFuncs.moveMapLayer(allRoadLayers[item])
+        }
 
         document.getElementById('spinnerParent').style.display = 'none';
 
