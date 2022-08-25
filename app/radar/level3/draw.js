@@ -100,20 +100,22 @@ function draw(data) {
     document.body.appendChild(a);
     a.click();*/
 
-	var currentStation = 'K' + data.textHeader.id3;
-	if (document.getElementById('fileStation').innerHTML != currentStation) {
-		document.getElementById('fileStation').innerHTML = currentStation;
-	}
-	$.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-		var statLat = data[currentStation][1];
-		var statLng = data[currentStation][2];
-		// ../../../data/json/KLWX20220623_014344_V06.json
-		// product.abbreviation
-		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+	$.getJSON('/resources/stationAbbreviations.json', function(abrvData) {
+		var currentStation = abrvData[data.textHeader.id3];
+		if (document.getElementById('fileStation').innerHTML != currentStation) {
+			document.getElementById('fileStation').innerHTML = currentStation;
+		}
+		$.getJSON('/resources/radarStations.json', function(data) {
+			var statLat = data[currentStation][1];
+			var statLng = data[currentStation][2];
+			// ../../../data/json/KLWX20220623_014344_V06.json
+			// product.abbreviation
+			drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
 
-		//new mapboxgl.Marker()
-		//    .setLngLat([stationLng, stationLat])
-		//    .addTo(map);
+			//new mapboxgl.Marker()
+			//    .setLngLat([stationLng, stationLat])
+			//    .addTo(map);
+		});
 	});
 }
 

@@ -17309,24 +17309,26 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     // document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
-    var theFileStation = 'K' + l3rad.textHeader.id3;
-    document.getElementById('radarStation').innerHTML = theFileStation;
+    $.getJSON('/resources/stationAbbreviations.json', function(abrvData) {
+		var theFileStation = abrvData[l3rad.textHeader.id3];
+        document.getElementById('radarStation').innerHTML = theFileStation;
 
-    var theFileVCP = l3rad.productDescription.vcp;
-    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
+        var theFileVCP = l3rad.productDescription.vcp;
+        document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
-    var theFileDate = l3rad.messageHeader.julianDate;
-    var theFileTime = l3rad.messageHeader.seconds * 1000;
-    var fileDateObj = addDays(new Date(0), theFileDate);
-    var fileHours = ut.msToTime(theFileTime).hours;
-    var fileMinutes = ut.msToTime(theFileTime).minutes;
-    var fileSeconds = ut.msToTime(theFileTime).seconds;
-    fileDateObj.setUTCHours(fileHours);
-    fileDateObj.setUTCMinutes(fileMinutes);
-    fileDateObj.setUTCSeconds(fileSeconds);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+        var theFileDate = l3rad.messageHeader.julianDate;
+        var theFileTime = l3rad.messageHeader.seconds * 1000;
+        var fileDateObj = addDays(new Date(0), theFileDate);
+        var fileHours = ut.msToTime(theFileTime).hours;
+        var fileMinutes = ut.msToTime(theFileTime).minutes;
+        var fileSeconds = ut.msToTime(theFileTime).seconds;
+        fileDateObj.setUTCHours(fileHours);
+        fileDateObj.setUTCMinutes(fileMinutes);
+        fileDateObj.setUTCSeconds(fileSeconds);
+        var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
-    document.getElementById('radarTime').innerHTML = finalRadarDateTime;
+        document.getElementById('radarTime').innerHTML = finalRadarDateTime;
+    })
 }
 
 module.exports = showL3Info;
@@ -18176,20 +18178,22 @@ function draw(data) {
     document.body.appendChild(a);
     a.click();*/
 
-	var currentStation = 'K' + data.textHeader.id3;
-	if (document.getElementById('fileStation').innerHTML != currentStation) {
-		document.getElementById('fileStation').innerHTML = currentStation;
-	}
-	$.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
-		var statLat = data[currentStation][1];
-		var statLng = data[currentStation][2];
-		// ../../../data/json/KLWX20220623_014344_V06.json
-		// product.abbreviation
-		drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+	$.getJSON('/resources/stationAbbreviations.json', function(abrvData) {
+		var currentStation = abrvData[data.textHeader.id3];
+		if (document.getElementById('fileStation').innerHTML != currentStation) {
+			document.getElementById('fileStation').innerHTML = currentStation;
+		}
+		$.getJSON('/resources/radarStations.json', function(data) {
+			var statLat = data[currentStation][1];
+			var statLng = data[currentStation][2];
+			// ../../../data/json/KLWX20220623_014344_V06.json
+			// product.abbreviation
+			drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
 
-		//new mapboxgl.Marker()
-		//    .setLngLat([stationLng, stationLat])
-		//    .addTo(map);
+			//new mapboxgl.Marker()
+			//    .setLngLat([stationLng, stationLat])
+			//    .addTo(map);
+		});
 	});
 }
 
@@ -18258,7 +18262,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+    $.getJSON('/resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -18394,7 +18398,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         }
     }
 
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+    $.getJSON('/resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -18491,7 +18495,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+    $.getJSON('/resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -18985,14 +18989,16 @@ function stationStatusColor() {
 
 var statMarkerArr = [];
 function showStations() {
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+    $.getJSON('/resources/radarStations.json', function (data) {
         var allKeys = Object.keys(data);
         for (key in allKeys) {
             var curIter = data[allKeys[key]];
             var curStat = allKeys[key];
+            // generate station abbreviation json
+            // statObj[curStat.slice(1)] = curStat;
 
             // check if it is an unsupported radar
-            if (curStat.charAt(0) == 'K') {
+            if (curStat.length == 4 && curStat.charAt(0) != 'T') {
                 // create a HTML element for each feature
                 var el = document.createElement('div');
                 el.className = 'customMarker';
@@ -20006,7 +20012,7 @@ function flyToStation() {
     var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+    $.getJSON('/resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {
@@ -22265,7 +22271,7 @@ const draw = (data, _options) => {
 
 	//testHello('yeet')
 	var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+    $.getJSON('/resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {

@@ -21,14 +21,16 @@ function stationStatusColor() {
 
 var statMarkerArr = [];
 function showStations() {
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function (data) {
+    $.getJSON('/resources/radarStations.json', function (data) {
         var allKeys = Object.keys(data);
         for (key in allKeys) {
             var curIter = data[allKeys[key]];
             var curStat = allKeys[key];
+            // generate station abbreviation json
+            // statObj[curStat.slice(1)] = curStat;
 
             // check if it is an unsupported radar
-            if (curStat.charAt(0) == 'K') {
+            if (curStat.length == 4 && curStat.charAt(0) != 'T') {
                 // create a HTML element for each feature
                 var el = document.createElement('div');
                 el.className = 'customMarker';

@@ -269,7 +269,7 @@ const draw = (data, _options) => {
 
 	//testHello('yeet')
 	var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/weather/json/radarStations.json', function(data) {
+    $.getJSON('/resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {
