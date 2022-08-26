@@ -10,7 +10,11 @@ function loadAllStormTrackingStuff() {
         // });
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, 3);
+        loaders.getLatestFile($('#stationInp').val(), [3, 'NST', 0], function(url) {
+            console.log(url);
+            loaders.loadFileObject(fileUrl, 3);
+        })
+        //loaders.loadFileObject(fileUrl, 3);
     }
     function addMesocycloneLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`

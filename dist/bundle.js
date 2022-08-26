@@ -18339,7 +18339,11 @@ function loadAllStormTrackingStuff() {
         // });
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.58sti/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
         //console.log(fileUrl, $('#stationInp').val().toLowerCase())
-        loaders.loadFileObject(fileUrl, 3);
+        loaders.getLatestFile($('#stationInp').val(), [3, 'NST', 0], function(url) {
+            console.log(url);
+            loaders.loadFileObject(fileUrl, 3);
+        })
+        //loaders.loadFileObject(fileUrl, 3);
     }
     function addMesocycloneLayers() {
         var fileUrl = `${phpProxy}https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.141md/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
@@ -18410,25 +18414,45 @@ module.exports = {
 },{"../../loaders":85,"../../map/map":94,"../../utils":101}],83:[function(require,module,exports){
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
+var map = require('../../map/map');
 
 function parsePlotStormTracks(l3rad, theFileStation) {
     var stormTracksLayerArr = [];
-    // load storm tracking information
-    var geojsonLineTemplate = {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'LineString',
-            'coordinates': []
-        }
+
+    // for the storm track lines
+    var multiLineStringGeojson = {
+        "type": "MultiLineString",
+        "coordinates": []
     }
-    var geojsonPointTemplate = {
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-            'type': 'Point',
-            'coordinates': []
-        }
+    function pushNewMultiLineString(coords) {
+        multiLineStringGeojson.coordinates.push(coords);
+    }
+
+    // for the circles on the line edges
+    var linePointGeojson = {
+        'type': 'MultiPoint',
+        'coordinates': []
+    }
+    function pushNewLinePoint(coords) {
+        linePointGeojson.coordinates.push(coords);
+    }
+
+    // for the red points for isolated cells
+    var singlePointGeojson = {
+        'type': 'MultiPoint',
+        'coordinates': []
+    }
+    function pushNewSinglePoint(coords) {
+        singlePointGeojson.coordinates.push(coords);
+    }
+
+    // for the blue points for the start of a storm track
+    var mainLinePointGeojson = {
+        'type': 'MultiPoint',
+        'coordinates': []
+    }
+    function pushNewMainLinePoint(coords) {
+        mainLinePointGeojson.coordinates.push(coords);
     }
 
     $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
@@ -18440,17 +18464,15 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         var stormTracksList = Object.keys(stormTracks);
 
         function loadStormTrack(identifier) {
-            // store all map layers being added to be able to manipulate later
-            stormTracksLayerArr.push(identifier)
-            // reset geojson coordinates
-            geojsonLineTemplate.geometry.coordinates = [];
-            geojsonLineTemplate.geometry.type = 'LineString';
+            // array to store all of the line points
+            var lineCoords = [];
 
             // current storm track
             var curST = stormTracks[identifier].current;
             var curSTCoords = ut.findTerminalCoordinates(staLat, staLng, curST.nm, curST.deg);
             // push the initial coordinate point - we do not know if the current track is a line or a point yet
-            geojsonLineTemplate.geometry.coordinates.push([curSTCoords.longitude, curSTCoords.latitude])
+            var initialPoint = [curSTCoords.longitude, curSTCoords.latitude];
+            lineCoords.push(initialPoint)
 
             // future storm track (forecast)
             var futureST = stormTracks[identifier].forecast;
@@ -18468,53 +18490,54 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                     // check if the value is null, in which case the storm track is over
                     if (indexedFutureST != null) {
                         var indexedFutureSTCoords = ut.findTerminalCoordinates(staLat, staLng, indexedFutureST.nm, indexedFutureST.deg);
-                        // push the current index point to the line geojson object
-                        geojsonLineTemplate.geometry.coordinates.push([indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]);
+                        var formattedFutureSTCoords = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude];
+                        // push the current index point to the line geojson
+                        lineCoords.push(formattedFutureSTCoords);
                         // add a circle for each edge on a storm track line
-                        geojsonPointTemplate.geometry.coordinates = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude]
+                        pushNewLinePoint(formattedFutureSTCoords);
                     }
                 }
-                // push white circles to map
-                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircleEdge', identifier + '_pointEdge')
-                stormTracksLayerArr.push(identifier + '_pointEdge')
 
-                // push the finished geojson line object to a function that adds to the map
-                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'line', identifier)
+                // add the finished line to the map
+                pushNewMultiLineString(lineCoords)
                 // adds a blue circle at the start of the storm track
-                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
-                geojsonLineTemplate.geometry.type = 'Point';
-                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'lineCircle', identifier + '_point')
-                stormTracksLayerArr.push(identifier + '_point')
+                pushNewMainLinePoint(initialPoint)
             } else if (!isLine) {
                 // if the storm track does not have a forecast, display a Point geojson
-                geojsonLineTemplate.geometry.coordinates = geojsonLineTemplate.geometry.coordinates[0]
-                geojsonLineTemplate.geometry.type = 'Point';
-                mapFuncs.setGeojsonLayer(geojsonLineTemplate, 'circle', identifier)
+                pushNewSinglePoint(initialPoint);
             }
         }
+
         // Z0 = line, R1 = point
         for (key in stormTracksList) {
             loadStormTrack(stormTracksList[key])
         }
+
+        // add the storm track lines
+        mapFuncs.setGeojsonLayer(multiLineStringGeojson, 'line', 'multiLineString');
+        stormTracksLayerArr.push('multiLineString');
+        // add the circles on the line edges
+        mapFuncs.setGeojsonLayer(linePointGeojson, 'lineCircleEdge', 'linePoint');
+        stormTracksLayerArr.push('linePoint');
+        // add the red points for isolated cells
+        mapFuncs.setGeojsonLayer(singlePointGeojson, 'circle', 'singlePoint');
+        stormTracksLayerArr.push('singlePoint');
+        // add the blue points for the start of a storm track
+        mapFuncs.setGeojsonLayer(mainLinePointGeojson, 'lineCircle', 'mainLinePoint');
+        stormTracksLayerArr.push('mainLinePoint');
+
         document.getElementById('allStormTracksLayers').innerHTML = JSON.stringify(stormTracksLayerArr);
         var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
         var stLayers = stLayersText.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
         // setting layer orders
         for (key in stLayers) {
-            if (stLayers[key].includes('_pointEdge')) {
-                mapFuncs.moveMapLayer(stLayers[key])
-            }
-        }
-        for (key in stLayers) {
-            if (stLayers[key].includes('_point')) {
-                mapFuncs.moveMapLayer(stLayers[key])
-            }
+            mapFuncs.moveMapLayer(stLayers[key])
         }
     });
 }
 
 module.exports = parsePlotStormTracks;
-},{"../../map/mapFunctions":95,"../../utils":101}],84:[function(require,module,exports){
+},{"../../map/map":94,"../../map/mapFunctions":95,"../../utils":101}],84:[function(require,module,exports){
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
 
