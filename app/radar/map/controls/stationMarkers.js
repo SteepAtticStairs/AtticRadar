@@ -21,7 +21,7 @@ function stationStatusColor() {
 
 var statMarkerArr = [];
 function showStations() {
-    $.getJSON('resources/radarStations.json', function (data) {
+    $.getJSON('../resources/radarStations.json', function (data) {
         var allKeys = Object.keys(data);
         for (key in allKeys) {
             var curIter = data[allKeys[key]];
