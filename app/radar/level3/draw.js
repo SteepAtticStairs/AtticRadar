@@ -105,7 +105,7 @@ function draw(data) {
 		if (document.getElementById('fileStation').innerHTML != currentStation) {
 			document.getElementById('fileStation').innerHTML = currentStation;
 		}
-		$.getJSON('../resources/radarStations.json', function(data) {
+		$.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
 			var statLat = data[currentStation][1];
 			var statLng = data[currentStation][2];
 			// ../../../data/json/KLWX20220623_014344_V06.json
