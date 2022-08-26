@@ -21,7 +21,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         }
     }
 
-    $.getJSON('/resources/radarStations.json', function(data) {
+    $.getJSON('resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 

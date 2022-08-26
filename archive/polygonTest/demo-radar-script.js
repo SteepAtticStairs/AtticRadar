@@ -536,7 +536,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
   
     if (document.getElementById('prevStat').innerHTML != document.getElementById('fileStation').innerHTML) {
       var station = document.getElementById('fileStation').innerHTML;
-      $.getJSON('/resources/radarStations.json', function(data) {
+      $.getJSON('resources/radarStations.json', function(data) {
           var stationLat = data[station][1];
           var stationLng = data[station][2];
           map.flyTo({

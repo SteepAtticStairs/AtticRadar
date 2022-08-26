@@ -17589,6 +17589,27 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 allRoadLayers.push(layer.id);
             }
         }
+
+        // road-minor-low
+        // road-street-low
+        // road-minor-case
+        // road-street-case
+        // road-secondary-tertiary-case
+        // road-primary-case
+        // road-major-link-case
+        // road-motorway-trunk-case
+        // road-construction
+        // road-path
+        // road-steps
+        // road-major-link
+        // road-pedestrian
+        // road-minor
+        // road-street
+        // road-secondary-tertiary
+        // road-primary
+        // road-motorway-trunk
+        // road-rail
+
         map.addLayer(layer);
         for (item in allRoadLayers) {
             mapFuncs.moveMapLayer(allRoadLayers[item])
@@ -18195,7 +18216,7 @@ function draw(data) {
 		if (document.getElementById('fileStation').innerHTML != currentStation) {
 			document.getElementById('fileStation').innerHTML = currentStation;
 		}
-		$.getJSON('/resources/radarStations.json', function(data) {
+		$.getJSON('resources/radarStations.json', function(data) {
 			var statLat = data[currentStation][1];
 			var statLng = data[currentStation][2];
 			// ../../../data/json/KLWX20220623_014344_V06.json
@@ -18274,7 +18295,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('/resources/radarStations.json', function(data) {
+    $.getJSON('resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -18410,7 +18431,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         }
     }
 
-    $.getJSON('/resources/radarStations.json', function(data) {
+    $.getJSON('resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -18507,7 +18528,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('/resources/radarStations.json', function(data) {
+    $.getJSON('resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -19001,7 +19022,7 @@ function stationStatusColor() {
 
 var statMarkerArr = [];
 function showStations() {
-    $.getJSON('/resources/radarStations.json', function (data) {
+    $.getJSON('resources/radarStations.json', function (data) {
         var allKeys = Object.keys(data);
         for (key in allKeys) {
             var curIter = data[allKeys[key]];
@@ -20024,7 +20045,7 @@ function flyToStation() {
     var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('/resources/radarStations.json', function(data) {
+    $.getJSON('resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {
@@ -22283,7 +22304,7 @@ const draw = (data, _options) => {
 
 	//testHello('yeet')
 	var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('/resources/radarStations.json', function(data) {
+    $.getJSON('resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {

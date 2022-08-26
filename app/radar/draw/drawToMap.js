@@ -87,6 +87,27 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 allRoadLayers.push(layer.id);
             }
         }
+
+        // road-minor-low
+        // road-street-low
+        // road-minor-case
+        // road-street-case
+        // road-secondary-tertiary-case
+        // road-primary-case
+        // road-major-link-case
+        // road-motorway-trunk-case
+        // road-construction
+        // road-path
+        // road-steps
+        // road-major-link
+        // road-pedestrian
+        // road-minor
+        // road-street
+        // road-secondary-tertiary
+        // road-primary
+        // road-motorway-trunk
+        // road-rail
+
         map.addLayer(layer);
         for (item in allRoadLayers) {
             mapFuncs.moveMapLayer(allRoadLayers[item])

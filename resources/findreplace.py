@@ -9,4 +9,4 @@ def findReplace(directory, find, replace, filePattern):
             with open(filepath, "w") as f:
                 f.write(s)
 
-findReplace("/Users/me/Github/NexradJS", "https://steepatticstairs.github.io/weather/json/radarStations.json", "/resources/radarStations.json", "*.js")
+findReplace("/Users/me/Github/NexradJS", "/resources/radarStations.json", "resources/radarStations.json", "*.js")
