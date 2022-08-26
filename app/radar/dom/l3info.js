@@ -9,7 +9,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     // document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
-    $.getJSON('/resources/stationAbbreviations.json', function(abrvData) {
+    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function(abrvData) {
 		var theFileStation = abrvData[l3rad.textHeader.id3];
         document.getElementById('radarStation').innerHTML = theFileStation;
 

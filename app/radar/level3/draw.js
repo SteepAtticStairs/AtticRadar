@@ -100,7 +100,7 @@ function draw(data) {
     document.body.appendChild(a);
     a.click();*/
 
-	$.getJSON('/resources/stationAbbreviations.json', function(abrvData) {
+	$.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function(abrvData) {
 		var currentStation = abrvData[data.textHeader.id3];
 		if (document.getElementById('fileStation').innerHTML != currentStation) {
 			document.getElementById('fileStation').innerHTML = currentStation;
