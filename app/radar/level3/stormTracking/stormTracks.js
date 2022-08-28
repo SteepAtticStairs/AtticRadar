@@ -17,11 +17,20 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 
     // for the circles on the line edges
     var linePointGeojson = {
-        'type': 'MultiPoint',
-        'coordinates': []
+        "type": "FeatureCollection",
+        "features": []
     }
-    function pushNewLinePoint(coords) {
-        linePointGeojson.coordinates.push(coords);
+    function pushNewLinePoint(coords, properties) {
+        // this allows you to add properties for each cell
+        var objToPush = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": coords
+            },
+            "properties": properties
+        }
+        linePointGeojson.features.push(objToPush)
     }
 
     // for the red points for isolated cells
@@ -66,7 +75,14 @@ function parsePlotStormTracks(l3rad, theFileStation) {
             cellProperties.movement = JSON.parse(cellProperties.movement);
         }
         cellProperties.coords = JSON.parse(cellProperties.coords);
-        var hourMin = ut.printHourMin(new Date(cellProperties.time), ut.userTimeZone);
+        var cellTime = new Date(cellProperties.time);
+
+        var minutesToAdd = [15, 30, 45, 60];
+        if (cellProperties.index != undefined) {
+            cellTime = ut.addMinutes(cellTime, minutesToAdd[parseInt(cellProperties.index)])
+        }
+
+        var hourMin = ut.printHourMin(cellTime, ut.userTimeZone);
 
         var popupHTML = 
         `<div>Cell <b>${cellProperties.cellID}</b> at <b>${hourMin}</b></div>`
@@ -140,8 +156,16 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                         var formattedFutureSTCoords = [indexedFutureSTCoords.longitude, indexedFutureSTCoords.latitude];
                         // push the current index point to the line geojson
                         lineCoords.push(formattedFutureSTCoords);
+                        // properties for the line circle
+                        var forecastSTProperties = {
+                            'movement': curSTMovement,
+                            'cellID': identifier,
+                            'coords': indexedFutureSTCoords,
+                            'index': key,
+                            'time': fileTime.getTime()
+                        }
                         // add a circle for each edge on a storm track line
-                        pushNewLinePoint(formattedFutureSTCoords);
+                        pushNewLinePoint(formattedFutureSTCoords, forecastSTProperties);
                     }
                 }
 
@@ -184,10 +208,15 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 
     map.on('click', 'mainLinePoint', (e) => { cellClick(e) });
     map.on('click', 'singlePoint', (e) => { cellClick(e) });
+    map.on('click', 'linePoint', (e) => { cellClick(e) });
+
     map.on('mouseenter', 'mainLinePoint', () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseenter', 'singlePoint', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseenter', 'linePoint', () => { map.getCanvas().style.cursor = 'pointer'; });
+
     map.on('mouseleave', 'mainLinePoint', () => { map.getCanvas().style.cursor = ''; });
     map.on('mouseleave', 'singlePoint', () => { map.getCanvas().style.cursor = ''; });
+    map.on('mouseleave', 'linePoint', () => { map.getCanvas().style.cursor = ''; });
 }
 
 module.exports = parsePlotStormTracks;

@@ -21,6 +21,9 @@ function printHourMin(dateObj, tz) {
 }
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes*60000);
+}
 function msToTime(s) {
     // Pad to 2 or 3 digits, default is 2
     function pad(n, z) {
@@ -432,6 +435,7 @@ module.exports = {
     printFancyTime,
     printHourMin,
     userTimeZone,
+    addMinutes,
     msToTime,
     round,
     findTerminalCoordinates,
