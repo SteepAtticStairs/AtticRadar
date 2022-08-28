@@ -17778,17 +17778,19 @@ module.exports = drawRadarShape;
 * This file is the entry point for the project - everything starts here.
 */
 
-// load the main file
-require('../main');
+window.onload = function() {
+    // load the main file
+    require('../main');
 
-// load the station markers control (this has to be after everything else is loaded)
-require('../map/controls/stationMarkers');
+    // load the station markers control (this has to be after everything else is loaded)
+    require('../map/controls/stationMarkers');
 
-// initialize the alerts
-require('../../alerts/entry');
+    // initialize the alerts
+    require('../../alerts/entry');
 
-// load the tides chart
-require('../../tides/main').tideChartInit('container');
+    // load the tides chart
+    require('../../tides/main').tideChartInit('container');
+}
 },{"../../alerts/entry":67,"../../tides/main":105,"../main":86,"../map/controls/stationMarkers":91}],76:[function(require,module,exports){
 const { plot } = require('../../../nexrad-level-2-plot/src');
 const loaders = require('../loaders');
@@ -18878,6 +18880,25 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
+
+
+// const aeris = new AerisWeather('AcxJ7pqDEeRA8kcDUOTPS', '7tOA7yRcLFb40YCCoXq0ccUMtD4ZZJarCgNjOrtL');
+
+// const request = aeris.api()
+//     .endpoint('lightning')
+//     .place('79034')
+//     .format('json')
+//     .filter('cg')
+//     .limit(100000);
+// request.get().then((result) => {
+//     for (var i = 0; i < result.data.length; i++) {
+//         var lng = result.data[i].loc.long;
+//         var lat = result.data[i].loc.lat;
+//         new mapboxgl.Marker()
+//             .setLngLat([lng, lat])
+//             .addTo(map);
+//     }
+// });
 },{"./dom/fileUpload":70,"./level2/main":78,"./level3/main":80,"./loaders":85,"./map/controls/help/helpControl":88,"./map/controls/mode":89,"./map/controls/reload":90,"./map/map":94,"./menu/tilts":96,"./utils":101}],87:[function(require,module,exports){
 var map = require('../map');
 
@@ -19179,13 +19200,11 @@ createControl({
     }
 })
 
-window.addEventListener('load', (event) => {
-    setTimeout(function() {
-        $('#stationThing').addClass('icon-selected');
-        $('#stationThing').removeClass('icon-black');
-        showStations();
-    }, 200)
-})
+setTimeout(function() {
+    $('#stationThing').addClass('icon-selected');
+    $('#stationThing').removeClass('icon-black');
+    showStations();
+}, 200)
 },{"../../loaders":85,"../../menu/tilts":96,"../../misc/detectmobilebrowser":97,"../../misc/getStationStatus":98,"../../utils":101,"../map":94,"./createControl":87}],92:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');

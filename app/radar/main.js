@@ -63,3 +63,22 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
+
+
+// const aeris = new AerisWeather('AcxJ7pqDEeRA8kcDUOTPS', '7tOA7yRcLFb40YCCoXq0ccUMtD4ZZJarCgNjOrtL');
+
+// const request = aeris.api()
+//     .endpoint('lightning')
+//     .place('79034')
+//     .format('json')
+//     .filter('cg')
+//     .limit(100000);
+// request.get().then((result) => {
+//     for (var i = 0; i < result.data.length; i++) {
+//         var lng = result.data[i].loc.long;
+//         var lat = result.data[i].loc.lat;
+//         new mapboxgl.Marker()
+//             .setLngLat([lng, lat])
+//             .addTo(map);
+//     }
+// });

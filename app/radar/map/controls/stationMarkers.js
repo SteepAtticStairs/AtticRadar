@@ -155,10 +155,8 @@ createControl({
     }
 })
 
-window.addEventListener('load', (event) => {
-    setTimeout(function() {
-        $('#stationThing').addClass('icon-selected');
-        $('#stationThing').removeClass('icon-black');
-        showStations();
-    }, 200)
-})
+setTimeout(function() {
+    $('#stationThing').addClass('icon-selected');
+    $('#stationThing').removeClass('icon-black');
+    showStations();
+}, 200)
