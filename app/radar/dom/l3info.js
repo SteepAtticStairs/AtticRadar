@@ -1,5 +1,6 @@
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
+const getLevel3FileTime = require('../level3/l3fileTime');
 
 function showL3Info(l3rad) {// //showPlotBtn();
     $('#fileUploadSpan').hide();
@@ -16,15 +17,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
         var theFileVCP = l3rad.productDescription.vcp;
         document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
-        var theFileDate = l3rad.messageHeader.julianDate;
-        var theFileTime = l3rad.messageHeader.seconds * 1000;
-        var fileDateObj = addDays(new Date(0), theFileDate);
-        var fileHours = ut.msToTime(theFileTime).hours;
-        var fileMinutes = ut.msToTime(theFileTime).minutes;
-        var fileSeconds = ut.msToTime(theFileTime).seconds;
-        fileDateObj.setUTCHours(fileHours);
-        fileDateObj.setUTCMinutes(fileMinutes);
-        fileDateObj.setUTCSeconds(fileSeconds);
+        var fileDateObj = getLevel3FileTime(l3rad);
         var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
         document.getElementById('radarTime').innerHTML = finalRadarDateTime;

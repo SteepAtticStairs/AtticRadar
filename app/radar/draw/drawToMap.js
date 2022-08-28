@@ -82,7 +82,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         const layers = map.getStyle().layers;
         var allRoadLayers = [];
         for (const layer of layers) {
-            console.log(layer.id)
+            //console.log(layer.id)
             if (layer.type === 'symbol'/* || layer.type === 'line'*/) {
                 allRoadLayers.push(layer.id);
             }

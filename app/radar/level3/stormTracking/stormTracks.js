@@ -1,5 +1,6 @@
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
+const getLevel3FileTime = require('../l3fileTime');
 var map = require('../../map/map');
 
 function parsePlotStormTracks(l3rad, theFileStation) {
@@ -65,9 +66,10 @@ function parsePlotStormTracks(l3rad, theFileStation) {
             cellProperties.movement = JSON.parse(cellProperties.movement);
         }
         cellProperties.coords = JSON.parse(cellProperties.coords);
+        var hourMin = ut.printHourMin(new Date(cellProperties.time), ut.userTimeZone);
 
         var popupHTML = 
-        `<div>Cell <b>${cellProperties.cellID}</b></div>`
+        `<div>Cell <b>${cellProperties.cellID}</b> at <b>${hourMin}</b></div>`
 
         function flip(num) {
             if (num >= 180) {
@@ -95,6 +97,8 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         //console.log(stormTracks)
         var stormTracksList = Object.keys(stormTracks);
 
+        var fileTime = getLevel3FileTime(l3rad);
+
         function loadStormTrack(identifier) {
             // array to store all of the line points
             var lineCoords = [];
@@ -113,7 +117,8 @@ function parsePlotStormTracks(l3rad, theFileStation) {
             var curSTProperties = {
                 'movement': curSTMovement,
                 'cellID': identifier,
-                'coords': curSTCoords
+                'coords': curSTCoords,
+                'time': fileTime.getTime()
             }
 
             // future storm track (forecast)

@@ -11,7 +11,13 @@ function toBuffer(ab) {
 
 function printFancyTime(dateObj, tz) {
     var timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
+    if (tz == 'UTC') {
+        timeZ = 'UTC';
+    }
     return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${timeZ}`;
+}
+function printHourMin(dateObj, tz) {
+    return dateObj.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: tz })
 }
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -424,6 +430,7 @@ module.exports = {
     phpProxy,
     toBuffer,
     printFancyTime,
+    printHourMin,
     userTimeZone,
     msToTime,
     round,
