@@ -18408,6 +18408,8 @@ function loadAllStormTrackingStuff() {
     }
     document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
     document.getElementById('testEventElem').innerHTML = 'changed'
+
+    ut.progressBarVal('hide');
 }
 
 module.exports = {
@@ -18441,11 +18443,20 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 
     // for the red points for isolated cells
     var singlePointGeojson = {
-        'type': 'MultiPoint',
-        'coordinates': []
+        "type": "FeatureCollection",
+        "features": []
     }
-    function pushNewSinglePoint(coords) {
-        singlePointGeojson.coordinates.push(coords);
+    function pushNewSinglePoint(coords, properties) {
+        // this allows you to add properties for each cell
+        var objToPush = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": coords
+            },
+            "properties": properties
+        }
+        singlePointGeojson.features.push(objToPush)
     }
 
     // for the blue points for the start of a storm track
@@ -18454,7 +18465,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         "features": []
     }
     function pushNewMainLinePoint(coords, properties) {
-        // this just allows you to add properties for each cell
+        // this allows you to add properties for each cell
         var objToPush = {
             "type": "Feature",
             "geometry": {
@@ -18464,6 +18475,34 @@ function parsePlotStormTracks(l3rad, theFileStation) {
             "properties": properties
         }
         mainLinePointGeojson.features.push(objToPush)
+    }
+
+    function cellClick(e) {
+        var cellProperties = e.features[0].properties;
+        if (cellProperties.movement != 'new') {
+            cellProperties.movement = JSON.parse(cellProperties.movement);
+        }
+        cellProperties.coords = JSON.parse(cellProperties.coords);
+
+        var popupHTML = 
+        `<div>Cell <b>${cellProperties.cellID}</b></div>`
+
+        function flip(num) {
+            if (num >= 180) {
+                return num - 180;
+            } else if (num < 180) {
+                return num + 180;
+            }
+        }
+
+        if (cellProperties.movement != 'new') {
+            popupHTML += `<div><b>${ut.degToCompass(flip(cellProperties.movement.deg))}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
+        }
+
+        new mapboxgl.Popup()
+            .setLngLat([cellProperties.coords.longitude, cellProperties.coords.latitude])
+            .setHTML(popupHTML)
+            .addTo(map);
     }
 
     $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function (data) {
@@ -18489,6 +18528,12 @@ function parsePlotStormTracks(l3rad, theFileStation) {
             // curSTMovement.deg, curSTMovement.kts
             var curSTMovement = stormTracks[identifier].movement;
 
+            var curSTProperties = {
+                'movement': curSTMovement,
+                'cellID': identifier,
+                'coords': curSTCoords
+            }
+
             // future storm track (forecast)
             var futureST = stormTracks[identifier].forecast;
             var isLine;
@@ -18513,19 +18558,13 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                     }
                 }
 
-                var curSTProperties = {
-                    'movement': curSTMovement,
-                    'cellID': identifier,
-                    'coords': curSTCoords
-                }
-
                 // add the finished line to the map
                 pushNewMultiLineString(lineCoords)
                 // adds a blue circle at the start of the storm track
                 pushNewMainLinePoint(initialPoint, curSTProperties);
             } else if (!isLine) {
                 // if the storm track does not have a forecast, display a Point geojson
-                pushNewSinglePoint(initialPoint);
+                pushNewSinglePoint(initialPoint, curSTProperties);
             }
         }
 
@@ -18556,26 +18595,12 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         }
     });
 
-    map.on('click', 'mainLinePoint', (e) => {
-        var cellProperties = e.features[0].properties;
-        cellProperties.movement = JSON.parse(cellProperties.movement);
-        cellProperties.coords = JSON.parse(cellProperties.coords);
-
-        var popupHTML = 
-        `<div>Cell <b>${cellProperties.cellID}</b></div>
-        <div><b>${ut.degToCompass(cellProperties.movement.deg - 180)}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
-
-        new mapboxgl.Popup()
-            .setLngLat([cellProperties.coords.longitude, cellProperties.coords.latitude])
-            .setHTML(popupHTML)
-            .addTo(map);
-    });
-    map.on('mouseenter', 'mainLinePoint', () => {
-        map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', 'mainLinePoint', () => {
-        map.getCanvas().style.cursor = '';
-    });
+    map.on('click', 'mainLinePoint', (e) => { cellClick(e) });
+    map.on('click', 'singlePoint', (e) => { cellClick(e) });
+    map.on('mouseenter', 'mainLinePoint', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseenter', 'singlePoint', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'mainLinePoint', () => { map.getCanvas().style.cursor = ''; });
+    map.on('mouseleave', 'singlePoint', () => { map.getCanvas().style.cursor = ''; });
 }
 
 module.exports = parsePlotStormTracks;

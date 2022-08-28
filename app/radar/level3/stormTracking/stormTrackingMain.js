@@ -77,6 +77,8 @@ function loadAllStormTrackingStuff() {
     }
     document.getElementById('prevStat').innerHTML = document.getElementById('fileStation').innerHTML;
     document.getElementById('testEventElem').innerHTML = 'changed'
+
+    ut.progressBarVal('hide');
 }
 
 module.exports = {
