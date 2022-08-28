@@ -394,6 +394,32 @@ function disableModeBtn() {
     $('#modeThing').css('opacity', 0.5);
 }
 
+function knotsToMph(knots, decimals) {
+    return (knots * 1.151).toFixed(decimals);
+}
+// https://stackoverflow.com/a/25867068/18758797
+function degToCompass(num, icons) {
+    var val = Math.floor((num / 22.5) + 0.5);
+    var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    if (icons == true) {
+        arr = ["↑ N", "↑↗ NNE", "↗ NE", "→↗ ENE", "→ E", "↘→ ESE", "↘ SE", "↓↘ SSE", "↓ S", "↙↓ SSW", "↙ SW", "←↙ WSW", "← W", "↖← WNW", "↖ NW", "↖↑ NNW"];
+    }
+    return arr[(val % 16)];
+}
+// https://gist.github.com/basarat/4670200?permalink_comment_id=2067650#gistcomment-2067650
+function getCardinalDirection(angle) {
+    if (typeof angle === 'string') angle = parseInt(angle);
+    if (angle <= 0 || angle > 360 || typeof angle === 'undefined') return '☈';
+    const arrows = { north: '↑ N', north_east: '↗ NE', east: '→ E', south_east: '↘ SE', south: '↓ S', south_west: '↙ SW', west: '← W', north_west: '↖ NW' };
+    const directions = Object.keys(arrows);
+    const degree = 360 / directions.length;
+    angle = angle + degree / 2;
+    for (let i = 0; i < directions.length; i++) {
+      if (angle >= (i * degree) && angle < (i + 1) * degree) return arrows[directions[i]];
+    }
+    return arrows['north'];
+}
+
 module.exports = {
     phpProxy,
     toBuffer,
@@ -419,5 +445,8 @@ module.exports = {
     tideChartDivName,
     waitVisible,
     flyToStation,
-    disableModeBtn
+    disableModeBtn,
+    knotsToMph,
+    degToCompass,
+    getCardinalDirection
 }

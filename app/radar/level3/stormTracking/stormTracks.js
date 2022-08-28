@@ -34,14 +34,23 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 
     // for the blue points for the start of a storm track
     var mainLinePointGeojson = {
-        'type': 'MultiPoint',
-        'coordinates': []
+        "type": "FeatureCollection",
+        "features": []
     }
-    function pushNewMainLinePoint(coords) {
-        mainLinePointGeojson.coordinates.push(coords);
+    function pushNewMainLinePoint(coords, properties) {
+        // this just allows you to add properties for each cell
+        var objToPush = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": coords
+            },
+            "properties": properties
+        }
+        mainLinePointGeojson.features.push(objToPush)
     }
 
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function (data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -59,6 +68,10 @@ function parsePlotStormTracks(l3rad, theFileStation) {
             // push the initial coordinate point - we do not know if the current track is a line or a point yet
             var initialPoint = [curSTCoords.longitude, curSTCoords.latitude];
             lineCoords.push(initialPoint)
+
+            // current track's direction (degrees) and speed (knots)
+            // curSTMovement.deg, curSTMovement.kts
+            var curSTMovement = stormTracks[identifier].movement;
 
             // future storm track (forecast)
             var futureST = stormTracks[identifier].forecast;
@@ -84,10 +97,16 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                     }
                 }
 
+                var curSTProperties = {
+                    'movement': curSTMovement,
+                    'cellID': identifier,
+                    'coords': curSTCoords
+                }
+
                 // add the finished line to the map
                 pushNewMultiLineString(lineCoords)
                 // adds a blue circle at the start of the storm track
-                pushNewMainLinePoint(initialPoint)
+                pushNewMainLinePoint(initialPoint, curSTProperties);
             } else if (!isLine) {
                 // if the storm track does not have a forecast, display a Point geojson
                 pushNewSinglePoint(initialPoint);
@@ -119,6 +138,27 @@ function parsePlotStormTracks(l3rad, theFileStation) {
         for (key in stLayers) {
             mapFuncs.moveMapLayer(stLayers[key])
         }
+    });
+
+    map.on('click', 'mainLinePoint', (e) => {
+        var cellProperties = e.features[0].properties;
+        cellProperties.movement = JSON.parse(cellProperties.movement);
+        cellProperties.coords = JSON.parse(cellProperties.coords);
+
+        var popupHTML = 
+        `<div>Cell <b>${cellProperties.cellID}</b></div>
+        <div><b>${ut.degToCompass(cellProperties.movement.deg - 180)}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
+
+        new mapboxgl.Popup()
+            .setLngLat([cellProperties.coords.longitude, cellProperties.coords.latitude])
+            .setHTML(popupHTML)
+            .addTo(map);
+    });
+    map.on('mouseenter', 'mainLinePoint', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'mainLinePoint', () => {
+        map.getCanvas().style.cursor = '';
     });
 }
 
