@@ -1,6 +1,6 @@
 const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
-const createControl = require('../radar/map/controls/createControl');
+const createMenuOption = require('../radar/menu/createMenuOption');
 const mapClick = require ('./mapClick');
 const simplify = require('simplify-geojson')
 var map = require('../radar/map/map');
@@ -13,15 +13,15 @@ var noaaAlertsURL = `https://api.weather.gov/alerts/active`;
 var newAlertsArr = [];
 var y = 0;
 
-createControl({
-    'id': 'alertsThing',
-    'position': 'top-left',
-    'icon': 'fa-circle-exclamation',
-    'css': 'margin-top: 100%;'
-}, function() {
-    if (!$('#alertsThing').hasClass('icon-selected')) {
-        $('#alertsThing').addClass('icon-selected');
-        $('#alertsThing').removeClass('icon-black');
+createMenuOption({
+    'id': 'alertMenuItem',
+    'class': 'alert alert-secondary offCanvasMenuItem',
+    'contents': 'Show Alerts',
+    'css': ''
+}, function(thisObj) {
+    if (!$(thisObj).hasClass('alert-primary')) {
+        $(thisObj).addClass('alert-primary');
+        $(thisObj).removeClass('alert-secondary');
 
         if (map.getLayer('newAlertsLayer')) {
             map.getCanvas().style.cursor = "crosshair";
@@ -67,9 +67,9 @@ createControl({
                 // // });
             })
         }
-    } else if ($('#alertsThing').hasClass('icon-selected')) {
-        $('#alertsThing').removeClass('icon-selected');
-        $('#alertsThing').addClass('icon-black');
+    } else if ($(thisObj).hasClass('alert-primary')) {
+        $(thisObj).removeClass('alert-primary');
+        $(thisObj).addClass('alert-secondary');
 
         map.getCanvas().style.cursor = "default";
         map.off('click', 'newAlertsLayer', mapClick)

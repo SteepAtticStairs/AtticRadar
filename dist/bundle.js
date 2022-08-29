@@ -16899,7 +16899,7 @@ module.exports = function whichTypedArray(value) {
 },{"available-typed-arrays":6,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22,"is-typed-array":29}],66:[function(require,module,exports){
 const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
-const createControl = require('../radar/map/controls/createControl');
+const createMenuOption = require('../radar/menu/createMenuOption');
 const mapClick = require ('./mapClick');
 const simplify = require('simplify-geojson')
 var map = require('../radar/map/map');
@@ -16912,15 +16912,15 @@ var noaaAlertsURL = `https://api.weather.gov/alerts/active`;
 var newAlertsArr = [];
 var y = 0;
 
-createControl({
-    'id': 'alertsThing',
-    'position': 'top-left',
-    'icon': 'fa-circle-exclamation',
-    'css': 'margin-top: 100%;'
-}, function() {
-    if (!$('#alertsThing').hasClass('icon-selected')) {
-        $('#alertsThing').addClass('icon-selected');
-        $('#alertsThing').removeClass('icon-black');
+createMenuOption({
+    'id': 'alertMenuItem',
+    'class': 'alert alert-secondary offCanvasMenuItem',
+    'contents': 'Show Alerts',
+    'css': ''
+}, function(thisObj) {
+    if (!$(thisObj).hasClass('alert-primary')) {
+        $(thisObj).addClass('alert-primary');
+        $(thisObj).removeClass('alert-secondary');
 
         if (map.getLayer('newAlertsLayer')) {
             map.getCanvas().style.cursor = "crosshair";
@@ -16966,9 +16966,9 @@ createControl({
                 // // });
             })
         }
-    } else if ($('#alertsThing').hasClass('icon-selected')) {
-        $('#alertsThing').removeClass('icon-selected');
-        $('#alertsThing').addClass('icon-black');
+    } else if ($(thisObj).hasClass('alert-primary')) {
+        $(thisObj).removeClass('alert-primary');
+        $(thisObj).addClass('alert-secondary');
 
         map.getCanvas().style.cursor = "default";
         map.off('click', 'newAlertsLayer', mapClick)
@@ -16977,7 +16977,7 @@ createControl({
         map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
     }
 })
-},{"../radar/map/controls/createControl":88,"../radar/map/map":95,"../radar/utils":105,"./fetchData":68,"./mapClick":69,"simplify-geojson":200}],67:[function(require,module,exports){
+},{"../radar/map/map":95,"../radar/menu/createMenuOption":97,"../radar/utils":105,"./fetchData":68,"./mapClick":69,"simplify-geojson":200}],67:[function(require,module,exports){
 /*
 * This file is the entry point for the alerts module.
 */
