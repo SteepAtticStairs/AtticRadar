@@ -25,18 +25,21 @@ createMenuOption({
     'id': 'modeMenuItem',
     'class': 'alert alert-success offCanvasMenuItem',
     'contents': 'Current File Mode',
+    'icon': 'fa fa-clock',
     'css': ''
-}, function(thisObj) {
+}, function(thisObj, innerDiv, iconElem) {
     if ($(thisObj).hasClass('alert-success')) {
         $(thisObj).removeClass('alert-success');
         $(thisObj).addClass('alert-danger');
-        thisObj.innerHTML = 'Upload File Mode';
+        iconElem.className = 'fa fa-upload';
+        innerDiv.innerHTML = 'Upload File Mode';
 
         showHideFileBox('show');
     } else if ($(thisObj).hasClass('alert-danger')) {
         $(thisObj).removeClass('alert-danger');
         $(thisObj).addClass('alert-success');
-        thisObj.innerHTML = 'Current File Mode';
+        iconElem.className = 'fa fa-clock';
+        innerDiv.innerHTML = 'Current File Mode';
 
         showHideFileBox('hide');
     }

@@ -17,8 +17,9 @@ createMenuOption({
     'id': 'alertMenuItem',
     'class': 'alert alert-secondary offCanvasMenuItem',
     'contents': 'Show Alerts',
+    'icon': 'fa fa-circle-exclamation',
     'css': ''
-}, function(thisObj) {
+}, function(thisObj, innerDiv, iconElem) {
     if (!$(thisObj).hasClass('alert-primary')) {
         $(thisObj).addClass('alert-primary');
         $(thisObj).removeClass('alert-secondary');

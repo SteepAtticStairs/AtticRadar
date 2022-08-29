@@ -5,8 +5,9 @@ createMenuOption({
     'id': 'stationMenuItem',
     'class': 'alert alert-secondary offCanvasMenuItem',
     'contents': 'Station Markers',
+    'icon': 'fa fa-satellite-dish',
     'css': ''
-}, function(thisObj) {
+}, function(thisObj, innerDiv, iconElem) {
     if ($(thisObj).hasClass('alert-secondary')) {
         $(thisObj).removeClass('alert-secondary');
         $(thisObj).addClass('alert-primary');

@@ -4,11 +4,12 @@ var map = require('../radar/map/map');
 
 function addTideStationsControl(divName) {
     createMenuOption({
-        'id': 'tidesMenuItem',
+        'id': 'stationMenuItem',
         'class': 'alert alert-secondary offCanvasMenuItem',
         'contents': 'Tide Stations',
+        'icon': 'fa fa-water',
         'css': ''
-    }, function(thisObj) {
+    }, function(thisObj, innerDiv, iconElem) {
         if (!$(thisObj).hasClass('alert-primary')) {
             $(thisObj).addClass('alert-primary');
             $(thisObj).removeClass('alert-secondary');

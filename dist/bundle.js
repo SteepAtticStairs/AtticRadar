@@ -16916,8 +16916,9 @@ createMenuOption({
     'id': 'alertMenuItem',
     'class': 'alert alert-secondary offCanvasMenuItem',
     'contents': 'Show Alerts',
+    'icon': 'fa fa-circle-exclamation',
     'css': ''
-}, function(thisObj) {
+}, function(thisObj, innerDiv, iconElem) {
     if (!$(thisObj).hasClass('alert-primary')) {
         $(thisObj).addClass('alert-primary');
         $(thisObj).removeClass('alert-secondary');
@@ -19588,16 +19589,28 @@ function createMenuOption(options, clickFunc) {
     var divId = options.id;
     var divClass = options.class;
     var contents = options.contents;
+    var icon = options.icon;
     var css = options.css;
 
     var div = document.createElement('div');
     div.id = divId;
     div.className = divClass;
-    div.innerHTML = contents;
+
+    var iconElem = document.createElement('span');
+    iconElem.id = `${divId}_icon`;
+    iconElem.className = icon;
+    iconElem.innerHTML = '&nbsp;&nbsp;'
+    div.appendChild(iconElem);
+
+    var innerDiv = document.createElement('span');
+    innerDiv.id = `${divId}_inner`;
+    innerDiv.innerHTML = contents;
+    div.appendChild(innerDiv);
+
     div.style.cssText = css;
 
     $(div).on('click', function() {
-        clickFunc(this);
+        clickFunc(this, innerDiv, iconElem);
     })
 
     document.getElementById('offCanvasBody').appendChild(div);
@@ -19633,18 +19646,21 @@ createMenuOption({
     'id': 'modeMenuItem',
     'class': 'alert alert-success offCanvasMenuItem',
     'contents': 'Current File Mode',
+    'icon': 'fa fa-clock',
     'css': ''
-}, function(thisObj) {
+}, function(thisObj, innerDiv, iconElem) {
     if ($(thisObj).hasClass('alert-success')) {
         $(thisObj).removeClass('alert-success');
         $(thisObj).addClass('alert-danger');
-        thisObj.innerHTML = 'Upload File Mode';
+        iconElem.className = 'fa fa-upload';
+        innerDiv.innerHTML = 'Upload File Mode';
 
         showHideFileBox('show');
     } else if ($(thisObj).hasClass('alert-danger')) {
         $(thisObj).removeClass('alert-danger');
         $(thisObj).addClass('alert-success');
-        thisObj.innerHTML = 'Current File Mode';
+        iconElem.className = 'fa fa-clock';
+        innerDiv.innerHTML = 'Current File Mode';
 
         showHideFileBox('hide');
     }
@@ -19657,8 +19673,9 @@ createMenuOption({
     'id': 'stationMenuItem',
     'class': 'alert alert-secondary offCanvasMenuItem',
     'contents': 'Station Markers',
+    'icon': 'fa fa-satellite-dish',
     'css': ''
-}, function(thisObj) {
+}, function(thisObj, innerDiv, iconElem) {
     if ($(thisObj).hasClass('alert-secondary')) {
         $(thisObj).removeClass('alert-secondary');
         $(thisObj).addClass('alert-primary');
@@ -19892,7 +19909,12 @@ for (key in allParserArgs) {
 module.exports = isDevelopmentMode;
 },{"../../tides/chart":106,"../../tides/fetchData":107,"../utils":105}],105:[function(require,module,exports){
 (function (Buffer){(function (){
-const phpProxy = 'https://php-cors.000webhostapp.com/?'
+/*
+* https://nordicapis.com/10-free-to-use-cors-proxies/
+* https://allorigins.win/
+*/
+const phpProxy = 'https://api.allorigins.win/raw?url=';
+//const phpProxy = 'https://php-cors.000webhostapp.com/?';
 //const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
 function toBuffer(ab) {
@@ -20631,11 +20653,12 @@ var map = require('../radar/map/map');
 
 function addTideStationsControl(divName) {
     createMenuOption({
-        'id': 'tidesMenuItem',
+        'id': 'stationMenuItem',
         'class': 'alert alert-secondary offCanvasMenuItem',
         'contents': 'Tide Stations',
+        'icon': 'fa fa-water',
         'css': ''
-    }, function(thisObj) {
+    }, function(thisObj, innerDiv, iconElem) {
         if (!$(thisObj).hasClass('alert-primary')) {
             $(thisObj).addClass('alert-primary');
             $(thisObj).removeClass('alert-secondary');

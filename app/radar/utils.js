@@ -1,4 +1,9 @@
-const phpProxy = 'https://php-cors.000webhostapp.com/?'
+/*
+* https://nordicapis.com/10-free-to-use-cors-proxies/
+* https://allorigins.win/
+*/
+const phpProxy = 'https://api.allorigins.win/raw?url=';
+//const phpProxy = 'https://php-cors.000webhostapp.com/?';
 //const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
 function toBuffer(ab) {
