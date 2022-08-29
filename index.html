@@ -298,6 +298,12 @@
         .alertAccordionBody {
             white-space: pre-wrap;
         }
+
+        .offCanvasMenuItem {
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
@@ -481,6 +487,19 @@
                 </div> -->
             </div>
         </div>
+    </div>
+
+
+    <!-- Offcanvas menu -->
+    <button class="btn btn-primary" id="offCanvasBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+        aria-controls="offcanvasExample" style="display: none"></button>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" id="offCanvasBody"></div>
     </div>
 
     <div id='optionsBox'>

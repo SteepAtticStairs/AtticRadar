@@ -18,13 +18,17 @@ ut.progressBarVal('hide');
 require('./dom/fileUpload');
 
 // load the mode control
-require('./map/controls/mode');
+require('./menu/mode');
+//require('./map/controls/mode');
 
 // add the reload control
 require('./map/controls/reload');
 
 // add the help control
 require('./map/controls/help/helpControl');
+
+// add the menu control
+require('./map/controls/offCanvasMenu');
 
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
