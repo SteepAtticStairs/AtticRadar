@@ -20625,20 +20625,20 @@ module.exports = {
     tideChartInit
 }
 },{"./chart":106,"./fetchData":107,"./loadMarkers":108,"./mapControl":110}],110:[function(require,module,exports){
-const createControl = require('../radar/map/controls/createControl');
+const createMenuOption = require('../radar/menu/createMenuOption');
 const loadMarkers = require('./loadMarkers');
 var map = require('../radar/map/map');
 
 function addTideStationsControl(divName) {
-    createControl({
-        'id': 'tideStationsThing',
-        'position': 'top-left',
-        'icon': 'fa-person-swimming',
-        'css': 'margin-top: 100%;'
-    }, function() {
-        if (!$('#tideStationsThing').hasClass('icon-selected')) {
-            $('#tideStationsThing').addClass('icon-selected');
-            $('#tideStationsThing').removeClass('icon-black');
+    createMenuOption({
+        'id': 'tidesMenuItem',
+        'class': 'alert alert-secondary offCanvasMenuItem',
+        'contents': 'Tide Stations',
+        'css': ''
+    }, function(thisObj) {
+        if (!$(thisObj).hasClass('alert-primary')) {
+            $(thisObj).addClass('alert-primary');
+            $(thisObj).removeClass('alert-secondary');
 
             if (map.getLayer('tideStationDots')) {
                 // layer does exist - toggle the visibility to on
@@ -20647,9 +20647,9 @@ function addTideStationsControl(divName) {
                 // layer doesn't exist - load it onto the map for the first time
                 loadMarkers.loadTideStationMarkers(divName);
             }
-        } else if ($('#tideStationsThing').hasClass('icon-selected')) {
-            $('#tideStationsThing').removeClass('icon-selected');
-            $('#tideStationsThing').addClass('icon-black');
+        } else if ($(thisObj).hasClass('alert-primary')) {
+            $(thisObj).removeClass('alert-primary');
+            $(thisObj).addClass('alert-secondary');
             // layer does exist - toggle the visibility to off
             loadMarkers.toggleTideStationMarkers('hide');
         }
@@ -20659,7 +20659,7 @@ function addTideStationsControl(divName) {
 module.exports = {
     addTideStationsControl
 }
-},{"../radar/map/controls/createControl":88,"../radar/map/map":95,"./loadMarkers":108}],111:[function(require,module,exports){
+},{"../radar/map/map":95,"../radar/menu/createMenuOption":97,"./loadMarkers":108}],111:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
