@@ -1,5 +1,6 @@
 const createMenuOption = require('./createMenuOption');
 const showStations = require('../map/controls/stationMarkers');
+const ut = require('../utils');
 
 createMenuOption({
     'id': 'stationMenuItem',

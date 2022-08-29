@@ -19613,6 +19613,26 @@ function createMenuOption(options, clickFunc) {
         clickFunc(this, innerDiv, iconElem);
     })
 
+    function animateBrightness(startVal, stopVal, duration) {
+        // https://stackoverflow.com/a/20082518/18758797
+        $({blurRadius: startVal}).animate({blurRadius: stopVal}, {
+            duration: duration,
+            easing: 'linear',
+            step: function() {
+                $(div).css({
+                    "-webkit-filter": "brightness("+this.blurRadius+"%)",
+                    "filter": "brightness("+this.blurRadius+"%)"
+                });
+            }
+        });
+    }
+    $(div).on('mouseenter', function() {
+        animateBrightness(100, 80, 100);
+    })
+    $(div).on('mouseleave', function() {
+        animateBrightness(80, 100, 100);
+    })
+
     document.getElementById('offCanvasBody').appendChild(div);
     document.getElementById('offCanvasBody').appendChild(document.createElement('br'));
 }
@@ -19668,6 +19688,7 @@ createMenuOption({
 },{"./createMenuOption":97}],99:[function(require,module,exports){
 const createMenuOption = require('./createMenuOption');
 const showStations = require('../map/controls/stationMarkers');
+const ut = require('../utils');
 
 createMenuOption({
     'id': 'stationMenuItem',
@@ -19697,7 +19718,7 @@ setTimeout(function() {
     $('#stationMenuItem').removeClass('alert-secondary');
     showStations();
 }, 200)
-},{"../map/controls/stationMarkers":92,"./createMenuOption":97}],100:[function(require,module,exports){
+},{"../map/controls/stationMarkers":92,"../utils":105,"./createMenuOption":97}],100:[function(require,module,exports){
 const ut = require('../utils');
 const loaders = require('../loaders');
 
@@ -19916,6 +19937,17 @@ module.exports = isDevelopmentMode;
 const phpProxy = 'https://api.allorigins.win/raw?url=';
 //const phpProxy = 'https://php-cors.000webhostapp.com/?';
 //const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+
+const colors = {
+    'red': 'rgb(255, 0, 0)',
+    'darkRed': 'rgb(170, 0, 0)',
+
+    'green': 'rgb(17, 167, 17)',
+    'darkGreen': 'rgb(13, 118, 13)',
+
+    'blue': 'rgb(92, 157, 255)',
+    'darkBlue': 'rgb(27, 78, 155)',
+}
 
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
@@ -20348,6 +20380,7 @@ function getCardinalDirection(angle) {
 
 module.exports = {
     phpProxy,
+    colors,
     toBuffer,
     printFancyTime,
     printHourMin,

@@ -6,6 +6,17 @@ const phpProxy = 'https://api.allorigins.win/raw?url=';
 //const phpProxy = 'https://php-cors.000webhostapp.com/?';
 //const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
+const colors = {
+    'red': 'rgb(255, 0, 0)',
+    'darkRed': 'rgb(170, 0, 0)',
+
+    'green': 'rgb(17, 167, 17)',
+    'darkGreen': 'rgb(13, 118, 13)',
+
+    'blue': 'rgb(92, 157, 255)',
+    'darkBlue': 'rgb(27, 78, 155)',
+}
+
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);
     const view = new Uint8Array(ab);
@@ -437,6 +448,7 @@ function getCardinalDirection(angle) {
 
 module.exports = {
     phpProxy,
+    colors,
     toBuffer,
     printFancyTime,
     printHourMin,
