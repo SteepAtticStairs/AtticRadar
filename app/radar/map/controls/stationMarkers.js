@@ -43,6 +43,7 @@ function showStations() {
                 statMarkerArr.push(mark)
             }
         }
+        $('#dataDiv').data('statMarkerArr', statMarkerArr);
     }).then(function () {
         stationStatusColor();
 
@@ -135,28 +136,30 @@ function showStations() {
     })
 }
 
-createControl({
-    'id': 'stationThing',
-    'class': 'stationBtn',
-    'position': 'top-left',
-    'icon': 'fa-satellite-dish',
-    'css': 'margin-top: 100%;'
-}, function() {
-    if (!$('#stationThing').hasClass('icon-selected')) {
-        $('#stationThing').addClass('icon-selected');
-        $('#stationThing').removeClass('icon-black');
-        showStations();
-    } else if ($('#stationThing').hasClass('icon-selected')) {
-        $('#stationThing').removeClass('icon-selected');
-        $('#stationThing').addClass('icon-black');
-        for (key in statMarkerArr) {
-            statMarkerArr[key].remove();
-        }
-    }
-})
+// createControl({
+//     'id': 'stationThing',
+//     'class': 'stationBtn',
+//     'position': 'top-left',
+//     'icon': 'fa-satellite-dish',
+//     'css': 'margin-top: 100%;'
+// }, function() {
+//     if (!$('#stationThing').hasClass('icon-selected')) {
+//         $('#stationThing').addClass('icon-selected');
+//         $('#stationThing').removeClass('icon-black');
+//         showStations();
+//     } else if ($('#stationThing').hasClass('icon-selected')) {
+//         $('#stationThing').removeClass('icon-selected');
+//         $('#stationThing').addClass('icon-black');
+//         for (key in statMarkerArr) {
+//             statMarkerArr[key].remove();
+//         }
+//     }
+// })
 
-setTimeout(function() {
-    $('#stationThing').addClass('icon-selected');
-    $('#stationThing').removeClass('icon-black');
-    showStations();
-}, 200)
+// setTimeout(function() {
+//     $('#stationThing').addClass('icon-selected');
+//     $('#stationThing').removeClass('icon-black');
+//     showStations();
+// }, 200)
+
+module.exports = showStations;

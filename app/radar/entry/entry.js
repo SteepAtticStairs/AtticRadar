@@ -6,9 +6,6 @@ window.onload = function() {
     // load the main file
     require('../main');
 
-    // load the station markers control (this has to be after everything else is loaded)
-    require('../map/controls/stationMarkers');
-
     // initialize the alerts
     require('../../alerts/entry');
 

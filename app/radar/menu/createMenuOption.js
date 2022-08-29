@@ -4,14 +4,18 @@ function createMenuOption(options, clickFunc) {
     var contents = options.contents;
     var css = options.css;
 
-    document.getElementById('offCanvasBody').innerHTML += 
-    `<div id="${divId}" class="${divClass}">${contents}</div>`
+    var div = document.createElement('div');
+    div.id = divId;
+    div.className = divClass;
+    div.innerHTML = contents;
+    div.style.cssText = css;
 
-    document.getElementById(`${divId}`).style.cssText = css;
-
-    $(`#${divId}`).on('click', function() {
+    $(div).on('click', function() {
         clickFunc(this);
     })
+
+    document.getElementById('offCanvasBody').appendChild(div);
+    document.getElementById('offCanvasBody').appendChild(document.createElement('br'));
 }
 
 module.exports = createMenuOption;

@@ -1,4 +1,5 @@
-const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
+const phpProxy = 'https://php-cors.000webhostapp.com/?'
+//const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
 function toBuffer(ab) {
     const buf = Buffer.alloc(ab.byteLength);

@@ -21,6 +21,9 @@ require('./dom/fileUpload');
 require('./menu/mode');
 //require('./map/controls/mode');
 
+// load the station marker menu item
+require('./menu/stationMarkerMenu');
+
 // add the reload control
 require('./map/controls/reload');
 

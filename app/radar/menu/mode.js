@@ -1,7 +1,7 @@
 const createMenuOption = require('./createMenuOption');
 
 function showHideFileBox(showHide) {
-    $('.stationBtn').click();
+    $('#stationMenuItem').click();
     if (showHide == 'show') {
         // file mode
         $('#dataDiv').data('isFileUpload', true);
