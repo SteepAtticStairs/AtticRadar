@@ -446,6 +446,11 @@ function getCardinalDirection(angle) {
     return arrows['north'];
 }
 
+function preventFileCaching(url) {
+    var curTime = new Date();
+    return url += `&?nocache=${curTime.getTime()}`;
+}
+
 module.exports = {
     phpProxy,
     colors,
@@ -477,5 +482,6 @@ module.exports = {
     disableModeBtn,
     knotsToMph,
     degToCompass,
-    getCardinalDirection
+    getCardinalDirection,
+    preventFileCaching
 }

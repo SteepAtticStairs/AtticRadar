@@ -1,30 +1,6 @@
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
-
-// https://stackoverflow.com/a/64123890
-// https://github.com/samundrak/fetch-progress
-async function fetchWithProgress(url, callback) {
-    const response = await fetch(url);
-    let loaded = 0;
-
-    const res = new Response(new ReadableStream({
-        async start(controller) {
-            const reader = response.body.getReader();
-            for (;;) {
-                const {done, value} = await reader.read();
-                if (done) break;
-                loaded += value.byteLength;
-                ut.progressBarVal('label', ut.formatBytes(loaded));
-                ut.progressBarVal('set', parseInt(ut.formatBytes(loaded)) / 10);
-                controller.enqueue(value);
-            }
-            controller.close();
-        },
-    }));
-    callback(await res.blob());
-}
-
 /**
 * Function to load a radar plot onto the map from a URL.
 *
@@ -36,6 +12,8 @@ file where you only want to load the first chunk of the file (reflectivity data)
 loading speed.
 */
 function loadFileObject(url, level) {
+    url = ut.preventFileCaching(url);
+
     ut.progressBarVal('show');
     var radLevel;
     var wholeOrPart = 'whole';
@@ -48,9 +26,12 @@ function loadFileObject(url, level) {
         radLevel = 3;
     }
     console.log('Fetch initialized - data requested');
-    fetchWithProgress(url, function(resp) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.addEventListener('load', function () {
         console.log('File finished downloading');
-        var response = resp;
+        var response = xhr.response;
         var blob;
 
         if (level != 2) {
@@ -86,7 +67,18 @@ function loadFileObject(url, level) {
         });
         // Dispatch/Trigger/Fire the event
         document.dispatchEvent(event);
-    })
+    });
+    xhr.onprogress = (event) => {
+        // event.loaded returns how many bytes are downloaded
+        // event.total returns the total number of bytes
+        // event.total is only available if server sends `Content-Length` header
+        //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
+        //var complete = (event.loaded / event.total * 50 | 0);
+        console.log(`${ut.formatBytes(event.loaded)}`);
+        ut.progressBarVal('label', ut.formatBytes(event.loaded));
+        ut.progressBarVal('set', parseInt(ut.formatBytes(event.loaded)) / 10);
+    }
+    xhr.send();
 }
 
 /**
@@ -110,6 +102,7 @@ function getLatestL2(station, callback) {
     //console.log(fullURL)
     var baseURL = 'https://noaa-nexrad-level2.s3.amazonaws.com';
     //https://noaa-nexrad-level2.s3.amazonaws.com/2022/08/09/KATX/KATX20220809_004942_V06
+    fullURL = ut.preventFileCaching(fullURL);
     $.get(ut.phpProxy + fullURL, function (data) {
         var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
         dataToWorkWith = JSON.parse(dataToWorkWith)
@@ -150,6 +143,7 @@ function getLatestL3(station, product, index, callback) {
         // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
         var urlPrefInfo = '?prefix=';
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
+        fullURL = ut.preventFileCaching(fullURL);
         console.log(fullURL)
         $.get(ut.phpProxy + fullURL, function (data) {
             var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
@@ -206,7 +200,7 @@ function getLatestFile(station, levelProduct, callback) {
     ut.progressBarVal('show');
     // obviously, the user wants a level 2 file
     if (levelProduct == 2) {
-        getLatestL2(station, function(url) {
+        getLatestL2(station, function (url) {
             callback(url);
         })
     } else {
@@ -218,7 +212,7 @@ function getLatestFile(station, levelProduct, callback) {
         const fileIndex = levelProduct[2];
         /* we need to slice(1) here (remove the first letter) because the level 3 source we
         * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
-        getLatestL3(station.slice(1), product, fileIndex, function(url) {
+        getLatestL3(station.slice(1), product, fileIndex, function (url) {
             callback(url);
         })
     }
