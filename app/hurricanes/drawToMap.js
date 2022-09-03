@@ -29,6 +29,11 @@ function drawHurricanesToMap(geojson, type, index) {
                     'line-width': 3
                 }
             });
+
+            var hurricaneMapLayers = $('#dataDiv').data('hurricaneMapLayers');
+            hurricaneMapLayers.push(`coneLayer${index}`);
+            hurricaneMapLayers.push(`coneLayerOutline${index}`);
+            $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
         } else if (type == 'track') {
             map.addLayer({
                 'id': `trackLayerLine${index}`,
@@ -56,6 +61,11 @@ function drawHurricanesToMap(geojson, type, index) {
                     'circle-stroke-color': 'white'
                 }
             })
+
+            var hurricaneMapLayers = $('#dataDiv').data('hurricaneMapLayers');
+            hurricaneMapLayers.push(`trackLayerLine${index}`);
+            hurricaneMapLayers.push(`trackLayerPoints${index}`);
+            $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
         }
 
         map.on('mouseenter', `trackLayerPoints${index}`, () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -127,6 +137,9 @@ function drawHurricanesToMap(geojson, type, index) {
                     map.moveLayer(`trackLayerPoints${i}`)
                 }
             }
+
+            // add the hurricanes menu item
+            require('./menuItem').loadHurricanesControl($('#dataDiv').data('hurricaneMapLayers'));
         }
     })
 }

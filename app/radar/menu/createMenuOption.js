@@ -5,9 +5,13 @@ function createMenuOption(options, clickFunc) {
     var icon = options.icon;
     var css = options.css;
 
+    var outerDiv = document.createElement('div');
+    outerDiv.id = `${divId}_outer`;
+
     var div = document.createElement('div');
     div.id = divId;
     div.className = divClass;
+    outerDiv.appendChild(div);
 
     var iconElem = document.createElement('span');
     iconElem.id = `${divId}_icon`;
@@ -46,8 +50,8 @@ function createMenuOption(options, clickFunc) {
         animateBrightness(80, 100, 100);
     })
 
-    document.getElementById('offCanvasBody').appendChild(div);
-    document.getElementById('offCanvasBody').appendChild(document.createElement('br'));
+    outerDiv.appendChild(document.createElement('br'));
+    document.getElementById('offCanvasBody').appendChild(outerDiv);
 }
 
 module.exports = createMenuOption;

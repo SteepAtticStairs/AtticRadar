@@ -7,6 +7,7 @@ const ut = require('../radar/utils');
 // https://www.nhc.noaa.gov/aboutrss.shtml
 
 $('#dataDiv').data('indexOfDrawnHurricane', []);
+$('#dataDiv').data('hurricaneMapLayers', []);
 
 // var url = '../../data/kmz/AL052022_TRACK_latest.kmz';
 // var type = 'track';

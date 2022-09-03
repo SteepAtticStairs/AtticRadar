@@ -4,7 +4,7 @@ var map = require('../radar/map/map');
 
 function addTideStationsControl(divName) {
     createMenuOption({
-        'id': 'stationMenuItem',
+        'id': 'tideStationMenuItem',
         'class': 'alert alert-secondary offCanvasMenuItem',
         'contents': 'Tide Stations',
         'icon': 'fa fa-water',
