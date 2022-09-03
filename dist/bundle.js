@@ -17173,13 +17173,14 @@ function addMarker(e) {
 
 module.exports = addMarker;
 },{"../radar/map/map":99,"../radar/utils":109}],70:[function(require,module,exports){
+const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 
-function drawHurricanesToMap(geojson, type) {
+function drawHurricanesToMap(geojson, type, index) {
     map.on('load', () => {
         if (type == 'cone') {
             map.addLayer({
-                'id': `newAlertsLayer`,
+                'id': `coneLayer${index}`,
                 'type': 'fill',
                 'source': {
                     type: 'geojson',
@@ -17193,9 +17194,9 @@ function drawHurricanesToMap(geojson, type) {
                 }
             });
             map.addLayer({
-                'id': `newAlertsLayerOutline`,
+                'id': `coneLayerOutline${index}`,
                 'type': 'line',
-                'source': `newAlertsLayer`,
+                'source': `coneLayer${index}`,
                 'paint': {
                     //#014385 blue
                     //#850101 red
@@ -17205,7 +17206,7 @@ function drawHurricanesToMap(geojson, type) {
             });
         } else if (type == 'track') {
             map.addLayer({
-                'id': 'trackLayerLine',
+                'id': `trackLayerLine${index}`,
                 'type': 'line',
                 'source': {
                     type: 'geojson',
@@ -17217,7 +17218,7 @@ function drawHurricanesToMap(geojson, type) {
                 }
             });
             map.addLayer({
-                'id': 'trackLayerPoints',
+                'id': `trackLayerPoints${index}`,
                 'type': 'circle',
                 'source': {
                     'type': 'geojson',
@@ -17231,11 +17232,82 @@ function drawHurricanesToMap(geojson, type) {
                 }
             })
         }
+
+        map.on('mouseenter', `trackLayerPoints${index}`, () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', `trackLayerPoints${index}`, () => { map.getCanvas().style.cursor = ''; });
+
+        map.on('click', `trackLayerPoints${index}`, function(e) {
+            // parse the content of each point
+            var div = document.createElement('div')
+            div.innerHTML = e.features[0].properties.description;
+            var parsedDescription = JSON.parse(ut.html2json(div));
+
+            var trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
+            var trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
+            var trackpointForecastDesc = parsedDescription.children[0].children[0].children[3].textContent;
+            var trackpointTime = parsedDescription.children[0].children[0].children[4].textContent;
+            var trackpointLocation = parsedDescription.children[0].children[0].children[5].textContent;
+            var trackpointMaxWind = parsedDescription.children[0].children[0].children[6].textContent;
+            var trackpointWindGusts = parsedDescription.children[0].children[0].children[7].textContent;
+            var trackpointMotion;
+            var trackpointPressure;
+            if (parsedDescription.children[0].children[0].children.hasOwnProperty(8)) {
+                trackpointMotion = parsedDescription.children[0].children[0].children[8].textContent;
+            }
+            if (parsedDescription.children[0].children[0].children.hasOwnProperty(9)) {
+                trackpointPressure = parsedDescription.children[0].children[0].children[9].textContent;
+            }
+
+            var popupContent = 
+            `<div>
+                <div><b>${trackpointStormName}</b></div>
+                <br>
+                <div>${trackpointTime}</div>
+                <div>${trackpointLocation}</div>
+                <div>${trackpointMaxWind}</div>
+                <div>${trackpointWindGusts}</div>`
+
+            if (trackpointMotion != undefined && trackpointPressure != undefined) {
+                popupContent += `<br>`
+            }
+            if (trackpointMotion != undefined) {
+                popupContent += `<div>${trackpointMotion}</div>`
+            }
+            if (trackpointPressure != undefined) {
+                popupContent += `<div>${trackpointPressure}</div>`
+            }
+
+            popupContent += '</div>';
+
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(popupContent)
+                //.setHTML(e.features[0].properties.description)
+                .addTo(map);
+        })
+
+        var namesArr = $('#dataDiv').data('allHurricanesPlotted');
+        // increase the counter of number of layers plotted
+        var indexOfDrawnHurricane = $('#dataDiv').data('indexOfDrawnHurricane');
+        indexOfDrawnHurricane.push(index);
+        $('#dataDiv').data('indexOfDrawnHurricane', indexOfDrawnHurricane);
+
+        if (indexOfDrawnHurricane.length == namesArr.length * 2) {
+            for (var i = 0; i < namesArr.length * 2; i++) {
+                // set layer order
+                if (map.getLayer(`trackLayerLine${i}`)) {
+                    map.moveLayer(`trackLayerLine${i}`)
+                }
+                if (map.getLayer(`trackLayerPoints${i}`)) {
+                    map.moveLayer(`trackLayerPoints${i}`)
+                }
+            }
+        }
     })
 }
 
 module.exports = drawHurricanesToMap;
-},{"../radar/map/map":99}],71:[function(require,module,exports){
+},{"../radar/map/map":99,"../radar/utils":109}],71:[function(require,module,exports){
 /*
 * This file is the entry point for the hurricanes module.
 */
@@ -17249,18 +17321,28 @@ const ut = require('../radar/utils');
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_TRACK_latest.kmz
 // https://www.nhc.noaa.gov/gis/
+// https://www.nhc.noaa.gov/aboutrss.shtml
+
+$('#dataDiv').data('indexOfDrawnHurricane', []);
 
 // var url = '../../data/kmz/AL052022_TRACK_latest.kmz';
 // var type = 'track';
-var layersToLoad = [
-    //['../../data/kmz/AL052022_CONE_latest.kmz', 'cone'],
-    //['../../data/kmz/AL052022_TRACK_latest.kmz', 'track']
-]
-for (var i = 0; i < layersToLoad.length; i++) {
-    loadHurricaneFromFile(layersToLoad[i][0], layersToLoad[i][1])
+var layersToLoad = []
+function loadHurricanesFromID(ids) {
+    for (var i = 0; i < ids.length; i++) {
+        layersToLoad.push([`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`, 'cone']);
+        layersToLoad.push([`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`, 'track']);
+    }
+    for (var i = 0; i < layersToLoad.length; i++) {
+        loadHurricaneFromFile(layersToLoad[i][0], layersToLoad[i][1], i)
+    }
 }
 
-function loadHurricaneFromFile(url, type) {
+function loadHurricaneFromFile(url, type, index) {
+    if (url.startsWith("https")) {
+        url = ut.phpProxy + url;
+    }
+
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
     xhr.responseType = "blob";
@@ -17271,16 +17353,52 @@ function loadHurricaneFromFile(url, type) {
         blob.lastModifiedDate = new Date();
         blob.name = url;
 
-        unzipKMZ(blob, type);
+        unzipKMZ(blob, type, index);
     });
     xhr.send();
 }
+
+function ifExists(jsonData, num) {
+    if (jsonData.rss.channel.item.hasOwnProperty(num)) {
+        if (jsonData.rss.channel.item[num].hasOwnProperty('nhc:Cyclone')) {
+            return jsonData.rss.channel.item[num]['nhc:Cyclone']['nhc:atcf']['#text'];
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+var namesArr = [];
+$.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
+    var jsonData = ut.xmlToJson(data);
+    for (var n = 0; n < 20; n++) {
+        var existsIndex = ifExists(jsonData, n);
+        if (existsIndex != false) {
+            namesArr.push(existsIndex);
+        }
+    }
+
+    $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-ep.xml', function(data) {
+        var jsonData = ut.xmlToJson(data);
+        for (var n = 0; n < 20; n++) {
+            var existsIndex = ifExists(jsonData, n);
+            if (existsIndex != false) {
+                namesArr.push(existsIndex);
+            }
+        }
+
+        $('#dataDiv').data('allHurricanesPlotted', namesArr);
+        loadHurricanesFromID(namesArr);
+    })
+})
 },{"../radar/utils":109,"./unzip":73}],73:[function(require,module,exports){
 const drawHurricanesToMap = require('./drawToMap');
 
 // https://gis.stackexchange.com/a/325061/206737
 // https://jsfiddle.net/7z318a0r/
-function unzipKMZ(kmzBlob, type) {
+function unzipKMZ(kmzBlob, type, index) {
     let getDom = xml => (new DOMParser()).parseFromString(xml, "text/xml")
     let getExtension = fileName => fileName.split(".").pop()
 
@@ -17300,7 +17418,7 @@ function unzipKMZ(kmzBlob, type) {
 
     getKmlDom(kmzBlob).then(kmlDom => {
         let geoJsonObject = toGeoJSON.kml(kmlDom)
-        drawHurricanesToMap(geoJsonObject, type);
+        drawHurricanesToMap(geoJsonObject, type, index);
     })
 }
 
