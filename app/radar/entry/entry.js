@@ -9,6 +9,9 @@ window.onload = function() {
     // initialize the alerts
     require('../../alerts/entry');
 
+    // initialize the hurricanes module
+    require('../../hurricanes/entry');
+
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
 }
