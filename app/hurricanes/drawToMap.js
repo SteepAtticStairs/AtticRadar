@@ -1,7 +1,8 @@
 const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 
-function drawHurricanesToMap(geojson, type, index) {
+function drawHurricanesToMap(geojson, type, index, hurricaneID) {
+    console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
     function doTheStuff() {
         if (type == 'cone') {
             map.addLayer({
@@ -77,6 +78,12 @@ function drawHurricanesToMap(geojson, type, index) {
             div.innerHTML = e.features[0].properties.description;
             var parsedDescription = JSON.parse(ut.html2json(div));
 
+            console.log(e.features[0].properties.styleUrl)
+            // #xs_point = Extratropical Cyclone
+            // #h_point = Hurricane
+            // #s_point = Tropical Storm
+            // #xd_point = Low Pressure Area OR Tropical Depression?
+
             var trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
             var trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
             var trackpointForecastDesc = parsedDescription.children[0].children[0].children[3].textContent;
@@ -132,6 +139,7 @@ function drawHurricanesToMap(geojson, type, index) {
         var indexOfDrawnHurricane = $('#dataDiv').data('indexOfDrawnHurricane');
         indexOfDrawnHurricane.push(index);
         $('#dataDiv').data('indexOfDrawnHurricane', indexOfDrawnHurricane);
+        //console.log(`${hurricaneID}/${type} - Finished drawing hurricane.`);
 
         if (indexOfDrawnHurricane.length == namesArr.length * 2) {
             for (var i = 0; i < namesArr.length * 2; i++) {
@@ -143,6 +151,7 @@ function drawHurricanesToMap(geojson, type, index) {
                     map.moveLayer(`trackLayerPoints${i}`)
                 }
             }
+            console.log(`Finished drawing all hurricanes.`);
 
             // add the hurricanes menu item
             require('./menuItem').loadHurricanesControl($('#dataDiv').data('hurricaneMapLayers'));

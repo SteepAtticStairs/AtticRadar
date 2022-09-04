@@ -1,10 +1,14 @@
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
+var map = require('../radar/map/map');
 
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_TRACK_latest.kmz
 // https://www.nhc.noaa.gov/gis/
 // https://www.nhc.noaa.gov/aboutrss.shtml
+
+// https://www.nrlmry.navy.mil/atcf_web/docs/database/new/database.html
+// https://www.nrlmry.navy.mil/atcf_web/docs/current_storms/
 
 $('#dataDiv').data('indexOfDrawnHurricane', []);
 $('#dataDiv').data('hurricaneMapLayers', []);
@@ -14,15 +18,25 @@ $('#dataDiv').data('hurricaneMapLayers', []);
 var layersToLoad = []
 function loadHurricanesFromID(ids) {
     for (var i = 0; i < ids.length; i++) {
-        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`), 'cone']);
-        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`), 'track']);
+        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`), 'cone', ids[i]]);
+        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`), 'track', ids[i]]);
+        // $.get(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/cxml/${ids[i].toLowerCase()}_cxml.xml`, function(data) {
+        //     var json = ut.xmlToJson(data);
+        //     for (var item in json.cxml.data.disturbance.fix) {
+        //         var lat = json.cxml.data.disturbance.fix[item].latitude['#text'];
+        //         var lon = json.cxml.data.disturbance.fix[item].longitude['#text'];
+        //         new mapboxgl.Marker()
+        //             .setLngLat([lon, lat])
+        //             .addTo(map);
+        //     }
+        // })
     }
     for (var i = 0; i < layersToLoad.length; i++) {
-        loadHurricaneFromFile(layersToLoad[i][0], layersToLoad[i][1], i)
+        loadHurricaneFromFile(layersToLoad[i][0], layersToLoad[i][1], i, layersToLoad[i][2])
     }
 }
 
-function loadHurricaneFromFile(url, type, index) {
+function loadHurricaneFromFile(url, type, index, hurricaneID) {
     if (url.startsWith("https")) {
         url = ut.phpProxy + url;
     }
@@ -37,7 +51,7 @@ function loadHurricaneFromFile(url, type, index) {
         blob.lastModifiedDate = new Date();
         blob.name = url;
 
-        unzipKMZ(blob, type, index);
+        unzipKMZ(blob, type, index, hurricaneID);
     });
     xhr.send();
 }
@@ -60,6 +74,7 @@ $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml
     for (var n = 0; n < 20; n++) {
         var existsIndex = ifExists(jsonData, n);
         if (existsIndex != false) {
+            console.log('Found hurricane ' + existsIndex);
             namesArr.push(existsIndex);
         }
     }
@@ -69,6 +84,7 @@ $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml
         for (var n = 0; n < 20; n++) {
             var existsIndex = ifExists(jsonData, n);
             if (existsIndex != false) {
+                console.log('Found hurricane ' + existsIndex);
                 namesArr.push(existsIndex);
             }
         }
@@ -78,6 +94,7 @@ $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml
             for (var n = 0; n < 20; n++) {
                 var existsIndex = ifExists(jsonData, n);
                 if (existsIndex != false) {
+                    console.log('Found hurricane ' + existsIndex);
                     namesArr.push(existsIndex);
                 }
             }
