@@ -14,8 +14,8 @@ $('#dataDiv').data('hurricaneMapLayers', []);
 var layersToLoad = []
 function loadHurricanesFromID(ids) {
     for (var i = 0; i < ids.length; i++) {
-        layersToLoad.push([`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`, 'cone']);
-        layersToLoad.push([`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`, 'track']);
+        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`), 'cone']);
+        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`), 'track']);
     }
     for (var i = 0; i < layersToLoad.length; i++) {
         loadHurricaneFromFile(layersToLoad[i][0], layersToLoad[i][1], i)
@@ -55,7 +55,7 @@ function ifExists(jsonData, num) {
 }
 
 var namesArr = [];
-$.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
+$.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
     var jsonData = ut.xmlToJson(data);
     for (var n = 0; n < 20; n++) {
         var existsIndex = ifExists(jsonData, n);
@@ -64,7 +64,7 @@ $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
         }
     }
 
-    $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-ep.xml', function(data) {
+    $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-ep.xml'), function (data) {
         var jsonData = ut.xmlToJson(data);
         for (var n = 0; n < 20; n++) {
             var existsIndex = ifExists(jsonData, n);
@@ -73,7 +73,17 @@ $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
             }
         }
 
-        $('#dataDiv').data('allHurricanesPlotted', namesArr);
-        loadHurricanesFromID(namesArr);
+        $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-cp.xml'), function (data) {
+            var jsonData = ut.xmlToJson(data);
+            for (var n = 0; n < 20; n++) {
+                var existsIndex = ifExists(jsonData, n);
+                if (existsIndex != false) {
+                    namesArr.push(existsIndex);
+                }
+            }
+
+            $('#dataDiv').data('allHurricanesPlotted', namesArr);
+            loadHurricanesFromID(namesArr);
+        })
     })
 })

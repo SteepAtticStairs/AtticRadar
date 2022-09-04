@@ -451,6 +451,24 @@ function preventFileCaching(url) {
     return url += `&?nocache=${curTime.getTime()}`;
 }
 
+function getSSHWSVal(windSpeed) {
+    if (windSpeed <= 38) {
+        return 'Tropical Depression'; // TD
+    } else if (windSpeed >= 39 && windSpeed <= 73) {
+        return 'Tropical Storm'; // TS
+    } else if (windSpeed >= 74 && windSpeed <= 95) {
+        return 'Category 1'; // C1
+    } else if (windSpeed >= 96 && windSpeed <= 110) {
+        return 'Category 2'; // C2
+    } else if (windSpeed >= 111 && windSpeed <= 129) {
+        return 'Category 3'; // C3
+    } else if (windSpeed >= 130 && windSpeed <= 156) {
+        return 'Category 4'; // C4
+    } else if (windSpeed >= 157) {
+        return 'Category 5'; // C5
+    }
+}
+
 module.exports = {
     phpProxy,
     colors,
@@ -483,5 +501,6 @@ module.exports = {
     knotsToMph,
     degToCompass,
     getCardinalDirection,
-    preventFileCaching
+    preventFileCaching,
+    getSSHWSVal
 }

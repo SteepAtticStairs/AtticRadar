@@ -17177,7 +17177,7 @@ const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 
 function drawHurricanesToMap(geojson, type, index) {
-    map.on('load', () => {
+    function doTheStuff() {
         if (type == 'cone') {
             map.addLayer({
                 'id': `coneLayer${index}`,
@@ -17268,9 +17268,15 @@ function drawHurricanesToMap(geojson, type, index) {
                 trackpointPressure = parsedDescription.children[0].children[0].children[9].textContent;
             }
 
+            // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
+            // https://stackoverflow.com/a/12059321/18758797
+            var windSpeedMPH = trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
+            var sshwsLevel = ut.getSSHWSVal(windSpeedMPH);
+
             var popupContent = 
             `<div>
                 <div><b>${trackpointStormName}</b></div>
+                <div><u>SSHWS: ${sshwsLevel}</u></div>
                 <br>
                 <div>${trackpointTime}</div>
                 <div>${trackpointLocation}</div>
@@ -17316,18 +17322,23 @@ function drawHurricanesToMap(geojson, type, index) {
             // add the hurricanes menu item
             require('./menuItem').loadHurricanesControl($('#dataDiv').data('hurricaneMapLayers'));
         }
-    })
+    }
+    doTheStuff();
 }
 
 module.exports = drawHurricanesToMap;
 },{"../radar/map/map":100,"../radar/utils":110,"./menuItem":73}],71:[function(require,module,exports){
+var map = require('../radar/map/map');
+
 /*
 * This file is the entry point for the hurricanes module.
 */
 
 // load the starting file
-require('./fetchData');
-},{"./fetchData":72}],72:[function(require,module,exports){
+map.on('load', () => {
+    require('./fetchData');
+})
+},{"../radar/map/map":100,"./fetchData":72}],72:[function(require,module,exports){
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
 
@@ -17344,8 +17355,8 @@ $('#dataDiv').data('hurricaneMapLayers', []);
 var layersToLoad = []
 function loadHurricanesFromID(ids) {
     for (var i = 0; i < ids.length; i++) {
-        layersToLoad.push([`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`, 'cone']);
-        layersToLoad.push([`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`, 'track']);
+        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`), 'cone']);
+        layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`), 'track']);
     }
     for (var i = 0; i < layersToLoad.length; i++) {
         loadHurricaneFromFile(layersToLoad[i][0], layersToLoad[i][1], i)
@@ -17385,7 +17396,7 @@ function ifExists(jsonData, num) {
 }
 
 var namesArr = [];
-$.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
+$.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
     var jsonData = ut.xmlToJson(data);
     for (var n = 0; n < 20; n++) {
         var existsIndex = ifExists(jsonData, n);
@@ -17394,7 +17405,7 @@ $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
         }
     }
 
-    $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-ep.xml', function(data) {
+    $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-ep.xml'), function (data) {
         var jsonData = ut.xmlToJson(data);
         for (var n = 0; n < 20; n++) {
             var existsIndex = ifExists(jsonData, n);
@@ -17403,8 +17414,18 @@ $.get(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml', function(data) {
             }
         }
 
-        $('#dataDiv').data('allHurricanesPlotted', namesArr);
-        loadHurricanesFromID(namesArr);
+        $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-cp.xml'), function (data) {
+            var jsonData = ut.xmlToJson(data);
+            for (var n = 0; n < 20; n++) {
+                var existsIndex = ifExists(jsonData, n);
+                if (existsIndex != false) {
+                    namesArr.push(existsIndex);
+                }
+            }
+
+            $('#dataDiv').data('allHurricanesPlotted', namesArr);
+            loadHurricanesFromID(namesArr);
+        })
     })
 })
 },{"../radar/utils":110,"./unzip":74}],73:[function(require,module,exports){
@@ -20693,6 +20714,24 @@ function preventFileCaching(url) {
     return url += `&?nocache=${curTime.getTime()}`;
 }
 
+function getSSHWSVal(windSpeed) {
+    if (windSpeed <= 38) {
+        return 'Tropical Depression'; // TD
+    } else if (windSpeed >= 39 && windSpeed <= 73) {
+        return 'Tropical Storm'; // TS
+    } else if (windSpeed >= 74 && windSpeed <= 95) {
+        return 'Category 1'; // C1
+    } else if (windSpeed >= 96 && windSpeed <= 110) {
+        return 'Category 2'; // C2
+    } else if (windSpeed >= 111 && windSpeed <= 129) {
+        return 'Category 3'; // C3
+    } else if (windSpeed >= 130 && windSpeed <= 156) {
+        return 'Category 4'; // C4
+    } else if (windSpeed >= 157) {
+        return 'Category 5'; // C5
+    }
+}
+
 module.exports = {
     phpProxy,
     colors,
@@ -20725,7 +20764,8 @@ module.exports = {
     knotsToMph,
     degToCompass,
     getCardinalDirection,
-    preventFileCaching
+    preventFileCaching,
+    getSSHWSVal
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":100,"buffer":11}],111:[function(require,module,exports){

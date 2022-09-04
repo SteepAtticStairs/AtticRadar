@@ -2,7 +2,7 @@ const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 
 function drawHurricanesToMap(geojson, type, index) {
-    map.on('load', () => {
+    function doTheStuff() {
         if (type == 'cone') {
             map.addLayer({
                 'id': `coneLayer${index}`,
@@ -93,9 +93,15 @@ function drawHurricanesToMap(geojson, type, index) {
                 trackpointPressure = parsedDescription.children[0].children[0].children[9].textContent;
             }
 
+            // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
+            // https://stackoverflow.com/a/12059321/18758797
+            var windSpeedMPH = trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
+            var sshwsLevel = ut.getSSHWSVal(windSpeedMPH);
+
             var popupContent = 
             `<div>
                 <div><b>${trackpointStormName}</b></div>
+                <div><u>SSHWS: ${sshwsLevel}</u></div>
                 <br>
                 <div>${trackpointTime}</div>
                 <div>${trackpointLocation}</div>
@@ -141,7 +147,8 @@ function drawHurricanesToMap(geojson, type, index) {
             // add the hurricanes menu item
             require('./menuItem').loadHurricanesControl($('#dataDiv').data('hurricaneMapLayers'));
         }
-    })
+    }
+    doTheStuff();
 }
 
 module.exports = drawHurricanesToMap;
