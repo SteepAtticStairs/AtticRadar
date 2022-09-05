@@ -69,9 +69,10 @@ function ifExists(jsonData, num) {
 }
 
 var namesArr = [];
+var checkingIters = 50;
 $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
     var jsonData = ut.xmlToJson(data);
-    for (var n = 0; n < 20; n++) {
+    for (var n = 0; n < checkingIters; n++) {
         var existsIndex = ifExists(jsonData, n);
         if (existsIndex != false) {
             console.log('Found hurricane ' + existsIndex);
@@ -81,7 +82,7 @@ $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml
 
     $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-ep.xml'), function (data) {
         var jsonData = ut.xmlToJson(data);
-        for (var n = 0; n < 20; n++) {
+        for (var n = 0; n < checkingIters; n++) {
             var existsIndex = ifExists(jsonData, n);
             if (existsIndex != false) {
                 console.log('Found hurricane ' + existsIndex);
@@ -91,7 +92,7 @@ $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml
 
         $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-cp.xml'), function (data) {
             var jsonData = ut.xmlToJson(data);
-            for (var n = 0; n < 20; n++) {
+            for (var n = 0; n < checkingIters; n++) {
                 var existsIndex = ifExists(jsonData, n);
                 if (existsIndex != false) {
                     console.log('Found hurricane ' + existsIndex);

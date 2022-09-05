@@ -1,6 +1,52 @@
 const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 
+function getTrackPointData(properties) {
+    var trackPointDataObj = {};
+    // parse the content of each point
+    var div = document.createElement('div')
+    div.innerHTML = properties.description;
+    var parsedDescription = JSON.parse(ut.html2json(div));
+
+    //console.log(properties.styleUrl)
+    // #xs_point = Extratropical Cyclone
+    // #h_point = Hurricane
+    // #s_point = Tropical Storm
+    // #xd_point = Low Pressure Area OR Tropical Depression?
+
+    trackPointDataObj.trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
+    trackPointDataObj.trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
+    trackPointDataObj.trackpointForecastDesc = parsedDescription.children[0].children[0].children[3].textContent;
+    trackPointDataObj.trackpointTime = parsedDescription.children[0].children[0].children[4].textContent;
+    trackPointDataObj.trackpointLocation = parsedDescription.children[0].children[0].children[5].textContent;
+    trackPointDataObj.trackpointMaxWind = parsedDescription.children[0].children[0].children[6].textContent;
+    trackPointDataObj.trackpointWindGusts = parsedDescription.children[0].children[0].children[7].textContent;
+    trackPointDataObj.trackpointMotion = undefined;
+    trackPointDataObj.trackpointPressure = undefined;
+    if (parsedDescription.children[0].children[0].children.hasOwnProperty(8)) {
+        trackPointDataObj.trackpointMotion = parsedDescription.children[0].children[0].children[8].textContent;
+    }
+    if (parsedDescription.children[0].children[0].children.hasOwnProperty(9)) {
+        trackPointDataObj.trackpointPressure = parsedDescription.children[0].children[0].children[9].textContent;
+    }
+
+    // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
+    // https://stackoverflow.com/a/12059321/18758797
+    var windSpeedMPH = trackPointDataObj.trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
+    trackPointDataObj.sshwsLevel = ut.getSSHWSVal(windSpeedMPH);
+
+    var formattedCoords = trackPointDataObj.trackpointLocation.replace('Location: ', '');
+    // remove all spaces
+    formattedCoords = formattedCoords.replace(/ /g, '');
+    // remove N, S, E, and W
+    formattedCoords = formattedCoords.replace(/N/g, '').replace(/S/g, '').replace(/E/g, '').replace(/W/g, '');
+    // transform into lat, lng array by splitting at the comma
+    formattedCoords = formattedCoords.split(',');
+    trackPointDataObj.formattedCoords = formattedCoords;
+
+    return trackPointDataObj;
+}
+
 function drawHurricanesToMap(geojson, type, index, hurricaneID) {
     console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
     function doTheStuff() {
@@ -36,6 +82,16 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
             hurricaneMapLayers.push(`coneLayerOutline${index}`);
             $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
         } else if (type == 'track') {
+            for (var item in geojson.features) {
+                if (!geojson.features[item].properties.styleUrl.includes('line')) {
+                    var trackPointData = getTrackPointData(geojson.features[item].properties);
+                    var sshwsLevel = trackPointData.sshwsLevel;
+
+                    geojson.features[item].properties.sshwsVal = sshwsLevel[0];
+                    geojson.features[item].properties.sshwsColor = sshwsLevel[1];
+                    //geojson.features[item].properties.coords = trackPointData.formattedCoords;
+                }
+            }
             map.addLayer({
                 'id': `trackLayerLine${index}`,
                 'type': 'line',
@@ -58,8 +114,14 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 'paint': {
                     'circle-radius': 4,
                     'circle-stroke-width': 2,
-                    'circle-color': 'red',
-                    'circle-stroke-color': 'white'
+                    'circle-color': {
+                        type: 'identity',
+                        property: 'sshwsColor',
+                    },
+                    'circle-stroke-color': {
+                        type: 'identity',
+                        property: 'sshwsColor',
+                    },
                 }
             })
 
@@ -69,66 +131,64 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
             $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
         }
 
-        map.on('mouseenter', `trackLayerPoints${index}`, () => { map.getCanvas().style.cursor = 'pointer'; });
-        map.on('mouseleave', `trackLayerPoints${index}`, () => { map.getCanvas().style.cursor = ''; });
+        var popupArr = [];
+        map.on('mouseenter', `trackLayerPoints${index}`, function (e) {
+            map.getCanvas().style.cursor = 'pointer';
 
-        map.on('click', `trackLayerPoints${index}`, function(e) {
-            // parse the content of each point
-            var div = document.createElement('div')
-            div.innerHTML = e.features[0].properties.description;
-            var parsedDescription = JSON.parse(ut.html2json(div));
+            var obj = getTrackPointData(e.features[0].properties);
 
-            console.log(e.features[0].properties.styleUrl)
-            // #xs_point = Extratropical Cyclone
-            // #h_point = Hurricane
-            // #s_point = Tropical Storm
-            // #xd_point = Low Pressure Area OR Tropical Depression?
+            var popupContent =
+                `<div>
+                    <div><b>${obj.trackpointStormName}</b></div>
+                    <!-- <div><b>${obj.trackpointTime}</b></div>
+                    <br> -->
+                    <div><u>SSHWS: ${obj.sshwsLevel[0]}</u></div>
+                </div>`
 
-            var trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
-            var trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
-            var trackpointForecastDesc = parsedDescription.children[0].children[0].children[3].textContent;
-            var trackpointTime = parsedDescription.children[0].children[0].children[4].textContent;
-            var trackpointLocation = parsedDescription.children[0].children[0].children[5].textContent;
-            var trackpointMaxWind = parsedDescription.children[0].children[0].children[6].textContent;
-            var trackpointWindGusts = parsedDescription.children[0].children[0].children[7].textContent;
-            var trackpointMotion;
-            var trackpointPressure;
-            if (parsedDescription.children[0].children[0].children.hasOwnProperty(8)) {
-                trackpointMotion = parsedDescription.children[0].children[0].children[8].textContent;
-            }
-            if (parsedDescription.children[0].children[0].children.hasOwnProperty(9)) {
-                trackpointPressure = parsedDescription.children[0].children[0].children[9].textContent;
-            }
+            var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
+                .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
+                .setHTML(popupContent)
+                //.setHTML(e.features[0].properties.description)
+                .addTo(map);
+            popupArr.push(pop);
+        });
+        map.on('mouseleave', `trackLayerPoints${index}`, function (e) {
+            map.getCanvas().style.cursor = '';
 
-            // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
-            // https://stackoverflow.com/a/12059321/18758797
-            var windSpeedMPH = trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
-            var sshwsLevel = ut.getSSHWSVal(windSpeedMPH);
+            setTimeout(function() {
+                for (var item in popupArr) {
+                    popupArr[item].remove();
+                }
+            }, 50)
+        });
 
-            var popupContent = 
-            `<div>
-                <div><b>${trackpointStormName}</b></div>
-                <div><u>SSHWS: ${sshwsLevel}</u></div>
+        map.on('click', `trackLayerPoints${index}`, function (e) {
+            var obj = getTrackPointData(e.features[0].properties);
+
+            var popupContent =
+                `<div>
+                <div><b>${obj.trackpointStormName}</b></div>
+                <div><u>SSHWS: ${obj.sshwsLevel[0]}</u></div>
                 <br>
-                <div>${trackpointTime}</div>
-                <div>${trackpointLocation}</div>
-                <div>${trackpointMaxWind}</div>
-                <div>${trackpointWindGusts}</div>`
+                <div>${obj.trackpointTime}</div>
+                <div>${obj.trackpointLocation}</div>
+                <div>${obj.trackpointMaxWind}</div>
+                <div>${obj.trackpointWindGusts}</div>`
 
-            if (trackpointMotion != undefined && trackpointPressure != undefined) {
+            if (obj.trackpointMotion != undefined && obj.trackpointPressure != undefined) {
                 popupContent += `<br>`
             }
-            if (trackpointMotion != undefined) {
-                popupContent += `<div>${trackpointMotion}</div>`
+            if (obj.trackpointMotion != undefined) {
+                popupContent += `<div>${obj.trackpointMotion}</div>`
             }
-            if (trackpointPressure != undefined) {
-                popupContent += `<div>${trackpointPressure}</div>`
+            if (obj.trackpointPressure != undefined) {
+                popupContent += `<div>${obj.trackpointPressure}</div>`
             }
 
             popupContent += '</div>';
 
             new mapboxgl.Popup()
-                .setLngLat(e.lngLat)
+                .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
                 .setHTML(popupContent)
                 //.setHTML(e.features[0].properties.description)
                 .addTo(map);
