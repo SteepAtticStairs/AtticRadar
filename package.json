@@ -6,6 +6,7 @@
   "dependencies": {
     "brfs": "^2.0.2",
     "canvas": "^2.9.1",
+    "luxon": "^3.0.3",
     "seek-bzip": "^2.0.0",
     "simplify-geojson": "^1.0.5"
   },

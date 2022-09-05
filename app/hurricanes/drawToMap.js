@@ -1,5 +1,6 @@
 const ut = require('../radar/utils');
 var map = require('../radar/map/map');
+const { DateTime } = require('luxon');
 
 function getTrackPointData(properties) {
     var trackPointDataObj = {};
@@ -35,6 +36,7 @@ function getTrackPointData(properties) {
     var windSpeedMPH = trackPointDataObj.trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
     trackPointDataObj.sshwsLevel = ut.getSSHWSVal(windSpeedMPH);
 
+
     var formattedCoords = trackPointDataObj.trackpointLocation.replace('Location: ', '');
     // remove all spaces
     formattedCoords = formattedCoords.replace(/ /g, '');
@@ -43,6 +45,32 @@ function getTrackPointData(properties) {
     // transform into lat, lng array by splitting at the comma
     formattedCoords = formattedCoords.split(',');
     trackPointDataObj.formattedCoords = formattedCoords;
+
+    var formattedDateObj = DateTime.now().setZone("UTC");
+    // 12:00 PM GMT September 05, 2022 
+    // ["12:00", "AM", "GMT", "September", "09", "2022"]
+    //  3:00 AM GMT September 05, 2022 
+    // ["3:00", "AM", "GMT", "September", "09", "2022"]
+    var formattedDate = trackPointDataObj.trackpointTime.replace('Valid at: ', '');
+    if (formattedDate.charAt(0) == ' ') {
+        formattedDate = '0' + formattedDate.substring(1);
+    }
+    if (formattedDate.charAt(formattedDate.length - 1) == ' ') {
+        formattedDate = formattedDate.slice(0, -1);
+    }
+    //console.log(formattedDate)
+    var tz = formattedDate.substring(9, 12);
+    formattedDate = formattedDate.substring(0, 9) + formattedDate.substring(13);
+    formattedDateObj = DateTime.fromFormat(formattedDate, "hh:mm a LLLL dd, yyyy");
+
+    var finalDateObj = new Date(formattedDateObj.toUTC().ts);
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    //console.log(`${new Date(formattedDateObj.toUTC().ts).toLocaleString().replace(/,/g, '')} ${tz}`)
+    var dayName = days[finalDateObj.getDay()];
+    var hourMin = ut.printHourMin(finalDateObj);
+
+    // e.g. ["Tue", "3:00 PM", "MDT", vanilla js date obj]
+    trackPointDataObj.formattedTime = [dayName, hourMin, tz, finalDateObj];
 
     return trackPointDataObj;
 }
@@ -136,13 +164,15 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
             map.getCanvas().style.cursor = 'pointer';
 
             var obj = getTrackPointData(e.features[0].properties);
+            var time = obj.formattedTime;
 
             var popupContent =
                 `<div>
-                    <div><b>${obj.trackpointStormName}</b></div>
+                    <div><b>${time[0]}</b></div>
+                    <div><b>${time[1]} ${time[2]}</b></div>
                     <!-- <div><b>${obj.trackpointTime}</b></div>
                     <br> -->
-                    <div><u>SSHWS: ${obj.sshwsLevel[0]}</u></div>
+                    <div>${obj.sshwsLevel[0]}</div>
                 </div>`
 
             var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
