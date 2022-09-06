@@ -451,21 +451,30 @@ function preventFileCaching(url) {
     return url += `&?nocache=${curTime.getTime()}`;
 }
 
+var sshwsValues = [
+    ['Tropical Depression', '#348feb', 'TD'],
+    ['Tropical Storm', '#12cc47', 'TS'],
+    ['Category 1', '#ebcb2f', 'C1'],
+    ['Category 2', '#eb932f', 'C2'],
+    ['Category 3', '#eb642f', 'C3'],
+    ['Category 4', '#eb3b2f', 'C4'],
+    ['Category 5', '#eb2f87', 'C5']
+]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
-        return ['Tropical Depression', '#348feb', 'TD']; // TD
+        return sshwsValues[0]; // TD
     } else if (windSpeed >= 39 && windSpeed <= 73) {
-        return ['Tropical Storm', '#12cc47', 'TS']; // TS
+        return sshwsValues[1]; // TS
     } else if (windSpeed >= 74 && windSpeed <= 95) {
-        return ['Category 1', '#ebcb2f', 'C1']; // C1
+        return sshwsValues[2]; // C1
     } else if (windSpeed >= 96 && windSpeed <= 110) {
-        return ['Category 2', '#eb932f', 'C2']; // C2
+        return sshwsValues[3]; // C2
     } else if (windSpeed >= 111 && windSpeed <= 129) {
-        return ['Category 3', '#eb642f', 'C3']; // C3
+        return sshwsValues[4]; // C3
     } else if (windSpeed >= 130 && windSpeed <= 156) {
-        return ['Category 4', '#eb3b2f', 'C4']; // C4
+        return sshwsValues[5]; // C4
     } else if (windSpeed >= 157) {
-        return ['Category 5', '#eb2f87', 'C5']; // C5
+        return sshwsValues[6]; // C5
     }
 }
 
@@ -502,5 +511,6 @@ module.exports = {
     degToCompass,
     getCardinalDirection,
     preventFileCaching,
+    sshwsValues,
     getSSHWSVal
 }

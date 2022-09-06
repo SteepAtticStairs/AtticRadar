@@ -1,6 +1,9 @@
 const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 const { DateTime } = require('luxon');
+const createCssClasses = require('./createCssClasses');
+
+createCssClasses.createCssClasses();
 
 function getTrackPointData(properties) {
     var trackPointDataObj = {};
