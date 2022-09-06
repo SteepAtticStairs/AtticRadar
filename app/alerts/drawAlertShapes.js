@@ -18,7 +18,7 @@ createMenuOption({
     'iconId': 'alertMenuItemIcon',
 
     'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-black',
+    'iconClass': 'icon-grey',
 
     'contents': 'Show Alerts',
     'icon': 'fa fa-circle-exclamation',
@@ -26,7 +26,7 @@ createMenuOption({
 }, function(divElem, iconElem) {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
-        $(iconElem).removeClass('icon-black');
+        $(iconElem).removeClass('icon-grey');
 
         if (map.getLayer('newAlertsLayer')) {
             map.getCanvas().style.cursor = "crosshair";
@@ -74,7 +74,7 @@ createMenuOption({
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-black');
+        $(iconElem).addClass('icon-grey');
 
         map.getCanvas().style.cursor = "default";
         map.off('click', 'newAlertsLayer', mapClick)

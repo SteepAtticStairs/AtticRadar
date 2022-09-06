@@ -7,20 +7,20 @@ createMenuOption({
     'iconId': 'stationMenuItemIcon',
 
     'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-black',
+    'iconClass': 'icon-grey',
 
     'contents': 'Station Markers',
     'icon': 'fa fa-satellite-dish',
     'css': ''
 }, function(divElem, iconElem) {
-    if ($(iconElem).hasClass('icon-black')) {
-        $(iconElem).removeClass('icon-black');
+    if ($(iconElem).hasClass('icon-grey')) {
+        $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');
 
         showStations();
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-black');
+        $(iconElem).addClass('icon-grey');
 
         var statMarkerArr = $('#dataDiv').data('statMarkerArr');
         for (key in statMarkerArr) {
@@ -29,7 +29,7 @@ createMenuOption({
     }
 })
 
-$('#stationMenuItemIcon').removeClass('icon-black');
+$('#stationMenuItemIcon').removeClass('icon-grey');
 $('#stationMenuItemIcon').addClass('icon-blue');
 setTimeout(function() {
     showStations();

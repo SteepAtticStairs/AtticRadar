@@ -15,7 +15,7 @@ function loadHurricanesControl(layerArray) {
         'css': ''
     }, function(divElem, iconElem) {
         if (!$(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-black');
+            $(iconElem).removeClass('icon-grey');
             $(iconElem).addClass('icon-blue');
 
             for (var i = 0; i < layerArray.length; i++) {
@@ -23,7 +23,7 @@ function loadHurricanesControl(layerArray) {
             }
         } else if ($(iconElem).hasClass('icon-blue')) {
             $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-black');
+            $(iconElem).addClass('icon-grey');
 
             for (var i = 0; i < layerArray.length; i++) {
                 map.setLayoutProperty(layerArray[i], 'visibility', 'none');

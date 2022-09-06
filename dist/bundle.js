@@ -16917,7 +16917,7 @@ createMenuOption({
     'iconId': 'alertMenuItemIcon',
 
     'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-black',
+    'iconClass': 'icon-grey',
 
     'contents': 'Show Alerts',
     'icon': 'fa fa-circle-exclamation',
@@ -16925,7 +16925,7 @@ createMenuOption({
 }, function(divElem, iconElem) {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
-        $(iconElem).removeClass('icon-black');
+        $(iconElem).removeClass('icon-grey');
 
         if (map.getLayer('newAlertsLayer')) {
             map.getCanvas().style.cursor = "crosshair";
@@ -16973,7 +16973,7 @@ createMenuOption({
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-black');
+        $(iconElem).addClass('icon-grey');
 
         map.getCanvas().style.cursor = "default";
         map.off('click', 'newAlertsLayer', mapClick)
@@ -17628,7 +17628,7 @@ function loadHurricanesControl(layerArray) {
         'css': ''
     }, function(divElem, iconElem) {
         if (!$(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-black');
+            $(iconElem).removeClass('icon-grey');
             $(iconElem).addClass('icon-blue');
 
             for (var i = 0; i < layerArray.length; i++) {
@@ -17636,7 +17636,7 @@ function loadHurricanesControl(layerArray) {
             }
         } else if ($(iconElem).hasClass('icon-blue')) {
             $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-black');
+            $(iconElem).addClass('icon-grey');
 
             for (var i = 0; i < layerArray.length; i++) {
                 map.setLayoutProperty(layerArray[i], 'visibility', 'none');
@@ -20227,20 +20227,20 @@ createMenuOption({
     'iconId': 'stationMenuItemIcon',
 
     'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-black',
+    'iconClass': 'icon-grey',
 
     'contents': 'Station Markers',
     'icon': 'fa fa-satellite-dish',
     'css': ''
 }, function(divElem, iconElem) {
-    if ($(iconElem).hasClass('icon-black')) {
-        $(iconElem).removeClass('icon-black');
+    if ($(iconElem).hasClass('icon-grey')) {
+        $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');
 
         showStations();
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-black');
+        $(iconElem).addClass('icon-grey');
 
         var statMarkerArr = $('#dataDiv').data('statMarkerArr');
         for (key in statMarkerArr) {
@@ -20249,7 +20249,7 @@ createMenuOption({
     }
 })
 
-$('#stationMenuItemIcon').removeClass('icon-black');
+$('#stationMenuItemIcon').removeClass('icon-grey');
 $('#stationMenuItemIcon').addClass('icon-blue');
 setTimeout(function() {
     showStations();
@@ -21261,7 +21261,7 @@ function addTideStationsControl(divName) {
         'iconId': 'tideStationMenuItemIcon',
     
         'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-black',
+        'iconClass': 'icon-grey',
     
         'contents': 'Tide Stations',
         'icon': 'fa fa-water',
@@ -21269,7 +21269,7 @@ function addTideStationsControl(divName) {
     }, function(divElem, iconElem) {
         if (!$(iconElem).hasClass('icon-blue')) {
             $(iconElem).addClass('icon-blue');
-            $(iconElem).removeClass('icon-black');
+            $(iconElem).removeClass('icon-grey');
     
             if (map.getLayer('tideStationDots')) {
                 // layer does exist - toggle the visibility to on
@@ -21280,7 +21280,7 @@ function addTideStationsControl(divName) {
             }
         } else if ($(iconElem).hasClass('icon-blue')) {
             $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-black');
+            $(iconElem).addClass('icon-grey');
             // layer does exist - toggle the visibility to off
             loadMarkers.toggleTideStationMarkers('hide');
         }

@@ -8,7 +8,7 @@ function addTideStationsControl(divName) {
         'iconId': 'tideStationMenuItemIcon',
     
         'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-black',
+        'iconClass': 'icon-grey',
     
         'contents': 'Tide Stations',
         'icon': 'fa fa-water',
@@ -16,7 +16,7 @@ function addTideStationsControl(divName) {
     }, function(divElem, iconElem) {
         if (!$(iconElem).hasClass('icon-blue')) {
             $(iconElem).addClass('icon-blue');
-            $(iconElem).removeClass('icon-black');
+            $(iconElem).removeClass('icon-grey');
     
             if (map.getLayer('tideStationDots')) {
                 // layer does exist - toggle the visibility to on
@@ -27,7 +27,7 @@ function addTideStationsControl(divName) {
             }
         } else if ($(iconElem).hasClass('icon-blue')) {
             $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-black');
+            $(iconElem).addClass('icon-grey');
             // layer does exist - toggle the visibility to off
             loadMarkers.toggleTideStationMarkers('hide');
         }
