@@ -14,15 +14,19 @@ var newAlertsArr = [];
 var y = 0;
 
 createMenuOption({
-    'id': 'alertMenuItem',
-    'class': 'alert alert-secondary offCanvasMenuItem',
+    'divId': 'alertMenuItemDiv',
+    'iconId': 'alertMenuItemIcon',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-black',
+
     'contents': 'Show Alerts',
     'icon': 'fa fa-circle-exclamation',
     'css': ''
-}, function(thisObj, innerDiv, iconElem) {
-    if (!$(thisObj).hasClass('alert-primary')) {
-        $(thisObj).addClass('alert-primary');
-        $(thisObj).removeClass('alert-secondary');
+}, function(divElem, iconElem) {
+    if (!$(iconElem).hasClass('icon-blue')) {
+        $(iconElem).addClass('icon-blue');
+        $(iconElem).removeClass('icon-black');
 
         if (map.getLayer('newAlertsLayer')) {
             map.getCanvas().style.cursor = "crosshair";
@@ -68,9 +72,9 @@ createMenuOption({
                 // // });
             })
         }
-    } else if ($(thisObj).hasClass('alert-primary')) {
-        $(thisObj).removeClass('alert-primary');
-        $(thisObj).addClass('alert-secondary');
+    } else if ($(iconElem).hasClass('icon-blue')) {
+        $(iconElem).removeClass('icon-blue');
+        $(iconElem).addClass('icon-black');
 
         map.getCanvas().style.cursor = "default";
         map.off('click', 'newAlertsLayer', mapClick)

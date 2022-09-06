@@ -22,24 +22,32 @@ function showHideFileBox(showHide) {
 }
 
 createMenuOption({
-    'id': 'modeMenuItem',
-    'class': 'alert alert-success offCanvasMenuItem',
+    'divId': 'modeMenuItemDiv',
+    'iconId': 'modeMenuItemClass',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-green',
+
     'contents': 'Current File Mode',
     'icon': 'fa fa-clock',
     'css': ''
-}, function(thisObj, innerDiv, iconElem) {
-    if ($(thisObj).hasClass('alert-success')) {
-        $(thisObj).removeClass('alert-success');
-        $(thisObj).addClass('alert-danger');
-        iconElem.className = 'fa fa-upload';
-        innerDiv.innerHTML = 'Upload File Mode';
+}, function(divElem, iconElem) {
+    if ($(iconElem).hasClass('icon-green')) {
+        $(iconElem).removeClass('icon-green');
+        $(iconElem).addClass('icon-red');
+
+        $(iconElem).removeClass('fa-clock');
+        $(iconElem).addClass('fa-upload');
+        //innerDiv.innerHTML = 'Upload File Mode';
 
         showHideFileBox('show');
-    } else if ($(thisObj).hasClass('alert-danger')) {
-        $(thisObj).removeClass('alert-danger');
-        $(thisObj).addClass('alert-success');
-        iconElem.className = 'fa fa-clock';
-        innerDiv.innerHTML = 'Current File Mode';
+    } else if ($(iconElem).hasClass('icon-red')) {
+        $(iconElem).removeClass('icon-red');
+        $(iconElem).addClass('icon-green');
+
+        $(iconElem).removeClass('fa-upload');
+        $(iconElem).addClass('fa-clock');
+        //innerDiv.innerHTML = 'Current File Mode';
 
         showHideFileBox('hide');
     }

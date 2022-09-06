@@ -4,32 +4,32 @@ var map = require('../radar/map/map');
 
 function loadHurricanesControl(layerArray) {
     createMenuOption({
-        'id': 'hurricanesMenuItem',
-        'class': 'alert alert-primary offCanvasMenuItem',
+        'divId': 'hurricanesMenuItemDiv',
+        'iconId': 'hurricanesMenuItemIcon',
+
+        'divClass': 'mapFooterMenuItem',
+        'iconClass': 'icon-blue',
+
         'contents': 'Hurricane Tracker',
         'icon': 'fa fa-hurricane',
         'css': ''
-    }, function (thisObj, innerDiv, iconElem) {
-        if (!$(thisObj).hasClass('alert-primary')) {
-            $(thisObj).removeClass('alert-secondary');
-            $(thisObj).addClass('alert-primary');
+    }, function(divElem, iconElem) {
+        if (!$(iconElem).hasClass('icon-blue')) {
+            $(iconElem).removeClass('icon-black');
+            $(iconElem).addClass('icon-blue');
 
             for (var i = 0; i < layerArray.length; i++) {
                 map.setLayoutProperty(layerArray[i], 'visibility', 'visible');
             }
-        } else if ($(thisObj).hasClass('alert-primary')) {
-            $(thisObj).removeClass('alert-primary');
-            $(thisObj).addClass('alert-secondary');
+        } else if ($(iconElem).hasClass('icon-blue')) {
+            $(iconElem).removeClass('icon-blue');
+            $(iconElem).addClass('icon-black');
 
             for (var i = 0; i < layerArray.length; i++) {
                 map.setLayoutProperty(layerArray[i], 'visibility', 'none');
             }
         }
     })
-    // insert the hurricanes menu item after the tide stations menu item
-    if ($("#tideStationMenuItem_outer").length) {
-        $("#tideStationMenuItem_outer").insertAfter("#hurricanesMenuItem_outer");
-    }
 }
 
 module.exports = {

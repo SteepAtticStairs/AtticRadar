@@ -3,20 +3,24 @@ const showStations = require('../map/controls/stationMarkers');
 const ut = require('../utils');
 
 createMenuOption({
-    'id': 'stationMenuItem',
-    'class': 'alert alert-secondary offCanvasMenuItem',
+    'divId': 'stationMenuItemDiv',
+    'iconId': 'stationMenuItemIcon',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-black',
+
     'contents': 'Station Markers',
     'icon': 'fa fa-satellite-dish',
     'css': ''
-}, function(thisObj, innerDiv, iconElem) {
-    if ($(thisObj).hasClass('alert-secondary')) {
-        $(thisObj).removeClass('alert-secondary');
-        $(thisObj).addClass('alert-primary');
+}, function(divElem, iconElem) {
+    if ($(iconElem).hasClass('icon-black')) {
+        $(iconElem).removeClass('icon-black');
+        $(iconElem).addClass('icon-blue');
 
         showStations();
-    } else if ($(thisObj).hasClass('alert-primary')) {
-        $(thisObj).removeClass('alert-primary');
-        $(thisObj).addClass('alert-secondary');
+    } else if ($(iconElem).hasClass('icon-blue')) {
+        $(iconElem).removeClass('icon-blue');
+        $(iconElem).addClass('icon-black');
 
         var statMarkerArr = $('#dataDiv').data('statMarkerArr');
         for (key in statMarkerArr) {
@@ -25,8 +29,8 @@ createMenuOption({
     }
 })
 
+$('#stationMenuItemIcon').removeClass('icon-black');
+$('#stationMenuItemIcon').addClass('icon-blue');
 setTimeout(function() {
-    $('#stationMenuItem').addClass('alert-primary');
-    $('#stationMenuItem').removeClass('alert-secondary');
     showStations();
 }, 200)

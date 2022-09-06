@@ -31,7 +31,7 @@ require('./map/controls/reload');
 require('./map/controls/help/helpControl');
 
 // add the menu control
-require('./map/controls/offCanvasMenu');
+//require('./map/controls/offCanvasMenu');
 
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {

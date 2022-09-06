@@ -310,9 +310,51 @@
         #offcanvasExample {
             width: 30vw;
         }
+
+        .noselect {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+        }
+
+
+        #mapFooter {
+            position: absolute;
+            z-index: 115;
+            bottom: 0%;
+            height: 35px;
+            width: 100%;
+            background-color: rgb(105, 105, 105);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #mapFooter div {
+            display: table-cell;
+            text-align: center;
+        }
+        .mapFooterMenuItem {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
+    <div id="mapFooter">
+        <!-- <div>balls1</div>&nbsp;&nbsp;&nbsp;
+        <div>balls2</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp;
+        <div>balls3</div>&nbsp;&nbsp;&nbsp; -->
+    </div>
 
     <div class="progress align-middle" id="progBarParent">
         <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="150"></div>
