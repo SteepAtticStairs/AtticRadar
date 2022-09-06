@@ -106,7 +106,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
     }
 
 
-    if (theFileStation.toUpperCase() != theFileStation) {
+    //if (theFileStation.toUpperCase() != theFileStation) {
         $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function (abrvData) {
             var theFileStation = abrvData[l3rad.textHeader.id3];
             $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function (data) {
@@ -210,7 +210,7 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                 }
             });
         });
-    }
+    //}
 
     map.on('click', 'mainLinePoint', (e) => { cellClick(e) });
     map.on('click', 'singlePoint', (e) => { cellClick(e) });
