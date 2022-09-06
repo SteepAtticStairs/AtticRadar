@@ -33,6 +33,11 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
+if (require('./misc/detectmobilebrowser')) {
+    $('#mapFooter').css("height", "+=20px");
+    $('#mapFooter').css("align-items", "start");
+}
+
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
     var endTimer = Date.now();

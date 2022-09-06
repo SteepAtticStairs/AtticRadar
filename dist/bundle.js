@@ -19470,6 +19470,11 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
+if (require('./misc/detectmobilebrowser')) {
+    $('#mapFooter').css("height", "+=20px");
+    $('#mapFooter').css("align-items", "start");
+}
+
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
     var endTimer = Date.now();
@@ -19526,7 +19531,7 @@ document.addEventListener('loadFile', function(event) {
 //             .addTo(map);
 //     }
 // });
-},{"./dom/fileUpload":76,"./level2/main":84,"./level3/main":87,"./loaders":92,"./map/controls/help/helpControl":95,"./map/controls/reload":96,"./map/map":100,"./menu/mode":103,"./menu/stationMarkerMenu":104,"./menu/tilts":105,"./utils":110}],94:[function(require,module,exports){
+},{"./dom/fileUpload":76,"./level2/main":84,"./level3/main":87,"./loaders":92,"./map/controls/help/helpControl":95,"./map/controls/reload":96,"./map/map":100,"./menu/mode":103,"./menu/stationMarkerMenu":104,"./menu/tilts":105,"./misc/detectmobilebrowser":106,"./utils":110}],94:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
