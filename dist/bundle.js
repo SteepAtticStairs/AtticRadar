@@ -17226,6 +17226,7 @@ const ut = require('../radar/utils');
 var map = require('../radar/map/map');
 const { DateTime } = require('luxon');
 const createCssClasses = require('./createCssClasses');
+const isMobile = require('../radar/misc/detectmobilebrowser');
 
 createCssClasses.createCssClasses();
 
@@ -17294,10 +17295,16 @@ function getTrackPointData(properties) {
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     //console.log(`${new Date(formattedDateObj.toUTC().ts).toLocaleString().replace(/,/g, '')} ${tz}`)
     var dayName = days[finalDateObj.getDay()];
+
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var monthName = months[finalDateObj.getMonth()];
+
+    var day = finalDateObj.getDate();
+
     var hourMin = ut.printHourMin(finalDateObj);
 
     // e.g. ["Tue", "3:00 PM", "MDT", vanilla js date obj]
-    trackPointDataObj.formattedTime = [dayName, hourMin, tz, finalDateObj];
+    trackPointDataObj.formattedTime = [dayName, hourMin, tz, monthName, day, finalDateObj];
 
     return trackPointDataObj;
 }
@@ -17386,38 +17393,40 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
             $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
         }
 
-        var popupArr = [];
-        map.on('mouseenter', `trackLayerPoints${index}`, function (e) {
-            map.getCanvas().style.cursor = 'pointer';
+        if (!isMobile) {
+            var popupArr = [];
+            map.on('mouseenter', `trackLayerPoints${index}`, function (e) {
+                map.getCanvas().style.cursor = 'pointer';
 
-            var obj = getTrackPointData(e.features[0].properties);
-            var time = obj.formattedTime;
+                var obj = getTrackPointData(e.features[0].properties);
+                var time = obj.formattedTime;
 
-            var popupContent =
-                `<div>
-                    <div><b>${time[0]}</b></div>
+                var popupContent =
+                    `<div>
+                    <div><b>${time[0].substring(0, 3)} ${time[3].substring(0, 3)} ${time[4]}</b></div>
                     <div><b>${time[1]} ${time[2]}</b></div>
                     <!-- <div><b>${obj.trackpointTime}</b></div>
                     <br> -->
                     <div>${obj.sshwsLevel[0]}</div>
                 </div>`
 
-            var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
-                .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
-                .setHTML(popupContent)
-                //.setHTML(e.features[0].properties.description)
-                .addTo(map);
-            popupArr.push(pop);
-        });
-        map.on('mouseleave', `trackLayerPoints${index}`, function (e) {
-            map.getCanvas().style.cursor = '';
+                var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
+                    .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
+                    .setHTML(popupContent)
+                    //.setHTML(e.features[0].properties.description)
+                    .addTo(map);
+                popupArr.push(pop);
+            });
+            map.on('mouseleave', `trackLayerPoints${index}`, function (e) {
+                map.getCanvas().style.cursor = '';
 
-            setTimeout(function() {
-                for (var item in popupArr) {
-                    popupArr[item].remove();
-                }
-            }, 50)
-        });
+                setTimeout(function () {
+                    for (var item in popupArr) {
+                        popupArr[item].remove();
+                    }
+                }, 50)
+            });
+        }
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
             var obj = getTrackPointData(e.features[0].properties);
@@ -17478,7 +17487,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 }
 
 module.exports = drawHurricanesToMap;
-},{"../radar/map/map":101,"../radar/utils":111,"./createCssClasses":70,"./menuItem":74,"luxon":201}],72:[function(require,module,exports){
+},{"../radar/map/map":101,"../radar/misc/detectmobilebrowser":107,"../radar/utils":111,"./createCssClasses":70,"./menuItem":74,"luxon":201}],72:[function(require,module,exports){
 var map = require('../radar/map/map');
 
 /*
