@@ -19470,9 +19470,15 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
-if (require('./misc/detectmobilebrowser')) {
-    $('#mapFooter').css("height", "+=20px");
-    $('#mapFooter').css("align-items", "start");
+if (!require('./misc/detectmobilebrowser')) {
+    //$('#mapFooter').css("height", "+=20px");
+    var div = document.createElement('div');
+    div.className = 'mapFooter';
+    $(div).css("z-index", $('#mapFooter').css("z-index") - 1);
+    document.body.appendChild(div);
+
+    $('#mapFooter').css("bottom", "5%");
+    //$('#mapFooter').css("align-items", "start");
 }
 
 var startTimer = Date.now();

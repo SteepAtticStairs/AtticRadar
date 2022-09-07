@@ -324,20 +324,23 @@
         }
 
 
-        #mapFooter {
+        .mapFooter {
             position: absolute;
             z-index: 115;
             bottom: 0%;
-            height: 35px;
+            height: 40px;
             width: 100%;
             background-color: rgb(32, 32, 32);
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        #mapFooter div {
+        .mapFooter div {
             display: table-cell;
             text-align: center;
+        }
+        .mapFooter span {
+            font-size: 20px;
         }
         .mapFooterMenuItem {
             cursor: pointer;
@@ -346,7 +349,7 @@
 </head>
 <body>
 
-    <div id="mapFooter">
+    <div id="mapFooter" class="mapFooter">
         <!-- <div>balls1</div>&nbsp;&nbsp;&nbsp;
         <div>balls2</div>&nbsp;&nbsp;&nbsp;
         <div>balls3</div>&nbsp;&nbsp;&nbsp;
