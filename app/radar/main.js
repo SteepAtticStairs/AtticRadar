@@ -50,8 +50,16 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
     console.log(`Established connection to proxy in ${endTimer - startTimer} ms`)
 })
 
+//$('#productsDropdownBtn').click();
+$('#productsDropdownTrigger').on('click', function(e) {
+    $('#productsDropdown').css("bottom", "40px");
+    new bootstrap.Dropdown($('#productsDropdown')).toggle();
+    //$('#productsDropdownBtn').dropdown('toggle');
+})
+
 $(".productOption").on('click', function() {
     var thisValue = $(this).attr('value');
+    document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != thisValue) {

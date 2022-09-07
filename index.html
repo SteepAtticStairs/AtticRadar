@@ -346,9 +346,12 @@
             cursor: pointer;
         }
 
-        #productsDropdown {
+        #productsDropdownTrigger, #productsDropdown {
             position: absolute;
             left: 5px;
+            font-size: small;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -356,8 +359,9 @@
 
     <div id="mapFooter" class="mapFooter">
         <!-- Default dropup button -->
+        <div id="productsDropdownTrigger" class="noselect">Products</div>
         <div class="btn-group dropup" id="productsDropdown">
-            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button style="display: none" type="button" id="productsDropdownBtn" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                 Products
             </button>
             <ul class="dropdown-menu" style="height: 200px; overflow-y: auto; cursor: pointer;">
