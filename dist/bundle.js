@@ -19470,7 +19470,7 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
-if (!require('./misc/detectmobilebrowser')) {
+if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');
     div.className = 'mapFooter';
@@ -19487,15 +19487,16 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
     console.log(`Established connection to proxy in ${endTimer - startTimer} ms`)
 })
 
-$('.productBtnGroup button').on('click', function() {
+$(".productOption").on('click', function() {
+    var thisValue = $(this).attr('value');
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
-    if ($('#dataDiv').data('curProd') != this.value) {
+    if ($('#dataDiv').data('curProd') != thisValue) {
         tilts.resetTilts();
-        tilts.listTilts(ut.numOfTiltsObj[this.value]);
+        tilts.listTilts(ut.numOfTiltsObj[thisValue]);
     }
-    $('#dataDiv').data('curProd', this.value);
-    var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
+    $('#dataDiv').data('curProd', thisValue);
+    var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][thisValue];
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         console.log(url);
@@ -20277,45 +20278,51 @@ const loaders = require('../loaders');
 */
 function listTilts(tiltsArr, callback) {
     //<li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-    $('#tiltsMenu').empty();
+    // &nbsp;&nbsp;&nbsp;
+    // <input class="form-check-input" type="radio" id="checkTilt1" name="inlineRadioOptions" value="1">
+    // <label class="form-check-label" for="checkTilt1">1</label>
+    document.getElementById('newTiltsMenu').innerHTML = '';
     for (key in tiltsArr) {
-        // create an anchor element with the appropriate title and value
-        var anchorElem = document.createElement('a');
-        anchorElem.className = 'dropdown-item';
-        anchorElem.href = '#';
-        anchorElem.setAttribute('value', `tilt${tiltsArr[key]}`);
-        anchorElem.innerHTML = `Tilt ${tiltsArr[key]}`
+        var inputElem = document.createElement('input');
+        inputElem.className = 'form-check-input';
+        inputElem.id = `checkTilt${tiltsArr[key]}`;
+        $(inputElem).attr('type', 'radio');
+        $(inputElem).attr('name', 'inlineRadioOptions');
+        $(inputElem).attr('value', `tilt${tiltsArr[key]}`);
 
-        // create a line element to wrap the anchor
-        var lineElem = document.createElement('li');
-        lineElem.appendChild(anchorElem)
+        var labelElem = document.createElement('label');
+        labelElem.className = 'form-check-label';
+        labelElem.innerHTML = tiltsArr[key];
+        $(labelElem).attr('for', `checkTilt${tiltsArr[key]}`);
+        $(labelElem).attr('value', `tilt${tiltsArr[key]}`);
 
-        // add the tilt option to the dropdown
-        document.getElementById('tiltsMenu').appendChild(lineElem);
-        // if it is the first element in the tilts array, set the dropdown button to read that first element
-        if (key == 0) {
-            document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
-        }
+        document.getElementById('newTiltsMenu').appendChild(document.createTextNode('\u00A0\u00A0\u00A0'));
+        document.getElementById('newTiltsMenu').appendChild(inputElem);
+        document.getElementById('newTiltsMenu').appendChild(document.createTextNode('\u00A0'));
+        document.getElementById('newTiltsMenu').appendChild(labelElem);
+        // // add the tilt option to the dropdown
+        // document.getElementById('tiltsMenu').appendChild(lineElem);
+        // // if it is the first element in the tilts array, set the dropdown button to read that first element
+        // if (key == 0) {
+        //     document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
+        // }
     }
     // if you want a callback after the tilts have been loaded
     if (callback) callback();
 }
 
 function tiltEventListeners() {
-    $('#tiltsDropdown').on('click', function(e) {
-        var clickTarget = $(e.target);
-        if (clickTarget.parents().eq(1).attr('id') == 'tiltsMenu') {
-            var clickedValue = clickTarget.attr('value');
-            document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${clickedValue.slice(-1)}`;
-            $('#tiltsDropdownBtn').attr('value', clickedValue);
+    $('#newTiltsMenu').on('click', function(e) {
+        var clickedValue = $(e.target).attr('value');
+        document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${clickedValue.slice(-1)}`;
+        $('#tiltsDropdownBtn').attr('value', clickedValue);
 
-            var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][$('#dataDiv').data('curProd')];
-            var currentStation = $('#stationInp').val();
-            loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
-                console.log(url);
-                loaders.loadFileObject(ut.phpProxy + url, 3, 0);
-            })
-        }
+        var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][$('#dataDiv').data('curProd')];
+        var currentStation = $('#stationInp').val();
+        loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function (url) {
+            console.log(url);
+            loaders.loadFileObject(ut.phpProxy + url, 3, 0);
+        })
     })
 }
 

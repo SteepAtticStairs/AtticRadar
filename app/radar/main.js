@@ -33,7 +33,7 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
-if (!require('./misc/detectmobilebrowser')) {
+if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');
     div.className = 'mapFooter';
@@ -50,15 +50,16 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
     console.log(`Established connection to proxy in ${endTimer - startTimer} ms`)
 })
 
-$('.productBtnGroup button').on('click', function() {
+$(".productOption").on('click', function() {
+    var thisValue = $(this).attr('value');
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
-    if ($('#dataDiv').data('curProd') != this.value) {
+    if ($('#dataDiv').data('curProd') != thisValue) {
         tilts.resetTilts();
-        tilts.listTilts(ut.numOfTiltsObj[this.value]);
+        tilts.listTilts(ut.numOfTiltsObj[thisValue]);
     }
-    $('#dataDiv').data('curProd', this.value);
-    var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][this.value];
+    $('#dataDiv').data('curProd', thisValue);
+    var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][thisValue];
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         console.log(url);

@@ -345,11 +345,59 @@
         .mapFooterMenuItem {
             cursor: pointer;
         }
+
+        #productsDropdown {
+            position: absolute;
+            left: 5px;
+        }
     </style>
 </head>
 <body>
 
     <div id="mapFooter" class="mapFooter">
+        <!-- Default dropup button -->
+        <div class="btn-group dropup" id="productsDropdown">
+            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                Products
+            </button>
+            <ul class="dropdown-menu" style="height: 200px; overflow-y: auto; cursor: pointer;">
+                <li><h6 class="dropdown-header">Tilt</h6></li>
+                <div id="newTiltsMenu">
+                    <!-- &nbsp;&nbsp;&nbsp;
+                    <input class="form-check-input" type="radio" id="checkTilt1" name="inlineRadioOptions" value="1">
+                    <label class="form-check-label" for="checkTilt1">1</label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input class="form-check-input" type="radio" id="checkTilt2" name="inlineRadioOptions" value="2">
+                    <label class="form-check-label" for="checkTilt2">2</label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input class="form-check-input" type="radio" id="checkTilt3" name="inlineRadioOptions" value="3">
+                    <label class="form-check-label" for="checkTilt3">3</label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input class="form-check-input" type="radio" id="checkTilt4" name="inlineRadioOptions" value="4">
+                    <label class="form-check-label" for="checkTilt4">4</label> -->
+                </div>
+
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Super Resolution</h6></li>
+                <li><a class="dropdown-item productOption" value="ref" id='srResBtn'><b>HR</b> Base Reflectivity</a></li>
+                <li><a class="dropdown-item productOption" value="vel"><b>HR</b> Base Velocity</a></li>
+
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Digital</h6></li>
+                <li><a class="dropdown-item productOption" value="rho">Correlation Coefficient</a></li>
+                <li><a class="dropdown-item productOption" value="zdr">Differential Reflectivity</a></li>
+                <li><a class="dropdown-item productOption" value="sw ">Base Spectrum Width (124 nmi)</a></li>
+                <li><a class="dropdown-item productOption" value="hyc">Hydrometer Classification</a></li>
+                <li><a class="dropdown-item productOption" value="hhc">Hybrid Hydrometer Classification</a></li>
+                <li><a class="dropdown-item productOption" value="lowres-ref">Digital Base Reflectivity</a></li>
+                <li><a class="dropdown-item productOption" value="lowres-vel">Digital Base Velocity</a></li>
+                <li><a class="dropdown-item productOption" value="vil">Vertically Integrated Liquid</a></li>
+
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Classic</h6></li>
+                <li><a class="dropdown-item productOption" value="srv">Storm Relative Velocity</a></li>
+            </ul>
+        </div>
         <!-- <div>balls1</div>&nbsp;&nbsp;&nbsp;
         <div>balls2</div>&nbsp;&nbsp;&nbsp;
         <div>balls3</div>&nbsp;&nbsp;&nbsp;
