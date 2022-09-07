@@ -21,6 +21,11 @@ function listTilts(tiltsArr, callback) {
         $(inputElem).attr('name', 'inlineRadioOptions');
         $(inputElem).attr('value', `tilt${tiltsArr[key]}`);
 
+        // if it is the first element in the tilts array, set the radio group selected to the first tilt
+        if (key == 0) {
+            $(inputElem).prop("checked", true);
+        }
+
         var labelElem = document.createElement('label');
         labelElem.className = 'form-check-label';
         labelElem.innerHTML = tiltsArr[key];
@@ -31,12 +36,6 @@ function listTilts(tiltsArr, callback) {
         document.getElementById('newTiltsMenu').appendChild(inputElem);
         document.getElementById('newTiltsMenu').appendChild(document.createTextNode('\u00A0'));
         document.getElementById('newTiltsMenu').appendChild(labelElem);
-        // // add the tilt option to the dropdown
-        // document.getElementById('tiltsMenu').appendChild(lineElem);
-        // // if it is the first element in the tilts array, set the dropdown button to read that first element
-        // if (key == 0) {
-        //     document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${tiltsArr[key]}`;
-        // }
     }
     // if you want a callback after the tilts have been loaded
     if (callback) callback();

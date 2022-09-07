@@ -53,13 +53,26 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
 //$('#productsDropdownBtn').click();
 $('#productsDropdownTrigger').on('click', function(e) {
     $('#productsDropdown').css("bottom", "40px");
-    new bootstrap.Dropdown($('#productsDropdown')).toggle();
-    //$('#productsDropdownBtn').dropdown('toggle');
+    var bsDropdownClass = new bootstrap.Dropdown($('#productsDropdown'));
+
+    if (!bsDropdownClass._isShown()) {
+        bsDropdownClass.show();
+        document.body.addEventListener('click', function(e) {
+            // if the click target IS NOT the button to open the dropdown
+            if ($(e.target).attr('id') != 'productsDropdownTrigger') {
+                bsDropdownClass.hide();
+            }
+        });
+    } else {
+        bsDropdownClass.hide();
+    }
 })
 
 $(".productOption").on('click', function() {
     var thisValue = $(this).attr('value');
-    document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
+
+    //document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
+
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
     if ($('#dataDiv').data('curProd') != thisValue) {
