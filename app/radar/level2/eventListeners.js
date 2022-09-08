@@ -3,6 +3,8 @@ const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
 
 function loadL2Listeners(l2rad) {
+    $('#currentModeSpan').hide();
+    $('#uploadModeSpan').show();
     // var btnsArr = [
     //     "level2-ref",
     //     "level2-vel",

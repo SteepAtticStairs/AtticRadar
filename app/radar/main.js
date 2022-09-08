@@ -58,8 +58,8 @@ $('#productsDropdownTrigger').on('click', function(e) {
     if (!bsDropdownClass._isShown()) {
         bsDropdownClass.show();
         document.body.addEventListener('click', function(e) {
-            // if the click target IS NOT the button to open the dropdown
-            if ($(e.target).attr('id') != 'productsDropdownTrigger') {
+            // if the click target is the map
+            if ($(e.target).prop("tagName") == 'CANVAS') {
                 bsDropdownClass.hide();
             }
         });
