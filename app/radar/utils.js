@@ -417,7 +417,7 @@ function flyToStation() {
 
 function disableModeBtn() {
     $('#dataDiv').data('noMoreClicks', true);
-    $('#modeThing').css('opacity', 0.5);
+    $('#modeMenuItemClass').css('opacity', 0.25);
 }
 
 function knotsToMph(knots, decimals) {

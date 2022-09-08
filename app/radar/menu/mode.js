@@ -1,7 +1,7 @@
 const createMenuOption = require('./createMenuOption');
 
 function showHideFileBox(showHide) {
-    $('#stationMenuItem').click();
+    $('#stationMenuItemIcon').click();
     if (showHide == 'show') {
         // file mode
         $('#dataDiv').data('isFileUpload', true);
@@ -32,23 +32,25 @@ createMenuOption({
     'icon': 'fa fa-clock',
     'css': ''
 }, function(divElem, iconElem) {
-    if ($(iconElem).hasClass('icon-green')) {
-        $(iconElem).removeClass('icon-green');
-        $(iconElem).addClass('icon-red');
+    if (!$('#dataDiv').data('noMoreClicks')) {
+        if ($(iconElem).hasClass('icon-green')) {
+            $(iconElem).removeClass('icon-green');
+            $(iconElem).addClass('icon-red');
 
-        $(iconElem).removeClass('fa-clock');
-        $(iconElem).addClass('fa-upload');
-        //innerDiv.innerHTML = 'Upload File Mode';
+            $(iconElem).removeClass('fa-clock');
+            $(iconElem).addClass('fa-upload');
+            //innerDiv.innerHTML = 'Upload File Mode';
 
-        showHideFileBox('show');
-    } else if ($(iconElem).hasClass('icon-red')) {
-        $(iconElem).removeClass('icon-red');
-        $(iconElem).addClass('icon-green');
+            showHideFileBox('show');
+        } else if ($(iconElem).hasClass('icon-red')) {
+            $(iconElem).removeClass('icon-red');
+            $(iconElem).addClass('icon-green');
 
-        $(iconElem).removeClass('fa-upload');
-        $(iconElem).addClass('fa-clock');
-        //innerDiv.innerHTML = 'Current File Mode';
+            $(iconElem).removeClass('fa-upload');
+            $(iconElem).addClass('fa-clock');
+            //innerDiv.innerHTML = 'Current File Mode';
 
-        showHideFileBox('hide');
+            showHideFileBox('hide');
+        }
     }
 })
