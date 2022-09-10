@@ -11,7 +11,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 

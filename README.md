@@ -1,4 +1,4 @@
-# NexradJS
+# AtticRadar
 
 **FULL CREDIT GOES TO [netbymatt](https://github.com/netbymatt) for pretty much all of this project.**
 
@@ -19,8 +19,8 @@ In summary, the majority of this app was not made by me. I wanted to give the cr
 
 # Setup
 ```
-git clone https://github.com/SteepAtticStairs/NexradJS.git
-cd NexradJS
+git clone https://github.com/SteepAtticStairs/AtticRadar.git
+cd AtticRadar
 npm install
 npm run build
 php -S 127.0.0.1:8080
@@ -39,7 +39,7 @@ to use `watchify` (a part of Browserify) to auto-bundle the project every time y
 
 **A live demo of this webpage can be found here:
 <br>
-https://steepatticstairs.github.io/NexradJS/**
+https://steepatticstairs.github.io/AtticRadar/**
 <br><br><br>
 You can add some parameters to the URL to make the app easier to use / bookmark. You can add 
 * `#development`
@@ -51,18 +51,22 @@ The first one is to allow for extra development features (this is mainly for my 
 
 Sets the app's initial station to `KHGX`:
 ```
-https://steepatticstairs.github.io/NexradJS/#station=KHGX
+https://steepatticstairs.github.io/AtticRadar/#station=KHGX
 ```
 Sets the app's initial tide station to `8724698` (Loggerhead Key):
 ```
-https://steepatticstairs.github.io/NexradJS/#tideStation=8724698
+https://steepatticstairs.github.io/AtticRadar/#tideStation=8724698
 ```
 Sets the app into development mode:
 ```
-https://steepatticstairs.github.io/NexradJS/#development
+https://steepatticstairs.github.io/AtticRadar/#development
 ```
 Sets the app's initial station to `KHGX` AND into development mode:
 ```
-https://steepatticstairs.github.io/NexradJS/#station=KHGX&#development
+https://steepatticstairs.github.io/AtticRadar/#station=KHGX&#development
 ```
 Notice how in the last example, the two parameters are separated by an ampersand (`&`) and still require a hash (`#`) before each parameter.
+
+
+# History
+* `Sep 10 2022` - Renamed this project from "NexradJS" to "AtticRadar"

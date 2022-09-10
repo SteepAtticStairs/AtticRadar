@@ -27177,7 +27177,7 @@ const level3Plot = plotAndData(file, {
     //background: 'black'
 });
 
-// clone NexradJS repo
+// clone AtticRadar repo
 // cd level3test
 // browserify -t brfs index.js -o bundle.js
 

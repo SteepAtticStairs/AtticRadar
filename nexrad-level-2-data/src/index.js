@@ -9,7 +9,7 @@ const combineData = require('./combinedata');
 /*
 *
 * Last commit before redoing with callbacks:
-* https://github.com/SteepAtticStairs/NexradJS/tree/a7814678d0b415f415c4054dc313c12378fb51e7/nexrad-level-2-data
+* https://github.com/SteepAtticStairs/AtticRadar/tree/a7814678d0b415f415c4054dc313c12378fb51e7/nexrad-level-2-data
 *
 */
 

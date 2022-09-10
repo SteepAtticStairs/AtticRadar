@@ -107,9 +107,9 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 
 
     //if (theFileStation.toUpperCase() != theFileStation) {
-        $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function (abrvData) {
+        $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function (abrvData) {
             var theFileStation = abrvData[l3rad.textHeader.id3];
-            $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function (data) {
+            $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function (data) {
                 var staLat = data[theFileStation][1];
                 var staLng = data[theFileStation][2];
 

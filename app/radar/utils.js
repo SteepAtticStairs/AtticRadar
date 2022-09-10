@@ -397,7 +397,7 @@ function flyToStation() {
     var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {

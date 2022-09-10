@@ -1,6 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -510,7 +508,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":30,"util/":5}],3:[function(require,module,exports){
+},{"object-assign":30,"util/":4}],2:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -535,14 +533,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1132,7 +1130,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":4,"_process":43,"inherits":3}],6:[function(require,module,exports){
+},{"./support/isBuffer":3,"_process":43,"inherits":2}],5:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -1163,7 +1161,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1315,9 +1313,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
+},{}],7:[function(require,module,exports){
+
 },{}],8:[function(require,module,exports){
-arguments[4][1][0].apply(exports,arguments)
-},{"dup":1}],9:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -1729,7 +1727,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":43,"assert":2,"buffer":11,"pako/lib/zlib/constants":33,"pako/lib/zlib/deflate.js":35,"pako/lib/zlib/inflate.js":37,"pako/lib/zlib/zstream":41}],10:[function(require,module,exports){
+},{"_process":43,"assert":1,"buffer":11,"pako/lib/zlib/constants":33,"pako/lib/zlib/deflate.js":35,"pako/lib/zlib/inflate.js":37,"pako/lib/zlib/zstream":41}],9:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2341,7 +2339,9 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":9,"_process":43,"assert":2,"buffer":11,"stream":45,"util":64}],11:[function(require,module,exports){
+},{"./binding":8,"_process":43,"assert":1,"buffer":11,"stream":45,"util":64}],10:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"dup":7}],11:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -4122,7 +4122,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":7,"buffer":11,"ieee754":24}],12:[function(require,module,exports){
+},{"base64-js":6,"buffer":11,"ieee754":24}],12:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -5571,7 +5571,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":6,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22}],30:[function(require,module,exports){
+},{"available-typed-arrays":5,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22}],30:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -13742,7 +13742,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":46,"./_stream_duplex":47,"./internal/streams/async_iterator":52,"./internal/streams/buffer_list":53,"./internal/streams/destroy":54,"./internal/streams/from":56,"./internal/streams/state":58,"./internal/streams/stream":59,"_process":43,"buffer":11,"events":15,"inherits":25,"string_decoder/":60,"util":8}],50:[function(require,module,exports){
+},{"../errors":46,"./_stream_duplex":47,"./internal/streams/async_iterator":52,"./internal/streams/buffer_list":53,"./internal/streams/destroy":54,"./internal/streams/from":56,"./internal/streams/state":58,"./internal/streams/stream":59,"_process":43,"buffer":11,"events":15,"inherits":25,"string_decoder/":60,"util":7}],50:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -15065,7 +15065,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":11,"util":8}],54:[function(require,module,exports){
+},{"buffer":11,"util":7}],54:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -15781,8 +15781,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],62:[function(require,module,exports){
-arguments[4][4][0].apply(exports,arguments)
-},{"dup":4}],63:[function(require,module,exports){
+arguments[4][3][0].apply(exports,arguments)
+},{"dup":3}],63:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -16896,7 +16896,7 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":6,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22,"is-typed-array":29}],66:[function(require,module,exports){
+},{"available-typed-arrays":5,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22,"is-typed-array":29}],66:[function(require,module,exports){
 const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
 const createMenuOption = require('../radar/menu/createMenuOption');
@@ -17957,7 +17957,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     // document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function(abrvData) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
 		var theFileStation = abrvData[l3rad.textHeader.id3];
         document.getElementById('radarStation').innerHTML = theFileStation;
 
@@ -18858,12 +18858,12 @@ function draw(data) {
     document.body.appendChild(a);
     a.click();*/
 
-	$.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function(abrvData) {
+	$.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
 		var currentStation = abrvData[data.textHeader.id3];
 		if (document.getElementById('fileStation').innerHTML != currentStation) {
 			document.getElementById('fileStation').innerHTML = currentStation;
 		}
-		$.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+		$.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
 			var statLat = data[currentStation][1];
 			var statLng = data[currentStation][2];
 			// ../../../data/json/KLWX20220623_014344_V06.json
@@ -18961,7 +18961,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -19189,9 +19189,9 @@ function parsePlotStormTracks(l3rad, theFileStation) {
 
 
     //if (theFileStation.toUpperCase() != theFileStation) {
-        $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function (abrvData) {
+        $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function (abrvData) {
             var theFileStation = abrvData[l3rad.textHeader.id3];
-            $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function (data) {
+            $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function (data) {
                 var staLat = data[theFileStation][1];
                 var staLng = data[theFileStation][2];
 
@@ -19322,7 +19322,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -19819,7 +19819,7 @@ function stationStatusColor() {
 
 var statMarkerArr = [];
 function showStations() {
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function (data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function (data) {
         var allKeys = Object.keys(data);
         for (key in allKeys) {
             var curIter = data[allKeys[key]];
@@ -21056,7 +21056,7 @@ function flyToStation() {
     var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {
@@ -22555,7 +22555,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":126,"zlib":10}],131:[function(require,module,exports){
+},{"./classes/RandomAccessFile":126,"zlib":9}],131:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -22568,7 +22568,7 @@ const combineData = require('./combinedata');
 /*
 *
 * Last commit before redoing with callbacks:
-* https://github.com/SteepAtticStairs/NexradJS/tree/a7814678d0b415f415c4054dc313c12378fb51e7/nexrad-level-2-data
+* https://github.com/SteepAtticStairs/AtticRadar/tree/a7814678d0b415f415c4054dc313c12378fb51e7/nexrad-level-2-data
 *
 */
 
@@ -23405,7 +23405,7 @@ const draw = (data, _options) => {
 
 	//testHello('yeet')
 	var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {
@@ -24003,7 +24003,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],146:[function(require,module,exports){
+},{"fs":10}],146:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 

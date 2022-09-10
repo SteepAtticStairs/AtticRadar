@@ -100,12 +100,12 @@ function draw(data) {
     document.body.appendChild(a);
     a.click();*/
 
-	$.getJSON('https://steepatticstairs.github.io/NexradJS/resources/stationAbbreviations.json', function(abrvData) {
+	$.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
 		var currentStation = abrvData[data.textHeader.id3];
 		if (document.getElementById('fileStation').innerHTML != currentStation) {
 			document.getElementById('fileStation').innerHTML = currentStation;
 		}
-		$.getJSON('https://steepatticstairs.github.io/NexradJS/resources/radarStations.json', function(data) {
+		$.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
 			var statLat = data[currentStation][1];
 			var statLng = data[currentStation][2];
 			// ../../../data/json/KLWX20220623_014344_V06.json
