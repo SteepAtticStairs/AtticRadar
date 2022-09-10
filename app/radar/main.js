@@ -47,7 +47,13 @@ if (require('./misc/detectmobilebrowser')) {
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
     var endTimer = Date.now();
-    console.log(`Established connection to proxy in ${endTimer - startTimer} ms`)
+    console.log(`Established connection to main proxy in ${endTimer - startTimer} ms`)
+})
+
+var startTimer2 = Date.now();
+$.get(ut.phpProxy2 + "https://google.com", function(data) {
+    var endTimer2 = Date.now();
+    console.log(`Established connection to backup proxy in ${endTimer2 - startTimer2} ms`)
 })
 
 //$('#productsDropdownBtn').click();
