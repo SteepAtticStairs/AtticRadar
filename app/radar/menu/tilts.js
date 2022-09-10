@@ -57,8 +57,8 @@ function tiltEventListeners() {
 }
 
 function resetTilts() {
-    document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt 1`;
-    $('#tiltsDropdownBtn').attr('value', 'tilt1');
+    //document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt 1`;
+    //$('#tiltsDropdownBtn').attr('value', 'tilt1');
 }
 
 module.exports = {

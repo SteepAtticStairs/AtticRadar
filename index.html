@@ -512,12 +512,10 @@
 
     <div id="dataDiv" style="display: none"></div>
 
-    <!-- Button trigger modal -->
-    <button type="button" id="modalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-    </button>
-
-    <!-- Modal -->
+    <!--
+        THIS IS THE MODAL FOR THE TIDE STATIONS
+    -->
+    <button type="button" id="modalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -536,74 +534,10 @@
         </div>
     </div>
 
-
-
-    <!-- <a id="fileThatWorks" class="false-anchor">KTLX20130520_200356_V06.gz</a>
-    <br>
-    <a id="fileThatDoesnt" class="false-anchor">KLWX20220623_014344_V06</a>
-    <br> -->
-    <!-- <input id="fileInput" type="file"/> -->
-    <br>
-    <button id="plotRef" style="display: none">Ref</button>
-    <button id="plotVel" style="display: none">Vel</button>
-    <div id="messageDisplay" style="display: none"></div>
-    <br><br><br>
-    <canvas id="theCanvas" style="display: none"></canvas>
-
-    <div id="settingsDialog" style="display: none">
-        <a id="elevStuff" style="display: none">
-            <div><b>Elevation:</b></div>
-            <select id="elevInput">
-                <!-- <option value="1" selected>1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="17">17</option> -->
-            </select>
-            <br><br>
-        </a>
-        <a id="extraStuff" style="display: none">
-            <input type="checkbox" id="shouldLowFilter">
-            <label for="shouldLowFilter">Low Filter</label>
-            <br><br>
-        </a>
-        <a id="productStuff" style="display: none">
-            <div><b>Product:</b></div>
-            <select id="productInput">
-                <!-- <option value="REF" selected>Reflectivity</option>
-                <option value="VEL">Velocity</option>
-                <option value="RHO">Correlation Coefficient</option> -->
-            </select>
-            <br><br>
-        </a>
-        <a id="tiltStuff" style="display: none">
-            <div><b>Tilt:</b></div>
-            <select id="tiltInput">
-                <option value="tilt1" selected>Tilt 1</option>
-                <option value="tilt2">Tilt 2</option>
-                <option value="tilt3">Tilt 3</option>
-                <option value="tilt4">Tilt 4</option>
-            </select>
-            <br><br>
-        </a>
-        <div><b>Station:</b></div>
-        <input id="userStation" value="KLWX">
-        <br>
-        <select id="levelInput">
-            <option value="l2" selected>Level 2</option>
-            <option value="l3">Level 3</option>
-        </select>
-
-        <input style="display:none" autofocus>
-    </div>
-
-    <div id="messageDialog" style="display: none">
-        <div id="messageBox"></div>
-    </div>
-
-    <!-- Button trigger modal -->
+    <!--
+        THIS IS THE MODAL FOR THE ALERTS MODULE
+    -->
     <button id="alertModalTrigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#alertModal" style="display: none"></button>
-
-    <!-- Modal -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -625,10 +559,11 @@
     </div>
 
 
-    <!-- Offcanvas menu -->
+    <!--
+        THIS IS THE HTML FOR THE OFFCANVAS MENU
+    -->
     <button class="btn btn-primary" id="offCanvasBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
         aria-controls="offcanvasExample" style="display: none"></button>
-
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
@@ -638,91 +573,11 @@
     </div>
 
     <div id='optionsBox' style="display: none">
-        <div id="smallInfo" style="display: none">
-            <div id="curRadProd">Click to open menu.</div>
-            <!-- <div id="radarTime"></div>
-            <b>Station: </b><a id='radarStation'></a>
-            <b>VCP: </b><a id='radarVCP'></a> -->
-        </div>
-        <div id="mainInfo" style="display: none">
-            
-            <span id="currenstModeSpan">
-                <div style="display: none">
-                    <label for="stationInp">Station</label>
-                    <input type="text" class="form-control" id="stationInp" value="KLWX">
-                <!-- <br> -->
-                </div>
-                <div class="dropdown-center" id="tiltsDropdown">
-                    <button class="btn btn-secondary btn-sm dropdown-toggle" id="tiltsDropdownBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false" value="tilt1">
-                        Tilt 1</button>
-                    <ul class="dropdown-menu" id="tiltsMenu">
-                        <!-- <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-                        <li><a class="dropdown-item" href="#" value="tilt2">Tilt 2</a></li>
-                        <li><a class="dropdown-item" href="#" value="tilt3">Tilt 3</a></li>
-                        <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li> -->
-                    </ul>
-                </div>
-                <br>
-                <div class="btn-group-vertical productBtnGroup">
-                    <div>Super Resolution</div>
-                    <!-- <button type="button" value="mcy" class="btn btn-outline-primary btn-sm">Mesocyclone</button> -->
-                    <button type="button" value="ref" id='srResBtn' class="btn btn-outline-primary btn-sm"><b>HR</b> Base Reflectivity</button>
-                    <button type="button" value="vel"  class="btn btn-outline-primary btn-sm"><b>HR</b> Base Velocity</button> <!-- vel -->
-                </div>
-                <br>
-                <div class="btn-group-vertical productBtnGroup">
-                    <br>
-                    <div>Digital</div>
-                    <button type="button" value="rho" class="btn btn-outline-primary btn-sm">Correlation Coefficient</button>
-                    <button type="button" value="zdr" class="btn btn-outline-primary btn-sm">Differential Reflectivity</button>
-                    <button type="button" value="sw " class="btn btn-outline-primary btn-sm">Base Spectrum Width (124 nmi)</button>
-                    <button type="button" value="hyc"  class="btn btn-outline-primary btn-sm">Hydrometer Classification</button> <!-- hyc -->
-                    <button type="button" value="hhc"  class="btn btn-outline-primary btn-sm">Hybrid Hydrometer Classification</button> <!-- hhc -->
-                    <button type="button" value="lowres-ref" class="btn btn-outline-primary btn-sm">Digital Base Reflectivity</button> <!-- ref -->
-                    <button type="button" value="lowres-vel" class="btn btn-outline-primary btn-sm">Digital Base Velocity</button>
-                    <button type="button" value="vil"  class="btn btn-outline-primary btn-sm">Vertically Integrated Liquid</button> <!-- vil -->
-                </div>
-                <br>
-                <div class="btn-group-vertical productBtnGroup">
-                    <br>
-                    <div>Classic</div>
-                    <button type="button" value="srv"  class="btn btn-outline-primary btn-sm">Storm Relative Velocity</button> <!-- srv -->
-                </div>
-                <br>
-                <div class="btn-group-vertical productBtnGroup level2btns" id="level2btns" style="display: none">
-                    <br>
-                    <div>Level 2</div>
-                    <button type="button" value="load" id="loadl2" class="btn btn-outline-primary btn-sm">Load Level 2 File</button>
-                    <button type="button" value="l2-ref" id="l2-ref" class="btn btn-outline-secondary btn-sm" disabled>Base Reflectivity</button>
-                    <button type="button" value="l2-vel" id="l2-vel" class="btn btn-outline-secondary btn-sm" disabled>Base Velocity</button>
-                    <button type="button" value="l2-rho" id="l2-rho" class="btn btn-outline-secondary btn-sm" disabled>Correlation Coefficient</button>
-                    <button type="button" value="l2-phi" id="l2-phi" class="btn btn-outline-secondary btn-sm" disabled>Differential Phase Shift</button>
-                    <button type="button" value="l2-zdr" id="l2-zdr" class="btn btn-outline-secondary btn-sm" disabled>Differential Reflectivity</button>
-                    <button type="button" value="l2-sw " id="l2-sw " class="btn btn-outline-secondary btn-sm" disabled>Spectrum Width</button>
-                </div>
-                <br>
-                <div style="display: none">
-                    <div id="collapseBtn" style="display: none">
-                        <button id="collapseBtnBtn" class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            File Info
-                        </button>
-                        <br><br>
-                    </div>
-                    <div class="collapse" id="collapseExample">
-                        <div id='fileInfoDiv' style='display: none'>
-                            <!-- <div id='radFileNameParent'><b><a id='radFileName'></a></b></div> -->
-                            <div id='radDateParent'><b>Date: </b><a id='radDate'></a></div>
-                            <b>Station: </b><a id='radStation'></a>
-                            <b>VCP: </b><a id='radVCP'></a>
-                            <br>
-                            <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
-                            <br>
-                        </div>
-                    </div>
-                </div>
-            </span>
-        </div>
+        <div id="smallInfo" style="display: none"></div>
+        <div id="mainInfo" style="display: none"></div>
     </div>
+    <div id="stationInp"></div>
+    <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
 
     <!-- <script>
         document.getElementById('collapseBtnBtn').addEventListener('click', function() {

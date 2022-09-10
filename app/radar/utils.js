@@ -479,20 +479,26 @@ function getSSHWSVal(windSpeed) {
     }
 }
 
-function createModal(title, headerColor, body) {
-    var modalContent = 
-    `<div class="modal fade" tabindex="-1" aria-labelledby="jsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header alert ${headerColor}">
-                    <h5 class="modal-title">${title}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+function spawnModal(options) {
+    var title = options.title;
+    var headerColor = options.headerColor;
+    var body = options.body;
+
+    var modalContent =
+        `<div class="modal fade" tabindex="-1" aria-labelledby="jsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header alert ${headerColor}">
+                        <h5 class="modal-title">${title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">${body}</div>
                 </div>
-                <div class="modal-body">${body}</div>
             </div>
-        </div>
-    </div>`
-    return modalContent;
+        </div>`
+
+    var domObj = $(modalContent);
+    domObj.modal('show');
 }
 
 module.exports = {
@@ -531,5 +537,5 @@ module.exports = {
     preventFileCaching,
     sshwsValues,
     getSSHWSVal,
-    createModal
+    spawnModal
 }

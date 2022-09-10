@@ -50,8 +50,12 @@ function useData(data) {
         var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + stationDataURL);
         $.get(noCacheURL, function(data) {
             console.log(data)
-            var metarModal = $(ut.createModal(`Station ${id}`, 'alert-success', data));
-            metarModal.modal('show');
+
+            ut.spawnModal({
+                'title': `Station ${id}`,
+                'headerColor': 'alert-success',
+                'body': data
+            })
         })
     });
     map.on('mouseenter', 'metarStations', () => {
