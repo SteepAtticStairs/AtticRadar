@@ -54,7 +54,7 @@ function showStations() {
         })
 
         $('.customMarker').on('click', function () {
-            if (!$('#dataDiv').data('noMoreClicks')) {
+            if (!$('#dataDiv').data('fromFileUpload')) {
                 if (!$('#dataDiv').data('isFileUpload') && $(this).css('background-color') != redColor) {
                     // remove all other blue
                     $('.customMarker').each(function() {

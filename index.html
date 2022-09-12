@@ -346,6 +346,22 @@
             cursor: pointer;
         }
 
+        .radarHeader {
+            position: absolute;
+            z-index: 115;
+            top: 0%;
+            height: 50px;
+            width: 100%;
+            background-color: rgb(32, 32, 32);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .radarHeader div {
+            text-align: center;
+        }
+
         #productsDropdownTrigger, #productsDropdown {
             position: absolute;
             left: 5px;
@@ -357,6 +373,9 @@
 </head>
 <body>
 
+    <!--
+        MAP FOOTER
+    -->
     <div id="mapFooter" class="mapFooter">
         <!-- Default dropup button -->
         <div id="productsDropdownTrigger" class="noselect">Products</div>
@@ -430,42 +449,37 @@
                 </sus>
             </ul>
         </div>
-        <!-- <div>balls1</div>&nbsp;&nbsp;&nbsp;
-        <div>balls2</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp;
-        <div>balls3</div>&nbsp;&nbsp;&nbsp; -->
     </div>
 
+    <!--
+        PROGRESS BAR
+    -->
     <div class="progress align-middle" id="progBarParent">
         <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="150"></div>
     </div>
-    <!-- https://stackoverflow.com/a/20362024
-    ms-auto - left
-    mx-auto - center
-    ms-auto - right -->
-    <!-- <nav class="navbar bg-light" id="mapHeader">
-        <div class="container-fluid">
-            <span class="navbar-text mx-auto text-center" style="font-size: 13px">
-                <span>
-                    <div id="drop_zone">Drop files here</div>
-                </span>
-                <span style="display: none">
-                    <div id="radarTime"></div>
-                    <b>Station: </b><a id='radarStation'>None</a>
-                    <br>
-                    <b>VCP: </b><a id='radarVCP'>None</a>
-                </span>
-            </span>
-        </div>
-    </nav> -->
-    <div id="mapHeader">
+
+    <!--
+        MAP HEADER BOX
+    -->
+    <div id="radarHeader" class="radarHeader">
         <span id="fileUploadSpan" style="display: none">
+            <input type="file" id="hiddenFileUploader" style="display: none">
+            <div id="drop_zone">Drop Level 2 file here</div>
+
+            <div id="levelRadios">
+                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="2" checked>
+                <label class="form-check-label levelRadioInputs" for="inlineRadio1">Level 2</label>
+                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="3" style="float: right">
+                <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 3px;">Level 3</label>
+            </div>
+        </span>
+        <span id="radarInfoSpan">
+            <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
+            <div style="font-size: 12px"><b id='radarStation'>No Station Selected</b><a id="radarTime"></a></div>
+        </span>
+    </div>
+    <div id="mapHeader" style="display: none">
+        <!-- <span id="fileUploadSpan" style="display: none">
             <input type="file" id="hiddenFileUploader" style="display: none">
             <div id="drop_zone">Drop Level 2 file here</div>
 
@@ -481,9 +495,12 @@
             <b>Station: </b><a id='radarStation'>None</a>
             <br>
             <b>VCP: </b><a id='radarVCP'>None</a>
-        </span>
+        </span> -->
     </div>
 
+    <!--
+        SPINNER
+    -->
     <div id="spinnerParent" style="display: none">
         <!-- <div id="spinnerDisplayText">The radar is currently loading. Patience here is key - this should be quick.</div> -->
         <div class="sk-chase">
@@ -495,6 +512,10 @@
             <div class="sk-chase-dot"></div>
         </div>
     </div>
+
+    <!--
+        RANDOM DIVS TO STORE INFORMATION
+    -->
     <div id="fileStation" style="display: none"></div>
     <div id="fileVersion" style="display: none"></div>
     <div id="level3json" style="display: none"></div>
@@ -510,6 +531,9 @@
     <div id="testEventElem" style="display: none"></div>
 
 
+    <!--
+        VERY IMPORTANT - DO NOT DELETE
+    -->
     <div id="dataDiv" style="display: none"></div>
 
     <!--
@@ -577,6 +601,7 @@
         <div id="mainInfo" style="display: none"></div>
     </div>
     <div id="stationInp"></div>
+    <canvas id="theCanvas"></canvas>
     <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
 
     <!-- <script>

@@ -29,7 +29,7 @@ function showL2Info(l2rad) {
     fileDateObj.setUTCSeconds(fileSeconds);
     var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
-    document.getElementById('radarTime').innerHTML = finalRadarDateTime;
+    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 }
 
 module.exports = showL2Info;

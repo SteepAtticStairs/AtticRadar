@@ -20,7 +20,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
         var fileDateObj = getLevel3FileTime(l3rad);
         var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
-        document.getElementById('radarTime').innerHTML = finalRadarDateTime;
+        document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
     })
 }
 

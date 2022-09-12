@@ -17298,7 +17298,7 @@ function showL2Info(l2rad) {
     fileDateObj.setUTCSeconds(fileSeconds);
     var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
-    document.getElementById('radarTime').innerHTML = finalRadarDateTime;
+    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 }
 
 module.exports = showL2Info;
@@ -17325,7 +17325,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
         var fileDateObj = getLevel3FileTime(l3rad);
         var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
-        document.getElementById('radarTime').innerHTML = finalRadarDateTime;
+        document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
     })
 }
 
@@ -19195,7 +19195,7 @@ function showStations() {
         })
 
         $('.customMarker').on('click', function () {
-            if (!$('#dataDiv').data('noMoreClicks')) {
+            if (!$('#dataDiv').data('fromFileUpload')) {
                 if (!$('#dataDiv').data('isFileUpload') && $(this).css('background-color') != redColor) {
                     // remove all other blue
                     $('.customMarker').each(function() {
@@ -20293,17 +20293,17 @@ var allL2Btns = [
 // https://www.weather.gov/jetstream/vcp_max
 // https://www.roc.noaa.gov/WSR88D/Operations/VCP.aspx
 var vcpObj = {
-    '12': 'Precipitation Mode',
+    '12': 'Precip Mode',
     '31': 'Clean Air Mode',
     '32': 'Clean Air Mode',
     '35': 'Clean Air Mode',
-    '112': 'Precipitation Mode',
-    '121': 'Precipitation Mode',
-    '212': 'Precipitation Mode',
-    '215': 'Precipitation Mode',
+    '112': 'Precip Mode',
+    '121': 'Precip Mode',
+    '212': 'Precip Mode',
+    '215': 'Precip Mode',
 
-    '80': 'Precipitation Mode',
-    '90': 'Precipitation Mode',
+    '80': 'Precip Mode',
+    '90': 'Precip Mode',
 }
 
 function blobToString(b) {

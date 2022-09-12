@@ -291,17 +291,17 @@ var allL2Btns = [
 // https://www.weather.gov/jetstream/vcp_max
 // https://www.roc.noaa.gov/WSR88D/Operations/VCP.aspx
 var vcpObj = {
-    '12': 'Precipitation Mode',
+    '12': 'Precip Mode',
     '31': 'Clean Air Mode',
     '32': 'Clean Air Mode',
     '35': 'Clean Air Mode',
-    '112': 'Precipitation Mode',
-    '121': 'Precipitation Mode',
-    '212': 'Precipitation Mode',
-    '215': 'Precipitation Mode',
+    '112': 'Precip Mode',
+    '121': 'Precip Mode',
+    '212': 'Precip Mode',
+    '215': 'Precip Mode',
 
-    '80': 'Precipitation Mode',
-    '90': 'Precipitation Mode',
+    '80': 'Precip Mode',
+    '90': 'Precip Mode',
 }
 
 function blobToString(b) {
