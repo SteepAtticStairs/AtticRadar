@@ -5,6 +5,7 @@ const map = new mapboxgl.Map({
     zoom: 3,
     center: [-98.5606744, 36.8281576],
     //projection: 'equirectangular',
+    //fadeDuration: 0,
 });
 
 // https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567

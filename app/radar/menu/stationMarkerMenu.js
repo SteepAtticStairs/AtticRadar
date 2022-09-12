@@ -1,6 +1,7 @@
 const createMenuOption = require('./createMenuOption');
 const showStations = require('../map/controls/stationMarkers');
 const ut = require('../utils');
+const map = require('../map/map');
 
 createMenuOption({
     'divId': 'stationMenuItemDiv',
@@ -17,20 +18,27 @@ createMenuOption({
         $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');
 
-        showStations();
+        map._fadeDuration = 0;
+        if (map.getLayer('stationSymbolLayer')) {
+            // station marker layer already exists, simply toggle visibility here
+            map.setLayoutProperty('stationSymbolLayer', 'visibility', 'visible');
+        } else {
+            // station marker layer does not exist, load it into the map style
+            showStations();
+        }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
 
-        var statMarkerArr = $('#dataDiv').data('statMarkerArr');
-        for (key in statMarkerArr) {
-            statMarkerArr[key].remove();
-        }
+        map._fadeDuration = 300;
+        // hide the station marker layer
+        map.setLayoutProperty('stationSymbolLayer', 'visibility', 'none');
     }
 })
 
 $('#stationMenuItemIcon').removeClass('icon-grey');
 $('#stationMenuItemIcon').addClass('icon-blue');
+map._fadeDuration = 0;
 setTimeout(function() {
     showStations();
 }, 200)
