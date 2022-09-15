@@ -256,7 +256,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
             console.log(`Finished drawing all hurricanes.`);
 
             // add the hurricanes menu item
-            require('./menuItem').loadHurricanesControl($('#dataDiv').data('hurricaneMapLayers'));
+            //require('./menuItem').loadHurricanesControl($('#dataDiv').data('hurricaneMapLayers'));
         }
     }
     doTheStuff();

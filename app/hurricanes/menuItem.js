@@ -1,37 +1,37 @@
 const ut = require('../radar/utils');
 const createMenuOption = require('../radar/menu/createMenuOption');
+const fetchData = require('./fetchData');
 var map = require('../radar/map/map');
 
-function loadHurricanesControl(layerArray) {
-    createMenuOption({
-        'divId': 'hurricanesMenuItemDiv',
-        'iconId': 'hurricanesMenuItemIcon',
+createMenuOption({
+    'divId': 'hurricanesMenuItemDiv',
+    'iconId': 'hurricanesMenuItemIcon',
 
-        'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-blue',
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-grey',
 
-        'contents': 'Hurricane Tracker',
-        'icon': 'fa fa-hurricane',
-        'css': ''
-    }, function(divElem, iconElem) {
-        if (!$(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-grey');
-            $(iconElem).addClass('icon-blue');
+    'contents': 'Hurricane Tracker',
+    'icon': 'fa fa-hurricane',
+    'css': ''
+}, function(divElem, iconElem) {
+    var layerArray = $('#dataDiv').data('hurricaneMapLayers');
+    if (!$(iconElem).hasClass('icon-blue')) {
+        $(iconElem).removeClass('icon-grey');
+        $(iconElem).addClass('icon-blue');
 
+        if (map.getLayer(layerArray[0])) {
             for (var i = 0; i < layerArray.length; i++) {
                 map.setLayoutProperty(layerArray[i], 'visibility', 'visible');
             }
-        } else if ($(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-grey');
-
-            for (var i = 0; i < layerArray.length; i++) {
-                map.setLayoutProperty(layerArray[i], 'visibility', 'none');
-            }
+        } else {
+            fetchData();
         }
-    })
-}
+    } else if ($(iconElem).hasClass('icon-blue')) {
+        $(iconElem).removeClass('icon-blue');
+        $(iconElem).addClass('icon-grey');
 
-module.exports = {
-    loadHurricanesControl
-};
+        for (var i = 0; i < layerArray.length; i++) {
+            map.setLayoutProperty(layerArray[i], 'visibility', 'none');
+        }
+    }
+})
