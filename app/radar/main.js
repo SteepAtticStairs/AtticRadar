@@ -86,7 +86,7 @@ $(".productOption").on('click', function() {
         tilts.listTilts(ut.numOfTiltsObj[thisValue]);
     }
     $('#dataDiv').data('curProd', thisValue);
-    var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][thisValue];
+    var clickedProduct = ut.tiltObject[$('#dataDiv').data('curTilt')][thisValue];
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         console.log(url);

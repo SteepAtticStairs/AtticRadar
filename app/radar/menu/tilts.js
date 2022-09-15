@@ -24,6 +24,7 @@ function listTilts(tiltsArr, callback) {
         // if it is the first element in the tilts array, set the radio group selected to the first tilt
         if (key == 0) {
             $(inputElem).prop("checked", true);
+            $('#dataDiv').data('curTilt', `tilt${tiltsArr[key]}`)
         }
 
         var labelElem = document.createElement('label');
@@ -44,10 +45,10 @@ function listTilts(tiltsArr, callback) {
 function tiltEventListeners() {
     $('#newTiltsMenu').on('click', function(e) {
         var clickedValue = $(e.target).attr('value');
-        document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${clickedValue.slice(-1)}`;
-        $('#tiltsDropdownBtn').attr('value', clickedValue);
+        //document.getElementById('tiltsDropdownBtn').innerHTML = `Tilt ${clickedValue.slice(-1)}`;
+        $('#dataDiv').data('curTilt', clickedValue)
 
-        var clickedProduct = ut.tiltObject[$('#tiltsDropdownBtn').attr('value')][$('#dataDiv').data('curProd')];
+        var clickedProduct = ut.tiltObject[$('#dataDiv').data('curTilt')][$('#dataDiv').data('curProd')];
         var currentStation = $('#stationInp').val();
         loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function (url) {
             console.log(url);
