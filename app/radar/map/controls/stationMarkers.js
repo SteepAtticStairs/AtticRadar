@@ -6,16 +6,17 @@ const tilts = require('../../menu/tilts');
 const getStationStatus = require('../../misc/getStationStatus');
 const isMobile = require('../../misc/detectmobilebrowser');
 
+const radarStations = require('../../../../resources/radarStations');
+
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';
 
+$('#dataDiv').data('blueStations', null)
+
 function stationStatusColor() {
     getStationStatus(function (data) {
-        $('.customMarker').each(function () {
-            if (data[this.innerHTML].status == 'down') {
-                $(this).css('background-color', redColor);
-            }
-        })
+        const statusifiedGeojson = returnStationsGeojson(data);
+        map.getSource('stationSymbolLayer').setData(statusifiedGeojson);
     })
 }
 
@@ -75,175 +76,169 @@ function disableMouseListeners() {
     map.off('mouseout', 'stationSymbolLayer', mouseOut);
 }
 
+function returnStationsGeojson(radarStatusData) {
+    multiPointGeojson = {
+        "type": "FeatureCollection",
+        "features": []
+    };
+
+    var allKeys = Object.keys(radarStations);
+    for (key in allKeys) {
+        var curIter = radarStations[allKeys[key]];
+        var curStat = allKeys[key];
+        // generate station abbreviation json
+        // statObj[curStat.slice(1)] = curStat;
+
+        // check if it is an unsupported radar
+        if (curStat.length == 4 && curStat.charAt(0) != 'T') {
+            var status;
+            if (radarStatusData != null) {
+                var status = radarStatusData[curStat].status;
+            } else {
+                status = null;
+            }
+            pushNewPoint([curIter[2], curIter[1]], {
+                'station': curStat,
+                'status': status
+            });
+            // // create a HTML element for each feature
+            // var el = document.createElement('div');
+            // el.className = 'customMarker';
+            // el.innerHTML = curStat;
+
+            // // make a marker for each feature and add to the map
+            // var mark = new mapboxgl.Marker(el)
+            //     .setLngLat([curIter[2], curIter[1]])
+            //     .addTo(map);
+            // statMarkerArr.push(mark)
+        }
+    }
+    return multiPointGeojson;
+}
+
 var statMarkerArr = [];
 function showStations() {
-    //getStationStatus(function (stationStatus) {
-        $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function (data) {
-            var allKeys = Object.keys(data);
-            for (key in allKeys) {
-                var curIter = data[allKeys[key]];
-                var curStat = allKeys[key];
-                // generate station abbreviation json
-                // statObj[curStat.slice(1)] = curStat;
+    const stationGeojson = returnStationsGeojson();
 
-                // check if it is an unsupported radar
-                if (curStat.length == 4 && curStat.charAt(0) != 'T') {
-                    var status;
-                    if (typeof stationStatus != 'undefined') {
-                        var status = stationStatus[curStat].status;
-                    } else {
-                        status = null;
+    // https://stackoverflow.com/a/63995053/18758797
+    var fHover = null;
+    map.on('load', function (e) {
+        map.loadImage(
+            'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+            (error, image) => {
+                if (error) throw error;
+                map.addImage('custom-marker', image, {
+                    "sdf": "true"
+                });
+                map.addSource('stationSymbolLayer', {
+                    'type': 'geojson',
+                    'generateId': true,
+                    'data': stationGeojson
+                });
+
+                // Add a symbol layer
+                map.addLayer({
+                    'id': 'stationSymbolLayer',
+                    'type': 'symbol',
+                    'source': 'stationSymbolLayer',
+                    'layout': {
+                        'icon-image': 'custom-marker',
+                        'icon-size': 0.07,
+                        // get the title name from the source's "title" property
+                        'text-field': ['get', 'station'],
+                        'text-size': 13,
+                        'text-font': [
+                            //'Open Sans Semibold',
+                            'Arial Unicode MS Bold'
+                        ],
+                        //'text-offset': [0, 1.25],
+                        //'text-anchor': 'top'
+                    },
+                    //['==', ['case', ['feature-state', 'color'], 1]],
+                    //'rgb(136, 136, 136)',
+                    //['==', ['case', ['feature-state', 'color'], 2]],
+                    //'rgb(200, 200, 200)',
+                    //['==', ['case', ['feature-state', 'color'], 3]],
+                    //blueColor
+                    'paint': {
+                        //'text-color': 'white',
+                        'text-color': 'black',
+                        'icon-color': [
+                            'case',
+                            ['==', ['feature-state', 'color'], 3],
+                            blueColor,
+                            ['==', ['get', 'status'], 'down'],
+                            redColor,
+                            ['==', ['feature-state', 'color'], 1],
+                            'rgb(136, 136, 136)',
+                            ['==', ['feature-state', 'color'], 2],
+                            'rgb(200, 200, 200)',
+                            'rgb(200, 200, 200)'
+                        ]
                     }
-                    pushNewPoint([curIter[2], curIter[1]], {
-                        'station': curStat,
-                        'status': status
-                    });
-                    // // create a HTML element for each feature
-                    // var el = document.createElement('div');
-                    // el.className = 'customMarker';
-                    // el.innerHTML = curStat;
-
-                    // // make a marker for each feature and add to the map
-                    // var mark = new mapboxgl.Marker(el)
-                    //     .setLngLat([curIter[2], curIter[1]])
-                    //     .addTo(map);
-                    // statMarkerArr.push(mark)
-                }
+                });
+                stationStatusColor();
             }
+        );
+    });
 
-            // https://stackoverflow.com/a/63995053/18758797
-            var fHover = null;
-            map.on('load', function (e) {
-                map.loadImage(
-                    'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
-                    (error, image) => {
-                        if (error) throw error;
-                        map.addImage('custom-marker', image, {
-                            "sdf": "true"
-                        });
-                        map.addSource('stationSymbolLayer', {
-                            'type': 'geojson',
-                            'generateId': true,
-                            'data': multiPointGeojson
-                        });
+    if (!isMobile) {
+        enableMouseListeners();
+    }
 
-                        // Add a symbol layer
-                        map.addLayer({
-                            'id': 'stationSymbolLayer',
-                            'type': 'symbol',
-                            'source': 'stationSymbolLayer',
-                            'layout': {
-                                'icon-image': 'custom-marker',
-                                'icon-size': 0.07,
-                                // get the title name from the source's "title" property
-                                'text-field': ['get', 'station'],
-                                'text-size': 13,
-                                'text-font': [
-                                    //'Open Sans Semibold',
-                                    'Arial Unicode MS Bold'
-                                ],
-                                //'text-offset': [0, 1.25],
-                                //'text-anchor': 'top'
-                            },
-                            //['==', ['case', ['feature-state', 'color'], 1]],
-                            //'rgb(136, 136, 136)',
-                            //['==', ['case', ['feature-state', 'color'], 2]],
-                            //'rgb(200, 200, 200)',
-                            //['==', ['case', ['feature-state', 'color'], 3]],
-                            //blueColor
-                            'paint': {
-                                //'text-color': 'white',
-                                'text-color': 'black',
-                                'icon-color': [
-                                    'case',
-                                    ['==', ['feature-state', 'color'], 3],
-                                    blueColor,
-                                    ['==', ['get', 'status'], 'down'],
-                                    redColor,
-                                    ['==', ['feature-state', 'color'], 1],
-                                    'rgb(136, 136, 136)',
-                                    ['==', ['feature-state', 'color'], 2],
-                                    'rgb(200, 200, 200)',
-                                    'rgb(200, 200, 200)'
-                                ]
-                            }
-                        });
-                    }
-                );
+    map.on('click', 'stationSymbolLayer', function (e) {
+        if ($('#dataDiv').data('blueStations') != e.features[0].id && e.features[0].properties.status != 'down') {
+            var clickedStation = e.features[0].properties.station;
+            var id = e.features[0].id;
+
+            // change other blue station background to normal
+            map.setFeatureState({
+                source: 'stationSymbolLayer',
+                id: $('#dataDiv').data('blueStations')
+            }, {
+                hover: false,
+                color: 2,
+                isClicked: true,
             });
 
-            if (!isMobile) {
-                enableMouseListeners();
-            }
+            $('#dataDiv').data('blueStations', id);
 
-            map.on('click', 'stationSymbolLayer', function (e) {
-                if ($('#dataDiv').data('blueStations') != e.features[0].id && e.features[0].properties.status != 'down') {
-                    var clickedStation = e.features[0].properties.station;
-                    var id = e.features[0].id;
+            disableMouseListeners();
 
-                    // change other blue station background to normal
+            if (!$('#dataDiv').data('fromFileUpload')) {
+                if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
+                    // remove all other blue
+                    $('.customMarker').each(function () {
+                        if ($(this).css('background-color') == blueColor) {
+                            $(this).css('background-color', 'rgb(136, 136, 136)');
+                        }
+                    })
+                    $('#dataDiv').data('blueStationMarker', clickedStation);
+                    // change background to blue
                     map.setFeatureState({
                         source: 'stationSymbolLayer',
-                        id: $('#dataDiv').data('blueStations')
+                        id: e.features[0].id
                     }, {
                         hover: false,
-                        color: 2,
+                        color: 3,
                         isClicked: true,
                     });
+                    enableMouseListeners();
 
-                    $('#dataDiv').data('blueStations', id);
-
-                    disableMouseListeners();
-
-                    if (!$('#dataDiv').data('fromFileUpload')) {
-                        if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
-                            // remove all other blue
-                            $('.customMarker').each(function () {
-                                if ($(this).css('background-color') == blueColor) {
-                                    $(this).css('background-color', 'rgb(136, 136, 136)');
-                                }
-                            })
-                            $('#dataDiv').data('blueStationMarker', clickedStation);
-                            // change background to blue
-                            map.setFeatureState({
-                                source: 'stationSymbolLayer',
-                                id: e.features[0].id
-                            }, {
-                                hover: false,
-                                color: 3,
-                                isClicked: true,
-                            });
-                            enableMouseListeners();
-
-                            $('#stationInp').val(clickedStation);
-
-                            tilts.resetTilts();
-                            tilts.listTilts(ut.numOfTiltsObj['ref']);
-
-                            $('#dataDiv').data('curProd', 'ref');
-
-                            ut.progressBarVal('set', 0);
-
-                            ut.disableModeBtn();
-
-                            loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
-                                console.log(url);
-                                loaders.loadFileObject(ut.phpProxy + url, 3);
-                            })
-                        }
-                    }
+                    $('#stationInp').val(clickedStation);
+                    tilts.resetTilts();
+                    tilts.listTilts(ut.numOfTiltsObj['ref']);
+                    $('#dataDiv').data('curProd', 'ref');
+                    ut.progressBarVal('set', 0);
+                    ut.disableModeBtn();
+                    loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
+                        console.log(url);
+                        loaders.loadFileObject(ut.phpProxy + url, 3);
+                    })
                 }
-            })
-        }).then(function () {
-            stationStatusColor();
-
-            $('.customMarker').each(function () {
-                if (this.innerHTML == $('#dataDiv').data('blueStationMarker')) {
-                    $(this).css('background-color', blueColor);
-                }
-            })
-        })
-    //})
+            }
+        }
+    })
 }
 
 // createControl({
