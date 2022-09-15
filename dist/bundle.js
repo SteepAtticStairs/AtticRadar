@@ -1,6 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -510,7 +508,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":30,"util/":5}],3:[function(require,module,exports){
+},{"object-assign":30,"util/":4}],2:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -535,14 +533,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1132,7 +1130,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":4,"_process":43,"inherits":3}],6:[function(require,module,exports){
+},{"./support/isBuffer":3,"_process":43,"inherits":2}],5:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -1163,7 +1161,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1315,9 +1313,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
+},{}],7:[function(require,module,exports){
+
 },{}],8:[function(require,module,exports){
-arguments[4][1][0].apply(exports,arguments)
-},{"dup":1}],9:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -1729,7 +1727,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":43,"assert":2,"buffer":11,"pako/lib/zlib/constants":33,"pako/lib/zlib/deflate.js":35,"pako/lib/zlib/inflate.js":37,"pako/lib/zlib/zstream":41}],10:[function(require,module,exports){
+},{"_process":43,"assert":1,"buffer":11,"pako/lib/zlib/constants":33,"pako/lib/zlib/deflate.js":35,"pako/lib/zlib/inflate.js":37,"pako/lib/zlib/zstream":41}],9:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -2341,7 +2339,9 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":9,"_process":43,"assert":2,"buffer":11,"stream":45,"util":64}],11:[function(require,module,exports){
+},{"./binding":8,"_process":43,"assert":1,"buffer":11,"stream":45,"util":64}],10:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"dup":7}],11:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -4122,7 +4122,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":7,"buffer":11,"ieee754":24}],12:[function(require,module,exports){
+},{"base64-js":6,"buffer":11,"ieee754":24}],12:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -5571,7 +5571,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":6,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22}],30:[function(require,module,exports){
+},{"available-typed-arrays":5,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22}],30:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -13742,7 +13742,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":46,"./_stream_duplex":47,"./internal/streams/async_iterator":52,"./internal/streams/buffer_list":53,"./internal/streams/destroy":54,"./internal/streams/from":56,"./internal/streams/state":58,"./internal/streams/stream":59,"_process":43,"buffer":11,"events":15,"inherits":25,"string_decoder/":60,"util":8}],50:[function(require,module,exports){
+},{"../errors":46,"./_stream_duplex":47,"./internal/streams/async_iterator":52,"./internal/streams/buffer_list":53,"./internal/streams/destroy":54,"./internal/streams/from":56,"./internal/streams/state":58,"./internal/streams/stream":59,"_process":43,"buffer":11,"events":15,"inherits":25,"string_decoder/":60,"util":7}],50:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -15065,7 +15065,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":11,"util":8}],54:[function(require,module,exports){
+},{"buffer":11,"util":7}],54:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -15781,8 +15781,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],62:[function(require,module,exports){
-arguments[4][4][0].apply(exports,arguments)
-},{"dup":4}],63:[function(require,module,exports){
+arguments[4][3][0].apply(exports,arguments)
+},{"dup":3}],63:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -16896,7 +16896,7 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":6,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22,"is-typed-array":29}],66:[function(require,module,exports){
+},{"available-typed-arrays":5,"call-bind/callBound":12,"es-abstract/helpers/getOwnPropertyDescriptor":14,"for-each":16,"has-tostringtag/shams":22,"is-typed-array":29}],66:[function(require,module,exports){
 const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
 const createMenuOption = require('../radar/menu/createMenuOption');
@@ -19176,6 +19176,46 @@ function pushNewPoint(coords, properties) {
     multiPointGeojson.features.push(objToPush)
 }
 
+
+function mouseOver(e) {
+    if ($('#dataDiv').data('blueStations') != e.features[0].id) {
+        fHover = e.features[0];
+        map.getCanvas().style.cursor = 'pointer';
+        map.setFeatureState({
+            source: 'stationSymbolLayer',
+            id: fHover.id
+        }, {
+            hover: true,
+            color: 1,
+            isClicked: false,
+        });
+    }
+}
+function mouseOut(e) {
+    if (!fHover) return;
+    if ($('#dataDiv').data('blueStations') != fHover.id) {
+        map.getCanvas().style.cursor = 'default';
+        map.setFeatureState({
+            source: 'stationSymbolLayer',
+            id: fHover.id
+        }, {
+            hover: false,
+            color: 2,
+            isClicked: false,
+        });
+        fHover = null;
+    }
+}
+
+function enableMouseListeners() {
+    map.on('mouseover', 'stationSymbolLayer', mouseOver);
+    map.on('mouseout', 'stationSymbolLayer', mouseOut);
+}
+function disableMouseListeners() {
+    map.off('mouseover', 'stationSymbolLayer', mouseOver);
+    map.off('mouseout', 'stationSymbolLayer', mouseOut);
+}
+
 var statMarkerArr = [];
 function showStations() {
     $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function (data) {
@@ -19207,101 +19247,122 @@ function showStations() {
 
         // https://stackoverflow.com/a/63995053/18758797
         var fHover = null;
-        map.loadImage(
-            'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
-            (error, image) => {
-                if (error) throw error;
-                map.addImage('custom-marker', image);
-                map.addSource('stationSymbolLayer', {
-                    'type': 'geojson',
-                    'generateId': true,
-                    'data': multiPointGeojson
-                });
+        map.on('load', function (e) {
+            map.loadImage(
+                'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+                (error, image) => {
+                    if (error) throw error;
+                    map.addImage('custom-marker', image, {
+                        "sdf": "true"
+                    });
+                    map.addSource('stationSymbolLayer', {
+                        'type': 'geojson',
+                        'generateId': true,
+                        'data': multiPointGeojson
+                    });
 
-                // Add a symbol layer
-                map.addLayer({
-                    'id': 'stationSymbolLayer',
-                    'type': 'symbol',
-                    'source': 'stationSymbolLayer',
-                    'layout': {
-                        //'icon-image': 'custom-marker',
-                        // get the title name from the source's "title" property
-                        'text-field': ['get', 'station'],
-                        'text-size': 13,
-                        'text-font': [
-                            //'Open Sans Semibold',
-                            'Arial Unicode MS Bold'
-                        ],
-                        //'text-offset': [0, 1.25],
-                        //'text-anchor': 'top'
-                    },
-                    'paint': {
-                        //'text-color': 'white',
-                        'text-color': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            'rgb(190, 190, 190)',
-                            'white'
-                        ]
-                    }
-                });
-            }
-        );
+                    // Add a symbol layer
+                    map.addLayer({
+                        'id': 'stationSymbolLayer',
+                        'type': 'symbol',
+                        'source': 'stationSymbolLayer',
+                        'layout': {
+                            'icon-image': 'custom-marker',
+                            'icon-size': 0.07,
+                            // get the title name from the source's "title" property
+                            'text-field': ['get', 'station'],
+                            'text-size': 13,
+                            'text-font': [
+                                //'Open Sans Semibold',
+                                'Arial Unicode MS Bold'
+                            ],
+                            //'text-offset': [0, 1.25],
+                            //'text-anchor': 'top'
+                        },
+                        //['==', ['case', ['feature-state', 'color'], 1]],
+                        //'rgb(136, 136, 136)',
+                        //['==', ['case', ['feature-state', 'color'], 2]],
+                        //'rgb(200, 200, 200)',
+                        //['==', ['case', ['feature-state', 'color'], 3]],
+                        //blueColor
+                        'paint': {
+                            //'text-color': 'white',
+                            'text-color': 'black',
+                            'icon-color': [
+                                'case',
+                                ['==', ['feature-state', 'color'], 3],
+                                blueColor,
+                                ['==', ['feature-state', 'color'], 1],
+                                'rgb(136, 136, 136)',
+                                ['==', ['feature-state', 'color'], 2],
+                                'rgb(200, 200, 200)',
+                                'rgb(200, 200, 200)'
+                            ]
+                        }
+                    });
+                }
+            );
+        });
 
         if (!isMobile) {
-            map.on('mouseover', 'stationSymbolLayer', function (e) {
-                fHover = e.features[0];
-                map.getCanvas().style.cursor = 'pointer';
-                map.setFeatureState({
-                    source: 'stationSymbolLayer',
-                    id: fHover.id
-                }, {
-                    hover: true
-                });
-            });
-
-            map.on('mouseout', 'stationSymbolLayer', function (e) {
-                if (!fHover) return;
-                map.getCanvas().style.cursor = 'default';
-                map.setFeatureState({
-                    source: 'stationSymbolLayer',
-                    id: fHover.id
-                }, {
-                    hover: false
-                });
-                fHover = null;
-            });
+            enableMouseListeners();
         }
 
         map.on('click', 'stationSymbolLayer', function (e) {
-            var clickedStation = e.features[0].properties.station;
+            if ($('#dataDiv').data('blueStations') != e.features[0].id) {
+                var clickedStation = e.features[0].properties.station;
+                var id = e.features[0].id;
 
-            if (!$('#dataDiv').data('fromFileUpload')) {
-                if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
-                    // remove all other blue
-                    $('.customMarker').each(function () {
-                        if ($(this).css('background-color') == blueColor) {
-                            $(this).css('background-color', 'rgb(136, 136, 136)');
-                        }
-                    })
-                    $('#dataDiv').data('blueStationMarker', clickedStation);
-                    // change background to blue
-                    $(this).css('background-color', blueColor);
-                    $('#stationInp').val(clickedStation);
+                // change other blue station background to normal
+                map.setFeatureState({
+                    source: 'stationSymbolLayer',
+                    id: $('#dataDiv').data('blueStations')
+                }, {
+                    hover: false,
+                    color: 2,
+                    isClicked: true,
+                });
 
-                    tilts.resetTilts();
-                    tilts.listTilts(ut.numOfTiltsObj['ref']);
+                $('#dataDiv').data('blueStations', id);
 
-                    $('#dataDiv').data('curProd', 'ref');
+                disableMouseListeners();
 
-                    ut.progressBarVal('set', 0);
+                if (!$('#dataDiv').data('fromFileUpload')) {
+                    if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
+                        // remove all other blue
+                        $('.customMarker').each(function () {
+                            if ($(this).css('background-color') == blueColor) {
+                                $(this).css('background-color', 'rgb(136, 136, 136)');
+                            }
+                        })
+                        $('#dataDiv').data('blueStationMarker', clickedStation);
+                        // change background to blue
+                        map.setFeatureState({
+                            source: 'stationSymbolLayer',
+                            id: e.features[0].id
+                        }, {
+                            hover: false,
+                            color: 3,
+                            isClicked: true,
+                        });
+                        enableMouseListeners();
 
-                    ut.disableModeBtn();
+                        $('#stationInp').val(clickedStation);
 
-                    loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
-                        console.log(url);
-                        loaders.loadFileObject(ut.phpProxy + url, 3);
-                    })
+                        tilts.resetTilts();
+                        tilts.listTilts(ut.numOfTiltsObj['ref']);
+
+                        $('#dataDiv').data('curProd', 'ref');
+
+                        ut.progressBarVal('set', 0);
+
+                        ut.disableModeBtn();
+
+                        loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
+                            console.log(url);
+                            loaders.loadFileObject(ut.phpProxy + url, 3);
+                        })
+                    }
                 }
             }
         })
@@ -21950,7 +22011,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":116,"zlib":10}],121:[function(require,module,exports){
+},{"./classes/RandomAccessFile":116,"zlib":9}],121:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -23398,7 +23459,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":1}],136:[function(require,module,exports){
+},{"fs":10}],136:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 

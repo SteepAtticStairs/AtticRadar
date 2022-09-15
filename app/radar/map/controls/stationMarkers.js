@@ -35,6 +35,46 @@ function pushNewPoint(coords, properties) {
     multiPointGeojson.features.push(objToPush)
 }
 
+
+function mouseOver(e) {
+    if ($('#dataDiv').data('blueStations') != e.features[0].id) {
+        fHover = e.features[0];
+        map.getCanvas().style.cursor = 'pointer';
+        map.setFeatureState({
+            source: 'stationSymbolLayer',
+            id: fHover.id
+        }, {
+            hover: true,
+            color: 1,
+            isClicked: false,
+        });
+    }
+}
+function mouseOut(e) {
+    if (!fHover) return;
+    if ($('#dataDiv').data('blueStations') != fHover.id) {
+        map.getCanvas().style.cursor = 'default';
+        map.setFeatureState({
+            source: 'stationSymbolLayer',
+            id: fHover.id
+        }, {
+            hover: false,
+            color: 2,
+            isClicked: false,
+        });
+        fHover = null;
+    }
+}
+
+function enableMouseListeners() {
+    map.on('mouseover', 'stationSymbolLayer', mouseOver);
+    map.on('mouseout', 'stationSymbolLayer', mouseOut);
+}
+function disableMouseListeners() {
+    map.off('mouseover', 'stationSymbolLayer', mouseOver);
+    map.off('mouseout', 'stationSymbolLayer', mouseOut);
+}
+
 var statMarkerArr = [];
 function showStations() {
     $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function (data) {
@@ -66,101 +106,122 @@ function showStations() {
 
         // https://stackoverflow.com/a/63995053/18758797
         var fHover = null;
-        map.loadImage(
-            'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
-            (error, image) => {
-                if (error) throw error;
-                map.addImage('custom-marker', image);
-                map.addSource('stationSymbolLayer', {
-                    'type': 'geojson',
-                    'generateId': true,
-                    'data': multiPointGeojson
-                });
+        map.on('load', function (e) {
+            map.loadImage(
+                'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+                (error, image) => {
+                    if (error) throw error;
+                    map.addImage('custom-marker', image, {
+                        "sdf": "true"
+                    });
+                    map.addSource('stationSymbolLayer', {
+                        'type': 'geojson',
+                        'generateId': true,
+                        'data': multiPointGeojson
+                    });
 
-                // Add a symbol layer
-                map.addLayer({
-                    'id': 'stationSymbolLayer',
-                    'type': 'symbol',
-                    'source': 'stationSymbolLayer',
-                    'layout': {
-                        //'icon-image': 'custom-marker',
-                        // get the title name from the source's "title" property
-                        'text-field': ['get', 'station'],
-                        'text-size': 13,
-                        'text-font': [
-                            //'Open Sans Semibold',
-                            'Arial Unicode MS Bold'
-                        ],
-                        //'text-offset': [0, 1.25],
-                        //'text-anchor': 'top'
-                    },
-                    'paint': {
-                        //'text-color': 'white',
-                        'text-color': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            'rgb(190, 190, 190)',
-                            'white'
-                        ]
-                    }
-                });
-            }
-        );
+                    // Add a symbol layer
+                    map.addLayer({
+                        'id': 'stationSymbolLayer',
+                        'type': 'symbol',
+                        'source': 'stationSymbolLayer',
+                        'layout': {
+                            'icon-image': 'custom-marker',
+                            'icon-size': 0.07,
+                            // get the title name from the source's "title" property
+                            'text-field': ['get', 'station'],
+                            'text-size': 13,
+                            'text-font': [
+                                //'Open Sans Semibold',
+                                'Arial Unicode MS Bold'
+                            ],
+                            //'text-offset': [0, 1.25],
+                            //'text-anchor': 'top'
+                        },
+                        //['==', ['case', ['feature-state', 'color'], 1]],
+                        //'rgb(136, 136, 136)',
+                        //['==', ['case', ['feature-state', 'color'], 2]],
+                        //'rgb(200, 200, 200)',
+                        //['==', ['case', ['feature-state', 'color'], 3]],
+                        //blueColor
+                        'paint': {
+                            //'text-color': 'white',
+                            'text-color': 'black',
+                            'icon-color': [
+                                'case',
+                                ['==', ['feature-state', 'color'], 3],
+                                blueColor,
+                                ['==', ['feature-state', 'color'], 1],
+                                'rgb(136, 136, 136)',
+                                ['==', ['feature-state', 'color'], 2],
+                                'rgb(200, 200, 200)',
+                                'rgb(200, 200, 200)'
+                            ]
+                        }
+                    });
+                }
+            );
+        });
 
         if (!isMobile) {
-            map.on('mouseover', 'stationSymbolLayer', function (e) {
-                fHover = e.features[0];
-                map.getCanvas().style.cursor = 'pointer';
-                map.setFeatureState({
-                    source: 'stationSymbolLayer',
-                    id: fHover.id
-                }, {
-                    hover: true
-                });
-            });
-
-            map.on('mouseout', 'stationSymbolLayer', function (e) {
-                if (!fHover) return;
-                map.getCanvas().style.cursor = 'default';
-                map.setFeatureState({
-                    source: 'stationSymbolLayer',
-                    id: fHover.id
-                }, {
-                    hover: false
-                });
-                fHover = null;
-            });
+            enableMouseListeners();
         }
 
         map.on('click', 'stationSymbolLayer', function (e) {
-            var clickedStation = e.features[0].properties.station;
+            if ($('#dataDiv').data('blueStations') != e.features[0].id) {
+                var clickedStation = e.features[0].properties.station;
+                var id = e.features[0].id;
 
-            if (!$('#dataDiv').data('fromFileUpload')) {
-                if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
-                    // remove all other blue
-                    $('.customMarker').each(function () {
-                        if ($(this).css('background-color') == blueColor) {
-                            $(this).css('background-color', 'rgb(136, 136, 136)');
-                        }
-                    })
-                    $('#dataDiv').data('blueStationMarker', clickedStation);
-                    // change background to blue
-                    $(this).css('background-color', blueColor);
-                    $('#stationInp').val(clickedStation);
+                // change other blue station background to normal
+                map.setFeatureState({
+                    source: 'stationSymbolLayer',
+                    id: $('#dataDiv').data('blueStations')
+                }, {
+                    hover: false,
+                    color: 2,
+                    isClicked: true,
+                });
 
-                    tilts.resetTilts();
-                    tilts.listTilts(ut.numOfTiltsObj['ref']);
+                $('#dataDiv').data('blueStations', id);
 
-                    $('#dataDiv').data('curProd', 'ref');
+                disableMouseListeners();
 
-                    ut.progressBarVal('set', 0);
+                if (!$('#dataDiv').data('fromFileUpload')) {
+                    if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
+                        // remove all other blue
+                        $('.customMarker').each(function () {
+                            if ($(this).css('background-color') == blueColor) {
+                                $(this).css('background-color', 'rgb(136, 136, 136)');
+                            }
+                        })
+                        $('#dataDiv').data('blueStationMarker', clickedStation);
+                        // change background to blue
+                        map.setFeatureState({
+                            source: 'stationSymbolLayer',
+                            id: e.features[0].id
+                        }, {
+                            hover: false,
+                            color: 3,
+                            isClicked: true,
+                        });
+                        enableMouseListeners();
 
-                    ut.disableModeBtn();
+                        $('#stationInp').val(clickedStation);
 
-                    loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
-                        console.log(url);
-                        loaders.loadFileObject(ut.phpProxy + url, 3);
-                    })
+                        tilts.resetTilts();
+                        tilts.listTilts(ut.numOfTiltsObj['ref']);
+
+                        $('#dataDiv').data('curProd', 'ref');
+
+                        ut.progressBarVal('set', 0);
+
+                        ut.disableModeBtn();
+
+                        loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
+                            console.log(url);
+                            loaders.loadFileObject(ut.phpProxy + url, 3);
+                        })
+                    }
                 }
             }
         })
