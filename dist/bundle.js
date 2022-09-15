@@ -17516,6 +17516,8 @@ var map = require('../radar/map/map');
 // https://www.nrlmry.navy.mil/atcf_web/docs/database/new/database.html
 // https://www.nrlmry.navy.mil/atcf_web/docs/current_storms/
 
+// https://github.com/weather-gov/api/discussions/569
+
 $('#dataDiv').data('indexOfDrawnHurricane', []);
 $('#dataDiv').data('hurricaneMapLayers', []);
 
@@ -17576,42 +17578,52 @@ function exportFetchData() {
     }
 
     var namesArr = [];
-    var checkingIters = 50;
-    $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
-        var jsonData = ut.xmlToJson(data);
-        for (var n = 0; n < checkingIters; n++) {
-            var existsIndex = ifExists(jsonData, n);
-            if (existsIndex != false) {
-                console.log('Found hurricane ' + existsIndex);
-                namesArr.push(existsIndex);
-            }
+    //var checkingIters = 50;
+    $.getJSON(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/CurrentStorms.json'), function(data) {
+        for (var item in data.activeStorms) {
+            var stormID = data.activeStorms[item].id;
+            stormID = stormID.toUpperCase();
+            console.log('Found hurricane ' + stormID);
+            namesArr.push(stormID);
         }
-
-        $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-ep.xml'), function (data) {
-            var jsonData = ut.xmlToJson(data);
-            for (var n = 0; n < checkingIters; n++) {
-                var existsIndex = ifExists(jsonData, n);
-                if (existsIndex != false) {
-                    console.log('Found hurricane ' + existsIndex);
-                    namesArr.push(existsIndex);
-                }
-            }
-
-            $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-cp.xml'), function (data) {
-                var jsonData = ut.xmlToJson(data);
-                for (var n = 0; n < checkingIters; n++) {
-                    var existsIndex = ifExists(jsonData, n);
-                    if (existsIndex != false) {
-                        console.log('Found hurricane ' + existsIndex);
-                        namesArr.push(existsIndex);
-                    }
-                }
-
-                $('#dataDiv').data('allHurricanesPlotted', namesArr);
-                loadHurricanesFromID(namesArr);
-            })
-        })
+        $('#dataDiv').data('allHurricanesPlotted', namesArr);
+        loadHurricanesFromID(namesArr);
     })
+    // $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
+    //     var jsonData = ut.xmlToJson(data);
+    //     for (var n = 0; n < checkingIters; n++) {
+    //         var existsIndex = ifExists(jsonData, n);
+    //         if (existsIndex != false) {
+    //             console.log('Found hurricane ' + existsIndex);
+    //             namesArr.push(existsIndex);
+    //         }
+    //     }
+
+    //     $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-ep.xml'), function (data) {
+    //         var jsonData = ut.xmlToJson(data);
+    //         for (var n = 0; n < checkingIters; n++) {
+    //             var existsIndex = ifExists(jsonData, n);
+    //             if (existsIndex != false) {
+    //                 console.log('Found hurricane ' + existsIndex);
+    //                 namesArr.push(existsIndex);
+    //             }
+    //         }
+
+    //         $.get(ut.phpProxy + ut.preventFileCaching('https://www.nhc.noaa.gov/index-cp.xml'), function (data) {
+    //             var jsonData = ut.xmlToJson(data);
+    //             for (var n = 0; n < checkingIters; n++) {
+    //                 var existsIndex = ifExists(jsonData, n);
+    //                 if (existsIndex != false) {
+    //                     console.log('Found hurricane ' + existsIndex);
+    //                     namesArr.push(existsIndex);
+    //                 }
+    //             }
+
+    //             $('#dataDiv').data('allHurricanesPlotted', namesArr);
+    //             loadHurricanesFromID(namesArr);
+    //         })
+    //     })
+    // })
 }
 
 module.exports = exportFetchData;
