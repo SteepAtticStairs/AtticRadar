@@ -17500,6 +17500,9 @@ var map = require('../radar/map/map');
 
 // load the starting file
 require('./menuItem');
+
+// This is if you want to automatically load the hurricanes upon page load. Helpful when developing.
+//$('#hurricanesMenuItemIcon').click();
 },{"../radar/map/map":100,"./menuItem":74}],73:[function(require,module,exports){
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
