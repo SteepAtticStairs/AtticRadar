@@ -17859,9 +17859,8 @@ function showL3Info(l3rad) {// //showPlotBtn();
             // shrink the map header because the file upload box is no longer there
             $('#radarHeader').css('height', '-=25px');
             $('.progressBar').css('top', '-=25px');
+            $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
         }
-
-        $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
     })
 }
 
