@@ -208,6 +208,10 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                 for (key in stLayers) {
                     mapFuncs.moveMapLayer(stLayers[key])
                 }
+
+
+                ut.betterProgressBar('set', 100);
+                ut.betterProgressBar('hide');
             });
         });
     //}
