@@ -89,8 +89,7 @@ function returnStationsGeojson(radarStatusData) {
         // generate station abbreviation json
         // statObj[curStat.slice(1)] = curStat;
 
-        // check if it is an unsupported radar
-        if (curStat.length == 4 && curStat.charAt(0) != 'T') {
+        function pushThePoint() {
             var status;
             if (radarStatusData != null) {
                 var status = radarStatusData[curStat].status;
@@ -111,6 +110,15 @@ function returnStationsGeojson(radarStatusData) {
             //     .setLngLat([curIter[2], curIter[1]])
             //     .addTo(map);
             // statMarkerArr.push(mark)
+        }
+
+        // check if it is an unsupported radar
+        if (curStat.length == 4 && curStat.charAt(0) != 'T') {
+            pushThePoint();
+        }
+        // puerto rico WSR-88D is fine, but the 'T' makes it look like a TDWR
+        if (curStat == 'TJUA') {
+            pushThePoint();
         }
     }
     return multiPointGeojson;
