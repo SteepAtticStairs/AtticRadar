@@ -18,7 +18,7 @@ createMenuOption({
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
 
-        if (map.getLayer('metarStations')) {
+        if (map.getLayer('metarSymbolLayer')) {
             // layer does exist - toggle the visibility to on
             useData.toggleMETARStationMarkers('show');
         } else {

@@ -12,9 +12,9 @@ window.onload = function() {
     // initialize the hurricanes module
     require('../../hurricanes/entry');
 
+    // initialize the METARs module
+    require('../../metars/entry');
+
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
-
-    // initialize the METARs module
-    //require('../../metars/entry');
 }

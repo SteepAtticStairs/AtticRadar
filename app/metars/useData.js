@@ -24,22 +24,61 @@ function useData(data) {
         });
     }
 
-    map.addLayer({
-        id: 'metarStations',
-        type: 'circle',
-        source: {
-            type: 'geojson',
-            data: geojsonTemplate,
-        },
-        'paint': {
-            'circle-radius': 4,
-            'circle-stroke-width': 3,
-            'circle-color': '#12b317',
-            'circle-stroke-color': '#0b610e',
-        }
-    });
+    // map.addLayer({
+    //     id: 'metarStations',
+    //     type: 'circle',
+    //     source: {
+    //         type: 'geojson',
+    //         data: geojsonTemplate,
+    //     },
+    //     'paint': {
+    //         'circle-radius': 4,
+    //         'circle-stroke-width': 3,
+    //         'circle-color': '#12b317',
+    //         'circle-stroke-color': '#0b610e',
+    //     }
+    // });
+    map.loadImage(
+        'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+        (error, image) => {
+            if (error) throw error;
+            map.addImage('custom-marker-metar', image, {
+                "sdf": "true"
+            });
+            map.addSource('metarSymbolLayer', {
+                'type': 'geojson',
+                'generateId': true,
+                'data': geojsonTemplate
+            });
 
-    map.on('click', 'metarStations', (e) => {
+            // Add a symbol layer
+            map.addLayer({
+                'id': 'metarSymbolLayer',
+                'type': 'symbol',
+                'source': 'metarSymbolLayer',
+                'layout': {
+                    'icon-image': 'custom-marker-metar',
+                    'icon-size': 0.07,
+                    'text-field': ['get', 'stationID'],
+                    'text-size': 13,
+                    'text-font': [
+                        //'Open Sans Semibold',
+                        'Arial Unicode MS Bold'
+                    ],
+                    //'text-offset': [0, 1.25],
+                    //'text-anchor': 'top'
+                },
+                'paint': {
+                    //'text-color': 'white',
+                    'text-color': 'black',
+                    'icon-color': 'ForestGreen'
+                }
+            });
+            map.moveLayer('stationSymbolLayer');
+        }
+    );
+
+    map.on('click', 'metarSymbolLayer', (e) => {
         // Copy coordinates array.
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties.description;
@@ -48,7 +87,7 @@ function useData(data) {
         // https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=KDCA&hoursBeforeNow=1
         var stationDataURL = `https://tgftp.nws.noaa.gov/data/observations/metar/stations/${id}.TXT#`;
         var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + stationDataURL);
-        $.get(noCacheURL, function(data) {
+        $.get(noCacheURL, function (data) {
             console.log(data)
 
             ut.spawnModal({
@@ -58,20 +97,20 @@ function useData(data) {
             })
         })
     });
-    map.on('mouseenter', 'metarStations', () => {
+    map.on('mouseenter', 'metarSymbolLayer', () => {
         map.getCanvas().style.cursor = 'pointer';
     });
-    map.on('mouseleave', 'metarStations', () => {
+    map.on('mouseleave', 'metarSymbolLayer', () => {
         map.getCanvas().style.cursor = '';
     });
 }
 
 function toggleMETARStationMarkers(showHide) {
     if (showHide == 'hide') {
-        map.setLayoutProperty('metarStations', 'visibility', 'none');
+        map.setLayoutProperty('metarSymbolLayer', 'visibility', 'none');
         //mapFuncs.removeMapLayer('tideStationDots');
     } else if (showHide == 'show') {
-        map.setLayoutProperty('metarStations', 'visibility', 'visible');
+        map.setLayoutProperty('metarSymbolLayer', 'visibility', 'visible');
     }
 }
 
