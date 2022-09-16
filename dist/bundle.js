@@ -17265,8 +17265,8 @@ function getTrackPointData(properties) {
 
     // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
     // https://stackoverflow.com/a/12059321/18758797
-    var windSpeedMPH = trackPointDataObj.trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
-    trackPointDataObj.sshwsLevel = ut.getSSHWSVal(windSpeedMPH);
+    trackPointDataObj.windSpeedMPH = trackPointDataObj.trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
+    trackPointDataObj.sshwsLevel = ut.getSSHWSVal(trackPointDataObj.windSpeedMPH);
 
 
     var formattedCoords = trackPointDataObj.trackpointLocation.replace('Location: ', '');
@@ -17412,6 +17412,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     <!-- <div><b>${obj.trackpointTime}</b></div>
                     <br> -->
                     <div>${obj.sshwsLevel[0]}</div>
+                    <div><b>${obj.windSpeedMPH}</b> mph wind</div>
                 </div>`
 
                 var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
