@@ -18597,6 +18597,7 @@ function loadL2Menu(elevsAndProds) {
     document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
     if (duplicateElevs[firstElev].length == 1) {
         $('.elevNavBtns').hide();
+        //$('#extraBreaks').hide();
         document.getElementById('numOfElevsForArrows').innerHTML = '';
         $('#dataDiv').data('curArrowElev', 0);
     }
