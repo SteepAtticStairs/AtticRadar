@@ -21,6 +21,13 @@ function showL3Info(l3rad) {// //showPlotBtn();
         var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
         document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+
+        if ($('#dataDiv').data('fromFileUpload')) {
+            // shrink the map header because the file upload box is no longer there
+            $('#radarHeader').css('height', '-=25px')
+        }
+
+        $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
     })
 }
 

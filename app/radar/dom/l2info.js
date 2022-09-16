@@ -30,6 +30,11 @@ function showL2Info(l2rad) {
     var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
     document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+
+    if ($('#dataDiv').data('fromFileUpload')) {
+        // shrink the map header because the file upload box is no longer there
+        $('#radarHeader').css('height', '-=25px')
+    }
 }
 
 module.exports = showL2Info;

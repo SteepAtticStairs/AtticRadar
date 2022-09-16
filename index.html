@@ -265,10 +265,13 @@
 
         #drop_zone {
             height: 40px;
-            width: 150px;
+            width: auto;
+            /* top right bottom left */
+            padding: 0px 20px 0px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
 
             border: 1px solid rgb(72, 72, 72);
             border-style: dashed;
@@ -392,7 +395,7 @@
             <button style="display: none" type="button" id="productsDropdownBtn" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                 Products
             </button>
-            <ul class="dropdown-menu" style="height: 200px; overflow-y: auto; cursor: pointer;">
+            <ul class="dropdown-menu" id="productsSelectionMenu" style="height: 200px; overflow-y: auto; cursor: pointer;">
                 <sus id="currentModeSpan">
                     <li><h6 class="dropdown-header">Tilt</h6></li>
                     <div id="newTiltsMenu">
@@ -472,10 +475,10 @@
             <div id="drop_zone">Drop Level 2 file here</div>
 
             <div id="levelRadios">
-                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="2" checked>
-                <label class="form-check-label levelRadioInputs" for="inlineRadio1">Level 2</label>
+                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="2" style="float: left">
+                <label class="form-check-label levelRadioInputs" for="inlineRadio1" style="float: left; margin-left: 4px;">Level 2</label>
                 <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="3" style="float: right">
-                <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 3px;">Level 3</label>
+                <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 4px;">Level 3</label>
             </div>
         </span>
         <span id="radarInfoSpan">

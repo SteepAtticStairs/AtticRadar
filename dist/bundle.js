@@ -17758,14 +17758,14 @@ function dragEnter(thisObj) {
 }
 function dragLeave(thisObj) {
     $(thisObj).animate({
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         'border-width': '1px',
         'border-color': 'rgb(72, 72, 72)'
     }, 150);
 }
 $('#drop_zone').on('mouseenter', function(e) {
     $(this).animate({
-        backgroundColor: 'rgb(212, 212, 212)',
+        backgroundColor: 'rgb(150, 150, 150)',
     }, 150);
 })
 $('#drop_zone').on('dragenter', function(e) {
@@ -17773,7 +17773,7 @@ $('#drop_zone').on('dragenter', function(e) {
 })
 $('#drop_zone').on('mouseleave', function(e) {
     $(this).animate({
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     }, 150);
 })
 $('#drop_zone').on('dragleave', function(e) {
@@ -17821,6 +17821,11 @@ function showL2Info(l2rad) {
     var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
 
     document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+
+    if ($('#dataDiv').data('fromFileUpload')) {
+        // shrink the map header because the file upload box is no longer there
+        $('#radarHeader').css('height', '-=25px')
+    }
 }
 
 module.exports = showL2Info;
@@ -17848,6 +17853,13 @@ function showL3Info(l3rad) {// //showPlotBtn();
         var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
         document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+
+        if ($('#dataDiv').data('fromFileUpload')) {
+            // shrink the map header because the file upload box is no longer there
+            $('#radarHeader').css('height', '-=25px')
+        }
+
+        $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
     })
 }
 
@@ -20337,6 +20349,8 @@ function showHideFileBox(showHide) {
         $('#uploadModeSpan').show();
         $('#radarInfoSpan').hide();
         $('#currentModeSpan').hide();
+
+        $('#radarHeader').css('height', '+=25px')
     } else if (showHide == 'hide') {
         // current data mode
         $('#dataDiv').data('isFileUpload', false);
@@ -20345,6 +20359,8 @@ function showHideFileBox(showHide) {
         $('#uploadModeSpan').hide();
         $('#radarInfoSpan').show();
         $('#currentModeSpan').show();
+
+        $('#radarHeader').css('height', '-=25px')
     }
 }
 

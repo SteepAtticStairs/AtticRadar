@@ -10,6 +10,8 @@ function showHideFileBox(showHide) {
         $('#uploadModeSpan').show();
         $('#radarInfoSpan').hide();
         $('#currentModeSpan').hide();
+
+        $('#radarHeader').css('height', '+=25px')
     } else if (showHide == 'hide') {
         // current data mode
         $('#dataDiv').data('isFileUpload', false);
@@ -18,6 +20,8 @@ function showHideFileBox(showHide) {
         $('#uploadModeSpan').hide();
         $('#radarInfoSpan').show();
         $('#currentModeSpan').show();
+
+        $('#radarHeader').css('height', '-=25px')
     }
 }
 

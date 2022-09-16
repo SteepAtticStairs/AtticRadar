@@ -57,14 +57,14 @@ function dragEnter(thisObj) {
 }
 function dragLeave(thisObj) {
     $(thisObj).animate({
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         'border-width': '1px',
         'border-color': 'rgb(72, 72, 72)'
     }, 150);
 }
 $('#drop_zone').on('mouseenter', function(e) {
     $(this).animate({
-        backgroundColor: 'rgb(212, 212, 212)',
+        backgroundColor: 'rgb(150, 150, 150)',
     }, 150);
 })
 $('#drop_zone').on('dragenter', function(e) {
@@ -72,7 +72,7 @@ $('#drop_zone').on('dragenter', function(e) {
 })
 $('#drop_zone').on('mouseleave', function(e) {
     $(this).animate({
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     }, 150);
 })
 $('#drop_zone').on('dragleave', function(e) {
