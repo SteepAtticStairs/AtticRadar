@@ -134,11 +134,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
         console.log('File plotting complete');
-        ut.progressBarVal('add', dividedArr[0] * 1);
-        // this is just to give the illusion that the progress bar finishes
-        setTimeout(function() {
-            ut.progressBarVal('hide');
-        }, 500)
+        ut.betterProgressBar('set', 100);
+        ut.betterProgressBar('hide');
     }
 
     $.getJSON(`./app/radar/products/${produc}.json`, function(data) {

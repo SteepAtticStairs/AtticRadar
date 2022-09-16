@@ -14,7 +14,8 @@ loading speed.
 function loadFileObject(url, level) {
     url = ut.preventFileCaching(url);
 
-    ut.progressBarVal('show');
+    ut.betterProgressBar('set', 0);
+    ut.betterProgressBar('show');
     var radLevel;
     var wholeOrPart = 'whole';
     if (level == 2) {
@@ -75,8 +76,8 @@ function loadFileObject(url, level) {
         //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
         //var complete = (event.loaded / event.total * 50 | 0);
         console.log(`${ut.formatBytes(event.loaded)}`);
-        ut.progressBarVal('label', ut.formatBytes(event.loaded));
-        ut.progressBarVal('set', parseInt(ut.formatBytes(event.loaded)) / 10);
+        //ut.progressBarVal('label', ut.formatBytes(event.loaded));
+        ut.betterProgressBar('set', parseInt(ut.formatBytes(event.loaded)) / 10);
     }
     xhr.send();
 }

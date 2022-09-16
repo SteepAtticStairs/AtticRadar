@@ -18156,11 +18156,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
         console.log('File plotting complete');
-        ut.progressBarVal('add', dividedArr[0] * 1);
-        // this is just to give the illusion that the progress bar finishes
-        setTimeout(function() {
-            ut.progressBarVal('hide');
-        }, 500)
+        ut.betterProgressBar('set', 100);
+        ut.betterProgressBar('hide');
     }
 
     $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
@@ -18797,8 +18794,7 @@ function mainL3Loading(thisObj) {
     var result = thisObj.result;
     setTimeout(function() {
         // parsing the file
-        ut.progressBarVal('label', 'Parsing file');
-        ut.progressBarVal('add', dividedArr[0] * 1);
+        ut.betterProgressBar('set', 70);
         var l3rad = l3parse(ut.toBuffer(result));
         console.log(l3rad);
         ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
@@ -18812,8 +18808,7 @@ function mainL3Loading(thisObj) {
             l3info(l3rad);
         }
         // plot the file
-        ut.progressBarVal('label', 'Plotting file');
-        ut.progressBarVal('set', dividedArr[0] * 3);
+        ut.betterProgressBar('set', 90);
 
         if (l3rad.textHeader.type == "NTV") {
             parsePlotTornado(l3rad, document.getElementById('radarStation').innerHTML);
@@ -19250,7 +19245,8 @@ loading speed.
 function loadFileObject(url, level) {
     url = ut.preventFileCaching(url);
 
-    ut.progressBarVal('show');
+    ut.betterProgressBar('set', 0);
+    ut.betterProgressBar('show');
     var radLevel;
     var wholeOrPart = 'whole';
     if (level == 2) {
@@ -19311,8 +19307,8 @@ function loadFileObject(url, level) {
         //console.log(`%c Downloaded ${ut.formatBytes(event.loaded)} of ${ut.formatBytes(event.total)}`, 'color: #bada55');
         //var complete = (event.loaded / event.total * 50 | 0);
         console.log(`${ut.formatBytes(event.loaded)}`);
-        ut.progressBarVal('label', ut.formatBytes(event.loaded));
-        ut.progressBarVal('set', parseInt(ut.formatBytes(event.loaded)) / 10);
+        //ut.progressBarVal('label', ut.formatBytes(event.loaded));
+        ut.betterProgressBar('set', parseInt(ut.formatBytes(event.loaded)) / 10);
     }
     xhr.send();
 }
@@ -21139,6 +21135,26 @@ function spawnModal(options) {
     domObj.modal('show');
 }
 
+function betterProgressBar(whatToDo, value) {
+    if (whatToDo == 'set') {
+        $('#progressBar').css('width', `${value}%`)
+    } else if (whatToDo == 'add') {
+        var curVal = $('#progressBar').css('width')
+        $('#progressBar').css('width', (value + parseInt(curVal)) + '%');
+    } else if (whatToDo == 'getRemaining') {
+        var curVal = $('#progressBar').css('width');
+        var totalVal = 100;
+        return totalVal - parseInt(curVal);
+    } else if (whatToDo == 'hide') {
+        $('#progressBar').hide();
+    } else if (whatToDo == 'show') {
+        $('#progressBar').show();
+    } else if (whatToDo == 'label') {
+        //console.log(value);
+        //document.getElementById('progBar').innerHTML = value;
+    }
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -21175,7 +21191,8 @@ module.exports = {
     preventFileCaching,
     sshwsValues,
     getSSHWSVal,
-    spawnModal
+    spawnModal,
+    betterProgressBar
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":100,"buffer":11}],111:[function(require,module,exports){

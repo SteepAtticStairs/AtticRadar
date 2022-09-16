@@ -16,8 +16,7 @@ function mainL3Loading(thisObj) {
     var result = thisObj.result;
     setTimeout(function() {
         // parsing the file
-        ut.progressBarVal('label', 'Parsing file');
-        ut.progressBarVal('add', dividedArr[0] * 1);
+        ut.betterProgressBar('set', 70);
         var l3rad = l3parse(ut.toBuffer(result));
         console.log(l3rad);
         ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
@@ -31,8 +30,7 @@ function mainL3Loading(thisObj) {
             l3info(l3rad);
         }
         // plot the file
-        ut.progressBarVal('label', 'Plotting file');
-        ut.progressBarVal('set', dividedArr[0] * 3);
+        ut.betterProgressBar('set', 90);
 
         if (l3rad.textHeader.type == "NTV") {
             parsePlotTornado(l3rad, document.getElementById('radarStation').innerHTML);

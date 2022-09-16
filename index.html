@@ -362,6 +362,15 @@
             text-align: center;
         }
 
+        .progressBar {
+            position: absolute;
+            z-index: 115;
+            top: 50px;
+            height: 10px;
+            width: 100%;
+            background-color: rgb(20, 103, 204);
+        }
+
         #productsDropdownTrigger, #productsDropdown {
             position: absolute;
             left: 5px;
@@ -455,14 +464,7 @@
     <div id="tiltsDropdownBtn" style="display: none"></div>
 
     <!--
-        PROGRESS BAR
-    -->
-    <div class="progress align-middle" id="progBarParent">
-        <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="150"></div>
-    </div>
-
-    <!--
-        MAP HEADER BOX
+        MAP HEADER
     -->
     <div id="radarHeader" class="radarHeader">
         <span id="fileUploadSpan" style="display: none">
@@ -481,6 +483,18 @@
             <div style="font-size: 12px"><b id='radarStation'>No Station Selected</b><a id="radarTime"></a></div>
         </span>
     </div>
+
+    <!--
+        PROGRESS BAR
+    -->
+    <div class="progressBar" id="progressBar" style="display: none"></div>
+
+    <div style="display: none">
+        <div class="progress align-middle" id="progBarParent">
+            <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="150"></div>
+        </div>
+    </div>
+
     <div id="mapHeader" style="display: none">
         <!-- <span id="fileUploadSpan" style="display: none">
             <input type="file" id="hiddenFileUploader" style="display: none">

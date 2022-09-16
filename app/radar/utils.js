@@ -501,6 +501,26 @@ function spawnModal(options) {
     domObj.modal('show');
 }
 
+function betterProgressBar(whatToDo, value) {
+    if (whatToDo == 'set') {
+        $('#progressBar').css('width', `${value}%`)
+    } else if (whatToDo == 'add') {
+        var curVal = $('#progressBar').css('width')
+        $('#progressBar').css('width', (value + parseInt(curVal)) + '%');
+    } else if (whatToDo == 'getRemaining') {
+        var curVal = $('#progressBar').css('width');
+        var totalVal = 100;
+        return totalVal - parseInt(curVal);
+    } else if (whatToDo == 'hide') {
+        $('#progressBar').hide();
+    } else if (whatToDo == 'show') {
+        $('#progressBar').show();
+    } else if (whatToDo == 'label') {
+        //console.log(value);
+        //document.getElementById('progBar').innerHTML = value;
+    }
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -537,5 +557,6 @@ module.exports = {
     preventFileCaching,
     sshwsValues,
     getSSHWSVal,
-    spawnModal
+    spawnModal,
+    betterProgressBar
 }
