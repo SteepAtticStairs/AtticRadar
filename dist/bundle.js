@@ -17824,7 +17824,8 @@ function showL2Info(l2rad) {
 
     if ($('#dataDiv').data('fromFileUpload')) {
         // shrink the map header because the file upload box is no longer there
-        $('#radarHeader').css('height', '-=25px')
+        $('#radarHeader').css('height', '-=25px');
+        $('.progressBar').css('top', '-=25px');
     }
 }
 
@@ -17856,7 +17857,8 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
         if ($('#dataDiv').data('fromFileUpload')) {
             // shrink the map header because the file upload box is no longer there
-            $('#radarHeader').css('height', '-=25px')
+            $('#radarHeader').css('height', '-=25px');
+            $('.progressBar').css('top', '-=25px');
         }
 
         $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
@@ -20351,6 +20353,7 @@ function showHideFileBox(showHide) {
         $('#currentModeSpan').hide();
 
         $('#radarHeader').css('height', '+=25px')
+        $('.progressBar').css('top', '+=25px');
     } else if (showHide == 'hide') {
         // current data mode
         $('#dataDiv').data('isFileUpload', false);
@@ -20360,7 +20363,8 @@ function showHideFileBox(showHide) {
         $('#radarInfoSpan').show();
         $('#currentModeSpan').show();
 
-        $('#radarHeader').css('height', '-=25px')
+        $('#radarHeader').css('height', '-=25px');
+        $('.progressBar').css('top', '-=25px');
     }
 }
 
@@ -22537,8 +22541,7 @@ const decompress = (raf, opt, callback) => {
 		return new Promise(r => setTimeout(r));
 	}
 	async function handleHeavyLifting() {
-		ut.progressBarVal('show');
-		ut.progressBarVal('label', '')
+		ut.betterProgressBar('show');
 		// loop through each block and decompress it
 		for (const block of positions) {
 			if (iters < itersBeforeStop) {
@@ -22550,7 +22553,7 @@ const decompress = (raf, opt, callback) => {
 					const output = bzip.decodeBlock(compressed, 32); // skip 32 bits 'BZh9' header
 					outBuffers.push(output);
 
-					ut.progressBarVal('set', ut.scale(iters, 0, positions.length, 0, 100));
+					ut.betterProgressBar('set', ut.scale(iters, 0, positions.length, 0, 100));
 					await sleep();
 				}
 			}

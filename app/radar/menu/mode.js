@@ -12,6 +12,7 @@ function showHideFileBox(showHide) {
         $('#currentModeSpan').hide();
 
         $('#radarHeader').css('height', '+=25px')
+        $('.progressBar').css('top', '+=25px');
     } else if (showHide == 'hide') {
         // current data mode
         $('#dataDiv').data('isFileUpload', false);
@@ -21,7 +22,8 @@ function showHideFileBox(showHide) {
         $('#radarInfoSpan').show();
         $('#currentModeSpan').show();
 
-        $('#radarHeader').css('height', '-=25px')
+        $('#radarHeader').css('height', '-=25px');
+        $('.progressBar').css('top', '-=25px');
     }
 }
 

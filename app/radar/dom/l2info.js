@@ -33,7 +33,8 @@ function showL2Info(l2rad) {
 
     if ($('#dataDiv').data('fromFileUpload')) {
         // shrink the map header because the file upload box is no longer there
-        $('#radarHeader').css('height', '-=25px')
+        $('#radarHeader').css('height', '-=25px');
+        $('.progressBar').css('top', '-=25px');
     }
 }
 

@@ -80,8 +80,7 @@ const decompress = (raf, opt, callback) => {
 		return new Promise(r => setTimeout(r));
 	}
 	async function handleHeavyLifting() {
-		ut.progressBarVal('show');
-		ut.progressBarVal('label', '')
+		ut.betterProgressBar('show');
 		// loop through each block and decompress it
 		for (const block of positions) {
 			if (iters < itersBeforeStop) {
@@ -93,7 +92,7 @@ const decompress = (raf, opt, callback) => {
 					const output = bzip.decodeBlock(compressed, 32); // skip 32 bits 'BZh9' header
 					outBuffers.push(output);
 
-					ut.progressBarVal('set', ut.scale(iters, 0, positions.length, 0, 100));
+					ut.betterProgressBar('set', ut.scale(iters, 0, positions.length, 0, 100));
 					await sleep();
 				}
 			}
