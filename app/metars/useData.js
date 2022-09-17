@@ -1,6 +1,8 @@
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
 
+const parseMETAR = require('metar');
+
 var geojsonTemplate = {
     "type": "FeatureCollection",
     "features": []
@@ -93,16 +95,24 @@ function useData(data, action) {
         );
 
         map.on('click', 'metarSymbolLayer', (e) => {
-            // Copy coordinates array.
             const coordinates = e.features[0].geometry.coordinates.slice();
-            const description = e.features[0].properties.description;
             const id = e.features[0].properties.stationID;
             const rawText = e.features[0].properties.rawMetarText;
+
+            var parsedMetarData = parseMETAR(rawText);
+            console.log(parsedMetarData)
+
+            var metarHTMLBody = 
+            `<div>
+                <div><b>${rawText}</b></div>
+                <br>
+                <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre>
+            </div>`
 
             ut.spawnModal({
                 'title': `Station ${id}`,
                 'headerColor': 'alert-success',
-                'body': rawText
+                'body': metarHTMLBody
             })
 
             // // https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=KDCA&hoursBeforeNow=1
