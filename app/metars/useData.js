@@ -103,6 +103,7 @@ function useData(data, action) {
             console.log(parsedMetarData)
 
             var metarTemp = parsedMetarData.temperature;
+            var parsedMetarTemp = parseInt(ut.FtoC(metarTemp));
             var metarDewPoint = parsedMetarData.dewpoint;
             var metarAltimeter = parsedMetarData.altimeterInHg;
             var metarVisibility = parsedMetarData.visibility;
@@ -115,9 +116,8 @@ function useData(data, action) {
 
             var metarHTMLBody = 
             `<div>
-                <div><b>Raw Text: </b><u>${rawText}</u></div>
+                <div style="text-align: center; font-size: 30px; color: #14b840;"><b>${parsedMetarTemp}</b> ℉</div>
                 <br>
-                <div><b>Temperature: </b>${parseInt(ut.FtoC(metarTemp))} ℉</div>
                 <div><b>Dew Point: </b>${parseInt(ut.FtoC(metarDewPoint))} ℉</div>
                 <div><b>Altimeter: </b>${metarAltimeter} inHG</div>
                 <div><b>Visibility: </b>${metarVisibility} miles</div>
@@ -126,7 +126,9 @@ function useData(data, action) {
                 <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
                 <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
                 <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
-                <img src="../../resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                <br>
+                <div><b>Raw Text: </b><u>${rawText}</u></div>
 
                 <!--<br>
                 <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->
