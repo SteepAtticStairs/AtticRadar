@@ -33,6 +33,8 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
+$('#dataDiv').data('currentStation', 'KLWX');
+
 if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');

@@ -8,6 +8,8 @@ const isMobile = require('../../misc/detectmobilebrowser');
 
 const radarStations = require('../../../../resources/radarStations');
 
+const fetchMETARData = require('../../../metars/fetchData');
+
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';
 
@@ -234,6 +236,12 @@ function showStations() {
                     enableMouseListeners();
 
                     $('#stationInp').val(clickedStation);
+                    $('#dataDiv').data('currentStation', clickedStation);
+
+                    if ($('#dataDiv').data('metarsActive')) {
+                        fetchMETARData.fetchMETARData('update');
+                    }
+
                     tilts.resetTilts();
                     tilts.listTilts(ut.numOfTiltsObj['ref']);
                     $('#dataDiv').data('curProd', 'ref');

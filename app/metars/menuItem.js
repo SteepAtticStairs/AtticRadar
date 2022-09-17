@@ -18,16 +18,24 @@ createMenuOption({
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
 
-        if (map.getLayer('metarSymbolLayer')) {
+        $('#dataDiv').data('metarsActive', true);
+
+        if (map.getLayer('metarSymbolLayer') && $('#dataDiv').data('currentMetarRadarStation') == $('#dataDiv').data('currentStation')) {
             // layer does exist - toggle the visibility to on
             useData.toggleMETARStationMarkers('show');
-        } else {
+        } else if (!map.getLayer('metarSymbolLayer')) {
             // layer doesn't exist - load it onto the map for the first time
-            fetchMETARData.fetchMETARData();
+            fetchMETARData.fetchMETARData('load');
+        } else {
+            // layer does exist but a new station - update the data
+            fetchMETARData.fetchMETARData('update');
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
+
+        $('#dataDiv').data('metarsActive', false);
+
         // layer does exist - toggle the visibility to off
         useData.toggleMETARStationMarkers('hide');
     }

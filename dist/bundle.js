@@ -17710,20 +17710,36 @@ require('./menuItem');
 },{"../radar/map/map":104,"./menuItem":78}],77:[function(require,module,exports){
 const ut = require('../radar/utils');
 const useData = require('./useData');
+var map = require('../radar/map/map');
 
-function fetchMETARData() {
-    var url = 'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=stations&requestType=retrieve&format=xml&stationString=~us#';
+const radarStations = require('../../resources/radarStations');
+
+function fetchMETARData(action) {
+    var curStation = $('#dataDiv').data('currentStation');
+    $('#dataDiv').data('currentMetarRadarStation', curStation);
+    var bbx = geolib.getBoundsOfDistance(
+        { latitude: radarStations[curStation][1], longitude: radarStations[curStation][2] },
+        250000
+    );
+
+    var minLat = bbx[0].latitude;
+    var minLon = bbx[0].longitude;
+    var maxLat = bbx[1].latitude;
+    var maxLon = bbx[1].longitude;
+
+    var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
     var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + url);
     $.get(noCacheURL, function(data) {
         var parsedXMLData = ut.xmlToJson(data);
-        useData.useData(parsedXMLData);
+
+        useData.useData(parsedXMLData, action);
     })
 }
 
 module.exports = {
     fetchMETARData
 }
-},{"../radar/utils":114,"./useData":79}],78:[function(require,module,exports){
+},{"../../resources/radarStations":213,"../radar/map/map":104,"../radar/utils":114,"./useData":79}],78:[function(require,module,exports){
 const createMenuOption = require('../radar/menu/createMenuOption');
 const fetchMETARData = require('./fetchData');
 const useData = require('./useData');
@@ -17744,16 +17760,24 @@ createMenuOption({
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
 
-        if (map.getLayer('metarSymbolLayer')) {
+        $('#dataDiv').data('metarsActive', true);
+
+        if (map.getLayer('metarSymbolLayer') && $('#dataDiv').data('currentMetarRadarStation') == $('#dataDiv').data('currentStation')) {
             // layer does exist - toggle the visibility to on
             useData.toggleMETARStationMarkers('show');
-        } else {
+        } else if (!map.getLayer('metarSymbolLayer')) {
             // layer doesn't exist - load it onto the map for the first time
-            fetchMETARData.fetchMETARData();
+            fetchMETARData.fetchMETARData('load');
+        } else {
+            // layer does exist but a new station - update the data
+            fetchMETARData.fetchMETARData('update');
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
+
+        $('#dataDiv').data('metarsActive', false);
+
         // layer does exist - toggle the visibility to off
         useData.toggleMETARStationMarkers('hide');
     }
@@ -17766,16 +17790,25 @@ var geojsonTemplate = {
     "type": "FeatureCollection",
     "features": []
 }
+function resetTemplate() {
+    geojsonTemplate = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+}
 
-function useData(data) {
-    for (var item in data.response.data.Station) {
-        var lat = parseFloat(data.response.data.Station[item].latitude['#text']);
-        var lon = parseFloat(data.response.data.Station[item].longitude['#text']);
-        var stationId = data.response.data.Station[item].station_id['#text'];
+function useData(data, action) {
+    resetTemplate();
+    for (var item in data.response.data.METAR) {
+        var lat = parseFloat(data.response.data.METAR[item].latitude['#text']);
+        var lon = parseFloat(data.response.data.METAR[item].longitude['#text']);
+        var stationId = data.response.data.METAR[item].station_id['#text'];
+        var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
 
         geojsonTemplate.features.push({
             'properties': {
-                'stationID': stationId
+                'stationID': stationId,
+                'rawMetarText': rawMetarText
             },
             "geometry": {
                 "type": "Point",
@@ -17785,85 +17818,100 @@ function useData(data) {
         });
     }
 
-    // map.addLayer({
-    //     id: 'metarStations',
-    //     type: 'circle',
-    //     source: {
-    //         type: 'geojson',
-    //         data: geojsonTemplate,
-    //     },
-    //     'paint': {
-    //         'circle-radius': 4,
-    //         'circle-stroke-width': 3,
-    //         'circle-color': '#12b317',
-    //         'circle-stroke-color': '#0b610e',
-    //     }
-    // });
-    map.loadImage(
-        'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
-        (error, image) => {
-            if (error) throw error;
-            map.addImage('custom-marker-metar', image, {
-                "sdf": "true"
-            });
-            map.addSource('metarSymbolLayer', {
-                'type': 'geojson',
-                'generateId': true,
-                'data': geojsonTemplate
-            });
+    if (action == 'update') {
+        console.log(geojsonTemplate)
+        map.getSource('metarSymbolLayer').setData(geojsonTemplate);
+        toggleMETARStationMarkers('show');
+    } else if (action == 'load') {
+        // map.addLayer({
+        //     id: 'metarStations',
+        //     type: 'circle',
+        //     source: {
+        //         type: 'geojson',
+        //         data: geojsonTemplate,
+        //     },
+        //     'paint': {
+        //         'circle-radius': 4,
+        //         'circle-stroke-width': 3,
+        //         'circle-color': '#12b317',
+        //         'circle-stroke-color': '#0b610e',
+        //     }
+        // });
+        map.loadImage(
+            'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+            (error, image) => {
+                if (error) throw error;
+                map.addImage('custom-marker-metar', image, {
+                    "sdf": "true"
+                });
+                map.addSource('metarSymbolLayer', {
+                    'type': 'geojson',
+                    'generateId': true,
+                    'data': geojsonTemplate
+                });
 
-            // Add a symbol layer
-            map.addLayer({
-                'id': 'metarSymbolLayer',
-                'type': 'symbol',
-                'source': 'metarSymbolLayer',
-                'layout': {
-                    'icon-image': 'custom-marker-metar',
-                    'icon-size': 0.07,
-                    'text-field': ['get', 'stationID'],
-                    'text-size': 13,
-                    'text-font': [
-                        //'Open Sans Semibold',
-                        'Arial Unicode MS Bold'
-                    ],
-                    //'text-offset': [0, 1.25],
-                    //'text-anchor': 'top'
-                },
-                'paint': {
-                    //'text-color': 'white',
-                    'text-color': 'black',
-                    'icon-color': 'ForestGreen'
-                }
-            });
-            map.moveLayer('stationSymbolLayer');
-        }
-    );
+                // Add a symbol layer
+                map.addLayer({
+                    'id': 'metarSymbolLayer',
+                    'type': 'symbol',
+                    'source': 'metarSymbolLayer',
+                    'layout': {
+                        'icon-image': 'custom-marker-metar',
+                        'icon-size': 0.07,
+                        'text-field': ['get', 'stationID'],
+                        'text-size': 13,
+                        'text-font': [
+                            //'Open Sans Semibold',
+                            'Arial Unicode MS Bold'
+                        ],
+                        //'text-offset': [0, 1.25],
+                        //'text-anchor': 'top'
+                    },
+                    'paint': {
+                        //'text-color': 'white',
+                        'text-color': 'black',
+                        'icon-color': 'ForestGreen'
+                    }
+                });
+                map.moveLayer('stationSymbolLayer');
+            }
+        );
 
-    map.on('click', 'metarSymbolLayer', (e) => {
-        // Copy coordinates array.
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const description = e.features[0].properties.description;
-        const id = e.features[0].properties.stationID;
-
-        // https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=KDCA&hoursBeforeNow=1
-        var stationDataURL = `https://tgftp.nws.noaa.gov/data/observations/metar/stations/${id}.TXT#`;
-        var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + stationDataURL);
-        $.get(noCacheURL, function (data) {
-            console.log(data)
+        map.on('click', 'metarSymbolLayer', (e) => {
+            // Copy coordinates array.
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.description;
+            const id = e.features[0].properties.stationID;
+            const rawText = e.features[0].properties.rawMetarText;
 
             ut.spawnModal({
                 'title': `Station ${id}`,
                 'headerColor': 'alert-success',
-                'body': data
+                'body': rawText
             })
-        })
-    });
-    map.on('mouseenter', 'metarSymbolLayer', () => {
-        map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', 'metarSymbolLayer', () => {
-        map.getCanvas().style.cursor = '';
-    });
+
+            // // https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=KDCA&hoursBeforeNow=1
+            // // `https://tgftp.nws.noaa.gov/data/observations/metar/stations/${id}.TXT#`
+            // var stationDataURL = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=${id}&hoursBeforeNow=1#`;
+            // var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + stationDataURL);
+            // console.log(noCacheURL)
+            // $.get(noCacheURL, function (data) {
+            //     console.log(data)
+
+            //     //ut.spawnModal({
+            //     //    'title': `Station ${id}`,
+            //     //    'headerColor': 'alert-success',
+            //     //    'body': data
+            //     //})
+            // })
+        });
+        map.on('mouseenter', 'metarSymbolLayer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'metarSymbolLayer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+    }
 }
 
 function toggleMETARStationMarkers(showHide) {
@@ -19688,6 +19736,8 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
+$('#dataDiv').data('currentStation', 'KLWX');
+
 if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');
@@ -19865,6 +19915,8 @@ const getStationStatus = require('../../misc/getStationStatus');
 const isMobile = require('../../misc/detectmobilebrowser');
 
 const radarStations = require('../../../../resources/radarStations');
+
+const fetchMETARData = require('../../../metars/fetchData');
 
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';
@@ -20092,6 +20144,12 @@ function showStations() {
                     enableMouseListeners();
 
                     $('#stationInp').val(clickedStation);
+                    $('#dataDiv').data('currentStation', clickedStation);
+
+                    if ($('#dataDiv').data('metarsActive')) {
+                        fetchMETARData.fetchMETARData('update');
+                    }
+
                     tilts.resetTilts();
                     tilts.listTilts(ut.numOfTiltsObj['ref']);
                     $('#dataDiv').data('curProd', 'ref');
@@ -20134,7 +20192,7 @@ function showStations() {
 // }, 200)
 
 module.exports = showStations;
-},{"../../../../resources/radarStations":213,"../../loaders":96,"../../menu/tilts":109,"../../misc/detectmobilebrowser":110,"../../misc/getStationStatus":111,"../../utils":114,"../map":104,"./createControl":98}],102:[function(require,module,exports){
+},{"../../../../resources/radarStations":213,"../../../metars/fetchData":77,"../../loaders":96,"../../menu/tilts":109,"../../misc/detectmobilebrowser":110,"../../misc/getStationStatus":111,"../../utils":114,"../map":104,"./createControl":98}],102:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
