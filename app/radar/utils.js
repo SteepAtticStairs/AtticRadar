@@ -521,6 +521,10 @@ function betterProgressBar(whatToDo, value) {
     }
 }
 
+function FtoC(val) {
+    return (val * 1.8) + 32;
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -558,5 +562,6 @@ module.exports = {
     sshwsValues,
     getSSHWSVal,
     spawnModal,
-    betterProgressBar
+    betterProgressBar,
+    FtoC
 }

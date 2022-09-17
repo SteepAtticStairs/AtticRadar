@@ -102,11 +102,34 @@ function useData(data, action) {
             var parsedMetarData = parseMETAR(rawText);
             console.log(parsedMetarData)
 
+            var metarTemp = parsedMetarData.temperature;
+            var metarDewPoint = parsedMetarData.dewpoint;
+            var metarAltimeter = parsedMetarData.altimeterInHg;
+            var metarVisibility = parsedMetarData.visibility;
+            var metarWindSpeed = parsedMetarData.wind.speed; // in knots
+            var metarWindGustSpeed = parsedMetarData.wind.gust; // in knots
+            var metarWindDirection = parsedMetarData.wind.direction;
+            if (metarWindDirection == null) {
+                metarWindDirection = 0;
+            }
+
             var metarHTMLBody = 
             `<div>
-                <div><b>${rawText}</b></div>
+                <div><b>Raw Text: </b><u>${rawText}</u></div>
                 <br>
-                <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre>
+                <div><b>Temperature: </b>${parseInt(ut.FtoC(metarTemp))} ℉</div>
+                <div><b>Dew Point: </b>${parseInt(ut.FtoC(metarDewPoint))} ℉</div>
+                <div><b>Altimeter: </b>${metarAltimeter} inHG</div>
+                <div><b>Visibility: </b>${metarVisibility} miles</div>
+                <br>
+                <div><b>Wind:</b></div>
+                <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
+                <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
+                <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
+                <img src="../../resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+
+                <!--<br>
+                <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->
             </div>`
 
             ut.spawnModal({
@@ -115,20 +138,36 @@ function useData(data, action) {
                 'body': metarHTMLBody
             })
 
-            // // https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=KDCA&hoursBeforeNow=1
-            // // `https://tgftp.nws.noaa.gov/data/observations/metar/stations/${id}.TXT#`
-            // var stationDataURL = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=${id}&hoursBeforeNow=1#`;
-            // var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + stationDataURL);
-            // console.log(noCacheURL)
-            // $.get(noCacheURL, function (data) {
-            //     console.log(data)
-
-            //     //ut.spawnModal({
-            //     //    'title': `Station ${id}`,
-            //     //    'headerColor': 'alert-success',
-            //     //    'body': data
-            //     //})
-            // })
+            // {
+            //     "type": "METAR",
+            //     "correction": false,
+            //     "station": "KOQN",
+            //     "time": "2022-09-17T21:35:47.993Z",
+            //     "auto": true,
+            //     "wind": {
+            //         "speed": 4,
+            //         "gust": null,
+            //         "direction": 230,
+            //         "variation": null,
+            //         "unit": "KT"
+            //     },
+            //     "cavok": false,
+            //     "visibility": 10,
+            //     "visibilityVariation": null,
+            //     "visibilityVariationDirection": null,
+            //     "weather": null,
+            //     "clouds": [
+            //         {
+            //             "abbreviation": "SCT",
+            //             "meaning": "scattered",
+            //             "altitude": 4700,
+            //             "cumulonimbus": false
+            //         }
+            //     ],
+            //     "temperature": 26,
+            //     "dewpoint": 15,
+            //     "altimeterInHg": 30.19
+            // }
         });
         map.on('mouseenter', 'metarSymbolLayer', () => {
             map.getCanvas().style.cursor = 'pointer';
