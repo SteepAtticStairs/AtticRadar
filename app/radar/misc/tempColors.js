@@ -22,15 +22,15 @@ function rgbValToArray(rgbString) {
 function returnFullColorArray() {
     const tempColorObj = {
         'low': 'rgb(247, 198, 251)',
-        '30': 'rgb(204, 120, 214)',
-        '40': 'rgb(137, 67, 177)',
-        '50': 'rgb(55, 30, 149)',
-        '60': 'rgb(78, 167, 222)',
-        '70': 'rgb(99, 214, 148)',
-        '80': 'rgb(114, 197, 60)',
-        '90': 'rgb(251, 251, 86)',
-        '100': 'rgb(236, 135, 51)',
-        '110': 'rgb(192, 56, 30)',
+        '10': 'rgb(204, 120, 214)',
+        '20': 'rgb(137, 67, 177)',
+        '30': 'rgb(55, 30, 149)',
+        '40': 'rgb(78, 167, 222)',
+        '50': 'rgb(99, 214, 148)',
+        '60': 'rgb(114, 197, 60)',
+        '70': 'rgb(251, 251, 86)',
+        '80': 'rgb(236, 135, 51)',
+        '90': 'rgb(192, 56, 30)',
         'high': 'rgb(146, 32, 19)'
     }
     var allKeys = Object.keys(tempColorObj);
@@ -84,5 +84,11 @@ function getTempColor(tempVal) {
         return allColors.fullObj[tempVal];
     }
 }
+
+// ut.colorLog(60, getTempColor(60));
+// ut.colorLog(70, getTempColor(70));
+// ut.colorLog(80, getTempColor(80));
+// ut.colorLog(90, getTempColor(90));
+// ut.colorLog(100, getTempColor(100));
 
 module.exports = getTempColor;
