@@ -201,6 +201,8 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                 mapFuncs.setGeojsonLayer(mainLinePointGeojson, 'lineCircle', 'mainLinePoint');
                 stormTracksLayerArr.push('mainLinePoint');
 
+                $('#dataDiv').data('stormTrackMapLayers', stormTracksLayerArr);
+
                 document.getElementById('allStormTracksLayers').innerHTML = JSON.stringify(stormTracksLayerArr);
                 var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
                 var stLayers = stLayersText.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');

@@ -19452,6 +19452,8 @@ function parsePlotStormTracks(l3rad, theFileStation) {
                 mapFuncs.setGeojsonLayer(mainLinePointGeojson, 'lineCircle', 'mainLinePoint');
                 stormTracksLayerArr.push('mainLinePoint');
 
+                $('#dataDiv').data('stormTrackMapLayers', stormTracksLayerArr);
+
                 document.getElementById('allStormTracksLayers').innerHTML = JSON.stringify(stormTracksLayerArr);
                 var stLayersText = document.getElementById('allStormTracksLayers').innerHTML;
                 var stLayers = stLayersText.replace(/"/g, '').replace(/\[/g, '').replace(/\]/g, '').split(',');
@@ -20328,16 +20330,25 @@ class visibilityControl {
                 $('#visibilityThing').addClass('fa-eye-slash');
 
                 $('#visibilityThing').removeClass('icon-black');
+
                 map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+                var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+                for (var item in stLayers) {
+                    map.setLayoutProperty(stLayers[item], 'visibility', 'none');
+                }
             } else if ($('#visibilityThing').hasClass('icon-selected')) {
                 $('#visibilityThing').removeClass('icon-selected');
 
                 $('#visibilityThing').removeClass('fa-eye-slash');
                 $('#visibilityThing').addClass('fa-eye');
 
-                
                 $('#visibilityThing').addClass('icon-black');
+
                 map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+                var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+                for (var item in stLayers) {
+                    map.setLayoutProperty(stLayers[item], 'visibility', 'visible');
+                }
             }
         })
         return this._container;
