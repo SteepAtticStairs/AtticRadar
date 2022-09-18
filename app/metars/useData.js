@@ -1,5 +1,6 @@
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
+const getTempColor = require('../radar/misc/tempColors');
 
 const parseMETAR = require('metar');
 
@@ -103,7 +104,7 @@ function useData(data, action) {
             console.log(parsedMetarData)
 
             var metarTemp = parsedMetarData.temperature;
-            var parsedMetarTemp = parseInt(ut.FtoC(metarTemp));
+            var parsedMetarTemp = parseInt(ut.CtoF(metarTemp));
             var metarDewPoint = parsedMetarData.dewpoint;
             var metarAltimeter = parsedMetarData.altimeterInHg;
             var metarVisibility = parsedMetarData.visibility;
@@ -116,9 +117,9 @@ function useData(data, action) {
 
             var metarHTMLBody = 
             `<div>
-                <div style="text-align: center; font-size: 30px; color: #14b840;"><b>${parsedMetarTemp}</b> ℉</div>
+                <div style="text-align: center; font-size: 30px; color: ${getTempColor(parsedMetarTemp)};"><b>${parsedMetarTemp}</b> ℉</div>
                 <br>
-                <div><b>Dew Point: </b>${parseInt(ut.FtoC(metarDewPoint))} ℉</div>
+                <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
                 <div><b>Altimeter: </b>${metarAltimeter} inHG</div>
                 <div><b>Visibility: </b>${metarVisibility} miles</div>
                 <br>

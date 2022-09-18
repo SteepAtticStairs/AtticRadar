@@ -521,7 +521,7 @@ function betterProgressBar(whatToDo, value) {
     }
 }
 
-function FtoC(val) {
+function CtoF(val) {
     return (val * 1.8) + 32;
 }
 
@@ -563,5 +563,5 @@ module.exports = {
     getSSHWSVal,
     spawnModal,
     betterProgressBar,
-    FtoC
+    CtoF
 }
