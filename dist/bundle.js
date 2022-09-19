@@ -21036,12 +21036,22 @@ function returnFullColorArray() {
             //ut.colorLog(`   ${i}   `, lightOrDark, `background-color: ${curRGBVal}`);
         }
     }
+    var lowTempReturnVal = tempColorObj.low;
+    var rgbArr = rgbValToArray(lowTempReturnVal);
+    var lightOrDark = colorLightOrDark(rgbArr[0], rgbArr[1], rgbArr[2]);
+    lowTempReturnVal = [lowTempReturnVal, lightOrDark];
+
+    var highTempReturnVal = tempColorObj.high;
+    var rgbArr = rgbValToArray(highTempReturnVal);
+    var lightOrDark = colorLightOrDark(rgbArr[0], rgbArr[1], rgbArr[2]);
+    highTempReturnVal = [highTempReturnVal, lightOrDark];
+
     return {
         'fullObj': allTempColorVals,
         'minTemp': minTemp,
         'maxTemp': maxTemp,
-        'lowTempColor': tempColorObj.low,
-        'highTempColor': tempColorObj.high,
+        'lowTempColor': lowTempReturnVal,
+        'highTempColor': highTempReturnVal
     };
 }
 
