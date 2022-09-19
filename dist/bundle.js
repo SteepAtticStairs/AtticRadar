@@ -17899,11 +17899,13 @@ function useData(data, action) {
             if (metarWindDirection == null) {
                 metarWindDirection = 0;
             }
+            var metarFancyTime = ut.printFancyTime(parsedMetarData.time);
 
             var metarHTMLBody = 
             `<div>
                 <div style="text-align: center; font-size: 30px; color: ${getTempColor(parsedMetarTemp)};"><b>${parsedMetarTemp}</b> ℉</div>
                 <br>
+                <div><i><b>VALID: </b>${metarFancyTime}</i></div>
                 <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
                 <div><b>Altimeter: </b>${metarAltimeter} inHG</div>
                 <div><b>Visibility: </b>${metarVisibility} miles</div>
@@ -17912,7 +17914,7 @@ function useData(data, action) {
                 <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
                 <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
                 <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
-                <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                <img src="../resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
                 <br>
                 <div><b>Raw Text: </b><u>${rawText}</u></div>
 
@@ -20373,9 +20375,16 @@ const map = new mapboxgl.Map({
     style: 'mapbox://styles/mapbox/dark-v10',
     zoom: 3,
     center: [-98.5606744, 36.8281576],
+    //zoom: 6,
+    //center: [-66.0190363102349, 18.15295560177013],
     //projection: 'equirectangular',
     //fadeDuration: 0,
 });
+
+// map.on('click', function(e) {
+//     console.log(e.lngLat)
+//     console.log(map.getZoom())
+// })
 
 // https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567
 function registerControlPosition(map, positionName) {
