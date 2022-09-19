@@ -116,9 +116,11 @@ function useData(data, action) {
             }
             var metarFancyTime = ut.printFancyTime(parsedMetarData.time);
 
+            var tempColor = getTempColor(parsedMetarTemp);
+
             var metarHTMLBody = 
             `<div>
-                <div style="text-align: center; font-size: 30px; color: ${getTempColor(parsedMetarTemp)};"><b>${parsedMetarTemp}</b> ℉</div>
+                <div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> ℉</div>
                 <br>
                 <div><i><b>VALID: </b>${metarFancyTime}</i></div>
                 <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>

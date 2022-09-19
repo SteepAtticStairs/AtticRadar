@@ -17901,9 +17901,11 @@ function useData(data, action) {
             }
             var metarFancyTime = ut.printFancyTime(parsedMetarData.time);
 
+            var tempColor = getTempColor(parsedMetarTemp);
+
             var metarHTMLBody = 
             `<div>
-                <div style="text-align: center; font-size: 30px; color: ${getTempColor(parsedMetarTemp)};"><b>${parsedMetarTemp}</b> ℉</div>
+                <div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> ℉</div>
                 <br>
                 <div><i><b>VALID: </b>${metarFancyTime}</i></div>
                 <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
@@ -20945,6 +20947,20 @@ module.exports = {
 },{}],113:[function(require,module,exports){
 const ut = require('../utils');
 
+const tempColorObj = {
+    'low': 'rgb(247, 198, 251)',
+    '10': 'rgb(204, 120, 214)',
+    '20': 'rgb(137, 67, 177)',
+    '30': 'rgb(55, 30, 149)',
+    '40': 'rgb(78, 167, 222)',
+    '50': 'rgb(99, 214, 148)',
+    '60': 'rgb(114, 197, 60)',
+    '70': 'rgb(251, 251, 86)',
+    '80': 'rgb(236, 135, 51)',
+    '90': 'rgb(192, 56, 30)',
+    'high': 'rgb(146, 32, 19)'
+}
+
 // https://stackoverflow.com/a/24253254
 function getColorGradientValue(p, rgb_beginning, rgb_end){
     var w = p * 2 - 1;
@@ -20964,20 +20980,27 @@ function rgbValToArray(rgbString) {
     return rgbString.replace('rgb(', '').replace(')', '').split(', ')
 }
 
+// https://stackoverflow.com/a/5624139
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+// https://stackoverflow.com/a/11868159
+function colorLightOrDark(R, G, B) {
+    // https://stackoverflow.com/a/4726403
+    // var nThreshold = 105;
+    // var bgDelta = (R * 0.299) + (G * 0.587) + (B * 0.114);
+    // return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff"; 
+
+    // http://www.w3.org/TR/AERT#color-contrast
+    const brightness = Math.round((
+        (parseInt(R) * 299) +
+        (parseInt(G) * 587) +
+        (parseInt(B) * 114)) / 1000);
+    const textColour = (brightness > 125) ? 'black' : 'white';
+    return textColour;
+}
+
 function returnFullColorArray() {
-    const tempColorObj = {
-        'low': 'rgb(247, 198, 251)',
-        '10': 'rgb(204, 120, 214)',
-        '20': 'rgb(137, 67, 177)',
-        '30': 'rgb(55, 30, 149)',
-        '40': 'rgb(78, 167, 222)',
-        '50': 'rgb(99, 214, 148)',
-        '60': 'rgb(114, 197, 60)',
-        '70': 'rgb(251, 251, 86)',
-        '80': 'rgb(236, 135, 51)',
-        '90': 'rgb(192, 56, 30)',
-        'high': 'rgb(146, 32, 19)'
-    }
     var allKeys = Object.keys(tempColorObj);
     const minTemp = parseInt(allKeys[0]);
     const maxTemp = parseInt(allKeys[allKeys.length - 3]);
@@ -20998,14 +21021,19 @@ function returnFullColorArray() {
             var endColor = rgbValToArray(tempColorObj[highestTen]);
 
             var { r, g, b } = getColorGradientValue(reversedVal, startColor, endColor);
+            var lightOrDark = colorLightOrDark(r, g, b);
             var stringifiedRGB = `rgb(${r}, ${g}, ${b})`;
 
-            allTempColorVals[i] = stringifiedRGB;
+            allTempColorVals[i] = [stringifiedRGB, lightOrDark];
             //ut.colorLog(i, stringifiedRGB);
+            //ut.colorLog(`   ${i}   `, lightOrDark, `background-color: ${stringifiedRGB}`);
         } else {
             var curRGBVal = tempColorObj[i];
-            allTempColorVals[i] = curRGBVal;
+            var rgbArr = rgbValToArray(curRGBVal);
+            var lightOrDark = colorLightOrDark(rgbArr[0], rgbArr[1], rgbArr[2]);
+            allTempColorVals[i] = [curRGBVal, lightOrDark];
             //ut.colorLog(i, curRGBVal);
+            //ut.colorLog(`   ${i}   `, lightOrDark, `background-color: ${curRGBVal}`);
         }
     }
     return {
