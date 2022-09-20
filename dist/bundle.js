@@ -16982,7 +16982,7 @@ createMenuOption({
         map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
     }
 })
-},{"../radar/map/map":104,"../radar/menu/createMenuOption":106,"../radar/utils":115,"./fetchData":68,"./mapClick":69,"simplify-geojson":212}],67:[function(require,module,exports){
+},{"../radar/map/map":104,"../radar/menu/createMenuOption":106,"../radar/utils":115,"./fetchData":68,"./mapClick":69,"simplify-geojson":218}],67:[function(require,module,exports){
 /*
 * This file is the entry point for the alerts module.
 */
@@ -17739,7 +17739,7 @@ function fetchMETARData(action) {
 module.exports = {
     fetchMETARData
 }
-},{"../../resources/radarStations":215,"../radar/map/map":104,"../radar/utils":115,"./useData":79}],78:[function(require,module,exports){
+},{"../../resources/radarStations":221,"../radar/map/map":104,"../radar/utils":115,"./useData":79}],78:[function(require,module,exports){
 const createMenuOption = require('../radar/menu/createMenuOption');
 const fetchMETARData = require('./fetchData');
 const useData = require('./useData');
@@ -17788,6 +17788,7 @@ const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 
 const parseMETAR = require('metar');
+const { rawMetarToSVG } = require('metar-plot')
 
 var geojsonTemplate = {
     "type": "FeatureCollection",
@@ -17900,6 +17901,15 @@ function useData(data, action) {
             var parsedMetarData = parseMETAR(rawText);
             console.log(parsedMetarData)
 
+            var metarSVG = rawMetarToSVG(rawText);
+
+            var doc = new DOMParser().parseFromString(metarSVG, "image/svg+xml");
+            var parsedDoc = $(doc.querySelector('svg')).attr('height', 150).attr('width', 150);
+            var svgStr = new XMLSerializer().serializeToString(parsedDoc[0]);
+
+            // https://stackoverflow.com/a/58142441/18758797
+            // ^^ svg string to data url
+
             var metarTemp = parsedMetarData.temperature;
             var parsedMetarTemp = parseInt(ut.CtoF(metarTemp));
             var metarDewPoint = parsedMetarData.dewpoint;
@@ -17928,7 +17938,10 @@ function useData(data, action) {
                 <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
                 <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
                 <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
-                <img src="../resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                <br>
+                <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
+                <div>${svgStr}</div>
                 <br>
                 <div><b>Raw Text: </b><u>${rawText}</u></div>
 
@@ -17995,7 +18008,7 @@ module.exports = {
     useData,
     toggleMETARStationMarkers
 }
-},{"../radar/map/map":104,"../radar/misc/tempColors":113,"../radar/utils":115,"metar":206}],80:[function(require,module,exports){
+},{"../radar/map/map":104,"../radar/misc/tempColors":113,"../radar/utils":115,"metar":212,"metar-plot":208}],80:[function(require,module,exports){
 const ut = require('../utils');
 
 /*
@@ -20262,7 +20275,7 @@ function showStations() {
 // }, 200)
 
 module.exports = showStations;
-},{"../../../../resources/radarStations":215,"../../../metars/fetchData":77,"../../loaders":96,"../../menu/tilts":109,"../../misc/detectmobilebrowser":110,"../../misc/getStationStatus":111,"../../utils":115,"../map":104,"./createControl":98}],102:[function(require,module,exports){
+},{"../../../../resources/radarStations":221,"../../../metars/fetchData":77,"../../loaders":96,"../../menu/tilts":109,"../../misc/detectmobilebrowser":110,"../../misc/getStationStatus":111,"../../utils":115,"../map":104,"./createControl":98}],102:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
@@ -23038,7 +23051,7 @@ const readCompressionHeader = (raf) => ({
 module.exports = decompress;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../../app/radar/utils":115,"./classes/RandomAccessFile":127,"./constants":129,"./gzipdecompress":131,"buffer":11,"seek-bzip":209}],131:[function(require,module,exports){
+},{"../../app/radar/utils":115,"./classes/RandomAccessFile":127,"./constants":129,"./gzipdecompress":131,"buffer":11,"seek-bzip":215}],131:[function(require,module,exports){
 const zlib = require('zlib');
 // structured byte access
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
@@ -24984,7 +24997,7 @@ const nullLogger = {
 module.exports = nexradLevel3Data;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./headers/graphic":147,"./headers/message":149,"./headers/productdescription":150,"./headers/radialpackets":151,"./headers/symbology":152,"./headers/tabular":154,"./headers/text":155,"./products":201,"./randomaccessfile":202,"buffer":11,"seek-bzip":209}],157:[function(require,module,exports){
+},{"./headers/graphic":147,"./headers/message":149,"./headers/productdescription":150,"./headers/radialpackets":151,"./headers/symbology":152,"./headers/tabular":154,"./headers/text":155,"./products":201,"./randomaccessfile":202,"buffer":11,"seek-bzip":215}],157:[function(require,module,exports){
 const code = 1;
 const description = 'Text and Special Symbol Packets';
 
@@ -35861,6 +35874,926 @@ exports.Zone = Zone;
 
 
 },{}],206:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseAltimeter = exports.parseWind = exports.parseClouds = exports.parseVisibility = exports.parseWeather = exports.parseTempNA = exports.parseTempInternation = exports.parseAuto = exports.parseCavok = exports.parseDate = exports.parseStation = exports.parseMetar = exports.METAR = void 0;
+var Weather_1 = require("./parts/Weather");
+var Cloud_1 = require("./parts/Cloud");
+var Wind_1 = require("./parts/Wind");
+//Meassage types
+var TYPES = ["METAR", "SPECI"];
+//Metar Object
+var METAR = /** @class */ (function () {
+    /**
+     * Extracted Metar data in a human readable format.
+     * @param metarString raw metar string if provided station and time will be ignored and replaced with the content in the raw METAR
+     * @param station staion name for instance creation
+     * @param time time for instance creation
+     */
+    function METAR(metarString, station, time) {
+        //Wind speed, direction and unit
+        this.wind = new Wind_1.Wind();
+        //List of weather conditions reported
+        this.weather = new Array();
+        //List of Cloud observations
+        this.clouds = new Array();
+        this.station = station !== null && station !== void 0 ? station : "----";
+        this.time = time !== null && time !== void 0 ? time : new Date();
+        if (metarString != null) {
+            parseMetar(metarString, this);
+        }
+    }
+    return METAR;
+}());
+exports.METAR = METAR;
+/**
+ * Parses a raw metar and binds or creates a METAR object
+ * @param metarString Raw METAR string
+ * @param ref Reference to a METAR object. This objects contents will be shallow replaced with the Raw metars values.
+ *  Meaning values will be updated or added but not removed.
+ * @returns
+ */
+function parseMetar(metarString, ref) {
+    var station = parseStation(metarString);
+    var time = parseDate(metarString);
+    if (ref != null) {
+        ref.station = station;
+        ref.time = time;
+    }
+    else {
+        ref = new METAR(undefined, station, time);
+    }
+    //Parse Auto
+    ref.auto = parseAuto(metarString);
+    //Parse Wind
+    ref.wind = parseWind(metarString);
+    //Parse CAVOK
+    ref.cavok = parseCavok(metarString);
+    //Parse Visablility
+    ref.visibility = parseVisibility(metarString);
+    //Parse Runway VIS
+    //TODO
+    //Parse Weather
+    ref.weather = parseWeather(metarString);
+    //Parse Clouds
+    ref.clouds = parseClouds(metarString);
+    //Parse Temp Point Internations 
+    var temps_int = parseTempInternation(metarString);
+    if (temps_int != null) {
+        ref.temperature = temps_int[0];
+        ref.dewpoint = temps_int[1];
+    }
+    //Parse Temp North american Will overwirte international since it is more precise
+    var temps_ne = parseTempNA(metarString);
+    if (temps_ne != null) {
+        ref.temperature = temps_ne[0];
+        ref.dewpoint = temps_ne[1];
+    }
+    //Parse Altimeter
+    ref.altimeter = parseAltimeter(metarString);
+    return ref;
+}
+exports.parseMetar = parseMetar;
+/**
+ * Parses the station name form the metar
+ * @param metar raw metar
+ * @returns
+ */
+function parseStation(metar) {
+    var re = /^(METAR\s)?([A-Z]{1,4})\s/g;
+    var matches = re.exec(metar);
+    if (matches != null) {
+        return matches[2];
+    }
+    else {
+        throw new Error("Station could not be found invalid metar");
+    }
+}
+exports.parseStation = parseStation;
+/**
+ * Parse Date object from metar.
+ * NOTE: Raw metar data does not contain month or year data. So this function assumes this metar was created in the current month and current year
+ * @param metar raw metar
+ * @returns
+ */
+function parseDate(metar) {
+    var re = /([\d]{2})([\d]{2})([\d]{2})Z/g;
+    var matches = re.exec(metar);
+    if (matches != null) {
+        var d = new Date();
+        d.setUTCDate(parseInt(matches[1]));
+        d.setUTCHours(parseInt(matches[2]));
+        d.setUTCMinutes(parseInt(matches[3]));
+        d.setUTCSeconds(0);
+        d.setUTCMilliseconds(0);
+        return d;
+    }
+    else {
+        throw new Error("Failed to parse Date");
+    }
+}
+exports.parseDate = parseDate;
+/**
+ * Parses for CAVOK (Ceiling and visabiliy OK)
+ * @param metar raw metar
+ * @returns
+ */
+function parseCavok(metar) {
+    var re = /\sCAVOK\s/g;
+    return metar.match(re) != null ? true : false;
+}
+exports.parseCavok = parseCavok;
+/**
+ * Parses for Automation
+ * @param metar raw metar
+ * @returns
+ */
+function parseAuto(metar) {
+    var re = /\s(AUTO)?(AO1)?(AO2)?\s/g;
+    return metar.match(re) != null ? true : false;
+}
+exports.parseAuto = parseAuto;
+/**
+ * Parse international temp dewp point format.
+ * @param metar raw metar
+ * @returns
+ */
+function parseTempInternation(metar) {
+    var re = /\s(M)?(\d{2})\/(M)?(\d{2})\s/g;
+    var matches = re.exec(metar);
+    if (matches != null) {
+        var temp = parseInt(matches[2]) * (matches[1] == null ? 1 : -1);
+        var dew_point = parseInt(matches[4]) * (matches[3] == null ? 1 : -1);
+        return [temp, dew_point];
+    }
+}
+exports.parseTempInternation = parseTempInternation;
+/**
+ * Parse North American temp dew point format
+ * @param metar raw metar
+ * @returns
+ */
+function parseTempNA(metar) {
+    var re = /(T)(\d{1})(\d{2})(\d{1})(\d{1})(\d{2})(\d{1})/g;
+    var matches = re.exec(metar);
+    if (matches != null) {
+        var temp = parseFloat(matches[3] + "." + matches[4]) * (matches[2] === "0" ? 1 : -1);
+        var dew_point = parseFloat(matches[6] + "." + matches[7]) * (matches[5] === "0" ? 1 : -1);
+        return [temp, dew_point];
+    }
+}
+exports.parseTempNA = parseTempNA;
+/**
+ * Parse Weather items
+ * @param metar raw metar
+ * @returns
+ */
+function parseWeather(metar) {
+    var obs_keys = Object.keys(Weather_1.WEATHER).join('|').replace(/\+/g, "\\+");
+    var re = new RegExp("\\s?(" + obs_keys + ")\\s", 'g');
+    var matches = metar.match(re);
+    if (matches != null) {
+        return matches.map(function (match) {
+            console.log(match);
+            var key = match.trim();
+            return {
+                abbreviation: key,
+                meaning: Weather_1.WEATHER[key].text
+            };
+        });
+    }
+    else {
+        return new Array();
+    }
+}
+exports.parseWeather = parseWeather;
+/**
+ * Parse visability
+ * @param metar raw metar
+ * @returns
+ */
+function parseVisibility(metar) {
+    var re = /\s([0-9]{1,2})?\s?([0-9]{1}\/[0-9]{1})?(SM)\s|\s([0-9]{1,4})\s/g;
+    if (metar.match(re)) {
+        var vis_parts = re.exec(metar);
+        if (vis_parts != null) {
+            var meters = vis_parts[4];
+            var miles = vis_parts[1];
+            var frac_miles = vis_parts[2];
+            //Metric case ex: 1000, 9999 
+            if (meters != null) {
+                return parseInt(meters);
+            }
+            //whole miles case ex: 1SM 10SM
+            else if (frac_miles != null) {
+                var total = 0.0;
+                if (miles != null) {
+                    total += parseFloat(miles);
+                }
+                total += parseFloat(eval(frac_miles));
+                return total * 1609.34;
+            }
+            //factional miles case "1 1/2SM" "1/4SM"
+            else {
+                return parseInt(miles) * 1609.34;
+            }
+        }
+    }
+    return undefined;
+}
+exports.parseVisibility = parseVisibility;
+/**
+ * Parse cloud coverages
+ * @param metarString raw metar
+ * @returns
+ */
+function parseClouds(metarString) {
+    var _a;
+    var re = /(NCD|SKC|CLR|NSC|FEW|SCT|BKN|OVC|VV)(\d{3})/g;
+    var clouds = new Array();
+    var matches;
+    while ((matches = re.exec(metarString)) != null) {
+        var cloud = {
+            abbreviation: matches[1],
+            meaning: (_a = Cloud_1.CLOUDS[matches[1]]) === null || _a === void 0 ? void 0 : _a.text,
+            altitude: parseInt(matches[2]) * 100
+        };
+        clouds.push(cloud);
+    }
+    return clouds;
+}
+exports.parseClouds = parseClouds;
+/**
+ * Parse wind data
+ * @param metar raw metar
+ * @returns
+ */
+function parseWind(metar) {
+    var wind = new Wind_1.Wind();
+    var re = /\s(\d{3})(\d{2})(G)?(\d{2})?(KT|MPS)\s/g;
+    var matches = re.exec(metar);
+    if (matches != null) {
+        wind.direction = parseInt(matches[1]);
+        wind.speed = parseInt(matches[2]);
+        wind.unit = matches[5];
+    }
+    return wind;
+}
+exports.parseWind = parseWind;
+function parseAltimeter(metar) {
+    var re = /(A|Q)(\d{2})(\d{2})/g;
+    var matches = re.exec(metar);
+    if (matches != null) {
+        if (matches[1] === "Q") {
+            var pressure = parseFloat(matches[2] + matches[3]);
+            return parseFloat((pressure * 0.029529).toFixed(2));
+        }
+        else {
+            return parseFloat(matches[2] + "." + matches[3]);
+        }
+    }
+}
+exports.parseAltimeter = parseAltimeter;
+
+},{"./parts/Cloud":209,"./parts/Weather":210,"./parts/Wind":211}],207:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.metarToImgSrc = exports.metarToSVG = exports.rawMetarToMetarPlot = exports.rawMetarToSVG = exports.MetarPlot = void 0;
+var Metar_1 = require("./Metar");
+var Cloud_1 = require("./parts/Cloud");
+var Weather_1 = require("./parts/Weather");
+var Wind_1 = require("./parts/Wind");
+/**
+ * Extracted Metar message
+ */
+var MetarPlot = /** @class */ (function () {
+    function MetarPlot() {
+    }
+    return MetarPlot;
+}());
+exports.MetarPlot = MetarPlot;
+/**
+ * Turns a raw METAR to an SVG image
+ * @param rawMetar RAW metar
+ * @param width css width of svg
+ * @param height css height of svg
+ * @param metric true for metric units(m, hPa, mps), false for north american units (miles, inHg, Kts)
+ * @returns
+ */
+function rawMetarToSVG(rawMetar, width, height, metric) {
+    var plot = rawMetarToMetarPlot(rawMetar, metric);
+    return metarToSVG(plot, width, height);
+}
+exports.rawMetarToSVG = rawMetarToSVG;
+/**
+ *
+ * @param rawMetar raw metar string
+ * @param metric true for metric units(m, hPa, mps), false for north american units (miles, inHg, Kts)
+ * @returns
+ */
+function rawMetarToMetarPlot(rawMetar, metric) {
+    var _a, _b;
+    var metar = new Metar_1.METAR(rawMetar);
+    var wx = (_a = metar.weather[0]) === null || _a === void 0 ? void 0 : _a.abbreviation;
+    //Metric converion
+    var pressure;
+    var vis = undefined;
+    var temp = metar.temperature;
+    var dp = metar.dewpoint;
+    if (metric) {
+        pressure = (metar.altimeter != null) ? Math.round(metar.altimeter * 33.86) : undefined;
+        if (metar.visibility != null) {
+            vis = metar.visibility > 9999 ? 9999 : Math.round(metar.visibility);
+        }
+    }
+    else {
+        temp = cToF(temp);
+        dp = cToF(dp);
+        pressure = metar.altimeter;
+        vis = milePrettyPrint((_b = metar.visibility) !== null && _b !== void 0 ? _b : -1);
+    }
+    return {
+        metric: metric !== null && metric !== void 0 ? metric : false,
+        visablity: vis,
+        temp: temp,
+        dew_point: dp,
+        station: metar.station,
+        wind_direction: (typeof metar.wind.direction === "number") ? metar.wind.direction : undefined,
+        wind_speed: metar.wind.speed,
+        gust_speed: metar.wind.gust,
+        wx: wx,
+        pressure: pressure,
+        coverage: determinCoverage(metar)
+    };
+}
+exports.rawMetarToMetarPlot = rawMetarToMetarPlot;
+/**
+ * Pretty print Miles in fractions if under 1 mile
+ */
+function milePrettyPrint(meters) {
+    var print = "";
+    if (meters === -1) {
+        return print;
+    }
+    var miles = meters * 0.0006213712;
+    //round to nearest quarter
+    var text = (Math.round(miles * 4) / 4).toFixed(2).toString();
+    return text.replace(".00", "");
+}
+/**
+ * Determines the coverage symbol
+ * @param metar
+ * @returns
+ */
+function determinCoverage(metar) {
+    var _a;
+    var prevailingCoverage;
+    metar.clouds.forEach(function (cloud) {
+        if (prevailingCoverage != null) {
+            var curr = prevailingCoverage.abbreviation != null ? Cloud_1.CLOUDS[prevailingCoverage.abbreviation].rank : undefined;
+            var rank = cloud.abbreviation != null ? Cloud_1.CLOUDS[cloud.abbreviation].rank : undefined;
+            console.log("cur: " + curr + ", rank: " + rank);
+            if (rank != null) {
+                if (rank > curr) {
+                    prevailingCoverage = cloud;
+                }
+            }
+        }
+        else {
+            prevailingCoverage = cloud;
+        }
+    });
+    return (_a = prevailingCoverage === null || prevailingCoverage === void 0 ? void 0 : prevailingCoverage.abbreviation) !== null && _a !== void 0 ? _a : "";
+}
+/**
+ * Turns a Metar plot object to a SVG image
+ * @param metar MetarPlot Object
+ * @param width css width for svg
+ * @param height css height for svg
+ * @returns
+ */
+function metarToSVG(metar, width, height) {
+    var _a, _b, _c, _d, _e, _f;
+    var VIS = (_a = metar.visablity) !== null && _a !== void 0 ? _a : "";
+    var TMP = (_b = metar.temp) !== null && _b !== void 0 ? _b : "";
+    var DEW = (_c = metar.dew_point) !== null && _c !== void 0 ? _c : "";
+    var STA = (_d = metar.station) !== null && _d !== void 0 ? _d : "";
+    var ALT = (_e = metar.pressure) !== null && _e !== void 0 ? _e : "";
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + width + "\" height=\"" + height + "\" viewBox=\"0 0 500 500\">\n                <style>\n                    .txt{ font-size: 47.5px; font-family: sans-serif; }\n                    .tmp{ fill: red }\n                    .sta{ fill: grey }\n                    .dew{ fill: blue }\n                    .vis{ fill: violet }\n                </style>\n                " + (0, Wind_1.genWind)(metar) + "\n                " + (0, Weather_1.getWeatherSVG)((_f = metar.wx) !== null && _f !== void 0 ? _f : "") + "\n                " + (0, Cloud_1.genCoverage)(metar.coverage, metar.condition) + "\n                <g id=\"text\">\n                    <text class=\"vis txt\" fill=\"#000000\" stroke=\"#000\" stroke-width=\"0\" x=\"80\"   y=\"260\" text-anchor=\"middle\" xml:space=\"preserve\">" + VIS + "</text>\n                    <text class=\"tmp txt\" fill=\"#000000\" stroke=\"#000\" stroke-width=\"0\" x=\"160\"  y=\"220\" text-anchor=\"middle\" xml:space=\"preserve\" >" + TMP + "</text>\n                    <text class=\"dew txt\" fill=\"#000000\" stroke=\"#000\" stroke-width=\"0\" x=\"160\"  y=\"315\" text-anchor=\"middle\" xml:space=\"preserve\">" + DEW + "</text>\n                    <text class=\"sta txt\" fill=\"#000000\" stroke=\"#000\" stroke-width=\"0\" x=\"275\"  y=\"315\" text-anchor=\"start\" xml:space=\"preserve\">" + STA + "</text>\n                    <text class=\"sta txt\" fill=\"#000000\" stroke=\"#000\" stroke-width=\"0\" x=\"275\"  y=\"220\"  text-anchor=\"start\" xml:space=\"preserve\">" + ALT + "</text>\n                </g>\n            </svg>";
+}
+exports.metarToSVG = metarToSVG;
+/**
+ * Turns a Metar plot object to a SVG image
+ * @param metar MetarPlot Object
+ * @returns A Base64 encoded string to be added directly as img src
+ */
+function metarToImgSrc(metar) {
+    var data = btoa(unescape(encodeURIComponent(metarToSVG(metar, "100px", "100px"))));
+    return "data:image/svg+xml;base64," + data;
+}
+exports.metarToImgSrc = metarToImgSrc;
+/**
+ * Convert ºF to ºF
+ * @param celsius
+ */
+function cToF(celsius) {
+    if (celsius != null) {
+        return Math.round(celsius * 9 / 5 + 32);
+    }
+}
+
+},{"./Metar":206,"./parts/Cloud":209,"./parts/Weather":210,"./parts/Wind":211}],208:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CLOUDS = exports.windImgSrc = exports.genWind = exports.getWeatherImgSrc = exports.getWeatherSVG = exports.WEATHER = exports.parseMetar = exports.METAR = exports.metarToImgSrc = exports.rawMetarToMetarPlot = exports.rawMetarToSVG = exports.metarToSVG = exports.MetarPlot = void 0;
+var MetarPlot_1 = require("./MetarPlot");
+Object.defineProperty(exports, "MetarPlot", { enumerable: true, get: function () { return MetarPlot_1.MetarPlot; } });
+Object.defineProperty(exports, "metarToSVG", { enumerable: true, get: function () { return MetarPlot_1.metarToSVG; } });
+Object.defineProperty(exports, "rawMetarToSVG", { enumerable: true, get: function () { return MetarPlot_1.rawMetarToSVG; } });
+Object.defineProperty(exports, "rawMetarToMetarPlot", { enumerable: true, get: function () { return MetarPlot_1.rawMetarToMetarPlot; } });
+Object.defineProperty(exports, "metarToImgSrc", { enumerable: true, get: function () { return MetarPlot_1.metarToImgSrc; } });
+var Metar_1 = require("./Metar");
+Object.defineProperty(exports, "METAR", { enumerable: true, get: function () { return Metar_1.METAR; } });
+Object.defineProperty(exports, "parseMetar", { enumerable: true, get: function () { return Metar_1.parseMetar; } });
+var Weather_1 = require("./parts/Weather");
+Object.defineProperty(exports, "WEATHER", { enumerable: true, get: function () { return Weather_1.WEATHER; } });
+Object.defineProperty(exports, "getWeatherSVG", { enumerable: true, get: function () { return Weather_1.getWeatherSVG; } });
+Object.defineProperty(exports, "getWeatherImgSrc", { enumerable: true, get: function () { return Weather_1.getWeatherImgSrc; } });
+var Wind_1 = require("./parts/Wind");
+Object.defineProperty(exports, "genWind", { enumerable: true, get: function () { return Wind_1.genWind; } });
+Object.defineProperty(exports, "windImgSrc", { enumerable: true, get: function () { return Wind_1.windImgSrc; } });
+var Cloud_1 = require("./parts/Cloud");
+Object.defineProperty(exports, "CLOUDS", { enumerable: true, get: function () { return Cloud_1.CLOUDS; } });
+
+},{"./Metar":206,"./MetarPlot":207,"./parts/Cloud":209,"./parts/Weather":210,"./parts/Wind":211}],209:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.genCoverage = exports.CLOUDS = exports.CONDITIONS = exports.Cloud = void 0;
+/**
+ * Cloud Description
+ */
+var Cloud = /** @class */ (function () {
+    function Cloud() {
+    }
+    return Cloud;
+}());
+exports.Cloud = Cloud;
+exports.CONDITIONS = {
+    //Visual Flight Rules
+    VFR: "green",
+    //Marginal Visual Flight Rules
+    MVFR: "blue",
+    //Instrument Flight Rules
+    IFR: "red",
+    //Low Instrument flight Rules
+    LIFR: "purple"
+};
+var size = 25;
+var piD = (size / 2) * 3.14 * 2;
+//clear square
+var CLR_SQUARE = "<g id=\"clr\">\n        <rect width=\"" + size + "\" height=\"" + size + "\" x=\"calc(250 - " + size / 2 + ")\" y=\"calc(250 - " + size / 2 + ")\" class=\"coverage\"/>\n    </g>";
+//clear circle
+var CLR_CIRCLE = "<g id=\"clr\">\n        <circle cx=\"250\" cy=\"250\" r=\"" + size + "\" fill=\"#00000000\" class=\"coverage\"/>\n    </g>";
+// Few clouds 25% coverage
+var FEW = "<g id=\"few\">\n        <circle cx=\"250\" cy=\"250\" r=\"" + size + "\" fill=\"#00000000\" class=\"coverage\"/>\n        <circle cx=\"250\" cy=\"250\" r=\"" + size / 2 + "\" fill=\"#00000000\" \n        stroke-dasharray=\"0 calc(75 * " + piD + " / 100) calc(25 * " + piD + " / 100)\"\n        class=\"partial\"/>\n    </g>";
+// Scattered clouds 50% coverage
+var SCT = "<g id=\"few\">\n    <circle cx=\"250\" cy=\"250\" r=\"" + size + "\" fill=\"#00000000\" class=\"coverage\"/>\n    <circle cx=\"250\" cy=\"250\" r=\"" + size / 2 + "\" fill=\"#00000000\" \n    stroke-dasharray=\"calc(25 * " + piD + " / 100) calc(50 * " + piD + " / 100) calc(25 * " + piD + " / 100)\"\n    class=\"partial\"/>\n</g>";
+// Broken clouds 75% coverage
+var BRK = "<g id=\"few\">\n    <circle cx=\"250\" cy=\"250\" r=\"" + size + "\" fill=\"#00000000\" class=\"coverage\"/>\n    <circle cx=\"250\" cy=\"250\" r=\"" + size / 2 + "\" fill=\"#00000000\" \n    stroke-dasharray=\"calc(49 * " + piD + " / 100) calc(26 * " + piD + " / 100) calc(25 * " + piD + " / 100)\"\n    class=\"partial\"/>\n</g>";
+// Overcast
+var OVC = "<g id=\"ovc\">\n    <circle cx=\"250\" cy=\"250\" r=\"" + size + "\" class=\"ovc\"/>\n</g>";
+//Cloud abbreviation map
+exports.CLOUDS = {
+    NCD: { svg: CLR_CIRCLE, text: "no clouds", rank: 0 },
+    SKC: { svg: CLR_CIRCLE, text: "sky clear", rank: 0 },
+    CLR: { svg: CLR_CIRCLE, text: "no clouds under 12,000 ft", rank: 0 },
+    NSC: { svg: CLR_CIRCLE, text: "no significant", rank: 0 },
+    FEW: { svg: FEW, text: "few", rank: 1 },
+    SCT: { svg: SCT, text: "scattered", rank: 2 },
+    BKN: { svg: BRK, text: "broken", rank: 3 },
+    OVC: { svg: OVC, text: "overcast", rank: 4 },
+    VV: { svg: OVC, text: "vertical visibility", rank: 5 },
+};
+/**
+ * Generates SVG for cloud coverage
+ * @param coverage
+ * @param condition
+ * @returns
+ */
+function genCoverage(coverage, condition) {
+    if (coverage != null && coverage !== "") {
+        return "\n            <style>\n                .coverage{ \n                    stroke-width: 5; \n                    stroke: " + (condition != null ? exports.CONDITIONS[condition] : "black") + ";\n                }\n                .partial{\n                    stroke-width: 25; \n                    stroke: " + (condition != null ? exports.CONDITIONS[condition] : "black") + ";\n                }\n                .ovc{\n                    fill: " + (condition != null ? exports.CONDITIONS[condition] : "black") + ";\n                }\n            </style>\n            " + exports.CLOUDS[coverage].svg;
+    }
+    else {
+        return "";
+    }
+}
+exports.genCoverage = genCoverage;
+
+},{}],210:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WEATHER = exports.getWeatherImgSrc = exports.getWeatherSVG = exports.Weather = void 0;
+/**
+ * Weather Descriptor
+ */
+var Weather = /** @class */ (function () {
+    function Weather() {
+    }
+    return Weather;
+}());
+exports.Weather = Weather;
+/**
+ * Returns SVG icon
+ * @param key weather abbriviation
+ */
+function getWeatherSVG(key) {
+    var weather = exports.WEATHER[key] != null ? exports.WEATHER[key].svg : "";
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"65\" height=\"65\" viewBox=\"0 0 500 500\" x=\"140\" y=\"220\">\n                <style>\n                    .wx_graphic {\n                        stroke: black;\n                        fill: none;\n                        stroke-width: 30\n                    }\n                </style>\n                " + weather + "\n            </svg>";
+}
+exports.getWeatherSVG = getWeatherSVG;
+/**
+ * Returns a raw base64 src for img tag
+ * @param key
+ * @returns
+ */
+function getWeatherImgSrc(key) {
+    var weather = exports.WEATHER[key] != null ? exports.WEATHER[key].svg : "";
+    var data = btoa(unescape(encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"65\" height=\"65\" viewBox=\"0 0 500 500\">\n                <style>\n                    .wx_graphic {\n                        stroke: black;\n                        fill: none;\n                        stroke-width: 30\n                    }\n                </style>\n                " + weather + "\n            </svg>")));
+    return "data:image/svg+xml;base64," + data;
+}
+exports.getWeatherImgSrc = getWeatherImgSrc;
+var BRK_DWN_ARW = "<line class=\"wx_graphic\" x1=\"350\" y1=\"50\" x2=\"175\" y2=\"250\"></line>\n    <line class=\"wx_graphic\" x1=\"170\" y1=\"245\" x2=\"350\" y2=\"415\"></line>\n    <line class=\"wx_graphic\" x1=\"350\" y1=\"415\" x2=\"250\" y2=\"415\"></line>\n    <line class=\"wx_graphic\" x1=\"350\" y1=\"425\" x2=\"350\" y2=\"315\"></line>";
+var RIGHT_ARROW = "<line class=\"wx_graphic\" x1=\"120\" y1=\"250\" x2=\"430\" y2=\"250\"></line>\n    <line class=\"wx_graphic\" x1=\"380\" y1=\"250\" x2=\"465\" y2=\"250\" transform=\"rotate(-45, 450, 250)\"></line>\n    <line class=\"wx_graphic\" x1=\"380\" y1=\"250\" x2=\"450\" y2=\"250\" transform=\"rotate(45, 450, 250)\"></line>";
+var COMMA = "<ellipse\n      style=\"fill:black;\"\n      cx=\"238\"\n      cy=\"178\"\n      rx=\"88\"\n      ry=\"87\" />\n    <path\n      class=\"wx_graphic\"\n      d=\"m 174,335 c 9,2 19,3 30,3 h 2 c 56,0 101,-34 101,-76 v -68 c 0,-42 -45,-76 -101,-76 h -2\" />";
+var STAR = "<rect\n        style=\"fill:black\"\n        width=\"50\"\n        height=\"350\"\n        x=\"225\"\n        y=\"-25\" />\n    <rect\n        style=\"fill:black\"\n        width=\"50\"\n        height=\"350\"\n        x=\"235\"\n        y=\"-300\"\n        transform=\"rotate(55)\" />\n    <rect\n        style=\"fill:black\"\n        width=\"50\" height=\"350\"\n        x=\"-10\" y=\"115\"\n        transform=\"rotate(-55)\" />";
+var DWN_TRI = "<path\n    class=\"wx_graphic\" \n    style=\"stroke-linecap:butt;stroke-linejoin:round\"\n    d=\"M 245,420 175,150 320,146 Z\" />";
+var DWN_TRI_SMALL = "<path\n        class=\"wx_graphic\"\n        style=\"stroke-linecap:butt;stroke-linejoin:round\"\n        d=\"M 240,435 190,275 290,275 Z\"/>";
+var SINE = "<g>\n        <path\n            class=\"wx_graphic\" \n            d=\"m 430,230 a 85,90 0 0 1 -45,80 85,90 0 0 1 -85,0 85,90 0 0 1 -45,-80\"/>\n        <path\n            class=\"wx_graphic\" \n            d=\"m -80,-230 a 85,90 0 0 1 -45,80 85,90 0 0 1 -85,0 85,90 0 0 1 -45,-80\"\n            transform=\"rotate(180)\" />\n    </g>";
+/*
+SVG Icons
+*/
+//DUST OR SAND
+//Smoke or volcanic ash
+var FU_VA = "<g id=\"FU_VA\">\n        <line class=\"wx_graphic\" x1=\"100\" y1=\"150\" x2=\"100\" y2=\"400\"></line>\n        <path class=\"wx_graphic\" d=\"M 100 150 C 115 75 185 75 200 150\"></path>\n        <path class=\"wx_graphic\" d=\"M 200 150 C 215 215 285 215 300 150\"></path>\n        <path class=\"wx_graphic\" d=\"M 300 150 C 315 75 380 75 400 150\"></path>\n    </g>";
+//Haze
+var HZ = "<g id=\"HZ\">\n        <ellipse\n        class=\"wx_graphic\" \n        cx=\"155\"\n        cy=\"255\"\n        rx=\"90\"\n        ry=\"75\" />\n    <ellipse\n        class=\"wx_graphic\" \n        cx=\"340\"\n        cy=\"255\"\n        rx=\"90\"\n        ry=\"75\" />\n    </g>";
+//Dust or Sand
+var DU_SA = "<g id=\"DU_SA\">\n        <path\n        id=\"path342\"\n        class=\"wx_graphic\"\n        d=\"m 322.61133,125.13086 c -16.56384,-20.34934 -42.43354,-31.823704 -69.45117,-30.804688 -11.39949,0.429681 -22.58631,3.074347 -32.87305,7.771488 -35.54781,16.23274 -54.37418,53.88954 -45.19336,90.39648 9.18079,36.50727 43.87857,61.96066 83.29297,61.10156 m -69.90625,126.18555 c 23.94628,29.96696 67.31576,40.40903 104.10937,25.06641 36.79392,-15.34204 57.03041,-52.30668 48.57813,-88.73438 -8.45193,-36.42761 -43.29946,-62.43592 -83.65235,-62.43359\" />\n    </g>";
+//Blowing dust or sand
+var BLDU_BLSA = "<g id=\"BLDU_BLSA\">\n        " + DU_SA + "\n        <rect\n            class=\"wx_graphic\"\n            width=\"0.75\"\n            height=\"385\"\n            x=\"255\"\n            y=\"60\" />\n    </g>";
+//Dust Devil
+var PO = "<g id=\"PO\">\n        <path\n            class=\"wx_graphic\" \n            d=\"M 371.02339,260.54119 327.623,186.08416 175.04878,186.71893 99.310495,319.1701 l 76.835945,131.81445 152.57421,-0.63281 42.2129,-73.82227\" />\n        <path\n            class=\"wx_graphic\" \n            d=\"M 369.42563,141.09136 326.02524,66.634336 173.45102,67.269101 97.712737,199.72027 174.54868,331.53472 327.1229,330.90191 369.33579,257.07964\" />\n    </g>";
+//Vicinity sand storm
+var VCSS = "<g id=\"VCSS\">\n        " + DU_SA + "\n        <path\n            class=\"wx_graphic\"\n            d=\"m 130,245 240,-0.0781 -25,-50\" />\n        <path\n            class=\"wx_graphic\" \n            d=\"M 390,200 A 195,190 0 0 1 195,150 195,190 0 0 1 145,-40\"\n            transform=\"matrix(0.7,0.7,-0.7,0.7,0,0)\" />\n        <path\n            class=\"wx_graphic\" \n            d=\"M -285,225 A 190,185 0 0 1 -485,185 190,185 0 0 1 -540,-5\"\n            transform=\"matrix(-0.65,-0.75,0.75,-0.65,0,0)\"/>\n    </g>";
+//FOG OR SPEACIAL WEATHER
+//Mist or light fog
+var BR = "<g id=\"BR\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"200\" x2=\"450\" y2=\"200\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"300\" x2=\"450\" y2=\"300\"></line>\n    </g>";
+//More or less continuous shallow fog
+var MIFG = "<g id=\"MIFG\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"200\" x2=\"200\" y2=\"200\"></line>\n        <line class=\"wx_graphic\" x1=\"300\" y1=\"200\" x2=\"450\" y2=\"200\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"300\" x2=\"450\" y2=\"300\"></line>\n    </g>\n    ";
+//Vicinity thunderstorm
+var VCTS = "<g id=\"VCTS\">" + BRK_DWN_ARW + "</g>";
+//Virga or precipitation not hitting ground
+var VIRGA = "<g id=\"VIGRA\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"250\"\n            rx=\"80\"\n            ry=\"80\"/>\n        <path\n            class=\"wx_graphic\" \n            d=\"M 415,310 A 185,190 25 0 1 245,415 185,190 25 0 1 80,305\" />\n    </g>";
+//Vicinity showers
+var VCSH = "<g id=\"VCSH\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"250\"\n            rx=\"80\"\n            ry=\"80\" />\n        <path\n            class=\"wx_graphic\" \n            d=\"M 390,200 A 195,190 0 0 1 195,150 195,190 0 0 1 145,-40\"\n            transform=\"matrix(0.7,0.7,-0.7,0.7,0,0)\" />\n        <path\n            class=\"wx_graphic\" \n            d=\"M -285,225 A 190,185 0 0 1 -485,185 190,185 0 0 1 -540,-5\"\n            transform=\"matrix(-0.65,-0.75,0.75,-0.65,0,0)\"/>\n    </g>";
+//Thunderstorm with or without precipitation
+var TS = "<g id=\"TS\">\n        " + BRK_DWN_ARW + "\n        <line class=\"wx_graphic\" x1=\"355\" y1=\"50\" x2=\"50\" y2=\"50\"></line>\n        <line class=\"wx_graphic\" x1=\"60\" y1=\"50\" x2=\"60\" y2=\"440\"></line>\n    </g>\n    ";
+//Squalls
+var SQ = "<g id=\"SQ\">\n        <line class=\"wx_graphic\" x1=\"250\" y1=\"450\" x2=\"150\" y2=\"50\"></line>\n        <line class=\"wx_graphic\" x1=\"150\" y1=\"50\" x2=\"250\" y2=\"125\"></line>\n        <line class=\"wx_graphic\" x1=\"250\" y1=\"125\" x2=\"350\" y2=\"50\"></line>\n        <line class=\"wx_graphic\" x1=\"350\" y1=\"50\" x2=\"250\" y2=\"450\"></line>\n    </g>";
+//Funnel cloud or tornado
+var FC = "<g id=\"FC\">\n        <line class=\"wx_graphic\" x1=\"200\" y1=\"100\" x2=\"200\" y2=\"400\"></line>\n        <line class=\"wx_graphic\" x1=\"300\" y1=\"100\" x2=\"300\" y2=\"400\"></line>\n        <line class=\"wx_graphic\" x1=\"300\" y1=\"100\" x2=\"375\" y2=\"50\"></line>\n        <line class=\"wx_graphic\" x1=\"300\" y1=\"400\" x2=\"375\" y2=\"450\"></line>\n        <line class=\"wx_graphic\" x1=\"200\" y1=\"400\" x2=\"125\" y2=\"450\"></line>\n        <line class=\"wx_graphic\" x1=\"200\" y1=\"100\" x2=\"125\" y2=\"50\"></line>\n    </g>\n    ";
+//BLOWING WEATHER
+//Sand or dust storm
+var SS = "<g id=\"SS\">\n        " + DU_SA + "\n        <path\n            class=\"wx_graphic\"\n            d=\"m 130,245 240,-0.0781 -25,-50\" />\n    </g>";
+//Strong sand or dust storm
+var PLUS_SS = "<g id=\"+SS\">\n        " + DU_SA + "\n        <path\n            class=\"wx_graphic\"\n            d=\"m 135,230 c 80,-0.025 150,-0.050 240,-0.078 l -30,-50\"/>\n        <path\n            class=\"wx_graphic\"\n            d=\"m 135,285 240,0.078 -30,50\" />\n    </g>";
+//Blowing snow
+var BLSN = "<g id=\"BLSN\">\n        <rect\n            class=\"wx_graphic\"\n            width=\"336.96838\"\n            height=\"3.2715375\"\n            x=\"74.154854\"\n            y=\"248.36423\" />\n        <path\n            class=\"wx_graphic\"\n            d=\"m 370.77355,286.68722 58.29491,-38.25 -58.29491,-34.99609\" />\n        <g transform=\"rotate(-90,250,250)\">\n            <rect\n                class=\"wx_graphic\"\n                width=\"335\"\n                height=\"5\"\n                x=\"75\"\n                y=\"250\" />\n            <path\n                class=\"wx_graphic\"\n                d=\"m 370.77355,286.68722 58.29491,-38.25 -58.29491,-34.99609\" />\n        </g>\n    </g>";
+//Drifting snow
+var DRSN = "<g id=\"DRSN\">\n        <rect\n            class=\"wx_graphic\"\n            width=\"336.96838\"\n            height=\"3.2715375\"\n            x=\"74.154854\"\n            y=\"248.36423\" />\n        <path\n            class=\"wx_graphic\"\n            d=\"m 370.77355,286.68722 58.29491,-38.25 -58.29491,-34.99609\" />\n        <g transform=\"rotate(90,250,250)\">\n            <rect\n                class=\"wx_graphic\"\n                width=\"335\"\n                height=\"5\"\n                x=\"75\"\n                y=\"250\" />\n            <path\n                class=\"wx_graphic\"\n                d=\"m 370.77355,286.68722 58.29491,-38.25 -58.29491,-34.99609\" />\n        </g>\n    </g>\n    ";
+//FOG//////////////////////////////////////////////
+//Vicinity fog
+var VCFG = "<g id=\"VCFG\">\n        <line class=\"wx_graphic\" x1=\"100\" y1=\"150\" x2=\"400\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"100\" y1=\"250\" x2=\"400\" y2=\"250\"></line>\n        <line class=\"wx_graphic\" x1=\"100\" y1=\"350\" x2=\"400\" y2=\"350\"></line>\n        <path class=\"wx_graphic\" d=\"M 60 135 C 15 165 15 335 65 365\"></path>\n        <path class=\"wx_graphic\" d=\"M 435 135 C 485 150 500 345 435 365\"></path>\n    </g>";
+//Patchy fog
+var BCFG = "<g id=\"BCFG\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"150\" x2=\"150\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"350\" y1=\"150\" x2=\"450\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"350\" x2=\"150\" y2=\"350\"></line>\n        <line class=\"wx_graphic\" x1=\"350\" y1=\"350\" x2=\"450\" y2=\"350\"></line>\n    </g>";
+//Fog, sky discernable
+var PRFG = "<g id=\"BCFG\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"150\" x2=\"150\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"350\" y1=\"150\" x2=\"450\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"350\" x2=\"450\" y2=\"350\"></line>\n    </g>";
+//Fog, sky undiscernable
+var FG = "<g id=\"FG\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"150\" x2=\"450\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"350\" x2=\"450\" y2=\"350\"></line>\n    </g>";
+//Freezing fog
+var FZFG = "<g id=\"FG\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"150\" x2=\"450\" y2=\"150\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"350\" x2=\"450\" y2=\"350\"></line>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"150\" x2=\"250\" y2=\"350\"></line>\n        <line class=\"wx_graphic\" x1=\"450\" y1=\"150\" x2=\"250\" y2=\"350\"></line>\n    </g>";
+//Drizzle
+//Light drizzle
+var MIN_DZ = "<g id=\"-DZ\">\n        <g transform=\"matrix(0.6,0,0,0.6,20,114)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,203,114)\">" + COMMA + "</g>\n    </g>";
+//Moderate drizzle
+var DZ = "<g id=\"DZ\">\n        <g transform=\"matrix(0.6,0,0,0.6,18,158)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,201,158)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,106,12)\">" + COMMA + "</g>\n    </g>";
+//Heavy drizzle
+var PLUS_DZ = "<g id=\"+DZ\">\n        <g transform=\"matrix(0.6,0,0,0.6,20,114)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,203,114)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,108,-31)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,108,261)\">" + COMMA + "</g>\n    </g>";
+//Light freezing drizzle
+var MIN_FZDZ = "<g id=\"-FZDZ\">\n        <g transform=\"matrix(0.6,0,0,0.6,28,136)\">" + COMMA + "</g>\n        " + SINE + "\n    </g>";
+//Moderate to heavy freezing drizzle
+var FZDZ = "<g id=\"-DZ\">\n        <g transform=\"matrix(0.6,0,0,0.6,28,136)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,204,66)\">" + COMMA + "</g>\n        " + SINE + "    \n    </g>";
+//Light drizzle and rain
+var MIN_DZRA = "<g id=\"-DZRA\">\n        <g transform=\"matrix(0.6,0,0,0.6,107,193)\">" + COMMA + "</g>\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"150\"\n            rx=\"50\"\n            ry=\"55\"/>\n    </g>";
+//Moderate to heavy drizzle and rain
+var DZRA = "<g id=\"DZRA\" transform=\"matrix(1,0,0,0.9,0.6,120)\">\n        <g transform=\"matrix(0.6,0,0,0.6,105,170)\">" + COMMA + "</g>\n        <g transform=\"matrix(0.6,0,0,0.6,105,-140)\">" + COMMA + "</g>\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"150\"\n            rx=\"50\"\n            ry=\"55\"/>\n    </g>";
+//RAIN
+//Light rain
+var MIN_RA = "<g id=\"-RA\">\n        <ellipse\n            style=\"fill:#00000\"\n            cx=\"130\"\n            cy=\"245\"\n            rx=\"80\"\n            ry=\"80\" />\n        <ellipse\n            style=\"fill:black\"\n            cx=\"370\"\n            cy=\"245\"\n            rx=\"80\"\n            ry=\"80\" />\n    </g>";
+//Moderate rain
+var RA = "<g id=\"RA\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"135\"\n            cy=\"355\"\n            rx=\"80\"\n            ry=\"80\" />\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"145\"\n            rx=\"80\"\n            ry=\"80\" />\n        <ellipse\n            style=\"fill:black\"\n            cx=\"365\"\n            cy=\"355\"\n            rx=\"80\"\n            ry=\"80\" />\n    </g>";
+//Heavy rain
+var PLUS_RA = "<g id=\"+RA\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"140\"\n            cy=\"250\"\n            rx=\"80\"\n            ry=\"80\" />\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"100\"\n            rx=\"80\"\n            ry=\"80\" />\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"400\"\n            rx=\"80\"\n            ry=\"80\" />\n        <ellipse\n            style=\"fill:black\"\n            cx=\"360\"\n            cy=\"250\"\n            rx=\"80\"\n            ry=\"80\" />\n    </g>";
+//Light freezing rain
+var MIN_FZRA = "<g id=\"-FZRA\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"170\"\n            cy=\"250\"\n            rx=\"50\"\n            ry=\"55\"/>\n        " + SINE + "\n    </g>";
+//Moderate to heavy freezing rain
+var FZRA = "<g id=\"FZRA\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"170\"\n            cy=\"250\"\n            rx=\"50\"\n            ry=\"55\"/>\n        <ellipse\n            style=\"fill:black\"\n            cx=\"345\"\n            cy=\"215\"\n            rx=\"50\"\n            ry=\"55\"/>\n        " + SINE + "\n    </g>";
+//Light rain and snow
+var MIN_RASN = "<g id=\"-RASN\" transform=\"translate(-0.45,160)\">\n        <g transform=\"matrix(0.45,0,0,0.4,140,140)\">" + STAR + "</g>\n        <ellipse\n            style=\"fill:black\"\n            cx=\"250\"\n            cy=\"-15\"\n            rx=\"70\"\n            ry=\"70\" />\n    </g>";
+//Moderate to heavy rain and snow
+var RASN = "<g id=\"RASN\" transform=\"translate(-0.43,155)\">\n        <g transform=\"matrix(0.45,0,0,0.4,140,200)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,140,-130)\">" + STAR + "</g>\n        <ellipse\n            cx=\"250\"\n            cy=\"95\"\n            rx=\"70\"\n            ry=\"70\" />\n    </g>";
+//SNOW and MISC FROZEN PERCIP
+//Light snow
+var MIN_SN = "<g id=\"-SN\" transform=\"translate(-0.435,100)\">\n        <g transform=\"matrix(0.45,0,0,0.4,40,90)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,240,90)\">" + STAR + "</g>\n    </g>";
+//Moderate snow
+var SN = "<g id=\"SN\" transform=\"translate(-0.435,170)\">\n        <g transform=\"matrix(0.45,0,0,0.4,40,90)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,240,90)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,140,-55)\">" + STAR + "</g>\n    </g>";
+//Heavy snow
+var PLUS_SN = "<g id=\"+SN\" transform=\"translate(-0.435,100)\">\n        <g transform=\"matrix(0.45,0,0,0.4,40,90)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,240,90)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,140,-55)\">" + STAR + "</g>\n        <g transform=\"matrix(0.45,0,0,0.4,140,240)\">" + STAR + "</g>\n    </g>";
+//Snow grains
+var SG = "<g id=\"SG\">\n        <polygon class=\"wx_graphic\" points=\"250 150 150 300 350 300\"></polygon>\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"230\" x2=\"197\" y2=\"230\"></line>\n        <line class=\"wx_graphic\" x1=\"303\" y1=\"230\" x2=\"450\" y2=\"230\"></line>\n    </g>";
+//Ice crystals
+var IC = "<g id=\"IC\">\n        <line class=\"wx_graphic\" x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\"></line>\n        <line class=\"wx_graphic\" x1=\"175\" y1=\"175\" x2=\"325\" y2=\"325\"></line>\n        <line class=\"wx_graphic\" x1=\"325\" y1=\"175\" x2=\"174\" y2=\"325\"></line>  \n    </g>";
+//Ice pellets
+var PE_PL = "<g id=\"PE_PL\">\n      <polygon class=\"wx_graphic\" points=\"250 150 150 300 350 300\"></polygon>\n      <text style=\"fill: black; font-size: 100px;\" x=\"237.271\" y=\"242.526\" dx=\"-18.412\" dy=\"32.137\">\u25CF</text>\n    </g>";
+//SHOWERY PERCIPITATION
+//Light rain showers
+var MIN_SHRA = "<g id=\"MIN_SHRA\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"245\"\n            cy=\"70\"\n            rx=\"50\"\n            ry=\"50\" />\n        " + DWN_TRI + "\n    </g>";
+//Moderate to heavy rain showers
+var SHRA = "<g transform=\"translate(3.14,20)\">\n        <ellipse\n            style=\"fill:black\"\n                cx=\"245\"\n                cy=\"70\"\n                rx=\"50\"\n                ry=\"50\" />\n        " + DWN_TRI + "\n        <rect\n            style=\"fill:none;stroke:black;stroke-width:15;\"\n            width=\"100\"\n            height=\"5\"\n            x=\"195\"\n            y=\"205\" />\n    </g>";
+//Light rain and snow showers
+var MIN_SHRASN = "<g transform=\"translate(9,20)\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"240\"\n            cy=\"195\"\n            rx=\"50\"\n            ry=\"50\"/>\n        " + DWN_TRI_SMALL + "\n        <g transform=\"matrix(0.3,0,0,0.3,165,35)\">\n            " + STAR + "\n        </g>\n    </g>";
+//Moderate to heavy rain and snow showers
+var SHRASN = "<g transform=\"translate(9,20)\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"240\"\n            cy=\"195\"\n            rx=\"50\"\n            ry=\"50\"/>\n        " + DWN_TRI_SMALL + "\n        <g transform=\"matrix(0.3,0,0,0.3,165,35)\">\n            " + STAR + "\n        </g>\n        <rect\n            class=\"fill:black\"\n            width=\"70\"\n            height=\"20\"\n            x=\"205\"\n            y=\"305\" />\n    </g>";
+//Light snow showers
+var MIN_SHSN = "<g id=\"MIN_SHRA\">\n        " + DWN_TRI + "\n        <g transform=\"matrix(0.325,0,0,0.3,165,35)\">\n            " + STAR + "\n        </g>\n    </g>";
+//Moderate to heavy snow showers
+var SHSN = "<g id=\"MIN_SHRA\">\n        " + DWN_TRI + "\n        <g transform=\"matrix(0.325,0,0,0.3,165,35)\">\n            " + STAR + "\n        </g>\n        <rect\n            style=\"fill:none;stroke:black;stroke-width:15;\"\n            width=\"100\"\n            height=\"5\"\n            x=\"195\"\n            y=\"205\" />\n    </g>";
+//Light showers with hail, not with thunder
+var MIN_GR = "<g transform=\"translate(3.1476804,20.168937)\">\n        <path\n            class=\"wx_graphic\"\n            style=\"stroke-linecap:butt;stroke-linejoin:round\"\n            d=\"M 200,350 80,140 325,140 Z\"\n            transform=\"matrix(0.54819594,0,0,1.1522448,135.14291,26.25069)\" />\n        <path\n            style=\"fill:black;stroke-linecap:butt;stroke-linejoin:round\"\n            d=\"M 215,106.41301 271.14262,9.7515746 327.2378,105.91474 Z\"\n            transform=\"matrix(1.25,0,0,1.2,-90,25)\" />\n    </g>";
+//Moderate to heavy showers with hail, not with thunder
+var GR = "<g transform=\"translate(3.1476804,20.168937)\">\n        <path\n            class=\"wx_graphic\"\n            style=\"stroke-linecap:butt;stroke-linejoin:round\"\n            d=\"M 200,350 80,140 325,140 Z\"\n            transform=\"matrix(0.55,0,0,1.15,135,25)\" />\n        <path\n            style=\"fill:black;stroke-linecap:butt;stroke-linejoin:round\"\n            d=\"M 215,105 270,10 325,105 Z\"\n            transform=\"matrix(1.25,0,0,1.2,-90,25)\" />\n        <rect\n            style=\"fill:none;stroke:black;stroke-width:15\"\n            width=\"95\"\n            height=\"5\"\n            x=\"200\"\n            y=\"235\" />\n    </g>";
+// THUNDERSTORMS
+var THUNDER = "<path\n        class=\"wx_graphic\"\n        style=\"stroke-linecap:butt;stroke-linejoin:round\"    \n        d=\"M 375,425 230,290 355,125 H 125 v 300\"/>\n    <path\n        class=\"wx_graphic\"\n        style=\"stroke-linecap:butt;stroke-linejoin:round\"\n        d=\"M 250,405 380,425 335,305\"/>";
+//Light to moderate thunderstorm with rain
+var TSRA = "  <g transform=\"matrix(0.59808265,0,0,0.58004786,205.87825,107.57905)\">\n    <ellipse\n        style=\"fill:black\"\n        cx=\"75\"\n        cy=\"-75\"\n        rx=\"70\"\n        ry=\"70\" />\n    </g>\n    " + THUNDER;
+//Light to moderate thunderstorm with hail
+var TSGR = "<path\n        class=\"wx_graphic\"\n        d=\"m 190,45 40,-70 40,70 z\"\n        transform=\"matrix(0.8,0,0,0.7,55,60)\" />\n        " + THUNDER;
+//Thunderstorm with heavy rain
+var PLUS_TSRA = "<g transform=\"matrix(0.6,0,0,0.6,205,105)\">\n        <ellipse\n            style=\"fill:black\"\n            cx=\"75\"\n            cy=\"-75\"\n            rx=\"70\"\n            ry=\"70\" />\n    </g>\n    <path\n        class=\"wx_graphic\"\n        style=\"stroke-linecap:butt;stroke-linejoin:round\"\n        d=\"M 235,420 295,350 230,290 355,125 H 125 v 300\" />\n    <path\n        class=\"wx_graphic\"\n        style=\"stroke-linecap:butt;stroke-linejoin:round\"\n        d=\"m 240,355 -25,80 80,-20\"/>";
+/**
+ * Map of weather abbriviation to SVG data and Full text
+ */
+exports.WEATHER = {
+    "FU": { svg: FU_VA, text: "Smoke" },
+    "VA": { svg: FU_VA, text: "Volcanic Ash" },
+    "HZ": { svg: HZ, text: "Haze" },
+    "DU": { svg: DU_SA, text: "Dust" },
+    "SA": { svg: DU_SA, text: "Sand" },
+    "BLDU": { svg: BLDU_BLSA, text: "Blowing Dust" },
+    "BLDA": { svg: BLDU_BLSA, text: "Blowing Sand" },
+    "PO": { svg: PO, text: "Dust Devil" },
+    "VCSS": { svg: VCSS, text: "Vicinity Sand Storm" },
+    "BR": { svg: BR, text: "Mist or light fog" },
+    "MIFG": { svg: MIFG, text: "Continuous Shallow Fog" },
+    "VCTS": { svg: VCTS, text: "Vicinity Thunderstorm" },
+    "VIRGA": { svg: VIRGA, text: "Virga" },
+    "VCSH": { svg: VCSH, text: "Vicinity showers" },
+    "TS": { svg: TS, text: "Thunderstorm" },
+    "SQ": { svg: SQ, text: "Squall" },
+    "FC": { svg: FC, text: "Funnel Cloud/Tornado" },
+    "SS": { svg: SS, text: "Sand/Dust Storm" },
+    "+SS": { svg: PLUS_SS, text: "Strong Sand/Dust Storm" },
+    "BLSN": { svg: BLSN, text: "Blowing Snow" },
+    "DRSN": { svg: DRSN, text: "Drifting Snow" },
+    "VCFG": { svg: VCFG, text: "Vicinity Fog" },
+    "BCFG": { svg: BCFG, text: "Patchy Fog" },
+    "PRFG": { svg: PRFG, text: "Fog, Sky Discernable" },
+    "FG": { svg: FG, text: "Fog, Sky Undiscernable" },
+    "FZFG": { svg: FZFG, text: "Freezing Fog" },
+    "-DZ": { svg: MIN_DZ, text: "Light Drizzle" },
+    "DZ": { svg: DZ, text: "Moderate Drizzle" },
+    "+DZ": { svg: PLUS_DZ, text: "Heavy Drizzle" },
+    "-FZDZ": { svg: MIN_FZDZ, text: "Light Freezing Drizzle" },
+    "FZDZ": { svg: FZDZ, text: "Moderate Freezing Drizzle" },
+    "+FZDZ": { svg: FZDZ, text: "Heavy Freezing Drizzle" },
+    "-DZRA": { svg: MIN_DZRA, text: "Light Drizzle & Rain" },
+    "DZRA": { svg: DZRA, text: "Moderate to Heavy Drizzle & Rain" },
+    "-RA": { svg: MIN_RA, text: "Light Rain" },
+    "RA": { svg: RA, text: "Moderate Rain" },
+    "+RA": { svg: PLUS_RA, text: "Heavy Rain" },
+    "-FZRA": { svg: MIN_FZRA, text: "Light Freezing Rain" },
+    "FZRA": { svg: FZRA, text: "Moderate Freezing Rain" },
+    "+FZRA": { svg: FZRA, text: "Heavy Freezing Rain" },
+    "-RASN": { svg: MIN_RASN, text: "Light Rain & Snow" },
+    "RASN": { svg: RASN, text: "Moderate Rain & Snow" },
+    "+RASN": { svg: RASN, text: "Heavy Rain & Snow" },
+    "-SN": { svg: MIN_SN, text: "Light Snow" },
+    "SN": { svg: SN, text: "Moderate Snow" },
+    "+SN": { svg: PLUS_SN, text: "Heavy Snow" },
+    "SG": { svg: SG, text: "Snow Grains" },
+    "IC": { svg: IC, text: "Ice Crystals" },
+    "PE": { svg: PE_PL, text: "Ice Pellets" },
+    "PL": { svg: PE_PL, text: "Ice Pellets" },
+    "-SHRA": { svg: MIN_SHRA, text: "Light rain showers" },
+    "SHRA": { svg: SHRA, text: "Moderate rain showers" },
+    "+SHRA": { svg: SHRA, text: "Heavy rain showers" },
+    "-SHRASN": { svg: MIN_SHRASN, text: "Light rain and snow showers" },
+    "SHRASN": { svg: SHRASN, text: "Moderate rain and snow showers" },
+    "+SHRASN": { svg: SHRASN, text: "Heavy rain and snow showers" },
+    "-SHSN": { svg: MIN_SHSN, text: "Light snow showers" },
+    "SHSN": { svg: SHSN, text: "Moderate snow showers" },
+    "+SHSN": { svg: SHSN, text: "Heavy snow showers" },
+    "-GR": { svg: MIN_GR, text: "Light showers with hail, not with thunder" },
+    "GR": { svg: GR, text: "Moderate to heavy showers with hail, not with thunder" },
+    "-TSRA": { svg: TSRA, text: "Light thunderstorm with rain" },
+    "TSRA": { svg: TSRA, text: "Moderate thunderstorm with rain" },
+    "-TSGR": { svg: TSGR, text: "Light thunderstorm with hail" },
+    "TSGR": { svg: TSGR, text: "Moderate thunderstorm with hail" },
+    "+TSRA": { svg: PLUS_TSRA, text: "Thunderstorm with heavy rain" }
+};
+var RECENT_WEATHER = {
+    REBLSN: "Moderate/heavy blowing snow (visibility significantly reduced)reduced",
+    REDS: "Dust Storm",
+    REFC: "Funnel Cloud",
+    REFZDZ: "Freezing Drizzle",
+    REFZRA: "Freezing Rain",
+    REGP: "Moderate/heavy snow pellets",
+    REGR: "Moderate/heavy hail",
+    REGS: "Moderate/heavy small hail",
+    REIC: "Moderate/heavy ice crystals",
+    REPL: "Moderate/heavy ice pellets",
+    RERA: "Moderate/heavy rain",
+    RESG: "Moderate/heavy snow grains",
+    RESHGR: "Moderate/heavy hail showers",
+    RESHGS: "Moderate/heavy small hail showers",
+    // RESHGS: "Moderate/heavy snow pellet showers", // dual meaning?
+    RESHPL: "Moderate/heavy ice pellet showers",
+    RESHRA: "Moderate/heavy rain showers",
+    RESHSN: "Moderate/heavy snow showers",
+    RESN: "Moderate/heavy snow",
+    RESS: "Sandstorm",
+    RETS: "Thunderstorm",
+    REUP: "Unidentified precipitation (AUTO obs. only)",
+    REVA: "Volcanic Ash",
+};
+
+},{}],211:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.genWind = exports.windImgSrc = exports.Variation = exports.Wind = void 0;
+var Wind = /** @class */ (function () {
+    function Wind() {
+    }
+    return Wind;
+}());
+exports.Wind = Wind;
+var Variation = /** @class */ (function () {
+    function Variation() {
+    }
+    return Variation;
+}());
+exports.Variation = Variation;
+var GUST_WIDTH = 2;
+var WS_WIDTH = 4;
+/**
+ * Creates a windbarb for the metar
+ * @param metar
+ * @returns Img src base64 string
+ */
+function windImgSrc(metar) {
+    var data = btoa(unescape(encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 500 500\">\n                    " + genWind(metar) + "\n                </svg>")));
+    return "data:image/svg+xml;base64," + data;
+}
+exports.windImgSrc = windImgSrc;
+/**
+ * Creates a windbarb for the metar
+ * @param metar
+ * @returns SVG string
+ */
+function genWind(metar) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    var WDD = metar.wind_direction ? metar.wind_direction : 0;
+    var WSP = metar.wind_speed ? metar.wind_speed : 0;
+    var wind = "";
+    var gust = "";
+    if (WSP === 0) {
+        wind =
+            "<g id=\"calm\">\n                <ellipse id=\"calm-marker\" stroke=\"#000\" fill=\"#00000000\" cx=\"250\" cy=\"250\" rx=\"35\" ry=\"35\"/>\n            </g>";
+    }
+    else {
+        gust = metar.gust_speed == null ? "" :
+            "<g id=\"gustBarb\" transform=\"rotate(" + WDD + ", 250, 250)\">\n                " + genBarb1((_a = metar.gust_speed) !== null && _a !== void 0 ? _a : 0, true) + "\n                " + genBarb2((_b = metar.gust_speed) !== null && _b !== void 0 ? _b : 0, true) + "\n                " + genBarb3((_c = metar.gust_speed) !== null && _c !== void 0 ? _c : 0, true) + "\n                " + genBarb4((_d = metar.gust_speed) !== null && _d !== void 0 ? _d : 0, true) + "\n                " + genBarb5((_e = metar.gust_speed) !== null && _e !== void 0 ? _e : 0, true) + "\n            </g>";
+        wind =
+            "<g id=\"windBard\" transform=\"rotate(" + WDD + ", 250, 250)\">\n                <line stroke-width=\"3\" y1=\"225\" x1=\"250\" y2=\"50\" x2=\"250\"  stroke=\"#000\" fill=\"none\" />\n                " + genBarb1((_f = metar.wind_speed) !== null && _f !== void 0 ? _f : 0, false) + "\n                " + genBarb2((_g = metar.wind_speed) !== null && _g !== void 0 ? _g : 0, false) + "\n                " + genBarb3((_h = metar.wind_speed) !== null && _h !== void 0 ? _h : 0, false) + "\n                " + genBarb4((_j = metar.wind_speed) !== null && _j !== void 0 ? _j : 0, false) + "\n                " + genBarb5((_k = metar.wind_speed) !== null && _k !== void 0 ? _k : 0, false) + "\n            </g>";
+    }
+    return gust + wind;
+}
+exports.genWind = genWind;
+/**
+ * Generate first barb
+ * @param speed wind or gust speed
+ * @param gust set to true for gust
+ * @returns
+ */
+function genBarb1(speed, gust) {
+    var fill = gust ? 'red' : '#000';
+    var tag = gust ? 'gs' : 'ws';
+    var width = gust ? GUST_WIDTH : WS_WIDTH;
+    var barb = "";
+    if (speed >= 10 && speed < 50) {
+        barb = "<line id=\"" + tag + "-bard-1-long\" stroke-width=\"" + width + "\" y1=\"50\" x1=\"250\" y2=\"50\" x2=\"300\" stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 50)\"/>";
+    }
+    else if (speed >= 50) {
+        barb = "<polygon id=\"" + tag + "-bard-1-flag\" points=\"248,60 290,30 248,30\" fill=\"" + fill + "\" />";
+    }
+    return barb;
+}
+/**
+ * Generate second barb
+ * @param speed wind or gust speed
+ * @param gust set to true for gust
+ * @returns
+ */
+function genBarb2(speed, gust) {
+    var fill = gust ? 'red' : '#000';
+    var tag = gust ? 'gs' : 'ws';
+    var width = gust ? GUST_WIDTH : WS_WIDTH;
+    var barb = "";
+    if ((speed < 10) || (15 <= speed && speed < 20) || (55 <= speed && speed < 60)) {
+        barb = "<line id=\"" + tag + "-bard-2-short\" stroke-width=\"" + width + "\" y1=\"70\" x1=\"250\" y2=\"70\" x2=\"275\" stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 70)\"/>";
+    }
+    else if ((15 < speed && speed < 50) || (speed >= 60)) {
+        barb = "<line id=\"" + tag + "-bard-2-long\" stroke-width=\"" + width + "\" y1=\"70\" x1=\"250\" y2=\"70\" x2=\"300\" stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 70)\"/>";
+    }
+    return barb;
+}
+/**
+ * Generate third barb
+ * @param speed wind or gust speed
+ * @param gust set to true for gust
+ * @returns
+ */
+function genBarb3(speed, gust) {
+    var fill = gust ? 'red' : '#000';
+    var tag = gust ? 'gs' : 'ws';
+    var width = gust ? GUST_WIDTH : WS_WIDTH;
+    var barb = "";
+    if ((25 <= speed && speed < 30) || (65 <= speed && speed < 70)) {
+        barb = "<line id=\"" + tag + "-bard-3-short\" stroke-width=\"" + width + "\" y1=\"90\"  x1=\"250\" y2=\"90\" x2=\"275\" stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 90)\"/>";
+    }
+    else if ((25 < speed && speed < 50) || speed >= 70) {
+        barb = "<line id=\"" + tag + "-bard-3-long\" stroke-width=\"" + width + "\" y1=\"90\"  x1=\"250\" y2=\"90\" x2=\"300\" stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 90)\"/>";
+    }
+    return barb;
+}
+/**
+ * Generate forth barb
+ * @param speed wind or gust speed
+ * @param gust set to true for gust
+ * @returns
+ */
+function genBarb4(speed, gust) {
+    var fill = gust ? 'red' : '#000';
+    var tag = gust ? 'gs' : 'ws';
+    var width = gust ? GUST_WIDTH : WS_WIDTH;
+    var barb = "";
+    if ((35 <= speed && speed < 40) || (75 <= speed && speed < 80)) {
+        barb = "<line id=\"" + tag + "-bard-4-short\" stroke-width=\"" + width + "\" y1=\"110\" x1=\"250\" y2=\"110\" x2=\"275\"  stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 110)\"/>";
+    }
+    else if ((35 < speed && speed < 50) || speed >= 80) {
+        barb = "<line id=\"" + tag + "-bard-4-long\" stroke-width=\"" + width + "\" y1=\"110\" x1=\"250\" y2=\"110\" x2=\"300\"  stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 110)\"/>";
+    }
+    return barb;
+}
+/**
+ * Generate fifth barb
+ * @param speed wind or gust speed
+ * @param gust set to true for gust
+ * @returns
+ */
+function genBarb5(speed, gust) {
+    var fill = gust ? 'red' : '#000';
+    var tag = gust ? 'gs' : 'ws';
+    var width = gust ? GUST_WIDTH : WS_WIDTH;
+    var brab = "";
+    if ((45 <= speed && speed < 50) || (85 <= speed && speed < 90)) {
+        brab = "<line id=\"" + tag + "-bard-5-short\" stroke-width=\"" + width + "\" y1=\"130\" x1=\"250\" y2=\"130\" x2=\"275\"  stroke=\"" + fill + "\" transform=\"rotate(-35, 250, 130)\"/>";
+    }
+    return brab;
+}
+
+},{}],212:[function(require,module,exports){
 (function() {
     // http://www.met.tamu.edu/class/metar/metar-pg10-sky.html
     // https://ww8.fltplan.com/AreaForecast/abbreviations.htm
@@ -36283,7 +37216,7 @@ exports.Zone = Zone;
     }
 })();
 
-},{}],207:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
@@ -36381,7 +37314,7 @@ BitReader.prototype.pi = function() {
 module.exports = BitReader;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":11}],208:[function(require,module,exports){
+},{"buffer":11}],214:[function(require,module,exports){
 /* CRC32, used in Bzip2 implementation.
  * This is a port of CRC32.java from the jbzip2 implementation at
  *   https://code.google.com/p/jbzip2
@@ -36487,7 +37420,7 @@ module.exports = (function() {
   return CRC32;
 })();
 
-},{}],209:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
@@ -37096,7 +38029,7 @@ Bunzip.license = pjson.license;
 module.exports = Bunzip;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../package.json":211,"./bitreader":207,"./crc32":208,"./stream":210,"buffer":11}],210:[function(require,module,exports){
+},{"../package.json":217,"./bitreader":213,"./crc32":214,"./stream":216,"buffer":11}],216:[function(require,module,exports){
 /* very simple input/output stream interface */
 var Stream = function() {
 };
@@ -37140,7 +38073,7 @@ Stream.prototype.flush = function() {
 
 module.exports = Stream;
 
-},{}],211:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 module.exports={
   "name": "seek-bzip",
   "version": "2.0.0",
@@ -37176,7 +38109,7 @@ module.exports={
   }
 }
 
-},{}],212:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 var simplify = require('simplify-geometry')
 
 module.exports = function (geojson, tolerance, dontClone) {
@@ -37219,7 +38152,7 @@ function simplifyFeatureCollection (fc, tolerance) {
   return fc
 }
 
-},{"simplify-geometry":213}],213:[function(require,module,exports){
+},{"simplify-geometry":219}],219:[function(require,module,exports){
 var Line = require('./line');
 
 var simplifyGeometry = function(points, tolerance){
@@ -37262,7 +38195,7 @@ var simplifyGeometry = function(points, tolerance){
 
 module.exports = simplifyGeometry;
 
-},{"./line":214}],214:[function(require,module,exports){
+},{"./line":220}],220:[function(require,module,exports){
 var Line = function(p1, p2){
 
   this.p1 = p1;
@@ -37349,7 +38282,7 @@ Line.prototype.perpendicularDistance = function(point){
 
 module.exports = Line;
 
-},{}],215:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 const radarStations = {
 	"AWPA2": [
 		"99507",
