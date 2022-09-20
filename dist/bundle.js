@@ -17808,17 +17808,29 @@ function useData(data, action) {
         var stationId = data.response.data.METAR[item].station_id['#text'];
         var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
 
-        geojsonTemplate.features.push({
-            'properties': {
-                'stationID': stationId,
-                'rawMetarText': rawMetarText
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates":
-                    [lon, lat]
-            }
-        });
+        try {
+            var parsedMetarData = parseMETAR(rawMetarText);
+            var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature));
+            var tempColor = getTempColor(parsedMetarTemp);
+
+            geojsonTemplate.features.push({
+                'properties': {
+                    'stationID': stationId,
+                    'rawMetarText': rawMetarText,
+                    'temp': parsedMetarTemp,
+                    'tempColor': tempColor[0],
+                    'tempColorText': tempColor[1],
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates":
+                        [lon, lat]
+                }
+            });
+        }
+        catch(err) {
+            console.log(err.message)
+        }
     }
 
     if (action == 'update') {
@@ -17861,7 +17873,7 @@ function useData(data, action) {
                     'layout': {
                         'icon-image': 'custom-marker-metar',
                         'icon-size': 0.07,
-                        'text-field': ['get', 'stationID'],
+                        'text-field': ['get', 'temp'],
                         'text-size': 13,
                         'text-font': [
                             //'Open Sans Semibold',
@@ -17873,7 +17885,7 @@ function useData(data, action) {
                     'paint': {
                         //'text-color': 'white',
                         'text-color': 'black',
-                        'icon-color': 'ForestGreen'
+                        'icon-color': ['get', 'tempColor'],
                     }
                 });
                 map.moveLayer('stationSymbolLayer');
