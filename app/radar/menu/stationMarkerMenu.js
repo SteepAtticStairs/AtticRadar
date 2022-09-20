@@ -38,7 +38,7 @@ createMenuOption({
 
 $('#stationMenuItemIcon').removeClass('icon-grey');
 $('#stationMenuItemIcon').addClass('icon-blue');
-map._fadeDuration = 0;
+$('#dataDiv').data('stationMarkersVisible', true);
 setTimeout(function() {
     showStations();
 }, 200)

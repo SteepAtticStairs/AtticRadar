@@ -17717,9 +17717,15 @@ const radarStations = require('../../resources/radarStations');
 function fetchMETARData(action) {
     var curStation = $('#dataDiv').data('currentStation');
     $('#dataDiv').data('currentMetarRadarStation', curStation);
+
+    var distance = 250000;
+    var distanceMiles = distance / 1609;
+    var stationLat = radarStations[curStation][1];
+    var stationLon = radarStations[curStation][2];
+
     var bbx = geolib.getBoundsOfDistance(
-        { latitude: radarStations[curStation][1], longitude: radarStations[curStation][2] },
-        250000
+        { latitude: stationLat, longitude: stationLon },
+        distance
     );
 
     var minLat = bbx[0].latitude;
@@ -17727,7 +17733,9 @@ function fetchMETARData(action) {
     var maxLat = bbx[1].latitude;
     var maxLon = bbx[1].longitude;
 
-    var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
+    //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
+    //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=~us&hoursBeforeNow=3#`;
+    var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=${distanceMiles};${stationLon},${stationLat}&hoursBeforeNow=3#`;
     var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + url);
     $.get(noCacheURL, function(data) {
         var parsedXMLData = ut.xmlToJson(data);
@@ -20786,7 +20794,7 @@ createMenuOption({
 
 $('#stationMenuItemIcon').removeClass('icon-grey');
 $('#stationMenuItemIcon').addClass('icon-blue');
-map._fadeDuration = 0;
+$('#dataDiv').data('stationMarkersVisible', true);
 setTimeout(function() {
     showStations();
 }, 200)
@@ -20990,7 +20998,9 @@ const tempColorObj = {
     '70': 'rgb(251, 251, 86)',
     '80': 'rgb(236, 135, 51)',
     '90': 'rgb(192, 56, 30)',
-    'high': 'rgb(146, 32, 19)'
+    '100': 'rgb(237, 14, 133)',
+    '110': 'rgb(237, 14, 215)',
+    'high': 'rgb(163, 8, 148)'
 }
 
 // https://stackoverflow.com/a/24253254

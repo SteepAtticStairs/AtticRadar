@@ -7,9 +7,15 @@ const radarStations = require('../../resources/radarStations');
 function fetchMETARData(action) {
     var curStation = $('#dataDiv').data('currentStation');
     $('#dataDiv').data('currentMetarRadarStation', curStation);
+
+    var distance = 250000;
+    var distanceMiles = distance / 1609;
+    var stationLat = radarStations[curStation][1];
+    var stationLon = radarStations[curStation][2];
+
     var bbx = geolib.getBoundsOfDistance(
-        { latitude: radarStations[curStation][1], longitude: radarStations[curStation][2] },
-        250000
+        { latitude: stationLat, longitude: stationLon },
+        distance
     );
 
     var minLat = bbx[0].latitude;
@@ -17,7 +23,9 @@ function fetchMETARData(action) {
     var maxLat = bbx[1].latitude;
     var maxLon = bbx[1].longitude;
 
-    var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
+    //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
+    //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=~us&hoursBeforeNow=3#`;
+    var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=${distanceMiles};${stationLon},${stationLat}&hoursBeforeNow=3#`;
     var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + url);
     $.get(noCacheURL, function(data) {
         var parsedXMLData = ut.xmlToJson(data);
