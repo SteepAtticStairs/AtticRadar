@@ -18,7 +18,7 @@ createMenuOption({
         $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');
 
-        map._fadeDuration = 0;
+        $('#dataDiv').data('stationMarkersVisible', true);
         if (map.getLayer('stationSymbolLayer')) {
             // station marker layer already exists, simply toggle visibility here
             map.setLayoutProperty('stationSymbolLayer', 'visibility', 'visible');
@@ -30,7 +30,7 @@ createMenuOption({
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
 
-        map._fadeDuration = 300;
+        $('#dataDiv').data('stationMarkersVisible', false);
         // hide the station marker layer
         map.setLayoutProperty('stationSymbolLayer', 'visibility', 'none');
     }

@@ -17830,7 +17830,7 @@ function useData(data, action) {
             });
         }
         catch(err) {
-            console.log(err.message)
+            console.warn(`${stationId}: ${err.message}`)
         }
     }
 
@@ -17901,11 +17901,10 @@ function useData(data, action) {
             var parsedMetarData = parseMETAR(rawText);
             console.log(parsedMetarData)
 
-            var metarSVG = rawMetarToSVG(rawText);
-
-            var doc = new DOMParser().parseFromString(metarSVG, "image/svg+xml");
-            var parsedDoc = $(doc.querySelector('svg')).attr('height', 150).attr('width', 150);
-            var svgStr = new XMLSerializer().serializeToString(parsedDoc[0]);
+            // var metarSVG = rawMetarToSVG(rawText);
+            // var doc = new DOMParser().parseFromString(metarSVG, "image/svg+xml");
+            // var parsedDoc = $(doc.querySelector('svg')).attr('height', 150).attr('width', 150);
+            // var svgStr = new XMLSerializer().serializeToString(parsedDoc[0]);
 
             // https://stackoverflow.com/a/58142441/18758797
             // ^^ svg string to data url
@@ -17939,9 +17938,9 @@ function useData(data, action) {
                 <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
                 <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
                 <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
-                <br>
+                <!-- <br>
                 <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
-                <div>${svgStr}</div>
+                <div>{svgStr}</div> -->
                 <br>
                 <div><b>Raw Text: </b><u>${rawText}</u></div>
 
@@ -20413,6 +20412,14 @@ const map = new mapboxgl.Map({
 //     console.log(map.getZoom())
 // })
 
+map.on('zoomstart', function() {
+    if ($('#dataDiv').data('stationMarkersVisible') || $('#dataDiv').data('metarsActive')) {
+        map._fadeDuration = 0;
+    } else {
+        map._fadeDuration = 300;
+    }
+})
+
 // https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567
 function registerControlPosition(map, positionName) {
     if (map._controlPositions[positionName]) {
@@ -20759,7 +20766,7 @@ createMenuOption({
         $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');
 
-        map._fadeDuration = 0;
+        $('#dataDiv').data('stationMarkersVisible', true);
         if (map.getLayer('stationSymbolLayer')) {
             // station marker layer already exists, simply toggle visibility here
             map.setLayoutProperty('stationSymbolLayer', 'visibility', 'visible');
@@ -20771,7 +20778,7 @@ createMenuOption({
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
 
-        map._fadeDuration = 300;
+        $('#dataDiv').data('stationMarkersVisible', false);
         // hide the station marker layer
         map.setLayoutProperty('stationSymbolLayer', 'visibility', 'none');
     }

@@ -15,6 +15,14 @@ const map = new mapboxgl.Map({
 //     console.log(map.getZoom())
 // })
 
+map.on('zoomstart', function() {
+    if ($('#dataDiv').data('stationMarkersVisible') || $('#dataDiv').data('metarsActive')) {
+        map._fadeDuration = 0;
+    } else {
+        map._fadeDuration = 300;
+    }
+})
+
 // https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567
 function registerControlPosition(map, positionName) {
     if (map._controlPositions[positionName]) {

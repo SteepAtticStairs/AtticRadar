@@ -45,7 +45,7 @@ function useData(data, action) {
             });
         }
         catch(err) {
-            console.log(err.message)
+            console.warn(`${stationId}: ${err.message}`)
         }
     }
 
@@ -116,11 +116,10 @@ function useData(data, action) {
             var parsedMetarData = parseMETAR(rawText);
             console.log(parsedMetarData)
 
-            var metarSVG = rawMetarToSVG(rawText);
-
-            var doc = new DOMParser().parseFromString(metarSVG, "image/svg+xml");
-            var parsedDoc = $(doc.querySelector('svg')).attr('height', 150).attr('width', 150);
-            var svgStr = new XMLSerializer().serializeToString(parsedDoc[0]);
+            // var metarSVG = rawMetarToSVG(rawText);
+            // var doc = new DOMParser().parseFromString(metarSVG, "image/svg+xml");
+            // var parsedDoc = $(doc.querySelector('svg')).attr('height', 150).attr('width', 150);
+            // var svgStr = new XMLSerializer().serializeToString(parsedDoc[0]);
 
             // https://stackoverflow.com/a/58142441/18758797
             // ^^ svg string to data url
@@ -154,9 +153,9 @@ function useData(data, action) {
                 <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
                 <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
                 <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
-                <br>
+                <!-- <br>
                 <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
-                <div>${svgStr}</div>
+                <div>{svgStr}</div> -->
                 <br>
                 <div><b>Raw Text: </b><u>${rawText}</u></div>
 
