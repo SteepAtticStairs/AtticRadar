@@ -3,7 +3,8 @@ const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 
 const parseMETAR = require('metar');
-const { rawMetarToSVG } = require('metar-plot')
+const metarParser = require('aewx-metar-parser');
+//const { rawMetarToSVG } = require('metar-plot')
 
 var geojsonTemplate = {
     "type": "FeatureCollection",
@@ -25,8 +26,8 @@ function useData(data, action) {
         var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
 
         try {
-            var parsedMetarData = parseMETAR(rawMetarText);
-            var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature));
+            var parsedMetarData = metarParser(rawMetarText);
+            var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
             var tempColor = getTempColor(parsedMetarTemp);
 
             geojsonTemplate.features.push({
@@ -113,7 +114,9 @@ function useData(data, action) {
             const id = e.features[0].properties.stationID;
             const rawText = e.features[0].properties.rawMetarText;
 
-            var parsedMetarData = parseMETAR(rawText);
+            // KTTF 211655Z AUTO 26009G16KT 2 1/2SM -RA SCT055 SCT075 BKN110 24/20 A2981 RMK AO2 T02410198 P0001
+            //var parsedMetarData = parseMETAR(rawText);
+            var parsedMetarData = metarParser(rawText);
             console.log(parsedMetarData)
 
             // var metarSVG = rawMetarToSVG(rawText);
@@ -124,50 +127,63 @@ function useData(data, action) {
             // https://stackoverflow.com/a/58142441/18758797
             // ^^ svg string to data url
 
-            var metarTemp = parsedMetarData.temperature;
-            var parsedMetarTemp = parseInt(ut.CtoF(metarTemp));
-            var metarDewPoint = parsedMetarData.dewpoint;
-            var metarAltimeter = parsedMetarData.altimeterInHg;
-            var metarVisibility = parsedMetarData.visibility;
-            var metarWindSpeed = parsedMetarData.wind.speed; // in knots
-            var metarWindGustSpeed = parsedMetarData.wind.gust; // in knots
-            var metarWindDirection = parsedMetarData.wind.direction;
-            if (metarWindDirection == null) {
-                metarWindDirection = 0;
+            try {
+                var metarTemp = parsedMetarData.temperature.celsius;
+                var parsedMetarTemp = parseInt(ut.CtoF(metarTemp));
+                var metarDewPoint = parsedMetarData.dewpoint.celsius;
+                var metarBarometer = parsedMetarData.barometer.hg;
+                var metarVisibility = parsedMetarData.visibility.miles;
+                var metarWindSpeed = parsedMetarData.wind.speed_kts; // in knots
+                var metarWindGustSpeed = parsedMetarData.wind.gust_kts; // in knots
+                var metarWindDirection = parsedMetarData.wind.degrees;
+                if (metarWindDirection == null) {
+                    metarWindDirection = 0;
+                }
+                var metarFancyTime = ut.printFancyTime(parsedMetarData.observed);
+
+                var tempColor = getTempColor(parsedMetarTemp);
+
+                var metarHTMLBody =
+                `<div>
+                    <div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> ℉</div>
+                    <br>
+                    <div><i><b>VALID: </b>${metarFancyTime}</i></div>
+                    <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
+                    <div><b>Barometer: </b>${metarBarometer} inHG</div>
+                    <div><b>Visibility: </b>${metarVisibility} miles</div>
+                    <br>
+                    <div><b>Wind:</b></div>
+                    <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
+                    <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
+                    <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
+                    <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                    <!-- <br>
+                    <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
+                    <div>{svgStr}</div> -->
+                    <br>
+                    <div><b>Raw Text: </b><u>${rawText}</u></div>
+
+                    <!--<br>
+                    <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->
+                </div>`
+
+                ut.spawnModal({
+                    'title': `Station ${id}`,
+                    'headerColor': 'alert-success',
+                    'body': metarHTMLBody
+                })
+            } catch(err) {
+                ut.spawnModal({
+                    'title': `Station ${id}: Error`,
+                    'headerColor': 'alert-danger',
+                    'body': 
+                    `<div><b>There was an error parsing the ${id} station's METAR data.</b></div>
+                    <br>
+                    <div><b>Error message:</b></div>
+                    <div>${err.message}</div>`
+                })
+                console.warn(err.message);
             }
-            var metarFancyTime = ut.printFancyTime(parsedMetarData.time);
-
-            var tempColor = getTempColor(parsedMetarTemp);
-
-            var metarHTMLBody = 
-            `<div>
-                <div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> ℉</div>
-                <br>
-                <div><i><b>VALID: </b>${metarFancyTime}</i></div>
-                <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
-                <div><b>Altimeter: </b>${metarAltimeter} inHG</div>
-                <div><b>Visibility: </b>${metarVisibility} miles</div>
-                <br>
-                <div><b>Wind:</b></div>
-                <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
-                <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
-                <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
-                <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
-                <!-- <br>
-                <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
-                <div>{svgStr}</div> -->
-                <br>
-                <div><b>Raw Text: </b><u>${rawText}</u></div>
-
-                <!--<br>
-                <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->
-            </div>`
-
-            ut.spawnModal({
-                'title': `Station ${id}`,
-                'headerColor': 'alert-success',
-                'body': metarHTMLBody
-            })
 
             // {
             //     "type": "METAR",
