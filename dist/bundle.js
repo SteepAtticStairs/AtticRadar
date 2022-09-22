@@ -17921,6 +17921,8 @@ function useData(data, action) {
             // https://stackoverflow.com/a/58142441/18758797
             // ^^ svg string to data url
 
+            // https://github.com/aeharding/metar-taf-parser
+
             try {
                 var metarTemp = parsedMetarData.temperature.celsius;
                 var parsedMetarTemp = parseInt(ut.CtoF(metarTemp));
@@ -17972,6 +17974,9 @@ function useData(data, action) {
                     'headerColor': 'alert-danger',
                     'body': 
                     `<div><b>There was an error parsing the ${id} station's METAR data.</b></div>
+                    <br>
+                    <div><b>Raw Text:</b></div>
+                    <div><i>${rawText}</i></div>
                     <br>
                     <div><b>Error message:</b></div>
                     <div>${err.message}</div>`
