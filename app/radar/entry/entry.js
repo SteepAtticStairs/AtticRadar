@@ -15,6 +15,9 @@ window.onload = function() {
     // initialize the METARs module
     require('../../metars/entry');
 
+    // initialize the satellite module
+    //require('../../satellite/entry');
+
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
 }

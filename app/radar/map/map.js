@@ -4,6 +4,7 @@ const map = new mapboxgl.Map({
     style: 'mapbox://styles/mapbox/dark-v10',
     zoom: 3,
     center: [-98.5606744, 36.8281576],
+    maxZoom: 15,
     //zoom: 6,
     //center: [-66.0190363102349, 18.15295560177013],
     //projection: 'equirectangular',
