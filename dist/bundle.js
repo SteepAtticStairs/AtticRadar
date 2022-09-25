@@ -17354,6 +17354,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     var sshwsLevel = trackPointData.sshwsLevel;
 
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
+                    geojson.features[item].properties.sshwsValAbbv = sshwsLevel[2];
                     geojson.features[item].properties.sshwsColor = sshwsLevel[1];
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
                 }
@@ -17370,15 +17371,16 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     'line-width': 2
                 }
             });
+            map.addSource(`trackLayerPoints${index}`, {
+                type: "geojson",
+                data: geojson
+            });
             map.addLayer({
-                'id': `trackLayerPoints${index}`,
-                'type': 'circle',
-                'source': {
-                    'type': 'geojson',
-                    'data': geojson,
-                },
-                'paint': {
-                    'circle-radius': 4,
+                "id": `trackLayerPoints${index}`,
+                "type": "circle",
+                "source": `trackLayerPoints${index}`,
+                "paint": {
+                    "circle-radius": 9,
                     'circle-stroke-width': 2,
                     'circle-color': {
                         type: 'identity',
@@ -17389,11 +17391,26 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                         property: 'sshwsColor',
                     },
                 }
-            })
+            });
+            map.addLayer({
+                "id": `trackLayerPointsLabel${index}`,
+                "type": "symbol",
+                "source": `trackLayerPoints${index}`,
+                "layout": {
+                    "text-field": ['get', 'sshwsValAbbv'],
+                    "text-font": [
+                        "Arial Unicode MS Bold"
+                    ],
+                    "text-size": 14,
+                    'text-allow-overlap': true,
+                    'text-ignore-placement': true,
+                }
+            });
 
             var hurricaneMapLayers = $('#dataDiv').data('hurricaneMapLayers');
             hurricaneMapLayers.push(`trackLayerLine${index}`);
             hurricaneMapLayers.push(`trackLayerPoints${index}`);
+            hurricaneMapLayers.push(`trackLayerPointsLabel${index}`);
             $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
         }
 
@@ -17480,6 +17497,9 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 }
                 if (map.getLayer(`trackLayerPoints${i}`)) {
                     map.moveLayer(`trackLayerPoints${i}`)
+                }
+                if (map.getLayer(`trackLayerPointsLabel${i}`)) {
+                    map.moveLayer(`trackLayerPointsLabel${i}`)
                 }
             }
             console.log(`Finished drawing all hurricanes.`);
