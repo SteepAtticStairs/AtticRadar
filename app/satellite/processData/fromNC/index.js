@@ -31,16 +31,22 @@ function execCmd(command, cb) {
     });
 }
 
-removeFile('bw.png');
-removeFile('bw.png.aux.xml');
-removeFile('bwProj.png');
-removeFile('bwProj.png.aux.xml');
-removeFile('colored.png');
-removeFile('colored.png.aux.xml');
-removeFile('ugly.tif');
+var args = process.argv;
 
-execCmd(`gdal_translate -ot float32 -unscale -CO COMPRESS=deflate NETCDF:"goes16-c13.nc":Rad ugly.tif`, function() {
-execCmd(`gdal_translate -ot Byte -of png -scale 0 650 0 255 ugly.tif bw.png`, function() {
-execCmd(`gdalwarp -t_srs EPSG:4326 -dstnodata -999.0 bw.png bwProj.png`, function() {
-execCmd(`gdaldem color-relief -alpha bwProj.png color.txt colored.png`, function(){});
-});});});
+if (args.includes('changeColor')) {
+    execCmd(`gdaldem color-relief -alpha bwProj.png color.txt colored.png`, function(){});
+} else {
+    removeFile('bw.png');
+    removeFile('bw.png.aux.xml');
+    removeFile('bwProj.png');
+    removeFile('bwProj.png.aux.xml');
+    removeFile('colored.png');
+    removeFile('colored.png.aux.xml');
+    removeFile('ugly.tif');
+
+    execCmd(`gdal_translate -ot float32 -unscale -CO COMPRESS=deflate NETCDF:"goes16-c13.nc":Rad ugly.tif`, function() {
+    execCmd(`gdal_translate -ot Byte -of png -scale 0 650 0 255 ugly.tif bw.png`, function() {
+    execCmd(`gdalwarp -t_srs EPSG:4326 -dstnodata -999.0 bw.png bwProj.png`, function() {
+    execCmd(`gdaldem color-relief -alpha bwProj.png color.txt colored.png`, function(){});
+    });});});
+}
