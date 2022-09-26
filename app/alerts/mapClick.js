@@ -1,12 +1,13 @@
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
+const getPolygonColors = require('./polygonColors');
 
-function updateAccordion(number, title, expanded, body) {
+function updateAccordion(number, title, expanded, body, color) {
     var content = 
     `<div class="accordion-item">
         <h2 class="accordion-header" id="accordionHeader${number}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionContent${number}"
-                aria-expanded="${expanded}" aria-controls="collapseOne">
+                aria-expanded="${expanded}" aria-controls="collapseOne" style="background-color: ${color}">
                 ${title}
             </button>
         </h2>
@@ -20,6 +21,14 @@ function updateAccordion(number, title, expanded, body) {
         document.getElementById('alertModalAccordion').innerHTML = '';
     }
     document.getElementById('alertModalAccordion').innerHTML += content;
+}
+
+function rgbToRGBA(rgb, opacity) {
+    var str = rgb.slice(0, -1)
+    str += `, ${opacity})`;
+    str = str.slice(3);
+    str = 'rgba' + str;
+    return str;
 }
 
 function addMarker(e) {
@@ -44,7 +53,8 @@ function addMarker(e) {
         //var alertTitle = `Alert #${parseInt(key) + 1}`;
         var alertTitle = properties.event;
 
-        updateAccordion(key, alertTitle, false, alertModalBody);
+        var color = getPolygonColors(properties.event);
+        updateAccordion(key, alertTitle, false, alertModalBody, rgbToRGBA(color, 0.5));
     }
 
     // open the modal

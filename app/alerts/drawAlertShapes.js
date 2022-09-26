@@ -2,6 +2,7 @@ const fetchPolygonData = require('./fetchData');
 const ut = require('../radar/utils');
 const createMenuOption = require('../radar/menu/createMenuOption');
 const mapClick = require ('./mapClick');
+const getPolygonColors = require('./polygonColors');
 const simplify = require('simplify-geojson')
 var map = require('../radar/map/map');
 
@@ -37,6 +38,9 @@ createMenuOption({
             map.getCanvas().style.cursor = "crosshair";
             map.on('click', 'newAlertsLayer', mapClick)
             fetchPolygonData([noaaAlertsURL], function(data) {
+                for (var item in data.features) {
+                    data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
+                }
                 map.addLayer({
                     'id': `newAlertsLayer`,
                     'type': 'fill',
@@ -47,8 +51,8 @@ createMenuOption({
                     paint: {
                         //#0080ff blue
                         //#ff7d7d red
-                        'fill-color': '#ff7d7d',
-                        'fill-opacity': 0.5
+                        'fill-color': ['get', 'color'],
+                        'fill-opacity': 0
                     }
                 });
                 map.addLayer({
@@ -58,7 +62,7 @@ createMenuOption({
                     'paint': {
                         //#014385 blue
                         //#850101 red
-                        'line-color': '#850101',
+                        'line-color': ['get', 'color'],
                         'line-width': 3
                     }
                 });
