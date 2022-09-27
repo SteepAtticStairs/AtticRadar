@@ -81,18 +81,59 @@ function setImageFromXML(auxXMLStr, imageUrl) {
 
 function initSatImage() {
     //map.on('load', function() {
-        var auxXMLFileUrl = '../app/satellite/processData/projectedImage.png.aux.xml';
-        var jsonFileUrl = '../app/satellite/processData/initialImage.json';
-        var imageFileUrl = '../app/satellite/processData/projectedImage.png';
+        // var auxXMLFileUrl = '../app/satellite/processData/projectedImage.png.aux.xml';
+        // var jsonFileUrl = '../app/satellite/processData/initialImage.json';
+        // var imageFileUrl = '../app/satellite/processData/projectedImage.png';
 
-        $.get(auxXMLFileUrl, function(data) {
-            var auxXMLData = data;
-            setImageFromXML(
-                auxXMLData,
-                imageFileUrl
-            )
-        })
+        // $.get(auxXMLFileUrl, function(data) {
+        //     var auxXMLData = data;
+        //     setImageFromXML(
+        //         auxXMLData,
+        //         imageFileUrl
+        //     )
+        // })
     //})
+    // https://stackoverflow.com/a/16245768/18758797
+    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php',
+        data: {
+            'satNum': 16,
+            'channel': 13,
+            'sector': 'conus'
+        },
+        success: function(data) {
+            var arr = data.split('STEEPATTICSTAIRS');
+
+            const blob = b64toBlob(arr[1], 'image/png');
+            const blobUrl = URL.createObjectURL(blob);
+
+            setImageFromXML(
+                arr[0],
+                blobUrl
+            )
+        }
+    });
 }
 
 module.exports = initSatImage;
