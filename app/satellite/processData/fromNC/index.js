@@ -35,7 +35,7 @@ function execCmd(command, cb) {
 var args = process.argv;
 
 if (args.includes('changeColor')) {
-    execCmd(`gdaldem color-relief -alpha bwProj.png IR4AVHRR6.cpt colored.png`, function(){});
+    execCmd(`gdaldem color-relief -alpha bwProj.png color.txt colored.png`, function(){});
 } else {
     removeFile('bw.png');
     removeFile('bw.png.aux.xml');
