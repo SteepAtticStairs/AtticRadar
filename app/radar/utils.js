@@ -3,7 +3,7 @@
 * https://allorigins.win/
 */
 const phpProxy = 'https://api.allorigins.win/raw?url=';
-const phpProxy2 = 'https://php-cors-proxy.herokuapp.com/?';
+const phpProxy2 = 'https://php-cors-proxy.herokuapp.com/?'; // http://127.0.0.1:9999/proxy/?
 //const phpProxy = 'https://php-cors.000webhostapp.com/?';
 //const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
