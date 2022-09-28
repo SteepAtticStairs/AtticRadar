@@ -18,9 +18,6 @@ window.onload = function() {
     // initialize the satellite module
     //require('../../satellite/entry');
 
-    // load the offcanvas menu control
-    require('../map/controls/offCanvasMenu');
-
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
 }

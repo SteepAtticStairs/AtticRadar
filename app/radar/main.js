@@ -21,6 +21,13 @@ require('./dom/fileUpload');
 require('./menu/mode');
 //require('./map/controls/mode');
 
+// load the offcanvas menu control
+require('./map/controls/offCanvasMenu');
+
+// load the offcanvas settings control
+require('./menu/settings');
+$('#dataDiv').data('stormTracksVisibility', true);
+
 // load the station marker menu item
 require('./menu/stationMarkerMenu');
 

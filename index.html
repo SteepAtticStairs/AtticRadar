@@ -622,6 +622,33 @@
         <div class="offcanvas-body" id="offCanvasBody"></div>
     </div>
 
+    <!--
+        THIS IS THE HTML FOR THE SETTINGS MENU
+    -->
+    <button id="settingsModalTrigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#settingsModal" style="display: none"></button>
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert alert-secondary">
+                    <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="settingsModalBody">
+                    <div class="form-check" id="stormTracksCheckbox">
+                        <input class="form-check-input" type="checkbox" value="" id="stormTracksCheckBtn" checked>
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Show Storm Tracks
+                        </label>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
     <div id='optionsBox' style="display: none">
         <div id="smallInfo" style="display: none"></div>
         <div id="mainInfo" style="display: none"></div>

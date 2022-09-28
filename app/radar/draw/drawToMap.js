@@ -124,7 +124,9 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         if ($('#dataDiv').data('fromFileUpload')) {
             ut.flyToStation();
         } else {
-            STstuff.loadAllStormTrackingStuff();
+            if ($('#dataDiv').data('stormTracksVisibility')) {
+                STstuff.loadAllStormTrackingStuff();
+            }
         }
 
         // make sure the alerts are always on top
