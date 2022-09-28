@@ -20072,15 +20072,16 @@ function createControl(options, clickFunc) {
 module.exports = createControl;
 },{"../map":106}],100:[function(require,module,exports){
 const ut = require('../../../utils');
-const createControl = require('../createControl');
+const createOffCanvasItem = require('../../../menu/createOffCanvasItem');
 
 $.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
-    createControl({
-        'id': 'helpThing',
-        'position': 'bottom-left',
-        'icon': 'fa-question',
-        'css': 'margin-top: 100%;'
-    }, function() {
+    createOffCanvasItem({
+        'id': 'helpMenuItem',
+        'class': 'alert alert-secondary offCanvasMenuItem',
+        'contents': 'Help',
+        'icon': 'fa fa-question',
+        'css': ''
+    }, function(thisObj, innerDiv, iconElem) {
         ut.spawnModal({
             'title': 'Help',
             'headerColor': 'alert-info',
@@ -20088,7 +20089,7 @@ $.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
         })
     })
 })
-},{"../../../utils":119,"../createControl":99}],101:[function(require,module,exports){
+},{"../../../menu/createOffCanvasItem":109,"../../../utils":119}],101:[function(require,module,exports){
 const createMenuOption = require('../../menu/createMenuOption');
 const createOffCanvasItem = require('../../menu/createOffCanvasItem');
 

@@ -1,13 +1,14 @@
 const ut = require('../../../utils');
-const createControl = require('../createControl');
+const createOffCanvasItem = require('../../../menu/createOffCanvasItem');
 
 $.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
-    createControl({
-        'id': 'helpThing',
-        'position': 'bottom-left',
-        'icon': 'fa-question',
-        'css': 'margin-top: 100%;'
-    }, function() {
+    createOffCanvasItem({
+        'id': 'helpMenuItem',
+        'class': 'alert alert-secondary offCanvasMenuItem',
+        'contents': 'Help',
+        'icon': 'fa fa-question',
+        'css': ''
+    }, function(thisObj, innerDiv, iconElem) {
         ut.spawnModal({
             'title': 'Help',
             'headerColor': 'alert-info',
