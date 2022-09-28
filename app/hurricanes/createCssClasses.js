@@ -11,6 +11,7 @@ function createCssClasses() {
     .C3 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[4][1]}; color: white; }
     .C4 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[5][1]}; color: white; }
     .C5 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[6][1]}; color: white; }
+    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: white; }
 
     .TD .mapboxgl-popup-tip { 
         border-top-color: ${ut.sshwsValues[0][1]};
@@ -39,6 +40,10 @@ function createCssClasses() {
     .C5 .mapboxgl-popup-tip {
         border-top-color: ${ut.sshwsValues[6][1]};
         border-bottom-color: ${ut.sshwsValues[6][1]};
+    }
+    .Other .mapboxgl-popup-tip {
+        border-top-color: ${ut.sshwsValues[7][1]};
+        border-bottom-color: ${ut.sshwsValues[7][1]};
     }`)
     .appendTo("head");
 }
