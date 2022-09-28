@@ -26,4 +26,19 @@ createOffCanvasItem({
             }
         }
     })
+
+    $('#radarVisibilityCheckbox').on('click', function() {
+        var isChecked = $('#radarVisibilityCheckBtn').is(":checked");
+
+        var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+        if (!isChecked) {
+            if (map.getLayer('baseReflectivity')) {
+                map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+            }
+        } else if (isChecked) {
+            if (map.getLayer('baseReflectivity')) {
+                map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+            }
+        }
+    })
 })

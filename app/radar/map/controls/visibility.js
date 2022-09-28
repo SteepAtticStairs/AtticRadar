@@ -52,7 +52,7 @@ class visibilityControl {
 }
 var theVisibilityControl = new visibilityControl;
 if (!hasVisibilityControl) {
-    map.addControl(theVisibilityControl, 'top-right');
+    //map.addControl(theVisibilityControl, 'top-right');
     hasVisibilityControl = true;
 }
 //map.addControl(theVisibilityControl, 'top-left');

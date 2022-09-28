@@ -20532,7 +20532,7 @@ class visibilityControl {
 }
 var theVisibilityControl = new visibilityControl;
 if (!hasVisibilityControl) {
-    map.addControl(theVisibilityControl, 'top-right');
+    //map.addControl(theVisibilityControl, 'top-right');
     hasVisibilityControl = true;
 }
 //map.addControl(theVisibilityControl, 'top-left');
@@ -20972,6 +20972,21 @@ createOffCanvasItem({
         } else if (isChecked) {
             for (var item in stLayers) {
                 map.setLayoutProperty(stLayers[item], 'visibility', 'visible');
+            }
+        }
+    })
+
+    $('#radarVisibilityCheckbox').on('click', function() {
+        var isChecked = $('#radarVisibilityCheckBtn').is(":checked");
+
+        var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+        if (!isChecked) {
+            if (map.getLayer('baseReflectivity')) {
+                map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+            }
+        } else if (isChecked) {
+            if (map.getLayer('baseReflectivity')) {
+                map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
             }
         }
     })
