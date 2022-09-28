@@ -1,17 +1,26 @@
-const createControl = require('./createControl');
+const createMenuOption = require('../../menu/createMenuOption');
+const createOffCanvasItem = require('../../menu/createOffCanvasItem');
 
-createControl({
-    'id': 'menuThing',
-    'position': 'top-left',
-    'icon': 'fa-bars',
-    'css': 'margin-top: 100%;'
-}, function () {
+createMenuOption({
+    'divId': 'offcanvasMenuItemDiv',
+    'iconId': 'offcanvasMenuItemIcon',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-grey',
+
+    'contents': 'Open Offcanvas Menu',
+    'icon': 'fa fa-bars',
+    'css': ''
+}, function(divElem, iconElem) {
     $('#offCanvasBtn').click();
-    // if (!$('#menuThing').hasClass('icon-selected')) {
-    //     $('#menuThing').addClass('icon-selected');
-    //     $('#menuThing').removeClass('icon-black');
-    // } else if ($('#menuThing').hasClass('icon-selected')) {
-    //     $('#menuThing').removeClass('icon-selected');
-    //     $('#menuThing').addClass('icon-black');
-    // }
+    if (!$(iconElem).hasClass('icon-blue')) {
+        //$(iconElem).addClass('icon-blue');
+        //$(iconElem).removeClass('icon-grey');
+    } else if ($(iconElem).hasClass('icon-blue')) {
+        //$(iconElem).removeClass('icon-blue');
+        //$(iconElem).addClass('icon-grey');
+
+        // layer does exist - toggle the visibility to off
+        // map.setLayoutProperty('satelliteLayer', 'visibility', 'none');
+    }
 })
