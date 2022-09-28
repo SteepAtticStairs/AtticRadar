@@ -20,4 +20,7 @@ window.onload = function() {
 
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
+
+    // add the reload control
+    require('../map/controls/reload');
 }

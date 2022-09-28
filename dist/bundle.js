@@ -18740,8 +18740,11 @@ window.onload = function() {
 
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
+
+    // add the reload control
+    require('../map/controls/reload');
 }
-},{"../../alerts/entry":67,"../../hurricanes/entry":73,"../../metars/entry":77,"../../tides/main":123,"../main":98}],87:[function(require,module,exports){
+},{"../../alerts/entry":67,"../../hurricanes/entry":73,"../../metars/entry":77,"../../tides/main":123,"../main":98,"../map/controls/reload":102}],87:[function(require,module,exports){
 const { plot } = require('../../../nexrad-level-2-plot/src');
 const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
@@ -19924,9 +19927,6 @@ $('#dataDiv').data('stormTracksVisibility', true);
 // load the station marker menu item
 require('./menu/stationMarkerMenu');
 
-// add the reload control
-require('./map/controls/reload');
-
 // add the help control
 require('./map/controls/help/helpControl');
 
@@ -20030,7 +20030,7 @@ document.addEventListener('loadFile', function(event) {
 //             .addTo(map);
 //     }
 // });
-},{"./dom/fileUpload":81,"./level2/main":89,"./level3/main":92,"./loaders":97,"./map/controls/help/helpControl":100,"./map/controls/offCanvasMenu":101,"./map/controls/reload":102,"./map/map":106,"./menu/mode":110,"./menu/settings":111,"./menu/stationMarkerMenu":112,"./menu/tilts":113,"./misc/detectmobilebrowser":114,"./utils":119}],99:[function(require,module,exports){
+},{"./dom/fileUpload":81,"./level2/main":89,"./level3/main":92,"./loaders":97,"./map/controls/help/helpControl":100,"./map/controls/offCanvasMenu":101,"./map/map":106,"./menu/mode":110,"./menu/settings":111,"./menu/stationMarkerMenu":112,"./menu/tilts":113,"./misc/detectmobilebrowser":114,"./utils":119}],99:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -20116,20 +20116,23 @@ createMenuOption({
     }
 })
 },{"../../menu/createMenuOption":108,"../../menu/createOffCanvasItem":109}],102:[function(require,module,exports){
-const loaders = require('../../loaders');
-const ut = require('../../utils');
-const createControl = require('./createControl');
+const createMenuOption = require('../../menu/createMenuOption');
 var map = require('../map');
 
-createControl({
-    'id': 'reloadThing',
-    'position': 'top-right',
-    'icon': 'fa-arrow-rotate-right',
-    'css': 'margin-top: 100%;'
-}, function() {
+createMenuOption({
+    'divId': 'reloadItemDiv',
+    'iconId': 'reloadItemClass',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-grey',
+
+    'contents': 'Reload',
+    'icon': 'fa fa-arrow-rotate-right',
+    'css': ''
+}, function(divElem, iconElem) {
     window.location.reload();
 })
-},{"../../loaders":97,"../../utils":119,"../map":106,"./createControl":99}],103:[function(require,module,exports){
+},{"../../menu/createMenuOption":108,"../map":106}],103:[function(require,module,exports){
 var map = require('../map');
 const loaders = require('../../loaders');
 const ut = require('../../utils');
@@ -20329,7 +20332,7 @@ function showStations() {
     }
 
     map.on('click', 'stationSymbolLayer', function (e) {
-        if ($('#dataDiv').data('blueStations') != e.features[0].id && e.features[0].properties.status != 'down') {
+        if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
             var id = e.features[0].id;
 

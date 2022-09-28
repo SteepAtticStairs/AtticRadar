@@ -1,13 +1,16 @@
-const loaders = require('../../loaders');
-const ut = require('../../utils');
-const createControl = require('./createControl');
+const createMenuOption = require('../../menu/createMenuOption');
 var map = require('../map');
 
-createControl({
-    'id': 'reloadThing',
-    'position': 'top-right',
-    'icon': 'fa-arrow-rotate-right',
-    'css': 'margin-top: 100%;'
-}, function() {
+createMenuOption({
+    'divId': 'reloadItemDiv',
+    'iconId': 'reloadItemClass',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-grey',
+
+    'contents': 'Reload',
+    'icon': 'fa fa-arrow-rotate-right',
+    'css': ''
+}, function(divElem, iconElem) {
     window.location.reload();
 })

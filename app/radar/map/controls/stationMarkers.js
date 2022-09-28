@@ -197,7 +197,7 @@ function showStations() {
     }
 
     map.on('click', 'stationSymbolLayer', function (e) {
-        if ($('#dataDiv').data('blueStations') != e.features[0].id && e.features[0].properties.status != 'down') {
+        if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
             var id = e.features[0].id;
 

@@ -31,9 +31,6 @@ $('#dataDiv').data('stormTracksVisibility', true);
 // load the station marker menu item
 require('./menu/stationMarkerMenu');
 
-// add the reload control
-require('./map/controls/reload');
-
 // add the help control
 require('./map/controls/help/helpControl');
 
