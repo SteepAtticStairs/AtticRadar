@@ -17294,7 +17294,8 @@ function getTrackPointData(properties) {
     div.innerHTML = properties.description;
     var parsedDescription = JSON.parse(ut.html2json(div));
 
-    //console.log(properties.styleUrl)
+    var styleUrl = properties.styleUrl;
+    trackPointDataObj.styleUrl = styleUrl;
     // #xs_point = Extratropical Cyclone
     // #h_point = Hurricane
     // #s_point = Tropical Storm
@@ -17408,8 +17409,20 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
                     geojson.features[item].properties.sshwsValAbbv = sshwsLevel[2];
-                    geojson.features[item].properties.sshwsColor = sshwsLevel[1];
+                    //geojson.features[item].properties.sshwsColor = sshwsLevel[1];
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
+
+                    // https://www.nhc.noaa.gov/refresh/graphics_at4+shtml/215607.shtml?gm_track#contents
+                    // https://www.nhc.noaa.gov/images/interactive_cone_legend.jpg
+                    var postTrop;
+                    if (geojson.features[item].properties.styleUrl.replace('#', '').slice(0, 1) == 'x') {
+                        // post-tropical or extratropical
+                        postTrop = ut.sshwsValues[7][1];
+                    } else {
+                        // normal, set the value to the sshws color
+                        postTrop = sshwsLevel[1];
+                    }
+                    geojson.features[item].properties.sshwsColor = postTrop;
                 }
             }
             map.addLayer({
@@ -21852,7 +21865,8 @@ var sshwsValues = [
     ['Category 2', '#eb932f', 'C2'],
     ['Category 3', '#eb642f', 'C3'],
     ['Category 4', '#eb3b2f', 'C4'],
-    ['Category 5', '#eb2f87', 'C5']
+    ['Category 5', '#eb2f87', 'C5'],
+    ['Other', 'rgb(140, 3, 252)']
 ]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
