@@ -387,6 +387,25 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+
+        #colorPicker {
+            width: 40px;
+            height: 40px;
+            /*background-color: white;*/
+            border: 3px solid rgb(125, 125, 125);
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+
+            position: absolute;
+            z-index: 1000;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
     </style>
 </head>
 <body>
@@ -654,6 +673,8 @@
             </div>
         </div>
     </div>
+
+    <div id="colorPicker"></div>
 
     <div id='optionsBox' style="display: none">
         <div id="smallInfo" style="display: none"></div>

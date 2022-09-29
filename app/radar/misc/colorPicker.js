@@ -1,5 +1,8 @@
+var map = require('../map/map');
+const createOffCanvasItem = require('../menu/createOffCanvasItem');
+
 // https://stackoverflow.com/a/73854666/18758797
-function getMouseColor(e, map) {
+function getMouseColor(e) {
     const canvas = map.getCanvas();
     const gl = canvas.getContext("webgl") || canvas.getContext("webgl2");
 
@@ -10,9 +13,10 @@ function getMouseColor(e, map) {
         const canvasWidth = parseFloat(canvas.style.width, 10);
         const canvasHeight = parseFloat(canvas.style.height, 10);
 
+        var mapCenter = map.project(map.getCenter());
         // e.point.x and y, specifying the horizontal and vertical pixels read from the lower left corner of the screen
-        canvasX = e.point.x;
-        canvasY = e.point.y;
+        canvasX = mapCenter.x; // e.point.x;
+        canvasY = mapCenter.y; // e.point.y;
 
         // WenGL buffer is larger than canvas, there 
         const bufferX = (gl.drawingBufferWidth / canvasWidth * canvasX).toFixed(0);
@@ -31,8 +35,31 @@ function getMouseColor(e, map) {
         const color = `rgba(${r}, ${g}, ${b}, ${a})`;
         //colorStyle.backgroundColor = color;
 
-        console.log(`%c${color}`, `color: ${color}`);
+        //console.log(`%c${color}`, `color: ${color}`);
+        $('#colorPicker').css('background-color', color);
     }
 }
+
+createOffCanvasItem({
+    'id': 'colorPickerMenuItem',
+    'class': 'alert alert-secondary offCanvasMenuItem',
+    'contents': 'Color Picker',
+    'icon': 'fa fa-binoculars', // fa-binoculars, fa-microscope, fa-magnifying-glass
+    'css': ''
+}, function(thisObj, innerDiv, iconElem) {
+    if (!$(thisObj).hasClass('alert-primary')) {
+        $(thisObj).addClass('alert-primary');
+        $(thisObj).removeClass('alert-secondary');
+
+        map.on("move", getMouseColor);
+        $('#colorPicker').show();
+    } else if ($(thisObj).hasClass('alert-primary')) {
+        $(thisObj).removeClass('alert-primary');
+        $(thisObj).addClass('alert-secondary');
+
+        $('#colorPicker').hide();
+        map.off("move", getMouseColor);
+    }
+})
 
 module.exports = getMouseColor;

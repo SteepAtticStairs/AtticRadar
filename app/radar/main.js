@@ -14,6 +14,9 @@ tilts.listTilts([1, 2, 3, 4], function() {
 // initially hide the progress bar
 ut.progressBarVal('hide');
 
+// load the color picker
+require('./misc/colorPicker');
+
 // add file upload listeners
 require('./dom/fileUpload');
 
