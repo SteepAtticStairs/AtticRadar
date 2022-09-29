@@ -17299,11 +17299,21 @@ function getTrackPointData(properties) {
     div.innerHTML = properties.description;
     var parsedDescription = JSON.parse(ut.html2json(div));
 
-    //console.log(properties.styleUrl)
+    var styleUrl = properties.styleUrl;
+    trackPointDataObj.styleUrl = styleUrl;
     // #xs_point = Extratropical Cyclone
     // #h_point = Hurricane
     // #s_point = Tropical Storm
     // #xd_point = Low Pressure Area OR Tropical Depression?
+    var postTrop;
+    if (styleUrl.replace('#', '').slice(0, 1) == 'x') {
+        // post-tropical or extratropical
+        postTrop = true;
+    } else {
+        // normal, set the value to the sshws color
+        postTrop = false;
+    }
+    trackPointDataObj.postTrop = postTrop;
 
     trackPointDataObj.trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
     trackPointDataObj.trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
@@ -17325,6 +17335,9 @@ function getTrackPointData(properties) {
     // https://stackoverflow.com/a/12059321/18758797
     trackPointDataObj.windSpeedMPH = trackPointDataObj.trackpointMaxWind.match(/\(([^)]+)\)/)[1].slice(0, -4);
     trackPointDataObj.sshwsLevel = ut.getSSHWSVal(trackPointDataObj.windSpeedMPH);
+    if (postTrop) {
+        trackPointDataObj.sshwsLevel = ut.getSSHWSVal('Other');
+    }
 
 
     var formattedCoords = trackPointDataObj.trackpointLocation.replace('Location: ', '');
@@ -17412,9 +17425,21 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     var sshwsLevel = trackPointData.sshwsLevel;
 
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
-                    geojson.features[item].properties.sshwsValAbbv = sshwsLevel[2];
-                    geojson.features[item].properties.sshwsColor = sshwsLevel[1];
+                    geojson.features[item].properties.sshwsValAbbv = ut.getSSHWSVal(trackPointData.windSpeedMPH)[2];
+                    //geojson.features[item].properties.sshwsColor = sshwsLevel[1];
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
+
+                    // https://www.nhc.noaa.gov/refresh/graphics_at4+shtml/215607.shtml?gm_track#contents
+                    // https://www.nhc.noaa.gov/images/interactive_cone_legend.jpg
+                    var col;
+                    if (trackPointData.postTrop) {
+                        // post-tropical or extratropical
+                        col = ut.sshwsValues[7][1];
+                    } else {
+                        // normal, set the value to the sshws color
+                        col = sshwsLevel[1];
+                    }
+                    geojson.features[item].properties.sshwsColor = col;
                 }
             }
             map.addLayer({
@@ -17486,7 +17511,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     <div><b>${time[1]} ${time[2]}</b></div>
                     <!-- <div><b>${obj.trackpointTime}</b></div>
                     <br> -->
-                    <div>${obj.sshwsLevel[0]}</div>
+                    <div>${obj.sshwsVal}</div>
                     <div><b>${obj.windSpeedMPH}</b> mph wind</div>
                 </div>`
 
