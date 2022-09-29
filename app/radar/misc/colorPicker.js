@@ -1,3 +1,4 @@
+// https://stackoverflow.com/a/73854666/18758797
 function getMouseColor(e, map) {
     const canvas = map.getCanvas();
     const gl = canvas.getContext("webgl") || canvas.getContext("webgl2");
