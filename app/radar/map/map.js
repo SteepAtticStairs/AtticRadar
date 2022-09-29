@@ -5,11 +5,15 @@ const map = new mapboxgl.Map({
     zoom: 3,
     center: [-98.5606744, 36.8281576],
     maxZoom: 15,
+    preserveDrawingBuffer: true
     //zoom: 6,
     //center: [-66.0190363102349, 18.15295560177013],
     //projection: 'equirectangular',
     //fadeDuration: 0,
 });
+
+// const getMouseColor = require('../misc/colorPicker');
+// map.on("mousemove", e => getMouseColor(e, map));
 
 // map.on('click', function(e) {
 //     console.log(e.lngLat)
