@@ -4,6 +4,8 @@ const createMenuOption = require('../radar/menu/createMenuOption');
 const mapClick = require ('./mapClick');
 const getPolygonColors = require('./polygonColors');
 const simplify = require('simplify-geojson')
+var geojsonMerge = require('@mapbox/geojson-merge');
+const alertZones = require('./alertZones/alertZones');
 var map = require('../radar/map/map');
 
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
@@ -37,17 +39,20 @@ createMenuOption({
         } else {
             map.getCanvas().style.cursor = "crosshair";
             map.on('click', 'newAlertsLayer', mapClick)
+
             fetchPolygonData([noaaAlertsURL], function(data) {
                 for (var item in data.features) {
                     data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
                 }
+                console.log(data)
+                map.addSource('alertsSource', {
+                    type: 'geojson',
+                    data: data,
+                })
                 map.addLayer({
                     'id': `newAlertsLayer`,
                     'type': 'fill',
-                    'source': {
-                        type: 'geojson',
-                        data: data,
-                    },
+                    'source': 'alertsSource',
                     paint: {
                         //#0080ff blue
                         //#ff7d7d red
@@ -58,7 +63,7 @@ createMenuOption({
                 map.addLayer({
                     'id': `newAlertsLayerOutline`,
                     'type': 'line',
-                    'source': `newAlertsLayer`,
+                    'source': 'alertsSource',
                     'paint': {
                         //#014385 blue
                         //#850101 red
@@ -66,6 +71,39 @@ createMenuOption({
                         'line-width': 3
                     }
                 });
+
+                var polygonGeojson = {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+                function pushNewPolygon(geometry, properties) {
+                    // this allows you to add properties for each cell
+                    var objToPush = {
+                        "type": "Feature",
+                        "geometry": geometry,
+                        "properties": properties
+                    }
+                    polygonGeojson.features.push(objToPush)
+                }
+                $.getJSON('https://steepatticstairs.github.io/AtticRadar/app/alerts/alertZones/alertZones.json', function(newData) {
+                    for (var item in data.features) {
+                        if (data.features[item].geometry == null) {
+                            var affectedZones = data.features[item].properties.affectedZones;
+                            for (var i in affectedZones) {
+                                affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
+                                if (newData[affectedZones[i]] != undefined) {
+                                    pushNewPolygon(newData[affectedZones[i]], data.features[item].properties)
+                                }
+                            }
+                            //console.log(affectedZones)
+                        }
+                    }
+                    var mergedGeoJSON = geojsonMerge.merge([
+                        data,
+                        polygonGeojson
+                    ]);
+                    map.getSource('alertsSource').setData(mergedGeoJSON);
+                })
                 // newAlertsArr.push(`newAlertsLayerOutline`);
                 // newAlertsArr.push(`newAlertsLayer`);
 
