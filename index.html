@@ -395,16 +395,36 @@
             /*background-color: white;*/
             border: 3px solid rgb(125, 125, 125);
             border-radius: 50%;
-            pointer-events: none;
-            display: none;
 
             position: absolute;
             z-index: 1000;
             top:0;
+            bottom:0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            pointer-events: none;
+            display: none;
+        }
+        #colorPickerText {
+            text-align: center;
+            width: 40px;
+            height: fit-content;
+            padding: 1px 5px;
+            /* line-height: 25px; */
+            background-color: rgb(136, 136, 136);
+            border: 1px solid black;
+            border-radius: 5px;
+
+            position: absolute;
+            z-index: 1000;
+            top: 70px;
             bottom: 0;
             left: 0;
             right: 0;
             margin: auto;
+            pointer-events: none;
+            display: none;
         }
     </style>
 </head>
@@ -674,7 +694,8 @@
         </div>
     </div>
 
-    <div id="colorPicker"></div>
+    <div id="colorPicker" class="colorPicker"></div>
+    <div id="colorPickerText" class="colorPicker"></div>
 
     <div id='optionsBox' style="display: none">
         <div id="smallInfo" style="display: none"></div>

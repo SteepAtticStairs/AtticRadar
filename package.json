@@ -8,6 +8,7 @@
     "aewx-metar-parser": "^1.0.0",
     "brfs": "^2.0.2",
     "canvas": "^2.9.1",
+    "chroma-js": "^2.4.2",
     "luxon": "^3.0.3",
     "metar": "^1.0.0",
     "proj4": "^2.8.0",

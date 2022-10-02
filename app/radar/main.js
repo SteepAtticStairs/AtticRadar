@@ -14,8 +14,8 @@ tilts.listTilts([1, 2, 3, 4], function() {
 // initially hide the progress bar
 ut.progressBarVal('hide');
 
-// load the color picker
-require('./misc/colorPicker');
+// load the data inspector tool
+require('./inspector/entry');
 
 // add file upload listeners
 require('./dom/fileUpload');
@@ -59,11 +59,11 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
     console.log(`Established connection to main proxy in ${endTimer - startTimer} ms`)
 })
 
-var startTimer2 = Date.now();
-$.get(ut.phpProxy2 + "https://google.com", function(data) {
-    var endTimer2 = Date.now();
-    console.log(`Established connection to backup proxy in ${endTimer2 - startTimer2} ms`)
-})
+// var startTimer2 = Date.now();
+// $.get(ut.phpProxy2 + "https://google.com", function(data) {
+//     var endTimer2 = Date.now();
+//     console.log(`Established connection to backup proxy in ${endTimer2 - startTimer2} ms`)
+// })
 
 //$('#productsDropdownBtn').click();
 $('#productsDropdownTrigger').on('click', function(e) {
