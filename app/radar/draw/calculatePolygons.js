@@ -1,3 +1,5 @@
+const setTextField = require('../inspector/setTextField');
+
 //onmessage=function(oEvent) {
 function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     //var url = oEvent.data[0];
@@ -73,72 +75,118 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
         //console.log(mx,my);
         return {
             x:mx,
-            y:my
+            y:my,
+            lat:lon,
+            lon:lat
         }
     }
+
+    var featuresArr = [];
+	function pushPoint(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, value) {
+		featuresArr.push({
+			"type": "Feature",
+			"geometry": { "type": "Polygon",
+				"coordinates": [
+					[
+						[lng1, lat1],
+						[lng2, lat2],
+						[lng3, lat3],
+						[lng4, lat4]
+					]
+				]
+			},
+			"properties": {
+				"value": value,
+			}
+		},);
+	}
 
     //function to process file
     function reqListener() {
         var json = JSON.parse(this.responseText);
+        //console.log(json)
 
         var azs = json.azimuths;
         var min = azs[0];
         var max = azs[azs.length-1];
 
-        for (var key in json.radials) {
-            if (key == "azimuths") continue;
-            key = +key;
-            var values = json.radials[key];
-            var az = azs[key];
-            var leftAz, rightAz, bottomR, topR;
+        function pushValues(mode) {
+            for (var key in json.radials) {
+                if (key == "azimuths") continue;
+                key = +key;
+                var values = json.radials[key];
+                var az = azs[key];
+                var leftAz, rightAz, bottomR, topR;
 
-            //case when first az
-            if (key == 0) {
-                //case when crossing 0
-                leftAz = (min + 360 + max)/2;
-                rightAz = (az+azs[key+1])/2;
-            } else if (key == azs.length-1) {
-                //case when crossing 0 the other way
-                leftAz = (az + azs[key-1])/2;
-                rightAz = (min+360+max)/2;
-            } else {
-                //case when nothing to worry about
-                leftAz = (az + azs[key-1])/2;
-                rightAz = (az + azs[key+1])/2;
-            }
+                //case when first az
+                if (key == 0) {
+                    //case when crossing 0
+                    leftAz = (min + 360 + max)/2;
+                    rightAz = (az+azs[key+1])/2;
+                } else if (key == azs.length-1) {
+                    //case when crossing 0 the other way
+                    leftAz = (az + azs[key-1])/2;
+                    rightAz = (min+360+max)/2;
+                } else {
+                    //case when nothing to worry about
+                    leftAz = (az + azs[key-1])/2;
+                    rightAz = (az + azs[key+1])/2;
+                }
 
-            //loop through radar range gates
-            for (var i=0; i<values.length; i++) {
-                bottomR = values[i]*multiplier - gateRes;
-                topR = values[i]*multiplier + gateRes;
+                //loop through radar range gates
+                for (var i=0; i<values.length; i++) {
+                    bottomR = values[i]*multiplier - gateRes;
+                    topR = values[i]*multiplier + gateRes;
 
-                var bl = calculatePosition(leftAz, bottomR);
-                //console.log(bl, bl.x);
-                var tl = calculatePosition(leftAz, topR);
-                var br = calculatePosition(rightAz, bottomR);
-                var tr = calculatePosition(rightAz, topR);
+                    var bl = calculatePosition(leftAz, bottomR);
+                    //console.log(bl, bl.x);
+                    var tl = calculatePosition(leftAz, topR);
+                    var br = calculatePosition(rightAz, bottomR);
+                    var tr = calculatePosition(rightAz, topR);
 
-                output.push(
-                    bl.x,//leftAz,
-                    bl.y,//bottomR,
+                    if (mode == 'geojson') {
+                        pushPoint(bl.lat, bl.lon, tl.lat, tl.lon, tr.lat, tr.lon, br.lat, br.lon, json.rawValues[key][i])
+                    } else if (mode == 'radarPlot') {
+                        output.push(
+                            bl.x,//leftAz,
+                            bl.y,//bottomR,
 
-                    tl.x,//leftAz,
-                    tl.y,//topR,
+                            tl.x,//leftAz,
+                            tl.y,//topR,
 
-                    br.x,//rightAz,
-                    br.y,//bottomR,
-                    br.x,//rightAz,
-                    br.y,//bottomR,
+                            br.x,//rightAz,
+                            br.y,//bottomR,
+                            br.x,//rightAz,
+                            br.y,//bottomR,
 
-                    tl.x,//leftAz,
-                    tl.y,//topR,
-                    tr.x,//rightAz,
-                    tr.y//topR
-                )
-                var colorVal = json.values[key][i];
-                colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
+                            tl.x,//leftAz,
+                            tl.y,//topR,
+                            tr.x,//rightAz,
+                            tr.y//topR
+                        )
+                        var colorVal = json.values[key][i];
+                        colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
+                    }
+                }
             }
         }
+
+        function initSetTextField(event) {
+            console.log('Loading GeoJSON...')
+            pushValues('geojson');
+            var geojsonParentTemplate = {
+                "type": "FeatureCollection",
+                "features": featuresArr
+            }
+            setTextField(geojsonParentTemplate);
+        }
+
+        if ($('#dataDiv').data('addedGJEventListener') == undefined) {
+            $("#dataDiv").on("loadGeoJSON", initSetTextField);
+            $('#dataDiv').data('addedGJEventListener', true);
+        }
+
+        pushValues('radarPlot');
         var typedOutput = new Float32Array(output);
         var colorOutput = new Float32Array(colors);
         var indexOutput = new Int32Array(indices);

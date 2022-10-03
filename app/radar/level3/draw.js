@@ -14,6 +14,7 @@ function draw(data) {
 	var json = {
 		'radials': [],
 		'values': [],
+		'rawValues': [],
 		'azimuths': [],
 		'version': [],
 	};
@@ -36,6 +37,7 @@ function draw(data) {
 	radialLoop.forEach((radial) => {
 		arr = [];
 		valArr = [];
+		rawValArr = [];
 		const startAngle = radial.startAngle * (Math.PI / 180);
 		const endAngle = startAngle + radial.angleDelta * (Math.PI / 180);
 		json.azimuths.push(radial.startAngle)
@@ -54,12 +56,13 @@ function draw(data) {
 
 			arr.push(idx + data.radialPackets[0].firstBin)
 			valArr.push((bin + adder) / divider)
-			c.push((bin + adder) / divider)
+			rawValArr.push(bin)
 
 			//ctx.stroke();
 		});
 		json.radials.push(arr)
 		json.values.push(valArr)
+		json.rawValues.push(rawValArr);
 	});
 
 	// if the first azimuth isn't zero (e.g. azimuths going 0-360) then we need to do some re-arrangement

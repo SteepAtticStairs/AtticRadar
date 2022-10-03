@@ -3,4 +3,4 @@
 */
 
 // load the starting file
-//require('./colorPicker');
+require('./colorPicker');

@@ -37,11 +37,11 @@ function getMouseColor(e) {
         const color = `rgb(${r}, ${g}, ${b})`;
         //colorStyle.backgroundColor = color;
 
-        getValFromColor(color, 'N0B', function(val) {
-            //console.log(val)
-            $('#colorPickerText').text(val);
-            //ut.colorLog(val, val)
-        })
+        // getValFromColor(color, 'N0B', function(val) {
+        //     //console.log(val)
+        //     $('#colorPickerText').text(val);
+        //     //ut.colorLog(val, val)
+        // })
         //console.log(`%c${color}`, `color: ${color}`);
         $('#colorPicker').css('background-color', color);
     }

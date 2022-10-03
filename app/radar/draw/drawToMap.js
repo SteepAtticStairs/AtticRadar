@@ -138,6 +138,10 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         console.log('File plotting complete');
         ut.betterProgressBar('set', 100);
         ut.betterProgressBar('hide');
+
+        setTimeout(function() {
+            $("#dataDiv").trigger("loadGeoJSON");
+        }, 500)
     }
 
     $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
