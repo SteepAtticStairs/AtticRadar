@@ -12,6 +12,7 @@ function setTextField(geojson) {
     // document.body.appendChild(a);
     // a.click();
     const glookup = new GeoJsonGeometriesLookup(geojson);
+    console.log('GeoJSON loaded.')
     map.on('move', function(e) {
         if ($('.colorPicker').is(":visible")) {
             try {

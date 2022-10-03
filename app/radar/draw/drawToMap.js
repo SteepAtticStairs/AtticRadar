@@ -3,6 +3,7 @@ const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
+const generateGeoJSON = require('../inspector/generateGeoJSON');
 var map = require('../map/map');
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
@@ -140,7 +141,10 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         ut.betterProgressBar('hide');
 
         setTimeout(function() {
-            $("#dataDiv").trigger("loadGeoJSON");
+            //$("#dataDiv").trigger("loadGeoJSON");
+            //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
+            var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
+            generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
         }, 500)
     }
 
