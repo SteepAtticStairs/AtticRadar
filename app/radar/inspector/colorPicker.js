@@ -2,6 +2,7 @@ var map = require('../map/map');
 const createOffCanvasItem = require('../menu/createOffCanvasItem');
 const getValFromColor = require('./getGradientValue');
 const ut = require('../utils');
+const createMenuOption = require('../menu/createMenuOption');
 
 // https://stackoverflow.com/a/73854666/18758797
 function getMouseColor(e) {
@@ -47,22 +48,26 @@ function getMouseColor(e) {
     }
 }
 
-createOffCanvasItem({
-    'id': 'colorPickerMenuItem',
-    'class': 'alert alert-secondary offCanvasMenuItem',
+createMenuOption({
+    'divId': 'colorPickerItemDiv',
+    'iconId': 'colorPickerItemClass',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-grey',
+
     'contents': 'Color Picker',
     'icon': 'fa fa-binoculars', // fa-binoculars, fa-microscope, fa-magnifying-glass
     'css': ''
-}, function(thisObj, innerDiv, iconElem) {
-    if (!$(thisObj).hasClass('alert-primary')) {
-        $(thisObj).addClass('alert-primary');
-        $(thisObj).removeClass('alert-secondary');
+}, function(divElem, iconElem) {
+    if (!$(iconElem).hasClass('icon-blue')) {
+        $(iconElem).addClass('icon-blue');
+        $(iconElem).removeClass('icon-grey');
 
         map.on("move", getMouseColor);
         $('.colorPicker').show();
-    } else if ($(thisObj).hasClass('alert-primary')) {
-        $(thisObj).removeClass('alert-primary');
-        $(thisObj).addClass('alert-secondary');
+    } else if ($(iconElem).hasClass('icon-blue')) {
+        $(iconElem).removeClass('icon-blue');
+        $(iconElem).addClass('icon-grey');
 
         $('.colorPicker').hide();
         map.off("move", getMouseColor);
