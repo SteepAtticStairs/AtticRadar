@@ -8,6 +8,9 @@ createMenuOption({
     'divClass': 'mapFooterMenuItem',
     'iconClass': 'icon-grey',
 
+    'location': 'top-left',
+    'size': 30,
+
     'contents': 'Open Offcanvas Menu',
     'icon': 'fa fa-bars',
     'css': ''

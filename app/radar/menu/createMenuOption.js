@@ -5,6 +5,9 @@ function createMenuOption(options, clickFunc) {
     var divClass = options.divClass;
     var iconClass = options.iconClass;
 
+    var location = options.location;
+    var size = options.size;
+
     var contents = options.contents;
     var icon = options.icon;
     var css = options.css;
@@ -14,7 +17,11 @@ function createMenuOption(options, clickFunc) {
     div.className = divClass;
     //$(div).addClass('mapFooterMenuItem');
 
+    const defaultSize = 23;
+
     var iconElem = document.createElement('span');
+    $(iconElem).css("fontSize", defaultSize)
+    if (size != undefined) { $(iconElem).css("fontSize", size) }
     iconElem.id = iconId;
     $(iconElem).addClass(icon);
     $(iconElem).addClass(iconClass);
@@ -25,8 +32,13 @@ function createMenuOption(options, clickFunc) {
     nbspElem.className = 'noselect';
     nbspElem.appendChild(document.createTextNode('\u00A0\u00A0\u00A0'));
 
-    document.getElementById('mapFooter').appendChild(div);
-    document.getElementById('mapFooter').appendChild(nbspElem);
+    if (location == 'bottom-center' || location == undefined) {
+        document.getElementById('mapFooter').appendChild(div);
+        document.getElementById('mapFooter').appendChild(nbspElem);
+    } else if (location == 'top-left') {
+        document.getElementById('top-left').appendChild(div);
+        document.getElementById('top-left').appendChild(nbspElem);
+    }
 
     // var outerDiv = document.createElement('div');
     // outerDiv.id = `${divId}_outer`;
