@@ -1,1 +1,1 @@
-exclude: [app, archive, data, level3test, , nexrad-level-2-plot, nexrad-level-3-data, nexrad-level-3-plot, resources, server]
+exclude: [app, archive, data, level3test, nexrad-level-2-plot, nexrad-level-3-data, nexrad-level-3-plot, resources, server]
