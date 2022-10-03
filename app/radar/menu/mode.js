@@ -1,4 +1,5 @@
 const createMenuOption = require('./createMenuOption');
+const createOffCanvasItem = require('./createOffCanvasItem');
 
 function showHideFileBox(showHide) {
     $('#stationMenuItemIcon').click();
@@ -27,36 +28,28 @@ function showHideFileBox(showHide) {
     }
 }
 
-createMenuOption({
-    'divId': 'modeMenuItemDiv',
-    'iconId': 'modeMenuItemClass',
-
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-green',
-
+createOffCanvasItem({
+    'id': 'modeMenuItem',
+    'class': 'alert alert-success offCanvasMenuItem',
     'contents': 'Current File Mode',
     'icon': 'fa fa-clock',
     'css': ''
-}, function(divElem, iconElem) {
-    if (!$('#dataDiv').data('noMoreClicks')) {
-        if ($(iconElem).hasClass('icon-green')) {
-            $(iconElem).removeClass('icon-green');
-            $(iconElem).addClass('icon-red');
+}, function(thisObj, innerDiv, iconElem) {
+    if ($(thisObj).hasClass('alert-success')) {
+        $(thisObj).removeClass('alert-success');
+        $(thisObj).addClass('alert-danger');
 
-            $(iconElem).removeClass('fa-clock');
-            $(iconElem).addClass('fa-upload');
-            //innerDiv.innerHTML = 'Upload File Mode';
+        iconElem.className = 'fa fa-upload';
+        innerDiv.innerHTML = 'Upload File Mode';
 
-            showHideFileBox('show');
-        } else if ($(iconElem).hasClass('icon-red')) {
-            $(iconElem).removeClass('icon-red');
-            $(iconElem).addClass('icon-green');
+        showHideFileBox('show');
+    } else if ($(thisObj).hasClass('alert-danger')) {
+        $(thisObj).removeClass('alert-danger');
+        $(thisObj).addClass('alert-success');
 
-            $(iconElem).removeClass('fa-upload');
-            $(iconElem).addClass('fa-clock');
-            //innerDiv.innerHTML = 'Current File Mode';
+        iconElem.className = 'fa fa-clock';
+        innerDiv.innerHTML = 'Current File Mode';
 
-            showHideFileBox('hide');
-        }
+        showHideFileBox('hide');
     }
 })

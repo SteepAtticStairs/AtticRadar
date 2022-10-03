@@ -14,15 +14,15 @@ tilts.listTilts([1, 2, 3, 4], function() {
 // initially hide the progress bar
 ut.progressBarVal('hide');
 
-// load the data inspector tool
-require('./inspector/entry');
-
 // add file upload listeners
 require('./dom/fileUpload');
 
 // load the mode control
 require('./menu/mode');
 //require('./map/controls/mode');
+
+// load the data inspector tool
+require('./inspector/entry');
 
 // load the offcanvas menu control
 require('./map/controls/offCanvasMenu');
