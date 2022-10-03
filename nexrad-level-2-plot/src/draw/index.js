@@ -185,6 +185,7 @@ const draw = (data, _options) => {
 	var json = {
 		'radials': [],
 		'values': [],
+		'rawValues': [],
 		'azimuths': [],
 		'version': [],
 	};
@@ -210,6 +211,7 @@ const draw = (data, _options) => {
 	rrlEncoded.forEach((radial) => {
 		arr = [];
 		valArr = [];
+		rawValArr = [];
 		json.azimuths.push(radial.azimuth)
 		// calculate plotting parameters
 
@@ -235,6 +237,7 @@ const draw = (data, _options) => {
 				//ctx.arc(0, 0, (idx + deadZone) * gateSizeScaling, startAngle, endAngle + resolution * (bin.count - 1));
 				arr.push((idx + deadZone) * gateSizeScaling)
 				valArr.push(bin.value + adder)
+				rawValArr.push(bin)
 				//c.push(bin.value + adder)
 			} else {
 				// plain data
@@ -242,12 +245,14 @@ const draw = (data, _options) => {
 				//ctx.arc(0, 0, (idx + deadZone) * gateSizeScaling, startAngle, endAngle);
 				arr.push((idx + deadZone) * gateSizeScaling)
 				valArr.push(bin + adder)
+				rawValArr.push(bin)
 				//c.push(bin + adder)
 			}
 			//ctx.stroke();
 		});
 		json.radials.push(arr)
 		json.values.push(valArr)
+		json.rawValues.push(rawValArr);
 	});
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log(valueArr)
