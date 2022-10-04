@@ -3,6 +3,7 @@ const createOffCanvasItem = require('../menu/createOffCanvasItem');
 const getValFromColor = require('./getGradientValue');
 const ut = require('../utils');
 const createMenuOption = require('../menu/createMenuOption');
+const generateGeoJSON = require('./generateGeoJSON');
 
 // https://stackoverflow.com/a/73854666/18758797
 function getMouseColor(e) {
@@ -65,6 +66,13 @@ createMenuOption({
 
         map.on("move", getMouseColor);
         $('.colorPicker').show();
+
+        var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
+        var previousCalcPolygonsData = $('#dataDiv').data('previousCalcPolygonsData');
+        if (previousCalcPolygonsData != calcPolygonsData) {
+            $('#dataDiv').data('previousCalcPolygonsData', calcPolygonsData);
+            generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
+        }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');

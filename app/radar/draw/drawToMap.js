@@ -115,12 +115,15 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         ut.betterProgressBar('set', 100);
         ut.betterProgressBar('hide');
 
-        setTimeout(function() {
-            //$("#dataDiv").trigger("loadGeoJSON");
-            //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
-            var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
-            generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
-        }, 500)
+        if ($('#colorPickerItemClass').hasClass('icon-blue')) {
+            $('#colorPickerItemClass').click();
+        }
+        // setTimeout(function() {
+        //     //$("#dataDiv").trigger("loadGeoJSON");
+        //     //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
+        //     var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
+        //     generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
+        // }, 500)
     }
 
     $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
