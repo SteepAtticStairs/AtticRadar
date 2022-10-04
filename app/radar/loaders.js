@@ -129,10 +129,15 @@ function getLatestL2(station, callback) {
 * @param {any} callback - The function to run after the retrieval. Use a single variable
 in this function, this will be a string with the latest file's URL.
 */
-function getLatestL3(station, product, index, callback) {
+function getLatestL3(station, product, index, callback, date) {
     if (!(product.length > 3)) {
         //document.getElementById('spinnerParent').style.display = 'block';
-        var curTime = new Date();
+        var curTime;
+        if (date == undefined) {
+            curTime = new Date();
+        } else {
+            curTime = date;
+        }
         var year = curTime.getUTCFullYear();
         var month = curTime.getUTCMonth() + 1;
         if (month.toString().length == 1) month = "0" + month.toString();
@@ -147,14 +152,21 @@ function getLatestL3(station, product, index, callback) {
         fullURL = ut.preventFileCaching(fullURL);
         console.log(fullURL)
         $.get(ut.phpProxy + fullURL, function (data) {
-            var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
-            dataToWorkWith = JSON.parse(dataToWorkWith)
-            //console.log(dataToWorkWith)
-            var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-            var filenameKey = contentsBase[contentsBase.length - (index + 1)].Key.HASHtext;
+            try {
+                var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
+                dataToWorkWith = JSON.parse(dataToWorkWith)
+                //console.log(dataToWorkWith)
+                var contentsBase = dataToWorkWith.ListBucketResult.Contents;
+                var filenameKey = contentsBase[contentsBase.length - (index + 1)].Key.HASHtext;
 
-            var finishedURL = `${urlBase}${filenameKey}`;
-            callback(finishedURL);
+                var finishedURL = `${urlBase}${filenameKey}`;
+                callback(finishedURL);
+            } catch(e) {
+                // error checking - if nothing exists for this date, fetch the directory listing for the previous day
+                var d = curTime;
+                d.setDate(d.getDate() - 1);
+                getLatestL3(station, product, index, callback, d);
+            }
         })
     } else {
         var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
