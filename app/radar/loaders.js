@@ -162,10 +162,14 @@ function getLatestL3(station, product, index, callback, date) {
                 var finishedURL = `${urlBase}${filenameKey}`;
                 callback(finishedURL);
             } catch(e) {
-                // error checking - if nothing exists for this date, fetch the directory listing for the previous day
-                var d = curTime;
-                d.setDate(d.getDate() - 1);
-                getLatestL3(station, product, index, callback, d);
+                // we don't want to go back days for storm tracking - most of the time an empty directory
+                // of storm track files means there are no storm tracks avaliable at the time (e.g. clear skies / no storms)
+                if (product != 'NTV' && product != 'NMD' && product != 'NST') {
+                    // error checking - if nothing exists for this date, fetch the directory listing for the previous day
+                    var d = curTime;
+                    d.setDate(d.getDate() - 1);
+                    getLatestL3(station, product, index, callback, d);
+                }
             }
         })
     } else {

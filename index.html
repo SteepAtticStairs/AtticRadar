@@ -370,6 +370,11 @@
             left: 10px;
             display: flex;
         }
+        #top-right {
+            position: absolute;
+            right: 10px;
+            display: flex;
+        }
 
         .progressBar {
             position: absolute;
@@ -431,6 +436,16 @@
             margin: auto;
             pointer-events: none;
             display: none;
+        }
+
+        .new-file {
+            color: rgb(17, 167, 17);
+        }
+        .recent-file {
+            color: rgb(217, 184, 0);
+        }
+        .old-file {
+            color: rgb(229, 78, 78);
         }
     </style>
 </head>
@@ -522,6 +537,7 @@
     -->
     <div id="radarHeader" class="radarHeader">
         <div id="top-left"></div>
+        <div id="top-right"></div>
         <span id="fileUploadSpan" style="display: none">
             <input type="file" id="hiddenFileUploader" style="display: none">
             <div id="drop_zone">Drop Level 2 file here</div>
