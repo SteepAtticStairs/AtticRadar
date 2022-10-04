@@ -5,6 +5,7 @@ const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 const generateGeoJSON = require('../inspector/generateGeoJSON');
 var map = require('../map/map');
+const setBaseMapLayers = require('../misc/baseMapLayers');
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var settings = {};
@@ -80,38 +81,12 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         //console.log(Math.max(...[...new Set(colors)]))
         mapFuncs.removeMapLayer('baseReflectivity');
 
-        const layers = map.getStyle().layers;
-        var allRoadLayers = [];
-        for (const layer of layers) {
-            //console.log(layer.id)
-            if (layer.type === 'symbol'/* || layer.type === 'line'*/) {
-                allRoadLayers.push(layer.id);
-            }
-        }
-
-        // road-minor-low
-        // road-street-low
-        // road-minor-case
-        // road-street-case
-        // road-secondary-tertiary-case
-        // road-primary-case
-        // road-major-link-case
-        // road-motorway-trunk-case
-        // road-construction
-        // road-path
-        // road-steps
-        // road-major-link
-        // road-pedestrian
-        // road-minor
-        // road-street
-        // road-secondary-tertiary
-        // road-primary
-        // road-motorway-trunk
-        // road-rail
-
         map.addLayer(layer);
-        for (item in allRoadLayers) {
-            mapFuncs.moveMapLayer(allRoadLayers[item])
+        var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
+        if (!isChecked) {
+            setBaseMapLayers('cities');
+        } else if (isChecked) {
+            setBaseMapLayers('both');
         }
 
         document.getElementById('spinnerParent').style.display = 'none';

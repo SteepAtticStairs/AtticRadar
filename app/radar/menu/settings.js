@@ -1,6 +1,7 @@
 const createOffCanvasItem = require('./createOffCanvasItem');
 const ut = require('../utils');
 const map = require('../map/map');
+const setBaseMapLayers = require('../misc/baseMapLayers');
 
 createOffCanvasItem({
     'id': 'settingsMenuItem',
@@ -30,7 +31,6 @@ createOffCanvasItem({
     $('#radarVisibilityCheckbox').on('click', function() {
         var isChecked = $('#radarVisibilityCheckBtn').is(":checked");
 
-        var stLayers = $('#dataDiv').data('stormTrackMapLayers')
         if (!isChecked) {
             if (map.getLayer('baseReflectivity')) {
                 map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
@@ -39,6 +39,16 @@ createOffCanvasItem({
             if (map.getLayer('baseReflectivity')) {
                 map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
             }
+        }
+    })
+
+    $('#showExtraMapLayersCheckbox').on('click', function() {
+        var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
+
+        if (!isChecked) {
+            setBaseMapLayers('cities');
+        } else if (isChecked) {
+            setBaseMapLayers('both');
         }
     })
 })
