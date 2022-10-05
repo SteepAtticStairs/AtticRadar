@@ -37,6 +37,9 @@ require('./menu/stationMarkerMenu');
 // add the help control
 require('./map/controls/help/helpControl');
 
+// load the radar message listener
+require('./radarMessage/radarMessage');
+
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 

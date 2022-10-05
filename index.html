@@ -447,6 +447,18 @@
         .old-file {
             color: rgb(229, 78, 78);
         }
+
+        #radarStationParent {
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 1px 5px;
+            /* line-height: 25px; */
+            background-color: rgb(0, 111, 181);
+            border: 2px solid rgb(0, 73, 119);
+            border-radius: 25px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -551,7 +563,7 @@
         </span>
         <span id="radarInfoSpan">
             <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
-            <div style="font-size: 12px"><b id='radarStation'>No Station Selected</b><a id="radarTime"></a></div>
+            <div style="font-size: 12px"><sus id='radarStationParent'><i class="fa-solid fa-circle-info" id="radarStationIcon" style="display: none">&nbsp;&nbsp;</i><b id='radarStation'>No Station Selected</b></sus><a id="radarTime"></a></div>
         </span>
     </div>
 
