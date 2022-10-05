@@ -1,6 +1,8 @@
 //var map = require('../map/map');
 const ut = require('../utils');
 
+// https://www.weather.gov/nl2/NEXRADView
+
 function resetStationDiv(station) {
     setTimeout(function() {
         $('#radarStationIcon').removeClass('fa-bounce');
@@ -83,7 +85,7 @@ function showRadarStatus(station) {
                     <!-- <div><b>Data Last Recieved: </b>${radstatLastReceivedData}</div> -->
                     <br>
                     <div><b>Message Time: </b>${messageTime}</div>
-                    <div style="white-space: pre-wrap;"><b>Message: </b><pre>${radstatMessageText}</pre></div>
+                    <div style="white-space: pre-wrap;"><b>Message: </b><div class="code">${radstatMessageText}</div></div>
                     <br>
                     <div><b>Message ID: </b>${messageID}</div>
                     <div><b>Message Name: </b>${messageName}</div>`
