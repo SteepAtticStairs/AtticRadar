@@ -568,6 +568,19 @@ function getRadialConstants(radVersion) {
     }
 }
 
+// https://stackoverflow.com/a/544429/18758797
+function getDateDiff(date1, date2) {
+    var diff = Date.parse( date2 ) - Date.parse( date1 ); 
+    return isNaN( diff ) ? NaN : {
+        //diff : diff,
+        ms : Math.floor( diff            % 1000 ),
+        s  : Math.floor( diff /     1000 %   60 ),
+        m  : Math.floor( diff /    60000 %   60 ),
+        h  : Math.floor( diff /  3600000 %   24 ),
+        d  : Math.floor( diff / 86400000        )
+    };
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -607,5 +620,6 @@ module.exports = {
     spawnModal,
     betterProgressBar,
     CtoF,
-    getRadialConstants
+    getRadialConstants,
+    getDateDiff
 }

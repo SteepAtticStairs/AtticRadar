@@ -29,6 +29,17 @@ function showRadarStatus(station) {
         var radstatLastReceivedData = ut.printFancyTime(new Date(stationData.properties.latency.levelTwoLastReceivedTime));
         var stationName = stationData.properties.name;
 
+        var stationStatusDiv;
+        try {
+            var stationStatusObj = $('#dataDiv').data('stationStatusObj');
+            var curStationStatus = stationStatusObj[station].status;
+            if (curStationStatus == 'up') { stationStatusDiv = `<b class='new-file'>ONLINE</b>` }
+            if (curStationStatus == 'down') { stationStatusDiv = `<b class='old-file'>OFFLINE</b>` }
+        } catch (e) {
+            console.warn(e);
+            stationStatusDiv = `<b>unknown</b>`
+        }
+
         var latestURL = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.75ftm/SI.${station.toLowerCase()}/sn.last`
         $.get(ut.preventFileCaching(ut.phpProxy + latestURL), function (data) {
             // var radstatMessageIssuanceTime = new Date(data.issuanceTime);
@@ -48,6 +59,8 @@ function showRadarStatus(station) {
 
             var messageText = data;
             var messageTime;
+            var messageAge;
+            var ageClass;
 
             try {
                 // convert to uppercase so we don't run into case issues
@@ -61,18 +74,37 @@ function showRadarStatus(station) {
                 // convert to a date object in UTC time
                 var dateObj = new Date(`${dateStr} UTC`);
                 messageTime = ut.printFancyTime(dateObj);
+
+                const dateDiff = ut.getDateDiff(dateObj, new Date());
+                var formattedDateDiff;
+                if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
+                if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
+                if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
+                if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
+
+                // greater than or equal to 3 days
+                if (dateDiff.d >= 3) { ageClass = 'old-file'; }
+                // greater than or equal to 1 days but less than 3 days
+                if (dateDiff.d >= 1 && dateDiff.d < 3) { ageClass = 'recent-file'; }
+                // 0 days
+                if (dateDiff.d == 0) { ageClass = 'new-file'; }
+                messageAge = `<b class='${ageClass}'>${formattedDateDiff} old</b>`
+                //document.getElementById('top-right').innerHTML = formattedDateDiff;
             } catch (e) {
                 console.warn(e);
                 messageTime = 'There was an error while parsing the message time.'
+                messageAge = 'N/A'
+                ageClass = ''
             }
 
             var htmlContent = 
             `<div><b>Radar Station: </b>${station}</div>
             <div><b>Radar Name: </b>${stationName}</div>
+            <div><b>Station Status: ${stationStatusDiv}</b></div>
             <!-- <div><b>Data Last Recieved: </b>${radstatLastReceivedData}</div> -->
             <br>
             <div><b>Message Send Time: </b>${messageTime}</div>
-            <div style="white-space: pre-wrap;"><b>Message: </b><div class="code">${messageText}</div></div>`
+            <div style="white-space: pre-wrap;"><b>Message (${messageAge}):</b><div class="code">${messageText}</div></div>`
             ut.spawnModal({
                 'title': `${station} Info`,
                 'headerColor': 'alert-warning',

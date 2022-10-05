@@ -238,6 +238,9 @@ function showStations() {
                     $('#stationInp').val(clickedStation);
                     $('#dataDiv').data('currentStation', clickedStation);
 
+                    $('#radarStationIcon').show();
+                    document.getElementById('radarStation').innerHTML = clickedStation;
+
                     if ($('#dataDiv').data('metarsActive')) {
                         fetchMETARData.fetchMETARData('update');
                     }

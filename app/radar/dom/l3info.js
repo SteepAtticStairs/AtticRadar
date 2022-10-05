@@ -2,19 +2,6 @@ const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel3FileTime = require('../level3/l3fileTime');
 
-// https://stackoverflow.com/a/544429/18758797
-function getDateDiff(date1, date2) {
-    var diff = Date.parse( date2 ) - Date.parse( date1 ); 
-    return isNaN( diff ) ? NaN : {
-        //diff : diff,
-        ms : Math.floor( diff            % 1000 ),
-        s  : Math.floor( diff /     1000 %   60 ),
-        m  : Math.floor( diff /    60000 %   60 ),
-        h  : Math.floor( diff /  3600000 %   24 ),
-        d  : Math.floor( diff / 86400000        )
-    };
-}
-
 function showL3Info(l3rad) {// //showPlotBtn();
     $('#fileUploadSpan').hide();
     $('#radarInfoSpan').show();
@@ -25,7 +12,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
 		var theFileStation = abrvData[l3rad.textHeader.id3];
-        document.getElementById('radarStation').innerHTML = theFileStation;
+        //document.getElementById('radarStation').innerHTML = theFileStation;
 
         var theFileVCP = l3rad.productDescription.vcp;
         document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
@@ -35,7 +22,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
         document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 
-        const dateDiff = getDateDiff(fileDateObj, new Date());
+        const dateDiff = ut.getDateDiff(fileDateObj, new Date());
         var formattedDateDiff;
         if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
         if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }

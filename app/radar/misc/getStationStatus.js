@@ -31,6 +31,7 @@ function getStationStatus(callback) {
                 }
             }
         }
+        $('#dataDiv').data('stationStatusObj', allStationStatusObj);
         callback(allStationStatusObj);
     })
 }
