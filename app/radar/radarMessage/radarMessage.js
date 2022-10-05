@@ -74,9 +74,8 @@ function showRadarStatus(station) {
                     );
 
                     radstatMessageText.replace(/\n/g, '<br>');
-                    var message = `${data.id}<br><div class='false-anchor' onclick='window.location.href = "${msgURL}"'>${msgURL}</a>`;
-                    var messageID = data.productName;
-                    var messageName = radstatMessageText;
+                    var messageID = `<a class='false-anchor' onclick='window.location.href = "${msgURL}"'>${data.id}</a>`;
+                    var messageName = data.productName;
                     var messageTime = ut.printFancyTime(radstatMessageIssuanceTime);
 
                     var htmlContent = 
