@@ -37,16 +37,15 @@ to use `watchify` (a part of Browserify) to auto-bundle the project every time y
 
 # Notes
 
-**A live demo of this webpage can be found here:
+**The website can be found live here:
 <br>
 https://steepatticstairs.github.io/AtticRadar/**
 <br><br><br>
 You can add some parameters to the URL to make the app easier to use / bookmark. You can add 
-* `#development`
 * `#station=ICAO`
 * `#tideStation=TIDESTATIONID`
 
-The first one is to allow for extra development features (this is mainly for my own use, I wouldn't recommend trying this). The second one is to set the app's initial station view. (The default will likely be either `KLWX` or `KMHX`, because those are the stations I use the most.)  The third one is to set the default tide station. Here are some examples:
+The first one is to set the app's initial station. This is the station the map would load radar products for / load METAR stations around, if there isn't a selected station. (The default will likely be either `KLWX` or `KMHX`, because those are the stations I use the most.)  The second one is to set the default tide station. Here are some examples:
 <br>
 
 Sets the app's initial station to `KHGX`:
@@ -57,13 +56,9 @@ Sets the app's initial tide station to `8724698` (Loggerhead Key):
 ```
 https://steepatticstairs.github.io/AtticRadar/#tideStation=8724698
 ```
-Sets the app into development mode:
+Sets the app's initial station to `KHGX` AND sets the tide station to `8724698`:
 ```
-https://steepatticstairs.github.io/AtticRadar/#development
-```
-Sets the app's initial station to `KHGX` AND into development mode:
-```
-https://steepatticstairs.github.io/AtticRadar/#station=KHGX&#development
+https://steepatticstairs.github.io/AtticRadar/#station=KHGX&#tideStation=8724698
 ```
 Notice how in the last example, the two parameters are separated by an ampersand (`&`) and still require a hash (`#`) before each parameter.
 
