@@ -10,6 +10,8 @@ function showRadarStatus(station) {
         })
         return;
     }
+    document.getElementById('radarStation').innerHTML = 'Loading...'
+    $('#radarStationIcon').addClass('fa-bounce');
     var radmessageURL = `https://api.weather.gov/products/types/FTM/locations/${station.substring(1)}/#`;
     $.getJSON(ut.preventFileCaching(radmessageURL), function (data) {
         // THIS CODE IS TO REPLACE THE @ CHARACTERS WITH "AT"
@@ -81,6 +83,10 @@ function showRadarStatus(station) {
                         'headerColor': 'alert-warning',
                         'body': htmlContent
                     })
+                    setTimeout(function() {
+                        $('#radarStationIcon').removeClass('fa-bounce');
+                        document.getElementById('radarStation').innerHTML = station;
+                    }, 500)
 
                     // document.getElementById('radstatMessageID').innerHTML = `${data.id}<br><div class='false-anchor' onclick='window.location.href = "${msgURL}"'>${msgURL}</a>`;
                     // document.getElementById('radstatMessageName').innerHTML = data.productName;
@@ -94,8 +100,8 @@ function showRadarStatus(station) {
     });
 }
 
-$('#radarStation').on('click', function() {
-    showRadarStatus(this.innerHTML)
+$('#radarStationParent').on('click', function() {
+    showRadarStatus($('#radarStation').text())
 })
 
 //module.exports = showRadarStatus;
