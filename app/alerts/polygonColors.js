@@ -58,9 +58,9 @@ function getPolygonColors(alertEvent) {
     // console.log(noaaColors)
 
     if (Object.keys(noaaColors).includes(alertEvent)) {
-        // if (Object.keys(noaaColors[alertEvent]).includes('originalColor')) {
-        //     return noaaColors[alertEvent].originalColor;
-        // }
+        if (Object.keys(noaaColors[alertEvent]).includes('originalColor')) {
+            return noaaColors[alertEvent].originalColor;
+        }
         return noaaColors[alertEvent].rgb;
     } else {
         return 'rgb(128, 128, 128)';

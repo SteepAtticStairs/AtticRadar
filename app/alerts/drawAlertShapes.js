@@ -5,8 +5,12 @@ const mapClick = require ('./mapClick');
 const getPolygonColors = require('./polygonColors');
 const simplify = require('simplify-geojson')
 var geojsonMerge = require('@mapbox/geojson-merge');
-const alertZones = require('./alertZones/alertZones');
 var map = require('../radar/map/map');
+
+// https://stackoverflow.com/a/1431113/18758797
+function replaceAt(str, index, replacement) {
+    return str.substring(0, index) + replacement + str.substring(index + replacement.length);
+}
 
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
@@ -59,7 +63,7 @@ createMenuOption({
                         'fill-color': ['get', 'color'],
                         'fill-opacity': 0
                     }
-                });
+                }, 'stationSymbolLayer');
                 map.addLayer({
                     'id': `newAlertsLayerOutline`,
                     'type': 'line',
@@ -70,7 +74,7 @@ createMenuOption({
                         'line-color': ['get', 'color'],
                         'line-width': 3
                     }
-                });
+                }, 'stationSymbolLayer');
 
                 var polygonGeojson = {
                     "type": "FeatureCollection",
@@ -85,25 +89,33 @@ createMenuOption({
                     }
                     polygonGeojson.features.push(objToPush)
                 }
-                $.getJSON('https://steepatticstairs.github.io/AtticRadar/app/alerts/alertZones/alertZones.json', function(newData) {
-                    for (var item in data.features) {
-                        if (data.features[item].geometry == null) {
-                            var affectedZones = data.features[item].properties.affectedZones;
-                            for (var i in affectedZones) {
+                for (var item in data.features) {
+                    if (data.features[item].geometry == null) {
+                        var affectedZones = data.features[item].properties.affectedZones;
+                        for (var i in affectedZones) {
+                            var zoneToPush;
+                            if (affectedZones[i].includes('forecast')) {
                                 affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
-                                if (newData[affectedZones[i]] != undefined) {
-                                    pushNewPolygon(newData[affectedZones[i]], data.features[item].properties)
-                                }
+                                zoneToPush = forecastZones[affectedZones[i]];
+                            } else if (affectedZones[i].includes('county')) {
+                                affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
+                                zoneToPush = countyZones[affectedZones[i]];
+                            } else if (affectedZones[i].includes('fire')) {
+                                affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
+                                zoneToPush = fireZones[affectedZones[i]];
                             }
-                            //console.log(affectedZones)
+                            if (zoneToPush != undefined) {
+                                pushNewPolygon(zoneToPush.geometry, data.features[item].properties)
+                            }
                         }
                     }
-                    var mergedGeoJSON = geojsonMerge.merge([
-                        data,
-                        polygonGeojson
-                    ]);
-                    map.getSource('alertsSource').setData(mergedGeoJSON);
-                })
+                }
+                var mergedGeoJSON = geojsonMerge.merge([
+                    data,
+                    polygonGeojson
+                ]);
+                map.getSource('alertsSource').setData(mergedGeoJSON);
+                //map.moveLayer('stationSymbolLayer');
                 // newAlertsArr.push(`newAlertsLayerOutline`);
                 // newAlertsArr.push(`newAlertsLayer`);
 
