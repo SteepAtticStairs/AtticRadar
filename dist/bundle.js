@@ -16935,12 +16935,12 @@ createMenuOption({
         $(iconElem).removeClass('icon-grey');
 
         if (map.getLayer('newAlertsLayer')) {
-            map.getCanvas().style.cursor = "crosshair";
+            //map.getCanvas().style.cursor = "crosshair";
             map.on('click', 'newAlertsLayer', mapClick)
             map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
         } else {
-            map.getCanvas().style.cursor = "crosshair";
+            //map.getCanvas().style.cursor = "crosshair";
             map.on('click', 'newAlertsLayer', mapClick)
 
             fetchPolygonData([noaaAlertsURL], function(data) {
@@ -16974,6 +16974,13 @@ createMenuOption({
                         'line-width': 3
                     }
                 }, 'stationSymbolLayer');
+
+                map.on('mouseover', 'newAlertsLayer', function(e) {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+                map.on('mouseout', 'newAlertsLayer', function(e) {
+                    map.getCanvas().style.cursor = '';
+                });
 
                 var polygonGeojson = {
                     "type": "FeatureCollection",
@@ -17029,7 +17036,7 @@ createMenuOption({
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
 
-        map.getCanvas().style.cursor = "default";
+        map.getCanvas().style.cursor = "";
         map.off('click', 'newAlertsLayer', mapClick)
 
         map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');
@@ -21444,7 +21451,7 @@ function pushNewPoint(coords, properties) {
 
 
 function mouseOver(e) {
-    if ($('#dataDiv').data('blueStations') != e.features[0].id && e.features[0].properties.status != 'down') {
+    if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
         fHover = e.features[0];
         map.getCanvas().style.cursor = 'pointer';
         map.setFeatureState({
@@ -21459,8 +21466,8 @@ function mouseOver(e) {
 }
 function mouseOut(e) {
     if (!fHover) return;
-    if ($('#dataDiv').data('blueStations') != fHover.id && fHover.properties.status != 'down') {
-        map.getCanvas().style.cursor = 'default';
+    if ($('#dataDiv').data('blueStations') != fHover.id/* && fHover.properties.status != 'down'*/) {
+        map.getCanvas().style.cursor = '';
         map.setFeatureState({
             source: 'stationSymbolLayer',
             id: fHover.id

@@ -36,12 +36,12 @@ createMenuOption({
         $(iconElem).removeClass('icon-grey');
 
         if (map.getLayer('newAlertsLayer')) {
-            map.getCanvas().style.cursor = "crosshair";
+            //map.getCanvas().style.cursor = "crosshair";
             map.on('click', 'newAlertsLayer', mapClick)
             map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
         } else {
-            map.getCanvas().style.cursor = "crosshair";
+            //map.getCanvas().style.cursor = "crosshair";
             map.on('click', 'newAlertsLayer', mapClick)
 
             fetchPolygonData([noaaAlertsURL], function(data) {
@@ -75,6 +75,13 @@ createMenuOption({
                         'line-width': 3
                     }
                 }, 'stationSymbolLayer');
+
+                map.on('mouseover', 'newAlertsLayer', function(e) {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+                map.on('mouseout', 'newAlertsLayer', function(e) {
+                    map.getCanvas().style.cursor = '';
+                });
 
                 var polygonGeojson = {
                     "type": "FeatureCollection",
@@ -130,7 +137,7 @@ createMenuOption({
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
 
-        map.getCanvas().style.cursor = "default";
+        map.getCanvas().style.cursor = "";
         map.off('click', 'newAlertsLayer', mapClick)
 
         map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');

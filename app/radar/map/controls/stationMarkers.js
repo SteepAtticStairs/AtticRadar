@@ -40,7 +40,7 @@ function pushNewPoint(coords, properties) {
 
 
 function mouseOver(e) {
-    if ($('#dataDiv').data('blueStations') != e.features[0].id && e.features[0].properties.status != 'down') {
+    if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
         fHover = e.features[0];
         map.getCanvas().style.cursor = 'pointer';
         map.setFeatureState({
@@ -55,8 +55,8 @@ function mouseOver(e) {
 }
 function mouseOut(e) {
     if (!fHover) return;
-    if ($('#dataDiv').data('blueStations') != fHover.id && fHover.properties.status != 'down') {
-        map.getCanvas().style.cursor = 'default';
+    if ($('#dataDiv').data('blueStations') != fHover.id/* && fHover.properties.status != 'down'*/) {
+        map.getCanvas().style.cursor = '';
         map.setFeatureState({
             source: 'stationSymbolLayer',
             id: fHover.id
