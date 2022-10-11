@@ -2,6 +2,7 @@ const createOffCanvasItem = require('./createOffCanvasItem');
 const ut = require('../utils');
 const map = require('../map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
+const terminator = require('../map/terminator/terminator');
 
 createOffCanvasItem({
     'id': 'settingsMenuItem',
@@ -49,6 +50,16 @@ createOffCanvasItem({
             setBaseMapLayers('cities');
         } else if (isChecked) {
             setBaseMapLayers('both');
+        }
+    })
+
+    $('#showDayNightLineLayersCheckbox').on('click', function() {
+        var isChecked = $('#showDayNightLineCheckBtn').is(":checked");
+
+        if (!isChecked) {
+            terminator.toggleVisibility('hide');
+        } else if (isChecked) {
+            terminator.toggleVisibility('show');
         }
     })
 })

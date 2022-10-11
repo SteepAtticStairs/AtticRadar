@@ -29,10 +29,11 @@
     <!-- https://developers.google.com/chart/interactive/docs/gallery/linechart -->
     <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
 
-    <script defer src="https://cdn.aerisapi.com/sdk/js/latest/aerisweather.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
+
+    <!-- https://github.com/webgeodatavore/GeoJSON.Terminator -->
+    <script src="https://unpkg.com/@webgeodatavore/geojson.terminator@1.0.0/GeoJSON.Terminator.js"></script>
 
     <script src="./app/alerts/alertZones/forecastZones.js"></script>
     <script src="./app/alerts/alertZones/countyZones.js"></script>
@@ -728,11 +729,16 @@
                             Toggle Radar Visibility
                         </label>
                     </div>
-                    <br>
                     <div class="form-check" id="showExtraMapLayersCheckbox">
                         <input class="form-check-input" type="checkbox" value="" id="showExtraMapLayersCheckBtn">
                         <label class="form-check-label" for="flexCheckDefault">
                             Show Extra Map Layers
+                        </label>
+                    </div>
+                    <div class="form-check" id="showDayNightLineLayersCheckbox">
+                        <input class="form-check-input" type="checkbox" value="" id="showDayNightLineCheckBtn">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Show Day-Night Line
                         </label>
                     </div>
                 </div>
