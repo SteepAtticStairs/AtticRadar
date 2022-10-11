@@ -3,6 +3,7 @@ var map = require('../radar/map/map');
 const { DateTime } = require('luxon');
 const createCssClasses = require('./createCssClasses');
 const isMobile = require('../radar/misc/detectmobilebrowser');
+const stormTypeData = require('./stormTypeData');
 
 createCssClasses.createCssClasses();
 
@@ -33,6 +34,14 @@ function getTrackPointData(properties) {
     }
     if (parsedDescription.children[0].children[0].children.hasOwnProperty(9)) {
         trackPointDataObj.trackpointPressure = parsedDescription.children[0].children[0].children[9].textContent;
+    }
+
+    var forecastHourString = parsedDescription.children[0].children[0].children[3].textContent;
+    var forecastHour = parseInt(forecastHourString);
+    if (!Number.isNaN(forecastHour)) {
+        trackPointDataObj.forecastHour = forecastHour;
+    } else {
+        trackPointDataObj.forecastHour = 0;
     }
 
     // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
@@ -88,24 +97,9 @@ function getTrackPointData(properties) {
 function drawHurricanesToMap(geojson, type, index, hurricaneID) {
     console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
 
-    function parseStormTypeForecast(csvJsonData) {
-        var stormTypeObj = {};
-        for (var item in csvJsonData) {
-            var forecastHour = csvJsonData[item][5];
-            var stormType = csvJsonData[item][10];
-            if (forecastHour != undefined) {
-                stormTypeObj[forecastHour] = stormType;
-            }
-        }
-        return stormTypeObj;
-    }
-    function getForecastFile(stormID, cb) {
-        $.get(ut.preventFileCaching(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/fst/${stormID.toLowerCase()}.fst#`), function(data) { cb(data); })
-    }
-    getForecastFile(hurricaneID, function(data) {
-        var json = ut.csvToJson(data);
-        var stormTypeForecast = parseStormTypeForecast(json);
-        console.log(stormTypeForecast)
+    stormTypeData(hurricaneID, function(hurricaneTypeData) {
+        console.log(hurricaneTypeData)
+        $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`, hurricaneTypeData);
     })
 
     function doTheStuff() {
@@ -213,6 +207,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 map.getCanvas().style.cursor = 'pointer';
 
                 var obj = getTrackPointData(e.features[0].properties);
+                var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
                 var time = obj.formattedTime;
 
                 var popupContent =
@@ -223,6 +218,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     <br> -->
                     <div>${obj.sshwsLevel[0]}</div>
                     <div><b>${obj.windSpeedMPH}</b> mph wind</div>
+                    <div><b>Storm Type:</b> ${hurricaneTypeData[obj.forecastHour]}</div>
                 </div>`
 
                 var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
@@ -245,6 +241,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
             var obj = getTrackPointData(e.features[0].properties);
+            var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
 
             var popupContent =
                 `<div>
@@ -254,7 +251,8 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div>${obj.trackpointTime}</div>
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
-                <div>${obj.trackpointWindGusts}</div>`
+                <div>${obj.trackpointWindGusts}</div>
+                <div><b>Storm Type:</b> ${hurricaneTypeData[obj.forecastHour]}</div>`
 
             if (obj.trackpointMotion != undefined && obj.trackpointPressure != undefined) {
                 popupContent += `<br>`
