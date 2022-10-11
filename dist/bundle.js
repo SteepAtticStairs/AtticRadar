@@ -18255,6 +18255,41 @@ function getTrackPointData(properties) {
 
 function drawHurricanesToMap(geojson, type, index, hurricaneID) {
     console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
+
+    function csvToJson(csv) {
+        function onlySpaces(str) { return str.trim().length === 0; }
+
+        var obj = {};
+        var rows = csv.split('\n');
+        for (var row in rows) {
+            var curRowItem = rows[row].split(',');
+            for (var i in curRowItem) {
+                curRowItem[i] = curRowItem[i].replace(/ /g, '')
+            }
+            obj[row] = curRowItem;
+        }
+        return obj;
+    }
+    function parseStormTypeForecast(csvJsonData) {
+        var stormTypeObj = {};
+        for (var item in csvJsonData) {
+            var forecastHour = csvJsonData[item][5];
+            var stormType = csvJsonData[item][10];
+            if (forecastHour != undefined) {
+                stormTypeObj[forecastHour] = stormType;
+            }
+        }
+        return stormTypeObj;
+    }
+    function getForecastFile(stormID, cb) {
+        $.get(ut.preventFileCaching(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/fst/${stormID.toLowerCase()}.fst#`), function(data) { cb(data); })
+    }
+    getForecastFile(hurricaneID, function(data) {
+        var json = csvToJson(data);
+        var stormTypeForecast = parseStormTypeForecast(json);
+        console.log(stormTypeForecast)
+    })
+
     function doTheStuff() {
         if (type == 'cone') {
             map.addLayer({
