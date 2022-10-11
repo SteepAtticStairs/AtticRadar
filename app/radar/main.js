@@ -40,6 +40,9 @@ require('./map/controls/help/helpControl');
 // load the radar message listener
 require('./radarMessage/radarMessage');
 
+// load the historical hurricanes module
+//require('../hurricanes/historical/fetchHurricaneFile');
+
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 

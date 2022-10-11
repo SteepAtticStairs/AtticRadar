@@ -18256,20 +18256,6 @@ function getTrackPointData(properties) {
 function drawHurricanesToMap(geojson, type, index, hurricaneID) {
     console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
 
-    function csvToJson(csv) {
-        function onlySpaces(str) { return str.trim().length === 0; }
-
-        var obj = {};
-        var rows = csv.split('\n');
-        for (var row in rows) {
-            var curRowItem = rows[row].split(',');
-            for (var i in curRowItem) {
-                curRowItem[i] = curRowItem[i].replace(/ /g, '')
-            }
-            obj[row] = curRowItem;
-        }
-        return obj;
-    }
     function parseStormTypeForecast(csvJsonData) {
         var stormTypeObj = {};
         for (var item in csvJsonData) {
@@ -18285,7 +18271,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
         $.get(ut.preventFileCaching(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/fst/${stormID.toLowerCase()}.fst#`), function(data) { cb(data); })
     }
     getForecastFile(hurricaneID, function(data) {
-        var json = csvToJson(data);
+        var json = ut.csvToJson(data);
         var stormTypeForecast = parseStormTypeForecast(json);
         console.log(stormTypeForecast)
     })
@@ -21237,6 +21223,9 @@ require('./map/controls/help/helpControl');
 // load the radar message listener
 require('./radarMessage/radarMessage');
 
+// load the historical hurricanes module
+//require('../hurricanes/historical/fetchHurricaneFile');
+
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
@@ -23731,6 +23720,21 @@ function getDateDiff(date1, date2) {
     };
 }
 
+function csvToJson(csv) {
+    function onlySpaces(str) { return str.trim().length === 0; }
+
+    var obj = {};
+    var rows = csv.split('\n');
+    for (var row in rows) {
+        var curRowItem = rows[row].split(',');
+        for (var i in curRowItem) {
+            curRowItem[i] = curRowItem[i].replace(/ /g, '')
+        }
+        obj[row] = curRowItem;
+    }
+    return obj;
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -23771,7 +23775,8 @@ module.exports = {
     betterProgressBar,
     CtoF,
     getRadialConstants,
-    getDateDiff
+    getDateDiff,
+    csvToJson
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":112,"buffer":11}],129:[function(require,module,exports){

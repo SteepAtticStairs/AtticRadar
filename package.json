@@ -12,9 +12,11 @@
     "geojson-geometries-lookup": "^0.5.0",
     "luxon": "^3.0.3",
     "metar": "^1.0.0",
+    "pako": "^2.0.4",
     "proj4": "^2.8.0",
     "seek-bzip": "^2.0.0",
-    "simplify-geojson": "^1.0.5"
+    "simplify-geojson": "^1.0.5",
+    "zlibjs": "^0.3.1"
   },
   "devDependencies": {
     "del": "^6.0.0",

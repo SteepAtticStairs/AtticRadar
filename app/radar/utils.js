@@ -581,6 +581,21 @@ function getDateDiff(date1, date2) {
     };
 }
 
+function csvToJson(csv) {
+    function onlySpaces(str) { return str.trim().length === 0; }
+
+    var obj = {};
+    var rows = csv.split('\n');
+    for (var row in rows) {
+        var curRowItem = rows[row].split(',');
+        for (var i in curRowItem) {
+            curRowItem[i] = curRowItem[i].replace(/ /g, '')
+        }
+        obj[row] = curRowItem;
+    }
+    return obj;
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -621,5 +636,6 @@ module.exports = {
     betterProgressBar,
     CtoF,
     getRadialConstants,
-    getDateDiff
+    getDateDiff,
+    csvToJson
 }
