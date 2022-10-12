@@ -18376,6 +18376,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
                 var obj = getTrackPointData(e.features[0].properties);
                 var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
+                //var fullHurricaneData = $('#dataDiv').data(`${hurricaneID}_hurricaneData`);
                 var time = obj.formattedTime;
 
                 var popupContent =
@@ -18676,6 +18677,7 @@ function getForecastFile(stormID, cb) {
 function stormTypeData(hurricaneID, cb) {
     getForecastFile(hurricaneID, function(data) {
         var json = ut.csvToJson(data);
+        $('#dataDiv').data(`${hurricaneID}_hurricaneData`, json)
         var stormTypeForecast = parseStormTypeForecast(json);
         cb(stormTypeForecast);
     })

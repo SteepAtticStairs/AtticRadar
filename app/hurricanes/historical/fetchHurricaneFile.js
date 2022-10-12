@@ -19,8 +19,10 @@ function fetchHurricaneFile(stormNumber, year, basin) {
     })
 }
 
-// bal092021 - hurricane ida
-const cycloneNumber = '09';
-const cycloneYear = '2021';
+// 09 2021 al - hurricane ida
+// 12 2005 al - hurricane katrina
+// 14 2018 al - hurricane michael
+const cycloneNumber = '14';
+const cycloneYear = '2018';
 const cycloneBasin = 'al';
 fetchHurricaneFile(cycloneNumber, cycloneYear, cycloneBasin);

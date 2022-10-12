@@ -30,6 +30,7 @@ function getForecastFile(stormID, cb) {
 function stormTypeData(hurricaneID, cb) {
     getForecastFile(hurricaneID, function(data) {
         var json = ut.csvToJson(data);
+        $('#dataDiv').data(`${hurricaneID}_hurricaneData`, json)
         var stormTypeForecast = parseStormTypeForecast(json);
         cb(stormTypeForecast);
     })
