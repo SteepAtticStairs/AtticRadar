@@ -34,19 +34,26 @@ $('#dataDiv').data('stormTracksVisibility', true);
 // load the station marker menu item
 require('./menu/stationMarkerMenu');
 
-// add the help control
-require('./map/controls/help/helpControl');
-
 // load the radar message listener
 require('./radarMessage/radarMessage');
 
 // load the historical hurricanes module
-//require('../hurricanes/historical/fetchHurricaneFile');
+require('../hurricanes/historical/menuItem');
+
+// add the help control
+require('./map/controls/help/helpControl');
 
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
 $('#dataDiv').data('currentStation', 'KLWX');
+
+$('#haSubmitBtn').on('mouseenter', function() {
+    ut.animateBrightness(100, 80, 100, $('#haSubmitOuter'));
+})
+$('#haSubmitBtn').on('mouseleave', function() {
+    ut.animateBrightness(80, 100, 100, $('#haSubmitOuter'));
+})
 
 if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");

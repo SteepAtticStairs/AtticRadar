@@ -29,6 +29,9 @@ function addTideStationsControl(divName) {
             loadMarkers.toggleTideStationMarkers('hide');
         }
     })
+
+    $('#helpMenuItem_outer').insertAfter('#tideStationMenuItem_outer');
+    $(document.createElement('br')).insertAfter('#helpMenuItem_outer');
 }
 
 module.exports = {

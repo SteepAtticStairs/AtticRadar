@@ -1,3 +1,5 @@
+const ut = require('../utils');
+
 function createOffCanvasItem(options, clickFunc) {
     var divId = options.id;
     var divClass = options.class;
@@ -30,24 +32,11 @@ function createOffCanvasItem(options, clickFunc) {
         clickFunc(this, innerDiv, iconElem);
     })
 
-    function animateBrightness(startVal, stopVal, duration) {
-        // https://stackoverflow.com/a/20082518/18758797
-        $({blurRadius: startVal}).animate({blurRadius: stopVal}, {
-            duration: duration,
-            easing: 'linear',
-            step: function() {
-                $(div).css({
-                    "-webkit-filter": "brightness("+this.blurRadius+"%)",
-                    "filter": "brightness("+this.blurRadius+"%)"
-                });
-            }
-        });
-    }
     $(div).on('mouseenter', function() {
-        animateBrightness(100, 80, 100);
+        ut.animateBrightness(100, 80, 100, div);
     })
     $(div).on('mouseleave', function() {
-        animateBrightness(80, 100, 100);
+        ut.animateBrightness(80, 100, 100, div);
     })
 
     outerDiv.appendChild(document.createElement('br'));

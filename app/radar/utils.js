@@ -596,6 +596,20 @@ function csvToJson(csv) {
     return obj;
 }
 
+function animateBrightness(startVal, stopVal, duration, div) {
+    // https://stackoverflow.com/a/20082518/18758797
+    $({blurRadius: startVal}).animate({blurRadius: stopVal}, {
+        duration: duration,
+        easing: 'linear',
+        step: function() {
+            $(div).css({
+                "-webkit-filter": "brightness("+this.blurRadius+"%)",
+                "filter": "brightness("+this.blurRadius+"%)"
+            });
+        }
+    });
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -637,5 +651,6 @@ module.exports = {
     CtoF,
     getRadialConstants,
     getDateDiff,
-    csvToJson
+    csvToJson,
+    animateBrightness
 }

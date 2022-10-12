@@ -1,7 +1,7 @@
 const ut = require('../../../utils');
 const createOffCanvasItem = require('../../../menu/createOffCanvasItem');
 
-//$.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
+$.get('app/radar/map/controls/help/helpControlContent.html', function(data) {
     createOffCanvasItem({
         'id': 'helpMenuItem',
         'class': 'alert alert-secondary offCanvasMenuItem',
@@ -15,4 +15,4 @@ const createOffCanvasItem = require('../../../menu/createOffCanvasItem');
             'body': data
         })
     })
-//})
+})

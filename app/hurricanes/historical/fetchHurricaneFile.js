@@ -25,4 +25,6 @@ function fetchHurricaneFile(stormNumber, year, basin) {
 const cycloneNumber = '14';
 const cycloneYear = '2018';
 const cycloneBasin = 'al';
-fetchHurricaneFile(cycloneNumber, cycloneYear, cycloneBasin);
+//fetchHurricaneFile(cycloneNumber, cycloneYear, cycloneBasin);
+
+module.exports = fetchHurricaneFile;
