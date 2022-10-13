@@ -760,42 +760,30 @@
     -->
     <button id="hurricaneArchiveModalTrigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hurricaneArchiveModal" style="display: none"></button>
     <div class="modal fade" id="hurricaneArchiveModal" tabindex="-1" aria-labelledby="hurricaneArchiveModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header alert alert-primary">
                     <h5 class="modal-title" id="hurricaneArchiveModalLabel">Hurricane Archive</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="hurricaneArchiveModalBody">
-                    <div><b>Year:</b></div>
-                    <input type="text" id="haDatePicker" placeholder="2021" />
-                    <br>
-                    <div><b>Storm Name:</b></div>
-                    <input type="text" id="haStormName" placeholder="Ida" />
-                    <!-- <br>
-                    <div><b>Basin:</b></div>
-                    <div class="dropdown" id="haBasinDropdown">
-                        <a id="haBasinDropdownBtn" class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Select One
-                        </a>
-                        <ul class="dropdown-menu" id="haBasinDropdownMenu">
-                            <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
+                    <form class="px-4 py-2">
+                        <input type="search" class="form-control" id="haSearchStorm" placeholder="Katrina" autofocus="autofocus">
+                    </form>
+                    <div class="dropdown-center" id="haStormNameDropdown">
+                        <button id="haStormNameDropdownBtn" style="display: none" class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown button
+                        </button>
+                        <ul class="dropdown-menu thingsToHideWhileTyping" id="haStormNameDropdownMenu" style="width: 100%; text-align: center; display: none">
+                            <!-- <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
                             <li><a class="dropdown-item" href="#" value="ep">East Pacific</a></li>
-                            <li><a class="dropdown-item" href="#" value="cp">Central Pacific</a></li>
+                            <li><a class="dropdown-item" href="#" value="cp">Central Pacific</a></li> -->
                         </ul>
-                    </div> -->
-                    <br><br>
-                    <div id="haSubmitOuter">
-                        <div class="alert alert-secondary offCanvasMenuItem" id="haSubmitBtn">
-                            <span class="fa-solid fa-circle-check">&nbsp;&nbsp;</span>
-                            <span>Submit</span>
-                        </div>
+                        <div id="haStormNameDropdownEmpty" class="dropdown-header thingsToHideWhileTyping" style="text-align: center">Please enter a hurricane name.</div>
+                        <div id="haStormNameDropdownError" class="dropdown-header thingsToHideWhileTyping" style="text-align: center; display: none">No hurricanes found.</div>
                     </div>
+                    <br><br><br><br><br><br>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> -->
             </div>
         </div>
     </div>
@@ -809,10 +797,8 @@
             endDate: new Date(new Date().setFullYear(2021))
         })
 
-        $("#haBasinDropdownMenu li a").click(function() {
-            $('#haBasinDropdownBtn').html($(this).text())
-            $('#haBasinDropdown').val(this.getAttribute('value'))
-        })
+        var haStormNameDropdown = new bootstrap.Dropdown($('#haStormNameDropdown'));
+        haStormNameDropdown.show();
     </script>
 
     <!-- <textarea id="w3review" name="w3review" rows="15" cols="15" style="position: absolute; z-index: 100000"></textarea> -->

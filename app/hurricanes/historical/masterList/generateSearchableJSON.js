@@ -19,7 +19,7 @@ function csvToJson(csv) {
         if (!obj.hasOwnProperty(year)) {
             obj[year] = [];
         }
-        obj[year].push([name, basin, stormID])
+        obj[year].push([name, stormID, year, basin])
     }
     return obj;
 }

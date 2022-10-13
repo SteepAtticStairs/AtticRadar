@@ -1,5 +1,6 @@
 const createOffCanvasItem = require('../../radar/menu/createOffCanvasItem');
 const fetchHurricaneFile = require('./fetchHurricaneFile');
+const initHurricaneArchiveListeners = require('./eventListeners');
 
 function zeroPad(num, length) {
     length = length || 2; // defaults to 2 if no parameter is passed
@@ -8,9 +9,8 @@ function zeroPad(num, length) {
 
 function startRightAway() {
     var _year = '2018';
-    $('#haDatePicker').val(_year)
     var _stormID = getStormID('Michael', _year).id;
-    $('#haStormName').val('Michael')
+    $('#haSearchStorm').val('Michael')
 
     fetchHurricaneFile(_stormID, _year)
 }
@@ -21,8 +21,8 @@ function getStormID(name, year) {
     for (var i in stormYear) {
         if (stormYear[i][0] == name) {
             return {
-                'basin': stormYear[i][1],
-                'id': stormYear[i][2].toLowerCase(),
+                'basin': stormYear[i][3],
+                'id': stormYear[i][1].toLowerCase(),
             };
         }
     }
@@ -36,15 +36,8 @@ createOffCanvasItem({
     'css': ''
 }, function(thisObj, innerDiv, iconElem) {
     $('#hurricaneArchiveModalTrigger').click();
-
-    $('#haSubmitBtn').on('click', function() {
-        $('#hurricaneArchiveModalTrigger').click();
-
-        var year = $('#haDatePicker').val();
-        var stormID = getStormID($('#haStormName').val(), year).id;
-
-        fetchHurricaneFile(stormID, year)
-    })
 })
+
+initHurricaneArchiveListeners();
 
 //startRightAway();
