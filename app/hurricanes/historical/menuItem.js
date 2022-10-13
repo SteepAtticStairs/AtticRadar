@@ -31,7 +31,7 @@ createOffCanvasItem({
 
         var year = $('#haDatePicker').val();
         var stormNumber = $('#haStormNumber').val();
-        var basin = $('#haBasin').val();
+        var basin = $('#haBasinDropdown').val();
 
         fetchHurricaneFile(zeroPad(stormNumber), year, basin)
     })

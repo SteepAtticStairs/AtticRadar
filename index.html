@@ -772,7 +772,17 @@
                     <input type="number" id="haStormNumber" placeholder="09" />
                     <br>
                     <div><b>Basin:</b></div>
-                    <input type="text" id="haBasin" placeholder="al" />
+                    <!-- <input type="text" id="haBasin" placeholder="al" /> -->
+                    <div class="dropdown" id="haBasinDropdown">
+                        <a id="haBasinDropdownBtn" class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select One
+                        </a>
+                        <ul class="dropdown-menu" id="haBasinDropdownMenu">
+                            <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
+                            <li><a class="dropdown-item" href="#" value="ep">East Pacific</a></li>
+                            <li><a class="dropdown-item" href="#" value="cp">Central Pacific</a></li>
+                        </ul>
+                    </div>
                     <br><br>
                     <div id="haSubmitOuter">
                         <div class="alert alert-secondary offCanvasMenuItem" id="haSubmitBtn">
@@ -796,6 +806,11 @@
             autoclose: true,
             startDate: new Date(new Date().setFullYear(1851)),
             endDate: new Date(new Date().setFullYear(2021))
+        })
+
+        $("#haBasinDropdownMenu li a").click(function() {
+            $('#haBasinDropdownBtn').html($(this).text())
+            $('#haBasinDropdown').val(this.getAttribute('value'))
         })
     </script>
 
