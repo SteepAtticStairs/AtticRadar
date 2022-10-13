@@ -8,13 +8,24 @@ function zeroPad(num, length) {
 
 function startRightAway() {
     var _year = '2018';
-    var _stormNumber = '14';
-    var _basin = 'al';
-    $('#haDatePicker').val(_year);
-    $('#haStormNumber').val(_stormNumber);
-    $('#haBasin').val(_basin);
+    $('#haDatePicker').val(_year)
+    var _stormID = getStormID('Michael', _year).id;
+    $('#haStormName').val('Michael')
 
-    fetchHurricaneFile(zeroPad(_stormNumber), _year, _basin)
+    fetchHurricaneFile(_stormID, _year)
+}
+
+function getStormID(name, year) {
+    name = name.toUpperCase();
+    var stormYear = allStorms[year];
+    for (var i in stormYear) {
+        if (stormYear[i][0] == name) {
+            return {
+                'basin': stormYear[i][1],
+                'id': stormYear[i][2].toLowerCase(),
+            };
+        }
+    }
 }
 
 createOffCanvasItem({
@@ -30,11 +41,10 @@ createOffCanvasItem({
         $('#hurricaneArchiveModalTrigger').click();
 
         var year = $('#haDatePicker').val();
-        var stormNumber = $('#haStormNumber').val();
-        var basin = $('#haBasinDropdown').val();
+        var stormID = getStormID($('#haStormName').val(), year).id;
 
-        fetchHurricaneFile(zeroPad(stormNumber), year, basin)
+        fetchHurricaneFile(stormID, year)
     })
 })
 
-//startRightAway();
+startRightAway();

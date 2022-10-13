@@ -1,0 +1,11 @@
+HURDAT Archive folder:
+https://ftp.nhc.noaa.gov/atcf/archive/
+
+HURDAT Archive master storm list:
+https://ftp.nhc.noaa.gov/atcf/archive/storm.table
+
+Best Track data folder for current season:
+https://ftp.nhc.noaa.gov/atcf/btk/
+
+Forecast data folder for current season:
+https://ftp.nhc.noaa.gov/atcf/fst/

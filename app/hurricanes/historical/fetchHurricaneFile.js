@@ -11,8 +11,8 @@ function xhrHurricaneFile(url, cb) {
     xhr.send();
 }
 
-function fetchHurricaneFile(stormNumber, year, basin) {
-    var bestTrackURL = `https://ftp.nhc.noaa.gov/atcf/archive/${year}/b${basin}${stormNumber}${year}.dat.gz`;
+function fetchHurricaneFile(stormID, year, basin) {
+    var bestTrackURL = `https://ftp.nhc.noaa.gov/atcf/archive/${year}/b${stormID}.dat.gz`;
     console.log(bestTrackURL);
     xhrHurricaneFile(ut.phpProxy + bestTrackURL, function(data) {
         unGZip(data);
