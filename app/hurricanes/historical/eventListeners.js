@@ -1,4 +1,4 @@
-const fetchHurricaneFile = require('./fetchHurricaneFile');
+const parseHurricaneFile = require('./plotIBTRACS');
 
 function initHurricaneArchiveListeners() {
     // <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
@@ -35,19 +35,20 @@ function initHurricaneArchiveListeners() {
         }
         textValue = textValue.toLowerCase();
 
-        for (var i in allStorms) {
-            for (var n in allStorms[i]) {
-                try {
-                    var currentStormNameIndex = allStorms[i][n][0];
-                    currentStormNameIndex = capitalizeFirstLetter(currentStormNameIndex.toLowerCase());
-                    var currentStormIDIndex = allStorms[i][n][1].toLowerCase();
-                    var currentStormYearIndex = allStorms[i][n][2];
-                    if (currentStormNameIndex.toLowerCase().includes(textValue)) {
-                        buildDropdownElement(`${currentStormNameIndex} ${currentStormYearIndex}`, currentStormIDIndex)
-                    }
-                } catch (e) {
-                    console.warn(e);
+        for (var n in stormList) {
+            try {
+                var sid = stormList[n][0];
+                var name = stormList[n][1];
+                var year = stormList[n][2];
+                var basin = stormList[n][3];
+                name = capitalizeFirstLetter(name.toLowerCase());
+                if (name.toLowerCase().includes(textValue)) {
+                    buildDropdownElement(`${name} ${year}`, sid)
+                } else if (year.includes(textValue)) {
+                    buildDropdownElement(`${name} ${year}`, sid)
                 }
+            } catch (e) {
+                console.warn(e);
             }
         }
         var lengthOfStormSuggestions = document.getElementById("haStormNameDropdownMenu").getElementsByTagName("li").length;
@@ -63,8 +64,14 @@ function initHurricaneArchiveListeners() {
             var thisText = $(e.target).text();
             var thisValue = e.target.getAttribute('value');
 
+            var stormName = thisText.split(' ')[0];
+            var stormYear = thisText.split(' ')[1];
+
             $('#hurricaneArchiveModalTrigger').click();
-            fetchHurricaneFile(thisValue, thisText.split(' ')[1]);
+            $.getJSON(`https://raw.githubusercontent.com/SteepAtticStairs/hurricaneArchives/main/IBTrACS/storms/${thisValue}.json`, function(data) {
+                parseHurricaneFile(data);
+            })
+            //fetchHurricaneFile(thisValue, thisText.split(' ')[1]);
         }
     })
 }

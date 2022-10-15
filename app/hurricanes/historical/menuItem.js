@@ -1,18 +1,41 @@
 const createOffCanvasItem = require('../../radar/menu/createOffCanvasItem');
-const fetchHurricaneFile = require('./fetchHurricaneFile');
 const initHurricaneArchiveListeners = require('./eventListeners');
+const parseHurricaneFile = require('./plotIBTRACS');
 
 function zeroPad(num, length) {
     length = length || 2; // defaults to 2 if no parameter is passed
     return (new Array(length).join('0') + num).slice(length*-1);
 }
 
-function startRightAway() {
-    var _year = '2018';
-    var _stormID = getStormID('Michael', _year).id;
-    $('#haSearchStorm').val('Michael')
+// function findStorm(json, name, year, basin, sid) {
+//     var keys = Object.keys(json);
+//     for (var i in keys) {
+//         if (keys[i] == `${sid}-${name}-${year}-${basin}`) {
+//             return json[keys[i]];
+//         }
+//     }
+// }
+function findStorm(json, sid) {
+    var keys = Object.keys(json);
+    for (var i in keys) {
+        if (keys[i].includes(sid)) {
+            return json[keys[i]];
+        }
+    }
+}
 
-    fetchHurricaneFile(_stormID, _year)
+function startRightAway() {
+    // var stormJSON = ibtracsArchive['TIP_1979'];
+    // parseHurricaneFile(stormJSON)
+    // ./IBTrACS/ibtracsArchive.json
+    $.getJSON('../app/hurricanes/historical/IBTrACS/ibtracsArchive.json', function(data) {
+        console.log(findStorm(data, '2021239N17281'))
+    })
+    // var _year = '2018';
+    // var _stormID = getStormID('Michael', _year).id;
+    // $('#haSearchStorm').val('Michael')
+
+    // fetchHurricaneFile(_stormID, _year)
 }
 
 function getStormID(name, year) {
