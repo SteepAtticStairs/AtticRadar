@@ -3,7 +3,7 @@ const parseHurricaneFile = require('./plotIBTRACS');
 function initHurricaneArchiveListeners() {
     // <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
 
-    function buildDropdownElement(text, stormID) {
+    function buildDropdownElement(text, stormID, color) {
         var anchor = document.createElement('a');
         anchor.className = 'dropdown-item hurArch';
         anchor.href = '#';
@@ -11,6 +11,7 @@ function initHurricaneArchiveListeners() {
         anchor.setAttribute('value', stormID)
 
         var line = document.createElement('li');
+        line.style.backgroundColor = color;
         line.appendChild(anchor);
 
         document.getElementById('haStormNameDropdownMenu').appendChild(line);
@@ -69,7 +70,7 @@ function initHurricaneArchiveListeners() {
 
             $('#hurricaneArchiveModalTrigger').click();
             $.getJSON(`https://raw.githubusercontent.com/SteepAtticStairs/hurricaneArchives/main/IBTrACS/storms/${thisValue}.json`, function(data) {
-                parseHurricaneFile(data);
+                parseHurricaneFile(data, thisValue);
             })
             //fetchHurricaneFile(thisValue, thisText.split(' ')[1]);
         }

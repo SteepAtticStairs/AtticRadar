@@ -18612,7 +18612,7 @@ const parseHurricaneFile = require('./plotIBTRACS');
 function initHurricaneArchiveListeners() {
     // <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
 
-    function buildDropdownElement(text, stormID) {
+    function buildDropdownElement(text, stormID, color) {
         var anchor = document.createElement('a');
         anchor.className = 'dropdown-item hurArch';
         anchor.href = '#';
@@ -18620,6 +18620,7 @@ function initHurricaneArchiveListeners() {
         anchor.setAttribute('value', stormID)
 
         var line = document.createElement('li');
+        line.style.backgroundColor = color;
         line.appendChild(anchor);
 
         document.getElementById('haStormNameDropdownMenu').appendChild(line);
@@ -18678,7 +18679,7 @@ function initHurricaneArchiveListeners() {
 
             $('#hurricaneArchiveModalTrigger').click();
             $.getJSON(`https://raw.githubusercontent.com/SteepAtticStairs/hurricaneArchives/main/IBTrACS/storms/${thisValue}.json`, function(data) {
-                parseHurricaneFile(data);
+                parseHurricaneFile(data, thisValue);
             })
             //fetchHurricaneFile(thisValue, thisText.split(' ')[1]);
         }
@@ -18759,17 +18760,22 @@ var map = require('../../radar/map/map');
 
 // https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt
 
-var lineStringGeojson = {
-    "type": "LineString",
-    "coordinates": []
+var lineStringGeojson;
+var pointGeojson;
+function resetGeojsons() {
+    lineStringGeojson = {
+        "type": "LineString",
+        "coordinates": []
+    }
+    pointGeojson = {
+        "type": "FeatureCollection",
+        "features": []
+    }
 }
+resetGeojsons();
+
 function pushNewLineString(coords) {
     lineStringGeojson.coordinates.push(coords);
-}
-
-var pointGeojson = {
-    "type": "FeatureCollection",
-    "features": []
 }
 function pushNewPoint(coords, properties) {
     var objToPush = {
@@ -18783,13 +18789,65 @@ function pushNewPoint(coords, properties) {
     pointGeojson.features.push(objToPush)
 }
 
-function parseHurricaneFile(hurricaneJSON) {
-    var theHaMarkerArr = $('#dataDiv').data('haMarkerArr')
-    for (var i in theHaMarkerArr) {
-        theHaMarkerArr[i].remove()
-    }
+function plot(pointGeojson, lineGeojson, stormID) {
+    map.addLayer({
+        'id': `haLayerLine${stormID}`,
+        'type': 'line',
+        'source': {
+            type: 'geojson',
+            data: lineGeojson,
+        },
+        'paint': {
+            'line-color': '#ffffff',
+            'line-width': 2
+        }
+    });
 
-    var haMarkerArr = [];
+    map.addSource(`haLayerPointsSource${stormID}`, {
+        type: "geojson",
+        data: pointGeojson
+    });
+    map.addLayer({
+        "id": `haLayerPoints${stormID}`,
+        "type": "circle",
+        "source": `haLayerPointsSource${stormID}`,
+        "paint": {
+            "circle-radius": 9,
+            'circle-stroke-width': 2,
+            'circle-color': {
+                type: 'identity',
+                property: 'color',
+            },
+            'circle-stroke-color': {
+                type: 'identity',
+                property: 'color',
+            },
+        }
+    });
+    map.addLayer({
+        "id": `haLayerPointsText${stormID}`,
+        "type": "symbol",
+        "source": `haLayerPointsSource${stormID}`,
+        "layout": {
+            "text-field": ['get', 'abbv'],
+            "text-font": [
+                "Arial Unicode MS Bold"
+            ],
+            "text-size": 14,
+            'text-allow-overlap': true,
+            'text-ignore-placement': true,
+        }
+    });
+}
+
+function parseHurricaneFile(hurricaneJSON, stormID) {
+    // var theHaMarkerArr = $('#dataDiv').data('haMarkerArr')
+    // for (var i in theHaMarkerArr) {
+    //     theHaMarkerArr[i].remove()
+    // }
+    resetGeojsons();
+
+    //var haMarkerArr = [];
     var json = hurricaneJSON;
     console.log(json)
 
@@ -18797,15 +18855,23 @@ function parseHurricaneFile(hurricaneJSON) {
         try {
             var lat = json[i].LAT;
             var lon = json[i].LON;
+            var usaWind = json[i].USA_WIND;
+            var wmoWind = json[i].WMO_WIND;
+
+            var sshwsVal = ut.getSSHWSVal(ut.knotsToMph(usaWind, 0));
+            json[i].color = sshwsVal[1];
+            json[i].abbv = sshwsVal[2];
 
             pushNewPoint([lon, lat], json[i]);
-            var haMarker = new mapboxgl.Marker()
-                .setLngLat([lon, lat])
-                .addTo(map);
-            haMarkerArr.push(haMarker)
+            pushNewLineString([lon, lat], json[i]);
+            // var haMarker = new mapboxgl.Marker()
+            //     .setLngLat([lon, lat])
+            //     .addTo(map);
+            // haMarkerArr.push(haMarker)
             if (parseInt(i) == Object.keys(json).length - 2) {
-                $('#dataDiv').data('haMarkerArr', haMarkerArr);
-                console.log(pointGeojson)
+                //$('#dataDiv').data('haMarkerArr', haMarkerArr);
+                //console.log(pointGeojson)
+                plot(pointGeojson, lineStringGeojson, stormID)
             }
         } catch (e) {
             console.warn(e);
