@@ -460,7 +460,8 @@ var sshwsValues = [
     ['Category 3', '#eb642f', 'C3'],
     ['Category 4', '#eb3b2f', 'C4'],
     ['Category 5', '#eb2f87', 'C5'],
-    ['Other', 'rgb(140, 3, 252)', 'Other']
+    ['Other', 'rgb(140, 3, 252)', 'Other'],
+    ['Unknown', 'rgb(128, 128, 128)', '?']
 ]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
@@ -479,6 +480,8 @@ function getSSHWSVal(windSpeed) {
         return sshwsValues[6]; // C5
     } else if (windSpeed == 'Other') {
         return sshwsValues[7]
+    } else if (windSpeed == 'Unknown') {
+        return sshwsValues[8]
     }
 }
 

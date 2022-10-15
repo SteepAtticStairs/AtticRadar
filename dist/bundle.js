@@ -18858,7 +18858,12 @@ function parseHurricaneFile(hurricaneJSON, stormID) {
             var usaWind = json[i].USA_WIND;
             var wmoWind = json[i].WMO_WIND;
 
-            var sshwsVal = ut.getSSHWSVal(ut.knotsToMph(usaWind, 0));
+            if (usaWind.replace(/ /g, '') == '') {
+                usaWind = 'Unknown'
+            } else {
+                usaWind = ut.knotsToMph(usaWind, 0)
+            }
+            var sshwsVal = ut.getSSHWSVal(usaWind);
             json[i].color = sshwsVal[1];
             json[i].abbv = sshwsVal[2];
 
@@ -23971,7 +23976,8 @@ var sshwsValues = [
     ['Category 3', '#eb642f', 'C3'],
     ['Category 4', '#eb3b2f', 'C4'],
     ['Category 5', '#eb2f87', 'C5'],
-    ['Other', 'rgb(140, 3, 252)', 'Other']
+    ['Other', 'rgb(140, 3, 252)', 'Other'],
+    ['Unknown', 'rgb(128, 128, 128)', '?']
 ]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
@@ -23990,6 +23996,8 @@ function getSSHWSVal(windSpeed) {
         return sshwsValues[6]; // C5
     } else if (windSpeed == 'Other') {
         return sshwsValues[7]
+    } else if (windSpeed == 'Unknown') {
+        return sshwsValues[8]
     }
 }
 
