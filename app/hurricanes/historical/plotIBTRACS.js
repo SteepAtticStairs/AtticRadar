@@ -101,10 +101,14 @@ function parseHurricaneFile(hurricaneJSON, stormID) {
             var usaWind = json[i].USA_WIND;
             var wmoWind = json[i].WMO_WIND;
 
-            if (usaWind.replace(/ /g, '') == '') {
+            if (usaWind == undefined) {
                 usaWind = 'Unknown'
             } else {
-                usaWind = ut.knotsToMph(usaWind, 0)
+                if (usaWind.replace(/ /g, '') == '') {
+                    usaWind = 'Unknown'
+                } else {
+                    usaWind = ut.knotsToMph(usaWind, 0)
+                }
             }
             var sshwsVal = ut.getSSHWSVal(usaWind);
             json[i].color = sshwsVal[1];
