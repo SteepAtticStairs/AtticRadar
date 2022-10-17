@@ -20,15 +20,12 @@ createMenuOption({
 
         $('#dataDiv').data('metarsActive', true);
 
-        if (map.getLayer('metarSymbolLayer') && $('#dataDiv').data('currentMetarRadarStation') == $('#dataDiv').data('currentStation')) {
+        if (map.getLayer('metarSymbolLayer')) {
             // layer does exist - toggle the visibility to on
             useData.toggleMETARStationMarkers('show');
-        } else if (!map.getLayer('metarSymbolLayer')) {
+        } else {
             // layer doesn't exist - load it onto the map for the first time
             fetchMETARData.fetchMETARData('load');
-        } else {
-            // layer does exist but a new station - update the data
-            fetchMETARData.fetchMETARData('update');
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');

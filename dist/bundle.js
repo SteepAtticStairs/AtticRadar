@@ -2159,7 +2159,8 @@ function fetchMETARData(action) {
 
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=~us&hoursBeforeNow=3#`;
-    var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=${distanceMiles};${stationLon},${stationLat}&hoursBeforeNow=3#`;
+    //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=${distanceMiles};${stationLon},${stationLat}&hoursBeforeNow=3#`;
+    var url = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.xml#';
     //var url =  '../resources/USA_Test_METAR.xml';
     var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + url);
     $.get(noCacheURL, function(data) {
@@ -2195,15 +2196,12 @@ createMenuOption({
 
         $('#dataDiv').data('metarsActive', true);
 
-        if (map.getLayer('metarSymbolLayer') && $('#dataDiv').data('currentMetarRadarStation') == $('#dataDiv').data('currentStation')) {
+        if (map.getLayer('metarSymbolLayer')) {
             // layer does exist - toggle the visibility to on
             useData.toggleMETARStationMarkers('show');
-        } else if (!map.getLayer('metarSymbolLayer')) {
+        } else {
             // layer doesn't exist - load it onto the map for the first time
             fetchMETARData.fetchMETARData('load');
-        } else {
-            // layer does exist but a new station - update the data
-            fetchMETARData.fetchMETARData('update');
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
@@ -2239,34 +2237,39 @@ function resetTemplate() {
 
 function useData(data, action) {
     resetTemplate();
+    console.log(data)
     for (var item in data.response.data.METAR) {
-        var lat = parseFloat(data.response.data.METAR[item].latitude['#text']);
-        var lon = parseFloat(data.response.data.METAR[item].longitude['#text']);
-        var stationId = data.response.data.METAR[item].station_id['#text'];
-        var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
+        if (data.response.data.METAR[item].hasOwnProperty('latitude')) {
+            var lat = parseFloat(data.response.data.METAR[item].latitude['#text']);
+            var lon = parseFloat(data.response.data.METAR[item].longitude['#text']);
+            var stationId = data.response.data.METAR[item].station_id['#text'];
+            var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
 
-        try {
-            var parsedMetarData = metarParser(rawMetarText);
-            var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
-            var tempColor = getTempColor(parsedMetarTemp);
+            try {
+                var parsedMetarData = metarParser(rawMetarText);
+                var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
+                var tempColor = getTempColor(parsedMetarTemp);
 
-            geojsonTemplate.features.push({
-                'properties': {
-                    'stationID': stationId,
-                    'rawMetarText': rawMetarText,
-                    'temp': parsedMetarTemp,
-                    'tempColor': tempColor[0],
-                    'tempColorText': tempColor[1],
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates":
-                        [lon, lat]
-                }
-            });
-        }
-        catch(err) {
-            console.warn(`${stationId}: ${err.message}`)
+                geojsonTemplate.features.push({
+                    'properties': {
+                        'stationID': stationId,
+                        'rawMetarText': rawMetarText,
+                        'temp': parsedMetarTemp,
+                        'tempColor': tempColor[0],
+                        'tempColorText': tempColor[1],
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates":
+                            [lon, lat]
+                    }
+                });
+            }
+            catch(err) {
+                console.warn(`${stationId}: ${err.message}`)
+            }
+        } else {
+            //console.log(data.response.data.METAR[item].station_id['#text'])
         }
     }
 
@@ -5129,7 +5132,7 @@ function showStations() {
                     document.getElementById('radarStation').innerHTML = clickedStation;
 
                     if ($('#dataDiv').data('metarsActive')) {
-                        fetchMETARData.fetchMETARData('update');
+                        //fetchMETARData.fetchMETARData('update');
                     }
 
                     tilts.resetTilts();

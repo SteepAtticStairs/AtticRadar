@@ -242,7 +242,7 @@ function showStations() {
                     document.getElementById('radarStation').innerHTML = clickedStation;
 
                     if ($('#dataDiv').data('metarsActive')) {
-                        fetchMETARData.fetchMETARData('update');
+                        //fetchMETARData.fetchMETARData('update');
                     }
 
                     tilts.resetTilts();

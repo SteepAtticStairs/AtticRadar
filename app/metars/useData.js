@@ -19,34 +19,39 @@ function resetTemplate() {
 
 function useData(data, action) {
     resetTemplate();
+    console.log(data)
     for (var item in data.response.data.METAR) {
-        var lat = parseFloat(data.response.data.METAR[item].latitude['#text']);
-        var lon = parseFloat(data.response.data.METAR[item].longitude['#text']);
-        var stationId = data.response.data.METAR[item].station_id['#text'];
-        var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
+        if (data.response.data.METAR[item].hasOwnProperty('latitude')) {
+            var lat = parseFloat(data.response.data.METAR[item].latitude['#text']);
+            var lon = parseFloat(data.response.data.METAR[item].longitude['#text']);
+            var stationId = data.response.data.METAR[item].station_id['#text'];
+            var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
 
-        try {
-            var parsedMetarData = metarParser(rawMetarText);
-            var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
-            var tempColor = getTempColor(parsedMetarTemp);
+            try {
+                var parsedMetarData = metarParser(rawMetarText);
+                var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
+                var tempColor = getTempColor(parsedMetarTemp);
 
-            geojsonTemplate.features.push({
-                'properties': {
-                    'stationID': stationId,
-                    'rawMetarText': rawMetarText,
-                    'temp': parsedMetarTemp,
-                    'tempColor': tempColor[0],
-                    'tempColorText': tempColor[1],
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates":
-                        [lon, lat]
-                }
-            });
-        }
-        catch(err) {
-            console.warn(`${stationId}: ${err.message}`)
+                geojsonTemplate.features.push({
+                    'properties': {
+                        'stationID': stationId,
+                        'rawMetarText': rawMetarText,
+                        'temp': parsedMetarTemp,
+                        'tempColor': tempColor[0],
+                        'tempColorText': tempColor[1],
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates":
+                            [lon, lat]
+                    }
+                });
+            }
+            catch(err) {
+                console.warn(`${stationId}: ${err.message}`)
+            }
+        } else {
+            //console.log(data.response.data.METAR[item].station_id['#text'])
         }
     }
 
