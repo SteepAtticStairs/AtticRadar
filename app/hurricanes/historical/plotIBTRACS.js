@@ -77,8 +77,8 @@ function plot(pointGeojson, lineGeojson, stormID) {
                 "Arial Unicode MS Bold"
             ],
             "text-size": 14,
-            'text-allow-overlap': true,
-            'text-ignore-placement': true,
+            //'text-allow-overlap': true,
+            //'text-ignore-placement': true,
         }
     });
 }
