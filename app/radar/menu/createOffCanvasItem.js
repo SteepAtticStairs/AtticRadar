@@ -1,11 +1,15 @@
 const ut = require('../utils');
 
-function createOffCanvasItem(options, clickFunc) {
+function createOffCanvasItem(options, clickFunc, hoverFuncs) {
     var divId = options.id;
     var divClass = options.class;
     var contents = options.contents;
     var icon = options.icon;
     var css = options.css;
+    var provideOwnHoverFunctions = false;
+    if (options.provideOwnHoverFunctions) {
+        provideOwnHoverFunctions = true;
+    }
 
     var outerDiv = document.createElement('div');
     outerDiv.id = `${divId}_outer`;
@@ -33,10 +37,18 @@ function createOffCanvasItem(options, clickFunc) {
     })
 
     $(div).on('mouseenter', function() {
-        ut.animateBrightness(100, 80, 100, div);
+        if (!provideOwnHoverFunctions) {
+            ut.animateBrightness(100, 80, 100, div);
+        } else {
+            hoverFuncs('mouseenter', div)
+        }
     })
     $(div).on('mouseleave', function() {
-        ut.animateBrightness(80, 100, 100, div);
+        if (!provideOwnHoverFunctions) {
+            ut.animateBrightness(80, 100, 100, div);
+        } else {
+            hoverFuncs('mouseleave', div)
+        }
     })
 
     outerDiv.appendChild(document.createElement('br'));

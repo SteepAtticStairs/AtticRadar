@@ -418,7 +418,10 @@ function flyToStation() {
 
 function disableModeBtn() {
     $('#dataDiv').data('noMoreClicks', true);
-    $('#modeMenuItemClass').css('opacity', 0.25);
+    $('#modeMenuItem').css({
+        "-webkit-filter": "brightness(75%)",
+        "filter": "brightness(75%)"
+    });
 }
 
 function knotsToMph(knots, decimals) {
