@@ -41,8 +41,8 @@ function addScriptTag(url, cb) {
         //var complete = (event.loaded / event.total * 50 | 0);
         console.log(`${ut.formatBytes(event.loaded)}`);
         //ut.progressBarVal('label', ut.formatBytes(event.loaded));
-        totalLoaded = totalLoaded + parseFloat(event.loaded) / 1000000;
-        ut.betterProgressBar('set', totalLoaded);
+        var thingToLoad = totalLoaded + parseFloat(event.loaded)/* / 31000000*/;
+        ut.betterProgressBar('set', ut.scale(thingToLoad, 0, 31000000, 0, 100));
     }
     xhr.send();
 }
@@ -110,10 +110,13 @@ createMenuOption({
 
                 addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
                 console.log('Loaded forecast zones.');
+                totalLoaded = totalLoaded + 14500000;
                 addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
                 console.log('Loaded county zones.');
+                totalLoaded = totalLoaded + 7500000;
                 addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
                 console.log('Loaded fire zones.');
+                totalLoaded = totalLoaded + 8900000;
 
                 ut.betterProgressBar('set', 100);
                 setTimeout(function() {
