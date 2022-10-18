@@ -514,8 +514,12 @@ function betterProgressBar(whatToDo, value) {
     if (whatToDo == 'set') {
         $('#progressBar').css('width', `${value}%`)
     } else if (whatToDo == 'add') {
-        var curVal = $('#progressBar').css('width')
-        $('#progressBar').css('width', (value + parseInt(curVal)) + '%');
+        // https://stackoverflow.com/a/23236691/18758797
+        var w = $('#progressBar').css('width').slice(0, -2);
+        var ww = $(window).width();
+        var curVal = w / ww * 100;
+
+        $('#progressBar').css('width', (value + parseFloat(curVal)) + '%');
     } else if (whatToDo == 'getRemaining') {
         var curVal = $('#progressBar').css('width');
         var totalVal = 100;
