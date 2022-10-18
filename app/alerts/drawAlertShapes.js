@@ -12,6 +12,13 @@ function replaceAt(str, index, replacement) {
     return str.substring(0, index) + replacement + str.substring(index + replacement.length);
 }
 
+function addScriptTag(url) {
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src = url;
+    $("head").append(s);
+}
+
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
 // https://realearth.ssec.wisc.edu/products/?app=_ALL_
@@ -41,97 +48,106 @@ createMenuOption({
             map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
         } else {
-            //map.getCanvas().style.cursor = "crosshair";
-            map.on('click', 'newAlertsLayer', mapClick)
+            setTimeout(function() {
+                //map.getCanvas().style.cursor = "crosshair";
+                map.on('click', 'newAlertsLayer', mapClick)
 
-            fetchPolygonData([noaaAlertsURL], function(data) {
-                for (var item in data.features) {
-                    data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
-                }
-                console.log(data)
-                map.addSource('alertsSource', {
-                    type: 'geojson',
-                    data: data,
-                })
-                map.addLayer({
-                    'id': `newAlertsLayer`,
-                    'type': 'fill',
-                    'source': 'alertsSource',
-                    paint: {
-                        //#0080ff blue
-                        //#ff7d7d red
-                        'fill-color': ['get', 'color'],
-                        'fill-opacity': 0
-                    }
-                }, 'stationSymbolLayer');
-                map.addLayer({
-                    'id': `newAlertsLayerOutline`,
-                    'type': 'line',
-                    'source': 'alertsSource',
-                    'paint': {
-                        //#014385 blue
-                        //#850101 red
-                        'line-color': ['get', 'color'],
-                        'line-width': 3
-                    }
-                }, 'stationSymbolLayer');
+                addScriptTag('../app/alerts/alertZones/forecastZones.js');
+                console.log('Loaded forecast zones.');
+                addScriptTag('../app/alerts/alertZones/countyZones.js');
+                console.log('Loaded county zones.');
+                addScriptTag('../app/alerts/alertZones/fireZones.js');
+                console.log('Loaded fire zones.');
 
-                map.on('mouseover', 'newAlertsLayer', function(e) {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                map.on('mouseout', 'newAlertsLayer', function(e) {
-                    map.getCanvas().style.cursor = '';
-                });
-
-                var polygonGeojson = {
-                    "type": "FeatureCollection",
-                    "features": []
-                }
-                function pushNewPolygon(geometry, properties) {
-                    // this allows you to add properties for each cell
-                    var objToPush = {
-                        "type": "Feature",
-                        "geometry": geometry,
-                        "properties": properties
+                fetchPolygonData([noaaAlertsURL], function(data) {
+                    for (var item in data.features) {
+                        data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
                     }
-                    polygonGeojson.features.push(objToPush)
-                }
-                for (var item in data.features) {
-                    if (data.features[item].geometry == null) {
-                        var affectedZones = data.features[item].properties.affectedZones;
-                        for (var i in affectedZones) {
-                            var zoneToPush;
-                            if (affectedZones[i].includes('forecast')) {
-                                affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
-                                zoneToPush = forecastZones[affectedZones[i]];
-                            } else if (affectedZones[i].includes('county')) {
-                                affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
-                                zoneToPush = countyZones[affectedZones[i]];
-                            } else if (affectedZones[i].includes('fire')) {
-                                affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
-                                zoneToPush = fireZones[affectedZones[i]];
-                            }
-                            if (zoneToPush != undefined) {
-                                pushNewPolygon(zoneToPush.geometry, data.features[item].properties)
+                    console.log(data)
+                    map.addSource('alertsSource', {
+                        type: 'geojson',
+                        data: data,
+                    })
+                    map.addLayer({
+                        'id': `newAlertsLayer`,
+                        'type': 'fill',
+                        'source': 'alertsSource',
+                        paint: {
+                            //#0080ff blue
+                            //#ff7d7d red
+                            'fill-color': ['get', 'color'],
+                            'fill-opacity': 0
+                        }
+                    }, 'stationSymbolLayer');
+                    map.addLayer({
+                        'id': `newAlertsLayerOutline`,
+                        'type': 'line',
+                        'source': 'alertsSource',
+                        'paint': {
+                            //#014385 blue
+                            //#850101 red
+                            'line-color': ['get', 'color'],
+                            'line-width': 3
+                        }
+                    }, 'stationSymbolLayer');
+
+                    map.on('mouseover', 'newAlertsLayer', function(e) {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                    map.on('mouseout', 'newAlertsLayer', function(e) {
+                        map.getCanvas().style.cursor = '';
+                    });
+
+                    var polygonGeojson = {
+                        "type": "FeatureCollection",
+                        "features": []
+                    }
+                    function pushNewPolygon(geometry, properties) {
+                        // this allows you to add properties for each cell
+                        var objToPush = {
+                            "type": "Feature",
+                            "geometry": geometry,
+                            "properties": properties
+                        }
+                        polygonGeojson.features.push(objToPush)
+                    }
+                    for (var item in data.features) {
+                        if (data.features[item].geometry == null) {
+                            var affectedZones = data.features[item].properties.affectedZones;
+                            for (var i in affectedZones) {
+                                var zoneToPush;
+                                if (affectedZones[i].includes('forecast')) {
+                                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
+                                    zoneToPush = forecastZones[affectedZones[i]];
+                                } else if (affectedZones[i].includes('county')) {
+                                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
+                                    zoneToPush = countyZones[affectedZones[i]];
+                                } else if (affectedZones[i].includes('fire')) {
+                                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
+                                    zoneToPush = fireZones[affectedZones[i]];
+                                }
+                                if (zoneToPush != undefined) {
+                                    pushNewPolygon(zoneToPush.geometry, data.features[item].properties)
+                                }
                             }
                         }
                     }
-                }
-                var mergedGeoJSON = geojsonMerge.merge([
-                    data,
-                    polygonGeojson
-                ]);
-                map.getSource('alertsSource').setData(mergedGeoJSON);
-                //map.moveLayer('stationSymbolLayer');
-                // newAlertsArr.push(`newAlertsLayerOutline`);
-                // newAlertsArr.push(`newAlertsLayer`);
+                    var mergedGeoJSON = geojsonMerge.merge([
+                        data,
+                        polygonGeojson
+                    ]);
+                    map.getSource('alertsSource').setData(mergedGeoJSON);
+                    //map.moveLayer('stationSymbolLayer');
+                    // newAlertsArr.push(`newAlertsLayerOutline`);
+                    // newAlertsArr.push(`newAlertsLayer`);
 
-                // // map.on('click', 'newAlertsLayer', (e) => {
-                // //     for (key in e.features) {
-                // //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
-                // //     }
-                // // });
-            })
+                    // // map.on('click', 'newAlertsLayer', (e) => {
+                    // //     for (key in e.features) {
+                    // //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
+                    // //     }
+                    // // });
+                })
+            }, 0)
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
