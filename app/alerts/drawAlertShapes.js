@@ -74,11 +74,19 @@ createMenuOption({
                 ut.betterProgressBar('show');
                 ut.betterProgressBar('set', 0);
 
-                addScriptTag('../app/alerts/alertZones/forecastZones.js', function() {
+                var host = window.location.host;
+                var urlPart;
+                if (host == 'steepatticstairs.github.io') {
+                    urlPart = '/AtticRadar/';
+                } else {
+                    urlPart = '/';
+                }
+
+                addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
                 console.log('Loaded forecast zones.');
-                addScriptTag('../app/alerts/alertZones/countyZones.js', function() {
+                addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
                 console.log('Loaded county zones.');
-                addScriptTag('../app/alerts/alertZones/fireZones.js', function() {
+                addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
                 console.log('Loaded fire zones.');
 
                 ut.betterProgressBar('set', 100);
@@ -175,7 +183,7 @@ createMenuOption({
                     // // });
                 })
                 });});});
-            }, 0)
+            }, 50)
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
