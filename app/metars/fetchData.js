@@ -1,8 +1,19 @@
 const ut = require('../radar/utils');
 const useData = require('./useData');
+const pako = require('pako');
 var map = require('../radar/map/map');
 
 const radarStations = require('../../resources/radarStations');
+
+function xhrGzipFile(url, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.addEventListener('load', function () {
+        cb(this.response);
+    })
+    xhr.send();
+}
 
 function fetchMETARData(action) {
     var curStation = $('#dataDiv').data('currentStation');
@@ -26,12 +37,13 @@ function fetchMETARData(action) {
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=~us&hoursBeforeNow=3#`;
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=${distanceMiles};${stationLon},${stationLat}&hoursBeforeNow=3#`;
-    var url = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.xml#';
+    var url = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.xml.gz#';
     //var url =  '../resources/USA_Test_METAR.xml';
-    var noCacheURL = ut.preventFileCaching(ut.phpProxy2 + url);
-    $.get(noCacheURL, function(data) {
-        var parsedXMLData = ut.xmlToJson(data);
-
+    var noCacheURL = ut.preventFileCaching(ut.phpProxy + url);
+    console.log(noCacheURL)
+    xhrGzipFile(noCacheURL, function(data) {
+        var xml = pako.inflate(new Uint8Array(data), { to: 'string' });
+        var parsedXMLData = ut.xmlToJson(xml);
         useData.useData(parsedXMLData, action);
     })
 }
