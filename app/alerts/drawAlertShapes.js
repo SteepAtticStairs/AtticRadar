@@ -12,7 +12,7 @@ function replaceAt(str, index, replacement) {
     return str.substring(0, index) + replacement + str.substring(index + replacement.length);
 }
 
-var totalLoaded = 0;
+var totalLoaded = 2000000; // 2 MB (to account for the alert file fetched from api.weather.gov)
 
 function addScriptTag(url, cb) {
     // var s = document.createElement("script");
@@ -41,7 +41,7 @@ function addScriptTag(url, cb) {
         console.log(`${ut.formatBytes(event.loaded)}`);
         //ut.progressBarVal('label', ut.formatBytes(event.loaded));
         var thingToLoad = totalLoaded + parseFloat(event.loaded)/* / 31000000*/;
-        ut.betterProgressBar('set', ut.scale(thingToLoad, 0, 31000000, 0, 100));
+        ut.betterProgressBar('set', ut.scale(thingToLoad, 0, 33000000, 0, 100)); // scale from 31 MB (all of the alert zones + the extra 2 MB)
     }
     xhr.send();
 }
@@ -78,88 +78,72 @@ createMenuOption({
             ut.betterProgressBar('show');
             ut.betterProgressBar('set', 0);
 
-            // //ut.betterProgressBar('add', parseFloat(event.loaded) / 1000000);
-            // function getRandomInt(min, max) {
-            //     min = Math.ceil(min);
-            //     max = Math.floor(max);
-            //     return Math.floor(Math.random() * (max - min + 1)) + min;
-            // }
-            // var val = 0;
-            // (function myLoop(i, b) {
-            //     setTimeout(function() {
-            //         ut.betterProgressBar('set', val);
-            //         var ranInt = getRandomInt(0, 100);
-            //         val = val + 1;
-            //         if (--i) myLoop(i, ranInt);
-            //     }, b)
-            // })(101, 0);
-
-            setTimeout(function() {
-                //map.getCanvas().style.cursor = "crosshair";
-                map.on('click', 'newAlertsLayer', mapClick)
-
-                var host = window.location.host;
-                var urlPart;
-                if (host == 'steepatticstairs.github.io') {
-                    urlPart = '/AtticRadar/';
-                } else {
-                    urlPart = '/';
+            fetchPolygonData([noaaAlertsURL], function(data) {
+                for (var item in data.features) {
+                    data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
                 }
-                console.log(host)
-
-                addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
-                console.log('Loaded forecast zones.');
-                totalLoaded = totalLoaded + 14500000;
-                addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
-                console.log('Loaded county zones.');
-                totalLoaded = totalLoaded + 7500000;
-                addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
-                console.log('Loaded fire zones.');
-                totalLoaded = totalLoaded + 8900000;
-
-                ut.betterProgressBar('set', 100);
-                setTimeout(function() {
-                    ut.betterProgressBar('hide');
-                }, 500)
-
-                fetchPolygonData([noaaAlertsURL], function(data) {
-                    for (var item in data.features) {
-                        data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
+                console.log(data)
+                map.addSource('alertsSource', {
+                    type: 'geojson',
+                    data: data,
+                })
+                map.addLayer({
+                    'id': `newAlertsLayer`,
+                    'type': 'fill',
+                    'source': 'alertsSource',
+                    paint: {
+                        //#0080ff blue
+                        //#ff7d7d red
+                        'fill-color': ['get', 'color'],
+                        'fill-opacity': 0
                     }
-                    console.log(data)
-                    map.addSource('alertsSource', {
-                        type: 'geojson',
-                        data: data,
-                    })
-                    map.addLayer({
-                        'id': `newAlertsLayer`,
-                        'type': 'fill',
-                        'source': 'alertsSource',
-                        paint: {
-                            //#0080ff blue
-                            //#ff7d7d red
-                            'fill-color': ['get', 'color'],
-                            'fill-opacity': 0
-                        }
-                    }, 'stationSymbolLayer');
-                    map.addLayer({
-                        'id': `newAlertsLayerOutline`,
-                        'type': 'line',
-                        'source': 'alertsSource',
-                        'paint': {
-                            //#014385 blue
-                            //#850101 red
-                            'line-color': ['get', 'color'],
-                            'line-width': 3
-                        }
-                    }, 'stationSymbolLayer');
+                }, 'stationSymbolLayer');
+                map.addLayer({
+                    'id': `newAlertsLayerOutline`,
+                    'type': 'line',
+                    'source': 'alertsSource',
+                    'paint': {
+                        //#014385 blue
+                        //#850101 red
+                        'line-color': ['get', 'color'],
+                        'line-width': 3
+                    }
+                }, 'stationSymbolLayer');
 
-                    map.on('mouseover', 'newAlertsLayer', function(e) {
-                        map.getCanvas().style.cursor = 'pointer';
-                    });
-                    map.on('mouseout', 'newAlertsLayer', function(e) {
-                        map.getCanvas().style.cursor = '';
-                    });
+                map.on('mouseover', 'newAlertsLayer', function(e) {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+                map.on('mouseout', 'newAlertsLayer', function(e) {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                setTimeout(function() {
+                    //map.getCanvas().style.cursor = "crosshair";
+                    map.on('click', 'newAlertsLayer', mapClick)
+
+                    var host = window.location.host;
+                    var urlPart;
+                    if (host == 'steepatticstairs.github.io') {
+                        urlPart = '/AtticRadar/';
+                    } else {
+                        urlPart = '/';
+                    }
+                    console.log(host)
+
+                    addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
+                    console.log('Loaded forecast zones.');
+                    totalLoaded = totalLoaded + 14500000; // 14.5 MB
+                    addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
+                    console.log('Loaded county zones.');
+                    totalLoaded = totalLoaded + 7500000; // 7.5 MB
+                    addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
+                    console.log('Loaded fire zones.');
+                    totalLoaded = totalLoaded + 8900000; // 8.8 MB
+
+                    ut.betterProgressBar('set', 100);
+                    setTimeout(function() {
+                        ut.betterProgressBar('hide');
+                    }, 500)
 
                     var polygonGeojson = {
                         "type": "FeatureCollection",
@@ -200,18 +184,9 @@ createMenuOption({
                         polygonGeojson
                     ]);
                     map.getSource('alertsSource').setData(mergedGeoJSON);
-                    //map.moveLayer('stationSymbolLayer');
-                    // newAlertsArr.push(`newAlertsLayerOutline`);
-                    // newAlertsArr.push(`newAlertsLayer`);
-
-                    // // map.on('click', 'newAlertsLayer', (e) => {
-                    // //     for (key in e.features) {
-                    // //         ut.colorLog(e.features[key].properties.CAP_ID, 'green')
-                    // //     }
-                    // // });
-                })
-                });});});
-            }, 50)
+                    });});});
+                }, 50)
+            })
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');

@@ -18,6 +18,7 @@ function fetchPolygonData(url, callback) {
             //ut.progressBarVal('set', ut.scale(event.loaded / 1000000, 0, 40, 0, 150))
             //ut.progressBarVal('label', ut.formatBytes(event.loaded))
             console.log(ut.formatBytes(event.loaded))
+            ut.betterProgressBar('set', ut.scale(event.loaded, 0, 31000000, 0, 100));
         }
         alertsXHTTP.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
