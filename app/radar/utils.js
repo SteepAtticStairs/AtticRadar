@@ -620,6 +620,14 @@ function animateBrightness(startVal, stopVal, duration, div) {
     });
 }
 
+function haMapControlActions(mode, value) {
+    if (mode == 'show') {
+        $('#hurricaneArchiveMapControl').show();
+    } else if (mode == 'hide') {
+        $('#hurricaneArchiveMapControl').hide();
+    }
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -662,5 +670,6 @@ module.exports = {
     getRadialConstants,
     getDateDiff,
     csvToJson,
-    animateBrightness
+    animateBrightness,
+    haMapControlActions
 }

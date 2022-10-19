@@ -1988,6 +1988,8 @@ module.exports = initHurricaneArchiveListeners;
 const createOffCanvasItem = require('../../radar/menu/createOffCanvasItem');
 const initHurricaneArchiveListeners = require('./eventListeners');
 const parseHurricaneFile = require('./plotIBTRACS');
+const ut = require('../../radar/utils');
+var map = require('../../radar/map/map');
 
 function zeroPad(num, length) {
     length = length || 2; // defaults to 2 if no parameter is passed
@@ -2046,12 +2048,30 @@ createOffCanvasItem({
     'css': ''
 }, function(thisObj, innerDiv, iconElem) {
     $('#hurricaneArchiveModalTrigger').click();
+    ut.haMapControlActions('show');
 })
 
 initHurricaneArchiveListeners();
 
+$('#haClearMap').on('click', function() {
+    ut.haMapControlActions('hide');
+
+    var haMapLayers = $('#dataDiv').data('haMapLayers');
+    for (var i in haMapLayers) {
+        //map.setLayoutProperty(haMapLayers[i], 'visibility', 'none');
+        if (map.getLayer(haMapLayers[i])) {
+            map.removeLayer(haMapLayers[i]);
+        }
+    }
+    for (var i in haMapLayers) {
+        if (map.getSource(haMapLayers[i])) {
+            map.removeSource(haMapLayers[i]);
+        }
+    }
+})
+
 //startRightAway();
-},{"../../radar/menu/createOffCanvasItem":57,"./eventListeners":12,"./plotIBTRACS":14}],14:[function(require,module,exports){
+},{"../../radar/map/map":53,"../../radar/menu/createOffCanvasItem":57,"../../radar/utils":70,"./eventListeners":12,"./plotIBTRACS":14}],14:[function(require,module,exports){
 const ut = require('../../radar/utils');
 var map = require('../../radar/map/map');
 
@@ -2086,6 +2106,7 @@ function pushNewPoint(coords, properties) {
     pointGeojson.features.push(objToPush)
 }
 
+var layersArr = [];
 function plot(pointGeojson, lineGeojson, stormID) {
     map.addLayer({
         'id': `haLayerLine${stormID}`,
@@ -2099,11 +2120,13 @@ function plot(pointGeojson, lineGeojson, stormID) {
             'line-width': 2
         }
     });
+    layersArr.push(`haLayerLine${stormID}`)
 
     map.addSource(`haLayerPointsSource${stormID}`, {
         type: "geojson",
         data: pointGeojson
     });
+    layersArr.push(`haLayerPointsSource${stormID}`)
     map.addLayer({
         "id": `haLayerPoints${stormID}`,
         "type": "circle",
@@ -2121,6 +2144,8 @@ function plot(pointGeojson, lineGeojson, stormID) {
             },
         }
     });
+    layersArr.push(`haLayerPoints${stormID}`)
+
     map.addLayer({
         "id": `haLayerPointsText${stormID}`,
         "type": "symbol",
@@ -2135,6 +2160,9 @@ function plot(pointGeojson, lineGeojson, stormID) {
             //'text-ignore-placement': true,
         }
     });
+    layersArr.push(`haLayerPointsText${stormID}`)
+
+    $('#dataDiv').data('haMapLayers', layersArr);
 }
 
 function parseHurricaneFile(hurricaneJSON, stormID) {
@@ -4919,11 +4947,11 @@ require('./map/controls/help/helpControl');
 
 $('#dataDiv').data('currentStation', 'KLWX');
 
-$('#haSubmitBtn').on('mouseenter', function() {
-    ut.animateBrightness(100, 80, 100, $('#haSubmitOuter'));
+$('#haClearMap').on('mouseenter', function() {
+    ut.animateBrightness(100, 80, 100, $('#haClearMapOuter'));
 })
-$('#haSubmitBtn').on('mouseleave', function() {
-    ut.animateBrightness(80, 100, 100, $('#haSubmitOuter'));
+$('#haClearMap').on('mouseleave', function() {
+    ut.animateBrightness(80, 100, 100, $('#haClearMapOuter'));
 })
 
 if (require('./misc/detectmobilebrowser')) {
@@ -7530,6 +7558,14 @@ function animateBrightness(startVal, stopVal, duration, div) {
     });
 }
 
+function haMapControlActions(mode, value) {
+    if (mode == 'show') {
+        $('#hurricaneArchiveMapControl').show();
+    } else if (mode == 'hide') {
+        $('#hurricaneArchiveMapControl').hide();
+    }
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -7572,7 +7608,8 @@ module.exports = {
     getRadialConstants,
     getDateDiff,
     csvToJson,
-    animateBrightness
+    animateBrightness,
+    haMapControlActions
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":53,"buffer":216}],71:[function(require,module,exports){

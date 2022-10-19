@@ -48,11 +48,11 @@ require('./map/controls/help/helpControl');
 
 $('#dataDiv').data('currentStation', 'KLWX');
 
-$('#haSubmitBtn').on('mouseenter', function() {
-    ut.animateBrightness(100, 80, 100, $('#haSubmitOuter'));
+$('#haClearMap').on('mouseenter', function() {
+    ut.animateBrightness(100, 80, 100, $('#haClearMapOuter'));
 })
-$('#haSubmitBtn').on('mouseleave', function() {
-    ut.animateBrightness(80, 100, 100, $('#haSubmitOuter'));
+$('#haClearMap').on('mouseleave', function() {
+    ut.animateBrightness(80, 100, 100, $('#haClearMapOuter'));
 })
 
 if (require('./misc/detectmobilebrowser')) {

@@ -475,6 +475,28 @@
         .code {
             font-family: 'Courier New', monospace;
         }
+
+        #hurricaneArchiveMapControl {
+            background-color: rgb(184, 184, 184);
+            /*width: 150px;
+            height: 250px;*/
+            width: fit-content;
+            height: fit-content;
+            max-height: 250px;
+
+            border: 2px solid rgb(0, 0, 0);
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+
+            display: flex;
+            justify-content: center; /* vertical */
+            /* align-items: center; */ /* horizontal */
+
+            position: absolute;
+            z-index: 100;
+            top: 50px;
+            left: 0;
+        }
     </style>
 </head>
 <body>
@@ -789,6 +811,16 @@
             </div>
         </div>
     </div>
+
+    <div id="hurricaneArchiveMapControl" style="display: none">
+        <div id="haClearMapOuter" style="margin: 8px 8px -8px 8px">
+            <div class="alert alert-danger offCanvasMenuItem" id="haClearMap">
+                <span class="fa-solid fa-circle-xmark">&nbsp;&nbsp;</span>
+                <span>Clear</span>
+            </div>
+        </div>
+    </div>
+
     <script>
         $('#haDatePicker').datepicker({
             format: "yyyy",

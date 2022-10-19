@@ -32,6 +32,7 @@ function pushNewPoint(coords, properties) {
     pointGeojson.features.push(objToPush)
 }
 
+var layersArr = [];
 function plot(pointGeojson, lineGeojson, stormID) {
     map.addLayer({
         'id': `haLayerLine${stormID}`,
@@ -45,11 +46,13 @@ function plot(pointGeojson, lineGeojson, stormID) {
             'line-width': 2
         }
     });
+    layersArr.push(`haLayerLine${stormID}`)
 
     map.addSource(`haLayerPointsSource${stormID}`, {
         type: "geojson",
         data: pointGeojson
     });
+    layersArr.push(`haLayerPointsSource${stormID}`)
     map.addLayer({
         "id": `haLayerPoints${stormID}`,
         "type": "circle",
@@ -67,6 +70,8 @@ function plot(pointGeojson, lineGeojson, stormID) {
             },
         }
     });
+    layersArr.push(`haLayerPoints${stormID}`)
+
     map.addLayer({
         "id": `haLayerPointsText${stormID}`,
         "type": "symbol",
@@ -81,6 +86,9 @@ function plot(pointGeojson, lineGeojson, stormID) {
             //'text-ignore-placement': true,
         }
     });
+    layersArr.push(`haLayerPointsText${stormID}`)
+
+    $('#dataDiv').data('haMapLayers', layersArr);
 }
 
 function parseHurricaneFile(hurricaneJSON, stormID) {

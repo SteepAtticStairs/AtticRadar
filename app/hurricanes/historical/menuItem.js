@@ -1,6 +1,8 @@
 const createOffCanvasItem = require('../../radar/menu/createOffCanvasItem');
 const initHurricaneArchiveListeners = require('./eventListeners');
 const parseHurricaneFile = require('./plotIBTRACS');
+const ut = require('../../radar/utils');
+var map = require('../../radar/map/map');
 
 function zeroPad(num, length) {
     length = length || 2; // defaults to 2 if no parameter is passed
@@ -59,8 +61,26 @@ createOffCanvasItem({
     'css': ''
 }, function(thisObj, innerDiv, iconElem) {
     $('#hurricaneArchiveModalTrigger').click();
+    ut.haMapControlActions('show');
 })
 
 initHurricaneArchiveListeners();
+
+$('#haClearMap').on('click', function() {
+    ut.haMapControlActions('hide');
+
+    var haMapLayers = $('#dataDiv').data('haMapLayers');
+    for (var i in haMapLayers) {
+        //map.setLayoutProperty(haMapLayers[i], 'visibility', 'none');
+        if (map.getLayer(haMapLayers[i])) {
+            map.removeLayer(haMapLayers[i]);
+        }
+    }
+    for (var i in haMapLayers) {
+        if (map.getSource(haMapLayers[i])) {
+            map.removeSource(haMapLayers[i]);
+        }
+    }
+})
 
 //startRightAway();
