@@ -488,10 +488,6 @@
             border-top-right-radius: 15px;
             border-bottom-right-radius: 15px;
 
-            display: flex;
-            justify-content: center; /* vertical */
-            /* align-items: center; */ /* horizontal */
-
             position: absolute;
             z-index: 100;
             top: 50px;
@@ -813,12 +809,13 @@
     </div>
 
     <div id="hurricaneArchiveMapControl" style="display: none">
-        <div id="haClearMapOuter" style="margin: 8px 8px -8px 8px">
+        <div id="haClearMapOuter" style="margin: 8px 8px -8px 8px; display: flex; justify-content: center;">
             <div class="alert alert-danger offCanvasMenuItem" id="haClearMap">
                 <span class="fa-solid fa-circle-xmark">&nbsp;&nbsp;</span>
                 <span>Clear</span>
             </div>
         </div>
+        <div id="haMapControlText" style="margin: 4px 4px 4px 4px; display: none;"></div>
     </div>
 
     <script>

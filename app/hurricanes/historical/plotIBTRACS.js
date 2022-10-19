@@ -3,6 +3,11 @@ var map = require('../../radar/map/map');
 
 // https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt
 
+function capitalizeFirstLetter(string) {
+    string = string.toLowerCase();
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 var lineStringGeojson;
 var pointGeojson;
 function resetGeojsons() {
@@ -137,6 +142,25 @@ function parseHurricaneFile(hurricaneJSON, stormID) {
             console.warn(e);
         }
     }
+
+    map.on('mouseenter', `haLayerPoints${stormID}`, function (e) {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', `haLayerPoints${stormID}`, function (e) {
+        map.getCanvas().style.cursor = '';
+    });
+    map.on('click', `haLayerPoints${stormID}`, function(e) {
+        $('#haMapControlText').show();
+
+        var properties = e.features[0].properties;
+        console.log(properties);
+
+        var divToAppend = 
+        `\n<div><b>ID:</b> ${properties.SID}</div>
+        <div><b>Name:</b> ${capitalizeFirstLetter(properties.NAME)}</div>`
+
+        document.getElementById('haMapControlText').innerHTML = divToAppend;
+    })
 }
 
 module.exports = parseHurricaneFile;

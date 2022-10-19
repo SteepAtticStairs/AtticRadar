@@ -625,6 +625,7 @@ function haMapControlActions(mode, value) {
         $('#hurricaneArchiveMapControl').show();
     } else if (mode == 'hide') {
         $('#hurricaneArchiveMapControl').hide();
+        $('#haMapControlText').hide();
     }
 }
 

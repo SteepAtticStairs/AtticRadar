@@ -2014,30 +2014,12 @@ function findStorm(json, sid) {
 }
 
 function startRightAway() {
-    // var stormJSON = ibtracsArchive['TIP_1979'];
-    // parseHurricaneFile(stormJSON)
-    // ./IBTrACS/ibtracsArchive.json
-    $.getJSON('../app/hurricanes/historical/IBTrACS/ibtracsArchive.json', function(data) {
-        console.log(findStorm(data, '2021239N17281'))
+    // hurricane michael
+    var id = '2018280N18273';
+    $.getJSON(`https://raw.githubusercontent.com/SteepAtticStairs/hurricaneArchives/main/IBTrACS/storms/${id}.json`, function(data) {
+        parseHurricaneFile(data, id);
+        ut.haMapControlActions('show');
     })
-    // var _year = '2018';
-    // var _stormID = getStormID('Michael', _year).id;
-    // $('#haSearchStorm').val('Michael')
-
-    // fetchHurricaneFile(_stormID, _year)
-}
-
-function getStormID(name, year) {
-    name = name.toUpperCase();
-    var stormYear = allStorms[year];
-    for (var i in stormYear) {
-        if (stormYear[i][0] == name) {
-            return {
-                'basin': stormYear[i][3],
-                'id': stormYear[i][1].toLowerCase(),
-            };
-        }
-    }
 }
 
 createOffCanvasItem({
@@ -2070,12 +2052,26 @@ $('#haClearMap').on('click', function() {
     }
 })
 
-//startRightAway();
+function shouldStartRightAway() {
+    if (!map.loaded()) {
+        map.on('load', function() {
+            startRightAway();
+        })
+    } else {
+        startRightAway();
+    }
+}
+shouldStartRightAway();
 },{"../../radar/map/map":53,"../../radar/menu/createOffCanvasItem":57,"../../radar/utils":70,"./eventListeners":12,"./plotIBTRACS":14}],14:[function(require,module,exports){
 const ut = require('../../radar/utils');
 var map = require('../../radar/map/map');
 
 // https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt
+
+function capitalizeFirstLetter(string) {
+    string = string.toLowerCase();
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 var lineStringGeojson;
 var pointGeojson;
@@ -2211,6 +2207,25 @@ function parseHurricaneFile(hurricaneJSON, stormID) {
             console.warn(e);
         }
     }
+
+    map.on('mouseenter', `haLayerPoints${stormID}`, function (e) {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', `haLayerPoints${stormID}`, function (e) {
+        map.getCanvas().style.cursor = '';
+    });
+    map.on('click', `haLayerPoints${stormID}`, function(e) {
+        $('#haMapControlText').show();
+
+        var properties = e.features[0].properties;
+        console.log(properties);
+
+        var divToAppend = 
+        `\n<div><b>ID:</b> ${properties.SID}</div>
+        <div><b>Name:</b> ${capitalizeFirstLetter(properties.NAME)}</div>`
+
+        document.getElementById('haMapControlText').innerHTML = divToAppend;
+    })
 }
 
 module.exports = parseHurricaneFile;
@@ -7563,6 +7578,7 @@ function haMapControlActions(mode, value) {
         $('#hurricaneArchiveMapControl').show();
     } else if (mode == 'hide') {
         $('#hurricaneArchiveMapControl').hide();
+        $('#haMapControlText').hide();
     }
 }
 
