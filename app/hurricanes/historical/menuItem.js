@@ -74,4 +74,4 @@ function shouldStartRightAway() {
         startRightAway();
     }
 }
-shouldStartRightAway();
+//shouldStartRightAway();
