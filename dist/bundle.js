@@ -2039,7 +2039,7 @@ function shouldStartRightAway() {
         startRightAway();
     }
 }
-shouldStartRightAway();
+//shouldStartRightAway();
 },{"../../radar/map/map":53,"../../radar/menu/createOffCanvasItem":57,"../../radar/utils":70,"./eventListeners":12,"./plotIBTRACS":14}],14:[function(require,module,exports){
 const ut = require('../../radar/utils');
 var map = require('../../radar/map/map');
