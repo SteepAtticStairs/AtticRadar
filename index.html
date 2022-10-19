@@ -494,6 +494,27 @@
             top: 50px;
             left: 0;
         }
+        #haClearMapOuter {
+            margin: 8px 40px -8px 8px;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+        #haMapControlMinimize {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 25px;
+            background-color: rgb(128, 128, 128);
+            z-index: 101;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -810,13 +831,16 @@
     </div>
 
     <div id="hurricaneArchiveMapControl" style="display: none">
-        <div id="haClearMapOuter" style="margin: 8px 8px -8px 8px; display: flex; justify-content: center;">
+        <div id="haMapControlMinimize">
+            <i id="haMapControlMinimizeIcon" class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div id="haClearMapOuter">
             <div class="alert alert-danger offCanvasMenuItem" id="haClearMap">
-                <span class="fa-solid fa-circle-xmark">&nbsp;&nbsp;</span>
-                <span>Clear</span>
+                <span class="fa-solid fa-circle-xmark haClearBtnContents">&nbsp;&nbsp;</span>
+                <span class="haClearBtnContents">Clear</span>
             </div>
         </div>
-        <div id="haMapControlText" style="margin: 4px 4px 4px 4px; display: none;"></div>
+        <div id="haMapControlText"style="margin: 4px 40px 4px 4px; display: none;"></div>
     </div>
 
     <script>
