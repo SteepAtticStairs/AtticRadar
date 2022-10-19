@@ -1,5 +1,7 @@
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
+const drawHurricanesToMap = require('./drawToMap');
+const loadOutlooks = require('./loadOutlooks');
 var map = require('../radar/map/map');
 
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
@@ -54,7 +56,9 @@ function exportFetchData() {
             blob.lastModifiedDate = new Date();
             blob.name = url;
 
-            unzipKMZ(blob, type, index, hurricaneID);
+            unzipKMZ(blob, hurricaneID, function(geoJsonObject) {
+                drawHurricanesToMap(geoJsonObject, type, index, hurricaneID);
+            });
         });
         xhr.send();
     }
@@ -70,6 +74,8 @@ function exportFetchData() {
             return false;
         }
     }
+
+    loadOutlooks();
 
     var namesArr = [];
     //var checkingIters = 50;

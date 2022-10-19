@@ -2,8 +2,8 @@ const drawHurricanesToMap = require('./drawToMap');
 
 // https://gis.stackexchange.com/a/325061/206737
 // https://jsfiddle.net/7z318a0r/
-function unzipKMZ(kmzBlob, type, index, hurricaneID) {
-    console.log(`${hurricaneID} - Unzipping KMZ...`);
+function unzipKMZ(kmzBlob, name, cb) {
+    console.log(`${name} - Unzipping KMZ...`);
     let getDom = xml => (new DOMParser()).parseFromString(xml, "text/xml")
     let getExtension = fileName => fileName.split(".").pop()
 
@@ -24,7 +24,8 @@ function unzipKMZ(kmzBlob, type, index, hurricaneID) {
     getKmlDom(kmzBlob).then(kmlDom => {
         let geoJsonObject = toGeoJSON.kml(kmlDom)
         //console.log(`${hurricaneID} - KMZ successfully unzipped.`);
-        drawHurricanesToMap(geoJsonObject, type, index, hurricaneID);
+        //drawHurricanesToMap(geoJsonObject, type, index, hurricaneID);
+        cb(geoJsonObject);
     })
 }
 
