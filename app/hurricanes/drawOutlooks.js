@@ -3,6 +3,7 @@ var map = require('../radar/map/map');
 
 function drawOutlookToMap(geojson, type, name) {
     console.log(geojson)
+    var hurricaneMapLayers = $('#dataDiv').data('hurricaneMapLayers');
     if (geojson.features[0].properties.name != " Tropical cyclone formation is not expected ") {
         if (type == 'cone') {
             var fillColor = geojson.features[0].properties.fill;
@@ -35,6 +36,8 @@ function drawOutlookToMap(geojson, type, name) {
                     'line-width': borderWidth
                 }
             });
+            hurricaneMapLayers.push(`outlookCone${name}`);
+            hurricaneMapLayers.push(`outlookConeOutline${name}`);
         } else if (type == 'track') {
             // var fillColor = geojson.features[0].properties.fill;
             // var fillOpacity = geojson.features[0].properties['fill-opacity'];
@@ -61,6 +64,7 @@ function drawOutlookToMap(geojson, type, name) {
                     'circle-stroke-color': black,
                 }
             });
+            hurricaneMapLayers.push(`outlookPoint${name}`);
             // {
             //     "styleUrl": "#higx",
             //     "styleHash": "-409ac551",
@@ -100,6 +104,7 @@ function drawOutlookToMap(geojson, type, name) {
                     .addTo(map);
             })
         }
+        $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
     }
 }
 
