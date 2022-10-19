@@ -41,7 +41,7 @@ function showRadarStatus(station) {
     }
 
     var latestURL = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.75ftm/SI.${station.toLowerCase()}/sn.last`
-    $.get(ut.preventFileCaching(ut.phpProxy + latestURL), function (data) {
+    $.get(ut.preventFileCaching(ut.phpProxy + latestURL + '#'), function (data) {
         // var radstatMessageIssuanceTime = new Date(data.issuanceTime);
         // var radstatMessageText = data.productText;
 

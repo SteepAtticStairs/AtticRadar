@@ -38,10 +38,13 @@ function loadOutlooks() {
     }
 
     var urls = [
+        ut.preventFileCaching(`https://www.nhc.noaa.gov/xgtwo/gtwo_atl.kmz#`),
         ut.preventFileCaching(`https://www.nhc.noaa.gov/xgtwo/gtwo_pac.kmz#`),
+        ut.preventFileCaching(`https://www.nhc.noaa.gov/xgtwo/gtwo_cpac.kmz#`),
     ]
+    var names = ['atl', 'pac', 'cpac'];
     for (var x in urls) {
-        loadOutlookFromFile(urls[x], 'pacOutlook')
+        loadOutlookFromFile(urls[x], `${names[x]}Outlook`)
         //loadOutlookFromFile(urls[x], 'track', 'pacOutlook')
     }
 }

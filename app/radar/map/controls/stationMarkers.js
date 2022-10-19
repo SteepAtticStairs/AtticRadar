@@ -252,7 +252,7 @@ function showStations() {
                     ut.disableModeBtn();
                     loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
                         console.log(url);
-                        loaders.loadFileObject(ut.phpProxy + url, 3);
+                        loaders.loadFileObject(ut.phpProxy + url + '#', 3);
                     })
                 }
             }
