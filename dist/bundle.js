@@ -6955,8 +6955,11 @@ module.exports = radarStationInfo;
 * https://nordicapis.com/10-free-to-use-cors-proxies/
 * https://allorigins.win/
 */
-const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
-const phpProxy2 = 'https://php-cors-proxy.herokuapp.com/?'; // http://127.0.0.1:9999/proxy/?
+const phpProxy = 'https://api.allorigins.win/raw?url=';
+const phpProxy2 = 'https://php-cors-proxy.herokuapp.com/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
+//const phpProxy  = 'https://salty-citadel-44916.herokuapp.com/';
+//const phpProxy  = 'https://secret-retreat-45871.herokuapp.com/'
+//const phpProxy  = 'https://circumvent-cors.herokuapp.com/';
 //const phpProxy = 'https://php-cors.000webhostapp.com/?';
 //const phpProxy = 'https://php-cors-proxy.herokuapp.com/?';
 
