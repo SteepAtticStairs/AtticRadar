@@ -4,28 +4,6 @@ const parseHurricaneFile = require('./plotIBTRACS');
 const ut = require('../../radar/utils');
 var map = require('../../radar/map/map');
 
-function zeroPad(num, length) {
-    length = length || 2; // defaults to 2 if no parameter is passed
-    return (new Array(length).join('0') + num).slice(length*-1);
-}
-
-// function findStorm(json, name, year, basin, sid) {
-//     var keys = Object.keys(json);
-//     for (var i in keys) {
-//         if (keys[i] == `${sid}-${name}-${year}-${basin}`) {
-//             return json[keys[i]];
-//         }
-//     }
-// }
-function findStorm(json, sid) {
-    var keys = Object.keys(json);
-    for (var i in keys) {
-        if (keys[i].includes(sid)) {
-            return json[keys[i]];
-        }
-    }
-}
-
 function startRightAway() {
     // hurricane michael
     var id = '2018280N18273';
@@ -74,4 +52,4 @@ function shouldStartRightAway() {
         startRightAway();
     }
 }
-//shouldStartRightAway();
+shouldStartRightAway();

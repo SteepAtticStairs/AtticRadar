@@ -632,6 +632,11 @@ function haMapControlActions(mode, value) {
     }
 }
 
+function zeroPad(num, length) {
+    length = length || 2; // defaults to 2 if no parameter is passed
+    return (new Array(length).join('0') + num).slice(length*-1);
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -675,5 +680,6 @@ module.exports = {
     getDateDiff,
     csvToJson,
     animateBrightness,
-    haMapControlActions
+    haMapControlActions,
+    zeroPad
 }

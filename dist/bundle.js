@@ -1991,28 +1991,6 @@ const parseHurricaneFile = require('./plotIBTRACS');
 const ut = require('../../radar/utils');
 var map = require('../../radar/map/map');
 
-function zeroPad(num, length) {
-    length = length || 2; // defaults to 2 if no parameter is passed
-    return (new Array(length).join('0') + num).slice(length*-1);
-}
-
-// function findStorm(json, name, year, basin, sid) {
-//     var keys = Object.keys(json);
-//     for (var i in keys) {
-//         if (keys[i] == `${sid}-${name}-${year}-${basin}`) {
-//             return json[keys[i]];
-//         }
-//     }
-// }
-function findStorm(json, sid) {
-    var keys = Object.keys(json);
-    for (var i in keys) {
-        if (keys[i].includes(sid)) {
-            return json[keys[i]];
-        }
-    }
-}
-
 function startRightAway() {
     // hurricane michael
     var id = '2018280N18273';
@@ -2061,7 +2039,7 @@ function shouldStartRightAway() {
         startRightAway();
     }
 }
-//shouldStartRightAway();
+shouldStartRightAway();
 },{"../../radar/map/map":53,"../../radar/menu/createOffCanvasItem":57,"../../radar/utils":70,"./eventListeners":12,"./plotIBTRACS":14}],14:[function(require,module,exports){
 const ut = require('../../radar/utils');
 var map = require('../../radar/map/map');
@@ -2071,6 +2049,27 @@ var map = require('../../radar/map/map');
 function capitalizeFirstLetter(string) {
     string = string.toLowerCase();
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;   
+}
+function printTime(dateObj, localOrNot) {
+    var timeZ;
+    if (localOrNot) {
+        dateObj = convertUTCDateToLocalDate(dateObj);
+        timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
+    } else {
+        timeZ = 'UTC';
+    }
+    return `${dateObj.toLocaleDateString()} ${dateObj.getHours()}:${ut.zeroPad(dateObj.getMinutes())} ${timeZ}`;
 }
 
 var lineStringGeojson;
@@ -2221,8 +2220,11 @@ function parseHurricaneFile(hurricaneJSON, stormID) {
         console.log(properties);
 
         var divToAppend = 
-        `\n<div><b>ID:</b> ${properties.SID}</div>
-        <div><b>Name:</b> ${capitalizeFirstLetter(properties.NAME)}</div>`
+        `<div><b>ID:</b> ${properties.SID}</div>
+        <div><b>Name:</b> ${capitalizeFirstLetter(properties.NAME)}</div>
+        <div><b>Wind Speed:</b> ${parseInt(ut.knotsToMph(parseFloat(properties.USA_WIND)))} mph</div>
+        <div><b>Pressure:</b> ${properties.USA_PRES} mb</div>
+        <div>${printTime(new Date(properties.ISO_TIME), false)}</div>`
 
         document.getElementById('haMapControlText').innerHTML = divToAppend;
     })
@@ -7585,6 +7587,11 @@ function haMapControlActions(mode, value) {
     }
 }
 
+function zeroPad(num, length) {
+    length = length || 2; // defaults to 2 if no parameter is passed
+    return (new Array(length).join('0') + num).slice(length*-1);
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -7628,7 +7635,8 @@ module.exports = {
     getDateDiff,
     csvToJson,
     animateBrightness,
-    haMapControlActions
+    haMapControlActions,
+    zeroPad
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":53,"buffer":216}],71:[function(require,module,exports){

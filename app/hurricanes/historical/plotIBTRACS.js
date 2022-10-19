@@ -8,6 +8,27 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;   
+}
+function printTime(dateObj, localOrNot) {
+    var timeZ;
+    if (localOrNot) {
+        dateObj = convertUTCDateToLocalDate(dateObj);
+        timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
+    } else {
+        timeZ = 'UTC';
+    }
+    return `${dateObj.toLocaleDateString()} ${dateObj.getHours()}:${ut.zeroPad(dateObj.getMinutes())} ${timeZ}`;
+}
+
 var lineStringGeojson;
 var pointGeojson;
 function resetGeojsons() {
@@ -156,8 +177,11 @@ function parseHurricaneFile(hurricaneJSON, stormID) {
         console.log(properties);
 
         var divToAppend = 
-        `\n<div><b>ID:</b> ${properties.SID}</div>
-        <div><b>Name:</b> ${capitalizeFirstLetter(properties.NAME)}</div>`
+        `<div><b>ID:</b> ${properties.SID}</div>
+        <div><b>Name:</b> ${capitalizeFirstLetter(properties.NAME)}</div>
+        <div><b>Wind Speed:</b> ${parseInt(ut.knotsToMph(parseFloat(properties.USA_WIND)))} mph</div>
+        <div><b>Pressure:</b> ${properties.USA_PRES} mb</div>
+        <div>${printTime(new Date(properties.ISO_TIME), false)}</div>`
 
         document.getElementById('haMapControlText').innerHTML = divToAppend;
     })
