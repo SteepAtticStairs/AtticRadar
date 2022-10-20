@@ -3449,7 +3449,7 @@ module.exports = drawRadarShape;
 * This file is the entry point for the project - everything starts here.
 */
 
-window.onload = function() {
+function load() {
     // load the main file
     require('../main');
 
@@ -3470,6 +3470,14 @@ window.onload = function() {
 
     // add the reload control
     require('../map/controls/reload');
+}
+
+if (document.readyState == 'complete' || document.readyState == 'interactive') {
+    load();
+} else if (document.readyState == 'loading') {
+    window.onload = function() {
+        load();
+    }
 }
 },{"../../alerts/entry":2,"../../hurricanes/entry":10,"../../metars/entry":19,"../../tides/main":74,"../main":45,"../map/controls/reload":49}],29:[function(require,module,exports){
 var map = require('../map/map');
@@ -5683,6 +5691,9 @@ const map = new mapboxgl.Map({
     //projection: 'equirectangular',
     //fadeDuration: 0,
 });
+
+// https://github.com/mapbox/mapbox-gl-js/issues/3265#issuecomment-660400481
+setTimeout(() => map.resize(), 0);
 
 // const getMouseColor = require('../misc/colorPicker');
 // map.on("mousemove", e => getMouseColor(e, map));

@@ -2,7 +2,7 @@
 * This file is the entry point for the project - everything starts here.
 */
 
-window.onload = function() {
+function load() {
     // load the main file
     require('../main');
 
@@ -23,4 +23,12 @@ window.onload = function() {
 
     // add the reload control
     require('../map/controls/reload');
+}
+
+if (document.readyState == 'complete' || document.readyState == 'interactive') {
+    load();
+} else if (document.readyState == 'loading') {
+    window.onload = function() {
+        load();
+    }
 }
