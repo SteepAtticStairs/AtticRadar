@@ -6,519 +6,52 @@
     <link rel="icon" href="logo.png">
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-    <link href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" rel="stylesheet">
-
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js"></script>
-
-    <!-- https://cdnjs.com/libraries/font-awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
-    <!-- https://getbootstrap.com/docs/5.2/getting-started/download/ -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-
-    <!-- https://getbootstrap.com/docs/5.2/components/tooltips/ -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
-
-    <!-- https://github.com/manuelbieh/geolib -->
-    <script src="https://cdn.jsdelivr.net/npm/geolib@3.3.3/lib/index.min.js"></script>
-
-    <!-- https://developers.google.com/chart/interactive/docs/gallery/linechart -->
-    <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
-
-    <!-- https://github.com/webgeodatavore/GeoJSON.Terminator -->
-    <script src="https://unpkg.com/@webgeodatavore/geojson.terminator@1.0.0/GeoJSON.Terminator.js"></script>
-
-    <script src="./app/hurricanes/historical/stormList.js"></script>
-    <!-- <script src="./app/hurricanes/historical/masterList/allStorms.js"></script>
-    <script src="./app/hurricanes/historical/masterList/ibtracsArchive.js"></script> -->
-
-    <!-- <script src="./app/alerts/alertZones/forecastZones.js"></script>
-    <script src="./app/alerts/alertZones/countyZones.js"></script>
-    <script src="./app/alerts/alertZones/fireZones.js"></script> -->
-
+    <!-- 
+        THIS IS JUST CSS THAT NEEDS TO BE LOADED BEFORE THE MAIN CSS FILE
+    -->
     <style>
         body {
             margin: 0;
             padding: 0;
         }
-        #map {
+        #loadingLibrariesDiv {
             position: absolute;
             top: 0;
             bottom: 0;
             width: 100%;
-        }
-        .false-anchor {
-            cursor: pointer;
-            text-decoration: underline;
-            color:rgb(0, 0, 238) !important;
-        }
-        .false-anchor:hover {
-            color:rgb(0, 0, 131) !important;
-        }
-        
-        .icon-black {
-            color:rgb(0, 0, 0);
-        }
-        .icon-grey {
-            color:rgb(148, 148, 148);
-        }
-        .icon-selected {
-            color:rgb(0, 132, 255);
-        }
-        .icon-green {
-            color:rgb(17, 167, 17);
-        }
-        .icon-red {
-            color:red;
-        }
-        .icon-blue {
-            color:rgb(92, 157, 255);
-        }
+            z-index: 500000;
 
-        .mapboxgl-ctrl-top-center {
-            position: relative !important;
-            left: 0;
-            right: 0;
-            top: 10px;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            background: url('./logo.png') no-repeat center fixed, #7b7b7b;
+            background-size: contain;
         }
-        .mapboxgl-ctrl-bottom-center {
-            position: absolute !important;
-            left: 0;
-            right: 0;
-            bottom: 15px;
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        #messageBox {
-            width: auto;
-            height: auto;
-            max-height: 50vh;
-            overflow: auto;
-            border: 1px solid rgb(0, 0, 0);
-            padding: 2px;
-            /*text-align: justify;*/
-            background: transparent;
-        }
-
-        #spinnerParent {
-            z-index: 10;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            bottom: 0;
-            height: 100%;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-        #spinnerDisplayText {
-            color: rgb(0, 162, 255);
-            /*background-color: rgb(87, 87, 87);*/
-            text-align: center;
-            margin: auto;
-            margin-top: 10%;
-            font-size: 30px;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        /*
-        https://tobiasahlin.com/spinkit/
-        */
-        .sk-chase {
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            top:0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto;
-            animation: sk-chase 2.5s infinite linear both;
-        }
-        
-        .sk-chase-dot {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0; 
-            animation: sk-chase-dot 1.0s infinite ease-in-out both; 
-        }
-        .sk-chase-dot:before {
-            content: '';
-            display: block;
-            width: 25%;
-            height: 25%;
-            background-color: #fff;
-            border-radius: 100%;
-            animation: sk-chase-dot-before 1.0s infinite ease-in-out both; 
-        }
-        .sk-chase-dot:nth-child(1) { animation-delay: -1.1s; }
-        .sk-chase-dot:nth-child(2) { animation-delay: -1.0s; }
-        .sk-chase-dot:nth-child(3) { animation-delay: -0.9s; }
-        .sk-chase-dot:nth-child(4) { animation-delay: -0.8s; }
-        .sk-chase-dot:nth-child(5) { animation-delay: -0.7s; }
-        .sk-chase-dot:nth-child(6) { animation-delay: -0.6s; }
-        .sk-chase-dot:nth-child(1):before { animation-delay: -1.1s; }
-        .sk-chase-dot:nth-child(2):before { animation-delay: -1.0s; }
-        .sk-chase-dot:nth-child(3):before { animation-delay: -0.9s; }
-        .sk-chase-dot:nth-child(4):before { animation-delay: -0.8s; }
-        .sk-chase-dot:nth-child(5):before { animation-delay: -0.7s; }
-        .sk-chase-dot:nth-child(6):before { animation-delay: -0.6s; }
-        
-        @keyframes sk-chase {
-            100% { transform: rotate(360deg); } 
-        }
-        @keyframes sk-chase-dot {
-            80%, 100% { transform: rotate(360deg); } 
-        }
-        @keyframes sk-chase-dot-before {
-            50% {
-                transform: scale(0.6); 
-            } 100%, 0% {
-                transform: scale(1.0); 
-            } 
-        }
-
-        #optionsBox {
-            position: absolute;
-            z-index: 15;
-            position: absolute;
-            left: 50%;
-            -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
-            height: auto;
-            width: fit-content;
-            bottom: 10px;
-            text-align: center;
-            overflow: scroll;
-            padding: 5px 10px;
-            /* line-height: 25px; */
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-
-            cursor: pointer;
-            /*position: absolute;
-            z-index: 100;
-            position: absolute;
-            left: 25%;
-            right: 25%;
-            bottom: 5%;
-            text-align: center;
-            width: auto;
-            height: 200px;
-            overflow: scroll;
-            padding: 5px 10px;
-            line-height: 25px;
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-
-            cursor: pointer;*/
-        }
-        /*#optionsBox:hover { 
-            background-color: rgb(212, 212, 212);
-            -webkit-transition: background-color 150ms linear;
-            -ms-transition: background-color 150ms linear;
-            transition: background-color 150ms linear;
-        }*/
-        .customMarker {
-            text-align: center;
-            width: auto;
-            height: auto;
-            padding: 1px 5px;
-            /* line-height: 25px; */
-            background-color: rgb(136, 136, 136);
-            border: 1px solid black;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #mapHeader {
-            /*position: relative;
-            z-index: 15;
-            margin: auto;
-            height: auto;
-            width: fit-content;
-            top: 10px;
-            border-radius: 5px;*/
-
-            position: relative;
-            z-index: 15;
-            margin: auto;
-            height: auto;
-            width: fit-content;
-            top: 10px;
-            padding: 5px 10px;
-            /* line-height: 25px; */
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            font-size: 13px;
-
-            cursor: pointer;
-        }
-
-        #drop_zone {
-            height: 40px;
-            width: auto;
-            /* top right bottom left */
-            padding: 0px 20px 0px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-
-            border: 1px solid rgb(72, 72, 72);
-            border-style: dashed;
-        }
-
-        #progBarParent {
-            /*position: relative;
-            z-index: 55;
-            top: 50vh;
-            left: 25%;
-            right: 25%;*/
-            position: absolute;
-            z-index: 100;
-            left: 20%;
-            right: 20%;
-            width: auto;
-            top: 50vh;
-        }
-
-        #modalBtn {
-            position: absolute;
-            z-index: 99999;
-            display: none;
-        }
-        #exampleModal {
-            z-index: 100000;
-        }
-
-        #alertModalBody {
-            height: 50vh;
-            overflow: scroll;
-        }
-        .alertAccordionBody {
-            white-space: pre-wrap;
-        }
-
-        .offCanvasMenuItem {
-            cursor: pointer;
-            display: inline-block;
-            padding: 5px 10px;
-        }
-        #offcanvasExample {
-            width: 30vw;
-        }
-
-        .noselect {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
-        }
-
-
-        .mapFooter {
-            position: absolute;
-            z-index: 115;
-            bottom: 0%;
-            height: 45px;
-            width: 100%;
-            background-color: rgb(32, 32, 32);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .mapFooter div {
-            display: table-cell;
-            text-align: center;
-        }
-        .mapFooter span {
-            font-size: 20px;
-        }
-        .mapFooterMenuItem {
-            cursor: pointer;
-        }
-
-        .radarHeader {
-            position: absolute;
-            z-index: 115;
-            top: 0%;
-            height: 50px;
-            width: 100%;
-            background-color: rgb(32, 32, 32);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-        .radarHeader div {
-            text-align: center;
-        }
-
-        #top-left {
-            position: absolute;
-            left: 10px;
-            display: flex;
-        }
-        #top-right {
-            position: absolute;
-            right: 10px;
-            display: flex;
-        }
-
-        .progressBar {
-            position: absolute;
-            z-index: 115;
-            top: 50px;
-            height: 10px;
-            width: 100%;
-            background-color: rgb(20, 103, 204);
-        }
-
-        #productsDropdownTrigger, #productsDropdown {
-            position: absolute;
-            left: 5px;
-            font-size: small;
-            color: white;
-            cursor: pointer;
-        }
-
-        .centerImg {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-
-        #colorPicker {
-            width: 40px;
-            height: 40px;
-            /*background-color: white;*/
-            border: 3px solid rgb(125, 125, 125);
-            border-radius: 50%;
-
-            position: absolute;
-            z-index: 1000;
-            top:0;
-            bottom:0;
-            left: 0;
-            right: 0;
-            margin: auto;
-            pointer-events: none;
-            display: none;
-        }
-        #colorPickerText {
-            text-align: center;
-            width: fit-content;
-            height: fit-content;
-            padding: 1px 5px;
-            /* line-height: 25px; */
-            background-color: rgb(136, 136, 136);
-            border: 1px solid black;
-            border-radius: 5px;
-
-            position: absolute;
-            z-index: 1000;
-            top: 70px;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto;
-            pointer-events: none;
-            display: none;
-        }
-
-        .new-file {
-            color: rgb(17, 167, 17);
-        }
-        .recent-file {
-            color: rgb(217, 184, 0);
-        }
-        .old-file {
-            color: rgb(229, 78, 78);
-        }
-
-        #radarStationParent {
-            text-align: center;
-            width: auto;
-            height: auto;
-            padding: 1px 5px;
-            /* line-height: 25px; */
-            background-color: rgb(0, 111, 181);
-            border: 2px solid rgb(0, 73, 119);
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .code {
-            font-family: 'Courier New', monospace;
-        }
-
-        #hurricaneArchiveMapControl {
-            background-color: rgb(184, 184, 184);
-            /*width: 150px;
-            height: 250px;*/
-            width: fit-content;
-            height: fit-content;
-            max-height: 250px;
-            overflow: scroll;
-
-            border: 2px solid rgb(0, 0, 0);
-            border-top-right-radius: 15px;
-            border-bottom-right-radius: 15px;
-
-            position: absolute;
-            z-index: 100;
-            top: 50px;
-            left: 0;
-        }
-        #haClearMapOuter {
-            margin: 8px 40px -8px 8px;
-            display: flex;
-            justify-content: center;
-            overflow: hidden;
-        }
-        #haMapControlMinimize {
+        #loadingLibrariesDivContent {
             position: absolute;
             top: 0;
             bottom: 0;
-            right: 0;
-            width: 25px;
-            background-color: rgb(128, 128, 128);
-            z-index: 101;
+            width: 100%;
+            z-index: 500000;
+
+            color: white;
+            background-color: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(15px);
 
             display: flex;
             justify-content: center;
             align-items: center;
-
             cursor: pointer;
+
+            /*font-family: 'Abel';*/
+            font-size: 25px;
         }
     </style>
 </head>
-<body>
 
+<body>
+    <div id="loadingLibrariesDiv">
+        <div id="loadingLibrariesDivContent">Loading libraries...</div>
+    </div>
+
+    <div id="bodyDiv">
     <!--
         MAP FOOTER
     -->
@@ -843,7 +376,7 @@
         <div id="haMapControlText"style="margin: 4px 40px 4px 4px; display: none;"></div>
     </div>
 
-    <script>
+    <!-- <script>
         $('#haDatePicker').datepicker({
             format: "yyyy",
             viewMode: "years", 
@@ -855,7 +388,7 @@
 
         var haStormNameDropdown = new bootstrap.Dropdown($('#haStormNameDropdown'));
         haStormNameDropdown.show();
-    </script>
+    </script> -->
 
     <!-- <textarea id="w3review" name="w3review" rows="15" cols="15" style="position: absolute; z-index: 100000"></textarea> -->
 
@@ -931,7 +464,75 @@
 
     <!-- <script src="./app/index.js"></script> -->
 
-    <script src="./dist/bundle.js"></script>
+    <!-- <script src="./dist/bundle.js"></script> -->
     <!-- <script src="./polygonTest/demo-radar-script.js"></script> -->
+    </div>
+
+    <script>
+        function addScriptTag(type, url, cb) {
+            if (type == 'js') {
+                var s = document.createElement("script");
+                s.type = "text/javascript";
+                s.src = url;
+                document.head.appendChild(s);
+
+                s.onreadystatechange = cb;
+                s.onload = cb;
+            } else if (type == 'css') {
+                var l = document.createElement('link');
+                l.rel = 'stylesheet'
+                l.href = url;
+                document.head.appendChild(l);
+
+                l.onreadystatechange = cb;
+                l.onload = cb;
+            }
+        }
+
+        document.getElementById('bodyDiv').style.display = 'none';
+        addScriptTag('js', 'https://code.jquery.com/jquery-3.2.1.min.js', function() {
+        addScriptTag('js', 'https://code.jquery.com/ui/1.13.1/jquery-ui.min.js', function() {
+        addScriptTag('css', 'https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css', function() {
+
+        addScriptTag('css', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css', function() {
+        addScriptTag('js', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js', function() {
+
+        // https://cdnjs.com/libraries/font-awesome
+        addScriptTag('css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css', function() {
+
+        // https://getbootstrap.com/docs/5.2/getting-started/download/
+        addScriptTag('css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css', function() {
+        addScriptTag('js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js', function() {
+
+        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js', function() {
+        addScriptTag('css', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css', function() {
+
+        // https://getbootstrap.com/docs/5.2/components/tooltips/
+        addScriptTag('js', 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js', function() {
+
+        // https://github.com/manuelbieh/geolib
+        addScriptTag('js', 'https://cdn.jsdelivr.net/npm/geolib@3.3.3/lib/index.min.js', function() {
+
+        // https://developers.google.com/chart/interactive/docs/gallery/linechart
+        addScriptTag('js', 'https://www.gstatic.com/charts/loader.js', function() {
+
+        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js', function() {
+        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js', function() {
+
+        // https://github.com/webgeodatavore/GeoJSON.Terminator
+        addScriptTag('js', 'https://unpkg.com/@webgeodatavore/geojson.terminator@1.0.0/GeoJSON.Terminator.js', function() {
+
+        addScriptTag('js', './app/hurricanes/historical/stormList.js', function() {
+
+        addScriptTag('css', './index.css', function() {
+
+        addScriptTag('js', './dist/bundle.js', function() {
+            document.getElementById('bodyDiv').style.display = 'block';
+            document.getElementById('loadingLibrariesDiv').style.display = 'none';
+
+
+
+        })})})})})})})})})})})})})})})})})})})
+    </script>
 </body>
 </html>

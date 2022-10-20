@@ -55,6 +55,18 @@ $('#haClearMap').on('mouseleave', function() {
     ut.animateBrightness(80, 100, 100, $('#haClearMapOuter'));
 })
 
+$('#haDatePicker').datepicker({
+    format: "yyyy",
+    viewMode: "years", 
+    minViewMode: "years",
+    autoclose: true,
+    startDate: new Date(new Date().setFullYear(1851)),
+    endDate: new Date(new Date().setFullYear(2021))
+})
+
+var haStormNameDropdown = new bootstrap.Dropdown($('#haStormNameDropdown'));
+haStormNameDropdown.show();
+
 if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');
