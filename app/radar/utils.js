@@ -203,6 +203,8 @@ var tiltObject = {
         'vil': '134il',
         'sti': 'NST',
         'mcy': 'NMD',
+        'sr-ref': 'TZ0',
+        'lr-ref': 'TZL',
     },
     'tilt2': {
         'ref': 'N1B',
@@ -219,6 +221,7 @@ var tiltObject = {
         'srv': 'N1S',
         'vil': '134il',
         'sti': 'NST',
+        'sr-ref': 'TZ1',
     },
     'tilt3': {
         'ref': 'N2B',
@@ -235,6 +238,7 @@ var tiltObject = {
         'srv': 'N2S',
         'vil': '134il',
         'sti': 'NST',
+        'sr-ref': 'TZ2',
     },
     'tilt4': {
         'ref': 'N3B',
@@ -255,20 +259,6 @@ var tiltObject = {
 }
 var numOfTiltsObj = {
     'ref': [1, 2, 3, 4],
-    'vel': [1, 2],
-    'lowres-ref': [1, 2, 3, 4],
-    'lowres-vel': [1, 2, 3, 4],
-    'rho': [1, 2, 3, 4],
-    'zdr': [1, 2, 3, 4],
-    'sw ': [1],
-    'hhc': [1],
-    'hyc': [1, 2, 3, 4],
-    'srv': [1, 2, 3, 4],
-    'vil': [1],
-    'sti': [1],
-}
-var numOfTiltsObj = {
-    'ref': [1, 2, 3, 4],
     'vel': [1, 2, 3],
     'lowres-ref': [1, 2, 3, 4],
     'lowres-vel': [1, 2, 3, 4],
@@ -280,6 +270,8 @@ var numOfTiltsObj = {
     'srv': [1, 2, 3, 4],
     'vil': [1],
     'sti': [1],
+    'sr-ref': [1, 2, 3],
+    'lr-ref': [1]
 }
 var allL2Btns = [
     'l2-ref',

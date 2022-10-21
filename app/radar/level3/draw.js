@@ -22,7 +22,7 @@ function draw(data) {
 	var divider = 1;
 	if (product == "N0U" || product == "N0G") {
 		adder = 65;
-	} else if (product == "N0B" || product == "NXQ") {
+	} else if (product == "N0B" || product == "NXQ" || product == "TZX" || product == "TZL") {
 		adder = 30;
 	}
 	// generate a palette

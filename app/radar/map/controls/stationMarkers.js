@@ -7,6 +7,7 @@ const getStationStatus = require('../../misc/getStationStatus');
 const isMobile = require('../../misc/detectmobilebrowser');
 
 const radarStations = require('../../../../resources/radarStations');
+const radarStationInfo = require('../../radarMessage/radarStationInfo');
 
 const fetchMETARData = require('../../../metars/fetchData');
 
@@ -100,7 +101,8 @@ function returnStationsGeojson(radarStatusData) {
             }
             pushNewPoint([curIter[2], curIter[1]], {
                 'station': curStat,
-                'status': status
+                'status': status,
+                'type': radarStationInfo[curStat].type
             });
             // // create a HTML element for each feature
             // var el = document.createElement('div');
@@ -115,13 +117,13 @@ function returnStationsGeojson(radarStatusData) {
         }
 
         // check if it is an unsupported radar
-        if (curStat.length == 4 && curStat.charAt(0) != 'T') {
+        if (curStat.length == 4/* && curStat.charAt(0) != 'T'*/) {
             pushThePoint();
         }
         // puerto rico WSR-88D is fine, but the 'T' makes it look like a TDWR
-        if (curStat == 'TJUA') {
-            pushThePoint();
-        }
+        // if (curStat == 'TJUA') {
+        //     pushThePoint();
+        // }
     }
     return multiPointGeojson;
 }
@@ -199,7 +201,24 @@ function showStations() {
     map.on('click', 'stationSymbolLayer', function (e) {
         if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
+            var stationType = e.features[0].properties.type;
             var id = e.features[0].id;
+
+            var productToLoad;
+            var abbvProductToLoad;
+            if (stationType == 'WSR-88D') {
+                $('#wsr88dMenu').show();
+                $('#tdwrMenu').hide();
+
+                productToLoad = 'N0B';
+                abbvProductToLoad = 'ref';
+            } else if (stationType == 'TDWR') {
+                $('#wsr88dMenu').hide();
+                $('#tdwrMenu').show();
+
+                productToLoad = 'TZ0';
+                abbvProductToLoad = 'sr-ref';
+            }
 
             // change other blue station background to normal
             map.setFeatureState({
@@ -246,11 +265,11 @@ function showStations() {
                     }
 
                     tilts.resetTilts();
-                    tilts.listTilts(ut.numOfTiltsObj['ref']);
-                    $('#dataDiv').data('curProd', 'ref');
+                    tilts.listTilts(ut.numOfTiltsObj[abbvProductToLoad]);
+                    $('#dataDiv').data('curProd', abbvProductToLoad);
                     ut.progressBarVal('set', 0);
                     ut.disableModeBtn();
-                    loaders.getLatestFile(clickedStation, [3, 'N0B', 0], function (url) {
+                    loaders.getLatestFile(clickedStation, [3, productToLoad, 0], function (url) {
                         console.log(url);
                         loaders.loadFileObject(ut.phpProxy + url + '#', 3);
                     })

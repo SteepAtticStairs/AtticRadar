@@ -21,6 +21,8 @@ require('./165')
 require('./170')
 require('./172')
 require('./177')
+require('./180')
+require('./186')
 
 // load all products in folder automatically
 const folders = fs.readdirSync(__dirname).filter((folder) => folder !== 'index.js');
