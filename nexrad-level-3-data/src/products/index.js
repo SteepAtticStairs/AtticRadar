@@ -22,6 +22,7 @@ require('./170')
 require('./172')
 require('./177')
 require('./180')
+require('./182')
 require('./186')
 
 // load all products in folder automatically

@@ -13,6 +13,7 @@ const fetchMETARData = require('../../../metars/fetchData');
 
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';
+const orangeColor = 'rgb(176, 128, 26)';
 
 $('#dataDiv').data('blueStations', null)
 
@@ -181,6 +182,8 @@ function showStations() {
                             blueColor,
                             ['==', ['get', 'status'], 'down'],
                             redColor,
+                            ['==', ['get', 'type'], 'TDWR'],
+                            orangeColor,
                             ['==', ['feature-state', 'color'], 1],
                             'rgb(136, 136, 136)',
                             ['==', ['feature-state', 'color'], 2],
