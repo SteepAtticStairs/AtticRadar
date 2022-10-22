@@ -550,7 +550,7 @@ function getRadialConstants(radVersion) {
         gateRes = 500;
         multiplier = gateRes*32;
     } else if (radVersion == "08") {
-        // version 08 is TDWR
+        // version 08 is level 2 TDWR
         gateRes = 150;
         multiplier = gateRes*1.2;
     } else if (radVersion == "l3") {
@@ -564,6 +564,16 @@ function getRadialConstants(radVersion) {
     } else if (radVersion == "DVL" || radVersion == "NSW") {
         // different resolution for vertically integrated liquid
         gateRes = 500;
+        multiplier = gateRes*2;
+    } else if (radVersion == "TZX") {
+        // different resolution for TDWR short-range reflectivity
+        gateRes = 73.7;
+        multiplier = gateRes*2;
+        // gateRes = parseFloat($('#gateRes').val());
+        // multiplier = gateRes*parseFloat($('#multiplier').val());
+    } else if (radVersion == "TZL") {
+        // different resolution for TDWR long-range reflectivity
+        gateRes = 150;
         multiplier = gateRes*2;
     } else {
         // everything else (new l2 files - hi-res)

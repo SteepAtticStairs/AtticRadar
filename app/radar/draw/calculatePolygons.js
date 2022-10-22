@@ -1,3 +1,5 @@
+const ut = require('../utils');
+
 //onmessage=function(oEvent) {
 function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     $('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
@@ -9,40 +11,11 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     //var multiplier = gateRes*2;
     //var radVersion = oEvent.data[4];
 
-    var gateRes;
-    var multiplier;
-    // different gate resolutions for hi-res vs non hi-res data
-    if (radVersion == "01") {
-        // version 01 is non hi-res data
-        gateRes = 2000;
-        multiplier = gateRes*8;
-    } else if (radVersion == "E2") {
-        // version 01 is non hi-res data
-        gateRes = 500;
-        multiplier = gateRes*32;
-    } else if (radVersion == "08") {
-        // version 08 is TDWR
-        gateRes = 150;
-        multiplier = gateRes*1.2;
-    } else if (radVersion == "l3") {
-        // version l3 is level 3 data
-        gateRes = 125;
-        multiplier = gateRes*2;
-    } else if (radVersion == "NXQ" || radVersion == "N0S") {
-        // different resolution for l3 base reflectivity
-        gateRes = 500;
-        multiplier = gateRes*2;
-    } else if (radVersion == "DVL" || radVersion == "NSW") {
-        // different resolution for vertically integrated liquid
-        gateRes = 500;
-        multiplier = gateRes*2;
-    } else {
-        // everything else (new l2 files - hi-res)
-        gateRes = 125;
-        multiplier = gateRes*2;
-    }
+    var rc = ut.getRadialConstants(radVersion);
+    var gateRes = rc.gateRes;
+    var multiplier = rc.multiplier;
 
-    //console.log(gateRes, multiplier)
+    console.log(gateRes, multiplier)
 
     function radians(deg) {
         return (3.141592654/180.)*deg;

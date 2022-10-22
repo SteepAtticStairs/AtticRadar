@@ -41,6 +41,12 @@ function mainL3Loading(thisObj) {
         } else {
             l3plot(l3rad);
         }
+
+        // $(document).keyup(function(event) {
+        //     if (event.which === 13) {
+        //         l3plot(l3rad);
+        //     }
+        // });
     }, 500)
 }
 

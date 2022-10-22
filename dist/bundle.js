@@ -3031,6 +3031,8 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
 module.exports = showL3Info;
 },{"../level3/l3fileTime":38,"../utils":70}],26:[function(require,module,exports){
+const ut = require('../utils');
+
 //onmessage=function(oEvent) {
 function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     $('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
@@ -3042,40 +3044,11 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     //var multiplier = gateRes*2;
     //var radVersion = oEvent.data[4];
 
-    var gateRes;
-    var multiplier;
-    // different gate resolutions for hi-res vs non hi-res data
-    if (radVersion == "01") {
-        // version 01 is non hi-res data
-        gateRes = 2000;
-        multiplier = gateRes*8;
-    } else if (radVersion == "E2") {
-        // version 01 is non hi-res data
-        gateRes = 500;
-        multiplier = gateRes*32;
-    } else if (radVersion == "08") {
-        // version 08 is TDWR
-        gateRes = 150;
-        multiplier = gateRes*1.2;
-    } else if (radVersion == "l3") {
-        // version l3 is level 3 data
-        gateRes = 125;
-        multiplier = gateRes*2;
-    } else if (radVersion == "NXQ" || radVersion == "N0S") {
-        // different resolution for l3 base reflectivity
-        gateRes = 500;
-        multiplier = gateRes*2;
-    } else if (radVersion == "DVL" || radVersion == "NSW") {
-        // different resolution for vertically integrated liquid
-        gateRes = 500;
-        multiplier = gateRes*2;
-    } else {
-        // everything else (new l2 files - hi-res)
-        gateRes = 125;
-        multiplier = gateRes*2;
-    }
+    var rc = ut.getRadialConstants(radVersion);
+    var gateRes = rc.gateRes;
+    var multiplier = rc.multiplier;
 
-    //console.log(gateRes, multiplier)
+    console.log(gateRes, multiplier)
 
     function radians(deg) {
         return (3.141592654/180.)*deg;
@@ -3198,7 +3171,7 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
 module.exports = {
     calcPolygons
 }
-},{}],27:[function(require,module,exports){
+},{"../utils":70}],27:[function(require,module,exports){
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
@@ -4254,7 +4227,7 @@ function draw(data) {
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
 	json.version = 'l3';
-	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW") {
+	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW" || product == "TZX" || product == "TZL") {
 		json.version = product;
 	}
 	//console.log(json)
@@ -4352,6 +4325,12 @@ function mainL3Loading(thisObj) {
         } else {
             l3plot(l3rad);
         }
+
+        // $(document).keyup(function(event) {
+        //     if (event.which === 13) {
+        //         l3plot(l3rad);
+        //     }
+        // });
     }, 500)
 }
 
@@ -5136,7 +5115,7 @@ $(".productOption").on('click', function() {
     var currentStation = $('#stationInp').val();
     loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function(url) {
         console.log(url);
-        loaders.loadFileObject(ut.phpProxy + url, 3);
+        loaders.loadFileObject(ut.phpProxy + url + '#', 3);
     })
 })
 
@@ -7638,7 +7617,7 @@ function getRadialConstants(radVersion) {
         gateRes = 500;
         multiplier = gateRes*32;
     } else if (radVersion == "08") {
-        // version 08 is TDWR
+        // version 08 is level 2 TDWR
         gateRes = 150;
         multiplier = gateRes*1.2;
     } else if (radVersion == "l3") {
@@ -7652,6 +7631,16 @@ function getRadialConstants(radVersion) {
     } else if (radVersion == "DVL" || radVersion == "NSW") {
         // different resolution for vertically integrated liquid
         gateRes = 500;
+        multiplier = gateRes*2;
+    } else if (radVersion == "TZX") {
+        // different resolution for TDWR short-range reflectivity
+        gateRes = 73.7;
+        multiplier = gateRes*2;
+        // gateRes = parseFloat($('#gateRes').val());
+        // multiplier = gateRes*parseFloat($('#multiplier').val());
+    } else if (radVersion == "TZL") {
+        // different resolution for TDWR long-range reflectivity
+        gateRes = 150;
         multiplier = gateRes*2;
     } else {
         // everything else (new l2 files - hi-res)
