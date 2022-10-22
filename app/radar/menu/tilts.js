@@ -52,7 +52,7 @@ function tiltEventListeners() {
         var currentStation = $('#stationInp').val();
         loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function (url) {
             console.log(url);
-            loaders.loadFileObject(ut.phpProxy + url, 3, 0);
+            loaders.loadFileObject(ut.phpProxy + url + '#', 3, 0);
         })
     })
 }

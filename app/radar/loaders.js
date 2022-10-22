@@ -173,7 +173,7 @@ function getLatestL3(station, product, index, callback, date) {
             }
         })
     } else {
-        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last#`
         callback(fileUrl);
     }
 

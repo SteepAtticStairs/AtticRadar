@@ -33,6 +33,10 @@
     color:rgb(92, 157, 255);
 }
 
+.selectedProduct {
+    background-color: rgba(58, 172, 88, 0.6);
+}
+
 .mapboxgl-ctrl-top-center {
     position: relative !important;
     left: 0;

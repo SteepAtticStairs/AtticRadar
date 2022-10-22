@@ -215,12 +215,26 @@ function showStations() {
 
                 productToLoad = 'N0B';
                 abbvProductToLoad = 'ref';
+
+                var menuElem = $('#wsr88dRefBtn');
+                if (menuElem.find('.selectedProductMenuItem').length == 0) {
+                    var htmlContent = menuElem.html();
+                    $('.selectedProductMenuItem').remove();
+                    menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
+                }
             } else if (stationType == 'TDWR') {
                 $('#wsr88dMenu').hide();
                 $('#tdwrMenu').show();
 
                 productToLoad = 'TZ0';
                 abbvProductToLoad = 'sr-ref';
+
+                var menuElem = $('#tdwrRefBtn');
+                if (menuElem.find('.selectedProductMenuItem').length == 0) {
+                    var htmlContent = menuElem.html();
+                    $('.selectedProductMenuItem').remove();
+                    menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
+                }
             }
 
             // change other blue station background to normal

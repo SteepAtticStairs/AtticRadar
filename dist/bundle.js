@@ -4922,7 +4922,7 @@ function getLatestL3(station, product, index, callback, date) {
             }
         })
     } else {
-        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last`
+        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last#`
         callback(fileUrl);
     }
 
@@ -5099,7 +5099,16 @@ $('#productsDropdownTrigger').on('click', function(e) {
     }
 })
 
+$('#wsr88dMenu').show();
+$('#tdwrMenu').hide();
+
 $(".productOption").on('click', function() {
+    //$('.selectedProduct').removeClass('selectedProduct');
+    //$(this).addClass('selectedProduct')
+    var thisInnerHTML = $(this).html();
+    $('.selectedProductMenuItem').remove();
+    $(this).html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${thisInnerHTML}`);
+
     var thisValue = $(this).attr('value');
 
     //document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
@@ -5477,12 +5486,26 @@ function showStations() {
 
                 productToLoad = 'N0B';
                 abbvProductToLoad = 'ref';
+
+                var menuElem = $('#wsr88dRefBtn');
+                if (menuElem.find('.selectedProductMenuItem').length == 0) {
+                    var htmlContent = menuElem.html();
+                    $('.selectedProductMenuItem').remove();
+                    menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
+                }
             } else if (stationType == 'TDWR') {
                 $('#wsr88dMenu').hide();
                 $('#tdwrMenu').show();
 
                 productToLoad = 'TZ0';
                 abbvProductToLoad = 'sr-ref';
+
+                var menuElem = $('#tdwrRefBtn');
+                if (menuElem.find('.selectedProductMenuItem').length == 0) {
+                    var htmlContent = menuElem.html();
+                    $('.selectedProductMenuItem').remove();
+                    menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
+                }
             }
 
             // change other blue station background to normal
@@ -6344,7 +6367,7 @@ function tiltEventListeners() {
         var currentStation = $('#stationInp').val();
         loaders.getLatestFile(currentStation, [3, clickedProduct, 0], function (url) {
             console.log(url);
-            loaders.loadFileObject(ut.phpProxy + url, 3, 0);
+            loaders.loadFileObject(ut.phpProxy + url + '#', 3, 0);
         })
     })
 }

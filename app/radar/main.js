@@ -108,7 +108,16 @@ $('#productsDropdownTrigger').on('click', function(e) {
     }
 })
 
+$('#wsr88dMenu').show();
+$('#tdwrMenu').hide();
+
 $(".productOption").on('click', function() {
+    //$('.selectedProduct').removeClass('selectedProduct');
+    //$(this).addClass('selectedProduct')
+    var thisInnerHTML = $(this).html();
+    $('.selectedProductMenuItem').remove();
+    $(this).html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${thisInnerHTML}`);
+
     var thisValue = $(this).attr('value');
 
     //document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
