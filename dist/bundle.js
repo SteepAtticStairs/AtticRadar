@@ -1375,6 +1375,14 @@ function drawOutlookToMap(geojson, type, name) {
             var mediumColor = 'rgb(240, 151, 55)'; // orange
             var lowColor = 'rgb(255, 255, 84)'; // yellow
 
+            if (geojson.features[1].properties.styleUrl == '#highx') {
+                geojson.features[1].properties.color = highColor;
+            } else if (geojson.features[1].properties.styleUrl == '#lowx') {
+                geojson.features[1].properties.color = lowColor;
+            } else {
+                geojson.features[1].properties.color = highColor;
+            }
+
             map.addSource(`outlookPointSource${name}`, {
                 type: "geojson",
                 data: geojson.features[1]
@@ -1386,7 +1394,7 @@ function drawOutlookToMap(geojson, type, name) {
                 "paint": {
                     "circle-radius": 9,
                     'circle-stroke-width': 2,
-                    'circle-color': highColor,
+                    'circle-color': ['get', 'color'],
                     'circle-stroke-color': black,
                 }
             });
