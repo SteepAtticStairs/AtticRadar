@@ -207,6 +207,8 @@ function showStations() {
             var stationType = e.features[0].properties.type;
             var id = e.features[0].id;
 
+            $('#productsDropdownTrigger').show();
+
             var productToLoad;
             var abbvProductToLoad;
             if (stationType == 'WSR-88D') {

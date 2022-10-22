@@ -67,6 +67,9 @@ $('#haDatePicker').datepicker({
 var haStormNameDropdown = new bootstrap.Dropdown($('#haStormNameDropdown'));
 haStormNameDropdown.show();
 
+ut.setMapMargin('bottom', $('#mapFooter').height());
+ut.setMapMargin('top', $('#radarHeader').height());
+
 if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');
@@ -74,7 +77,8 @@ if (require('./misc/detectmobilebrowser')) {
     $(div).css("z-index", $('#mapFooter').css("z-index") - 1);
     document.body.appendChild(div);
 
-    $('#mapFooter').css("bottom", "5%");
+    $('#mapFooter').css('bottom', '5%');
+    ut.setMapMargin('bottom', ($(window).height() * (5 / 100)) + $('#mapFooter').height());
     //$('#mapFooter').css("align-items", "start");
 }
 

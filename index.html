@@ -77,7 +77,7 @@
     -->
     <div id="mapFooter" class="mapFooter">
         <!-- Default dropup button -->
-        <div id="productsDropdownTrigger" class="noselect">Products</div>
+        <div id="productsDropdownTrigger" class="noselect" style="display: none">Products</div>
         <div class="btn-group dropup" id="productsDropdown">
             <button style="display: none" type="button" id="productsDropdownBtn" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                 Products
@@ -428,9 +428,9 @@
         <div id="smallInfo" style="display: none"></div>
         <div id="mainInfo" style="display: none"></div>
     </div>
-    <div id="stationInp"></div>
-    <canvas id="theCanvas"></canvas>
-    <canvas id="texturecolorbar" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+    <div id="stationInp" style="display: none"></div>
+    <canvas id="theCanvas" style="display: none"></canvas>
+    <canvas id="texturecolorbar" style="display: none" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
 
     <!-- <script>
         document.getElementById('collapseBtnBtn').addEventListener('click', function() {

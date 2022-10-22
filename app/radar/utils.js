@@ -643,6 +643,14 @@ function zeroPad(num, length) {
     return (new Array(length).join('0') + num).slice(length*-1);
 }
 
+function setMapMargin(topOrBottom, value) {
+    if (topOrBottom == 'top') {
+        $('#map').css('top', value);
+    } else if (topOrBottom == 'bottom') {
+        $('#map').css('bottom', value);
+    }
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -687,5 +695,6 @@ module.exports = {
     csvToJson,
     animateBrightness,
     haMapControlActions,
-    zeroPad
+    zeroPad,
+    setMapMargin
 }

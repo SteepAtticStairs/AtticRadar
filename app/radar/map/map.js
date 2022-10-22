@@ -5,12 +5,19 @@ const map = new mapboxgl.Map({
     zoom: 3,
     center: [-98.5606744, 36.8281576],
     maxZoom: 15,
-    preserveDrawingBuffer: true
+    preserveDrawingBuffer: true,
+    bearingSnap: 360,
+
+    attributionControl: false,
+    //renderWorldCopies: false,
+    //maxPitch: 75,
     //zoom: 6,
     //center: [-66.0190363102349, 18.15295560177013],
     //projection: 'equirectangular',
     //fadeDuration: 0,
 });
+
+map.touchZoomRotate.disableRotation();
 
 // https://github.com/mapbox/mapbox-gl-js/issues/3265#issuecomment-660400481
 setTimeout(() => map.resize(), 0);
