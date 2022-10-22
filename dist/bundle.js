@@ -1337,12 +1337,16 @@ function drawOutlookToMap(geojson, type, name) {
             var borderColor = geojson.features[0].properties.stroke;
             var borderWidth = geojson.features[0].properties['stroke-width'];
 
+            // close off the cone by adding the first coordinate set again to the end
+            var coneCoordinates = geojson.features[0].geometry.coordinates[0];
+            geojson.features[0].geometry.coordinates[0].push(coneCoordinates[0]);
+
             map.addLayer({
                 'id': `outlookCone${name}`,
                 'type': 'fill',
                 'source': {
                     type: 'geojson',
-                    data: geojson,
+                    data: geojson.features[0],
                 },
                 paint: {
                     //#0080ff blue
@@ -1808,8 +1812,6 @@ function exportFetchData() {
         if (url.startsWith("https")) {
             url = ut.phpProxy + url;
         }
-
-        console.log(url)
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);

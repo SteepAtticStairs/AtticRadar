@@ -46,8 +46,6 @@ function exportFetchData() {
             url = ut.phpProxy + url;
         }
 
-        console.log(url)
-
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
         xhr.responseType = "blob";
