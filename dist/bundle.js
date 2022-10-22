@@ -5069,7 +5069,10 @@ if (require('./misc/detectmobilebrowser')) {
     document.body.appendChild(div);
 
     $('#mapFooter').css('bottom', '5%');
-    ut.setMapMargin('bottom', ($(window).height() * (5 / 100)) + $('#mapFooter').height());
+    var offset = $(window).height() * (5 / 100);
+    ut.setMapMargin('bottom', offset + $('#mapFooter').height());
+    $('#colorPicker').css('bottom', offset);
+    $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
 }
 
@@ -5739,6 +5742,21 @@ const map = new mapboxgl.Map({
     //projection: 'equirectangular',
     //fadeDuration: 0,
 });
+
+// $('#dataDiv').data('centerMarker', []);
+// map.on('move', function() {
+//     var mapCenter = map.getCenter();
+
+//     var oldMark = $('#dataDiv').data('centerMarker');
+//     for (var i in oldMark) {
+//         oldMark[i].remove();
+//     }
+//     var mark = new mapboxgl.Marker()
+//     .setLngLat([mapCenter.lng, mapCenter.lat])
+//     .addTo(map);
+//     oldMark.push(mark)
+//     $('#dataDiv').data('centerMarker', oldMark);
+// })
 
 map.touchZoomRotate.disableRotation();
 

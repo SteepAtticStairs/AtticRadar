@@ -78,7 +78,10 @@ if (require('./misc/detectmobilebrowser')) {
     document.body.appendChild(div);
 
     $('#mapFooter').css('bottom', '5%');
-    ut.setMapMargin('bottom', ($(window).height() * (5 / 100)) + $('#mapFooter').height());
+    var offset = $(window).height() * (5 / 100);
+    ut.setMapMargin('bottom', offset + $('#mapFooter').height());
+    $('#colorPicker').css('bottom', offset);
+    $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
 }
 

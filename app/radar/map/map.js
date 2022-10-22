@@ -17,6 +17,21 @@ const map = new mapboxgl.Map({
     //fadeDuration: 0,
 });
 
+// $('#dataDiv').data('centerMarker', []);
+// map.on('move', function() {
+//     var mapCenter = map.getCenter();
+
+//     var oldMark = $('#dataDiv').data('centerMarker');
+//     for (var i in oldMark) {
+//         oldMark[i].remove();
+//     }
+//     var mark = new mapboxgl.Marker()
+//     .setLngLat([mapCenter.lng, mapCenter.lat])
+//     .addTo(map);
+//     oldMark.push(mark)
+//     $('#dataDiv').data('centerMarker', oldMark);
+// })
+
 map.touchZoomRotate.disableRotation();
 
 // https://github.com/mapbox/mapbox-gl-js/issues/3265#issuecomment-660400481
