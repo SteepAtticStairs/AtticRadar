@@ -1786,8 +1786,8 @@ function exportFetchData() {
     var layersToLoad = []
     function loadHurricanesFromID(ids) {
         for (var i = 0; i < ids.length; i++) {
-            layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz`), 'cone', ids[i]]);
-            layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz`), 'track', ids[i]]);
+            layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_CONE_latest.kmz#`), 'cone', ids[i]]);
+            layersToLoad.push([ut.preventFileCaching(`https://www.nhc.noaa.gov/storm_graphics/api/${ids[i]}_TRACK_latest.kmz#`), 'track', ids[i]]);
             // $.get(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/cxml/${ids[i].toLowerCase()}_cxml.xml`, function(data) {
             //     var json = ut.xmlToJson(data);
             //     for (var item in json.cxml.data.disturbance.fix) {
@@ -1808,6 +1808,8 @@ function exportFetchData() {
         if (url.startsWith("https")) {
             url = ut.phpProxy + url;
         }
+
+        console.log(url)
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -1842,7 +1844,8 @@ function exportFetchData() {
 
     var namesArr = [];
     //var checkingIters = 50;
-    $.getJSON(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/CurrentStorms.json'), function(data) {
+    var activeStormsURL = ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/CurrentStorms.json#');
+    $.getJSON(activeStormsURL, function(data) {
         for (var item in data.activeStorms) {
             var stormID = data.activeStorms[item].id;
             stormID = stormID.toUpperCase();
@@ -7085,7 +7088,7 @@ module.exports = radarStationInfo;
 * https://nordicapis.com/10-free-to-use-cors-proxies/
 * https://allorigins.win/
 */
-const phpProxy = 'https://api.allorigins.win/raw?url=';
+const phpProxy = 'https://php-cors-proxy.herokuapp.com/?'; //https://api.allorigins.win/raw?url=';
 const phpProxy2 = 'https://php-cors-proxy.herokuapp.com/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
 //const phpProxy  = 'https://salty-citadel-44916.herokuapp.com/';
 //const phpProxy  = 'https://secret-retreat-45871.herokuapp.com/'
