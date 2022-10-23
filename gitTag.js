@@ -65,7 +65,7 @@ if (mode == 'rename') {
         logRows.unshift(`* ${descriptions[i]}`);
     }
     logRows.unshift(`[${shortCommitID}](https://github.com/SteepAtticStairs/AtticRadar/commit/${commitID})`);
-    logRows.unshift(`**v${version}**`);
+    logRows.unshift(`**v${version}**\\`);
     fs.writeFileSync('CHANGELOG.md', logRows.join('\n'));
 
     runCommand(`git tag -a v${version} ${shortCommitID} -m ${version}`, function() {
