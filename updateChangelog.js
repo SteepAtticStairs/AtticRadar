@@ -42,10 +42,15 @@ function addDescription(cb) {
     })
 }
 
-function formatCommit(hash) {
-    shell.config.silent = true;
-    var timestamp = shell.exec(`git show -s --format=%ct ${hash}`, {async: false}).stdout;
-    timestamp = timestamp.trim();
+function formatCommit(value, hashOrTimestamp) {
+    var timestamp;
+    if (hashOrTimestamp == 'hash') {
+        shell.config.silent = true;
+        timestamp = shell.exec(`git show -s --format=%ct ${value}`, {async: false}).stdout;
+        timestamp = timestamp.trim();
+    } else if (hashOrTimestamp == 'timestamp') {
+        timestamp = value;
+    }
 
     var myDateTime = DateTime.fromSeconds(parseInt(timestamp)).setZone('America/New_York'); // America/New_York or UTC
     var dateString = myDateTime.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
@@ -66,22 +71,25 @@ if (mode == 'rename') {
     runCommand(`git tag -d ${oldName}`, function() {
     runCommand(`git push origin ${newName} :${oldName}`, function() {
     })})})
-} else if (mode == 'addDates') {
+} else if (mode == 'updateDates') {
     // echo $(git show -s --format=%ct 74a3d67bcfcc7dea8618a0ca5f48032ff13b7587)
     var data = fs.readFileSync('CHANGELOG.md', {encoding: 'utf-8'});
     var lines = data.split('\n');
     for (var i in lines) {
-        if (lines[i].charAt(0) == '[') {
-            var lineArr = lines[i].replaceAll(')', '').split('/');
-            var hash = lineArr[lineArr.length - 1];
-            var formattedCommit = formatCommit(hash);
-            lines[i] = `\`${formattedCommit.string}\`<!-- ${formattedCommit.timestamp} --><br />${lines[i]}`
-            //console.log(`${timestamp.trim()} ${hash.trim()}`)
+        if (lines[i].charAt(0) == '`') {
+            var dateStringRemoved = lines[i].split('`');
+            dateStringRemoved = dateStringRemoved[dateStringRemoved.length - 1];
+            var timestamp = dateStringRemoved.split('--')[1].trim();
+            var formattedCommit = formatCommit(timestamp, 'timestamp');
+            lines[i] = `\`${formattedCommit.string}\`${dateStringRemoved}`
         }
     }
     fs.writeFileSync('CHANGELOG.md', lines.join('\n'));
     exit();
 } else {
+    function runCommandBetter(cmd) {
+        shell.exec(cmd, {async: false}).stdout;
+    }
     readline.question('\nCommit ID:\n', commitID => {
     readline.question('\nVersion:\n', version => {
     addDescription(function() {
@@ -93,7 +101,7 @@ if (mode == 'rename') {
     descriptions.reverse();
     logRows.unshift(``);
 
-    var formattedCommit = formatCommit(commitID);
+    var formattedCommit = formatCommit(commitID, 'hash');
 
     for (var i in descriptions) {
         logRows.unshift(`* ${descriptions[i]}`);
@@ -103,12 +111,13 @@ if (mode == 'rename') {
     logRows.unshift(`**v${version}**\\`);
     fs.writeFileSync('CHANGELOG.md', logRows.join('\n'));
 
-    runCommand(`git tag -a v${version} ${shortCommitID} -m ${version}`, function() {
-    runCommand(`git push origin v${version}`, function() {
+    shell.config.silent = false;
+    runCommandBetter(`git tag -a v${version} ${shortCommitID} -m ${version}`);
+    runCommandBetter(`git push origin v${version}`);
     readline.close();
 
 
 
 
-    })})})})})
+    })})})
 }

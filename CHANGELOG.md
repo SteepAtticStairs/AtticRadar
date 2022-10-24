@@ -1,3 +1,7 @@
+**v4.0.1**\
+`07/31/2022 10:05 AM EDT`<!-- 1659276319 --><br />[5b7ca39](https://github.com/SteepAtticStairs/AtticRadar/commit/5b7ca39738e667d346de961b7d3e9063e0f45c15)
+* selecting a tilt now automatically loads that file onto the map
+
 **v4.0.0**\
 `07/30/2022 11:24 PM EDT`<!-- 1659237852 --><br />[4141b37](https://github.com/SteepAtticStairs/AtticRadar/commit/4141b370f28a51bc064939020963aff68fd56698)
 * started working on redoing the app with bootstrap
