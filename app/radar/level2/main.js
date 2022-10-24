@@ -1,5 +1,5 @@
-const { Level2Radar } = require('../../../nexrad-level-2-data/src');
-const { plot } = require('../../../nexrad-level-2-plot/src');
+const { Level2Radar } = require('../../../lib/nexrad-level-2-data/src');
+const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const l2listeners = require('../level2/eventListeners');
 const l2info = require('../dom/l2info');
 

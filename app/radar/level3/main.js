@@ -1,4 +1,4 @@
-const l3parse = require('../../../nexrad-level-3-data/src');
+const l3parse = require('../../../lib/nexrad-level-3-data/src');
 const l3plot = require('../level3/draw');
 const l3info = require('../dom/l3info');
 

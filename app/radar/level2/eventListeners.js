@@ -1,4 +1,4 @@
-const { plot } = require('../../../nexrad-level-2-plot/src');
+const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
 
