@@ -2940,7 +2940,10 @@ function showL2Info(l2rad) {
     var theFileVersion = l2rad.header.version;
 
     var theFileStation = l2rad.header.ICAO;
+    $('#radarStationIcon').show();
     document.getElementById('radarStation').innerHTML = theFileStation;
+
+    $('#productsDropdownTrigger').show();
 
     var theFileVCP;
     if (theFileVersion != "01" && theFileVersion != "E2") {
@@ -2967,6 +2970,7 @@ function showL2Info(l2rad) {
         // shrink the map header because the file upload box is no longer there
         $('#radarHeader').css('height', '-=25px');
         $('.progressBar').css('top', '-=25px');
+        ut.setMapMargin('top', '-=25px');
     }
 }
 
@@ -2986,7 +2990,10 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
 		var theFileStation = abrvData[l3rad.textHeader.id3];
-        //document.getElementById('radarStation').innerHTML = theFileStation;
+        $('#radarStationIcon').show();
+        document.getElementById('radarStation').innerHTML = theFileStation;
+
+        $('#productsDropdownTrigger').show();
 
         var theFileVCP = l3rad.productDescription.vcp;
         document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
@@ -3024,6 +3031,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
             // shrink the map header because the file upload box is no longer there
             $('#radarHeader').css('height', '-=25px');
             $('.progressBar').css('top', '-=25px');
+            ut.setMapMargin('top', '-=25px');
             $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
         }
     })
@@ -4227,7 +4235,7 @@ function draw(data) {
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
 	json.version = 'l3';
-	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW" || product == "TZX" || product == "TZL") {
+	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW" || product == "TZX" || product == "TVX" || product == "TZL") {
 		json.version = product;
 	}
 	//console.log(json)
@@ -7690,6 +7698,12 @@ function getRadialConstants(radVersion) {
         multiplier = gateRes*2;
     } else if (radVersion == "TZX") {
         // different resolution for TDWR short-range reflectivity
+        gateRes = 73.7;
+        multiplier = gateRes*2;
+        // gateRes = parseFloat($('#gateRes').val());
+        // multiplier = gateRes*parseFloat($('#multiplier').val());
+    } else if (radVersion == "TVX") {
+        // different resolution for TDWR base velocity
         gateRes = 73.7;
         multiplier = gateRes*2;
         // gateRes = parseFloat($('#gateRes').val());

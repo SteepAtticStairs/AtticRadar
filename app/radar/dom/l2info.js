@@ -8,7 +8,10 @@ function showL2Info(l2rad) {
     var theFileVersion = l2rad.header.version;
 
     var theFileStation = l2rad.header.ICAO;
+    $('#radarStationIcon').show();
     document.getElementById('radarStation').innerHTML = theFileStation;
+
+    $('#productsDropdownTrigger').show();
 
     var theFileVCP;
     if (theFileVersion != "01" && theFileVersion != "E2") {
@@ -35,6 +38,7 @@ function showL2Info(l2rad) {
         // shrink the map header because the file upload box is no longer there
         $('#radarHeader').css('height', '-=25px');
         $('.progressBar').css('top', '-=25px');
+        ut.setMapMargin('top', '-=25px');
     }
 }
 

@@ -571,6 +571,12 @@ function getRadialConstants(radVersion) {
         multiplier = gateRes*2;
         // gateRes = parseFloat($('#gateRes').val());
         // multiplier = gateRes*parseFloat($('#multiplier').val());
+    } else if (radVersion == "TVX") {
+        // different resolution for TDWR base velocity
+        gateRes = 73.7;
+        multiplier = gateRes*2;
+        // gateRes = parseFloat($('#gateRes').val());
+        // multiplier = gateRes*parseFloat($('#multiplier').val());
     } else if (radVersion == "TZL") {
         // different resolution for TDWR long-range reflectivity
         gateRes = 150;

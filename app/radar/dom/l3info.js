@@ -12,7 +12,10 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
 		var theFileStation = abrvData[l3rad.textHeader.id3];
-        //document.getElementById('radarStation').innerHTML = theFileStation;
+        $('#radarStationIcon').show();
+        document.getElementById('radarStation').innerHTML = theFileStation;
+
+        $('#productsDropdownTrigger').show();
 
         var theFileVCP = l3rad.productDescription.vcp;
         document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
@@ -50,6 +53,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
             // shrink the map header because the file upload box is no longer there
             $('#radarHeader').css('height', '-=25px');
             $('.progressBar').css('top', '-=25px');
+            ut.setMapMargin('top', '-=25px');
             $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
         }
     })
