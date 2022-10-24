@@ -49,7 +49,10 @@ function formatCommit(hash) {
 
     var myDateTime = DateTime.fromSeconds(parseInt(timestamp)).setZone('America/New_York'); // America/New_York or UTC
     var dateString = myDateTime.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
-    return dateString;
+    return {
+        'string': dateString,
+        'timestamp': parseInt(timestamp)
+    };
 }
 
 var args = process.argv;
@@ -71,8 +74,8 @@ if (mode == 'rename') {
         if (lines[i].charAt(0) == '[') {
             var lineArr = lines[i].replaceAll(')', '').split('/');
             var hash = lineArr[lineArr.length - 1];
-            var dateString = formatCommit(hash);
-            lines[i] = `\`${dateString}\`<br />${lines[i]}`
+            var formattedCommit = formatCommit(hash);
+            lines[i] = `\`${formattedCommit.string}\`<!-- ${formattedCommit.timestamp} --><br />${lines[i]}`
             //console.log(`${timestamp.trim()} ${hash.trim()}`)
         }
     }
@@ -89,22 +92,23 @@ if (mode == 'rename') {
     let logRows = fs.readFileSync('CHANGELOG.md').toString().split('\n');
     descriptions.reverse();
     logRows.unshift(``);
+
+    var formattedCommit = formatCommit(commitID);
+
     for (var i in descriptions) {
         logRows.unshift(`* ${descriptions[i]}`);
     }
 
-    var dateString = formatCommit(commitID);
-
-    logRows.unshift(`\`${dateString}\`<br />[${shortCommitID}](https://github.com/SteepAtticStairs/AtticRadar/commit/${commitID})`);
+    logRows.unshift(`\`${formattedCommit.string}\`<!-- ${formattedCommit.timestamp} --><br />[${shortCommitID}](https://github.com/SteepAtticStairs/AtticRadar/commit/${commitID})`);
     logRows.unshift(`**v${version}**\\`);
     fs.writeFileSync('CHANGELOG.md', logRows.join('\n'));
 
-    //runCommand(`git tag -a v${version} ${shortCommitID} -m ${version}`, function() {
-    //runCommand(`git push origin v${version}`, function() {
+    runCommand(`git tag -a v${version} ${shortCommitID} -m ${version}`, function() {
+    runCommand(`git push origin v${version}`, function() {
     readline.close();
 
 
 
 
-    })})})//})})
+    })})})})})
 }
