@@ -30,8 +30,8 @@ function loadOutlooks() {
             blob.name = url;
 
             unzipKMZ(blob, name, function(geoJsonObject) {
-                drawOutlookToMap(geoJsonObject, 'cone', name);
-                drawOutlookToMap(geoJsonObject, 'track', name);
+                drawOutlookToMap(geoJsonObject, name);
+                //drawOutlookToMap(geoJsonObject, 'track', name);
             });
         });
         xhr.send();
