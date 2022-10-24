@@ -1,5 +1,8 @@
+const { DateTime } = require('luxon')
 const { exec } = require('child_process');
-const fs = require('fs')
+const fs = require('fs');
+const { exit } = require('process');
+const shell = require('shelljs')
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
@@ -39,6 +42,16 @@ function addDescription(cb) {
     })
 }
 
+function formatCommit(hash) {
+    shell.config.silent = true;
+    var timestamp = shell.exec(`git show -s --format=%ct ${hash}`, {async: false}).stdout;
+    timestamp = timestamp.trim();
+
+    var myDateTime = DateTime.fromSeconds(parseInt(timestamp)).setZone('America/New_York'); // America/New_York or UTC
+    var dateString = myDateTime.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
+    return dateString;
+}
+
 var args = process.argv;
 const mode = args[2];
 if (mode == 'rename') {
@@ -50,6 +63,21 @@ if (mode == 'rename') {
     runCommand(`git tag -d ${oldName}`, function() {
     runCommand(`git push origin ${newName} :${oldName}`, function() {
     })})})
+} else if (mode == 'addDates') {
+    // echo $(git show -s --format=%ct 74a3d67bcfcc7dea8618a0ca5f48032ff13b7587)
+    var data = fs.readFileSync('CHANGELOG.md', {encoding: 'utf-8'});
+    var lines = data.split('\n');
+    for (var i in lines) {
+        if (lines[i].charAt(0) == '[') {
+            var lineArr = lines[i].replaceAll(')', '').split('/');
+            var hash = lineArr[lineArr.length - 1];
+            var dateString = formatCommit(hash);
+            lines[i] = `\`${dateString}\`<br />${lines[i]}`
+            //console.log(`${timestamp.trim()} ${hash.trim()}`)
+        }
+    }
+    fs.writeFileSync('CHANGELOG.md', lines.join('\n'));
+    exit();
 } else {
     readline.question('\nCommit ID:\n', commitID => {
     readline.question('\nVersion:\n', version => {
@@ -64,16 +92,19 @@ if (mode == 'rename') {
     for (var i in descriptions) {
         logRows.unshift(`* ${descriptions[i]}`);
     }
-    logRows.unshift(`[${shortCommitID}](https://github.com/SteepAtticStairs/AtticRadar/commit/${commitID})`);
+
+    var dateString = formatCommit(commitID);
+
+    logRows.unshift(`\`${dateString}\`<br />[${shortCommitID}](https://github.com/SteepAtticStairs/AtticRadar/commit/${commitID})`);
     logRows.unshift(`**v${version}**\\`);
     fs.writeFileSync('CHANGELOG.md', logRows.join('\n'));
 
-    runCommand(`git tag -a v${version} ${shortCommitID} -m ${version}`, function() {
-    runCommand(`git push origin v${version}`, function() {
+    //runCommand(`git tag -a v${version} ${shortCommitID} -m ${version}`, function() {
+    //runCommand(`git push origin v${version}`, function() {
     readline.close();
 
 
 
 
-    })})})})})
+    })})})//})})
 }
