@@ -24,6 +24,9 @@ function runCommand(cmd, cb) {
         cb();
     });
 }
+function runCommandBetter(cmd) {
+    shell.exec(cmd, {async: false}).stdout;
+}
 
 var descriptions = [];
 function descriptionLine(description, cb) {
@@ -71,6 +74,17 @@ if (mode == 'rename') {
     runCommand(`git tag -d ${oldName}`, function() {
     runCommand(`git push origin ${newName} :${oldName}`, function() {
     })})})
+} else if (mode == 'delete') {
+    //const newName = args[3];
+    const tagToDelete = args[3];
+
+    shell.config.silent = false;
+    // https://stackoverflow.com/a/44702758/18758797
+    runCommandBetter(`git tag -d ${tagToDelete}`);
+    runCommandBetter(`git fetch`);
+    runCommandBetter(`git push origin --delete ${tagToDelete}`);
+    runCommandBetter(`git tag -d ${tagToDelete}`);
+    exit();
 } else if (mode == 'updateDates') {
     // echo $(git show -s --format=%ct 74a3d67bcfcc7dea8618a0ca5f48032ff13b7587)
     var data = fs.readFileSync('CHANGELOG.md', {encoding: 'utf-8'});
@@ -87,9 +101,6 @@ if (mode == 'rename') {
     fs.writeFileSync('CHANGELOG.md', lines.join('\n'));
     exit();
 } else {
-    function runCommandBetter(cmd) {
-        shell.exec(cmd, {async: false}).stdout;
-    }
     readline.question('\nCommit ID:\n', commitID => {
     readline.question('\nVersion:\n', version => {
     addDescription(function() {
