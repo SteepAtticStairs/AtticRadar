@@ -1507,6 +1507,7 @@ function showPopup(e, coordsFromFeatureOrClick) {
             <div style="font-size: 20px; text-align: center">2-day: <b>${properties['2day_percentage']}%</b></div>
             <div style="font-size: 20px; text-align: center">5-day: <b>${properties['5day_percentage']}%</b></div>
             <br>
+            <div>Disturbance <b>#${properties.Disturbance}</b></div>
             <div><b>Discussion:</b></div>
             <div class="code">${properties.Discussion}</div>
         </div>`
@@ -1601,7 +1602,29 @@ function drawOutlookToMap(geojson, name) {
             // map.on('mouseenter', `outlookPoint${name}${x}`, function (e) { map.getCanvas().style.cursor = 'pointer'; })
             // map.on('mouseleave', `outlookPoint${name}${x}`, function (e) { map.getCanvas().style.cursor = ''; })
             // map.on('click', `outlookPoint${name}${x}`, function(e) { showPopup(e, 'feature') });
-        }
+        }/* else if (type == 'LineString') {
+            if (curFeature.properties.name != " Tropical cyclone formation is not expected " && curFeature.properties.name != " during the next 5 days. ") {
+                var green = 'rgb(0, 200, 0)';
+
+                map.addSource(`outlookLineSource${name}${x}`, {
+                    type: "geojson",
+                    data: curFeature
+                });
+                map.addLayer({
+                    "id": `outlookLine${name}${x}`,
+                    "type": "line",
+                    "source": `outlookLineSource${name}${x}`,
+                    "paint": {
+                        'line-color': green,
+                        'line-width': 4
+                    }
+                });
+                hurricaneMapLayers.push(`outlookLine${name}${x}`);
+            }
+            // map.on('mouseenter', `outlookPoint${name}${x}`, function (e) { map.getCanvas().style.cursor = 'pointer'; })
+            // map.on('mouseleave', `outlookPoint${name}${x}`, function (e) { map.getCanvas().style.cursor = ''; })
+            // map.on('click', `outlookPoint${name}${x}`, function(e) { showPopup(e, 'feature') });
+        }*/
         $('#dataDiv').data('hurricaneMapLayers', hurricaneMapLayers);
     }
 }
