@@ -467,3 +467,22 @@ https://tobiasahlin.com/spinkit/
 
     cursor: pointer;
 }
+
+.alertPopup .mapboxgl-popup-content{
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+}
+.alertPopup .mapboxgl-popup-close-button {
+    display: none;
+}
+/* https://github.com/mapbox/mapbox-gl-js/issues/2848#issuecomment-354447882 */
+.alertPopup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip { border-top-color: black; }
+.alertPopup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip { border-bottom-color: black; }
+.alertPopup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip { border-right-color: black; }
+.alertPopup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip { border-left-color: black; }
+
+.alertPopup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip { border-bottom-color: black; }
+.alertPopup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip { border-bottom-color: black; }
+.alertPopup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip { border-top-color: black; }
+.alertPopup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip { border-top-color: black; }

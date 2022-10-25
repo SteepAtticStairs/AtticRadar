@@ -78,6 +78,7 @@ createMenuOption({
             ut.betterProgressBar('show');
             ut.betterProgressBar('set', 0);
 
+            // '../data/active.json'
             fetchPolygonData([noaaAlertsURL], function(data) {
                 for (var item in data.features) {
                     data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
@@ -117,6 +118,7 @@ createMenuOption({
                     map.getCanvas().style.cursor = '';
                 });
 
+                //map.on('click', 'newAlertsLayer', mapClick)
                 setTimeout(function() {
                     //map.getCanvas().style.cursor = "crosshair";
                     map.on('click', 'newAlertsLayer', mapClick)

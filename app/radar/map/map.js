@@ -17,6 +17,13 @@ const map = new mapboxgl.Map({
     //fadeDuration: 0,
 });
 
+// map.on('click', (e) => {
+//     const popup = new mapboxgl.Popup({ className: 'alertPopup' })
+//         .setLngLat(e.lngLat)
+//         .setHTML("Hello World!")
+//         .addTo(map);
+// })
+
 // $('#dataDiv').data('centerMarker', []);
 // map.on('move', function() {
 //     var mapCenter = map.getCenter();

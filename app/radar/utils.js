@@ -491,6 +491,7 @@ function spawnModal(options) {
     var title = options.title;
     var headerColor = options.headerColor;
     var body = options.body;
+    var css = options.css;
 
     var modalContent =
         `<div class="modal fade" tabindex="-1" aria-labelledby="jsModalLabel" aria-hidden="true">
@@ -500,7 +501,7 @@ function spawnModal(options) {
                         <h5 class="modal-title">${title}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">${body}</div>
+                    <div class="modal-body" style="${css}">${body}</div>
                 </div>
             </div>
         </div>`

@@ -79,6 +79,7 @@ createMenuOption({
             ut.betterProgressBar('show');
             ut.betterProgressBar('set', 0);
 
+            // '../data/active.json'
             fetchPolygonData([noaaAlertsURL], function(data) {
                 for (var item in data.features) {
                     data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
@@ -118,6 +119,7 @@ createMenuOption({
                     map.getCanvas().style.cursor = '';
                 });
 
+                //map.on('click', 'newAlertsLayer', mapClick)
                 setTimeout(function() {
                     //map.getCanvas().style.cursor = "crosshair";
                     map.on('click', 'newAlertsLayer', mapClick)
@@ -249,13 +251,14 @@ module.exports = fetchPolygonData
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
 const getPolygonColors = require('./polygonColors');
+const chroma = require('chroma-js')
 
 function updateAccordion(number, title, expanded, body, color) {
     var content = 
     `<div class="accordion-item">
         <h2 class="accordion-header" id="accordionHeader${number}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionContent${number}"
-                aria-expanded="${expanded}" aria-controls="collapseOne" style="background-color: ${color}">
+                aria-expanded="${expanded}" aria-controls="collapseOne" style="white-space: pre;">
                 ${title}
             </button>
         </h2>
@@ -280,14 +283,48 @@ function rgbToRGBA(rgb, opacity) {
 }
 
 function addMarker(e) {
+    var popupItem = '';
+    var alertContentObj = {};
     for (key in e.features) {
+        var id = `${Date.now()}alert`;
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
+        console.log(parameters)
 
-        var alertURL = properties['@id'];
+        var initColor = getPolygonColors(properties.event);
+        var backgroundColor = initColor;
+        var borderColor = chroma(initColor).darken(1.5);
+        var textColor = chroma(initColor).luminance() > 0.4 ? 'black' : 'white';
+        //<i class="fa-solid fa-circle-info" style="font-size: 15px"></i>
+        popupItem += `<div style="color: white; text-align: center;"><b class="extraAlertTextTrigger" id="${id}" style="
+        text-align: center;
+        width: auto;
+        height: auto;
+        padding: 1px 5px;
+        background-color: ${backgroundColor};
+        border: 2px solid ${borderColor};
+        border-radius: 25px;
+        cursor: pointer;
+        color: ${textColor};
+        "><i class="fa-solid fa-circle-info"></i> ${properties.event}</b>`;
 
-        var alertModalBody = 
-            `<b>${properties.event}
+        var lineSpace = '';
+        var lineBreak = `<br>`;
+        var amountOfParams = 0;
+        function addParameter(parameterName, textValueID) {
+            if (parameters.hasOwnProperty(parameterName)) {
+                if (amountOfParams == 0) { popupItem += lineBreak; }
+                if (lineSpace == '' && amountOfParams != 0) { lineSpace = '&nbsp;&nbsp;&nbsp;'; }
+                popupItem += `${lineSpace}<b>${textValueID}</b><b class="code" style="color: rgb(179, 143, 52)"> ${parameters[parameterName]}</b>`;
+                amountOfParams++;
+            }
+        }
+        addParameter('maxHailSize', 'Hail:');
+        addParameter('maxWindGust', 'Wind:');
+        addParameter('tornadoDetection', 'Tornado:');
+
+        var extentedAlertDescription = 
+            `<div style="white-space: pre-wrap;"><b>${properties.event}
             <br>${properties.senderName}
             <br>${properties.headline}</b>
             <br><u>${ut.printFancyTime(new Date(properties.sent))}</u>
@@ -296,17 +333,77 @@ function addMarker(e) {
             <br><u>${properties.areaDesc}</u>
             <br>${parameters.NWSheadline}
             <br>${properties.description}
-            <br>${properties.instruction}`
-        //document.getElementById('alertModalBody').innerHTML = alertModalBody;
-        //var alertTitle = `Alert #${parseInt(key) + 1}`;
-        var alertTitle = properties.event;
-
-        var color = getPolygonColors(properties.event);
-        updateAccordion(key, alertTitle, false, alertModalBody, rgbToRGBA(color, 0.5));
+            <br>${properties.instruction}</div>`
+        alertContentObj[id] = {
+            'title': `${properties.event}`,
+            'desc': extentedAlertDescription
+        };
     }
+    const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+        .setLngLat(e.lngLat)
+        .setHTML(popupItem)
+        .addTo(map);
+
+    $('.extraAlertTextTrigger').on('click', function(e) {
+        var id = $(this).attr('id');
+        ut.spawnModal({
+            'title': alertContentObj[id].title,
+            'headerColor': 'alert-success',
+            'css': 'height: 50vh; overflow: scroll',
+            'body': alertContentObj[id].desc
+        })
+    })
+    // for (key in e.features) {
+    //     var properties = e.features[key].properties;
+    //     var parameters = JSON.parse(properties.parameters);
+    //     console.log(parameters)
+
+    //     var alertURL = properties['@id'];
+
+    //     var alertModalBody = 
+    //         `<b>${properties.event}
+    //         <br>${properties.senderName}
+    //         <br>${properties.headline}</b>
+    //         <br><u>${ut.printFancyTime(new Date(properties.sent))}</u>
+    //         <br><u>${parameters.WMOidentifier}</u>
+    //         <br><u>${parameters.VTEC}</u>
+    //         <br><u>${properties.areaDesc}</u>
+    //         <br>${parameters.NWSheadline}
+    //         <br>${properties.description}
+    //         <br>${properties.instruction}`
+    //     //document.getElementById('alertModalBody').innerHTML = alertModalBody;
+    //     //var alertTitle = `Alert #${parseInt(key) + 1}`;
+    //     var color = getPolygonColors(properties.event);
+    //     var alertTitle = 
+    //         `<div style="color: white"><b style="color: ${color};">${properties.event}</b>`;
+
+    //     var lineSpace = '';
+    //     var lineBreak = `<br>`;
+    //     var amountOfParams = 0;
+    //     if (parameters.hasOwnProperty('maxHailSize')) {
+    //         if (amountOfParams == 0) { alertTitle += lineBreak; }
+    //         if (lineSpace == '' && amountOfParams != 0) { lineSpace = '&nbsp;&nbsp;&nbsp;'; }
+    //         alertTitle += `${lineSpace}<b>Hail:</b> ${parameters.maxHailSize}`;
+    //         amountOfParams++;
+    //     }
+    //     if (parameters.hasOwnProperty('maxWindGust')) {
+    //         if (amountOfParams == 0) { alertTitle += lineBreak; }
+    //         if (lineSpace == '' && amountOfParams != 0) { lineSpace = '&nbsp;&nbsp;&nbsp;'; }
+    //         alertTitle += `${lineSpace}<b>Wind:</b> ${parameters.maxWindGust}</div>`;
+    //         amountOfParams++;
+    //     }
+    //     alertTitle += '</div>'
+
+    //     const popup = new mapboxgl.Popup({ className: 'alertPopup' })
+    //         .setLngLat(e.lngLat)
+    //         .setHTML(alertTitle)
+    //         .addTo(map);
+    //     //var color = getPolygonColors(properties.event);
+    //     //updateAccordion(key, alertTitle, false, alertModalBody, rgbToRGBA(color, 0.5));
+    // }
 
     // open the modal
-    $('#alertModalTrigger').click();
+    //$('#alertModalTrigger').click();
 
 
 
@@ -405,7 +502,7 @@ function addMarker(e) {
 }
 
 module.exports = addMarker;
-},{"../radar/map/map":53,"../radar/utils":70,"./polygonColors":6}],5:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/utils":70,"./polygonColors":6,"chroma-js":175}],5:[function(require,module,exports){
 const noaaColors = {
     "Tsunami Warning": {
         "priority": "1",
@@ -5746,6 +5843,13 @@ const map = new mapboxgl.Map({
     //fadeDuration: 0,
 });
 
+// map.on('click', (e) => {
+//     const popup = new mapboxgl.Popup({ className: 'alertPopup' })
+//         .setLngLat(e.lngLat)
+//         .setHTML("Hello World!")
+//         .addTo(map);
+// })
+
 // $('#dataDiv').data('centerMarker', []);
 // map.on('move', function() {
 //     var mapCenter = map.getCenter();
@@ -7617,6 +7721,7 @@ function spawnModal(options) {
     var title = options.title;
     var headerColor = options.headerColor;
     var body = options.body;
+    var css = options.css;
 
     var modalContent =
         `<div class="modal fade" tabindex="-1" aria-labelledby="jsModalLabel" aria-hidden="true">
@@ -7626,7 +7731,7 @@ function spawnModal(options) {
                         <h5 class="modal-title">${title}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">${body}</div>
+                    <div class="modal-body" style="${css}">${body}</div>
                 </div>
             </div>
         </div>`
