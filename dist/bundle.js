@@ -47,6 +47,44 @@ function addScriptTag(url, cb) {
     xhr.send();
 }
 
+function addAlertGeojsonLayer(layerName, geojson) {
+    map.addSource(`${layerName}Source`, {
+        type: 'geojson',
+        data: geojson,
+    })
+    map.addLayer({
+        'id': `${layerName}Layer`,
+        'type': 'fill',
+        'source': `${layerName}Source`,
+        paint: {
+            //#0080ff blue
+            //#ff7d7d red
+            'fill-color': ['get', 'color'],
+            'fill-opacity': 0
+        }
+    }, 'stationSymbolLayer');
+    map.addLayer({
+        'id': `${layerName}LayerOutline`,
+        'type': 'line',
+        'source': `${layerName}Source`,
+        'paint': {
+            //#014385 blue
+            //#850101 red
+            'line-color': ['get', 'color'],
+            'line-width': 3
+        }
+    }, 'stationSymbolLayer');
+
+    map.on('mouseover', `${layerName}Layer`, function(e) {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseout', `${layerName}Layer`, function(e) {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', `${layerName}Layer`, mapClick)
+}
+
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
 // https://realearth.ssec.wisc.edu/products/?app=_ALL_
@@ -70,11 +108,12 @@ createMenuOption({
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
 
-        if (map.getLayer('newAlertsLayer')) {
+        if (map.getLayer('mainAlertsLayer')) {
             //map.getCanvas().style.cursor = "crosshair";
-            map.on('click', 'newAlertsLayer', mapClick)
-            map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
-            map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
+            map.on('click', 'mainAlertsLayer', mapClick);
+
+            map.setLayoutProperty('mainAlertsLayer', 'visibility', 'visible');
+            map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'visible');
         } else {
             ut.betterProgressBar('show');
             ut.betterProgressBar('set', 0);
@@ -86,41 +125,9 @@ createMenuOption({
                     data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
                 }
                 console.log(data)
-                map.addSource('alertsSource', {
-                    type: 'geojson',
-                    data: data,
-                })
-                map.addLayer({
-                    'id': `newAlertsLayer`,
-                    'type': 'fill',
-                    'source': 'alertsSource',
-                    paint: {
-                        //#0080ff blue
-                        //#ff7d7d red
-                        'fill-color': ['get', 'color'],
-                        'fill-opacity': 0
-                    }
-                }, 'stationSymbolLayer');
-                map.addLayer({
-                    'id': `newAlertsLayerOutline`,
-                    'type': 'line',
-                    'source': 'alertsSource',
-                    'paint': {
-                        //#014385 blue
-                        //#850101 red
-                        'line-color': ['get', 'color'],
-                        'line-width': 3
-                    }
-                }, 'stationSymbolLayer');
 
-                map.on('mouseover', 'newAlertsLayer', function(e) {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                map.on('mouseout', 'newAlertsLayer', function(e) {
-                    map.getCanvas().style.cursor = '';
-                });
+                addAlertGeojsonLayer('mainAlerts', data);
 
-                map.on('click', 'newAlertsLayer', mapClick)
                 function loadExtraAlerts() {
                     setTimeout(function() {
                         //map.getCanvas().style.cursor = "crosshair";
@@ -185,10 +192,21 @@ createMenuOption({
                             }
                         }
                         var mergedGeoJSON = geojsonMerge.merge([
-                            data,
-                            polygonGeojson
+                            polygonGeojson,
+                            data
                         ]);
-                        map.getSource('alertsSource').setData(mergedGeoJSON);
+                        map.getSource('mainAlertsSource').setData(mergedGeoJSON);
+
+                        $('#showExtraAlertPolygonsCheckbox').show();
+                        $('#showExtraAlertPolygonsCheckbox').on('click', function() {
+                            var isChecked = $('#showExtraAlertPolygonsCheckBtn').is(":checked");
+
+                            if (!isChecked) {
+                                map.getSource('mainAlertsSource').setData(data);
+                            } else if (isChecked) {
+                                map.getSource('mainAlertsSource').setData(mergedGeoJSON);
+                            }
+                        })
                         });});});
                     }, 50)
                 }
@@ -200,10 +218,10 @@ createMenuOption({
         $(iconElem).addClass('icon-grey');
 
         map.getCanvas().style.cursor = "";
-        map.off('click', 'newAlertsLayer', mapClick)
+        map.off('click', 'mainAlertsLayer', mapClick);
 
-        map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');
-        map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
+        map.setLayoutProperty('mainAlertsLayer', 'visibility', 'none');
+        map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'none');
     }
 })
 },{"../radar/map/map":53,"../radar/menu/createMenuOption":56,"../radar/utils":70,"./fetchData":3,"./mapClick":4,"./polygonColors":6,"@mapbox/geojson-merge":161,"simplify-geojson":204}],2:[function(require,module,exports){
@@ -295,6 +313,7 @@ function addMarker(e) {
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
         //console.log(e.features[key])
+        console.log(properties)
 
         var initColor = getPolygonColors(properties.event);
         var backgroundColor = initColor;
@@ -331,19 +350,27 @@ function addMarker(e) {
 
         if (amountOfParams == 0) { popupItem += preStart; }
 
-        var expiresTime = DateTime.fromISO(properties.ends).toUTC().toJSDate();
+        var alertExpiresTime;
+        var thingToPrepend;
+        if (properties.hasOwnProperty('ends')) {
+            alertExpiresTime = properties.ends;
+            thingToPrepend = 'Ends: ';
+        } else {
+            alertExpiresTime = properties.expires;
+            thingToPrepend = 'Expires: ';
+        }
+        var expiresTime = DateTime.fromISO(alertExpiresTime).toUTC().toJSDate();
         var currentTime = DateTime.now().toUTC().toJSDate();
         const dateDiff = ut.getDateDiff(currentTime, expiresTime);
         var formattedDateDiff;
         var thingToAppend = '';
-        var thingToPrepend = 'Expires: ';
         var textColor = 'white';
         var isNegative = dateDiff.negative;
         if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
         if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
         if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
         if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
-        if (isNegative) { thingToAppend = ' ago'; thingToPrepend = 'Expired: '; textColor = 'rgba(229, 78, 78, 1)'; }
+        if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
         if (amountOfParams != 0) { popupItem += '<br>' }
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="code"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
 
@@ -6434,6 +6461,9 @@ createOffCanvasItem({
             terminator.toggleVisibility('show');
         }
     })
+
+    // this is in app/alerts/drawAlertShapes.js
+    //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})
 })
 },{"../map/map":53,"../map/terminator/terminator":55,"../misc/baseMapLayers":62,"../utils":70,"./createOffCanvasItem":57}],60:[function(require,module,exports){
 const createMenuOption = require('./createMenuOption');

@@ -41,6 +41,7 @@ function addMarker(e) {
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
         //console.log(e.features[key])
+        console.log(properties)
 
         var initColor = getPolygonColors(properties.event);
         var backgroundColor = initColor;
@@ -77,19 +78,27 @@ function addMarker(e) {
 
         if (amountOfParams == 0) { popupItem += preStart; }
 
-        var expiresTime = DateTime.fromISO(properties.ends).toUTC().toJSDate();
+        var alertExpiresTime;
+        var thingToPrepend;
+        if (properties.hasOwnProperty('ends')) {
+            alertExpiresTime = properties.ends;
+            thingToPrepend = 'Ends: ';
+        } else {
+            alertExpiresTime = properties.expires;
+            thingToPrepend = 'Expires: ';
+        }
+        var expiresTime = DateTime.fromISO(alertExpiresTime).toUTC().toJSDate();
         var currentTime = DateTime.now().toUTC().toJSDate();
         const dateDiff = ut.getDateDiff(currentTime, expiresTime);
         var formattedDateDiff;
         var thingToAppend = '';
-        var thingToPrepend = 'Expires: ';
         var textColor = 'white';
         var isNegative = dateDiff.negative;
         if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
         if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
         if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
         if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
-        if (isNegative) { thingToAppend = ' ago'; thingToPrepend = 'Expired: '; textColor = 'rgba(229, 78, 78, 1)'; }
+        if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
         if (amountOfParams != 0) { popupItem += '<br>' }
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="code"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
 

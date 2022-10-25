@@ -46,6 +46,44 @@ function addScriptTag(url, cb) {
     xhr.send();
 }
 
+function addAlertGeojsonLayer(layerName, geojson) {
+    map.addSource(`${layerName}Source`, {
+        type: 'geojson',
+        data: geojson,
+    })
+    map.addLayer({
+        'id': `${layerName}Layer`,
+        'type': 'fill',
+        'source': `${layerName}Source`,
+        paint: {
+            //#0080ff blue
+            //#ff7d7d red
+            'fill-color': ['get', 'color'],
+            'fill-opacity': 0
+        }
+    }, 'stationSymbolLayer');
+    map.addLayer({
+        'id': `${layerName}LayerOutline`,
+        'type': 'line',
+        'source': `${layerName}Source`,
+        'paint': {
+            //#014385 blue
+            //#850101 red
+            'line-color': ['get', 'color'],
+            'line-width': 3
+        }
+    }, 'stationSymbolLayer');
+
+    map.on('mouseover', `${layerName}Layer`, function(e) {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseout', `${layerName}Layer`, function(e) {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', `${layerName}Layer`, mapClick)
+}
+
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
 // https://realearth.ssec.wisc.edu/products/?app=_ALL_
@@ -69,11 +107,12 @@ createMenuOption({
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
 
-        if (map.getLayer('newAlertsLayer')) {
+        if (map.getLayer('mainAlertsLayer')) {
             //map.getCanvas().style.cursor = "crosshair";
-            map.on('click', 'newAlertsLayer', mapClick)
-            map.setLayoutProperty('newAlertsLayer', 'visibility', 'visible');
-            map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'visible');
+            map.on('click', 'mainAlertsLayer', mapClick);
+
+            map.setLayoutProperty('mainAlertsLayer', 'visibility', 'visible');
+            map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'visible');
         } else {
             ut.betterProgressBar('show');
             ut.betterProgressBar('set', 0);
@@ -85,41 +124,9 @@ createMenuOption({
                     data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
                 }
                 console.log(data)
-                map.addSource('alertsSource', {
-                    type: 'geojson',
-                    data: data,
-                })
-                map.addLayer({
-                    'id': `newAlertsLayer`,
-                    'type': 'fill',
-                    'source': 'alertsSource',
-                    paint: {
-                        //#0080ff blue
-                        //#ff7d7d red
-                        'fill-color': ['get', 'color'],
-                        'fill-opacity': 0
-                    }
-                }, 'stationSymbolLayer');
-                map.addLayer({
-                    'id': `newAlertsLayerOutline`,
-                    'type': 'line',
-                    'source': 'alertsSource',
-                    'paint': {
-                        //#014385 blue
-                        //#850101 red
-                        'line-color': ['get', 'color'],
-                        'line-width': 3
-                    }
-                }, 'stationSymbolLayer');
 
-                map.on('mouseover', 'newAlertsLayer', function(e) {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                map.on('mouseout', 'newAlertsLayer', function(e) {
-                    map.getCanvas().style.cursor = '';
-                });
+                addAlertGeojsonLayer('mainAlerts', data);
 
-                map.on('click', 'newAlertsLayer', mapClick)
                 function loadExtraAlerts() {
                     setTimeout(function() {
                         //map.getCanvas().style.cursor = "crosshair";
@@ -184,10 +191,21 @@ createMenuOption({
                             }
                         }
                         var mergedGeoJSON = geojsonMerge.merge([
-                            data,
-                            polygonGeojson
+                            polygonGeojson,
+                            data
                         ]);
-                        map.getSource('alertsSource').setData(mergedGeoJSON);
+                        map.getSource('mainAlertsSource').setData(mergedGeoJSON);
+
+                        $('#showExtraAlertPolygonsCheckbox').show();
+                        $('#showExtraAlertPolygonsCheckbox').on('click', function() {
+                            var isChecked = $('#showExtraAlertPolygonsCheckBtn').is(":checked");
+
+                            if (!isChecked) {
+                                map.getSource('mainAlertsSource').setData(data);
+                            } else if (isChecked) {
+                                map.getSource('mainAlertsSource').setData(mergedGeoJSON);
+                            }
+                        })
                         });});});
                     }, 50)
                 }
@@ -199,9 +217,9 @@ createMenuOption({
         $(iconElem).addClass('icon-grey');
 
         map.getCanvas().style.cursor = "";
-        map.off('click', 'newAlertsLayer', mapClick)
+        map.off('click', 'mainAlertsLayer', mapClick);
 
-        map.setLayoutProperty('newAlertsLayer', 'visibility', 'none');
-        map.setLayoutProperty('newAlertsLayerOutline', 'visibility', 'none');
+        map.setLayoutProperty('mainAlertsLayer', 'visibility', 'none');
+        map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'none');
     }
 })

@@ -62,4 +62,7 @@ createOffCanvasItem({
             terminator.toggleVisibility('show');
         }
     })
+
+    // this is in app/alerts/drawAlertShapes.js
+    //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})
 })
