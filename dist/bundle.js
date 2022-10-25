@@ -352,7 +352,7 @@ function addMarker(e) {
             if (parameters.hasOwnProperty(parameterName)) {
                 if (amountOfParams == 0) { popupItem += lineBreak; }
                 if (lineSpace == '' && amountOfParams != 0) { lineSpace = '&nbsp;&nbsp;&nbsp;'; }
-                popupItem += `${lineSpace}<b>${textValueID}</b><b class="code" style="color: rgb(179, 143, 52)"> ${parameters[parameterName]}</b>`;
+                popupItem += `${lineSpace}<b>${textValueID}</b><b class="alertsMonospaceText" style="color: rgb(179, 143, 52)"> ${parameters[parameterName]}</b>`;
                 amountOfParams++;
             }
         }
@@ -384,7 +384,7 @@ function addMarker(e) {
         if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
         if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
         if (amountOfParams != 0) { popupItem += '<br>' }
-        popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="code"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
+        popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
 
         var extentedAlertDescription = 
             `<div style="white-space: pre-wrap;"><b>${properties.event}

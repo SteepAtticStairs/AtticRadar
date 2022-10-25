@@ -538,3 +538,6 @@ https://tobiasahlin.com/spinkit/
     overflow: scroll;
     margin: 5px 5px 5px 5px;
 }
+.alertsMonospaceText {
+    font-family: 'Consolas', monospace;
+}
