@@ -505,9 +505,8 @@ https://tobiasahlin.com/spinkit/
 
     width: 550px;
     max-width: 90vw;
-    height: 90vh;
-    top: -10px;
-    bottom: 20px;
+    height: 85vh;
+    top: 10px;
 
     background-color: white;
     display: flex;
@@ -520,7 +519,7 @@ https://tobiasahlin.com/spinkit/
     background-color: black;
     color: white;
 }
-#alertsDialogHeader {
+#alertsDialogHeaderContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -533,6 +532,14 @@ https://tobiasahlin.com/spinkit/
     display: flex;
     justify-content: center;
     align-items: center;
+}
+#alertsDialogClose {
+    position: absolute;
+    z-index: 1002;
+    margin: 0 auto;
+    right: 20px;
+    transform: scale(1.5);
+    cursor: pointer;
 }
 #alertsDialogBody {
     overflow: scroll;

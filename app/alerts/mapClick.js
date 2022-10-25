@@ -4,8 +4,11 @@ const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
-$('#alertsDialog').on('click', function() {
-    $(this).hide();
+$('#alertsDialog').on('click', function(e) {
+    var clickedTarget = $(e.target).attr('id');
+    if (clickedTarget == 'alertsDialog' || clickedTarget == 'alertsDialogClose') {
+        $(this).hide();
+    }
 })
 
 function displayAlertDialog(options) {
@@ -18,7 +21,9 @@ function displayAlertDialog(options) {
 
     $('#alertsDialogHeader').html(title)
     $('#alertsDialogHeader').css('background-color', color);
+    $('#alertsDialogHeaderContainer').css('background-color', color);
     $('#alertsDialogHeader').css('color', textColor);
+    $('#alertsDialogClose').css('color', textColor);
 
     $('#alertsDialogBody').scrollTop(0);
     $('#alertsDialogBody').html(body);
