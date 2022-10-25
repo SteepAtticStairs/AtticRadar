@@ -486,3 +486,55 @@ https://tobiasahlin.com/spinkit/
 .alertPopup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip { border-bottom-color: black; }
 .alertPopup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip { border-top-color: black; }
 .alertPopup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip { border-top-color: black; }
+
+#alertsDialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+
+    background-color: rgba(0, 0, 0, 0.3);
+}
+#alertsDialogContainer {
+    position: absolute;
+    z-index: 1001;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    width: 550px;
+    max-width: 90vw;
+    height: 90vh;
+    top: -10px;
+    bottom: 20px;
+
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    white-space: pre-wrap;
+
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+}
+#alertsDialogHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    background-color: rgb(128, 128, 128);
+    z-index: 1002;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#alertsDialogBody {
+    overflow: scroll;
+    margin: 5px 5px 5px 5px;
+}

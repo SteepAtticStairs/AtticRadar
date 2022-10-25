@@ -289,25 +289,24 @@ const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
-function updateAccordion(number, title, expanded, body, color) {
-    var content = 
-    `<div class="accordion-item">
-        <h2 class="accordion-header" id="accordionHeader${number}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionContent${number}"
-                aria-expanded="${expanded}" aria-controls="collapseOne" style="white-space: pre;">
-                ${title}
-            </button>
-        </h2>
-        <div id="accordionContent${number}" class="accordion-collapse collapse" aria-labelledby="accordionHeader${number}"
-            data-bs-parent="#alertModalAccordion">
-            <div class="accordion-body alertAccordionBody">${body}</div>
-        </div>
-    </div>`
+$('#alertsDialog').on('click', function() {
+    $(this).hide();
+})
 
-    if (parseInt(number) == 0) {
-        document.getElementById('alertModalAccordion').innerHTML = '';
-    }
-    document.getElementById('alertModalAccordion').innerHTML += content;
+function displayAlertDialog(options) {
+    var title = options.title;
+    var body = options.body;
+    var color = options.color;
+    var textColor = options.textColor;
+
+    $('#alertsDialog').show();
+
+    $('#alertsDialogHeader').html(title)
+    $('#alertsDialogHeader').css('background-color', color);
+    $('#alertsDialogHeader').css('color', textColor);
+
+    $('#alertsDialogBody').scrollTop(0);
+    $('#alertsDialogBody').html(body);
 }
 
 function rgbToRGBA(rgb, opacity) {
@@ -400,7 +399,9 @@ function addMarker(e) {
             <br>${properties.instruction}</div>`
         alertContentObj[id] = {
             'title': `${properties.event}`,
-            'desc': extentedAlertDescription
+            'body': extentedAlertDescription,
+            'color': initColor,
+            'textColor': chroma(initColor).luminance() > 0.4 ? 'black' : 'white'
         };
 
         //popupItem += '<br>';
@@ -412,11 +413,18 @@ function addMarker(e) {
 
     $('.extraAlertTextTrigger').on('click', function(e) {
         var id = $(this).attr('id');
-        ut.spawnModal({
+        // ut.spawnModal({
+        //     'title': alertContentObj[id].title,
+        //     'headerColor': 'alert-success',
+        //     'css': 'height: 50vh; overflow: scroll',
+        //     'body': alertContentObj[id].body
+        // })
+        console.log(alertContentObj[id])
+        displayAlertDialog({
             'title': alertContentObj[id].title,
-            'headerColor': 'alert-success',
-            'css': 'height: 50vh; overflow: scroll',
-            'body': alertContentObj[id].desc
+            'body': alertContentObj[id].body,
+            'color': alertContentObj[id].color,
+            'textColor': alertContentObj[id].textColor,
         })
     })
     // for (key in e.features) {
