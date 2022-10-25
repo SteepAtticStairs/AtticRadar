@@ -1453,7 +1453,7 @@ function showPopup(e, coordsFromFeatureOrClick) {
 }
 
 function drawOutlookToMap(geojson, name) {
-    //console.log(geojson)
+    console.log(geojson)
     var hurricaneMapLayers = $('#dataDiv').data('hurricaneMapLayers');
 
     for (var x = 0; x < geojson.features.length; x++) {
@@ -1507,6 +1507,8 @@ function drawOutlookToMap(geojson, name) {
 
                 if (curFeature.properties.styleUrl == '#highx') {
                     curFeature.properties.color = highColor;
+                } else if (curFeature.properties.styleUrl == '#medx') {
+                    curFeature.properties.color = mediumColor;
                 } else if (curFeature.properties.styleUrl == '#lowx') {
                     curFeature.properties.color = lowColor;
                 } else {
