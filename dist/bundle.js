@@ -53,7 +53,7 @@ function addAlertGeojsonLayer(layerName, geojson) {
         data: geojson,
     })
     map.addLayer({
-        'id': `${layerName}Layer`,
+        'id': `${layerName}LayerFill`,
         'type': 'fill',
         'source': `${layerName}Source`,
         paint: {
@@ -70,19 +70,30 @@ function addAlertGeojsonLayer(layerName, geojson) {
         'paint': {
             //#014385 blue
             //#850101 red
+            'line-color': 'black',
+            'line-width': 8
+        }
+    }, 'stationSymbolLayer');
+    map.addLayer({
+        'id': `${layerName}Layer`,
+        'type': 'line',
+        'source': `${layerName}Source`,
+        'paint': {
+            //#014385 blue
+            //#850101 red
             'line-color': ['get', 'color'],
             'line-width': 3
         }
     }, 'stationSymbolLayer');
 
-    map.on('mouseover', `${layerName}Layer`, function(e) {
+    map.on('mouseover', `${layerName}LayerFill`, function(e) {
         map.getCanvas().style.cursor = 'pointer';
     });
-    map.on('mouseout', `${layerName}Layer`, function(e) {
+    map.on('mouseout', `${layerName}LayerFill`, function(e) {
         map.getCanvas().style.cursor = '';
     });
 
-    map.on('click', `${layerName}Layer`, mapClick)
+    map.on('click', `${layerName}LayerFill`, mapClick)
 }
 
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
@@ -110,9 +121,10 @@ createMenuOption({
 
         if (map.getLayer('mainAlertsLayer')) {
             //map.getCanvas().style.cursor = "crosshair";
-            map.on('click', 'mainAlertsLayer', mapClick);
+            map.on('click', 'mainAlertsLayerFill', mapClick);
 
             map.setLayoutProperty('mainAlertsLayer', 'visibility', 'visible');
+            map.setLayoutProperty('mainAlertsLayerFill', 'visibility', 'visible');
             map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'visible');
         } else {
             ut.betterProgressBar('show');
@@ -218,9 +230,10 @@ createMenuOption({
         $(iconElem).addClass('icon-grey');
 
         map.getCanvas().style.cursor = "";
-        map.off('click', 'mainAlertsLayer', mapClick);
+        map.off('click', 'mainAlertsLayerFill', mapClick);
 
         map.setLayoutProperty('mainAlertsLayer', 'visibility', 'none');
+        map.setLayoutProperty('mainAlertsLayerFill', 'visibility', 'none');
         map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'none');
     }
 })
