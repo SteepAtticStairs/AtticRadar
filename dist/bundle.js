@@ -80,6 +80,7 @@ createMenuOption({
             ut.betterProgressBar('set', 0);
 
             // '../data/active.json'
+            // noaaAlertsURL
             fetchPolygonData([noaaAlertsURL], function(data) {
                 for (var item in data.features) {
                     data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
@@ -119,76 +120,79 @@ createMenuOption({
                     map.getCanvas().style.cursor = '';
                 });
 
-                //map.on('click', 'newAlertsLayer', mapClick)
-                setTimeout(function() {
-                    //map.getCanvas().style.cursor = "crosshair";
-                    map.on('click', 'newAlertsLayer', mapClick)
-
-                    var host = window.location.host;
-                    var urlPart;
-                    if (host == 'steepatticstairs.github.io') {
-                        urlPart = '/AtticRadar/';
-                    } else {
-                        urlPart = '/';
-                    }
-                    console.log(host)
-
-                    addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
-                    console.log('Loaded forecast zones.');
-                    totalLoaded = totalLoaded + 14500000; // 14.5 MB
-                    addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
-                    console.log('Loaded county zones.');
-                    totalLoaded = totalLoaded + 7500000; // 7.5 MB
-                    addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
-                    console.log('Loaded fire zones.');
-                    totalLoaded = totalLoaded + 8900000; // 8.8 MB
-
-                    ut.betterProgressBar('set', 100);
+                map.on('click', 'newAlertsLayer', mapClick)
+                function loadExtraAlerts() {
                     setTimeout(function() {
-                        ut.betterProgressBar('hide');
-                    }, 500)
+                        //map.getCanvas().style.cursor = "crosshair";
+                        //map.on('click', 'newAlertsLayer', mapClick)
 
-                    var polygonGeojson = {
-                        "type": "FeatureCollection",
-                        "features": []
-                    }
-                    function pushNewPolygon(geometry, properties) {
-                        // this allows you to add properties for each cell
-                        var objToPush = {
-                            "type": "Feature",
-                            "geometry": geometry,
-                            "properties": properties
+                        var host = window.location.host;
+                        var urlPart;
+                        if (host == 'steepatticstairs.github.io') {
+                            urlPart = '/AtticRadar/';
+                        } else {
+                            urlPart = '/';
                         }
-                        polygonGeojson.features.push(objToPush)
-                    }
-                    for (var item in data.features) {
-                        if (data.features[item].geometry == null) {
-                            var affectedZones = data.features[item].properties.affectedZones;
-                            for (var i in affectedZones) {
-                                var zoneToPush;
-                                if (affectedZones[i].includes('forecast')) {
-                                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
-                                    zoneToPush = forecastZones[affectedZones[i]];
-                                } else if (affectedZones[i].includes('county')) {
-                                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
-                                    zoneToPush = countyZones[affectedZones[i]];
-                                } else if (affectedZones[i].includes('fire')) {
-                                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
-                                    zoneToPush = fireZones[affectedZones[i]];
-                                }
-                                if (zoneToPush != undefined) {
-                                    pushNewPolygon(zoneToPush.geometry, data.features[item].properties)
+                        console.log(host)
+
+                        addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
+                        console.log('Loaded forecast zones.');
+                        totalLoaded = totalLoaded + 14500000; // 14.5 MB
+                        addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
+                        console.log('Loaded county zones.');
+                        totalLoaded = totalLoaded + 7500000; // 7.5 MB
+                        addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
+                        console.log('Loaded fire zones.');
+                        totalLoaded = totalLoaded + 8900000; // 8.8 MB
+
+                        ut.betterProgressBar('set', 100);
+                        setTimeout(function() {
+                            ut.betterProgressBar('hide');
+                        }, 500)
+
+                        var polygonGeojson = {
+                            "type": "FeatureCollection",
+                            "features": []
+                        }
+                        function pushNewPolygon(geometry, properties) {
+                            // this allows you to add properties for each cell
+                            var objToPush = {
+                                "type": "Feature",
+                                "geometry": geometry,
+                                "properties": properties
+                            }
+                            polygonGeojson.features.push(objToPush)
+                        }
+                        for (var item in data.features) {
+                            if (data.features[item].geometry == null) {
+                                var affectedZones = data.features[item].properties.affectedZones;
+                                for (var i in affectedZones) {
+                                    var zoneToPush;
+                                    if (affectedZones[i].includes('forecast')) {
+                                        affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
+                                        zoneToPush = forecastZones[affectedZones[i]];
+                                    } else if (affectedZones[i].includes('county')) {
+                                        affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
+                                        zoneToPush = countyZones[affectedZones[i]];
+                                    } else if (affectedZones[i].includes('fire')) {
+                                        affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
+                                        zoneToPush = fireZones[affectedZones[i]];
+                                    }
+                                    if (zoneToPush != undefined) {
+                                        pushNewPolygon(zoneToPush.geometry, data.features[item].properties)
+                                    }
                                 }
                             }
                         }
-                    }
-                    var mergedGeoJSON = geojsonMerge.merge([
-                        data,
-                        polygonGeojson
-                    ]);
-                    map.getSource('alertsSource').setData(mergedGeoJSON);
-                    });});});
-                }, 50)
+                        var mergedGeoJSON = geojsonMerge.merge([
+                            data,
+                            polygonGeojson
+                        ]);
+                        map.getSource('alertsSource').setData(mergedGeoJSON);
+                        });});});
+                    }, 50)
+                }
+                loadExtraAlerts();
             })
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
@@ -252,6 +256,7 @@ var map = require('../radar/map/map');
 const ut = require('../radar/utils');
 const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
+const { DateTime } = require('luxon');
 
 function updateAccordion(number, title, expanded, body, color) {
     var content = 
@@ -289,7 +294,7 @@ function addMarker(e) {
         var id = `${Date.now()}alert`;
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
-        console.log(parameters)
+        //console.log(e.features[key])
 
         var initColor = getPolygonColors(properties.event);
         var backgroundColor = initColor;
@@ -309,7 +314,8 @@ function addMarker(e) {
         "><i class="fa-solid fa-circle-info"></i> ${properties.event}</b>`;
 
         var lineSpace = '';
-        var lineBreak = `<br>`;
+        var preStart = '<p style="line-height: 130%; margin-bottom: 0 !important">';
+        var lineBreak = `<br>${preStart}`;
         var amountOfParams = 0;
         function addParameter(parameterName, textValueID) {
             if (parameters.hasOwnProperty(parameterName)) {
@@ -322,6 +328,24 @@ function addMarker(e) {
         addParameter('maxHailSize', 'Hail:');
         addParameter('maxWindGust', 'Wind:');
         addParameter('tornadoDetection', 'Tornado:');
+
+        if (amountOfParams == 0) { popupItem += preStart; }
+
+        var expiresTime = DateTime.fromISO(properties.ends).toUTC().toJSDate();
+        var currentTime = DateTime.now().toUTC().toJSDate();
+        const dateDiff = ut.getDateDiff(currentTime, expiresTime);
+        var formattedDateDiff;
+        var thingToAppend = '';
+        var thingToPrepend = 'Expires: ';
+        var textColor = 'white';
+        var isNegative = dateDiff.negative;
+        if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
+        if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
+        if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
+        if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
+        if (isNegative) { thingToAppend = ' ago'; thingToPrepend = 'Expired: '; textColor = 'rgba(229, 78, 78, 1)'; }
+        if (amountOfParams != 0) { popupItem += '<br>' }
+        popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="code"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
 
         var extentedAlertDescription = 
             `<div style="white-space: pre-wrap;"><b>${properties.event}
@@ -338,6 +362,8 @@ function addMarker(e) {
             'title': `${properties.event}`,
             'desc': extentedAlertDescription
         };
+
+        //popupItem += '<br>';
     }
     const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
         .setLngLat(e.lngLat)
@@ -502,7 +528,7 @@ function addMarker(e) {
 }
 
 module.exports = addMarker;
-},{"../radar/map/map":53,"../radar/utils":70,"./polygonColors":6,"chroma-js":175}],5:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/utils":70,"./polygonColors":6,"chroma-js":175,"luxon":180}],5:[function(require,module,exports){
 const noaaColors = {
     "Tsunami Warning": {
         "priority": "1",
@@ -7828,15 +7854,21 @@ function getRadialConstants(radVersion) {
 
 // https://stackoverflow.com/a/544429/18758797
 function getDateDiff(date1, date2) {
-    var diff = Date.parse( date2 ) - Date.parse( date1 ); 
+    var diff = Date.parse( date2 ) - Date.parse( date1 );
+    var isNegative = (diff < 0);
+    if (isNegative) {
+        // negative
+        diff = Math.abs(diff);
+    }
     return isNaN( diff ) ? NaN : {
         //diff : diff,
         ms : Math.floor( diff            % 1000 ),
         s  : Math.floor( diff /     1000 %   60 ),
         m  : Math.floor( diff /    60000 %   60 ),
         h  : Math.floor( diff /  3600000 %   24 ),
-        d  : Math.floor( diff / 86400000        )
-    };
+        d  : Math.floor( diff / 86400000        ),
+        negative: isNegative
+    }
 }
 
 function csvToJson(csv) {

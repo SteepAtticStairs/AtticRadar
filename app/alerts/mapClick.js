@@ -2,6 +2,7 @@ var map = require('../radar/map/map');
 const ut = require('../radar/utils');
 const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
+const { DateTime } = require('luxon');
 
 function updateAccordion(number, title, expanded, body, color) {
     var content = 
@@ -39,7 +40,7 @@ function addMarker(e) {
         var id = `${Date.now()}alert`;
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
-        console.log(parameters)
+        //console.log(e.features[key])
 
         var initColor = getPolygonColors(properties.event);
         var backgroundColor = initColor;
@@ -59,7 +60,8 @@ function addMarker(e) {
         "><i class="fa-solid fa-circle-info"></i> ${properties.event}</b>`;
 
         var lineSpace = '';
-        var lineBreak = `<br>`;
+        var preStart = '<p style="line-height: 130%; margin-bottom: 0 !important">';
+        var lineBreak = `<br>${preStart}`;
         var amountOfParams = 0;
         function addParameter(parameterName, textValueID) {
             if (parameters.hasOwnProperty(parameterName)) {
@@ -72,6 +74,24 @@ function addMarker(e) {
         addParameter('maxHailSize', 'Hail:');
         addParameter('maxWindGust', 'Wind:');
         addParameter('tornadoDetection', 'Tornado:');
+
+        if (amountOfParams == 0) { popupItem += preStart; }
+
+        var expiresTime = DateTime.fromISO(properties.ends).toUTC().toJSDate();
+        var currentTime = DateTime.now().toUTC().toJSDate();
+        const dateDiff = ut.getDateDiff(currentTime, expiresTime);
+        var formattedDateDiff;
+        var thingToAppend = '';
+        var thingToPrepend = 'Expires: ';
+        var textColor = 'white';
+        var isNegative = dateDiff.negative;
+        if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
+        if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
+        if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
+        if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
+        if (isNegative) { thingToAppend = ' ago'; thingToPrepend = 'Expired: '; textColor = 'rgba(229, 78, 78, 1)'; }
+        if (amountOfParams != 0) { popupItem += '<br>' }
+        popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="code"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
 
         var extentedAlertDescription = 
             `<div style="white-space: pre-wrap;"><b>${properties.event}
@@ -88,6 +108,8 @@ function addMarker(e) {
             'title': `${properties.event}`,
             'desc': extentedAlertDescription
         };
+
+        //popupItem += '<br>';
     }
     const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
         .setLngLat(e.lngLat)
