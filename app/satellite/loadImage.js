@@ -64,6 +64,22 @@ function setImageFromXML(auxXMLStr, imageUrl) {
                 'raster-resampling': 'nearest'
             }
         });
+        function moveLayer(layerName) { if (map.getLayer(layerName)) { map.moveLayer(layerName) } }
+        //map.moveLayer('stationSymbolLayer')
+        var defaultLayers = [ "land", "landcover", "national-park", "landuse", "water-shadow", "waterway", "water", "hillshade", "land-structure-polygon", "land-structure-line", "aeroway-polygon", "aeroway-line", "building-outline", "building", "tunnel-street-minor-low", "tunnel-street-minor-case", "tunnel-primary-secondary-tertiary-case", "tunnel-major-link-case", "tunnel-motorway-trunk-case", "tunnel-construction", "tunnel-path", "tunnel-steps", "tunnel-major-link", "tunnel-pedestrian", "tunnel-street-minor", "tunnel-primary-secondary-tertiary", "tunnel-motorway-trunk", "road-pedestrian-case", "road-minor-low", "road-street-low", "road-minor-case", "road-street-case", "road-secondary-tertiary-case", "road-primary-case", "road-major-link-case", "road-motorway-trunk-case", "road-construction", "road-path", "road-steps", "road-major-link", "road-pedestrian", "road-minor", "road-street", "road-secondary-tertiary", "road-primary", "road-motorway-trunk", "road-rail", "bridge-pedestrian-case", "bridge-street-minor-low", "bridge-street-minor-case", "bridge-primary-secondary-tertiary-case", "bridge-major-link-case", "bridge-motorway-trunk-case", "bridge-construction", "bridge-path", "bridge-steps", "bridge-major-link", "bridge-pedestrian", "bridge-street-minor", "bridge-primary-secondary-tertiary", "bridge-motorway-trunk", "bridge-rail", "bridge-major-link-2-case", "bridge-motorway-trunk-2-case", "bridge-major-link-2", "bridge-motorway-trunk-2", "admin-1-boundary-bg", "admin-0-boundary-bg", "admin-1-boundary", "admin-0-boundary", "admin-0-boundary-disputed", "road-label", "waterway-label", "natural-line-label", "natural-point-label", "water-line-label", "water-point-label", "poi-label", "airport-label", "settlement-subdivision-label", "settlement-label", "state-label", "country-label" ]
+        var initialLayerOrder = map.style._order;
+        var selfAddedLayers = [];
+        for (var i in initialLayerOrder) {
+            if (!defaultLayers.includes(initialLayerOrder[i])) {
+                selfAddedLayers.push(initialLayerOrder[i]);
+            }
+        }
+        moveLayer('satelliteLayer');
+        for (var i in selfAddedLayers) {
+            if (selfAddedLayers[i] != 'satelliteLayer') {
+                moveLayer(selfAddedLayers[i]);
+            }
+        }
 
         //map.addLayer({
         //    id: 'statesLayes',
@@ -120,10 +136,23 @@ function initSatImage() {
         // http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php
         url: 'https://attic-server.herokuapp.com/satellite/processData/index.php',
         data: {
-            'satNum': 16,
-            'channel': 13,
-            'sector': 'conus'
+            'satNum': '16',
+            'channel': '13',
+            'sector': 'mesoscale-1'
         },
+        
+        // satNum = '16'; // 16, 17, or 18
+        // channel = '13'; // 01 - 16
+        // sector = 'conus'
+        /*
+        alaska (no goes 16)
+        conus
+        fulldisk
+        hawaii (no goes 16)
+        mesoscale-1
+        mesoscale-2
+        puertorico (only goes 16)
+        */
         success: function(data) {
             var arr = data.split('STEEPATTICSTAIRS');
 
