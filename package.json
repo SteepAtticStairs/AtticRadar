@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@mapbox/geojson-merge": "^1.1.1",
+    "@turf/turf": "^6.5.0",
     "aewx-metar-parser": "^1.0.0",
     "brfs": "^2.0.2",
     "canvas": "^2.9.1",
