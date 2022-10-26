@@ -391,17 +391,25 @@ function addMarker(e) {
         if (amountOfParams != 0) { popupItem += '<br>' }
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
 
+        function checkPropertyExists(property) {
+            var isUndefined = typeof property == 'undefined';
+            if (isUndefined) {
+                return 'None';
+            } else {
+                return property;
+            }
+        }
         var extentedAlertDescription = 
-            `<div style="white-space: pre-wrap;"><b>${properties.event}
-            <br>${properties.senderName}
-            <br>${properties.headline}</b>
-            <br><u>${ut.printFancyTime(new Date(properties.sent))}</u>
-            <br><u>${parameters.WMOidentifier}</u>
-            <br><u>${parameters.VTEC}</u>
-            <br><u>${properties.areaDesc}</u>
-            <br>${parameters.NWSheadline}
-            <br>${properties.description}
-            <br>${properties.instruction}</div>`
+`<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${checkPropertyExists(properties.event)}
+<hr>${checkPropertyExists(properties.senderName)}</b>
+<hr>${checkPropertyExists(properties.headline)}
+<hr><b class="alertTextDescriber">Sent:</b><br>${ut.printFancyTime(new Date(properties.sent))}
+<br><b class="alertTextDescriber">WMO Identifier:</b><br>${checkPropertyExists(parameters.WMOidentifier)}
+<b class="alertTextDescriber">VTEC:</b><br>${checkPropertyExists(parameters.VTEC)}
+<br><b class="alertTextDescriber">NWS Headline:</b><br>${checkPropertyExists(parameters.NWSheadline)}
+<br><b class="alertTextDescriber">Description:</b><br>${checkPropertyExists(properties.description)}
+<br><b class="alertTextDescriber">Instructions:</b><br>${checkPropertyExists(properties.instruction)}</div>
+<br><b class="alertTextDescriber">Areas affected:</b><br><i>${checkPropertyExists(properties.areaDesc)}</i>`
         alertContentObj[id] = {
             'title': `${properties.event}`,
             'body': extentedAlertDescription,
