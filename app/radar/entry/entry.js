@@ -16,7 +16,7 @@ function load() {
     require('../../metars/entry');
 
     // initialize the satellite module
-    //require('../../satellite/entry');
+    require('../../satellite/entry');
 
     // load the tides chart
     require('../../tides/main').tideChartInit('container');

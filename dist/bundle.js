@@ -237,7 +237,7 @@ createMenuOption({
         map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'none');
     }
 })
-},{"../radar/map/map":53,"../radar/menu/createMenuOption":56,"../radar/utils":70,"./fetchData":3,"./mapClick":4,"./polygonColors":6,"@mapbox/geojson-merge":161,"simplify-geojson":204}],2:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/menu/createMenuOption":56,"../radar/utils":70,"./fetchData":3,"./mapClick":4,"./polygonColors":6,"@mapbox/geojson-merge":164,"simplify-geojson":209}],2:[function(require,module,exports){
 /*
 * This file is the entry point for the alerts module.
 */
@@ -589,7 +589,7 @@ function addMarker(e) {
 }
 
 module.exports = addMarker;
-},{"../radar/map/map":53,"../radar/utils":70,"./polygonColors":6,"chroma-js":175,"luxon":180}],5:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/utils":70,"./polygonColors":6,"chroma-js":179,"luxon":184}],5:[function(require,module,exports){
 const noaaColors = {
     "Tsunami Warning": {
         "priority": "1",
@@ -1958,7 +1958,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 }
 
 module.exports = drawHurricanesToMap;
-},{"../radar/map/map":53,"../radar/misc/detectmobilebrowser":63,"../radar/utils":70,"./createCssClasses":7,"./stormTypeData":17,"luxon":180}],10:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/misc/detectmobilebrowser":63,"../radar/utils":70,"./createCssClasses":7,"./stormTypeData":17,"luxon":184}],10:[function(require,module,exports){
 /*
 * This file is the entry point for the hurricanes module.
 */
@@ -2750,7 +2750,7 @@ function fetchMETARData(action) {
 module.exports = {
     fetchMETARData
 }
-},{"../../resources/radarStations":208,"../radar/map/map":53,"../radar/utils":70,"./useData":22,"pako":182}],21:[function(require,module,exports){
+},{"../../resources/radarStations":213,"../radar/map/map":53,"../radar/utils":70,"./useData":22,"pako":186}],21:[function(require,module,exports){
 const createMenuOption = require('../radar/menu/createMenuOption');
 const fetchMETARData = require('./fetchData');
 const useData = require('./useData');
@@ -3043,7 +3043,7 @@ module.exports = {
     useData,
     toggleMETARStationMarkers
 }
-},{"../radar/map/map":53,"../radar/misc/tempColors":66,"../radar/utils":70,"aewx-metar-parser":172,"metar":181}],23:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/misc/tempColors":66,"../radar/utils":70,"aewx-metar-parser":176,"metar":185}],23:[function(require,module,exports){
 const ut = require('../utils');
 
 /*
@@ -3661,7 +3661,7 @@ function load() {
     require('../../metars/entry');
 
     // initialize the satellite module
-    //require('../../satellite/entry');
+    require('../../satellite/entry');
 
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
@@ -3677,7 +3677,7 @@ if (document.readyState == 'complete' || document.readyState == 'interactive') {
         load();
     }
 }
-},{"../../alerts/entry":2,"../../hurricanes/entry":10,"../../metars/entry":19,"../../tides/main":74,"../main":45,"../map/controls/reload":49}],29:[function(require,module,exports){
+},{"../../alerts/entry":2,"../../hurricanes/entry":10,"../../metars/entry":19,"../../satellite/entry":71,"../../tides/main":77,"../main":45,"../map/controls/reload":49}],29:[function(require,module,exports){
 var map = require('../map/map');
 const createOffCanvasItem = require('../menu/createOffCanvasItem');
 const getValFromColor = require('./getGradientValue');
@@ -3993,7 +3993,7 @@ function getValFromColor(color, product, cb) {
 // })
 
 module.exports = getValFromColor;
-},{"../utils":70,"chroma-js":175}],33:[function(require,module,exports){
+},{"../utils":70,"chroma-js":179}],33:[function(require,module,exports){
 var map = require('../map/map');
 const GeoJsonGeometriesLookup = require('geojson-geometries-lookup');
 
@@ -4026,7 +4026,7 @@ function setTextField(geojson) {
 }
 
 module.exports = setTextField;
-},{"../map/map":53,"geojson-geometries-lookup":176}],34:[function(require,module,exports){
+},{"../map/map":53,"geojson-geometries-lookup":180}],34:[function(require,module,exports){
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
@@ -4219,7 +4219,7 @@ function loadL2Listeners(l2rad) {
 }
 
 module.exports = loadL2Listeners;
-},{"../../../lib/nexrad-level-2-plot/src":100,"../loaders":44,"../map/mapFunctions":54}],35:[function(require,module,exports){
+},{"../../../lib/nexrad-level-2-plot/src":103,"../loaders":44,"../map/mapFunctions":54}],35:[function(require,module,exports){
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
 
@@ -4348,7 +4348,7 @@ function mainL2Loading(thisObj) {
 }
 
 module.exports = mainL2Loading;
-},{"../../../lib/nexrad-level-2-data/src":87,"../../../lib/nexrad-level-2-plot/src":100,"../dom/l2info":24,"../level2/eventListeners":34,"../utils":70,"./loadL2Menu":35}],37:[function(require,module,exports){
+},{"../../../lib/nexrad-level-2-data/src":90,"../../../lib/nexrad-level-2-plot/src":103,"../dom/l2info":24,"../level2/eventListeners":34,"../utils":70,"./loadL2Menu":35}],37:[function(require,module,exports){
 const drawRadarShape = require('../draw/drawToMap');
 
 const scaleArray = (fromRange, toRange) => {
@@ -4547,7 +4547,7 @@ function mainL3Loading(thisObj) {
 }
 
 module.exports = mainL3Loading;
-},{"../../../lib/nexrad-level-3-data/src":111,"../dom/l3info":25,"../level3/draw":37,"../level3/stormTracking/mesocycloneDetection":40,"../level3/stormTracking/stormTracks":42,"../level3/stormTracking/tornadoVortexSignature":43,"../utils":70}],40:[function(require,module,exports){
+},{"../../../lib/nexrad-level-3-data/src":114,"../dom/l3info":25,"../level3/draw":37,"../level3/stormTracking/mesocycloneDetection":40,"../level3/stormTracking/stormTracks":42,"../level3/stormTracking/tornadoVortexSignature":43,"../utils":70}],40:[function(require,module,exports){
 const ut = require('../../utils');
 const mapFuncs = require('../../map/mapFunctions');
 
@@ -5815,7 +5815,7 @@ function showStations() {
 // }, 200)
 
 module.exports = showStations;
-},{"../../../../resources/radarStations":208,"../../../metars/fetchData":20,"../../loaders":44,"../../menu/tilts":61,"../../misc/detectmobilebrowser":63,"../../misc/getStationStatus":64,"../../radarMessage/radarStationInfo":69,"../../utils":70,"../map":53,"./createControl":46}],51:[function(require,module,exports){
+},{"../../../../resources/radarStations":213,"../../../metars/fetchData":20,"../../loaders":44,"../../menu/tilts":61,"../../misc/detectmobilebrowser":63,"../../misc/getStationStatus":64,"../../radarMessage/radarStationInfo":69,"../../utils":70,"../map":53,"./createControl":46}],51:[function(require,module,exports){
 const loaders = require('../../loaders');
 const isDevelopmentMode = require('../../misc/urlParser');
 const createControl = require('./createControl');
@@ -6997,7 +6997,7 @@ for (key in allParserArgs) {
 }
 
 module.exports = isDevelopmentMode;
-},{"../../tides/chart":71,"../../tides/fetchData":72,"../utils":70}],68:[function(require,module,exports){
+},{"../../tides/chart":74,"../../tides/fetchData":75,"../utils":70}],68:[function(require,module,exports){
 //var map = require('../map/map');
 const ut = require('../utils');
 const radarStationInfo = require('./radarStationInfo');
@@ -8059,7 +8059,365 @@ module.exports = {
     setMapMargin
 }
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./map/map":53,"buffer":219}],71:[function(require,module,exports){
+},{"./map/map":53,"buffer":224}],71:[function(require,module,exports){
+/*
+* This file is the entry point for the satellite module.
+*/
+
+// load the starting file
+require('./menuItem');
+},{"./menuItem":73}],72:[function(require,module,exports){
+var map = require('../radar/map/map');
+const ut = require('../radar/utils');
+const proj4 = require('proj4');
+const turf = require('@turf/turf')
+
+function parseAuxXML(auxXMLStr, imageUrl, cb) {
+    var auxXMLJSON = ut.xmlToJson(auxXMLStr);
+    // access the raw text
+    var rawGeoTransformText = auxXMLJSON.PAMDataset.GeoTransform['#text'];
+    // remove all spaces
+    rawGeoTransformText = rawGeoTransformText.replace(/ /g, '');
+    // split into an array by the commas
+    var finalArr = rawGeoTransformText.split(',');
+    // convert scientific notation (e.g. e+02) to actual numbers
+    for (var i in finalArr) { finalArr[i] = parseFloat(finalArr[i]) }
+
+    function getWidthHeight(url, cb) {   
+        var img = new Image();
+        img.onload = function() {
+            cb(this.width, this.height);
+        };
+        img.src = url;
+    }
+    getWidthHeight(imageUrl, function(width, height) {
+        // https://gis.stackexchange.com/questions/389342/getting-extents-of-raster-with-geotransform
+        var minx = finalArr[0]
+        var maxy = finalArr[3]
+        var maxx = minx + finalArr[1] * width;
+        var miny = maxy + finalArr[5] * height;
+
+        var coord1 = miny;
+        var coord2 = minx;
+        var coord3 = maxy;
+        var coord4 = maxx;
+
+        var coordArr = [
+            proj4('EPSG:3857', 'EPSG:4326', [coord2, coord3]), // top left
+            proj4('EPSG:3857', 'EPSG:4326', [coord4, coord3]), // top right
+            proj4('EPSG:3857', 'EPSG:4326', [coord4, coord1]), // bottom right
+            proj4('EPSG:3857', 'EPSG:4326', [coord2, coord1]) // bottom left
+            /*
+                2  3
+                4  3
+                4  1
+                2  1
+            */
+        ]
+        cb(coordArr);
+    })
+}
+
+function setImageFromXML(coordArr, imageUrl, section) {
+    if (map.getLayer('satelliteLayer')) {
+        map.removeLayer('satelliteLayer');
+    }
+    if (map.getSource('satelliteLayer')) {
+        map.removeSource('satelliteLayer');
+    }
+    map.addLayer({
+        id: `satelliteLayer${section}`,
+        'type': 'raster',
+        'source': {
+            'type': 'image',
+            'url': imageUrl,
+            'coordinates': coordArr
+        },
+        'paint': {
+            'raster-fade-duration': 0,
+            'raster-resampling': 'nearest'
+        }
+    });
+    function moveLayer(layerName) { if (map.getLayer(layerName)) { map.moveLayer(layerName) } }
+    //map.moveLayer('stationSymbolLayer')
+    var defaultLayers = [ "land", "landcover", "national-park", "landuse", "water-shadow", "waterway", "water", "hillshade", "land-structure-polygon", "land-structure-line", "aeroway-polygon", "aeroway-line", "building-outline", "building", "tunnel-street-minor-low", "tunnel-street-minor-case", "tunnel-primary-secondary-tertiary-case", "tunnel-major-link-case", "tunnel-motorway-trunk-case", "tunnel-construction", "tunnel-path", "tunnel-steps", "tunnel-major-link", "tunnel-pedestrian", "tunnel-street-minor", "tunnel-primary-secondary-tertiary", "tunnel-motorway-trunk", "road-pedestrian-case", "road-minor-low", "road-street-low", "road-minor-case", "road-street-case", "road-secondary-tertiary-case", "road-primary-case", "road-major-link-case", "road-motorway-trunk-case", "road-construction", "road-path", "road-steps", "road-major-link", "road-pedestrian", "road-minor", "road-street", "road-secondary-tertiary", "road-primary", "road-motorway-trunk", "road-rail", "bridge-pedestrian-case", "bridge-street-minor-low", "bridge-street-minor-case", "bridge-primary-secondary-tertiary-case", "bridge-major-link-case", "bridge-motorway-trunk-case", "bridge-construction", "bridge-path", "bridge-steps", "bridge-major-link", "bridge-pedestrian", "bridge-street-minor", "bridge-primary-secondary-tertiary", "bridge-motorway-trunk", "bridge-rail", "bridge-major-link-2-case", "bridge-motorway-trunk-2-case", "bridge-major-link-2", "bridge-motorway-trunk-2", "admin-1-boundary-bg", "admin-0-boundary-bg", "admin-1-boundary", "admin-0-boundary", "admin-0-boundary-disputed", "road-label", "waterway-label", "natural-line-label", "natural-point-label", "water-line-label", "water-point-label", "poi-label", "airport-label", "settlement-subdivision-label", "settlement-label", "state-label", "country-label" ]
+    var initialLayerOrder = map.style._order;
+    var selfAddedLayers = [];
+    for (var i in initialLayerOrder) {
+        if (!defaultLayers.includes(initialLayerOrder[i])) {
+            selfAddedLayers.push(initialLayerOrder[i]);
+        }
+    }
+    moveLayer(`satelliteLayer${section}`);
+    for (var i in selfAddedLayers) {
+        if (selfAddedLayers[i] != `satelliteLayer${section}`) {
+            moveLayer(selfAddedLayers[i]);
+        }
+    }
+
+    //map.addLayer({
+    //    id: 'statesLayes',
+    //    type: "raster",
+    //    source: {
+    //        type: "raster",
+    //        tiles: [
+    //            `https://mesonet.agron.iastate.edu/c/tile.py/1.0.0/usstates/{z}/{x}/{y}.png`
+    //        ],
+    //        tileSize: 256
+    //    },
+    //});
+}
+
+function initSatImage() {
+    //map.on('load', function() {
+        // var auxXMLFileUrl = '../app/satellite/processData/projectedImage.png.aux.xml';
+        // var jsonFileUrl = '../app/satellite/processData/initialImage.json';
+        // var imageFileUrl = '../app/satellite/processData/projectedImage.png';
+
+        // $.get(auxXMLFileUrl, function(data) {
+        //     var auxXMLData = data;
+        //     setImageFromXML(
+        //         auxXMLData,
+        //         imageFileUrl
+        //     )
+        // })
+    //})
+    // https://stackoverflow.com/a/16245768/18758797
+    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+    }
+
+    // https://stackoverflow.com/a/30407959/18758797
+    function dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {type:mime});
+    }
+
+    function sliceImage(url, section, cb) {
+        var img = new Image();
+        img.src = url;
+
+        img.onload = function () {
+            var topLeftCoords;
+            var bottomRightCoords;
+            if (section == 'tl') {
+                topLeftCoords = { x: 0, y: 0 }
+                bottomRightCoords = { x: img.width / 2, y: img.height / 2 }
+            } else if (section == 'tr') {
+                topLeftCoords = { x: img.width / 2, y: 0 }
+                bottomRightCoords = { x: img.width, y: img.height / 2 }
+            } else if (section == 'bl') {
+                topLeftCoords = { x: 0, y: img.height / 2 }
+                bottomRightCoords = { x: img.width / 2, y: img.height }
+            } else if (section == 'br') {
+                topLeftCoords = { x: img.width / 2, y: img.height / 2 }
+                bottomRightCoords = { x: img.width, y: img.height }
+            }
+
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            var imageData = ctx.getImageData(topLeftCoords.x, topLeftCoords.y, bottomRightCoords.x, bottomRightCoords.y);
+
+            // create a new cavnas same as clipped size and a context
+            var newCan = document.createElement('canvas');
+            newCan.width = bottomRightCoords.x - topLeftCoords.x;
+            newCan.height = bottomRightCoords.y - topLeftCoords.y;
+            var newCtx = newCan.getContext('2d');
+
+            // put the clipped image on the new canvas.
+            newCtx.putImageData(imageData, 0, 0);
+
+            var cutUrl = newCan.toDataURL();
+            var b = dataURLtoBlob(cutUrl)
+            var u = URL.createObjectURL(b);
+
+            cb(u);
+
+            // var image = new Image();
+            // image.src = u;
+            // document.body.appendChild(image);
+            // const a = document.createElement('a');
+            // a.style.display = 'none';
+            // a.href = u;
+            // the filename you want
+            // a.download = 'cutUp.png';
+            // document.body.appendChild(a);
+            // a.click();
+        }
+    }
+    function downloadFile(url, filename) {
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+    }
+
+    function loadImageFromSectionBBOX(section, auxXmlStr, initialUrl, url) {
+        parseAuxXML(auxXmlStr, initialUrl, function(coordArr) {
+            var coord1 = coordArr[3][1];
+            var coord2 = coordArr[3][0];
+            var coord3 = coordArr[1][1];
+            var coord4 = coordArr[1][0];
+
+            var topLeft = [coord2, coord3];
+            var topRight = [coord4, coord3];
+            var bottomLeft = [coord2, coord1];
+            var bottomRight = [coord4, coord1];
+
+            var center = turf.center(turf.points([ topLeft, topRight, bottomLeft, bottomRight ])).geometry.coordinates;
+
+            var topCenter = turf.midpoint(turf.point(topLeft), turf.point(topRight)).geometry.coordinates;
+            var bottomCenter = turf.midpoint(turf.point(bottomLeft), turf.point(bottomRight)).geometry.coordinates;
+            var leftCenter = turf.midpoint(turf.point(topLeft), turf.point(bottomLeft)).geometry.coordinates;
+            var rightCenter = turf.midpoint(turf.point(topRight), turf.point(bottomRight)).geometry.coordinates;
+
+            // theCoordArr = [
+            //     leftCenter, // top left
+            //     center, // top right
+            //     bottomCenter, // bottom right
+            //     bottomLeft // bottom left
+            // ]
+            var theCoordArr;
+            if (section == 'tl') {
+                theCoordArr = [ topLeft, topCenter, center, leftCenter ]
+            } else if (section == 'tr') {
+                theCoordArr = [ topCenter, topRight, rightCenter, center ]
+            } else if (section == 'bl') {
+                theCoordArr = [ leftCenter, center, bottomCenter, bottomLeft ]
+            } else if (section == 'br') {
+                theCoordArr = [ center, rightCenter, bottomRight, bottomCenter ]
+            }
+
+            setImageFromXML(
+                theCoordArr,
+                url,
+                section
+            )
+        })
+    }
+
+    var satNum = '16';
+    var channel = '13';
+    var sector = 'conus';
+    $.ajax({
+        type: 'POST',
+        // https://attic-server.herokuapp.com/satellite/processData/index.php
+        // http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php
+        url: 'https://attic-server.herokuapp.com/satellite/processData/index.php',
+        data: {
+            'satNum': satNum,
+            'channel': channel,
+            'sector': sector
+        },
+        
+        // satNum = '16'; // 16, 17, or 18
+        // channel = '13'; // 01 - 16
+        // sector = 'conus'
+        /*
+        alaska (no goes 16)
+        conus
+        fulldisk
+        hawaii (no goes 16)
+        mesoscale-1
+        mesoscale-2
+        puertorico (only goes 16)
+        */
+        success: function(data) {
+            var arr = data.split('STEEPATTICSTAIRS');
+
+            const blob = b64toBlob(arr[1], 'image/png');
+            const blobUrl = URL.createObjectURL(blob);
+
+            var sections = ['tl', 'tr', 'bl', 'br']
+            function doSlice(n) {
+                sliceImage(blobUrl, sections[n], function(url) {
+                    var filename = `goes${satNum}_ch${channel}_${sector}_${sections[n]}.png`;
+                    //downloadFile(url, filename);
+                    loadImageFromSectionBBOX(sections[n], arr[0], blobUrl, url);
+                    n++;
+                    if (n <= 3) { doSlice(n); }
+                })
+            }
+            //doSlice(0);
+            // var section = 'tr';
+            // sliceImage(blobUrl, section, function(url) {
+            //     loadImageFromSectionBBOX(section, arr[0], blobUrl, url);
+            // })
+            parseAuxXML(arr[0], blobUrl, function(coordArr) {
+                setImageFromXML(
+                    coordArr,
+                    blobUrl,
+                    'section'
+                )
+            })
+        }
+    });
+}
+
+module.exports = initSatImage;
+},{"../radar/map/map":53,"../radar/utils":70,"@turf/turf":173,"proj4":202}],73:[function(require,module,exports){
+var map = require('../radar/map/map');
+const createMenuOption = require('../radar/menu/createMenuOption');
+const loadImage = require('./loadImage');
+
+createMenuOption({
+    'divId': 'satelliteMenuItemDiv',
+    'iconId': 'satelliteMenuItemIcon',
+
+    'divClass': 'mapFooterMenuItem',
+    'iconClass': 'icon-grey',
+
+    'contents': 'Satellite Data',
+    'icon': 'fa fa-satellite',
+    'css': ''
+}, function(divElem, iconElem) {
+    if (!$(iconElem).hasClass('icon-blue')) {
+        $(iconElem).addClass('icon-blue');
+        $(iconElem).removeClass('icon-grey');
+
+        if (map.getLayer('satelliteLayer')) {
+            // layer does exist - toggle the visibility to on
+            map.setLayoutProperty('satelliteLayer', 'visibility', 'visible');
+        } else if (!map.getLayer('satelliteLayer')) {
+            // layer doesn't exist - load it onto the map for the first time
+            loadImage();
+        }
+    } else if ($(iconElem).hasClass('icon-blue')) {
+        $(iconElem).removeClass('icon-blue');
+        $(iconElem).addClass('icon-grey');
+
+        // layer does exist - toggle the visibility to off
+        map.setLayoutProperty('satelliteLayer', 'visibility', 'none');
+    }
+})
+},{"../radar/map/map":53,"../radar/menu/createMenuOption":56,"./loadImage":72}],74:[function(require,module,exports){
 const ut = require('../radar/utils');
 
 function drawChart(divName, dataArray) {
@@ -8143,7 +8501,7 @@ function drawChart(divName, dataArray) {
 }
 
 module.exports = drawChart;
-},{"../radar/utils":70}],72:[function(require,module,exports){
+},{"../radar/utils":70}],75:[function(require,module,exports){
 function getYYMMDD(dateObj, type, modifier) {
     // https://stackoverflow.com/a/1296374
     if (type == 'start') {
@@ -8193,7 +8551,7 @@ function fetchData(stationID, callback) {
 }
 
 module.exports = fetchData;
-},{}],73:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 var map = require('../radar/map/map');
 const drawChart = require('./chart');
 const fetchData = require('./fetchData');
@@ -8295,7 +8653,7 @@ module.exports = {
     loadTideStationMarkers,
     toggleTideStationMarkers
 };
-},{"../radar/map/map":53,"../radar/map/mapFunctions":54,"./chart":71,"./fetchData":72}],74:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/map/mapFunctions":54,"./chart":74,"./fetchData":75}],77:[function(require,module,exports){
 const drawChart = require('./chart');
 const fetchData = require('./fetchData');
 const loadMarkers = require('./loadMarkers');
@@ -8326,7 +8684,7 @@ function tideChartInit(divName) {
 module.exports = {
     tideChartInit
 }
-},{"./chart":71,"./fetchData":72,"./loadMarkers":73,"./mapControl":75}],75:[function(require,module,exports){
+},{"./chart":74,"./fetchData":75,"./loadMarkers":76,"./mapControl":78}],78:[function(require,module,exports){
 const createMenuOption = require('../radar/menu/createMenuOption');
 const createOffCanvasItem = require('../radar/menu/createOffCanvasItem');
 const loadMarkers = require('./loadMarkers');
@@ -8366,7 +8724,7 @@ function addTideStationsControl(divName) {
 module.exports = {
     addTideStationsControl
 }
-},{"../radar/map/map":53,"../radar/menu/createMenuOption":56,"../radar/menu/createOffCanvasItem":57,"./loadMarkers":73}],76:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/menu/createMenuOption":56,"../radar/menu/createOffCanvasItem":57,"./loadMarkers":76}],79:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
@@ -8466,7 +8824,7 @@ module.exports = (raf, message, options) => {
 	return message;
 };
 
-},{}],77:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 // parse message type 2
 module.exports = (raf, message) => {
 	message.record = {
@@ -8518,7 +8876,7 @@ const alarmCodes = (raf) => {
 	return alarms;
 };
 
-},{}],78:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 const { MESSAGE_HEADER_SIZE } = require('../constants');
 
 // parse message type 31
@@ -8782,7 +9140,7 @@ const blockName = (raf) => {
 	return { name, type };
 };
 
-},{"../constants":84}],79:[function(require,module,exports){
+},{"../constants":87}],82:[function(require,module,exports){
 // parse message type 5 and 7
 module.exports = (raf, message) => {
 	message.record = {
@@ -8924,7 +9282,7 @@ const supplementalData = (raw) => ({
 	base_tilt_cut: parseBits(raw, 10),
 });
 
-},{}],80:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 const {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE,
 } = require('../constants');
@@ -8999,7 +9357,7 @@ const getRecord = (raf, recordOffset, options) => {
 
 module.exports.Level2Record = Level2Record;
 
-},{"../constants":84,"./Level2Record-1":76,"./Level2Record-2":77,"./Level2Record-31":78,"./Level2Record-5-7":79,"./Level2RecordSearch":81}],81:[function(require,module,exports){
+},{"../constants":87,"./Level2Record-1":79,"./Level2Record-2":80,"./Level2Record-31":81,"./Level2Record-5-7":82,"./Level2RecordSearch":84}],84:[function(require,module,exports){
 // attempt to search for the next message by looking for some known values
 
 const level2RecordSearch = (raf, startPos, julianDate, options) => {
@@ -9053,7 +9411,7 @@ module.exports = {
 	level2RecordSearch,
 };
 
-},{}],82:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -9236,7 +9594,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":219}],83:[function(require,module,exports){
+},{"buffer":224}],86:[function(require,module,exports){
 // combine data returned by multiple calls to the Level2Radar constructor
 
 // individual data structures or arrays can be passed
@@ -9279,7 +9637,7 @@ const combine = (...args) => {
 
 module.exports = combine;
 
-},{}],84:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 const FILE_HEADER_SIZE = 24;
 const RADAR_DATA_SIZE = 2432;
 const CTM_HEADER_SIZE = 12;
@@ -9289,7 +9647,7 @@ module.exports = {
 	FILE_HEADER_SIZE, RADAR_DATA_SIZE, CTM_HEADER_SIZE, MESSAGE_HEADER_SIZE,
 };
 
-},{}],85:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (Buffer){(function (){
 // decompress a nexrad level 2 archive, or return the provided file if it is not compressed
 
@@ -9410,7 +9768,7 @@ const readCompressionHeader = (raf) => ({
 module.exports = decompress;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../../../app/radar/utils":70,"./classes/RandomAccessFile":82,"./constants":84,"./gzipdecompress":86,"buffer":219,"seek-bzip":201}],86:[function(require,module,exports){
+},{"../../../app/radar/utils":70,"./classes/RandomAccessFile":85,"./constants":87,"./gzipdecompress":89,"buffer":224,"seek-bzip":206}],89:[function(require,module,exports){
 const zlib = require('zlib');
 // structured byte access
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
@@ -9420,7 +9778,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":82,"zlib":217}],87:[function(require,module,exports){
+},{"./classes/RandomAccessFile":85,"zlib":223}],90:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -9840,7 +10198,7 @@ const nullLogger = {
 module.exports.Level2Radar = Level2Radar;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./combinedata":83,"./parsedata":88,"buffer":219}],88:[function(require,module,exports){
+},{"./combinedata":86,"./parsedata":91,"buffer":224}],91:[function(require,module,exports){
 const { RandomAccessFile, BIG_ENDIAN } = require('./classes/RandomAccessFile');
 const { Level2Record } = require('./classes/Level2Record');
 const { RADAR_DATA_SIZE } = require('./constants');
@@ -9972,7 +10330,7 @@ const groupAndSortScans = (scans) => {
 
 module.exports = parseData;
 
-},{"../../../app/radar/utils":70,"./classes/Level2Record":80,"./classes/RandomAccessFile":82,"./constants":84,"./decompress":85,"./parseheader":89}],89:[function(require,module,exports){
+},{"../../../app/radar/utils":70,"./classes/Level2Record":83,"./classes/RandomAccessFile":85,"./constants":87,"./decompress":88,"./parseheader":92}],92:[function(require,module,exports){
 const { FILE_HEADER_SIZE } = require('./constants');
 
 const parse = (raf) => {
@@ -9998,7 +10356,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./constants":84}],90:[function(require,module,exports){
+},{"./constants":87}],93:[function(require,module,exports){
 const canvasObj = require('canvas');
 
 const { createCanvas } = canvasObj;
@@ -10314,10 +10672,10 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../../app/radar/draw/drawToMap":27,"./palettes":92,"./palettes/ref":93,"./palettes/vel":94,"./palettize":95,"./preprocess/downsample":96,"./preprocess/filterproduct":97,"./preprocess/indexproduct":98,"./preprocess/rrle":99,"canvas":173}],91:[function(require,module,exports){
+},{"../../../../app/radar/draw/drawToMap":27,"./palettes":95,"./palettes/ref":96,"./palettes/vel":97,"./palettize":98,"./preprocess/downsample":99,"./preprocess/filterproduct":100,"./preprocess/indexproduct":101,"./preprocess/rrle":102,"canvas":177}],94:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
-},{}],92:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 // ingest a palette and provide lookup and formatting functionality
 // {palette: [r1,g1,b1,a1, r2,g2,b2,a2, ...], limits: [1,2, ...]}
 // rgba values are returned with the the color index in the g position with 100% opacity
@@ -10436,7 +10794,7 @@ const inDeadband = (reset) => (a) => (a === null || a === reset || a === undefin
 
 module.exports = Palette;
 
-},{"./hexlookup":91}],93:[function(require,module,exports){
+},{"./hexlookup":94}],96:[function(require,module,exports){
 const palette = [
 	255, 255, 255, 0,	// transparent
 	0, 128, 128, 192,
@@ -10484,7 +10842,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],94:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 const palette = [
 	// 0: green/outbound
 	0, 255, 0, 255,
@@ -10546,7 +10904,7 @@ module.exports = {
 	transparentIndex,
 };
 
-},{}],95:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 const { createCanvas } = require('canvas');
 
 const palettizeImage = (sourceCtx, palette) => {
@@ -10579,7 +10937,7 @@ const palettizeImage = (sourceCtx, palette) => {
 
 module.exports = palettizeImage;
 
-},{"canvas":173}],96:[function(require,module,exports){
+},{"canvas":177}],99:[function(require,module,exports){
 // downsample the moment data preserving the maximum dbz using palette.downSample
 // this includes "cropping" the data to the specified size
 
@@ -10637,7 +10995,7 @@ const downSample = (radials, scale, resolution, options, palette) => {
 
 module.exports = downSample;
 
-},{}],97:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 // accomplish some pre-processing in one loop
 
 // filter data for a specific product
@@ -10675,7 +11033,7 @@ const filterProduct = (data, product) => data.map((header) => {
 
 module.exports = filterProduct;
 
-},{}],98:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 // take the raw data values and turn them into indexed values in the palette
 // this is the first step in palettizing and in the Radial run-length encoding process
 
@@ -10693,7 +11051,7 @@ const indexProduct = (radials, palette) => radials.map((radial) => {
 
 module.exports = indexProduct;
 
-},{}],99:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 // radial run-length encoding
 // encode run length data to the adjacent radials, instead of along the length of the radial
 
@@ -10773,7 +11131,7 @@ const rrle = (radials, resolutionRad, shouldNullValues) => {
 
 module.exports = rrle;
 
-},{}],100:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 const { draw, canvas } = require('./draw');
 const { keys } = require('./draw/palettes/hexlookup');
 const { writePngToFile } = require('./utils/file');
@@ -10840,7 +11198,7 @@ module.exports = {
 	canvas,
 };
 
-},{"./draw":90,"./draw/palettes/hexlookup":91,"./utils/file":101}],101:[function(require,module,exports){
+},{"./draw":93,"./draw/palettes/hexlookup":94,"./utils/file":104}],104:[function(require,module,exports){
 const fs = require('fs');
 // write a canvas to a Png file
 /**
@@ -10873,7 +11231,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":218}],102:[function(require,module,exports){
+},{"fs":214}],105:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -10926,7 +11284,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"../packets":129,"./graphic22":103}],103:[function(require,module,exports){
+},{"../packets":132,"./graphic22":106}],106:[function(require,module,exports){
 // parse data in the graphic area as packet 22 and related packets
 const { parser } = require('../packets');
 
@@ -10956,7 +11314,7 @@ const parse22 = (raf) => {
 
 module.exports = parse22;
 
-},{"../packets":129}],104:[function(require,module,exports){
+},{"../packets":132}],107:[function(require,module,exports){
 const parse = (raf) => ({
 
 	code: raf.readShort(),
@@ -10971,7 +11329,7 @@ const parse = (raf) => ({
 
 module.exports = parse;
 
-},{}],105:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 const MODE_MAINTENANCE = 0;
 const MODE_CLEAN_AIR = 1;
 const MODE_PRECIPITATION = 2;
@@ -11021,7 +11379,7 @@ module.exports = {
 	MODE_PRECIPITATION,
 };
 
-},{}],106:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 // register packet parsers
 
 const { parser } = require('../packets');
@@ -11061,7 +11419,7 @@ const parse = (raf, productDescription, layerCount, options) => {
 
 module.exports = parse;
 
-},{"../packets":129}],107:[function(require,module,exports){
+},{"../packets":132}],110:[function(require,module,exports){
 const symbologyText = require('./symbologytext');
 // some block ids just have text, this is not well documented so we do our best to parse these
 const textSymbologies = [3, 4, 5, 6, 7];
@@ -11089,7 +11447,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{"./symbologytext":108}],108:[function(require,module,exports){
+},{"./symbologytext":111}],111:[function(require,module,exports){
 // block id 6 is undocumented but appears to be text
 
 const parse = (raf) => {
@@ -11123,7 +11481,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],109:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 const parseMessageHeader = require('./message');
 const { parse: parseProductDescription } = require('./productdescription');
 
@@ -11186,7 +11544,7 @@ const parse = (raf, product) => {
 
 module.exports = parse;
 
-},{"./message":104,"./productdescription":105}],110:[function(require,module,exports){
+},{"./message":107,"./productdescription":108}],113:[function(require,module,exports){
 // file header as 30 byte string
 
 const parse = (raf) => {
@@ -11214,7 +11572,7 @@ const parse = (raf) => {
 
 module.exports = parse;
 
-},{}],111:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 (function (Buffer){(function (){
 const bzip = require('seek-bzip');
 const { RandomAccessFile } = require('./randomaccessfile');
@@ -11361,7 +11719,7 @@ const nullLogger = {
 module.exports = nexradLevel3Data;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./headers/graphic":102,"./headers/message":104,"./headers/productdescription":105,"./headers/radialpackets":106,"./headers/symbology":107,"./headers/tabular":109,"./headers/text":110,"./products":159,"./randomaccessfile":160,"buffer":219,"seek-bzip":201}],112:[function(require,module,exports){
+},{"./headers/graphic":105,"./headers/message":107,"./headers/productdescription":108,"./headers/radialpackets":109,"./headers/symbology":110,"./headers/tabular":112,"./headers/text":113,"./products":162,"./randomaccessfile":163,"buffer":224,"seek-bzip":206}],115:[function(require,module,exports){
 const code = 1;
 const description = 'Text and Special Symbol Packets';
 
@@ -11393,7 +11751,7 @@ module.exports = {
 	parser,
 };
 
-},{}],113:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 const code = 16;
 const description = 'Digital Radial Data Array Packet';
 
@@ -11478,7 +11836,7 @@ module.exports = {
 	parser,
 };
 
-},{}],114:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 const code = 19;
 const description = 'Special Graphic Symbol Packet';
 
@@ -11538,7 +11896,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],115:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 const code = 20;
 const description = 'Special Graphic Symbol Packet';
 
@@ -11598,7 +11956,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],116:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 const code = 21;
 const description = 'Special Graphic Symbol Packet';
 const { ijToAzDeg } = require('./utilities/ij');
@@ -11690,7 +12048,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/ij":130}],117:[function(require,module,exports){
+},{"./utilities/ij":133}],120:[function(require,module,exports){
 const code = 22;
 const description = 'Cell Trend Data Packet';
 
@@ -11725,7 +12083,7 @@ module.exports = {
 	parser,
 };
 
-},{}],118:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 const code = 23;
 const description = 'Special Graphic Symbol Packet';
 
@@ -11758,7 +12116,7 @@ module.exports = {
 	parser,
 };
 
-},{".":129}],119:[function(require,module,exports){
+},{".":132}],122:[function(require,module,exports){
 const code = 24;
 const description = 'Special Graphic Symbol Packet';
 
@@ -11771,7 +12129,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":118}],120:[function(require,module,exports){
+},{"./17":121}],123:[function(require,module,exports){
 const code = 25;
 const description = 'Special Graphic Symbol Packet';
 
@@ -11784,7 +12142,7 @@ module.exports = {
 	parser,
 };
 
-},{"./17":118}],121:[function(require,module,exports){
+},{"./17":121}],124:[function(require,module,exports){
 const code = 2;
 const description = 'Text and Special Symbol Packets';
 
@@ -11814,7 +12172,7 @@ module.exports = {
 	parser,
 };
 
-},{}],122:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 const code = 32;
 const description = 'Special Graphic Symbol Packet';
 
@@ -11874,7 +12232,7 @@ module.exports = {
 	supplemental: { featureKey },
 };
 
-},{}],123:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 const code = 6;
 const description = 'Linked Vector Packet';
 
@@ -11918,7 +12276,7 @@ module.exports = {
 	parser,
 };
 
-},{}],124:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 const code = 8;
 const description = 'Text and Special Symbol Packets';
 
@@ -11948,7 +12306,7 @@ module.exports = {
 	parser,
 };
 
-},{}],125:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 const code = 10;
 const description = 'Unlinked Vector Packet';
 
@@ -11998,7 +12356,7 @@ module.exports = {
 	parser,
 };
 
-},{}],126:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 const code = 0xaf1f;
 const description = 'Radial Data Packet (16 Data Levels)';
 const rle = require('./utilities/rle');
@@ -12049,7 +12407,7 @@ module.exports = {
 	parser,
 };
 
-},{"./utilities/rle":131}],127:[function(require,module,exports){
+},{"./utilities/rle":134}],130:[function(require,module,exports){
 const code = 12;
 const description = 'Tornado Vortex Signautre';
 
@@ -12091,7 +12449,7 @@ module.exports = {
 	parser,
 };
 
-},{}],128:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 const code = 15;
 const description = 'Special Graphic Symbol Packet';
 
@@ -12124,7 +12482,7 @@ module.exports = {
 	parser,
 };
 
-},{}],129:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 
 const path = require('path');
 require('./1')
@@ -12179,7 +12537,7 @@ module.exports = {
 	parser,
 };
 
-},{"./1":112,"./10":113,"./13":114,"./14":115,"./15":116,"./16":117,"./17":118,"./18":119,"./19":120,"./2":121,"./32":122,"./6":123,"./8":124,"./a":125,"./af1f":126,"./c":127,"./f":128,"path":250}],130:[function(require,module,exports){
+},{"./1":115,"./10":116,"./13":117,"./14":118,"./15":119,"./16":120,"./17":121,"./18":122,"./19":123,"./2":124,"./32":125,"./6":126,"./8":127,"./a":128,"./af1f":129,"./c":130,"./f":131,"path":255}],133:[function(require,module,exports){
 // i,j coordinate functions
 
 // i,j to azimuth/nmi
@@ -12206,7 +12564,7 @@ module.exports = {
 	ijToAzDeg,
 };
 
-},{}],131:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 // run length encoding expansion methods
 
 // expand rle from rrrrvvvv, 4-bit run, 4-bit value
@@ -12225,7 +12583,7 @@ module.exports = {
 	expand4_4,
 };
 
-},{}],132:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 const code = 134;
 const abbreviation = ['DVL'];
 const description = 'Digital Vertically Integrated Liquid';
@@ -12268,7 +12626,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],133:[function(require,module,exports){
+},{"../../randomaccessfile":163}],136:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -12331,7 +12689,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],134:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 const code = 141;
 const abbreviation = ['NMD'];
 const description = 'Mesocyclone';
@@ -12368,7 +12726,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160,"./formatter":133}],135:[function(require,module,exports){
+},{"../../randomaccessfile":163,"./formatter":136}],138:[function(require,module,exports){
 const code = 153;
 const abbreviation = ['N0B', 'N1B', 'N2B', 'N3B'];
 const description = 'Hi-Res Base Reflectivity';
@@ -12412,7 +12770,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],136:[function(require,module,exports){
+},{"../../randomaccessfile":163}],139:[function(require,module,exports){
 const code = 154;
 const abbreviation = [
 	'N0G',
@@ -12462,7 +12820,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],137:[function(require,module,exports){
+},{"../../randomaccessfile":163}],140:[function(require,module,exports){
 const code = 159;
 const abbreviation = [
 	'N0X',
@@ -12511,7 +12869,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],138:[function(require,module,exports){
+},{"../../randomaccessfile":163}],141:[function(require,module,exports){
 const code = 161;
 const abbreviation = [
 	'N0C',
@@ -12560,7 +12918,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],139:[function(require,module,exports){
+},{"../../randomaccessfile":163}],142:[function(require,module,exports){
 const code = 165;
 const abbreviation = ['N0H', 'N1H', 'N2H', 'N3H'];
 const description = 'Hydrometeor Classification';
@@ -12622,7 +12980,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":160}],140:[function(require,module,exports){
+},{"../../randomaccessfile":163}],143:[function(require,module,exports){
 const code = 170;
 const abbreviation = 'DAA';
 const description = 'Digital One Hour Accumulation';
@@ -12713,7 +13071,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],141:[function(require,module,exports){
+},{"../../randomaccessfile":163}],144:[function(require,module,exports){
 const code = 172;
 const abbreviation = 'DTA';
 const description = 'Storm Total Precipitation';
@@ -12804,7 +13162,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],142:[function(require,module,exports){
+},{"../../randomaccessfile":163}],145:[function(require,module,exports){
 const code = 177;
 const abbreviation = 'HHC';
 const description = 'Hybrid Hydrometeor Classification';
@@ -12845,7 +13203,7 @@ module.exports = {
 	supplemental: { key },
 };
 
-},{"../../randomaccessfile":160,"../165":139}],143:[function(require,module,exports){
+},{"../../randomaccessfile":163,"../165":142}],146:[function(require,module,exports){
 const code = 180;
 const abbreviation = ['TZX', 'TZ0', 'TZ1', 'TZ2'];
 const description = 'TDWR Short-Range Reflectivity';
@@ -12889,7 +13247,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],144:[function(require,module,exports){
+},{"../../randomaccessfile":163}],147:[function(require,module,exports){
 const code = 182;
 const abbreviation = [
 	'TVX',
@@ -12938,7 +13296,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],145:[function(require,module,exports){
+},{"../../randomaccessfile":163}],148:[function(require,module,exports){
 const code = 186;
 const abbreviation = ['TZL'];
 const description = 'TDWR Long-Range Reflectivity';
@@ -12982,7 +13340,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],146:[function(require,module,exports){
+},{"../../randomaccessfile":163}],149:[function(require,module,exports){
 const code = 30;
 const abbreviation = [
 	'NSW'
@@ -13028,7 +13386,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],147:[function(require,module,exports){
+},{"../../randomaccessfile":163}],150:[function(require,module,exports){
 const code = 56;
 const abbreviation = ['N0S', 'N1S', 'N2S', 'N3S'];
 const description = 'Storm relative velocity';
@@ -13060,7 +13418,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],148:[function(require,module,exports){
+},{"../../randomaccessfile":163}],151:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  P2     244/125   232/ 38     245/116   246/107   247/ 97   NO DATA    1.1/ 0.9"
@@ -13135,7 +13493,7 @@ const parseStringPosition = (position, kts = false) => {
 	};
 };
 
-},{}],149:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 const code = 58;
 const abbreviation = ['NST'];
 const description = 'Storm Tracking Information';
@@ -13171,7 +13529,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160,"./formatter":148}],150:[function(require,module,exports){
+},{"../../randomaccessfile":163,"./formatter":151}],153:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "        U3               0                   50                <0.50            "
@@ -13214,7 +13572,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],151:[function(require,module,exports){
+},{}],154:[function(require,module,exports){
 const code = 59;
 const abbreviation = ['NHI'];
 const description = 'Hail Index';
@@ -13232,7 +13590,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":150}],152:[function(require,module,exports){
+},{"./formatter":153}],155:[function(require,module,exports){
 // format the text data provided
 // extract data from lines that follow this format
 // "  TVS    F0    74/ 52    35    52    52/ 4.9   >11.1  < 4.9/ 16.0    16/ 4.9    "
@@ -13293,7 +13651,7 @@ module.exports = (data) => {
 	};
 };
 
-},{}],153:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 const code = 61;
 const abbreviation = ['NTV'];
 const description = 'Tornadic Vortex Signature';
@@ -13309,7 +13667,7 @@ module.exports = {
 	},
 };
 
-},{"./formatter":152}],154:[function(require,module,exports){
+},{"./formatter":155}],157:[function(require,module,exports){
 const code = 62;
 const abbreviation = ['NSS'];
 const description = 'Storm Structure';
@@ -13327,7 +13685,7 @@ module.exports = {
 	},
 };
 
-},{}],155:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 const code = 78;
 const abbreviation = 'N1P';
 const description = 'One-hour precipitation';
@@ -13359,7 +13717,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],156:[function(require,module,exports){
+},{"../../randomaccessfile":163}],159:[function(require,module,exports){
 const code = 80;
 const abbreviation = 'NTP';
 const description = 'Storm Total Rainfall Accumulation';
@@ -13393,7 +13751,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],157:[function(require,module,exports){
+},{"../../randomaccessfile":163}],160:[function(require,module,exports){
 const code = 94;
 const abbreviation = ['NXQ', 'NYQ', 'NZQ', 'N0Q', 'NAQ', 'N1Q', 'NBQ', 'N2Q', 'N3Q'];
 const description = 'Digital Base Reflectivity';
@@ -13437,7 +13795,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],158:[function(require,module,exports){
+},{"../../randomaccessfile":163}],161:[function(require,module,exports){
 const code = 99;
 const abbreviation = [
 	'N0U',
@@ -13486,7 +13844,7 @@ module.exports = {
 	},
 };
 
-},{"../../randomaccessfile":160}],159:[function(require,module,exports){
+},{"../../randomaccessfile":163}],162:[function(require,module,exports){
 
 const path = require('path');
 
@@ -13534,7 +13892,7 @@ module.exports = {
 	productAbbreviations,
 };
 
-},{"./134":132,"./141":134,"./153":135,"./154":136,"./159":137,"./161":138,"./165":139,"./170":140,"./172":141,"./177":142,"./180":143,"./182":144,"./186":145,"./30":146,"./56":147,"./58":149,"./59":151,"./61":153,"./62":154,"./78":155,"./80":156,"./94":157,"./99":158,"path":250}],160:[function(require,module,exports){
+},{"./134":135,"./141":137,"./153":138,"./154":139,"./159":140,"./161":141,"./165":142,"./170":143,"./172":144,"./177":145,"./180":146,"./182":147,"./186":148,"./30":149,"./56":150,"./58":152,"./59":154,"./61":156,"./62":157,"./78":158,"./80":159,"./94":160,"./99":161,"path":255}],163:[function(require,module,exports){
 (function (Buffer){(function (){
 const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
@@ -13652,7 +14010,7 @@ module.exports.BIG_ENDIAN = BIG_ENDIAN;
 module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":219}],161:[function(require,module,exports){
+},{"buffer":224}],164:[function(require,module,exports){
 var normalize = require('@mapbox/geojson-normalize');
 var geojsonStream = require('geojson-stream');
 var fs = require('fs');
@@ -13719,7 +14077,7 @@ function mergeFeatureCollectionStream (inputs) {
 module.exports.merge = merge;
 module.exports.mergeFeatureCollectionStream = mergeFeatureCollectionStream;
 
-},{"@mapbox/geojson-normalize":162,"fs":218,"geojson-stream":178}],162:[function(require,module,exports){
+},{"@mapbox/geojson-normalize":165,"fs":214,"geojson-stream":182}],165:[function(require,module,exports){
 module.exports = normalize;
 
 var types = {
@@ -13764,7 +14122,7 @@ function normalize(gj) {
     }
 }
 
-},{}],163:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var meta_1 = require("@turf/meta");
@@ -13803,7 +14161,7 @@ function bbox(geojson) {
 bbox["default"] = bbox;
 exports.default = bbox;
 
-},{"@turf/meta":169}],164:[function(require,module,exports){
+},{"@turf/meta":172}],167:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -14046,7 +14404,7 @@ function getMidpoint(pair1, pair2) {
 }
 exports.getMidpoint = getMidpoint;
 
-},{"@turf/bbox":163,"@turf/boolean-point-in-polygon":165,"@turf/boolean-point-on-line":166,"@turf/invariant":168}],165:[function(require,module,exports){
+},{"@turf/bbox":166,"@turf/boolean-point-in-polygon":168,"@turf/boolean-point-on-line":169,"@turf/invariant":171}],168:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var invariant_1 = require("@turf/invariant");
@@ -14166,7 +14524,7 @@ function inBBox(pt, bbox) {
     return (bbox[0] <= pt[0] && bbox[1] <= pt[1] && bbox[2] >= pt[0] && bbox[3] >= pt[1]);
 }
 
-},{"@turf/invariant":168}],166:[function(require,module,exports){
+},{"@turf/invariant":171}],169:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var invariant_1 = require("@turf/invariant");
@@ -14272,7 +14630,7 @@ function isPointOnLineSegment(lineSegmentStart, lineSegmentEnd, pt, excludeBound
 }
 exports.default = booleanPointOnLine;
 
-},{"@turf/invariant":168}],167:[function(require,module,exports){
+},{"@turf/invariant":171}],170:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
@@ -14998,7 +15356,7 @@ function validateId(id) {
 }
 exports.validateId = validateId;
 
-},{}],168:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var helpers_1 = require("@turf/helpers");
@@ -15233,7 +15591,7 @@ function getType(geojson, _name) {
 }
 exports.getType = getType;
 
-},{"@turf/helpers":167}],169:[function(require,module,exports){
+},{"@turf/helpers":170}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -16656,7 +17014,99 @@ exports.propReduce = propReduce;
 exports.segmentEach = segmentEach;
 exports.segmentReduce = segmentReduce;
 
-},{"@turf/helpers":167}],170:[function(require,module,exports){
+},{"@turf/helpers":170}],173:[function(require,module,exports){
+(function (process){(function (){
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"function"==typeof define&&define.amd?define(["exports"],e):e((t="undefined"!=typeof globalThis?globalThis:t||self).turf={})}(this,(function(t){"use strict";var e=6371008.8,n={centimeters:637100880,centimetres:637100880,degrees:57.22891354143274,feet:20902260.511392,inches:39.37*e,kilometers:6371.0088,kilometres:6371.0088,meters:e,metres:e,miles:3958.761333810546,millimeters:6371008800,millimetres:6371008800,nauticalmiles:e/1852,radians:1,yards:6967335.223679999},r={centimeters:100,centimetres:100,degrees:1/111325,feet:3.28084,inches:39.37,kilometers:.001,kilometres:.001,meters:1,metres:1,miles:1/1609.344,millimeters:1e3,millimetres:1e3,nauticalmiles:1/1852,radians:1/e,yards:1.0936133},i={acres:247105e-9,centimeters:1e4,centimetres:1e4,feet:10.763910417,hectares:1e-4,inches:1550.003100006,kilometers:1e-6,kilometres:1e-6,meters:1,metres:1,miles:386e-9,millimeters:1e6,millimetres:1e6,yards:1.195990046};function o(t,e,n){void 0===n&&(n={});var r={type:"Feature"};return(0===n.id||n.id)&&(r.id=n.id),n.bbox&&(r.bbox=n.bbox),r.properties=e||{},r.geometry=t,r}function s(t,e,n){switch(t){case"Point":return a(e).geometry;case"LineString":return h(e).geometry;case"Polygon":return l(e).geometry;case"MultiPoint":return d(e).geometry;case"MultiLineString":return g(e).geometry;case"MultiPolygon":return y(e).geometry;default:throw new Error(t+" is invalid")}}function a(t,e,n){if(void 0===n&&(n={}),!t)throw new Error("coordinates is required");if(!Array.isArray(t))throw new Error("coordinates must be an Array");if(t.length<2)throw new Error("coordinates must be at least 2 numbers long");if(!C(t[0])||!C(t[1]))throw new Error("coordinates must contain numbers");return o({type:"Point",coordinates:t},e,n)}function u(t,e,n){return void 0===n&&(n={}),f(t.map((function(t){return a(t,e)})),n)}function l(t,e,n){void 0===n&&(n={});for(var r=0,i=t;r<i.length;r++){var s=i[r];if(s.length<4)throw new Error("Each LinearRing of a Polygon must have 4 or more Positions.");for(var a=0;a<s[s.length-1].length;a++)if(s[s.length-1][a]!==s[0][a])throw new Error("First and last Position are not equivalent.")}return o({type:"Polygon",coordinates:t},e,n)}function c(t,e,n){return void 0===n&&(n={}),f(t.map((function(t){return l(t,e)})),n)}function h(t,e,n){if(void 0===n&&(n={}),t.length<2)throw new Error("coordinates must be an array of two or more positions");return o({type:"LineString",coordinates:t},e,n)}function p(t,e,n){return void 0===n&&(n={}),f(t.map((function(t){return h(t,e)})),n)}function f(t,e){void 0===e&&(e={});var n={type:"FeatureCollection"};return e.id&&(n.id=e.id),e.bbox&&(n.bbox=e.bbox),n.features=t,n}function g(t,e,n){return void 0===n&&(n={}),o({type:"MultiLineString",coordinates:t},e,n)}function d(t,e,n){return void 0===n&&(n={}),o({type:"MultiPoint",coordinates:t},e,n)}function y(t,e,n){return void 0===n&&(n={}),o({type:"MultiPolygon",coordinates:t},e,n)}function v(t,e,n){return void 0===n&&(n={}),o({type:"GeometryCollection",geometries:t},e,n)}function _(t,e){if(void 0===e&&(e=0),e&&!(e>=0))throw new Error("precision must be a positive number");var n=Math.pow(10,e||0);return Math.round(t*n)/n}function m(t,e){void 0===e&&(e="kilometers");var r=n[e];if(!r)throw new Error(e+" units is invalid");return t*r}function x(t,e){void 0===e&&(e="kilometers");var r=n[e];if(!r)throw new Error(e+" units is invalid");return t/r}function E(t,e){return w(x(t,e))}function b(t){var e=t%360;return e<0&&(e+=360),e}function w(t){return 180*(t%(2*Math.PI))/Math.PI}function I(t){return t%360*Math.PI/180}function N(t,e,n){if(void 0===e&&(e="kilometers"),void 0===n&&(n="kilometers"),!(t>=0))throw new Error("length must be a positive number");return m(x(t,e),n)}function S(t,e,n){if(void 0===e&&(e="meters"),void 0===n&&(n="kilometers"),!(t>=0))throw new Error("area must be a positive number");var r=i[e];if(!r)throw new Error("invalid original units");var o=i[n];if(!o)throw new Error("invalid final units");return t/r*o}function C(t){return!isNaN(t)&&null!==t&&!Array.isArray(t)}function P(t){return!!t&&t.constructor===Object}function M(t){if(!t)throw new Error("bbox is required");if(!Array.isArray(t))throw new Error("bbox must be an Array");if(4!==t.length&&6!==t.length)throw new Error("bbox must be an Array of 4 or 6 numbers");t.forEach((function(t){if(!C(t))throw new Error("bbox must only contain numbers")}))}function L(t){if(!t)throw new Error("id is required");if(-1===["string","number"].indexOf(typeof t))throw new Error("id must be a number or a string")}var O=Object.freeze({__proto__:null,earthRadius:e,factors:n,unitsFactors:r,areaFactors:i,feature:o,geometry:s,point:a,points:u,polygon:l,polygons:c,lineString:h,lineStrings:p,featureCollection:f,multiLineString:g,multiPoint:d,multiPolygon:y,geometryCollection:v,round:_,radiansToLength:m,lengthToRadians:x,lengthToDegrees:E,bearingToAzimuth:b,radiansToDegrees:w,degreesToRadians:I,convertLength:N,convertArea:S,isNumber:C,isObject:P,validateBBox:M,validateId:L});function R(t,e,n){if(null!==t)for(var r,i,o,s,a,u,l,c,h=0,p=0,f=t.type,g="FeatureCollection"===f,d="Feature"===f,y=g?t.features.length:1,v=0;v<y;v++){a=(c=!!(l=g?t.features[v].geometry:d?t.geometry:t)&&"GeometryCollection"===l.type)?l.geometries.length:1;for(var _=0;_<a;_++){var m=0,x=0;if(null!==(s=c?l.geometries[_]:l)){u=s.coordinates;var E=s.type;switch(h=!n||"Polygon"!==E&&"MultiPolygon"!==E?0:1,E){case null:break;case"Point":if(!1===e(u,p,v,m,x))return!1;p++,m++;break;case"LineString":case"MultiPoint":for(r=0;r<u.length;r++){if(!1===e(u[r],p,v,m,x))return!1;p++,"MultiPoint"===E&&m++}"LineString"===E&&m++;break;case"Polygon":case"MultiLineString":for(r=0;r<u.length;r++){for(i=0;i<u[r].length-h;i++){if(!1===e(u[r][i],p,v,m,x))return!1;p++}"MultiLineString"===E&&m++,"Polygon"===E&&x++}"Polygon"===E&&m++;break;case"MultiPolygon":for(r=0;r<u.length;r++){for(x=0,i=0;i<u[r].length;i++){for(o=0;o<u[r][i].length-h;o++){if(!1===e(u[r][i][o],p,v,m,x))return!1;p++}x++}m++}break;case"GeometryCollection":for(r=0;r<s.geometries.length;r++)if(!1===R(s.geometries[r],e,n))return!1;break;default:throw new Error("Unknown Geometry Type")}}}}}function T(t,e,n,r){var i=n;return R(t,(function(t,r,o,s,a){i=0===r&&void 0===n?t:e(i,t,r,o,s,a)}),r),i}function A(t,e){var n;switch(t.type){case"FeatureCollection":for(n=0;n<t.features.length&&!1!==e(t.features[n].properties,n);n++);break;case"Feature":e(t.properties,0)}}function D(t,e,n){var r=n;return A(t,(function(t,i){r=0===i&&void 0===n?t:e(r,t,i)})),r}function F(t,e){if("Feature"===t.type)e(t,0);else if("FeatureCollection"===t.type)for(var n=0;n<t.features.length&&!1!==e(t.features[n],n);n++);}function k(t,e,n){var r=n;return F(t,(function(t,i){r=0===i&&void 0===n?t:e(r,t,i)})),r}function G(t){var e=[];return R(t,(function(t){e.push(t)})),e}function q(t,e){var n,r,i,o,s,a,u,l,c,h,p=0,f="FeatureCollection"===t.type,g="Feature"===t.type,d=f?t.features.length:1;for(n=0;n<d;n++){for(a=f?t.features[n].geometry:g?t.geometry:t,l=f?t.features[n].properties:g?t.properties:{},c=f?t.features[n].bbox:g?t.bbox:void 0,h=f?t.features[n].id:g?t.id:void 0,s=(u=!!a&&"GeometryCollection"===a.type)?a.geometries.length:1,i=0;i<s;i++)if(null!==(o=u?a.geometries[i]:a))switch(o.type){case"Point":case"LineString":case"MultiPoint":case"Polygon":case"MultiLineString":case"MultiPolygon":if(!1===e(o,p,l,c,h))return!1;break;case"GeometryCollection":for(r=0;r<o.geometries.length;r++)if(!1===e(o.geometries[r],p,l,c,h))return!1;break;default:throw new Error("Unknown Geometry Type")}else if(!1===e(null,p,l,c,h))return!1;p++}}function B(t,e,n){var r=n;return q(t,(function(t,i,o,s,a){r=0===i&&void 0===n?t:e(r,t,i,o,s,a)})),r}function z(t,e){q(t,(function(t,n,r,i,s){var a,u=null===t?null:t.type;switch(u){case null:case"Point":case"LineString":case"Polygon":return!1!==e(o(t,r,{bbox:i,id:s}),n,0)&&void 0}switch(u){case"MultiPoint":a="Point";break;case"MultiLineString":a="LineString";break;case"MultiPolygon":a="Polygon"}for(var l=0;l<t.coordinates.length;l++){var c=t.coordinates[l];if(!1===e(o({type:a,coordinates:c},r),n,l))return!1}}))}function j(t,e,n){var r=n;return z(t,(function(t,i,o){r=0===i&&0===o&&void 0===n?t:e(r,t,i,o)})),r}function U(t,e){z(t,(function(t,n,r){var i=0;if(t.geometry){var o=t.geometry.type;if("Point"!==o&&"MultiPoint"!==o){var s,a=0,u=0,l=0;return!1!==R(t,(function(o,c,p,f,g){if(void 0===s||n>a||f>u||g>l)return s=o,a=n,u=f,l=g,void(i=0);var d=h([s,o],t.properties);if(!1===e(d,n,r,g,i))return!1;i++,s=o}))&&void 0}}}))}function V(t,e,n){var r=n,i=!1;return U(t,(function(t,o,s,a,u){r=!1===i&&void 0===n?t:e(r,t,o,s,a,u),i=!0})),r}function X(t,e){if(!t)throw new Error("geojson is required");z(t,(function(t,n,r){if(null!==t.geometry){var i=t.geometry.type,o=t.geometry.coordinates;switch(i){case"LineString":if(!1===e(t,n,r,0,0))return!1;break;case"Polygon":for(var s=0;s<o.length;s++)if(!1===e(h(o[s],t.properties),n,r,s))return!1}}}))}function Y(t,e,n){var r=n;return X(t,(function(t,i,o,s){r=0===i&&void 0===n?t:e(r,t,i,o,s)})),r}function H(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n,r=e.featureIndex||0,i=e.multiFeatureIndex||0,o=e.geometryIndex||0,s=e.segmentIndex||0,a=e.properties;switch(t.type){case"FeatureCollection":r<0&&(r=t.features.length+r),a=a||t.features[r].properties,n=t.features[r].geometry;break;case"Feature":a=a||t.properties,n=t.geometry;break;case"Point":case"MultiPoint":return null;case"LineString":case"Polygon":case"MultiLineString":case"MultiPolygon":n=t;break;default:throw new Error("geojson is invalid")}if(null===n)return null;var u=n.coordinates;switch(n.type){case"Point":case"MultiPoint":return null;case"LineString":return s<0&&(s=u.length+s-1),h([u[s],u[s+1]],a,e);case"Polygon":return o<0&&(o=u.length+o),s<0&&(s=u[o].length+s-1),h([u[o][s],u[o][s+1]],a,e);case"MultiLineString":return i<0&&(i=u.length+i),s<0&&(s=u[i].length+s-1),h([u[i][s],u[i][s+1]],a,e);case"MultiPolygon":return i<0&&(i=u.length+i),o<0&&(o=u[i].length+o),s<0&&(s=u[i][o].length-s-1),h([u[i][o][s],u[i][o][s+1]],a,e)}throw new Error("geojson is invalid")}function W(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n,r=e.featureIndex||0,i=e.multiFeatureIndex||0,o=e.geometryIndex||0,s=e.coordIndex||0,u=e.properties;switch(t.type){case"FeatureCollection":r<0&&(r=t.features.length+r),u=u||t.features[r].properties,n=t.features[r].geometry;break;case"Feature":u=u||t.properties,n=t.geometry;break;case"Point":case"MultiPoint":return null;case"LineString":case"Polygon":case"MultiLineString":case"MultiPolygon":n=t;break;default:throw new Error("geojson is invalid")}if(null===n)return null;var l=n.coordinates;switch(n.type){case"Point":return a(l,u,e);case"MultiPoint":return i<0&&(i=l.length+i),a(l[i],u,e);case"LineString":return s<0&&(s=l.length+s),a(l[s],u,e);case"Polygon":return o<0&&(o=l.length+o),s<0&&(s=l[o].length+s),a(l[o][s],u,e);case"MultiLineString":return i<0&&(i=l.length+i),s<0&&(s=l[i].length+s),a(l[i][s],u,e);case"MultiPolygon":return i<0&&(i=l.length+i),o<0&&(o=l[i].length+o),s<0&&(s=l[i][o].length-s),a(l[i][o][s],u,e)}throw new Error("geojson is invalid")}var J=Object.freeze({__proto__:null,coordAll:G,coordEach:R,coordReduce:T,featureEach:F,featureReduce:k,findPoint:W,findSegment:H,flattenEach:z,flattenReduce:j,geomEach:q,geomReduce:B,lineEach:X,lineReduce:Y,propEach:A,propReduce:D,segmentEach:U,segmentReduce:V});function Z(t){var e=[1/0,1/0,-1/0,-1/0];return R(t,(function(t){e[0]>t[0]&&(e[0]=t[0]),e[1]>t[1]&&(e[1]=t[1]),e[2]<t[0]&&(e[2]=t[0]),e[3]<t[1]&&(e[3]=t[1])})),e}function K(t){if(!t)throw new Error("coord is required");if(!Array.isArray(t)){if("Feature"===t.type&&null!==t.geometry&&"Point"===t.geometry.type)return t.geometry.coordinates;if("Point"===t.type)return t.coordinates}if(Array.isArray(t)&&t.length>=2&&!Array.isArray(t[0])&&!Array.isArray(t[1]))return t;throw new Error("coord must be GeoJSON Point or an Array of numbers")}function Q(t){if(Array.isArray(t))return t;if("Feature"===t.type){if(null!==t.geometry)return t.geometry.coordinates}else if(t.coordinates)return t.coordinates;throw new Error("coords must be GeoJSON Feature, Geometry Object or an Array")}function $(t){if(t.length>1&&C(t[0])&&C(t[1]))return!0;if(Array.isArray(t[0])&&t[0].length)return $(t[0]);throw new Error("coordinates must only contain numbers")}function tt(t,e,n){if(!e||!n)throw new Error("type and name required");if(!t||t.type!==e)throw new Error("Invalid input to "+n+": must be a "+e+", given "+t.type)}function et(t,e,n){if(!t)throw new Error("No feature passed");if(!n)throw new Error(".featureOf() requires a name");if(!t||"Feature"!==t.type||!t.geometry)throw new Error("Invalid input to "+n+", Feature with geometry required");if(!t.geometry||t.geometry.type!==e)throw new Error("Invalid input to "+n+": must be a "+e+", given "+t.geometry.type)}function nt(t,e,n){if(!t)throw new Error("No featureCollection passed");if(!n)throw new Error(".collectionOf() requires a name");if(!t||"FeatureCollection"!==t.type)throw new Error("Invalid input to "+n+", FeatureCollection required");for(var r=0,i=t.features;r<i.length;r++){var o=i[r];if(!o||"Feature"!==o.type||!o.geometry)throw new Error("Invalid input to "+n+", Feature with geometry required");if(!o.geometry||o.geometry.type!==e)throw new Error("Invalid input to "+n+": must be a "+e+", given "+o.geometry.type)}}function rt(t){return"Feature"===t.type?t.geometry:t}function it(t,e){return"FeatureCollection"===t.type?"FeatureCollection":"GeometryCollection"===t.type?"GeometryCollection":"Feature"===t.type&&null!==t.geometry?t.geometry.type:t.type}Z.default=Z;var ot=Object.freeze({__proto__:null,getCoord:K,getCoords:Q,containsNumber:$,geojsonType:tt,featureOf:et,collectionOf:nt,getGeom:rt,getType:it}),st=Object.getOwnPropertySymbols,at=Object.prototype.hasOwnProperty,ut=Object.prototype.propertyIsEnumerable;
+/*
+    object-assign
+    (c) Sindre Sorhus
+    @license MIT
+    */function lt(t){if(null==t)throw new TypeError("Object.assign cannot be called with null or undefined");return Object(t)}var ct=function(){try{if(!Object.assign)return!1;var t=new String("abc");if(t[5]="de","5"===Object.getOwnPropertyNames(t)[0])return!1;for(var e={},n=0;n<10;n++)e["_"+String.fromCharCode(n)]=n;if("0123456789"!==Object.getOwnPropertyNames(e).map((function(t){return e[t]})).join(""))return!1;var r={};return"abcdefghijklmnopqrst".split("").forEach((function(t){r[t]=t})),"abcdefghijklmnopqrst"===Object.keys(Object.assign({},r)).join("")}catch(t){return!1}}()?Object.assign:function(t,e){for(var n,r,i=lt(t),o=1;o<arguments.length;o++){for(var s in n=Object(arguments[o]))at.call(n,s)&&(i[s]=n[s]);if(st){r=st(n);for(var a=0;a<r.length;a++)ut.call(n,r[a])&&(i[r[a]]=n[r[a]])}}return i},ht={successCallback:null,verbose:!1},pt={};
+/**
+     * @license GNU Affero General Public License.
+     * Copyright (c) 2015, 2015 Ronny Lorenz <ronny@tbi.univie.ac.at>
+     * v. 1.2.0
+     * https://github.com/RaumZeit/MarchingSquares.js
+     *
+     * MarchingSquaresJS is free software: you can redistribute it and/or modify
+     * it under the terms of the GNU Affero General Public License as published by
+     * the Free Software Foundation, either version 3 of the License, or
+     * (at your option) any later version.
+     *
+     * MarchingSquaresJS is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * GNU Affero General Public License for more details.
+     *
+     * As additional permission under GNU Affero General Public License version 3
+     * section 7, third-party projects (personal or commercial) may distribute,
+     * include, or link against UNMODIFIED VERSIONS of MarchingSquaresJS without the
+     * requirement that said third-party project for that reason alone becomes
+     * subject to any requirement of the GNU Affero General Public License version 3.
+     * Any modifications to MarchingSquaresJS, however, must be shared with the public
+     * and made available.
+     *
+     * In summary this:
+     * - allows you to use MarchingSquaresJS at no cost
+     * - allows you to use MarchingSquaresJS for both personal and commercial purposes
+     * - allows you to distribute UNMODIFIED VERSIONS of MarchingSquaresJS under any
+     *   license as long as this license notice is included
+     * - enables you to keep the source code of your program that uses MarchingSquaresJS
+     *   undisclosed
+     * - forces you to share any modifications you have made to MarchingSquaresJS,
+     *   e.g. bug-fixes
+     *
+     * You should have received a copy of the GNU Affero General Public License
+     * along with MarchingSquaresJS.  If not, see <http://www.gnu.org/licenses/>.
+     */function ft(t,e,n){n=n||{};for(var r=Object.keys(ht),i=0;i<r.length;i++){var o=r[i],s=n[o];s=null!=s?s:ht[o],pt[o]=s}pt.verbose&&console.log("MarchingSquaresJS-isoContours: computing isocontour for "+e);var a=function(t){var e=[],n=0,r=1e-7;return t.cells.forEach((function(i,o){i.forEach((function(i,s){if(void 0!==i&&(5!==(f=i).cval&&10!==f.cval)&&!dt(i)){var a=function(t,e,n){var r,i,o=t.length,s=[],a=[0,0,1,1,0,0,0,0,-1,0,1,1,-1,0,-1,0],u=[0,-1,0,0,1,1,1,1,0,-1,0,0,0,-1,0,0],l=["none","left","bottom","left","right","none","bottom","left","top","top","none","top","right","right","bottom","none"],c=["none","bottom","right","right","top","top","top","top","left","bottom","right","right","left","bottom","left","none"],h=t[e][n],p=h.cval,f=l[p],g=vt(h,f);s.push([n+g[0],e+g[1]]),f=c[p],g=vt(h,f),s.push([n+g[0],e+g[1]]),yt(h);var d=n+a[p],y=e+u[p],v=p;for(;d>=0&&y>=0&&y<o&&(d!=n||y!=e)&&void 0!==(h=t[y][d]);){if(0===(p=h.cval)||15===p)return{path:s,info:"mergeable"};f=c[p],r=a[p],i=u[p],5!==p&&10!==p||(5===p?h.flipped?-1===u[v]?(f="left",r=-1,i=0):(f="right",r=1,i=0):-1===a[v]&&(f="bottom",r=0,i=-1):10===p&&(h.flipped?-1===a[v]?(f="top",r=0,i=1):(f="bottom",r=0,i=-1):1===u[v]&&(f="left",r=-1,i=0))),g=vt(h,f),s.push([d+g[0],y+g[1]]),yt(h),d+=r,y+=i,v=p}return{path:s,info:"closed"}}(t.cells,o,s),u=!1;if("mergeable"===a.info)for(var l=a.path[a.path.length-1][0],c=a.path[a.path.length-1][1],h=n-1;h>=0;h--)if(Math.abs(e[h][0][0]-l)<=r&&Math.abs(e[h][0][1]-c)<=r){for(var p=a.path.length-2;p>=0;--p)e[h].unshift(a.path[p]);u=!0;break}u||(e[n++]=a.path)}var f}))})),e}(function(t,e){for(var n=t.length-1,r=t[0].length-1,i={rows:n,cols:r,cells:[]},o=0;o<n;++o){i.cells[o]=[];for(var s=0;s<r;++s){var a=0,u=t[o+1][s],l=t[o+1][s+1],c=t[o][s+1],h=t[o][s];if(!(isNaN(u)||isNaN(l)||isNaN(c)||isNaN(h))){a|=u>=e?8:0,a|=l>=e?4:0,a|=c>=e?2:0;var p,f,g,d,y=!1;if(5===(a|=h>=e?1:0)||10===a){var v=(u+l+c+h)/4;5===a&&v<e?(a=10,y=!0):10===a&&v<e&&(a=5,y=!0)}if(0!==a&&15!==a)p=f=g=d=.5,1===a?(g=1-gt(e,u,h),f=1-gt(e,c,h)):2===a?(f=gt(e,h,c),d=1-gt(e,l,c)):3===a?(g=1-gt(e,u,h),d=1-gt(e,l,c)):4===a?(p=gt(e,u,l),d=gt(e,c,l)):5===a?(p=gt(e,u,l),d=gt(e,c,l),f=1-gt(e,c,h),g=1-gt(e,u,h)):6===a?(f=gt(e,h,c),p=gt(e,u,l)):7===a?(g=1-gt(e,u,h),p=gt(e,u,l)):8===a?(g=gt(e,h,u),p=1-gt(e,l,u)):9===a?(f=1-gt(e,c,h),p=1-gt(e,l,u)):10===a?(p=1-gt(e,l,u),d=1-gt(e,l,c),f=gt(e,h,c),g=gt(e,h,u)):11===a?(p=1-gt(e,l,u),d=1-gt(e,l,c)):12===a?(g=gt(e,h,u),d=gt(e,c,l)):13===a?(f=1-gt(e,c,h),d=gt(e,c,l)):14===a?(g=gt(e,h,u),f=gt(e,h,c)):console.log("MarchingSquaresJS-isoContours: Illegal cval detected: "+a),i.cells[o][s]={cval:a,flipped:y,top:p,right:d,bottom:f,left:g}}}}return i}(t,e));return"function"==typeof pt.successCallback&&pt.successCallback(a),a}function gt(t,e,n){return(t-e)/(n-e)}function dt(t){return 0===t.cval||15===t.cval}function yt(t){dt(t)||5===t.cval||10===t.cval||(t.cval=15)}function vt(t,e){return"top"===e?[t.top,1]:"bottom"===e?[t.bottom,0]:"right"===e?[1,t.right]:"left"===e?[0,t.left]:void 0}function _t(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.zProperty||"elevation",r=e.flip,i=e.flags;nt(t,"Point","input must contain Points");for(var o=function(t,e){var n={};return F(t,(function(t){var e=Q(t)[1];n[e]||(n[e]=[]),n[e].push(t)})),Object.keys(n).map((function(t){return n[t].sort((function(t,e){return Q(t)[0]-Q(e)[0]}))})).sort((function(t,n){return e?Q(t[0])[1]-Q(n[0])[1]:Q(n[0])[1]-Q(t[0])[1]}))}(t,r),s=[],a=0;a<o.length;a++){for(var u=o[a],l=[],c=0;c<u.length;c++){var h=u[c];h.properties[n]?l.push(h.properties[n]):l.push(0),!0===i&&(h.properties.matrixPosition=[a,c])}s.push(l)}return s}var mt=Et,xt=Et;function Et(t,e,n,r,i){bt(t,e,n||0,r||t.length-1,i||It)}function bt(t,e,n,r,i){for(;r>n;){if(r-n>600){var o=r-n+1,s=e-n+1,a=Math.log(o),u=.5*Math.exp(2*a/3),l=.5*Math.sqrt(a*u*(o-u)/o)*(s-o/2<0?-1:1);bt(t,e,Math.max(n,Math.floor(e-s*u/o+l)),Math.min(r,Math.floor(e+(o-s)*u/o+l)),i)}var c=t[e],h=n,p=r;for(wt(t,n,e),i(t[r],c)>0&&wt(t,n,r);h<p;){for(wt(t,h,p),h++,p--;i(t[h],c)<0;)h++;for(;i(t[p],c)>0;)p--}0===i(t[n],c)?wt(t,n,p):wt(t,++p,r),p<=e&&(n=p+1),e<=p&&(r=p-1)}}function wt(t,e,n){var r=t[e];t[e]=t[n],t[n]=r}function It(t,e){return t<e?-1:t>e?1:0}mt.default=xt;var Nt=Ct,St=Ct;function Ct(t,e){if(!(this instanceof Ct))return new Ct(t,e);this._maxEntries=Math.max(4,t||9),this._minEntries=Math.max(2,Math.ceil(.4*this._maxEntries)),e&&this._initFormat(e),this.clear()}function Pt(t,e,n){if(!n)return e.indexOf(t);for(var r=0;r<e.length;r++)if(n(t,e[r]))return r;return-1}function Mt(t,e){Lt(t,0,t.children.length,e,t)}function Lt(t,e,n,r,i){i||(i=Gt(null)),i.minX=1/0,i.minY=1/0,i.maxX=-1/0,i.maxY=-1/0;for(var o,s=e;s<n;s++)o=t.children[s],Ot(i,t.leaf?r(o):o);return i}function Ot(t,e){return t.minX=Math.min(t.minX,e.minX),t.minY=Math.min(t.minY,e.minY),t.maxX=Math.max(t.maxX,e.maxX),t.maxY=Math.max(t.maxY,e.maxY),t}function Rt(t,e){return t.minX-e.minX}function Tt(t,e){return t.minY-e.minY}function At(t){return(t.maxX-t.minX)*(t.maxY-t.minY)}function Dt(t){return t.maxX-t.minX+(t.maxY-t.minY)}function Ft(t,e){return t.minX<=e.minX&&t.minY<=e.minY&&e.maxX<=t.maxX&&e.maxY<=t.maxY}function kt(t,e){return e.minX<=t.maxX&&e.minY<=t.maxY&&e.maxX>=t.minX&&e.maxY>=t.minY}function Gt(t){return{children:t,height:1,leaf:!0,minX:1/0,minY:1/0,maxX:-1/0,maxY:-1/0}}function qt(t,e,n,r,i){for(var o,s=[e,n];s.length;)(n=s.pop())-(e=s.pop())<=r||(o=e+Math.ceil((n-e)/r/2)*r,mt(t,o,e,n,i),s.push(e,o,o,n))}function Bt(t){var e={exports:{}};return t(e,e.exports),e.exports}Ct.prototype={all:function(){return this._all(this.data,[])},search:function(t){var e=this.data,n=[],r=this.toBBox;if(!kt(t,e))return n;for(var i,o,s,a,u=[];e;){for(i=0,o=e.children.length;i<o;i++)s=e.children[i],kt(t,a=e.leaf?r(s):s)&&(e.leaf?n.push(s):Ft(t,a)?this._all(s,n):u.push(s));e=u.pop()}return n},collides:function(t){var e=this.data,n=this.toBBox;if(!kt(t,e))return!1;for(var r,i,o,s,a=[];e;){for(r=0,i=e.children.length;r<i;r++)if(o=e.children[r],kt(t,s=e.leaf?n(o):o)){if(e.leaf||Ft(t,s))return!0;a.push(o)}e=a.pop()}return!1},load:function(t){if(!t||!t.length)return this;if(t.length<this._minEntries){for(var e=0,n=t.length;e<n;e++)this.insert(t[e]);return this}var r=this._build(t.slice(),0,t.length-1,0);if(this.data.children.length)if(this.data.height===r.height)this._splitRoot(this.data,r);else{if(this.data.height<r.height){var i=this.data;this.data=r,r=i}this._insert(r,this.data.height-r.height-1,!0)}else this.data=r;return this},insert:function(t){return t&&this._insert(t,this.data.height-1),this},clear:function(){return this.data=Gt([]),this},remove:function(t,e){if(!t)return this;for(var n,r,i,o,s=this.data,a=this.toBBox(t),u=[],l=[];s||u.length;){if(s||(s=u.pop(),r=u[u.length-1],n=l.pop(),o=!0),s.leaf&&-1!==(i=Pt(t,s.children,e)))return s.children.splice(i,1),u.push(s),this._condense(u),this;o||s.leaf||!Ft(s,a)?r?(n++,s=r.children[n],o=!1):s=null:(u.push(s),l.push(n),n=0,r=s,s=s.children[0])}return this},toBBox:function(t){return t},compareMinX:Rt,compareMinY:Tt,toJSON:function(){return this.data},fromJSON:function(t){return this.data=t,this},_all:function(t,e){for(var n=[];t;)t.leaf?e.push.apply(e,t.children):n.push.apply(n,t.children),t=n.pop();return e},_build:function(t,e,n,r){var i,o=n-e+1,s=this._maxEntries;if(o<=s)return Mt(i=Gt(t.slice(e,n+1)),this.toBBox),i;r||(r=Math.ceil(Math.log(o)/Math.log(s)),s=Math.ceil(o/Math.pow(s,r-1))),(i=Gt([])).leaf=!1,i.height=r;var a,u,l,c,h=Math.ceil(o/s),p=h*Math.ceil(Math.sqrt(s));for(qt(t,e,n,p,this.compareMinX),a=e;a<=n;a+=p)for(qt(t,a,l=Math.min(a+p-1,n),h,this.compareMinY),u=a;u<=l;u+=h)c=Math.min(u+h-1,l),i.children.push(this._build(t,u,c,r-1));return Mt(i,this.toBBox),i},_chooseSubtree:function(t,e,n,r){for(var i,o,s,a,u,l,c,h,p,f;r.push(e),!e.leaf&&r.length-1!==n;){for(c=h=1/0,i=0,o=e.children.length;i<o;i++)u=At(s=e.children[i]),p=t,f=s,(l=(Math.max(f.maxX,p.maxX)-Math.min(f.minX,p.minX))*(Math.max(f.maxY,p.maxY)-Math.min(f.minY,p.minY))-u)<h?(h=l,c=u<c?u:c,a=s):l===h&&u<c&&(c=u,a=s);e=a||e.children[0]}return e},_insert:function(t,e,n){var r=this.toBBox,i=n?t:r(t),o=[],s=this._chooseSubtree(i,this.data,e,o);for(s.children.push(t),Ot(s,i);e>=0&&o[e].children.length>this._maxEntries;)this._split(o,e),e--;this._adjustParentBBoxes(i,o,e)},_split:function(t,e){var n=t[e],r=n.children.length,i=this._minEntries;this._chooseSplitAxis(n,i,r);var o=this._chooseSplitIndex(n,i,r),s=Gt(n.children.splice(o,n.children.length-o));s.height=n.height,s.leaf=n.leaf,Mt(n,this.toBBox),Mt(s,this.toBBox),e?t[e-1].children.push(s):this._splitRoot(n,s)},_splitRoot:function(t,e){this.data=Gt([t,e]),this.data.height=t.height+1,this.data.leaf=!1,Mt(this.data,this.toBBox)},_chooseSplitIndex:function(t,e,n){var r,i,o,s,a,u,l,c,h,p,f,g,d,y;for(u=l=1/0,r=e;r<=n-e;r++)i=Lt(t,0,r,this.toBBox),o=Lt(t,r,n,this.toBBox),h=i,p=o,f=void 0,g=void 0,d=void 0,y=void 0,f=Math.max(h.minX,p.minX),g=Math.max(h.minY,p.minY),d=Math.min(h.maxX,p.maxX),y=Math.min(h.maxY,p.maxY),s=Math.max(0,d-f)*Math.max(0,y-g),a=At(i)+At(o),s<u?(u=s,c=r,l=a<l?a:l):s===u&&a<l&&(l=a,c=r);return c},_chooseSplitAxis:function(t,e,n){var r=t.leaf?this.compareMinX:Rt,i=t.leaf?this.compareMinY:Tt;this._allDistMargin(t,e,n,r)<this._allDistMargin(t,e,n,i)&&t.children.sort(r)},_allDistMargin:function(t,e,n,r){t.children.sort(r);var i,o,s=this.toBBox,a=Lt(t,0,e,s),u=Lt(t,n-e,n,s),l=Dt(a)+Dt(u);for(i=e;i<n-e;i++)o=t.children[i],Ot(a,t.leaf?s(o):o),l+=Dt(a);for(i=n-e-1;i>=e;i--)o=t.children[i],Ot(u,t.leaf?s(o):o),l+=Dt(u);return l},_adjustParentBBoxes:function(t,e,n){for(var r=n;r>=0;r--)Ot(e[r],t)},_condense:function(t){for(var e,n=t.length-1;n>=0;n--)0===t[n].children.length?n>0?(e=t[n-1].children).splice(e.indexOf(t[n]),1):this.clear():Mt(t[n],this.toBBox)},_initFormat:function(t){var e=["return a"," - b",";"];this.compareMinX=new Function("a","b",e.join(t[0])),this.compareMinY=new Function("a","b",e.join(t[1])),this.toBBox=new Function("a","return {minX: a"+t[0]+", minY: a"+t[1]+", maxX: a"+t[2]+", maxY: a"+t[3]+"};")}},Nt.default=St;var zt=function(t,e,n){var r=t*e,i=jt*t,o=i-(i-t),s=t-o,a=jt*e,u=a-(a-e),l=e-u,c=s*l-(r-o*u-s*u-o*l);if(n)return n[0]=c,n[1]=r,n;return[c,r]},jt=+(Math.pow(2,27)+1);var Ut=function(t,e){var n=0|t.length,r=0|e.length;if(1===n&&1===r)return function(t,e){var n=t+e,r=n-t,i=t-(n-r)+(e-r);if(i)return[i,n];return[n]}(t[0],e[0]);var i,o,s=new Array(n+r),a=0,u=0,l=0,c=Math.abs,h=t[u],p=c(h),f=e[l],g=c(f);p<g?(o=h,(u+=1)<n&&(h=t[u],p=c(h))):(o=f,(l+=1)<r&&(f=e[l],g=c(f)));u<n&&p<g||l>=r?(i=h,(u+=1)<n&&(h=t[u],p=c(h))):(i=f,(l+=1)<r&&(f=e[l],g=c(f)));var d,y,v=i+o,_=v-i,m=o-_,x=m,E=v;for(;u<n&&l<r;)p<g?(i=h,(u+=1)<n&&(h=t[u],p=c(h))):(i=f,(l+=1)<r&&(f=e[l],g=c(f))),(m=(o=x)-(_=(v=i+o)-i))&&(s[a++]=m),x=E-((d=E+v)-(y=d-E))+(v-y),E=d;for(;u<n;)(m=(o=x)-(_=(v=(i=h)+o)-i))&&(s[a++]=m),x=E-((d=E+v)-(y=d-E))+(v-y),E=d,(u+=1)<n&&(h=t[u]);for(;l<r;)(m=(o=x)-(_=(v=(i=f)+o)-i))&&(s[a++]=m),x=E-((d=E+v)-(y=d-E))+(v-y),E=d,(l+=1)<r&&(f=e[l]);x&&(s[a++]=x);E&&(s[a++]=E);a||(s[a++]=0);return s.length=a,s};var Vt=function(t,e,n){var r=t+e,i=r-t,o=e-i,s=t-(r-i);if(n)return n[0]=s+o,n[1]=r,n;return[s+o,r]};var Xt=function(t,e){var n=t.length;if(1===n){var r=zt(t[0],e);return r[0]?r:[r[1]]}var i=new Array(2*n),o=[.1,.1],s=[.1,.1],a=0;zt(t[0],e,o),o[0]&&(i[a++]=o[0]);for(var u=1;u<n;++u){zt(t[u],e,s);var l=o[1];Vt(l,s[0],o),o[0]&&(i[a++]=o[0]);var c=s[1],h=o[1],p=c+h,f=h-(p-c);o[1]=p,f&&(i[a++]=f)}o[1]&&(i[a++]=o[1]);0===a&&(i[a++]=0);return i.length=a,i};var Yt=function(t,e){var n=0|t.length,r=0|e.length;if(1===n&&1===r)return function(t,e){var n=t+e,r=n-t,i=t-(n-r)+(e-r);if(i)return[i,n];return[n]}(t[0],-e[0]);var i,o,s=new Array(n+r),a=0,u=0,l=0,c=Math.abs,h=t[u],p=c(h),f=-e[l],g=c(f);p<g?(o=h,(u+=1)<n&&(h=t[u],p=c(h))):(o=f,(l+=1)<r&&(f=-e[l],g=c(f)));u<n&&p<g||l>=r?(i=h,(u+=1)<n&&(h=t[u],p=c(h))):(i=f,(l+=1)<r&&(f=-e[l],g=c(f)));var d,y,v=i+o,_=v-i,m=o-_,x=m,E=v;for(;u<n&&l<r;)p<g?(i=h,(u+=1)<n&&(h=t[u],p=c(h))):(i=f,(l+=1)<r&&(f=-e[l],g=c(f))),(m=(o=x)-(_=(v=i+o)-i))&&(s[a++]=m),x=E-((d=E+v)-(y=d-E))+(v-y),E=d;for(;u<n;)(m=(o=x)-(_=(v=(i=h)+o)-i))&&(s[a++]=m),x=E-((d=E+v)-(y=d-E))+(v-y),E=d,(u+=1)<n&&(h=t[u]);for(;l<r;)(m=(o=x)-(_=(v=(i=f)+o)-i))&&(s[a++]=m),x=E-((d=E+v)-(y=d-E))+(v-y),E=d,(l+=1)<r&&(f=-e[l]);x&&(s[a++]=x);E&&(s[a++]=E);a||(s[a++]=0);return s.length=a,s};var Ht=Bt((function(t){function e(t,e){for(var n=new Array(t.length-1),r=1;r<t.length;++r)for(var i=n[r-1]=new Array(t.length-1),o=0,s=0;o<t.length;++o)o!==e&&(i[s++]=t[r][o]);return n}function n(t){if(1===t.length)return t[0];if(2===t.length)return["sum(",t[0],",",t[1],")"].join("");var e=t.length>>1;return["sum(",n(t.slice(0,e)),",",n(t.slice(e)),")"].join("")}function r(t){if(2===t.length)return[["sum(prod(",t[0][0],",",t[1][1],"),prod(-",t[0][1],",",t[1][0],"))"].join("")];for(var i=[],o=0;o<t.length;++o)i.push(["scale(",n(r(e(t,o))),",",(s=o,1&s?"-":""),t[0][o],")"].join(""));return i;var s}function i(t){for(var i=[],o=[],s=function(t){for(var e=new Array(t),n=0;n<t;++n){e[n]=new Array(t);for(var r=0;r<t;++r)e[n][r]=["m",r,"[",t-n-1,"]"].join("")}return e}(t),a=[],u=0;u<t;++u)0==(1&u)?i.push.apply(i,r(e(s,u))):o.push.apply(o,r(e(s,u))),a.push("m"+u);var l=n(i),c=n(o),h="orientation"+t+"Exact",p=["function ",h,"(",a.join(),"){var p=",l,",n=",c,",d=sub(p,n);return d[d.length-1];};return ",h].join("");return new Function("sum","prod","scale","sub",p)(Ut,zt,Xt,Yt)}var o=i(3),s=i(4),a=[function(){return 0},function(){return 0},function(t,e){return e[0]-t[0]},function(t,e,n){var r,i=(t[1]-n[1])*(e[0]-n[0]),s=(t[0]-n[0])*(e[1]-n[1]),a=i-s;if(i>0){if(s<=0)return a;r=i+s}else{if(!(i<0))return a;if(s>=0)return a;r=-(i+s)}var u=33306690738754716e-32*r;return a>=u||a<=-u?a:o(t,e,n)},function(t,e,n,r){var i=t[0]-r[0],o=e[0]-r[0],a=n[0]-r[0],u=t[1]-r[1],l=e[1]-r[1],c=n[1]-r[1],h=t[2]-r[2],p=e[2]-r[2],f=n[2]-r[2],g=o*c,d=a*l,y=a*u,v=i*c,_=i*l,m=o*u,x=h*(g-d)+p*(y-v)+f*(_-m),E=7771561172376103e-31*((Math.abs(g)+Math.abs(d))*Math.abs(h)+(Math.abs(y)+Math.abs(v))*Math.abs(p)+(Math.abs(_)+Math.abs(m))*Math.abs(f));return x>E||-x>E?x:s(t,e,n,r)}];function u(t){var e=a[t.length];return e||(e=a[t.length]=i(t.length)),e.apply(void 0,t)}!function(){for(;a.length<=5;)a.push(i(a.length));for(var e=[],n=["slow"],r=0;r<=5;++r)e.push("a"+r),n.push("o"+r);var o=["function getOrientation(",e.join(),"){switch(arguments.length){case 0:case 1:return 0;"];for(r=2;r<=5;++r)o.push("case ",r,":return o",r,"(",e.slice(0,r).join(),");");o.push("}var s=new Array(arguments.length);for(var i=0;i<arguments.length;++i){s[i]=arguments[i]};return slow(s);}return getOrientation"),n.push(o.join(""));var s=Function.apply(void 0,n);for(t.exports=s.apply(void 0,[u].concat(a)),r=0;r<=5;++r)t.exports[r]=a[r]}()})),Wt=function(t){var e=t.length;if(e<3){for(var n=new Array(e),r=0;r<e;++r)n[r]=r;return 2===e&&t[0][0]===t[1][0]&&t[0][1]===t[1][1]?[0]:n}var i=new Array(e);for(r=0;r<e;++r)i[r]=r;i.sort((function(e,n){var r=t[e][0]-t[n][0];return r||t[e][1]-t[n][1]}));var o=[i[0],i[1]],s=[i[0],i[1]];for(r=2;r<e;++r){for(var a=i[r],u=t[a],l=o.length;l>1&&Jt(t[o[l-2]],t[o[l-1]],u)<=0;)l-=1,o.pop();for(o.push(a),l=s.length;l>1&&Jt(t[s[l-2]],t[s[l-1]],u)>=0;)l-=1,s.pop();s.push(a)}n=new Array(s.length+o.length-2);for(var c=0,h=(r=0,o.length);r<h;++r)n[c++]=o[r];for(var p=s.length-2;p>0;--p)n[c++]=s[p];return n},Jt=Ht[3];var Zt=Qt,Kt=Qt;function Qt(t,e){if(!(this instanceof Qt))return new Qt(t,e);if(this.data=t||[],this.length=this.data.length,this.compare=e||$t,this.length>0)for(var n=(this.length>>1)-1;n>=0;n--)this._down(n)}function $t(t,e){return t<e?-1:t>e?1:0}Qt.prototype={push:function(t){this.data.push(t),this.length++,this._up(this.length-1)},pop:function(){if(0!==this.length){var t=this.data[0];return this.length--,this.length>0&&(this.data[0]=this.data[this.length],this._down(0)),this.data.pop(),t}},peek:function(){return this.data[0]},_up:function(t){for(var e=this.data,n=this.compare,r=e[t];t>0;){var i=t-1>>1,o=e[i];if(n(r,o)>=0)break;e[t]=o,t=i}e[t]=r},_down:function(t){for(var e=this.data,n=this.compare,r=this.length>>1,i=e[t];t<r;){var o=1+(t<<1),s=o+1,a=e[o];if(s<this.length&&n(e[s],a)<0&&(o=s,a=e[s]),n(a,i)>=0)break;e[t]=a,t=o}e[t]=i}},Zt.default=Kt;var te=function(t,e){for(var n=t[0],r=t[1],i=!1,o=0,s=e.length-1;o<e.length;s=o++){var a=e[o][0],u=e[o][1],l=e[s][0],c=e[s][1];u>r!=c>r&&n<(l-a)*(r-u)/(c-u)+a&&(i=!i)}return i},ee=Ht[3],ne=ie,re=ie;function ie(t,e,n){e=Math.max(0,void 0===e?2:e),n=n||0;for(var r,i=function(t){for(var e=t[0],n=t[0],r=t[0],i=t[0],o=0;o<t.length;o++){var s=t[o];s[0]<e[0]&&(e=s),s[0]>r[0]&&(r=s),s[1]<n[1]&&(n=s),s[1]>i[1]&&(i=s)}var a=[e,n,r,i],u=a.slice();for(o=0;o<t.length;o++)te(t[o],a)||u.push(t[o]);var l=Wt(u),c=[];for(o=0;o<l.length;o++)c.push(u[l[o]]);return c}(t),o=Nt(16,["[0]","[1]","[0]","[1]"]).load(t),s=[],a=0;a<i.length;a++){var u=i[a];o.remove(u),r=he(u,r),s.push(r)}var l=Nt(16);for(a=0;a<s.length;a++)l.insert(ce(s[a]));for(var c=e*e,h=n*n;s.length;){var p=s.shift(),f=p.p,g=p.next.p,d=pe(f,g);if(!(d<h)){var y=d/c;(u=oe(o,p.prev.p,f,g,p.next.next.p,y,l))&&Math.min(pe(u,f),pe(u,g))<=y&&(s.push(p),s.push(he(u,p)),o.remove(u),l.remove(p),l.insert(ce(p)),l.insert(ce(p.next)))}}p=r;var v=[];do{v.push(p.p),p=p.next}while(p!==r);return v.push(p.p),v}function oe(t,e,n,r,i,o,s){for(var a=new Zt(null,se),u=t.data;u;){for(var l=0;l<u.children.length;l++){var c=u.children[l],h=u.leaf?fe(c,n,r):ae(n,r,c);h>o||a.push({node:c,dist:h})}for(;a.length&&!a.peek().node.children;){var p=a.pop(),f=p.node,g=fe(f,e,n),d=fe(f,r,i);if(p.dist<g&&p.dist<d&&le(n,f,s)&&le(r,f,s))return f}(u=a.pop())&&(u=u.node)}return null}function se(t,e){return t.dist-e.dist}function ae(t,e,n){if(ue(t,n)||ue(e,n))return 0;var r=ge(t[0],t[1],e[0],e[1],n.minX,n.minY,n.maxX,n.minY);if(0===r)return 0;var i=ge(t[0],t[1],e[0],e[1],n.minX,n.minY,n.minX,n.maxY);if(0===i)return 0;var o=ge(t[0],t[1],e[0],e[1],n.maxX,n.minY,n.maxX,n.maxY);if(0===o)return 0;var s=ge(t[0],t[1],e[0],e[1],n.minX,n.maxY,n.maxX,n.maxY);return 0===s?0:Math.min(r,i,o,s)}function ue(t,e){return t[0]>=e.minX&&t[0]<=e.maxX&&t[1]>=e.minY&&t[1]<=e.maxY}function le(t,e,n){for(var r,i,o,s,a=Math.min(t[0],e[0]),u=Math.min(t[1],e[1]),l=Math.max(t[0],e[0]),c=Math.max(t[1],e[1]),h=n.search({minX:a,minY:u,maxX:l,maxY:c}),p=0;p<h.length;p++)if(r=h[p].p,i=h[p].next.p,o=t,r!==(s=e)&&i!==o&&ee(r,i,o)>0!=ee(r,i,s)>0&&ee(o,s,r)>0!=ee(o,s,i)>0)return!1;return!0}function ce(t){var e=t.p,n=t.next.p;return t.minX=Math.min(e[0],n[0]),t.minY=Math.min(e[1],n[1]),t.maxX=Math.max(e[0],n[0]),t.maxY=Math.max(e[1],n[1]),t}function he(t,e){var n={p:t,prev:null,next:null,minX:0,minY:0,maxX:0,maxY:0};return e?(n.next=e.next,n.prev=e,e.next.prev=n,e.next=n):(n.prev=n,n.next=n),n}function pe(t,e){var n=t[0]-e[0],r=t[1]-e[1];return n*n+r*r}function fe(t,e,n){var r=e[0],i=e[1],o=n[0]-r,s=n[1]-i;if(0!==o||0!==s){var a=((t[0]-r)*o+(t[1]-i)*s)/(o*o+s*s);a>1?(r=n[0],i=n[1]):a>0&&(r+=o*a,i+=s*a)}return(o=t[0]-r)*o+(s=t[1]-i)*s}function ge(t,e,n,r,i,o,s,a){var u,l,c,h,p=n-t,f=r-e,g=s-i,d=a-o,y=t-i,v=e-o,_=p*p+f*f,m=p*g+f*d,x=g*g+d*d,E=p*y+f*v,b=g*y+d*v,w=_*x-m*m,I=w,N=w;0===w?(l=0,I=1,h=b,N=x):(h=_*b-m*E,(l=m*b-x*E)<0?(l=0,h=b,N=x):l>I&&(l=I,h=b+m,N=x)),h<0?(h=0,-E<0?l=0:-E>_?l=I:(l=-E,I=_)):h>N&&(h=N,-E+m<0?l=0:-E+m>_?l=I:(l=-E+m,I=_));var S=(1-(c=0===h?0:h/N))*i+c*s-((1-(u=0===l?0:l/I))*t+u*n),C=(1-c)*o+c*a-((1-u)*e+u*r);return S*S+C*C}function de(t,e){void 0===e&&(e={}),e.concavity=e.concavity||1/0;var n=[];if(R(t,(function(t){n.push([t[0],t[1]])})),!n.length)return null;var r=ne(n,e.concavity);return r.length>3?l([r]):null}function ye(t,e,n){if(void 0===n&&(n={}),!t)throw new Error("point is required");if(!e)throw new Error("polygon is required");var r=K(t),i=rt(e),o=i.type,s=e.bbox,a=i.coordinates;if(s&&!1===function(t,e){return e[0]<=t[0]&&e[1]<=t[1]&&e[2]>=t[0]&&e[3]>=t[1]}(r,s))return!1;"Polygon"===o&&(a=[a]);for(var u=!1,l=0;l<a.length&&!u;l++)if(ve(r,a[l][0],n.ignoreBoundary)){for(var c=!1,h=1;h<a[l].length&&!c;)ve(r,a[l][h],!n.ignoreBoundary)&&(c=!0),h++;c||(u=!0)}return u}function ve(t,e,n){var r=!1;e[0][0]===e[e.length-1][0]&&e[0][1]===e[e.length-1][1]&&(e=e.slice(0,e.length-1));for(var i=0,o=e.length-1;i<e.length;o=i++){var s=e[i][0],a=e[i][1],u=e[o][0],l=e[o][1];if(t[1]*(s-u)+a*(u-t[0])+l*(t[0]-s)==0&&(s-t[0])*(u-t[0])<=0&&(a-t[1])*(l-t[1])<=0)return!n;a>t[1]!=l>t[1]&&t[0]<(u-s)*(t[1]-a)/(l-a)+s&&(r=!r)}return r}function _e(t,e){var n=[];return F(t,(function(t){var r=!1;if("Point"===t.geometry.type)q(e,(function(e){ye(t,e)&&(r=!0)})),r&&n.push(t);else{if("MultiPoint"!==t.geometry.type)throw new Error("Input geometry must be a Point or MultiPoint");var i=[];q(e,(function(e){R(t,(function(t){ye(t,e)&&(r=!0,i.push(t))}))})),r&&n.push(d(i))}})),f(n)}function me(t,e,n){void 0===n&&(n={});var r=K(t),i=K(e),o=I(i[1]-r[1]),s=I(i[0]-r[0]),a=I(r[1]),u=I(i[1]),l=Math.pow(Math.sin(o/2),2)+Math.pow(Math.sin(s/2),2)*Math.cos(a)*Math.cos(u);return m(2*Math.atan2(Math.sqrt(l),Math.sqrt(1-l)),n.units)}function xe(t,e){var n=!1;return f(function(t){if(t.length<3)return[];t.sort(be);var e,n,r,i,o,s,a=t.length-1,u=t[a].x,l=t[0].x,c=t[a].y,h=c,p=1e-12;for(;a--;)t[a].y<c&&(c=t[a].y),t[a].y>h&&(h=t[a].y);var f,g=l-u,d=h-c,y=g>d?g:d,v=.5*(l+u),_=.5*(h+c),m=[new Ee({__sentinel:!0,x:v-20*y,y:_-y},{__sentinel:!0,x:v,y:_+20*y},{__sentinel:!0,x:v+20*y,y:_-y})],x=[],E=[];a=t.length;for(;a--;){for(E.length=0,f=m.length;f--;)(g=t[a].x-m[f].x)>0&&g*g>m[f].r?(x.push(m[f]),m.splice(f,1)):g*g+(d=t[a].y-m[f].y)*d>m[f].r||(E.push(m[f].a,m[f].b,m[f].b,m[f].c,m[f].c,m[f].a),m.splice(f,1));for(we(E),f=E.length;f;)n=E[--f],e=E[--f],r=t[a],i=n.x-e.x,o=n.y-e.y,s=2*(i*(r.y-n.y)-o*(r.x-n.x)),Math.abs(s)>p&&m.push(new Ee(e,n,r))}Array.prototype.push.apply(x,m),a=x.length;for(;a--;)(x[a].a.__sentinel||x[a].b.__sentinel||x[a].c.__sentinel)&&x.splice(a,1);return x}(t.features.map((function(t){var r={x:t.geometry.coordinates[0],y:t.geometry.coordinates[1]};return e?r.z=t.properties[e]:3===t.geometry.coordinates.length&&(n=!0,r.z=t.geometry.coordinates[2]),r}))).map((function(t){var e=[t.a.x,t.a.y],r=[t.b.x,t.b.y],i=[t.c.x,t.c.y],o={};return n?(e.push(t.a.z),r.push(t.b.z),i.push(t.c.z)):o={a:t.a.z,b:t.b.z,c:t.c.z},l([[e,r,i,e]],o)})))}ne.default=re;var Ee=function(t,e,n){this.a=t,this.b=e,this.c=n;var r,i,o=e.x-t.x,s=e.y-t.y,a=n.x-t.x,u=n.y-t.y,l=o*(t.x+e.x)+s*(t.y+e.y),c=a*(t.x+n.x)+u*(t.y+n.y),h=2*(o*(n.y-e.y)-s*(n.x-e.x));this.x=(u*l-s*c)/h,this.y=(o*c-a*l)/h,r=this.x-t.x,i=this.y-t.y,this.r=r*r+i*i};function be(t,e){return e.x-t.x}function we(t){var e,n,r,i,o,s=t.length;t:for(;s;)for(n=t[--s],e=t[--s],r=s;r;)if(o=t[--r],e===(i=t[--r])&&n===o||e===o&&n===i){t.splice(s,2),t.splice(r,2),s-=2;continue t}}function Ie(t){if(!t)throw new Error("geojson is required");switch(t.type){case"Feature":return Ne(t);case"FeatureCollection":return function(t){var e={type:"FeatureCollection"};return Object.keys(t).forEach((function(n){switch(n){case"type":case"features":return;default:e[n]=t[n]}})),e.features=t.features.map((function(t){return Ne(t)})),e}(t);case"Point":case"LineString":case"Polygon":case"MultiPoint":case"MultiLineString":case"MultiPolygon":case"GeometryCollection":return Ce(t);default:throw new Error("unknown GeoJSON type")}}function Ne(t){var e={type:"Feature"};return Object.keys(t).forEach((function(n){switch(n){case"type":case"properties":case"geometry":return;default:e[n]=t[n]}})),e.properties=Se(t.properties),e.geometry=Ce(t.geometry),e}function Se(t){var e={};return t?(Object.keys(t).forEach((function(n){var r=t[n];"object"==typeof r?null===r?e[n]=null:Array.isArray(r)?e[n]=r.map((function(t){return t})):e[n]=Se(r):e[n]=r})),e):e}function Ce(t){var e={type:t.type};return t.bbox&&(e.bbox=t.bbox),"GeometryCollection"===t.type?(e.geometries=t.geometries.map((function(t){return Ce(t)})),e):(e.coordinates=Pe(t.coordinates),e)}function Pe(t){var e=t;return"object"!=typeof e[0]?e.slice():e.map((function(t){return Pe(t)}))}function Me(t,e){if(void 0===e&&(e={}),!P(e=e||{}))throw new Error("options is invalid");var n=e.mutate;if("FeatureCollection"!==it(t))throw new Error("geojson must be a FeatureCollection");if(!t.features.length)throw new Error("geojson is empty");!1!==n&&void 0!==n||(t=Ie(t));var r=[],i=Y(t,(function(t,e){var n=function(t,e){var n,r=t.geometry.coordinates,i=e.geometry.coordinates,o=Le(r[0]),s=Le(r[r.length-1]),a=Le(i[0]),u=Le(i[i.length-1]);if(o===u)n=i.concat(r.slice(1));else if(a===s)n=r.concat(i.slice(1));else if(o===a)n=r.slice(1).reverse().concat(i);else{if(s!==u)return null;n=r.concat(i.reverse().slice(1))}return h(n)}(t,e);return n||(r.push(t),e)}));return i&&r.push(i),r.length?1===r.length?r[0]:g(r.map((function(t){return t.coordinates}))):null}function Le(t){return t[0].toString()+","+t[1].toString()}function Oe(t){return t}function Re(t,e){var n=function(t){if(null==t)return Oe;var e,n,r=t.scale[0],i=t.scale[1],o=t.translate[0],s=t.translate[1];return function(t,a){a||(e=n=0);var u=2,l=t.length,c=new Array(l);for(c[0]=(e+=t[0])*r+o,c[1]=(n+=t[1])*i+s;u<l;)c[u]=t[u],++u;return c}}(t.transform),r=t.arcs;function i(t,e){e.length&&e.pop();for(var i=r[t<0?~t:t],o=0,s=i.length;o<s;++o)e.push(n(i[o],o));t<0&&function(t,e){for(var n,r=t.length,i=r-e;i<--r;)n=t[i],t[i++]=t[r],t[r]=n}(e,s)}function o(t){return n(t)}function s(t){for(var e=[],n=0,r=t.length;n<r;++n)i(t[n],e);return e.length<2&&e.push(e[0]),e}function a(t){for(var e=s(t);e.length<4;)e.push(e[0]);return e}function u(t){return t.map(a)}return function t(e){var n,r=e.type;switch(r){case"GeometryCollection":return{type:r,geometries:e.geometries.map(t)};case"Point":n=o(e.coordinates);break;case"MultiPoint":n=e.coordinates.map(o);break;case"LineString":n=s(e.arcs);break;case"MultiLineString":n=e.arcs.map(s);break;case"Polygon":n=u(e.arcs);break;case"MultiPolygon":n=e.arcs.map(u);break;default:return null}return{type:r,coordinates:n}}(e)}function Te(t,e){var n={},r={},i={},o=[],s=-1;function a(t,e){for(var r in t){var i=t[r];delete e[i.start],delete i.start,delete i.end,i.forEach((function(t){n[t<0?~t:t]=1})),o.push(i)}}return e.forEach((function(n,r){var i,o=t.arcs[n<0?~n:n];o.length<3&&!o[1][0]&&!o[1][1]&&(i=e[++s],e[s]=n,e[r]=i)})),e.forEach((function(e){var n,o,s=function(e){var n,r=t.arcs[e<0?~e:e],i=r[0];t.transform?(n=[0,0],r.forEach((function(t){n[0]+=t[0],n[1]+=t[1]}))):n=r[r.length-1];return e<0?[n,i]:[i,n]}(e),a=s[0],u=s[1];if(n=i[a])if(delete i[n.end],n.push(e),n.end=u,o=r[u]){delete r[o.start];var l=o===n?n:n.concat(o);r[l.start=n.start]=i[l.end=o.end]=l}else r[n.start]=i[n.end]=n;else if(n=r[u])if(delete r[n.start],n.unshift(e),n.start=a,o=i[a]){delete i[o.end];var c=o===n?n:o.concat(n);r[c.start=o.start]=i[c.end=n.end]=c}else r[n.start]=i[n.end]=n;else r[(n=[e]).start=a]=i[n.end=u]=n})),a(i,r),a(r,i),e.forEach((function(t){n[t<0?~t:t]||o.push([t])})),o}function Ae(t,e){var n={},r=[],i=[];function o(t){t.forEach((function(e){e.forEach((function(e){(n[e=e<0?~e:e]||(n[e]=[])).push(t)}))})),r.push(t)}function s(e){return function(t){for(var e,n=-1,r=t.length,i=t[r-1],o=0;++n<r;)e=i,i=t[n],o+=e[0]*i[1]-e[1]*i[0];return Math.abs(o)}(Re(t,{type:"Polygon",arcs:[e]}).coordinates[0])}return e.forEach((function t(e){switch(e.type){case"GeometryCollection":e.geometries.forEach(t);break;case"Polygon":o(e.arcs);break;case"MultiPolygon":e.arcs.forEach(o)}})),r.forEach((function(t){if(!t._){var e=[],r=[t];for(t._=1,i.push(e);t=r.pop();)e.push(t),t.forEach((function(t){t.forEach((function(t){n[t<0?~t:t].forEach((function(t){t._||(t._=1,r.push(t))}))}))}))}})),r.forEach((function(t){delete t._})),{type:"MultiPolygon",arcs:i.map((function(e){var r,i=[];if(e.forEach((function(t){t.forEach((function(t){t.forEach((function(t){n[t<0?~t:t].length<2&&i.push(t)}))}))})),(r=(i=Te(t,i)).length)>1)for(var o,a,u=1,l=s(i[0]);u<r;++u)(o=s(i[u]))>l&&(a=i[0],i[0]=i[u],i[u]=a,l=o);return i})).filter((function(t){return t.length>0}))}}var De=Object.prototype.hasOwnProperty;function Fe(t,e,n,r,i,o){3===arguments.length&&(r=o=Array,i=null);for(var s=new r(t=1<<Math.max(4,Math.ceil(Math.log(t)/Math.LN2))),a=new o(t),u=t-1,l=0;l<t;++l)s[l]=i;function c(r,o){for(var l=e(r)&u,c=s[l],h=0;c!=i;){if(n(c,r))return a[l]=o;if(++h>=t)throw new Error("full hashmap");c=s[l=l+1&u]}return s[l]=r,a[l]=o,o}function h(r,o){for(var l=e(r)&u,c=s[l],h=0;c!=i;){if(n(c,r))return a[l];if(++h>=t)throw new Error("full hashmap");c=s[l=l+1&u]}return s[l]=r,a[l]=o,o}function p(r,o){for(var l=e(r)&u,c=s[l],h=0;c!=i;){if(n(c,r))return a[l];if(++h>=t)break;c=s[l=l+1&u]}return o}function f(){for(var t=[],e=0,n=s.length;e<n;++e){var r=s[e];r!=i&&t.push(r)}return t}return{set:c,maybeSet:h,get:p,keys:f}}function ke(t,e){return t[0]===e[0]&&t[1]===e[1]}var Ge=new ArrayBuffer(16),qe=new Float64Array(Ge),Be=new Uint32Array(Ge);function ze(t){qe[0]=t[0],qe[1]=t[1];var e=Be[0]^Be[1];return 2147483647&(e=e<<5^e>>7^Be[2]^Be[3])}function je(t){var e,n,r,i,o=t.coordinates,s=t.lines,a=t.rings,u=function(){for(var t=Fe(1.4*o.length,E,b,Int32Array,-1,Int32Array),e=new Int32Array(o.length),n=0,r=o.length;n<r;++n)e[n]=t.maybeSet(n,n);return e}(),l=new Int32Array(o.length),c=new Int32Array(o.length),h=new Int32Array(o.length),p=new Int8Array(o.length),f=0;for(e=0,n=o.length;e<n;++e)l[e]=c[e]=h[e]=-1;for(e=0,n=s.length;e<n;++e){var g=s[e],d=g[0],y=g[1];for(r=u[d],i=u[++d],++f,p[r]=1;++d<=y;)x(e,r,r=i,i=u[d]);++f,p[i]=1}for(e=0,n=o.length;e<n;++e)l[e]=-1;for(e=0,n=a.length;e<n;++e){var v=a[e],_=v[0]+1,m=v[1];for(x(e,u[m-1],r=u[_-1],i=u[_]);++_<=m;)x(e,r,r=i,i=u[_])}function x(t,e,n,r){if(l[n]!==t){l[n]=t;var i=c[n];if(i>=0){var o=h[n];i===e&&o===r||i===r&&o===e||(++f,p[n]=1)}else c[n]=e,h[n]=r}}function E(t){return ze(o[t])}function b(t,e){return ke(o[t],o[e])}l=c=h=null;var w,I=function(t,e,n,r,i){3===arguments.length&&(r=Array,i=null);for(var o=new r(t=1<<Math.max(4,Math.ceil(Math.log(t)/Math.LN2))),s=t-1,a=0;a<t;++a)o[a]=i;function u(r){for(var a=e(r)&s,u=o[a],l=0;u!=i;){if(n(u,r))return!0;if(++l>=t)throw new Error("full hashset");u=o[a=a+1&s]}return o[a]=r,!0}function l(r){for(var a=e(r)&s,u=o[a],l=0;u!=i;){if(n(u,r))return!0;if(++l>=t)break;u=o[a=a+1&s]}return!1}function c(){for(var t=[],e=0,n=o.length;e<n;++e){var r=o[e];r!=i&&t.push(r)}return t}return{add:u,has:l,values:c}}(1.4*f,ze,ke);for(e=0,n=o.length;e<n;++e)p[w=u[e]]&&I.add(o[w]);return I}function Ue(t,e,n,r){Ve(t,e,n),Ve(t,e,e+r),Ve(t,e+r,n)}function Ve(t,e,n){for(var r,i=e+(n---e>>1);e<i;++e,--n)r=t[e],t[e]=t[n],t[n]=r}function Xe(t){var e,n,r={};for(e in t)r[e]=null==(n=t[e])?{type:null}:("FeatureCollection"===n.type?Ye:"Feature"===n.type?He:We)(n);return r}function Ye(t){var e={type:"GeometryCollection",geometries:t.features.map(He)};return null!=t.bbox&&(e.bbox=t.bbox),e}function He(t){var e,n=We(t.geometry);for(e in null!=t.id&&(n.id=t.id),null!=t.bbox&&(n.bbox=t.bbox),t.properties){n.properties=t.properties;break}return n}function We(t){if(null==t)return{type:null};var e="GeometryCollection"===t.type?{type:"GeometryCollection",geometries:t.geometries.map(We)}:"Point"===t.type||"MultiPoint"===t.type?{type:t.type,coordinates:t.coordinates}:{type:t.type,arcs:t.coordinates};return null!=t.bbox&&(e.bbox=t.bbox),e}function Je(t,e){var n=function(t){var e=1/0,n=1/0,r=-1/0,i=-1/0;function o(t){null!=t&&De.call(s,t.type)&&s[t.type](t)}var s={GeometryCollection:function(t){t.geometries.forEach(o)},Point:function(t){a(t.coordinates)},MultiPoint:function(t){t.coordinates.forEach(a)},LineString:function(t){u(t.arcs)},MultiLineString:function(t){t.arcs.forEach(u)},Polygon:function(t){t.arcs.forEach(u)},MultiPolygon:function(t){t.arcs.forEach(l)}};function a(t){var o=t[0],s=t[1];o<e&&(e=o),o>r&&(r=o),s<n&&(n=s),s>i&&(i=s)}function u(t){t.forEach(a)}function l(t){t.forEach(u)}for(var c in t)o(t[c]);return r>=e&&i>=n?[e,n,r,i]:void 0}(t=Xe(t)),r=e>0&&n&&function(t,e,n){var r=e[0],i=e[1],o=e[2],s=e[3],a=o-r?(n-1)/(o-r):1,u=s-i?(n-1)/(s-i):1;function l(t){return[Math.round((t[0]-r)*a),Math.round((t[1]-i)*u)]}function c(t,e){for(var n,o,s,l,c,h=-1,p=0,f=t.length,g=new Array(f);++h<f;)n=t[h],l=Math.round((n[0]-r)*a),c=Math.round((n[1]-i)*u),l===o&&c===s||(g[p++]=[o=l,s=c]);for(g.length=p;p<e;)p=g.push([g[0][0],g[0][1]]);return g}function h(t){return c(t,2)}function p(t){return c(t,4)}function f(t){return t.map(p)}function g(t){null!=t&&De.call(d,t.type)&&d[t.type](t)}var d={GeometryCollection:function(t){t.geometries.forEach(g)},Point:function(t){t.coordinates=l(t.coordinates)},MultiPoint:function(t){t.coordinates=t.coordinates.map(l)},LineString:function(t){t.arcs=h(t.arcs)},MultiLineString:function(t){t.arcs=t.arcs.map(h)},Polygon:function(t){t.arcs=f(t.arcs)},MultiPolygon:function(t){t.arcs=t.arcs.map(f)}};for(var y in t)g(t[y]);return{scale:[1/a,1/u],translate:[r,i]}}(t,n,e),i=function(t){var e,n,r,i,o=t.coordinates,s=t.lines,a=t.rings,u=s.length+a.length;for(delete t.lines,delete t.rings,r=0,i=s.length;r<i;++r)for(e=s[r];e=e.next;)++u;for(r=0,i=a.length;r<i;++r)for(n=a[r];n=n.next;)++u;var l=Fe(2*u*1.4,ze,ke),c=t.arcs=[];for(r=0,i=s.length;r<i;++r){e=s[r];do{h(e)}while(e=e.next)}for(r=0,i=a.length;r<i;++r)if((n=a[r]).next)do{h(n)}while(n=n.next);else p(n);function h(t){var e,n,r,i,s,a,u,h;if(r=l.get(e=o[t[0]]))for(u=0,h=r.length;u<h;++u)if(f(i=r[u],t))return t[0]=i[0],void(t[1]=i[1]);if(s=l.get(n=o[t[1]]))for(u=0,h=s.length;u<h;++u)if(g(a=s[u],t))return t[1]=a[0],void(t[0]=a[1]);r?r.push(t):l.set(e,[t]),s?s.push(t):l.set(n,[t]),c.push(t)}function p(t){var e,n,r,i,s;if(n=l.get(o[t[0]]))for(i=0,s=n.length;i<s;++i){if(d(r=n[i],t))return t[0]=r[0],void(t[1]=r[1]);if(y(r,t))return t[0]=r[1],void(t[1]=r[0])}if(n=l.get(e=o[t[0]+v(t)]))for(i=0,s=n.length;i<s;++i){if(d(r=n[i],t))return t[0]=r[0],void(t[1]=r[1]);if(y(r,t))return t[0]=r[1],void(t[1]=r[0])}n?n.push(t):l.set(e,[t]),c.push(t)}function f(t,e){var n=t[0],r=e[0],i=t[1];if(n-i!=r-e[1])return!1;for(;n<=i;++n,++r)if(!ke(o[n],o[r]))return!1;return!0}function g(t,e){var n=t[0],r=e[0],i=t[1],s=e[1];if(n-i!=r-s)return!1;for(;n<=i;++n,--s)if(!ke(o[n],o[s]))return!1;return!0}function d(t,e){var n=t[0],r=e[0],i=t[1]-n;if(i!==e[1]-r)return!1;for(var s=v(t),a=v(e),u=0;u<i;++u)if(!ke(o[n+(u+s)%i],o[r+(u+a)%i]))return!1;return!0}function y(t,e){var n=t[0],r=e[0],i=t[1],s=e[1],a=i-n;if(a!==s-r)return!1;for(var u=v(t),l=a-v(e),c=0;c<a;++c)if(!ke(o[n+(c+u)%a],o[s-(c+l)%a]))return!1;return!0}function v(t){for(var e=t[0],n=t[1],r=e,i=r,s=o[r];++r<n;){var a=o[r];(a[0]<s[0]||a[0]===s[0]&&a[1]<s[1])&&(i=r,s=a)}return i-e}return t}(function(t){var e,n,r,i=je(t),o=t.coordinates,s=t.lines,a=t.rings;for(n=0,r=s.length;n<r;++n)for(var u=s[n],l=u[0],c=u[1];++l<c;)i.has(o[l])&&(e={0:l,1:u[1]},u[1]=l,u=u.next=e);for(n=0,r=a.length;n<r;++n)for(var h=a[n],p=h[0],f=p,g=h[1],d=i.has(o[p]);++f<g;)i.has(o[f])&&(d?(e={0:f,1:h[1]},h[1]=f,h=h.next=e):(Ue(o,p,g,g-f),o[g]=o[p],d=!0,f=p));return t}(function(t){var e=-1,n=[],r=[],i=[];function o(t){t&&De.call(s,t.type)&&s[t.type](t)}var s={GeometryCollection:function(t){t.geometries.forEach(o)},LineString:function(t){t.arcs=a(t.arcs)},MultiLineString:function(t){t.arcs=t.arcs.map(a)},Polygon:function(t){t.arcs=t.arcs.map(u)},MultiPolygon:function(t){t.arcs=t.arcs.map(l)}};function a(t){for(var r=0,o=t.length;r<o;++r)i[++e]=t[r];var s={0:e-o+1,1:e};return n.push(s),s}function u(t){for(var n=0,o=t.length;n<o;++n)i[++e]=t[n];var s={0:e-o+1,1:e};return r.push(s),s}function l(t){return t.map(u)}for(var c in t)o(t[c]);return{type:"Topology",coordinates:i,lines:n,rings:r,objects:t}}(t))),o=i.coordinates,s=Fe(1.4*i.arcs.length,Ze,Ke);function a(t){t&&De.call(u,t.type)&&u[t.type](t)}t=i.objects,i.bbox=n,i.arcs=i.arcs.map((function(t,e){return s.set(t,e),o.slice(t[0],t[1]+1)})),delete i.coordinates,o=null;var u={GeometryCollection:function(t){t.geometries.forEach(a)},LineString:function(t){t.arcs=l(t.arcs)},MultiLineString:function(t){t.arcs=t.arcs.map(l)},Polygon:function(t){t.arcs=t.arcs.map(l)},MultiPolygon:function(t){t.arcs=t.arcs.map(c)}};function l(t){var e=[];do{var n=s.get(t);e.push(t[0]<t[1]?n:~n)}while(t=t.next);return e}function c(t){return t.map(l)}for(var h in t)a(t[h]);return r&&(i.transform=r,i.arcs=function(t){for(var e=-1,n=t.length;++e<n;){for(var r,i,o=t[e],s=0,a=1,u=o.length,l=o[0],c=l[0],h=l[1];++s<u;)r=(l=o[s])[0],i=l[1],r===c&&i===h||(o[a++]=[r-c,i-h],c=r,h=i);1===a&&(o[a++]=[0,0]),o.length=a}return t}(i.arcs)),i}function Ze(t){var e,n=t[0],r=t[1];return r<n&&(e=n,n=r,r=e),n+31*r}function Ke(t,e){var n,r=t[0],i=t[1],o=e[0],s=e[1];return i<r&&(n=r,r=i,i=n),s<o&&(n=o,o=s,s=n),r===o&&i===s}function Qe(t,e){if(void 0===e&&(e={}),"FeatureCollection"!==it(t))throw new Error("geojson must be a FeatureCollection");if(!t.features.length)throw new Error("geojson is empty");!1!==e.mutate&&void 0!==e.mutate||(t=Ie(t));var n=[];z(t,(function(t){n.push(t.geometry)}));var r=Je({geoms:v(n).geometry});return function(t){return Re(t,Ae.apply(this,arguments))}(r,r.objects.geoms.geometries)}function $e(t,e){if(void 0===e&&(e={}),!P(e=e||{}))throw new Error("options is invalid");var n=e.mutate;if("FeatureCollection"!==it(t))throw new Error("geojson must be a FeatureCollection");if(!t.features.length)throw new Error("geojson is empty");!1!==n&&void 0!==n||(t=Ie(t));var r=function(t){var e={};z(t,(function(t){e[t.geometry.type]=!0}));var n=Object.keys(e);if(1===n.length)return n[0];return null}(t);if(!r)throw new Error("geojson must be homogenous");var i=t;switch(r){case"LineString":return Me(i,e);case"Polygon":return Qe(i,e);default:throw new Error(r+" is not supported")}}function tn(t,e){void 0===e&&(e={});var n="object"==typeof e?e.mutate:e;if(!t)throw new Error("geojson is required");var r=it(t),i=[];switch(r){case"LineString":i=en(t);break;case"MultiLineString":case"Polygon":Q(t).forEach((function(t){i.push(en(t))}));break;case"MultiPolygon":Q(t).forEach((function(t){var e=[];t.forEach((function(t){e.push(en(t))})),i.push(e)}));break;case"Point":return t;case"MultiPoint":var s={};Q(t).forEach((function(t){var e=t.join("-");Object.prototype.hasOwnProperty.call(s,e)||(i.push(t),s[e]=!0)}));break;default:throw new Error(r+" geometry not supported")}return t.coordinates?!0===n?(t.coordinates=i,t):{type:r,coordinates:i}:!0===n?(t.geometry.coordinates=i,t):o({type:r,coordinates:i},t.properties,{bbox:t.bbox,id:t.id})}function en(t){var e=Q(t);if(2===e.length&&!nn(e[0],e[1]))return e;var n=[],r=e.length-1,i=n.length;n.push(e[0]);for(var o=1;o<r;o++){var s=n[n.length-1];e[o][0]===s[0]&&e[o][1]===s[1]||(n.push(e[o]),(i=n.length)>2&&rn(n[i-3],n[i-1],n[i-2])&&n.splice(n.length-2,1))}if(n.push(e[e.length-1]),i=n.length,nn(e[0],e[e.length-1])&&i<4)throw new Error("invalid polygon");return rn(n[i-3],n[i-1],n[i-2])&&n.splice(n.length-2,1),n}function nn(t,e){return t[0]===e[0]&&t[1]===e[1]}function rn(t,e,n){var r=n[0],i=n[1],o=t[0],s=t[1],a=e[0],u=e[1],l=a-o,c=u-s;return 0===(r-o)*c-(i-s)*l&&(Math.abs(l)>=Math.abs(c)?l>0?o<=r&&r<=a:a<=r&&r<=o:c>0?s<=i&&i<=u:u<=i&&i<=s)}function on(t,e,n){var r=e.x,i=e.y,o=n.x-r,s=n.y-i;if(0!==o||0!==s){var a=((t.x-r)*o+(t.y-i)*s)/(o*o+s*s);a>1?(r=n.x,i=n.y):a>0&&(r+=o*a,i+=s*a)}return(o=t.x-r)*o+(s=t.y-i)*s}function sn(t,e,n,r,i){for(var o,s=r,a=e+1;a<n;a++){var u=on(t[a],t[e],t[n]);u>s&&(o=a,s=u)}s>r&&(o-e>1&&sn(t,e,o,r,i),i.push(t[o]),n-o>1&&sn(t,o,n,r,i))}function an(t,e){var n=t.length-1,r=[t[0]];return sn(t,0,n,e,r),r.push(t[n]),r}function un(t,e,n){if(t.length<=2)return t;var r=void 0!==e?e*e:1;return t=an(t=n?t:function(t,e){for(var n,r,i,o,s,a=t[0],u=[a],l=1,c=t.length;l<c;l++)n=t[l],i=a,o=void 0,s=void 0,o=(r=n).x-i.x,s=r.y-i.y,o*o+s*s>e&&(u.push(n),a=n);return a!==n&&u.push(n),u}(t,r),r)}function ln(t,e,n){return un(t.map((function(t){return{x:t[0],y:t[1],z:t[2]}})),e,n).map((function(t){return t.z?[t.x,t.y,t.z]:[t.x,t.y]}))}function cn(t,e,n){return t.map((function(t){var r=t.map((function(t){return{x:t[0],y:t[1]}}));if(r.length<4)throw new Error("invalid polygon");for(var i=un(r,e,n).map((function(t){return[t.x,t.y]}));!hn(i);)i=un(r,e-=.01*e,n).map((function(t){return[t.x,t.y]}));return i[i.length-1][0]===i[0][0]&&i[i.length-1][1]===i[0][1]||i.push(i[0]),i}))}function hn(t){return!(t.length<3)&&!(3===t.length&&t[2][0]===t[0][0]&&t[2][1]===t[0][1])}var pn=function(){function t(t){this.points=t.points||[],this.duration=t.duration||1e4,this.sharpness=t.sharpness||.85,this.centers=[],this.controls=[],this.stepLength=t.stepLength||60,this.length=this.points.length,this.delay=0;for(var e=0;e<this.length;e++)this.points[e].z=this.points[e].z||0;for(e=0;e<this.length-1;e++){var n=this.points[e],r=this.points[e+1];this.centers.push({x:(n.x+r.x)/2,y:(n.y+r.y)/2,z:(n.z+r.z)/2})}this.controls.push([this.points[0],this.points[0]]);for(e=0;e<this.centers.length-1;e++){var i=this.points[e+1].x-(this.centers[e].x+this.centers[e+1].x)/2,o=this.points[e+1].y-(this.centers[e].y+this.centers[e+1].y)/2,s=this.points[e+1].z-(this.centers[e].y+this.centers[e+1].z)/2;this.controls.push([{x:(1-this.sharpness)*this.points[e+1].x+this.sharpness*(this.centers[e].x+i),y:(1-this.sharpness)*this.points[e+1].y+this.sharpness*(this.centers[e].y+o),z:(1-this.sharpness)*this.points[e+1].z+this.sharpness*(this.centers[e].z+s)},{x:(1-this.sharpness)*this.points[e+1].x+this.sharpness*(this.centers[e+1].x+i),y:(1-this.sharpness)*this.points[e+1].y+this.sharpness*(this.centers[e+1].y+o),z:(1-this.sharpness)*this.points[e+1].z+this.sharpness*(this.centers[e+1].z+s)}])}return this.controls.push([this.points[this.length-1],this.points[this.length-1]]),this.steps=this.cacheSteps(this.stepLength),this}return t.prototype.cacheSteps=function(t){var e=[],n=this.pos(0);e.push(0);for(var r=0;r<this.duration;r+=10){var i=this.pos(r);Math.sqrt((i.x-n.x)*(i.x-n.x)+(i.y-n.y)*(i.y-n.y)+(i.z-n.z)*(i.z-n.z))>t&&(e.push(r),n=i)}return e},t.prototype.vector=function(t){var e=this.pos(t+10),n=this.pos(t-10);return{angle:180*Math.atan2(e.y-n.y,e.x-n.x)/3.14,speed:Math.sqrt((n.x-e.x)*(n.x-e.x)+(n.y-e.y)*(n.y-e.y)+(n.z-e.z)*(n.z-e.z))}},t.prototype.pos=function(t){var e=t-this.delay;e<0&&(e=0),e>this.duration&&(e=this.duration-1);var n=e/this.duration;if(n>=1)return this.points[this.length-1];var r=Math.floor((this.points.length-1)*n);return function(t,e,n,r,i){var o=function(t){var e=t*t;return[e*t,3*e*(1-t),3*t*(1-t)*(1-t),(1-t)*(1-t)*(1-t)]}(t);return{x:i.x*o[0]+r.x*o[1]+n.x*o[2]+e.x*o[3],y:i.y*o[0]+r.y*o[1]+n.y*o[2]+e.y*o[3],z:i.z*o[0]+r.z*o[1]+n.z*o[2]+e.z*o[3]}}((this.length-1)*n-r,this.points[r],this.controls[r][1],this.controls[r+1][0],this.points[r+1])},t}();function fn(t,e){void 0===e&&(e={});for(var n=e.resolution||1e4,r=e.sharpness||.85,i=[],o=rt(t).coordinates.map((function(t){return{x:t[0],y:t[1]}})),s=new pn({duration:n,points:o,sharpness:r}),a=function(t){var e=s.pos(t);Math.floor(t/100)%2==0&&i.push([e.x,e.y])},u=0;u<s.duration;u+=10)a(u);return a(s.duration),h(i,e.properties)}function gn(t,e){void 0===e&&(e={});var n=Number(t[0]),r=Number(t[1]),i=Number(t[2]),o=Number(t[3]);if(6===t.length)throw new Error("@turf/bbox-polygon does not support BBox with 6 positions");var s=[n,r];return l([[s,[i,r],[i,o],[n,o],s]],e.properties,{bbox:t,id:e.id})}function dn(t){return gn(Z(t))}function yn(t){var e=t[0],n=t[1],r=t[2],i=t[3];if(me(t.slice(0,2),[r,n])>=me(t.slice(0,2),[e,i])){var o=(n+i)/2;return[e,o-(r-e)/2,r,o+(r-e)/2]}var s=(e+r)/2;return[s-(i-n)/2,n,s+(i-n)/2,i]}function vn(t,e,n,r){void 0===r&&(r={});var i=K(t),o=I(i[0]),s=I(i[1]),u=I(n),l=x(e,r.units),c=Math.asin(Math.sin(s)*Math.cos(l)+Math.cos(s)*Math.sin(l)*Math.cos(u));return a([w(o+Math.atan2(Math.sin(u)*Math.sin(l)*Math.cos(s),Math.cos(l)-Math.sin(s)*Math.sin(c))),w(c)],r.properties)}function _n(t,e,n){void 0===n&&(n={});for(var r=n.steps||64,i=n.properties?n.properties:!Array.isArray(t)&&"Feature"===t.type&&t.properties?t.properties:{},o=[],s=0;s<r;s++)o.push(vn(t,e,-360*s/r,n).geometry.coordinates);return o.push(o[0]),l([o],i)}function mn(t,e,n){if(void 0===n&&(n={}),!0===n.final)return function(t,e){var n=mn(e,t);return n=(n+180)%360}(t,e);var r=K(t),i=K(e),o=I(r[0]),s=I(i[0]),a=I(r[1]),u=I(i[1]),l=Math.sin(s-o)*Math.cos(u),c=Math.cos(a)*Math.sin(u)-Math.sin(a)*Math.cos(u)*Math.cos(s-o);return w(Math.atan2(l,c))}function xn(t,e){void 0===e&&(e={});var n=Z(t);return a([(n[0]+n[2])/2,(n[1]+n[3])/2],e.properties,e)}function En(t,e){void 0===e&&(e={});var n=0,r=0,i=0;return R(t,(function(t){n+=t[0],r+=t[1],i++}),!0),a([n/i,r/i],e.properties)}function bn(t){var e=[];return"FeatureCollection"===t.type?F(t,(function(t){R(t,(function(n){e.push(a(n,t.properties))}))})):R(t,(function(n){e.push(a(n,t.properties))})),f(e)}var wn=Nn,In=Nn;function Nn(t,e,n){n=n||2;var r,i,o,s,a,u,l,c=e&&e.length,h=c?e[0]*n:t.length,p=Sn(t,0,h,n,!0),f=[];if(!p)return f;if(c&&(p=function(t,e,n,r){var i,o,s,a=[];for(i=0,o=e.length;i<o;i++)(s=Sn(t,e[i]*r,i<o-1?e[i+1]*r:t.length,r,!1))===s.next&&(s.steiner=!0),a.push(Fn(s));for(a.sort(Tn),i=0;i<a.length;i++)An(a[i],n),n=Cn(n,n.next);return n}(t,e,p,n)),t.length>80*n){r=o=t[0],i=s=t[1];for(var g=n;g<h;g+=n)(a=t[g])<r&&(r=a),(u=t[g+1])<i&&(i=u),a>o&&(o=a),u>s&&(s=u);l=0!==(l=Math.max(o-r,s-i))?1/l:0}return Pn(p,f,n,r,i,l),f}function Sn(t,e,n,r,i){var o,s;if(i===Hn(t,e,n,r)>0)for(o=e;o<n;o+=r)s=Vn(o,t[o],t[o+1],s);else for(o=n-r;o>=e;o-=r)s=Vn(o,t[o],t[o+1],s);return s&&Bn(s,s.next)&&(Xn(s),s=s.next),s}function Cn(t,e){if(!t)return t;e||(e=t);var n,r=t;do{if(n=!1,r.steiner||!Bn(r,r.next)&&0!==qn(r.prev,r,r.next))r=r.next;else{if(Xn(r),(r=e=r.prev)===r.next)break;n=!0}}while(n||r!==e);return e}function Pn(t,e,n,r,i,o,s){if(t){!s&&o&&function(t,e,n,r){var i=t;do{null===i.z&&(i.z=Dn(i.x,i.y,e,n,r)),i.prevZ=i.prev,i.nextZ=i.next,i=i.next}while(i!==t);i.prevZ.nextZ=null,i.prevZ=null,function(t){var e,n,r,i,o,s,a,u,l=1;do{for(n=t,t=null,o=null,s=0;n;){for(s++,r=n,a=0,e=0;e<l&&(a++,r=r.nextZ);e++);for(u=l;a>0||u>0&&r;)0!==a&&(0===u||!r||n.z<=r.z)?(i=n,n=n.nextZ,a--):(i=r,r=r.nextZ,u--),o?o.nextZ=i:t=i,i.prevZ=o,o=i;n=r}o.nextZ=null,l*=2}while(s>1)}(i)}(t,r,i,o);for(var a,u,l=t;t.prev!==t.next;)if(a=t.prev,u=t.next,o?Ln(t,r,i,o):Mn(t))e.push(a.i/n),e.push(t.i/n),e.push(u.i/n),Xn(t),t=u.next,l=u.next;else if((t=u)===l){s?1===s?Pn(t=On(t,e,n),e,n,r,i,o,2):2===s&&Rn(t,e,n,r,i,o):Pn(Cn(t),e,n,r,i,o,1);break}}}function Mn(t){var e=t.prev,n=t,r=t.next;if(qn(e,n,r)>=0)return!1;for(var i=t.next.next;i!==t.prev;){if(kn(e.x,e.y,n.x,n.y,r.x,r.y,i.x,i.y)&&qn(i.prev,i,i.next)>=0)return!1;i=i.next}return!0}function Ln(t,e,n,r){var i=t.prev,o=t,s=t.next;if(qn(i,o,s)>=0)return!1;for(var a=i.x<o.x?i.x<s.x?i.x:s.x:o.x<s.x?o.x:s.x,u=i.y<o.y?i.y<s.y?i.y:s.y:o.y<s.y?o.y:s.y,l=i.x>o.x?i.x>s.x?i.x:s.x:o.x>s.x?o.x:s.x,c=i.y>o.y?i.y>s.y?i.y:s.y:o.y>s.y?o.y:s.y,h=Dn(a,u,e,n,r),p=Dn(l,c,e,n,r),f=t.prevZ,g=t.nextZ;f&&f.z>=h&&g&&g.z<=p;){if(f!==t.prev&&f!==t.next&&kn(i.x,i.y,o.x,o.y,s.x,s.y,f.x,f.y)&&qn(f.prev,f,f.next)>=0)return!1;if(f=f.prevZ,g!==t.prev&&g!==t.next&&kn(i.x,i.y,o.x,o.y,s.x,s.y,g.x,g.y)&&qn(g.prev,g,g.next)>=0)return!1;g=g.nextZ}for(;f&&f.z>=h;){if(f!==t.prev&&f!==t.next&&kn(i.x,i.y,o.x,o.y,s.x,s.y,f.x,f.y)&&qn(f.prev,f,f.next)>=0)return!1;f=f.prevZ}for(;g&&g.z<=p;){if(g!==t.prev&&g!==t.next&&kn(i.x,i.y,o.x,o.y,s.x,s.y,g.x,g.y)&&qn(g.prev,g,g.next)>=0)return!1;g=g.nextZ}return!0}function On(t,e,n){var r=t;do{var i=r.prev,o=r.next.next;!Bn(i,o)&&zn(i,r,r.next,o)&&jn(i,o)&&jn(o,i)&&(e.push(i.i/n),e.push(r.i/n),e.push(o.i/n),Xn(r),Xn(r.next),r=t=o),r=r.next}while(r!==t);return r}function Rn(t,e,n,r,i,o){var s=t;do{for(var a=s.next.next;a!==s.prev;){if(s.i!==a.i&&Gn(s,a)){var u=Un(s,a);return s=Cn(s,s.next),u=Cn(u,u.next),Pn(s,e,n,r,i,o),void Pn(u,e,n,r,i,o)}a=a.next}s=s.next}while(s!==t)}function Tn(t,e){return t.x-e.x}function An(t,e){if(e=function(t,e){var n,r=e,i=t.x,o=t.y,s=-1/0;do{if(o<=r.y&&o>=r.next.y&&r.next.y!==r.y){var a=r.x+(o-r.y)*(r.next.x-r.x)/(r.next.y-r.y);if(a<=i&&a>s){if(s=a,a===i){if(o===r.y)return r;if(o===r.next.y)return r.next}n=r.x<r.next.x?r:r.next}}r=r.next}while(r!==e);if(!n)return null;if(i===s)return n.prev;var u,l=n,c=n.x,h=n.y,p=1/0;r=n.next;for(;r!==l;)i>=r.x&&r.x>=c&&i!==r.x&&kn(o<h?i:s,o,c,h,o<h?s:i,o,r.x,r.y)&&((u=Math.abs(o-r.y)/(i-r.x))<p||u===p&&r.x>n.x)&&jn(r,t)&&(n=r,p=u),r=r.next;return n}(t,e)){var n=Un(e,t);Cn(n,n.next)}}function Dn(t,e,n,r,i){return(t=1431655765&((t=858993459&((t=252645135&((t=16711935&((t=32767*(t-n)*i)|t<<8))|t<<4))|t<<2))|t<<1))|(e=1431655765&((e=858993459&((e=252645135&((e=16711935&((e=32767*(e-r)*i)|e<<8))|e<<4))|e<<2))|e<<1))<<1}function Fn(t){var e=t,n=t;do{e.x<n.x&&(n=e),e=e.next}while(e!==t);return n}function kn(t,e,n,r,i,o,s,a){return(i-s)*(e-a)-(t-s)*(o-a)>=0&&(t-s)*(r-a)-(n-s)*(e-a)>=0&&(n-s)*(o-a)-(i-s)*(r-a)>=0}function Gn(t,e){return t.next.i!==e.i&&t.prev.i!==e.i&&!function(t,e){var n=t;do{if(n.i!==t.i&&n.next.i!==t.i&&n.i!==e.i&&n.next.i!==e.i&&zn(n,n.next,t,e))return!0;n=n.next}while(n!==t);return!1}(t,e)&&jn(t,e)&&jn(e,t)&&function(t,e){var n=t,r=!1,i=(t.x+e.x)/2,o=(t.y+e.y)/2;do{n.y>o!=n.next.y>o&&n.next.y!==n.y&&i<(n.next.x-n.x)*(o-n.y)/(n.next.y-n.y)+n.x&&(r=!r),n=n.next}while(n!==t);return r}(t,e)}function qn(t,e,n){return(e.y-t.y)*(n.x-e.x)-(e.x-t.x)*(n.y-e.y)}function Bn(t,e){return t.x===e.x&&t.y===e.y}function zn(t,e,n,r){return!!(Bn(t,e)&&Bn(n,r)||Bn(t,r)&&Bn(n,e))||qn(t,e,n)>0!=qn(t,e,r)>0&&qn(n,r,t)>0!=qn(n,r,e)>0}function jn(t,e){return qn(t.prev,t,t.next)<0?qn(t,e,t.next)>=0&&qn(t,t.prev,e)>=0:qn(t,e,t.prev)<0||qn(t,t.next,e)<0}function Un(t,e){var n=new Yn(t.i,t.x,t.y),r=new Yn(e.i,e.x,e.y),i=t.next,o=e.prev;return t.next=e,e.prev=t,n.next=i,i.prev=n,r.next=n,n.prev=r,o.next=r,r.prev=o,r}function Vn(t,e,n,r){var i=new Yn(t,e,n);return r?(i.next=r.next,i.prev=r,r.next.prev=i,r.next=i):(i.prev=i,i.next=i),i}function Xn(t){t.next.prev=t.prev,t.prev.next=t.next,t.prevZ&&(t.prevZ.nextZ=t.nextZ),t.nextZ&&(t.nextZ.prevZ=t.prevZ)}function Yn(t,e,n){this.i=t,this.x=e,this.y=n,this.prev=null,this.next=null,this.z=null,this.prevZ=null,this.nextZ=null,this.steiner=!1}function Hn(t,e,n,r){for(var i=0,o=e,s=n-r;o<n;o+=r)i+=(t[s]-t[o])*(t[o+1]+t[s+1]),s=o;return i}function Wn(t){var e=function(t){for(var e=t[0][0].length,n={vertices:[],holes:[],dimensions:e},r=0,i=0;i<t.length;i++){for(var o=0;o<t[i].length;o++)for(var s=0;s<e;s++)n.vertices.push(t[i][o][s]);i>0&&(r+=t[i-1].length,n.holes.push(r))}return n}(t),n=wn(e.vertices,e.holes,2),r=[],i=[];n.forEach((function(t,r){var o=n[r];i.push([e.vertices[2*o],e.vertices[2*o+1]])}));for(var o=0;o<i.length;o+=3){var s=i.slice(o,o+3);s.push(i[o]),r.push(l([s]))}return r}function Jn(t,e){if(!t)throw new Error("targetPoint is required");if(!e)throw new Error("points is required");var n,r=1/0,i=0;return F(e,(function(e,n){var o=me(t,e);o<r&&(i=n,r=o)})),(n=Ie(e.features[i])).properties.featureIndex=i,n.properties.distanceToPoint=r,n}function Zn(t){if(!t)throw new Error("geojson is required");var e=[];return z(t,(function(t){!function(t,e){var n=[],r=t.geometry;if(null!==r){switch(r.type){case"Polygon":n=Q(r);break;case"LineString":n=[Q(r)]}n.forEach((function(n){(function(t,e){var n=[];return t.reduce((function(t,r){var i=h([t,r],e);return i.bbox=function(t,e){var n=t[0],r=t[1],i=e[0],o=e[1];return[n<i?n:i,r<o?r:o,n>i?n:i,r>o?r:o]}(t,r),n.push(i),r})),n})(n,t.properties).forEach((function(t){t.id=e.length,e.push(t)}))}))}}(t,e)})),f(e)}Nn.deviation=function(t,e,n,r){var i=e&&e.length,o=i?e[0]*n:t.length,s=Math.abs(Hn(t,0,o,n));if(i)for(var a=0,u=e.length;a<u;a++){var l=e[a]*n,c=a<u-1?e[a+1]*n:t.length;s-=Math.abs(Hn(t,l,c,n))}var h=0;for(a=0;a<r.length;a+=3){var p=r[a]*n,f=r[a+1]*n,g=r[a+2]*n;h+=Math.abs((t[p]-t[g])*(t[f+1]-t[p+1])-(t[p]-t[f])*(t[g+1]-t[p+1]))}return 0===s&&0===h?0:Math.abs((h-s)/s)},Nn.flatten=function(t){for(var e=t[0][0].length,n={vertices:[],holes:[],dimensions:e},r=0,i=0;i<t.length;i++){for(var o=0;o<t[i].length;o++)for(var s=0;s<e;s++)n.vertices.push(t[i][o][s]);i>0&&(r+=t[i-1].length,n.holes.push(r))}return n},wn.default=In;var Kn=Bt((function(t,e){function n(t,e,n){void 0===n&&(n={});var r={type:"Feature"};return(0===n.id||n.id)&&(r.id=n.id),n.bbox&&(r.bbox=n.bbox),r.properties=e||{},r.geometry=t,r}function r(t,e,r){if(void 0===r&&(r={}),!t)throw new Error("coordinates is required");if(!Array.isArray(t))throw new Error("coordinates must be an Array");if(t.length<2)throw new Error("coordinates must be at least 2 numbers long");if(!f(t[0])||!f(t[1]))throw new Error("coordinates must contain numbers");return n({type:"Point",coordinates:t},e,r)}function i(t,e,r){void 0===r&&(r={});for(var i=0,o=t;i<o.length;i++){var s=o[i];if(s.length<4)throw new Error("Each LinearRing of a Polygon must have 4 or more Positions.");for(var a=0;a<s[s.length-1].length;a++)if(s[s.length-1][a]!==s[0][a])throw new Error("First and last Position are not equivalent.")}return n({type:"Polygon",coordinates:t},e,r)}function o(t,e,r){if(void 0===r&&(r={}),t.length<2)throw new Error("coordinates must be an array of two or more positions");return n({type:"LineString",coordinates:t},e,r)}function s(t,e){void 0===e&&(e={});var n={type:"FeatureCollection"};return e.id&&(n.id=e.id),e.bbox&&(n.bbox=e.bbox),n.features=t,n}function a(t,e,r){return void 0===r&&(r={}),n({type:"MultiLineString",coordinates:t},e,r)}function u(t,e,r){return void 0===r&&(r={}),n({type:"MultiPoint",coordinates:t},e,r)}function l(t,e,r){return void 0===r&&(r={}),n({type:"MultiPolygon",coordinates:t},e,r)}function c(t,n){void 0===n&&(n="kilometers");var r=e.factors[n];if(!r)throw new Error(n+" units is invalid");return t*r}function h(t,n){void 0===n&&(n="kilometers");var r=e.factors[n];if(!r)throw new Error(n+" units is invalid");return t/r}function p(t){return 180*(t%(2*Math.PI))/Math.PI}function f(t){return!isNaN(t)&&null!==t&&!Array.isArray(t)}Object.defineProperty(e,"__esModule",{value:!0}),e.earthRadius=6371008.8,e.factors={centimeters:100*e.earthRadius,centimetres:100*e.earthRadius,degrees:e.earthRadius/111325,feet:3.28084*e.earthRadius,inches:39.37*e.earthRadius,kilometers:e.earthRadius/1e3,kilometres:e.earthRadius/1e3,meters:e.earthRadius,metres:e.earthRadius,miles:e.earthRadius/1609.344,millimeters:1e3*e.earthRadius,millimetres:1e3*e.earthRadius,nauticalmiles:e.earthRadius/1852,radians:1,yards:1.0936*e.earthRadius},e.unitsFactors={centimeters:100,centimetres:100,degrees:1/111325,feet:3.28084,inches:39.37,kilometers:.001,kilometres:.001,meters:1,metres:1,miles:1/1609.344,millimeters:1e3,millimetres:1e3,nauticalmiles:1/1852,radians:1/e.earthRadius,yards:1.0936133},e.areaFactors={acres:247105e-9,centimeters:1e4,centimetres:1e4,feet:10.763910417,hectares:1e-4,inches:1550.003100006,kilometers:1e-6,kilometres:1e-6,meters:1,metres:1,miles:386e-9,millimeters:1e6,millimetres:1e6,yards:1.195990046},e.feature=n,e.geometry=function(t,e,n){switch(t){case"Point":return r(e).geometry;case"LineString":return o(e).geometry;case"Polygon":return i(e).geometry;case"MultiPoint":return u(e).geometry;case"MultiLineString":return a(e).geometry;case"MultiPolygon":return l(e).geometry;default:throw new Error(t+" is invalid")}},e.point=r,e.points=function(t,e,n){return void 0===n&&(n={}),s(t.map((function(t){return r(t,e)})),n)},e.polygon=i,e.polygons=function(t,e,n){return void 0===n&&(n={}),s(t.map((function(t){return i(t,e)})),n)},e.lineString=o,e.lineStrings=function(t,e,n){return void 0===n&&(n={}),s(t.map((function(t){return o(t,e)})),n)},e.featureCollection=s,e.multiLineString=a,e.multiPoint=u,e.multiPolygon=l,e.geometryCollection=function(t,e,r){return void 0===r&&(r={}),n({type:"GeometryCollection",geometries:t},e,r)},e.round=function(t,e){if(void 0===e&&(e=0),e&&!(e>=0))throw new Error("precision must be a positive number");var n=Math.pow(10,e||0);return Math.round(t*n)/n},e.radiansToLength=c,e.lengthToRadians=h,e.lengthToDegrees=function(t,e){return p(h(t,e))},e.bearingToAzimuth=function(t){var e=t%360;return e<0&&(e+=360),e},e.radiansToDegrees=p,e.degreesToRadians=function(t){return t%360*Math.PI/180},e.convertLength=function(t,e,n){if(void 0===e&&(e="kilometers"),void 0===n&&(n="kilometers"),!(t>=0))throw new Error("length must be a positive number");return c(h(t,e),n)},e.convertArea=function(t,n,r){if(void 0===n&&(n="meters"),void 0===r&&(r="kilometers"),!(t>=0))throw new Error("area must be a positive number");var i=e.areaFactors[n];if(!i)throw new Error("invalid original units");var o=e.areaFactors[r];if(!o)throw new Error("invalid final units");return t/i*o},e.isNumber=f,e.isObject=function(t){return!!t&&t.constructor===Object},e.validateBBox=function(t){if(!t)throw new Error("bbox is required");if(!Array.isArray(t))throw new Error("bbox must be an Array");if(4!==t.length&&6!==t.length)throw new Error("bbox must be an Array of 4 or 6 numbers");t.forEach((function(t){if(!f(t))throw new Error("bbox must only contain numbers")}))},e.validateId=function(t){if(!t)throw new Error("id is required");if(-1===["string","number"].indexOf(typeof t))throw new Error("id must be a number or a string")}}));function Qn(t,e,n){if(null!==t)for(var r,i,o,s,a,u,l,c,h=0,p=0,f=t.type,g="FeatureCollection"===f,d="Feature"===f,y=g?t.features.length:1,v=0;v<y;v++){a=(c=!!(l=g?t.features[v].geometry:d?t.geometry:t)&&"GeometryCollection"===l.type)?l.geometries.length:1;for(var _=0;_<a;_++){var m=0,x=0;if(null!==(s=c?l.geometries[_]:l)){u=s.coordinates;var E=s.type;switch(h=!n||"Polygon"!==E&&"MultiPolygon"!==E?0:1,E){case null:break;case"Point":if(!1===e(u,p,v,m,x))return!1;p++,m++;break;case"LineString":case"MultiPoint":for(r=0;r<u.length;r++){if(!1===e(u[r],p,v,m,x))return!1;p++,"MultiPoint"===E&&m++}"LineString"===E&&m++;break;case"Polygon":case"MultiLineString":for(r=0;r<u.length;r++){for(i=0;i<u[r].length-h;i++){if(!1===e(u[r][i],p,v,m,x))return!1;p++}"MultiLineString"===E&&m++,"Polygon"===E&&x++}"Polygon"===E&&m++;break;case"MultiPolygon":for(r=0;r<u.length;r++){for(x=0,i=0;i<u[r].length;i++){for(o=0;o<u[r][i].length-h;o++){if(!1===e(u[r][i][o],p,v,m,x))return!1;p++}x++}m++}break;case"GeometryCollection":for(r=0;r<s.geometries.length;r++)if(!1===Qn(s.geometries[r],e,n))return!1;break;default:throw new Error("Unknown Geometry Type")}}}}}function $n(t,e){var n;switch(t.type){case"FeatureCollection":for(n=0;n<t.features.length&&!1!==e(t.features[n].properties,n);n++);break;case"Feature":e(t.properties,0)}}function tr(t,e){if("Feature"===t.type)e(t,0);else if("FeatureCollection"===t.type)for(var n=0;n<t.features.length&&!1!==e(t.features[n],n);n++);}function er(t,e){var n,r,i,o,s,a,u,l,c,h,p=0,f="FeatureCollection"===t.type,g="Feature"===t.type,d=f?t.features.length:1;for(n=0;n<d;n++){for(a=f?t.features[n].geometry:g?t.geometry:t,l=f?t.features[n].properties:g?t.properties:{},c=f?t.features[n].bbox:g?t.bbox:void 0,h=f?t.features[n].id:g?t.id:void 0,s=(u=!!a&&"GeometryCollection"===a.type)?a.geometries.length:1,i=0;i<s;i++)if(null!==(o=u?a.geometries[i]:a))switch(o.type){case"Point":case"LineString":case"MultiPoint":case"Polygon":case"MultiLineString":case"MultiPolygon":if(!1===e(o,p,l,c,h))return!1;break;case"GeometryCollection":for(r=0;r<o.geometries.length;r++)if(!1===e(o.geometries[r],p,l,c,h))return!1;break;default:throw new Error("Unknown Geometry Type")}else if(!1===e(null,p,l,c,h))return!1;p++}}function nr(t,e){er(t,(function(t,n,r,i,o){var s,a=null===t?null:t.type;switch(a){case null:case"Point":case"LineString":case"Polygon":return!1!==e(Kn.feature(t,r,{bbox:i,id:o}),n,0)&&void 0}switch(a){case"MultiPoint":s="Point";break;case"MultiLineString":s="LineString";break;case"MultiPolygon":s="Polygon"}for(var u=0;u<t.coordinates.length;u++){var l={type:s,coordinates:t.coordinates[u]};if(!1===e(Kn.feature(l,r),n,u))return!1}}))}function rr(t,e){nr(t,(function(t,n,r){var i=0;if(t.geometry){var o=t.geometry.type;if("Point"!==o&&"MultiPoint"!==o){var s,a=0,u=0,l=0;return!1!==Qn(t,(function(o,c,h,p,f){if(void 0===s||n>a||p>u||f>l)return s=o,a=n,u=p,l=f,void(i=0);var g=Kn.lineString([s,o],t.properties);if(!1===e(g,n,r,f,i))return!1;i++,s=o}))&&void 0}}}))}function ir(t,e){if(!t)throw new Error("geojson is required");nr(t,(function(t,n,r){if(null!==t.geometry){var i=t.geometry.type,o=t.geometry.coordinates;switch(i){case"LineString":if(!1===e(t,n,r,0,0))return!1;break;case"Polygon":for(var s=0;s<o.length;s++)if(!1===e(Kn.lineString(o[s],t.properties),n,r,s))return!1}}}))}var or=function(t){var e=[];return Qn(t,(function(t){e.push(t)})),e},sr=Qn,ar=function(t,e,n,r){var i=n;return Qn(t,(function(t,r,o,s,a){i=0===r&&void 0===n?t:e(i,t,r,o,s,a)}),r),i},ur=tr,lr=function(t,e,n){var r=n;return tr(t,(function(t,i){r=0===i&&void 0===n?t:e(r,t,i)})),r},cr=function(t,e){if(e=e||{},!Kn.isObject(e))throw new Error("options is invalid");var n,r=e.featureIndex||0,i=e.multiFeatureIndex||0,o=e.geometryIndex||0,s=e.coordIndex||0,a=e.properties;switch(t.type){case"FeatureCollection":r<0&&(r=t.features.length+r),a=a||t.features[r].properties,n=t.features[r].geometry;break;case"Feature":a=a||t.properties,n=t.geometry;break;case"Point":case"MultiPoint":return null;case"LineString":case"Polygon":case"MultiLineString":case"MultiPolygon":n=t;break;default:throw new Error("geojson is invalid")}if(null===n)return null;var u=n.coordinates;switch(n.type){case"Point":return Kn.point(u,a,e);case"MultiPoint":return i<0&&(i=u.length+i),Kn.point(u[i],a,e);case"LineString":return s<0&&(s=u.length+s),Kn.point(u[s],a,e);case"Polygon":return o<0&&(o=u.length+o),s<0&&(s=u[o].length+s),Kn.point(u[o][s],a,e);case"MultiLineString":return i<0&&(i=u.length+i),s<0&&(s=u[i].length+s),Kn.point(u[i][s],a,e);case"MultiPolygon":return i<0&&(i=u.length+i),o<0&&(o=u[i].length+o),s<0&&(s=u[i][o].length-s),Kn.point(u[i][o][s],a,e)}throw new Error("geojson is invalid")},hr=function(t,e){if(e=e||{},!Kn.isObject(e))throw new Error("options is invalid");var n,r=e.featureIndex||0,i=e.multiFeatureIndex||0,o=e.geometryIndex||0,s=e.segmentIndex||0,a=e.properties;switch(t.type){case"FeatureCollection":r<0&&(r=t.features.length+r),a=a||t.features[r].properties,n=t.features[r].geometry;break;case"Feature":a=a||t.properties,n=t.geometry;break;case"Point":case"MultiPoint":return null;case"LineString":case"Polygon":case"MultiLineString":case"MultiPolygon":n=t;break;default:throw new Error("geojson is invalid")}if(null===n)return null;var u=n.coordinates;switch(n.type){case"Point":case"MultiPoint":return null;case"LineString":return s<0&&(s=u.length+s-1),Kn.lineString([u[s],u[s+1]],a,e);case"Polygon":return o<0&&(o=u.length+o),s<0&&(s=u[o].length+s-1),Kn.lineString([u[o][s],u[o][s+1]],a,e);case"MultiLineString":return i<0&&(i=u.length+i),s<0&&(s=u[i].length+s-1),Kn.lineString([u[i][s],u[i][s+1]],a,e);case"MultiPolygon":return i<0&&(i=u.length+i),o<0&&(o=u[i].length+o),s<0&&(s=u[i][o].length-s-1),Kn.lineString([u[i][o][s],u[i][o][s+1]],a,e)}throw new Error("geojson is invalid")},pr=nr,fr=function(t,e,n){var r=n;return nr(t,(function(t,i,o){r=0===i&&0===o&&void 0===n?t:e(r,t,i,o)})),r},gr=er,dr=function(t,e,n){var r=n;return er(t,(function(t,i,o,s,a){r=0===i&&void 0===n?t:e(r,t,i,o,s,a)})),r},yr=ir,vr=function(t,e,n){var r=n;return ir(t,(function(t,i,o,s){r=0===i&&void 0===n?t:e(r,t,i,o,s)})),r},_r=$n,mr=function(t,e,n){var r=n;return $n(t,(function(t,i){r=0===i&&void 0===n?t:e(r,t,i)})),r},xr=rr,Er=function(t,e,n){var r=n,i=!1;return rr(t,(function(t,o,s,a,u){r=!1===i&&void 0===n?t:e(r,t,o,s,a,u),i=!0})),r},br=Object.defineProperty({coordAll:or,coordEach:sr,coordReduce:ar,featureEach:ur,featureReduce:lr,findPoint:cr,findSegment:hr,flattenEach:pr,flattenReduce:fr,geomEach:gr,geomReduce:dr,lineEach:yr,lineReduce:vr,propEach:_r,propReduce:mr,segmentEach:xr,segmentReduce:Er},"__esModule",{value:!0});function wr(t){var e=[1/0,1/0,-1/0,-1/0];return br.coordEach(t,(function(t){e[0]>t[0]&&(e[0]=t[0]),e[1]>t[1]&&(e[1]=t[1]),e[2]<t[0]&&(e[2]=t[0]),e[3]<t[1]&&(e[3]=t[1])})),e}wr.default=wr;var Ir=wr,Nr=Object.defineProperty({default:Ir},"__esModule",{value:!0}).default,Sr=br.featureEach,Cr=(br.coordEach,Kn.polygon,Kn.featureCollection);function Pr(t){var e=Nt(t);return e.insert=function(t){if("Feature"!==t.type)throw new Error("invalid feature");return t.bbox=t.bbox?t.bbox:Nr(t),Nt.prototype.insert.call(this,t)},e.load=function(t){var e=[];return Array.isArray(t)?t.forEach((function(t){if("Feature"!==t.type)throw new Error("invalid features");t.bbox=t.bbox?t.bbox:Nr(t),e.push(t)})):Sr(t,(function(t){if("Feature"!==t.type)throw new Error("invalid features");t.bbox=t.bbox?t.bbox:Nr(t),e.push(t)})),Nt.prototype.load.call(this,e)},e.remove=function(t,e){if("Feature"!==t.type)throw new Error("invalid feature");return t.bbox=t.bbox?t.bbox:Nr(t),Nt.prototype.remove.call(this,t,e)},e.clear=function(){return Nt.prototype.clear.call(this)},e.search=function(t){var e=Nt.prototype.search.call(this,this.toBBox(t));return Cr(e)},e.collides=function(t){return Nt.prototype.collides.call(this,this.toBBox(t))},e.all=function(){var t=Nt.prototype.all.call(this);return Cr(t)},e.toJSON=function(){return Nt.prototype.toJSON.call(this)},e.fromJSON=function(t){return Nt.prototype.fromJSON.call(this,t)},e.toBBox=function(t){var e;if(t.bbox)e=t.bbox;else if(Array.isArray(t)&&4===t.length)e=t;else if(Array.isArray(t)&&6===t.length)e=[t[0],t[1],t[3],t[4]];else if("Feature"===t.type)e=Nr(t);else{if("FeatureCollection"!==t.type)throw new Error("invalid geojson");e=Nr(t)}return{minX:e[0],minY:e[1],maxX:e[2],maxY:e[3]}},e}var Mr=Pr,Lr=Pr;function Or(t,e){var n={},r=[];if("LineString"===t.type&&(t=o(t)),"LineString"===e.type&&(e=o(e)),"Feature"===t.type&&"Feature"===e.type&&null!==t.geometry&&null!==e.geometry&&"LineString"===t.geometry.type&&"LineString"===e.geometry.type&&2===t.geometry.coordinates.length&&2===e.geometry.coordinates.length){var i=Rr(t,e);return i&&r.push(i),f(r)}var s=Mr();return s.load(Zn(e)),F(Zn(t),(function(t){F(s.search(t),(function(e){var i=Rr(t,e);if(i){var o=Q(i).join(",");n[o]||(n[o]=!0,r.push(i))}}))})),f(r)}function Rr(t,e){var n=Q(t),r=Q(e);if(2!==n.length)throw new Error("<intersects> line1 must only contain 2 coordinates");if(2!==r.length)throw new Error("<intersects> line2 must only contain 2 coordinates");var i=n[0][0],o=n[0][1],s=n[1][0],u=n[1][1],l=r[0][0],c=r[0][1],h=r[1][0],p=r[1][1],f=(p-c)*(s-i)-(h-l)*(u-o),g=(h-l)*(o-c)-(p-c)*(i-l),d=(s-i)*(o-c)-(u-o)*(i-l);if(0===f)return null;var y=g/f,v=d/f;return y>=0&&y<=1&&v>=0&&v<=1?a([i+y*(s-i),o+y*(u-o)]):null}function Tr(t,e,n){void 0===n&&(n={});var r=a([1/0,1/0],{dist:1/0}),i=0;return z(t,(function(t){for(var o=Q(t),s=0;s<o.length-1;s++){var u=a(o[s]);u.properties.dist=me(e,u,n);var l=a(o[s+1]);l.properties.dist=me(e,l,n);var c=me(u,l,n),p=Math.max(u.properties.dist,l.properties.dist),f=mn(u,l),g=vn(e,p,f+90,n),d=vn(e,p,f-90,n),y=Or(h([g.geometry.coordinates,d.geometry.coordinates]),h([u.geometry.coordinates,l.geometry.coordinates])),v=null;y.features.length>0&&((v=y.features[0]).properties.dist=me(e,v,n),v.properties.location=i+me(u,v,n)),u.properties.dist<r.properties.dist&&((r=u).properties.index=s,r.properties.location=i),l.properties.dist<r.properties.dist&&((r=l).properties.index=s+1,r.properties.location=i+c),v&&v.properties.dist<r.properties.dist&&((r=v).properties.index=s),i+=c}})),r}function Ar(t,n,r){void 0===r&&(r={});var i=K(t),o=K(n);return o[0]+=o[0]-i[0]>180?-360:i[0]-o[0]>180?360:0,N(function(t,n,r){var i=r=void 0===r?e:Number(r),o=t[1]*Math.PI/180,s=n[1]*Math.PI/180,a=s-o,u=Math.abs(n[0]-t[0])*Math.PI/180;u>Math.PI&&(u-=2*Math.PI);var l=Math.log(Math.tan(s/2+Math.PI/4)/Math.tan(o/2+Math.PI/4)),c=Math.abs(l)>1e-11?a/l:Math.cos(o);return Math.sqrt(a*a+c*c*u*u)*i}(i,o),"meters",r.units)}function Dr(t,e,n){if(void 0===n&&(n={}),n.method||(n.method="geodesic"),n.units||(n.units="kilometers"),!t)throw new Error("pt is required");if(Array.isArray(t)?t=a(t):"Point"===t.type?t=o(t):et(t,"Point","point"),!e)throw new Error("line is required");Array.isArray(e)?e=h(e):"LineString"===e.type?e=o(e):et(e,"LineString","line");var r=1/0,i=t.geometry.coordinates;return U(e,(function(t){var e=t.geometry.coordinates[0],o=t.geometry.coordinates[1],s=function(t,e,n,r){var i=[n[0]-e[0],n[1]-e[1]],o=Fr([t[0]-e[0],t[1]-e[1]],i);if(o<=0)return kr(t,e,{method:r.method,units:"degrees"});var s=Fr(i,i);if(s<=o)return kr(t,n,{method:r.method,units:"degrees"});var a=o/s,u=[e[0]+a*i[0],e[1]+a*i[1]];return kr(t,u,{method:r.method,units:"degrees"})}(i,e,o,n);s<r&&(r=s)})),N(r,"degrees",n.units)}function Fr(t,e){return t[0]*e[0]+t[1]*e[1]}function kr(t,e,n){return"planar"===n.method?Ar(t,e,n):me(t,e,n)}function Gr(t,e,n,r,i,o,s,a){var u,l,c,h,p={x:null,y:null,onLine1:!1,onLine2:!1};return 0===(u=(a-o)*(n-t)-(s-i)*(r-e))?null!==p.x&&null!==p.y&&p:(h=(n-t)*(l=e-o)-(r-e)*(c=t-i),l=((s-i)*l-(a-o)*c)/u,c=h/u,p.x=t+l*(n-t),p.y=e+l*(r-e),l>=0&&l<=1&&(p.onLine1=!0),c>=0&&c<=1&&(p.onLine2=!0),!(!p.onLine1||!p.onLine2)&&[p.x,p.y])}function qr(t){for(var e=function(t){if("FeatureCollection"!==t.type)return"Feature"!==t.type?f([o(t)]):f([t]);return t}(t),n=xn(e),r=!1,i=0;!r&&i<e.features.length;){var s,u=e.features[i].geometry,l=!1;if("Point"===u.type)n.geometry.coordinates[0]===u.coordinates[0]&&n.geometry.coordinates[1]===u.coordinates[1]&&(r=!0);else if("MultiPoint"===u.type){var c=!1;for(s=0;!c&&s<u.coordinates.length;)n.geometry.coordinates[0]===u.coordinates[s][0]&&n.geometry.coordinates[1]===u.coordinates[s][1]&&(r=!0,c=!0),s++}else if("LineString"===u.type)for(s=0;!l&&s<u.coordinates.length-1;)Br(n.geometry.coordinates[0],n.geometry.coordinates[1],u.coordinates[s][0],u.coordinates[s][1],u.coordinates[s+1][0],u.coordinates[s+1][1])&&(l=!0,r=!0),s++;else if("MultiLineString"===u.type)for(var h=0;h<u.coordinates.length;){l=!1,s=0;for(var p=u.coordinates[h];!l&&s<p.length-1;)Br(n.geometry.coordinates[0],n.geometry.coordinates[1],p[s][0],p[s][1],p[s+1][0],p[s+1][1])&&(l=!0,r=!0),s++;h++}else"Polygon"!==u.type&&"MultiPolygon"!==u.type||ye(n,u)&&(r=!0);i++}if(r)return n;var g=f([]);for(i=0;i<e.features.length;i++)g.features=g.features.concat(bn(e.features[i]).features);return a(Jn(n,g).geometry.coordinates)}function Br(t,e,n,r,i,o){return Math.sqrt((i-n)*(i-n)+(o-r)*(o-r))===Math.sqrt((t-n)*(t-n)+(e-r)*(e-r))+Math.sqrt((i-t)*(i-t)+(o-e)*(o-e))}Mr.default=Lr;var zr=6378137;function jr(t){return B(t,(function(t,e){return t+function(t){var e,n=0;switch(t.type){case"Polygon":return Ur(t.coordinates);case"MultiPolygon":for(e=0;e<t.coordinates.length;e++)n+=Ur(t.coordinates[e]);return n;case"Point":case"MultiPoint":case"LineString":case"MultiLineString":return 0}return 0}(e)}),0)}function Ur(t){var e=0;if(t&&t.length>0){e+=Math.abs(Vr(t[0]));for(var n=1;n<t.length;n++)e-=Math.abs(Vr(t[n]))}return e}function Vr(t){var e,n,r,i,o,s,a=0,u=t.length;if(u>2){for(s=0;s<u;s++)s===u-2?(r=u-2,i=u-1,o=0):s===u-1?(r=u-1,i=0,o=1):(r=s,i=s+1,o=s+2),e=t[r],n=t[i],a+=(Xr(t[o][0])-Xr(e[0]))*Math.sin(Xr(n[1]));a=a*zr*zr/2}return a}function Xr(t){return t*Math.PI/180}function Yr(t,e){return void 0===e&&(e={}),V(t,(function(t,n){var r=n.geometry.coordinates;return t+me(r[0],r[1],e)}),0)}function Hr(t,e,n,r){if(!P(r=r||{}))throw new Error("options is invalid");var i,o=[];if("Feature"===t.type)i=t.geometry.coordinates;else{if("LineString"!==t.type)throw new Error("input must be a LineString Feature or Geometry");i=t.coordinates}for(var s,a,u,l=i.length,c=0,p=0;p<i.length&&!(e>=c&&p===i.length-1);p++){if(c>e&&0===o.length){if(!(s=e-c))return o.push(i[p]),h(o);a=mn(i[p],i[p-1])-180,u=vn(i[p],s,a,r),o.push(u.geometry.coordinates)}if(c>=n)return(s=n-c)?(a=mn(i[p],i[p-1])-180,u=vn(i[p],s,a,r),o.push(u.geometry.coordinates),h(o)):(o.push(i[p]),h(o));if(c>=e&&o.push(i[p]),p===i.length-1)return h(o);c+=me(i[p],i[p+1],r)}if(c<e&&i.length===l)throw new Error("Start position is beyond line");var f=i[i.length-1];return h([f,f])}function Wr(t,e,n){void 0===n&&(n={});for(var r=K(t),i=Q(e),o=0;o<i.length-1;o++){var s=!1;if(n.ignoreEndVertices&&(0===o&&(s="start"),o===i.length-2&&(s="end"),0===o&&o+1===i.length-1&&(s="both")),Jr(i[o],i[o+1],r,s,void 0===n.epsilon?null:n.epsilon))return!0}return!1}function Jr(t,e,n,r,i){var o=n[0],s=n[1],a=t[0],u=t[1],l=e[0],c=e[1],h=l-a,p=c-u,f=(n[0]-a)*p-(n[1]-u)*h;if(null!==i){if(Math.abs(f)>i)return!1}else if(0!==f)return!1;return r?"start"===r?Math.abs(h)>=Math.abs(p)?h>0?a<o&&o<=l:l<=o&&o<a:p>0?u<s&&s<=c:c<=s&&s<u:"end"===r?Math.abs(h)>=Math.abs(p)?h>0?a<=o&&o<l:l<o&&o<=a:p>0?u<=s&&s<c:c<s&&s<=u:"both"===r&&(Math.abs(h)>=Math.abs(p)?h>0?a<o&&o<l:l<o&&o<a:p>0?u<s&&s<c:c<s&&s<u):Math.abs(h)>=Math.abs(p)?h>0?a<=o&&o<=l:l<=o&&o<=a:p>0?u<=s&&s<=c:c<=s&&s<=u}function Zr(t,e){var n=rt(t),r=rt(e),i=n.type,o=r.type;switch(i){case"Point":switch(o){case"MultiPoint":return function(t,e){var n,r=!1;for(n=0;n<e.coordinates.length;n++)if(Qr(e.coordinates[n],t.coordinates)){r=!0;break}return r}(n,r);case"LineString":return Wr(n,r,{ignoreEndVertices:!0});case"Polygon":case"MultiPolygon":return ye(n,r,{ignoreBoundary:!0});default:throw new Error("feature2 "+o+" geometry not supported")}case"MultiPoint":switch(o){case"MultiPoint":return function(t,e){for(var n=0;n<t.coordinates.length;n++){for(var r=!1,i=0;i<e.coordinates.length;i++)Qr(t.coordinates[n],e.coordinates[i])&&(r=!0);if(!r)return!1}return!0}(n,r);case"LineString":return function(t,e){for(var n=!1,r=0;r<t.coordinates.length;r++){if(!Wr(t.coordinates[r],e))return!1;n||(n=Wr(t.coordinates[r],e,{ignoreEndVertices:!0}))}return n}(n,r);case"Polygon":case"MultiPolygon":return function(t,e){for(var n=!0,r=!1,i=0;i<t.coordinates.length;i++){if(!(r=ye(t.coordinates[1],e))){n=!1;break}r=ye(t.coordinates[1],e,{ignoreBoundary:!0})}return n&&r}(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}case"LineString":switch(o){case"LineString":return function(t,e){for(var n=0;n<t.coordinates.length;n++)if(!Wr(t.coordinates[n],e))return!1;return!0}(n,r);case"Polygon":case"MultiPolygon":return function(t,e){var n=Z(e),r=Z(t);if(!Kr(n,r))return!1;for(var i=!1,o=0;o<t.coordinates.length-1;o++){if(!ye(t.coordinates[o],e))return!1;if(i||(i=ye(t.coordinates[o],e,{ignoreBoundary:!0})),!i)i=ye($r(t.coordinates[o],t.coordinates[o+1]),e,{ignoreBoundary:!0})}return i}(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}case"Polygon":switch(o){case"Polygon":case"MultiPolygon":return function(t,e){var n=Z(t);if(!Kr(Z(e),n))return!1;for(var r=0;r<t.coordinates[0].length;r++)if(!ye(t.coordinates[0][r],e))return!1;return!0}(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}default:throw new Error("feature1 "+i+" geometry not supported")}}function Kr(t,e){return!(t[0]>e[0])&&(!(t[2]<e[2])&&(!(t[1]>e[1])&&!(t[3]<e[3])))}function Qr(t,e){return t[0]===e[0]&&t[1]===e[1]}function $r(t,e){return[(t[0]+e[0])/2,(t[1]+e[1])/2]}function ti(t,e,n){void 0===n&&(n={}),n.mask&&!n.units&&(n.units="kilometers");for(var r=[],i=t[0],o=t[1],s=t[2],u=t[3],l=e/me([i,o],[s,o],n)*(s-i),c=e/me([i,o],[i,u],n)*(u-o),h=s-i,p=u-o,g=Math.floor(h/l),d=(p-Math.floor(p/c)*c)/2,y=i+(h-g*l)/2;y<=s;){for(var v=o+d;v<=u;){var _=a([y,v],n.properties);n.mask?Zr(_,n.mask)&&r.push(_):r.push(_),v+=c}y+=l}return f(r)}function ei(t,e){void 0===e&&(e={});var n=e.precision,r=e.coordinates,i=e.mutate;if(n=null==n||isNaN(n)?6:n,r=null==r||isNaN(r)?3:r,!t)throw new Error("<geojson> is required");if("number"!=typeof n)throw new Error("<precision> must be a number");if("number"!=typeof r)throw new Error("<coordinates> must be a number");!1!==i&&void 0!==i||(t=JSON.parse(JSON.stringify(t)));var o=Math.pow(10,n);return R(t,(function(t){!function(t,e,n){t.length>n&&t.splice(n,t.length);for(var r=0;r<t.length;r++)t[r]=Math.round(t[r]*e)/e}(t,o,r)})),t}function ni(t){if(!t)throw new Error("geojson is required");var e=[];return z(t,(function(t){e.push(t)})),f(e)}function ri(t,e,n){if("Polygon"!==t.geometry.type)throw new Error("The input feature must be a Polygon");void 0===n&&(n=1);var r=t.geometry.coordinates,i=[],o={};if(n){for(var s=[],a=0;a<r.length;a++)for(var u=0;u<r[a].length-1;u++)s.push(d(a,u));var l=Nt();l.load(s)}for(var c=0;c<r.length;c++)for(var h=0;h<r[c].length-1;h++){if(n)l.search(d(c,h)).forEach((function(t){var e=t.ring,n=t.edge;g(c,h,e,n)}));else for(var p=0;p<r.length;p++)for(var f=0;f<r[p].length-1;f++)g(c,h,p,f)}return e||(i={type:"Feature",geometry:{type:"MultiPoint",coordinates:i}}),i;function g(t,n,s,a){var u,l,c=r[t][n],h=r[t][n+1],p=r[s][a],f=r[s][a+1],g=function(t,e,n,r){if(ii(t,n)||ii(t,r)||ii(e,n)||ii(r,n))return null;var i=t[0],o=t[1],s=e[0],a=e[1],u=n[0],l=n[1],c=r[0],h=r[1],p=(i-s)*(l-h)-(o-a)*(u-c);return 0===p?null:[((i*a-o*s)*(u-c)-(i-s)*(u*h-l*c))/p,((i*a-o*s)*(l-h)-(o-a)*(u*h-l*c))/p]}(c,h,p,f);if(null!==g&&(u=h[0]!==c[0]?(g[0]-c[0])/(h[0]-c[0]):(g[1]-c[1])/(h[1]-c[1]),l=f[0]!==p[0]?(g[0]-p[0])/(f[0]-p[0]):(g[1]-p[1])/(f[1]-p[1]),!(u>=1||u<=0||l>=1||l<=0))){var d=g,y=!o[d];y&&(o[d]=!0),e?i.push(e(g,t,n,c,h,u,s,a,p,f,l,y)):i.push(g)}}function d(t,e){var n,i,o,s,a=r[t][e],u=r[t][e+1];return a[0]<u[0]?(n=a[0],i=u[0]):(n=u[0],i=a[0]),a[1]<u[1]?(o=a[1],s=u[1]):(o=u[1],s=a[1]),{minX:n,minY:o,maxX:i,maxY:s,ring:t,edge:e}}}function ii(t,e){if(!t||!e)return!1;if(t.length!==e.length)return!1;for(var n=0,r=t.length;n<r;n++)if(t[n]instanceof Array&&e[n]instanceof Array){if(!ii(t[n],e[n]))return!1}else if(t[n]!==e[n])return!1;return!0}function oi(t){if("Feature"!=t.type)throw new Error("The input must a geojson object of type Feature");if(void 0===t.geometry||null==t.geometry)throw new Error("The input must a geojson object with a non-empty geometry");if("Polygon"!=t.geometry.type)throw new Error("The input must be a geojson Polygon");for(var e=t.geometry.coordinates.length,n=[],r=0;r<e;r++){var i=t.geometry.coordinates[r];ci(i[0],i[i.length-1])||i.push(i[0]),n.push.apply(n,i.slice(0,i.length-1))}if(!function(t){for(var e={},n=1,r=0,i=t.length;r<i;++r){if(Object.prototype.hasOwnProperty.call(e,t[r])){n=0;break}e[t[r]]=1}return n}(n))throw new Error("The input polygon may not have duplicate vertices (except for the first and last vertex of each ring)");var o=n.length,s=ri(t,(function(t,e,n,r,i,o,s,a,u,l,c,h){return[t,e,n,r,i,o,s,a,u,l,c,h]})),a=s.length;if(0==a){var u=[];for(r=0;r<e;r++)u.push(l([t.geometry.coordinates[r]],{parent:-1,winding:li(t.geometry.coordinates[r])}));var c=f(u);return G(),q(),c}var h=[],p=[];for(r=0;r<e;r++){h.push([]);for(var g=0;g<t.geometry.coordinates[r].length-1;g++)h[r].push([new si(t.geometry.coordinates[r][hi(g+1,t.geometry.coordinates[r].length-1)],1,[r,g],[r,hi(g+1,t.geometry.coordinates[r].length-1)],void 0)]),p.push(new ai(t.geometry.coordinates[r][g],[r,hi(g-1,t.geometry.coordinates[r].length-1)],[r,g],void 0,void 0,!1,!0))}for(r=0;r<a;r++)h[s[r][1]][s[r][2]].push(new si(s[r][0],s[r][5],[s[r][1],s[r][2]],[s[r][6],s[r][7]],void 0)),s[r][11]&&p.push(new ai(s[r][0],[s[r][1],s[r][2]],[s[r][6],s[r][7]],void 0,void 0,!0,!0));var d=p.length;for(r=0;r<h.length;r++)for(g=0;g<h[r].length;g++)h[r][g].sort((function(t,e){return t.param<e.param?-1:1}));var y=[];for(r=0;r<d;r++)y.push({minX:p[r].coord[0],minY:p[r].coord[1],maxX:p[r].coord[0],maxY:p[r].coord[1],index:r});var v=Nt();v.load(y);for(r=0;r<h.length;r++)for(g=0;g<h[r].length;g++)for(var _=0;_<h[r][g].length;_++){x=_==h[r][g].length-1?h[r][hi(g+1,t.geometry.coordinates[r].length-1)][0].coord:h[r][g][_+1].coord;var m=v.search({minX:x[0],minY:x[1],maxX:x[0],maxY:x[1]})[0];h[r][g][_].nxtIsectAlongEdgeIn=m.index}for(r=0;r<h.length;r++)for(g=0;g<h[r].length;g++)for(_=0;_<h[r][g].length;_++){var x=h[r][g][_].coord,E=(m=v.search({minX:x[0],minY:x[1],maxX:x[0],maxY:x[1]})[0]).index;E<o?p[E].nxtIsectAlongRingAndEdge2=h[r][g][_].nxtIsectAlongEdgeIn:ci(p[E].ringAndEdge1,h[r][g][_].ringAndEdgeIn)?p[E].nxtIsectAlongRingAndEdge1=h[r][g][_].nxtIsectAlongEdgeIn:p[E].nxtIsectAlongRingAndEdge2=h[r][g][_].nxtIsectAlongEdgeIn}var b=[];for(r=0,g=0;g<e;g++){var w=r;for(_=0;_<t.geometry.coordinates[g].length-1;_++)p[r].coord[0]<p[w].coord[0]&&(w=r),r++;var I=p[w].nxtIsectAlongRingAndEdge2;for(_=0;_<p.length;_++)if(p[_].nxtIsectAlongRingAndEdge1==w||p[_].nxtIsectAlongRingAndEdge2==w){var N=_;break}var S=ui([p[N].coord,p[w].coord,p[I].coord],!0)?1:-1;b.push({isect:w,parent:-1,winding:S})}b.sort((function(t,e){return p[t.isect].coord>p[e.isect].coord?-1:1}));for(u=[];b.length>0;){var C=b.pop(),P=C.isect,M=C.parent,L=C.winding,O=u.length,R=[p[P].coord],T=P;if(p[P].ringAndEdge1Walkable)var A=p[P].ringAndEdge1,D=p[P].nxtIsectAlongRingAndEdge1;else A=p[P].ringAndEdge2,D=p[P].nxtIsectAlongRingAndEdge2;for(;!ci(p[P].coord,p[D].coord);){R.push(p[D].coord);var F=void 0;for(r=0;r<b.length;r++)if(b[r].isect==D){F=r;break}if(null!=F&&b.splice(F,1),ci(A,p[D].ringAndEdge1)){if(A=p[D].ringAndEdge2,p[D].ringAndEdge2Walkable=!1,p[D].ringAndEdge1Walkable){var k={isect:D};ui([p[T].coord,p[D].coord,p[p[D].nxtIsectAlongRingAndEdge2].coord],1==L)?(k.parent=M,k.winding=-L):(k.parent=O,k.winding=L),b.push(k)}T=D,D=p[D].nxtIsectAlongRingAndEdge2}else{if(A=p[D].ringAndEdge1,p[D].ringAndEdge1Walkable=!1,p[D].ringAndEdge2Walkable){k={isect:D};ui([p[T].coord,p[D].coord,p[p[D].nxtIsectAlongRingAndEdge1].coord],1==L)?(k.parent=M,k.winding=-L):(k.parent=O,k.winding=L),b.push(k)}T=D,D=p[D].nxtIsectAlongRingAndEdge1}}R.push(p[D].coord),u.push(l([R],{index:O,parent:M,winding:L,netWinding:void 0}))}c=f(u);function G(){for(var t=[],e=0;e<c.features.length;e++)-1==c.features[e].properties.parent&&t.push(e);if(t.length>1)for(e=0;e<t.length;e++){for(var n=-1,r=0;r<c.features.length;r++)t[e]!=r&&ye(c.features[t[e]].geometry.coordinates[0][0],c.features[r],{ignoreBoundary:!0})&&jr(c.features[r])<Infinity&&(n=r);c.features[t[e]].properties.parent=n}}function q(){for(var t=0;t<c.features.length;t++)if(-1==c.features[t].properties.parent){var e=c.features[t].properties.winding;c.features[t].properties.netWinding=e,B(t,e)}}function B(t,e){for(var n=0;n<c.features.length;n++)if(c.features[n].properties.parent==t){var r=e+c.features[n].properties.winding;c.features[n].properties.netWinding=r,B(n,r)}}return G(),q(),c}var si=function(t,e,n,r,i){this.coord=t,this.param=e,this.ringAndEdgeIn=n,this.ringAndEdgeOut=r,this.nxtIsectAlongEdgeIn=i},ai=function(t,e,n,r,i,o,s){this.coord=t,this.ringAndEdge1=e,this.ringAndEdge2=n,this.nxtIsectAlongRingAndEdge1=r,this.nxtIsectAlongRingAndEdge2=i,this.ringAndEdge1Walkable=o,this.ringAndEdge2Walkable=s};function ui(t,e){if(void 0===e&&(e=!0),3!=t.length)throw new Error("This function requires an array of three points [x,y]");return(t[1][0]-t[0][0])*(t[2][1]-t[0][1])-(t[1][1]-t[0][1])*(t[2][0]-t[0][0])>=0==e}function li(t){for(var e=0,n=0;n<t.length-1;n++)t[n][0]<t[e][0]&&(e=n);if(ui([t[hi(e-1,t.length-1)],t[e],t[hi(e+1,t.length-1)]],!0))var r=1;else r=-1;return r}function ci(t,e){if(!t||!e)return!1;if(t.length!=e.length)return!1;for(var n=0,r=t.length;n<r;n++)if(t[n]instanceof Array&&e[n]instanceof Array){if(!ci(t[n],e[n]))return!1}else if(t[n]!=e[n])return!1;return!0}function hi(t,e){return(t%e+e)%e}var pi=Math.PI/180,fi=180/Math.PI,gi=function(t,e){this.lon=t,this.lat=e,this.x=pi*t,this.y=pi*e};gi.prototype.view=function(){return String(this.lon).slice(0,4)+","+String(this.lat).slice(0,4)},gi.prototype.antipode=function(){var t=-1*this.lat,e=this.lon<0?180+this.lon:-1*(180-this.lon);return new gi(e,t)};var di=function(){this.coords=[],this.length=0};di.prototype.move_to=function(t){this.length++,this.coords.push(t)};var yi=function(t){this.properties=t||{},this.geometries=[]};yi.prototype.json=function(){if(this.geometries.length<=0)return{geometry:{type:"LineString",coordinates:null},type:"Feature",properties:this.properties};if(1===this.geometries.length)return{geometry:{type:"LineString",coordinates:this.geometries[0].coords},type:"Feature",properties:this.properties};for(var t=[],e=0;e<this.geometries.length;e++)t.push(this.geometries[e].coords);return{geometry:{type:"MultiLineString",coordinates:t},type:"Feature",properties:this.properties}},yi.prototype.wkt=function(){for(var t="",e="LINESTRING(",n=function(t){e+=t[0]+" "+t[1]+","},r=0;r<this.geometries.length;r++){if(0===this.geometries[r].coords.length)return"LINESTRING(empty)";this.geometries[r].coords.forEach(n),t+=e.substring(0,e.length-1)+")"}return t};var vi=function(t,e,n){if(!t||void 0===t.x||void 0===t.y)throw new Error("GreatCircle constructor expects two args: start and end objects with x and y properties");if(!e||void 0===e.x||void 0===e.y)throw new Error("GreatCircle constructor expects two args: start and end objects with x and y properties");this.start=new gi(t.x,t.y),this.end=new gi(e.x,e.y),this.properties=n||{};var r=this.start.x-this.end.x,i=this.start.y-this.end.y,o=Math.pow(Math.sin(i/2),2)+Math.cos(this.start.y)*Math.cos(this.end.y)*Math.pow(Math.sin(r/2),2);if(this.g=2*Math.asin(Math.sqrt(o)),this.g===Math.PI)throw new Error("it appears "+t.view()+" and "+e.view()+" are 'antipodal', e.g diametrically opposite, thus there is no single route but rather infinite");if(isNaN(this.g))throw new Error("could not calculate great circle between "+t+" and "+e)};function _i(t,e){var n=[],r=Mr();return z(e,(function(e){if(n.forEach((function(t,e){t.id=e})),n.length){var i=r.search(e);if(i.features.length){var o=xi(e,i);n=n.filter((function(t){return t.id!==o.id})),r.remove(o),F(mi(o,e),(function(t){n.push(t),r.insert(t)}))}}else(n=mi(t,e).features).forEach((function(t){t.bbox||(t.bbox=yn(Z(t)))})),r.load(f(n))})),f(n)}function mi(t,e){var n=[],r=Q(t)[0],i=Q(t)[t.geometry.coordinates.length-1];if(Ei(r,K(e))||Ei(i,K(e)))return f([t]);var o=Mr(),s=Zn(t);o.load(s);var a=o.search(e);if(!a.features.length)return f([t]);var u=xi(e,a),l=k(s,(function(t,r,i){var o=Q(r)[1],s=K(e);return i===u.id?(t.push(s),n.push(h(t)),Ei(s,o)?[s]:[s,o]):(t.push(o),t)}),[r]);return l.length>1&&n.push(h(l)),f(n)}function xi(t,e){if(!e.features.length)throw new Error("lines must contain features");if(1===e.features.length)return e.features[0];var n,r=1/0;return F(e,(function(e){var i=Tr(e,t).properties.dist;i<r&&(n=e,r=i)})),n}function Ei(t,e){return t[0]===e[0]&&t[1]===e[1]}function bi(t,e,n,r,i){void 0===i&&(i={});var o=i.steps||64,s=wi(n),a=wi(r),u=Array.isArray(t)||"Feature"!==t.type?{}:t.properties;if(s===a)return h(_n(t,e,i).geometry.coordinates[0],u);for(var l=s,c=s<a?a:a+360,p=l,f=[],g=0;p<c;)f.push(vn(t,e,p,i).geometry.coordinates),p=l+360*++g/o;return p>c&&f.push(vn(t,e,c,i).geometry.coordinates),h(f,u)}function wi(t){var e=t%360;return e<0&&(e+=360),e}function Ii(t,e){void 0===e&&(e={});var n=rt(t);switch(e.properties||"Feature"!==t.type||(e.properties=t.properties),n.type){case"Polygon":return Ni(n,e);case"MultiPolygon":return function(t,e){void 0===e&&(e={});var n=rt(t).coordinates,r=e.properties?e.properties:"Feature"===t.type?t.properties:{},i=[];return n.forEach((function(t){i.push(Si(t,r))})),f(i)}(n,e);default:throw new Error("invalid poly")}}function Ni(t,e){return void 0===e&&(e={}),Si(rt(t).coordinates,e.properties?e.properties:"Feature"===t.type?t.properties:{})}function Si(t,e){return t.length>1?g(t,e):h(t[0],e)}function Ci(t,e){var n,r,i;void 0===e&&(e={});var o=e.properties,s=null===(n=e.autoComplete)||void 0===n||n,a=null===(r=e.orderCoords)||void 0===r||r;switch(null!==(i=e.mutate)&&void 0!==i&&i||(t=Ie(t)),t.type){case"FeatureCollection":var u=[];return t.features.forEach((function(t){u.push(Q(Pi(t,{},s,a)))})),y(u,o);default:return Pi(t,o,s,a)}}function Pi(t,e,n,r){e=e||("Feature"===t.type?t.properties:{});var i=rt(t),o=i.coordinates,s=i.type;if(!o.length)throw new Error("line must contain coordinates");switch(s){case"LineString":return n&&(o=Mi(o)),l([o],e);case"MultiLineString":var a=[],u=0;return o.forEach((function(t){if(n&&(t=Mi(t)),r){var e=function(t){var e=t[0],n=t[1],r=t[2],i=t[3];return Math.abs(e-r)*Math.abs(n-i)}(Z(h(t)));e>u?(a.unshift(t),u=e):a.push(t)}else a.push(t)})),l(a,e);default:throw new Error("geometry type "+s+" is not supported")}}function Mi(t){var e=t[0],n=e[0],r=e[1],i=t[t.length-1],o=i[0],s=i[1];return n===o&&r===s||t.push(e),t}function Li(t,e){var n,r,i,o,s,a,u;for(r=1;r<=8;r*=2){for(n=[],o=!(Ri(i=t[t.length-1],e)&r),s=0;s<t.length;s++)(u=!(Ri(a=t[s],e)&r))!==o&&n.push(Oi(i,a,r,e)),u&&n.push(a),i=a,o=u;if(!(t=n).length)break}return n}function Oi(t,e,n,r){return 8&n?[t[0]+(e[0]-t[0])*(r[3]-t[1])/(e[1]-t[1]),r[3]]:4&n?[t[0]+(e[0]-t[0])*(r[1]-t[1])/(e[1]-t[1]),r[1]]:2&n?[r[2],t[1]+(e[1]-t[1])*(r[2]-t[0])/(e[0]-t[0])]:1&n?[r[0],t[1]+(e[1]-t[1])*(r[0]-t[0])/(e[0]-t[0])]:null}function Ri(t,e){var n=0;return t[0]<e[0]?n|=1:t[0]>e[2]&&(n|=2),t[1]<e[1]?n|=4:t[1]>e[3]&&(n|=8),n}function Ti(t,e){for(var n=[],r=0,i=t;r<i.length;r++){var o=Li(i[r],e);o.length>0&&(o[0][0]===o[o.length-1][0]&&o[0][1]===o[o.length-1][1]||o.push(o[0]),o.length>=4&&n.push(o))}return n}vi.prototype.interpolate=function(t){var e=Math.sin((1-t)*this.g)/Math.sin(this.g),n=Math.sin(t*this.g)/Math.sin(this.g),r=e*Math.cos(this.start.y)*Math.cos(this.start.x)+n*Math.cos(this.end.y)*Math.cos(this.end.x),i=e*Math.cos(this.start.y)*Math.sin(this.start.x)+n*Math.cos(this.end.y)*Math.sin(this.end.x),o=e*Math.sin(this.start.y)+n*Math.sin(this.end.y),s=fi*Math.atan2(o,Math.sqrt(Math.pow(r,2)+Math.pow(i,2)));return[fi*Math.atan2(i,r),s]},vi.prototype.Arc=function(t,e){var n=[];if(!t||t<=2)n.push([this.start.lon,this.start.lat]),n.push([this.end.lon,this.end.lat]);else for(var r=1/(t-1),i=0;i<t;++i){var o=r*i,s=this.interpolate(o);n.push(s)}for(var a=!1,u=0,l=e&&e.offset?e.offset:10,c=180-l,h=-180+l,p=360-l,f=1;f<n.length;++f){var g=n[f-1][0],d=n[f][0],y=Math.abs(d-g);y>p&&(d>c&&g<h||g>c&&d<h)?a=!0:y>u&&(u=y)}var v=[];if(a&&u<l){var _=[];v.push(_);for(var m=0;m<n.length;++m){var x=parseFloat(n[m][0]);if(m>0&&Math.abs(x-n[m-1][0])>p){var E=parseFloat(n[m-1][0]),b=parseFloat(n[m-1][1]),w=parseFloat(n[m][0]),I=parseFloat(n[m][1]);if(E>-180&&E<h&&180===w&&m+1<n.length&&n[m-1][0]>-180&&n[m-1][0]<h){_.push([-180,n[m][1]]),m++,_.push([n[m][0],n[m][1]]);continue}if(E>c&&E<180&&-180===w&&m+1<n.length&&n[m-1][0]>c&&n[m-1][0]<180){_.push([180,n[m][1]]),m++,_.push([n[m][0],n[m][1]]);continue}if(E<h&&w>c){var N=E;E=w,w=N;var S=b;b=I,I=S}if(E>c&&w<h&&(w+=360),E<=180&&w>=180&&E<w){var C=(180-E)/(w-E),P=C*I+(1-C)*b;_.push([n[m-1][0]>c?180:-180,P]),(_=[]).push([n[m-1][0]>c?-180:180,P]),v.push(_)}else _=[],v.push(_);_.push([x,n[m][1]])}else _.push([n[m][0],n[m][1]])}}else{var M=[];v.push(M);for(var L=0;L<n.length;++L)M.push([n[L][0],n[L][1]])}for(var O=new yi(this.properties),R=0;R<v.length;++R){var T=new di;O.geometries.push(T);for(var A=v[R],D=0;D<A.length;++D)T.move_to(A[D])}return O};var Ai=Bt((function(t,e){function n(t){var e=[];for(var n in t)e.push(n);return e}(t.exports="function"==typeof Object.keys?Object.keys:n).shim=n})),Di=Bt((function(t,e){var n="[object Arguments]"==function(){return Object.prototype.toString.call(arguments)}();function r(t){return"[object Arguments]"==Object.prototype.toString.call(t)}function i(t){return t&&"object"==typeof t&&"number"==typeof t.length&&Object.prototype.hasOwnProperty.call(t,"callee")&&!Object.prototype.propertyIsEnumerable.call(t,"callee")||!1}(e=t.exports=n?r:i).supported=r,e.unsupported=i})),Fi=Bt((function(t){var e=Array.prototype.slice,n=t.exports=function(t,o,s){return s||(s={}),t===o||(t instanceof Date&&o instanceof Date?t.getTime()===o.getTime():!t||!o||"object"!=typeof t&&"object"!=typeof o?s.strict?t===o:t==o:function(t,o,s){var a,u;if(r(t)||r(o))return!1;if(t.prototype!==o.prototype)return!1;if(Di(t))return!!Di(o)&&(t=e.call(t),o=e.call(o),n(t,o,s));if(i(t)){if(!i(o))return!1;if(t.length!==o.length)return!1;for(a=0;a<t.length;a++)if(t[a]!==o[a])return!1;return!0}try{var l=Ai(t),c=Ai(o)}catch(t){return!1}if(l.length!=c.length)return!1;for(l.sort(),c.sort(),a=l.length-1;a>=0;a--)if(l[a]!=c[a])return!1;for(a=l.length-1;a>=0;a--)if(u=l[a],!n(t[u],o[u],s))return!1;return typeof t==typeof o}(t,o,s))};function r(t){return null==t}function i(t){return!(!t||"object"!=typeof t||"number"!=typeof t.length)&&("function"==typeof t.copy&&"function"==typeof t.slice&&!(t.length>0&&"number"!=typeof t[0]))}}));function ki(t,e,n){if(void 0===n&&(n={}),!P(n=n||{}))throw new Error("options is invalid");var r,i=n.tolerance||0,o=[],s=Mr(),a=Zn(t);return s.load(a),U(e,(function(t){var e=!1;t&&(F(s.search(t),(function(n){if(!1===e){var o=Q(t).sort(),s=Q(n).sort();Fi(o,s)||(0===i?Wr(o[0],n)&&Wr(o[1],n):Tr(n,o[0]).properties.dist<=i&&Tr(n,o[1]).properties.dist<=i)?(e=!0,r=r?Gi(r,t):t):(0===i?Wr(s[0],t)&&Wr(s[1],t):Tr(t,s[0]).properties.dist<=i&&Tr(t,s[1]).properties.dist<=i)&&(r=r?Gi(r,n):n)}})),!1===e&&r&&(o.push(r),r=void 0))})),r&&o.push(r),f(o)}function Gi(t,e){var n=Q(e),r=Q(t),i=r[0],o=r[r.length-1],s=t.geometry.coordinates;return Fi(n[0],i)?s.unshift(n[1]):Fi(n[0],o)?s.push(n[1]):Fi(n[1],i)?s.unshift(n[0]):Fi(n[1],o)&&s.push(n[0]),t}function qi(t){var e=t%360;return e<0&&(e+=360),e}function Bi(t,e,n){var r;return void 0===n&&(n={}),(r=n.final?zi(K(e),K(t)):zi(K(t),K(e)))>180?-(360-r):r}function zi(t,e){var n=I(t[1]),r=I(e[1]),i=I(e[0]-t[0]);i>Math.PI&&(i-=2*Math.PI),i<-Math.PI&&(i+=2*Math.PI);var o=Math.log(Math.tan(r/2+Math.PI/4)/Math.tan(n/2+Math.PI/4));return(w(Math.atan2(i,o))+360)%360}function ji(t,n,r,i){void 0===i&&(i={});var o=n<0,s=N(Math.abs(n),i.units,"meters");o&&(s=-Math.abs(s));var u=K(t),l=function(t,n,r,i){i=void 0===i?e:Number(i);var o=n/i,s=t[0]*Math.PI/180,a=I(t[1]),u=I(r),l=o*Math.cos(u),c=a+l;Math.abs(c)>Math.PI/2&&(c=c>0?Math.PI-c:-Math.PI-c);var h=Math.log(Math.tan(c/2+Math.PI/4)/Math.tan(a/2+Math.PI/4)),p=Math.abs(h)>1e-11?l/h:Math.cos(a),f=o*Math.sin(u)/p;return[(180*(s+f)/Math.PI+540)%360-180,180*c/Math.PI]}(u,s,r);return l[0]+=l[0]-u[0]>180?-360:u[0]-l[0]>180?360:0,a(l,i.properties)}function Ui(t,e,n,r,i,o){for(var s=0;s<t.length;s++){var a=t[s],u=t[s+1];s===t.length-1&&(u=t[0]),r=Xi(a,u,e),n<=0&&r>0?Xi(e,a,i)<0||(i=a):n>0&&r<=0&&(Vi(e,a,o)||(o=a)),n=r}return[i,o]}function Vi(t,e,n){return Xi(t,e,n)>0}function Xi(t,e,n){return(e[0]-t[0])*(n[1]-t[1])-(n[0]-t[0])*(e[1]-t[1])}function Yi(t){for(var e,n,r=Q(t),i=0,o=1;o<r.length;)e=n||r[0],i+=((n=r[o])[0]-e[0])*(n[1]+e[1]),o++;return i>0}function Hi(t,e){switch("Feature"===t.type?t.geometry.type:t.type){case"GeometryCollection":return q(t,(function(t){Hi(t,e)})),t;case"LineString":return Wi(Q(t),e),t;case"Polygon":return Ji(Q(t),e),t;case"MultiLineString":return Q(t).forEach((function(t){Wi(t,e)})),t;case"MultiPolygon":return Q(t).forEach((function(t){Ji(t,e)})),t;case"Point":case"MultiPoint":return t}}function Wi(t,e){Yi(t)===e&&t.reverse()}function Ji(t,e){Yi(t[0])!==e&&t[0].reverse();for(var n=1;n<t.length;n++)Yi(t[n])===e&&t[n].reverse()}function Zi(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.zProperty||"elevation",r=e.flip,i=e.flags;nt(t,"Point","input must contain Points");for(var o=function(t,e){var n={};return F(t,(function(t){var e=Q(t)[1];n[e]||(n[e]=[]),n[e].push(t)})),Object.keys(n).map((function(t){return n[t].sort((function(t,e){return Q(t)[0]-Q(e)[0]}))})).sort((function(t,n){return e?Q(t[0])[1]-Q(n[0])[1]:Q(n[0])[1]-Q(t[0])[1]}))}
+/*!
+     * @license GNU Affero General Public License.
+     * Copyright (c) 2015, 2015 Ronny Lorenz <ronny@tbi.univie.ac.at>
+     * v. 1.2.0
+     * https://github.com/RaumZeit/MarchingSquares.js
+     *
+     * MarchingSquaresJS is free software: you can redistribute it and/or modify
+     * it under the terms of the GNU Affero General Public License as published by
+     * the Free Software Foundation, either version 3 of the License, or
+     * (at your option) any later version.
+     *
+     * MarchingSquaresJS is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * GNU Affero General Public License for more details.
+     *
+     * As additional permission under GNU Affero General Public License version 3
+     * section 7, third-party projects (personal or commercial) may distribute,
+     * include, or link against UNMODIFIED VERSIONS of MarchingSquaresJS without the
+     * requirement that said third-party project for that reason alone becomes
+     * subject to any requirement of the GNU Affero General Public License version 3.
+     * Any modifications to MarchingSquaresJS, however, must be shared with the public
+     * and made available.
+     *
+     * In summary this:
+     * - allows you to use MarchingSquaresJS at no cost
+     * - allows you to use MarchingSquaresJS for both personal and commercial purposes
+     * - allows you to distribute UNMODIFIED VERSIONS of MarchingSquaresJS under any
+     *   license as long as this license notice is included
+     * - enables you to keep the source code of your program that uses MarchingSquaresJS
+     *   undisclosed
+     * - forces you to share any modifications you have made to MarchingSquaresJS,
+     *   e.g. bug-fixes
+     *
+     * You should have received a copy of the GNU Affero General Public License
+     * along with MarchingSquaresJS.  If not, see <http://www.gnu.org/licenses/>.
+     */(t,r),s=[],a=0;a<o.length;a++){for(var u=o[a],l=[],c=0;c<u.length;c++){var h=u[c];h.properties[n]?l.push(h.properties[n]):l.push(0),!0===i&&(h.properties.matrixPosition=[a,c])}s.push(l)}return s}var Ki={successCallback:null,verbose:!1,polygons:!1},Qi={};function $i(t,e,n,r){r=r||{};for(var i=Object.keys(Ki),o=0;o<i.length;o++){var s=i[o],a=r[s];a=null!=a?a:Ki[s],Qi[s]=a}Qi.verbose&&console.log("MarchingSquaresJS-isoBands: computing isobands for ["+e+":"+(e+n)+"]");var u,l=function(t,e,n){for(var r=t.length-1,i=t[0].length-1,o={rows:r,cols:i,cells:[]},s=e+Math.abs(n),a=0;a<r;++a){o.cells[a]=[];for(var u=0;u<i;++u){var l=0,c=t[a+1][u],h=t[a+1][u+1],p=t[a][u+1],f=t[a][u];if(!(isNaN(c)||isNaN(h)||isNaN(p)||isNaN(f))){l|=c<e?0:c>s?128:64,l|=h<e?0:h>s?32:16,l|=p<e?0:p>s?8:4;var g=+(l|=f<e?0:f>s?2:1),d=0;if(17===l||18===l||33===l||34===l||38===l||68===l||72===l||98===l||102===l||132===l||136===l||137===l||152===l||153===l){var y=(c+h+p+f)/4;d=y>s?2:y<e?0:1,34===l?1===d?l=35:0===d&&(l=136):136===l?1===d?(l=35,d=4):0===d&&(l=34):17===l?1===d?(l=155,d=4):0===d&&(l=153):68===l?1===d?(l=103,d=4):0===d&&(l=102):153===l?1===d&&(l=155):102===l?1===d&&(l=103):152===l?d<2&&(l=156,d=1):137===l?d<2&&(l=139,d=1):98===l?d<2&&(l=99,d=1):38===l?d<2&&(l=39,d=1):18===l?d>0?(l=156,d=4):l=152:33===l?d>0?(l=139,d=4):l=137:72===l?d>0?(l=99,d=4):l=98:132===l&&(d>0?(l=39,d=4):l=38)}if(0!=l&&170!=l){var v,_,m,x,E,b,w,I;v=_=m=x=E=b=w=I=.5;var N=[];1===l?(m=1-Vo(e,p,f),I=1-Vo(e,c,f),N.push(Go[l])):169===l?(m=Vo(s,f,p),I=Vo(s,f,c),N.push(Go[l])):4===l?(b=1-Vo(e,h,p),x=Vo(e,f,p),N.push(Fo[l])):166===l?(b=Vo(s,p,h),x=1-Vo(s,p,f),N.push(Fo[l])):16===l?(E=Vo(e,p,h),_=Vo(e,c,h),N.push(Do[l])):154===l?(E=1-Vo(s,h,p),_=1-Vo(s,h,c),N.push(Do[l])):64===l?(w=Vo(e,f,c),v=1-Vo(e,h,c),N.push(Bo[l])):106===l?(w=1-Vo(s,c,f),v=Vo(s,c,h),N.push(Bo[l])):168===l?(x=Vo(s,f,p),m=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),N.push(ko[l]),N.push(Go[l])):2===l?(x=1-Vo(e,p,f),m=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),N.push(ko[l]),N.push(Go[l])):162===l?(E=Vo(s,p,h),b=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),N.push(ko[l]),N.push(Go[l])):8===l?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),N.push(Do[l]),N.push(Fo[l])):138===l?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),v=1-Vo(s,h,c),_=1-Vo(e,h,c),N.push(Do[l]),N.push(Fo[l])):32===l?(E=Vo(s,p,h),b=Vo(e,p,h),v=Vo(e,c,h),_=Vo(s,c,h),N.push(Do[l]),N.push(Fo[l])):42===l?(I=1-Vo(s,c,f),w=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h),N.push(qo[l]),N.push(Bo[l])):128===l&&(I=Vo(e,f,c),w=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c),N.push(qo[l]),N.push(Bo[l])),5===l?(b=1-Vo(e,h,p),I=1-Vo(e,c,f),N.push(Fo[l])):165===l?(b=Vo(s,p,h),I=Vo(s,f,c),N.push(Fo[l])):20===l?(x=Vo(e,f,p),_=Vo(e,c,h),N.push(ko[l])):150===l?(x=1-Vo(s,p,f),_=1-Vo(s,h,c),N.push(ko[l])):80===l?(E=Vo(e,p,h),w=Vo(e,f,c),N.push(Do[l])):90===l?(E=1-Vo(s,h,p),w=1-Vo(s,c,f),N.push(Do[l])):65===l?(m=1-Vo(e,p,f),v=1-Vo(e,h,c),N.push(Go[l])):105===l?(m=Vo(s,f,p),v=Vo(s,c,h),N.push(Go[l])):160===l?(E=Vo(s,p,h),b=Vo(e,p,h),I=Vo(e,f,c),w=Vo(s,f,c),N.push(Do[l]),N.push(Fo[l])):10===l?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),I=1-Vo(s,c,f),w=1-Vo(e,c,f),N.push(Do[l]),N.push(Fo[l])):130===l?(x=1-Vo(e,p,f),m=1-Vo(s,p,f),v=1-Vo(s,h,c),_=1-Vo(e,h,c),N.push(ko[l]),N.push(Go[l])):40===l?(x=Vo(s,f,p),m=Vo(e,f,p),v=Vo(e,c,h),_=Vo(s,c,h),N.push(ko[l]),N.push(Go[l])):101===l?(b=Vo(s,p,h),v=Vo(s,c,h),N.push(Fo[l])):69===l?(b=1-Vo(e,h,p),v=1-Vo(e,h,c),N.push(Fo[l])):149===l?(I=Vo(s,f,c),_=1-Vo(s,h,c),N.push(qo[l])):21===l?(I=1-Vo(e,c,f),_=Vo(e,c,h),N.push(qo[l])):86===l?(x=1-Vo(s,p,f),w=1-Vo(s,c,f),N.push(ko[l])):84===l?(x=Vo(e,f,p),w=Vo(e,f,c),N.push(ko[l])):89===l?(E=1-Vo(s,h,p),m=Vo(s,f,p),N.push(Go[l])):81===l?(E=Vo(e,p,h),m=1-Vo(e,p,f),N.push(Go[l])):96===l?(E=Vo(s,p,h),b=Vo(e,p,h),w=Vo(e,f,c),v=Vo(s,c,h),N.push(Do[l]),N.push(Fo[l])):74===l?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),w=1-Vo(s,c,f),v=1-Vo(e,h,c),N.push(Do[l]),N.push(Fo[l])):24===l?(E=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),_=Vo(e,c,h),N.push(Do[l]),N.push(Go[l])):146===l?(E=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),_=1-Vo(s,h,c),N.push(Do[l]),N.push(Go[l])):6===l?(b=1-Vo(e,h,p),x=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),N.push(Fo[l]),N.push(ko[l])):164===l?(b=Vo(s,p,h),x=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),N.push(Fo[l]),N.push(ko[l])):129===l?(m=1-Vo(e,p,f),I=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c),N.push(Go[l]),N.push(qo[l])):41===l?(m=Vo(s,f,p),I=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h),N.push(Go[l]),N.push(qo[l])):66===l?(x=1-Vo(e,p,f),m=1-Vo(s,p,f),w=1-Vo(s,c,f),v=1-Vo(e,h,c),N.push(ko[l]),N.push(Go[l])):104===l?(x=Vo(s,f,p),m=Vo(e,f,p),w=Vo(e,f,c),v=Vo(s,c,h),N.push(Go[l]),N.push(zo[l])):144===l?(E=Vo(e,p,h),I=Vo(e,f,c),w=Vo(s,f,c),_=1-Vo(s,h,c),N.push(Do[l]),N.push(Bo[l])):26===l?(E=1-Vo(s,h,p),I=1-Vo(s,c,f),w=1-Vo(e,c,f),_=Vo(e,c,h),N.push(Do[l]),N.push(Bo[l])):36===l?(b=Vo(s,p,h),x=Vo(e,f,p),v=Vo(e,c,h),_=Vo(s,c,h),N.push(Fo[l]),N.push(ko[l])):134===l?(b=1-Vo(e,h,p),x=1-Vo(s,p,f),v=1-Vo(s,h,c),_=1-Vo(e,h,c),N.push(Fo[l]),N.push(ko[l])):9===l?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),m=Vo(s,f,p),I=1-Vo(e,c,f),N.push(Do[l]),N.push(Fo[l])):161===l?(E=Vo(s,p,h),b=Vo(e,p,h),m=1-Vo(e,p,f),I=Vo(s,f,c),N.push(Do[l]),N.push(Fo[l])):37===l?(b=Vo(s,p,h),I=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h),N.push(Fo[l]),N.push(qo[l])):133===l?(b=1-Vo(e,h,p),I=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c),N.push(Fo[l]),N.push(qo[l])):148===l?(x=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),_=1-Vo(s,h,c),N.push(ko[l]),N.push(Bo[l])):22===l?(x=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),_=Vo(e,c,h),N.push(ko[l]),N.push(Bo[l])):82===l?(E=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),w=1-Vo(s,c,f),N.push(Do[l]),N.push(Go[l])):88===l?(E=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),w=Vo(e,f,c),N.push(Do[l]),N.push(Go[l])):73===l?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),m=Vo(s,f,p),v=1-Vo(e,h,c),N.push(Do[l]),N.push(Fo[l])):97===l?(E=Vo(s,p,h),b=Vo(e,p,h),m=1-Vo(e,p,f),v=Vo(s,c,h),N.push(Do[l]),N.push(Fo[l])):145===l?(E=Vo(e,p,h),m=1-Vo(e,p,f),I=Vo(s,f,c),_=1-Vo(s,h,c),N.push(Do[l]),N.push(qo[l])):25===l?(E=1-Vo(s,h,p),m=Vo(s,f,p),I=1-Vo(e,c,f),_=Vo(e,c,h),N.push(Do[l]),N.push(qo[l])):70===l?(b=1-Vo(e,h,p),x=1-Vo(s,p,f),w=1-Vo(s,c,f),v=1-Vo(e,h,c),N.push(Fo[l]),N.push(ko[l])):100===l?(b=Vo(s,p,h),x=Vo(e,f,p),w=Vo(e,f,c),v=Vo(s,c,h),N.push(Fo[l]),N.push(ko[l])):34===l?(0===d?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)):(E=Vo(s,p,h),b=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)),N.push(Do[l]),N.push(Fo[l]),N.push(qo[l]),N.push(Bo[l])):35===l?(4===d?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)):(E=Vo(s,p,h),b=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)),N.push(Do[l]),N.push(Fo[l]),N.push(Go[l]),N.push(Bo[l])):136===l?(0===d?(E=Vo(s,p,h),b=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)):(E=1-Vo(e,h,p),b=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)),N.push(Do[l]),N.push(Fo[l]),N.push(qo[l]),N.push(Bo[l])):153===l?(0===d?(E=Vo(e,p,h),m=1-Vo(e,p,f),I=1-Vo(e,c,f),_=Vo(e,c,h)):(E=1-Vo(s,h,p),m=Vo(s,f,p),I=Vo(s,f,c),_=1-Vo(s,h,c)),N.push(Do[l]),N.push(Go[l])):102===l?(0===d?(b=1-Vo(e,h,p),x=Vo(e,f,p),w=Vo(e,f,c),v=1-Vo(e,h,c)):(b=Vo(s,p,h),x=1-Vo(s,p,f),w=1-Vo(s,c,f),v=Vo(s,c,h)),N.push(Fo[l]),N.push(Bo[l])):155===l?(4===d?(E=Vo(e,p,h),m=1-Vo(e,p,f),I=1-Vo(e,c,f),_=Vo(e,c,h)):(E=1-Vo(s,h,p),m=Vo(s,f,p),I=Vo(s,f,c),_=1-Vo(s,h,c)),N.push(Do[l]),N.push(qo[l])):103===l?(4===d?(b=1-Vo(e,h,p),x=Vo(e,f,p),w=Vo(e,f,c),v=1-Vo(e,h,c)):(b=Vo(s,p,h),x=1-Vo(s,p,f),w=1-Vo(s,c,f),v=Vo(s,c,h)),N.push(Fo[l]),N.push(ko[l])):152===l?(0===d?(E=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),_=Vo(e,c,h)):(E=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),_=1-Vo(s,h,c)),N.push(Do[l]),N.push(ko[l]),N.push(Go[l])):156===l?(4===d?(E=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),_=Vo(e,c,h)):(E=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),_=1-Vo(s,h,c)),N.push(Do[l]),N.push(Go[l]),N.push(Bo[l])):137===l?(0===d?(E=Vo(s,p,h),b=Vo(e,p,h),m=1-Vo(e,p,f),I=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)):(E=1-Vo(e,h,p),b=1-Vo(s,h,p),m=Vo(s,f,p),I=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)),N.push(Do[l]),N.push(Fo[l]),N.push(Go[l])):139===l?(4===d?(E=Vo(s,p,h),b=Vo(e,p,h),m=1-Vo(e,p,f),I=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)):(E=1-Vo(e,h,p),b=1-Vo(s,h,p),m=Vo(s,f,p),I=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)),N.push(Do[l]),N.push(Fo[l]),N.push(qo[l])):98===l?(0===d?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),w=Vo(e,f,c),v=1-Vo(e,h,c)):(E=Vo(s,p,h),b=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),w=1-Vo(s,c,f),v=Vo(s,c,h)),N.push(Do[l]),N.push(Fo[l]),N.push(Bo[l])):99===l?(4===d?(E=1-Vo(e,h,p),b=1-Vo(s,h,p),x=Vo(s,f,p),m=Vo(e,f,p),w=Vo(e,f,c),v=1-Vo(e,h,c)):(E=Vo(s,p,h),b=Vo(e,p,h),x=1-Vo(e,p,f),m=1-Vo(s,p,f),w=1-Vo(s,c,f),v=Vo(s,c,h)),N.push(Do[l]),N.push(Fo[l]),N.push(Go[l])):38===l?(0===d?(b=1-Vo(e,h,p),x=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)):(b=Vo(s,p,h),x=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)),N.push(Fo[l]),N.push(qo[l]),N.push(Bo[l])):39===l?(4===d?(b=1-Vo(e,h,p),x=Vo(e,f,p),I=Vo(e,f,c),w=Vo(s,f,c),v=1-Vo(s,h,c),_=1-Vo(e,h,c)):(b=Vo(s,p,h),x=1-Vo(s,p,f),I=1-Vo(s,c,f),w=1-Vo(e,c,f),v=Vo(e,c,h),_=Vo(s,c,h)),N.push(Fo[l]),N.push(ko[l]),N.push(Bo[l])):85===l&&(E=1,b=0,x=1,m=0,I=0,w=1,v=0,_=1),(v<0||v>1||_<0||_>1||E<0||E>1||x<0||x>1||I<0||I>1||w<0||w>1)&&console.log("MarchingSquaresJS-isoBands: "+l+" "+g+" "+c+","+h+","+p+","+f+" "+d+" "+v+" "+_+" "+E+" "+b+" "+x+" "+m+" "+I+" "+w),o.cells[a][u]={cval:l,cval_real:g,flipped:d,topleft:v,topright:_,righttop:E,rightbottom:b,bottomright:x,bottomleft:m,leftbottom:I,lefttop:w,edges:N}}}}}return o}(t,e,n);return Qi.polygons?(Qi.verbose&&console.log("MarchingSquaresJS-isoBands: returning single polygons for each grid cell"),u=function(t){var e=[],n=0;return t.cells.forEach((function(t,r){t.forEach((function(t,i){if(void 0!==t){var o=Uo[t.cval](t);"object"==typeof o&&Xo(o)?"object"==typeof o[0]&&Xo(o[0])?"object"==typeof o[0][0]&&Xo(o[0][0])?o.forEach((function(t){t.forEach((function(t){t[0]+=i,t[1]+=r})),e[n++]=t})):(o.forEach((function(t){t[0]+=i,t[1]+=r})),e[n++]=o):console.log("MarchingSquaresJS-isoBands: bandcell polygon with malformed coordinates"):console.log("MarchingSquaresJS-isoBands: bandcell polygon with null coordinates")}}))})),e}(l)):(Qi.verbose&&console.log("MarchingSquaresJS-isoBands: returning polygon paths for entire data grid"),u=function(t){for(var e=[],n=t.rows,r=t.cols,i=[],o=0;o<n;o++)for(var s=0;s<r;s++)if(void 0!==t.cells[o][s]&&t.cells[o][s].edges.length>0){var a=Ho(t.cells[o][s]),u=null,l=s,c=o;null!==a&&i.push([a.p[0]+l,a.p[1]+c]);do{if(null===(u=Wo(t.cells[c][l],a.x,a.y,a.o)))break;if(i.push([u.p[0]+l,u.p[1]+c]),l+=u.x,a=u,(c+=u.y)<0||c>=n||l<0||l>=r||void 0===t.cells[c][l]){var h=Yo(t,l-=u.x,c-=u.y,u.x,u.y,u.o);if(null===h)break;h.path.forEach((function(t){i.push(t)})),l=h.i,c=h.j,a=h}}while(void 0!==t.cells[c][l]&&t.cells[c][l].edges.length>0);e.push(i),i=[],t.cells[o][s].edges.length>0&&s--}return e}(l)),"function"==typeof Qi.successCallback&&Qi.successCallback(u),u}var to=64,eo=16,no=[],ro=[],io=[],oo=[],so=[],ao=[],uo=[],lo=[],co=[],ho=[],po=[],fo=[],go=[],yo=[],vo=[],_o=[],mo=[],xo=[],Eo=[],bo=[],wo=[],Io=[],No=[],So=[];uo[85]=ho[85]=-1,lo[85]=po[85]=0,co[85]=fo[85]=1,Eo[85]=Io[85]=1,bo[85]=No[85]=0,wo[85]=So[85]=1,no[85]=oo[85]=0,ro[85]=so[85]=-1,io[85]=vo[85]=0,_o[85]=go[85]=0,mo[85]=yo[85]=1,ao[85]=xo[85]=1,Io[1]=Io[169]=0,No[1]=No[169]=-1,So[1]=So[169]=0,go[1]=go[169]=-1,yo[1]=yo[169]=0,vo[1]=vo[169]=0,ho[4]=ho[166]=0,po[4]=po[166]=-1,fo[4]=fo[166]=1,_o[4]=_o[166]=1,mo[4]=mo[166]=0,xo[4]=xo[166]=0,uo[16]=uo[154]=0,lo[16]=lo[154]=1,co[16]=co[154]=1,oo[16]=oo[154]=1,so[16]=so[154]=0,ao[16]=ao[154]=1,Eo[64]=Eo[106]=0,bo[64]=bo[106]=1,wo[64]=wo[106]=0,no[64]=no[106]=-1,ro[64]=ro[106]=0,io[64]=io[106]=1,Eo[2]=Eo[168]=0,bo[2]=bo[168]=-1,wo[2]=wo[168]=1,Io[2]=Io[168]=0,No[2]=No[168]=-1,So[2]=So[168]=0,go[2]=go[168]=-1,yo[2]=yo[168]=0,vo[2]=vo[168]=0,_o[2]=_o[168]=-1,mo[2]=mo[168]=0,xo[2]=xo[168]=1,uo[8]=uo[162]=0,lo[8]=lo[162]=-1,co[8]=co[162]=0,ho[8]=ho[162]=0,po[8]=po[162]=-1,fo[8]=fo[162]=1,go[8]=go[162]=1,yo[8]=yo[162]=0,vo[8]=vo[162]=1,_o[8]=_o[162]=1,mo[8]=mo[162]=0,xo[8]=xo[162]=0,uo[32]=uo[138]=0,lo[32]=lo[138]=1,co[32]=co[138]=1,ho[32]=ho[138]=0,po[32]=po[138]=1,fo[32]=fo[138]=0,no[32]=no[138]=1,ro[32]=ro[138]=0,io[32]=io[138]=0,oo[32]=oo[138]=1,so[32]=so[138]=0,ao[32]=ao[138]=1,Io[128]=Io[42]=0,No[128]=No[42]=1,So[128]=So[42]=1,Eo[128]=Eo[42]=0,bo[128]=bo[42]=1,wo[128]=wo[42]=0,no[128]=no[42]=-1,ro[128]=ro[42]=0,io[128]=io[42]=1,oo[128]=oo[42]=-1,so[128]=so[42]=0,ao[128]=ao[42]=0,ho[5]=ho[165]=-1,po[5]=po[165]=0,fo[5]=fo[165]=0,Io[5]=Io[165]=1,No[5]=No[165]=0,So[5]=So[165]=0,_o[20]=_o[150]=0,mo[20]=mo[150]=1,xo[20]=xo[150]=1,oo[20]=oo[150]=0,so[20]=so[150]=-1,ao[20]=ao[150]=1,uo[80]=uo[90]=-1,lo[80]=lo[90]=0,co[80]=co[90]=1,Eo[80]=Eo[90]=1,bo[80]=bo[90]=0,wo[80]=wo[90]=1,go[65]=go[105]=0,yo[65]=yo[105]=1,vo[65]=vo[105]=0,no[65]=no[105]=0,ro[65]=ro[105]=-1,io[65]=io[105]=0,uo[160]=uo[10]=-1,lo[160]=lo[10]=0,co[160]=co[10]=1,ho[160]=ho[10]=-1,po[160]=po[10]=0,fo[160]=fo[10]=0,Io[160]=Io[10]=1,No[160]=No[10]=0,So[160]=So[10]=0,Eo[160]=Eo[10]=1,bo[160]=bo[10]=0,wo[160]=wo[10]=1,_o[130]=_o[40]=0,mo[130]=mo[40]=1,xo[130]=xo[40]=1,go[130]=go[40]=0,yo[130]=yo[40]=1,vo[130]=vo[40]=0,no[130]=no[40]=0,ro[130]=ro[40]=-1,io[130]=io[40]=0,oo[130]=oo[40]=0,so[130]=so[40]=-1,ao[130]=ao[40]=1,ho[37]=ho[133]=0,po[37]=po[133]=1,fo[37]=fo[133]=1,Io[37]=Io[133]=0,No[37]=No[133]=1,So[37]=So[133]=0,no[37]=no[133]=-1,ro[37]=ro[133]=0,io[37]=io[133]=0,oo[37]=oo[133]=1,so[37]=so[133]=0,ao[37]=ao[133]=0,_o[148]=_o[22]=-1,mo[148]=mo[22]=0,xo[148]=xo[22]=0,Io[148]=Io[22]=0,No[148]=No[22]=-1,So[148]=So[22]=1,Eo[148]=Eo[22]=0,bo[148]=bo[22]=1,wo[148]=wo[22]=1,oo[148]=oo[22]=-1,so[148]=so[22]=0,ao[148]=ao[22]=1,uo[82]=uo[88]=0,lo[82]=lo[88]=-1,co[82]=co[88]=1,_o[82]=_o[88]=1,mo[82]=mo[88]=0,xo[82]=xo[88]=1,go[82]=go[88]=-1,yo[82]=yo[88]=0,vo[82]=vo[88]=1,Eo[82]=Eo[88]=0,bo[82]=bo[88]=-1,wo[82]=wo[88]=0,uo[73]=uo[97]=0,lo[73]=lo[97]=1,co[73]=co[97]=0,ho[73]=ho[97]=0,po[73]=po[97]=-1,fo[73]=fo[97]=0,go[73]=go[97]=1,yo[73]=yo[97]=0,vo[73]=vo[97]=0,no[73]=no[97]=1,ro[73]=ro[97]=0,io[73]=io[97]=1,uo[145]=uo[25]=0,lo[145]=lo[25]=-1,co[145]=co[25]=0,go[145]=go[25]=1,yo[145]=yo[25]=0,vo[145]=vo[25]=1,Io[145]=Io[25]=0,No[145]=No[25]=1,So[145]=So[25]=1,oo[145]=oo[25]=-1,so[145]=so[25]=0,ao[145]=ao[25]=0,ho[70]=ho[100]=0,po[70]=po[100]=1,fo[70]=fo[100]=0,_o[70]=_o[100]=-1,mo[70]=mo[100]=0,xo[70]=xo[100]=1,Eo[70]=Eo[100]=0,bo[70]=bo[100]=-1,wo[70]=wo[100]=1,no[70]=no[100]=1,ro[70]=ro[100]=0,io[70]=io[100]=0,ho[101]=ho[69]=0,po[101]=po[69]=1,fo[101]=fo[69]=0,no[101]=no[69]=1,ro[101]=ro[69]=0,io[101]=io[69]=0,Io[149]=Io[21]=0,No[149]=No[21]=1,So[149]=So[21]=1,oo[149]=oo[21]=-1,so[149]=so[21]=0,ao[149]=ao[21]=0,_o[86]=_o[84]=-1,mo[86]=mo[84]=0,xo[86]=xo[84]=1,Eo[86]=Eo[84]=0,bo[86]=bo[84]=-1,wo[86]=wo[84]=1,uo[89]=uo[81]=0,lo[89]=lo[81]=-1,co[89]=co[81]=0,go[89]=go[81]=1,yo[89]=yo[81]=0,vo[89]=vo[81]=1,uo[96]=uo[74]=0,lo[96]=lo[74]=1,co[96]=co[74]=0,ho[96]=ho[74]=-1,po[96]=po[74]=0,fo[96]=fo[74]=1,Eo[96]=Eo[74]=1,bo[96]=bo[74]=0,wo[96]=wo[74]=0,no[96]=no[74]=1,ro[96]=ro[74]=0,io[96]=io[74]=1,uo[24]=uo[146]=0,lo[24]=lo[146]=-1,co[24]=co[146]=1,_o[24]=_o[146]=1,mo[24]=mo[146]=0,xo[24]=xo[146]=1,go[24]=go[146]=0,yo[24]=yo[146]=1,vo[24]=vo[146]=1,oo[24]=oo[146]=0,so[24]=so[146]=-1,ao[24]=ao[146]=0,ho[6]=ho[164]=-1,po[6]=po[164]=0,fo[6]=fo[164]=1,_o[6]=_o[164]=-1,mo[6]=mo[164]=0,xo[6]=xo[164]=0,Io[6]=Io[164]=0,No[6]=No[164]=-1,So[6]=So[164]=1,Eo[6]=Eo[164]=1,bo[6]=bo[164]=0,wo[6]=wo[164]=0,go[129]=go[41]=0,yo[129]=yo[41]=1,vo[129]=vo[41]=1,Io[129]=Io[41]=0,No[129]=No[41]=1,So[129]=So[41]=0,no[129]=no[41]=-1,ro[129]=ro[41]=0,io[129]=io[41]=0,oo[129]=oo[41]=0,so[129]=so[41]=-1,ao[129]=ao[41]=0,_o[66]=_o[104]=0,mo[66]=mo[104]=1,xo[66]=xo[104]=0,go[66]=go[104]=-1,yo[66]=yo[104]=0,vo[66]=vo[104]=1,Eo[66]=Eo[104]=0,bo[66]=bo[104]=-1,wo[66]=wo[104]=0,no[66]=no[104]=0,ro[66]=ro[104]=-1,io[66]=io[104]=1,uo[144]=uo[26]=-1,lo[144]=lo[26]=0,co[144]=co[26]=0,Io[144]=Io[26]=1,No[144]=No[26]=0,So[144]=So[26]=1,Eo[144]=Eo[26]=0,bo[144]=bo[26]=1,wo[144]=wo[26]=1,oo[144]=oo[26]=-1,so[144]=so[26]=0,ao[144]=ao[26]=1,ho[36]=ho[134]=0,po[36]=po[134]=1,fo[36]=fo[134]=1,_o[36]=_o[134]=0,mo[36]=mo[134]=1,xo[36]=xo[134]=0,no[36]=no[134]=0,ro[36]=ro[134]=-1,io[36]=io[134]=1,oo[36]=oo[134]=1,so[36]=so[134]=0,ao[36]=ao[134]=0,uo[9]=uo[161]=-1,lo[9]=lo[161]=0,co[9]=co[161]=0,ho[9]=ho[161]=0,po[9]=po[161]=-1,fo[9]=fo[161]=0,go[9]=go[161]=1,yo[9]=yo[161]=0,vo[9]=vo[161]=0,Io[9]=Io[161]=1,No[9]=No[161]=0,So[9]=So[161]=1,uo[136]=0,lo[136]=1,co[136]=1,ho[136]=0,po[136]=1,fo[136]=0,_o[136]=-1,mo[136]=0,xo[136]=1,go[136]=-1,yo[136]=0,vo[136]=0,Io[136]=0,No[136]=-1,So[136]=0,Eo[136]=0,bo[136]=-1,wo[136]=1,no[136]=1,ro[136]=0,io[136]=0,oo[136]=1,so[136]=0,ao[136]=1,uo[34]=0,lo[34]=-1,co[34]=0,ho[34]=0,po[34]=-1,fo[34]=1,_o[34]=1,mo[34]=0,xo[34]=0,go[34]=1,yo[34]=0,vo[34]=1,Io[34]=0,No[34]=1,So[34]=1,Eo[34]=0,bo[34]=1,wo[34]=0,no[34]=-1,ro[34]=0,io[34]=1,oo[34]=-1,so[34]=0,ao[34]=0,uo[35]=0,lo[35]=1,co[35]=1,ho[35]=0,po[35]=-1,fo[35]=1,_o[35]=1,mo[35]=0,xo[35]=0,go[35]=-1,yo[35]=0,vo[35]=0,Io[35]=0,No[35]=-1,So[35]=0,Eo[35]=0,bo[35]=1,wo[35]=0,no[35]=-1,ro[35]=0,io[35]=1,oo[35]=1,so[35]=0,ao[35]=1,uo[153]=0,lo[153]=1,co[153]=1,go[153]=-1,yo[153]=0,vo[153]=0,Io[153]=0,No[153]=-1,So[153]=0,oo[153]=1,so[153]=0,ao[153]=1,ho[102]=0,po[102]=-1,fo[102]=1,_o[102]=1,mo[102]=0,xo[102]=0,Eo[102]=0,bo[102]=1,wo[102]=0,no[102]=-1,ro[102]=0,io[102]=1,uo[155]=0,lo[155]=-1,co[155]=0,go[155]=1,yo[155]=0,vo[155]=1,Io[155]=0,No[155]=1,So[155]=1,oo[155]=-1,so[155]=0,ao[155]=0,ho[103]=0,po[103]=1,fo[103]=0,_o[103]=-1,mo[103]=0,xo[103]=1,Eo[103]=0,bo[103]=-1,wo[103]=1,no[103]=1,ro[103]=0,io[103]=0,uo[152]=0,lo[152]=1,co[152]=1,_o[152]=-1,mo[152]=0,xo[152]=1,go[152]=-1,yo[152]=0,vo[152]=0,Io[152]=0,No[152]=-1,So[152]=0,Eo[152]=0,bo[152]=-1,wo[152]=1,oo[152]=1,so[152]=0,ao[152]=1,uo[156]=0,lo[156]=-1,co[156]=1,_o[156]=1,mo[156]=0,xo[156]=1,go[156]=-1,yo[156]=0,vo[156]=0,Io[156]=0,No[156]=-1,So[156]=0,Eo[156]=0,bo[156]=1,wo[156]=1,oo[156]=-1,so[156]=0,ao[156]=1,uo[137]=0,lo[137]=1,co[137]=1,ho[137]=0,po[137]=1,fo[137]=0,go[137]=-1,yo[137]=0,vo[137]=0,Io[137]=0,No[137]=-1,So[137]=0,no[137]=1,ro[137]=0,io[137]=0,oo[137]=1,so[137]=0,ao[137]=1,uo[139]=0,lo[139]=1,co[139]=1,ho[139]=0,po[139]=-1,fo[139]=0,go[139]=1,yo[139]=0,vo[139]=0,Io[139]=0,No[139]=1,So[139]=0,no[139]=-1,ro[139]=0,io[139]=0,oo[139]=1,so[139]=0,ao[139]=1,uo[98]=0,lo[98]=-1,co[98]=0,ho[98]=0,po[98]=-1,fo[98]=1,_o[98]=1,mo[98]=0,xo[98]=0,go[98]=1,yo[98]=0,vo[98]=1,Eo[98]=0,bo[98]=1,wo[98]=0,no[98]=-1,ro[98]=0,io[98]=1,uo[99]=0,lo[99]=1,co[99]=0,ho[99]=0,po[99]=-1,fo[99]=1,_o[99]=1,mo[99]=0,xo[99]=0,go[99]=-1,yo[99]=0,vo[99]=1,Eo[99]=0,bo[99]=-1,wo[99]=0,no[99]=1,ro[99]=0,io[99]=1,ho[38]=0,po[38]=-1,fo[38]=1,_o[38]=1,mo[38]=0,xo[38]=0,Io[38]=0,No[38]=1,So[38]=1,Eo[38]=0,bo[38]=1,wo[38]=0,no[38]=-1,ro[38]=0,io[38]=1,oo[38]=-1,so[38]=0,ao[38]=0,ho[39]=0,po[39]=1,fo[39]=1,_o[39]=-1,mo[39]=0,xo[39]=0,Io[39]=0,No[39]=-1,So[39]=1,Eo[39]=0,bo[39]=1,wo[39]=0,no[39]=-1,ro[39]=0,io[39]=1,oo[39]=1,so[39]=0,ao[39]=0;var Co=function(t){return[[t.bottomleft,0],[0,0],[0,t.leftbottom]]},Po=function(t){return[[1,t.rightbottom],[1,0],[t.bottomright,0]]},Mo=function(t){return[[t.topright,1],[1,1],[1,t.righttop]]},Lo=function(t){return[[0,t.lefttop],[0,1],[t.topleft,1]]},Oo=function(t){return[[t.bottomright,0],[t.bottomleft,0],[0,t.leftbottom],[0,t.lefttop]]},Ro=function(t){return[[t.bottomright,0],[t.bottomleft,0],[1,t.righttop],[1,t.rightbottom]]},To=function(t){return[[1,t.righttop],[1,t.rightbottom],[t.topleft,1],[t.topright,1]]},Ao=function(t){return[[0,t.leftbottom],[0,t.lefttop],[t.topleft,1],[t.topright,1]]},Do=[],Fo=[],ko=[],Go=[],qo=[],Bo=[],zo=[],jo=[];Go[1]=qo[1]=18,Go[169]=qo[169]=18,ko[4]=Fo[4]=12,ko[166]=Fo[166]=12,Do[16]=jo[16]=4,Do[154]=jo[154]=4,Bo[64]=zo[64]=22,Bo[106]=zo[106]=22,ko[2]=Bo[2]=17,Go[2]=qo[2]=18,ko[168]=Bo[168]=17,Go[168]=qo[168]=18,Do[8]=Go[8]=9,Fo[8]=ko[8]=12,Do[162]=Go[162]=9,Fo[162]=ko[162]=12,Do[32]=jo[32]=4,Fo[32]=zo[32]=1,Do[138]=jo[138]=4,Fo[138]=zo[138]=1,qo[128]=jo[128]=21,Bo[128]=zo[128]=22,qo[42]=jo[42]=21,Bo[42]=zo[42]=22,Fo[5]=qo[5]=14,Fo[165]=qo[165]=14,ko[20]=jo[20]=6,ko[150]=jo[150]=6,Do[80]=Bo[80]=11,Do[90]=Bo[90]=11,Go[65]=zo[65]=3,Go[105]=zo[105]=3,Do[160]=Bo[160]=11,Fo[160]=qo[160]=14,Do[10]=Bo[10]=11,Fo[10]=qo[10]=14,ko[130]=jo[130]=6,Go[130]=zo[130]=3,ko[40]=jo[40]=6,Go[40]=zo[40]=3,Fo[101]=zo[101]=1,Fo[69]=zo[69]=1,qo[149]=jo[149]=21,qo[21]=jo[21]=21,ko[86]=Bo[86]=17,ko[84]=Bo[84]=17,Do[89]=Go[89]=9,Do[81]=Go[81]=9,Do[96]=zo[96]=0,Fo[96]=Bo[96]=15,Do[74]=zo[74]=0,Fo[74]=Bo[74]=15,Do[24]=ko[24]=8,Go[24]=jo[24]=7,Do[146]=ko[146]=8,Go[146]=jo[146]=7,Fo[6]=Bo[6]=15,ko[6]=qo[6]=16,Fo[164]=Bo[164]=15,ko[164]=qo[164]=16,Go[129]=jo[129]=7,qo[129]=zo[129]=20,Go[41]=jo[41]=7,qo[41]=zo[41]=20,ko[66]=zo[66]=2,Go[66]=Bo[66]=19,ko[104]=zo[104]=2,Go[104]=Bo[104]=19,Do[144]=qo[144]=10,Bo[144]=jo[144]=23,Do[26]=qo[26]=10,Bo[26]=jo[26]=23,Fo[36]=jo[36]=5,ko[36]=zo[36]=2,Fo[134]=jo[134]=5,ko[134]=zo[134]=2,Do[9]=qo[9]=10,Fo[9]=Go[9]=13,Do[161]=qo[161]=10,Fo[161]=Go[161]=13,Fo[37]=jo[37]=5,qo[37]=zo[37]=20,Fo[133]=jo[133]=5,qo[133]=zo[133]=20,ko[148]=qo[148]=16,Bo[148]=jo[148]=23,ko[22]=qo[22]=16,Bo[22]=jo[22]=23,Do[82]=ko[82]=8,Go[82]=Bo[82]=19,Do[88]=ko[88]=8,Go[88]=Bo[88]=19,Do[73]=zo[73]=0,Fo[73]=Go[73]=13,Do[97]=zo[97]=0,Fo[97]=Go[97]=13,Do[145]=Go[145]=9,qo[145]=jo[145]=21,Do[25]=Go[25]=9,qo[25]=jo[25]=21,Fo[70]=zo[70]=1,ko[70]=Bo[70]=17,Fo[100]=zo[100]=1,ko[100]=Bo[100]=17,Do[34]=Go[34]=9,Fo[34]=ko[34]=12,qo[34]=jo[34]=21,Bo[34]=zo[34]=22,Do[136]=jo[136]=4,Fo[136]=zo[136]=1,ko[136]=Bo[136]=17,Go[136]=qo[136]=18,Do[35]=jo[35]=4,Fo[35]=ko[35]=12,Go[35]=qo[35]=18,Bo[35]=zo[35]=22,Do[153]=jo[153]=4,Go[153]=qo[153]=18,Fo[102]=ko[102]=12,Bo[102]=zo[102]=22,Do[155]=Go[155]=9,qo[155]=jo[155]=23,Fo[103]=zo[103]=1,ko[103]=Bo[103]=17,Do[152]=jo[152]=4,ko[152]=Bo[152]=17,Go[152]=qo[152]=18,Do[156]=ko[156]=8,Go[156]=qo[156]=18,Bo[156]=jo[156]=23,Do[137]=jo[137]=4,Fo[137]=zo[137]=1,Go[137]=qo[137]=18,Do[139]=jo[139]=4,Fo[139]=Go[139]=13,qo[139]=zo[139]=20,Do[98]=Go[98]=9,Fo[98]=ko[98]=12,Bo[98]=zo[98]=22,Do[99]=zo[99]=0,Fo[99]=ko[99]=12,Go[99]=Bo[99]=19,Fo[38]=ko[38]=12,qo[38]=jo[38]=21,Bo[38]=zo[38]=22,Fo[39]=jo[39]=5,ko[39]=qo[39]=16,Bo[39]=zo[39]=22;var Uo=[];function Vo(t,e,n){return(t-e)/(n-e)}function Xo(t){return t.constructor.toString().indexOf("Array")>-1}function Yo(t,e,n,r,i,o){for(var s=t.cells[n][e],a=s.cval_real,u=e+r,l=n+i,c=[],h=!1;!h;){if(void 0===t.cells[l]||void 0===t.cells[l][u])if(l-=i,u-=r,a=(s=t.cells[l][u]).cval_real,-1===i)if(0===o)if(1&a)c.push([u,l]),r=-1,i=0,o=0;else{if(!(4&a)){c.push([u+s.bottomright,l]),r=0,i=1,o=1,h=!0;break}c.push([u+1,l]),r=1,i=0,o=0}else{if(!(1&a)){if(4&a){c.push([u+s.bottomright,l]),r=0,i=1,o=1,h=!0;break}c.push([u+s.bottomleft,l]),r=0,i=1,o=0,h=!0;break}c.push([u,l]),r=-1,i=0,o=0}else if(1===i)if(0===o){if(!(a&eo)){if(a&to){c.push([u+s.topleft,l+1]),r=0,i=-1,o=0,h=!0;break}c.push([u+s.topright,l+1]),r=0,i=-1,o=1,h=!0;break}c.push([u+1,l+1]),r=1,i=0,o=1}else c.push([u+1,l+1]),r=1,i=0,o=1;else if(-1===r)if(0===o){if(!(a&to)){if(1&a){c.push([u,l+s.leftbottom]),r=1,i=0,o=0,h=!0;break}c.push([u,l+s.lefttop]),r=1,i=0,o=1,h=!0;break}c.push([u,l+1]),r=0,i=1,o=0}else{if(!(a&to)){console.log("MarchingSquaresJS-isoBands: wtf");break}c.push([u,l+1]),r=0,i=1,o=0}else{if(1!==r){console.log("MarchingSquaresJS-isoBands: we came from nowhere!");break}if(0===o){if(!(4&a)){c.push([u+1,l+s.rightbottom]),r=-1,i=0,o=0,h=!0;break}c.push([u+1,l]),r=0,i=-1,o=1}else{if(!(4&a)){if(a&eo){c.push([u+1,l+s.righttop]),r=-1,i=0,o=1;break}c.push([u+1,l+s.rightbottom]),r=-1,i=0,o=0,h=!0;break}c.push([u+1,l]),r=0,i=-1,o=1}}else if(a=(s=t.cells[l][u]).cval_real,-1===r)if(0===o)if(void 0!==t.cells[l-1]&&void 0!==t.cells[l-1][u])r=0,i=-1,o=1;else{if(!(1&a)){c.push([u+s.bottomright,l]),r=0,i=1,o=1,h=!0;break}c.push([u,l])}else{if(!(a&to)){console.log("MarchingSquaresJS-isoBands: found entry from top at "+u+","+l);break}console.log("MarchingSquaresJS-isoBands: proceeding in x-direction!")}else if(1===r){if(0===o){console.log("MarchingSquaresJS-isoBands: wtf");break}if(void 0!==t.cells[l+1]&&void 0!==t.cells[l+1][u])r=0,i=1,o=0;else{if(!(a&eo)){c.push([u+s.topleft,l+1]),r=0,i=-1,o=0,h=!0;break}c.push([u+1,l+1]),r=1,i=0,o=1}}else if(-1===i){if(1!==o){console.log("MarchingSquaresJS-isoBands: wtf");break}if(void 0!==t.cells[l][u+1])r=1,i=0,o=1;else{if(!(4&a)){c.push([u+1,l+s.righttop]),r=-1,i=0,o=1,h=!0;break}c.push([u+1,l]),r=0,i=-1,o=1}}else{if(1!==i){console.log("MarchingSquaresJS-isoBands: where did we came from???");break}if(0!==o){console.log("MarchingSquaresJS-isoBands: wtf");break}if(void 0!==t.cells[l][u-1])r=-1,i=0,o=0;else{if(!(a&to)){c.push([u,l+s.leftbottom]),r=1,i=0,o=0,h=!0;break}c.push([u,l+1]),r=0,i=1,o=0}}if(l+=i,(u+=r)===e&&l===n)break}return{path:c,i:u,j:l,x:r,y:i,o:o}}function Ho(t){if(t.edges.length>0){var e=t.edges[t.edges.length-1],n=t.cval_real;switch(e){case 0:return n&eo?{p:[1,t.righttop],x:-1,y:0,o:1}:{p:[t.topleft,1],x:0,y:-1,o:0};case 1:return 4&n?{p:[t.topleft,1],x:0,y:-1,o:0}:{p:[1,t.rightbottom],x:-1,y:0,o:0};case 2:return 4&n?{p:[t.bottomright,0],x:0,y:1,o:1}:{p:[t.topleft,1],x:0,y:-1,o:0};case 3:return 1&n?{p:[t.topleft,1],x:0,y:-1,o:0}:{p:[t.bottomleft,0],x:0,y:1,o:0};case 4:return n&eo?{p:[1,t.righttop],x:-1,y:0,o:1}:{p:[t.topright,1],x:0,y:-1,o:1};case 5:return 4&n?{p:[t.topright,1],x:0,y:-1,o:1}:{p:[1,t.rightbottom],x:-1,y:0,o:0};case 6:return 4&n?{p:[t.bottomright,0],x:0,y:1,o:1}:{p:[t.topright,1],x:0,y:-1,o:1};case 7:return 1&n?{p:[t.topright,1],x:0,y:-1,o:1}:{p:[t.bottomleft,0],x:0,y:1,o:0};case 8:return 4&n?{p:[t.bottomright,0],x:0,y:1,o:1}:{p:[1,t.righttop],x:-1,y:0,o:1};case 9:return 1&n?{p:[1,t.righttop],x:-1,y:0,o:1}:{p:[t.bottomleft,0],x:0,y:1,o:0};case 10:return 1&n?{p:[0,t.leftbottom],x:1,y:0,o:0}:{p:[1,t.righttop],x:-1,y:0,o:1};case 11:return n&to?{p:[1,t.righttop],x:-1,y:0,o:1}:{p:[0,t.lefttop],x:1,y:0,o:1};case 12:return 4&n?{p:[t.bottomright,0],x:0,y:1,o:1}:{p:[1,t.rightbottom],x:-1,y:0,o:0};case 13:return 1&n?{p:[1,t.rightbottom],x:-1,y:0,o:0}:{p:[t.bottomleft,0],x:0,y:1,o:0};case 14:return 1&n?{p:[0,t.leftbottom],x:1,y:0,o:0}:{p:[1,t.rightbottom],x:-1,y:0,o:0};case 15:return n&to?{p:[1,t.rightbottom],x:-1,y:0,o:0}:{p:[0,t.lefttop],x:1,y:0,o:1};case 16:return 4&n?{p:[t.bottomright,0],x:0,y:1,o:1}:{p:[0,t.leftbottom],x:1,y:0,o:0};case 17:return n&to?{p:[t.bottomright,0],x:0,y:1,o:1}:{p:[0,t.lefttop],x:1,y:0,o:1};case 18:return 1&n?{p:[0,t.leftbottom],x:1,y:0,o:0}:{p:[t.bottomleft,0],x:0,y:1,o:0};case 19:return n&to?{p:[t.bottomleft,0],x:0,y:1,o:0}:{p:[0,t.lefttop],x:1,y:0,o:1};case 20:return n&to?{p:[t.topleft,1],x:0,y:-1,o:0}:{p:[0,t.leftbottom],x:1,y:0,o:0};case 21:return n&eo?{p:[0,t.leftbottom],x:1,y:0,o:0}:{p:[t.topright,1],x:0,y:-1,o:1};case 22:return n&to?{p:[t.topleft,1],x:0,y:-1,o:0}:{p:[0,t.lefttop],x:1,y:0,o:1};case 23:return n&eo?{p:[0,t.lefttop],x:1,y:0,o:1}:{p:[t.topright,1],x:0,y:-1,o:1};default:console.log("MarchingSquaresJS-isoBands: edge index out of range!"),console.log(t)}}return null}function Wo(t,e,n,r){var i,o,s,a,u,l=t.cval;switch(e){case-1:switch(r){case 0:i=Fo[l],s=ho[l],a=po[l],u=fo[l];break;default:i=Do[l],s=uo[l],a=lo[l],u=co[l]}break;case 1:switch(r){case 0:i=qo[l],s=Io[l],a=No[l],u=So[l];break;default:i=Bo[l],s=Eo[l],a=bo[l],u=wo[l]}break;default:switch(n){case-1:switch(r){case 0:i=zo[l],s=no[l],a=ro[l],u=io[l];break;default:i=jo[l],s=oo[l],a=so[l],u=ao[l]}break;case 1:switch(r){case 0:i=Go[l],s=go[l],a=yo[l],u=vo[l];break;default:i=ko[l],s=_o[l],a=mo[l],u=xo[l]}}}if(o=t.edges.indexOf(i),void 0===t.edges[o])return null;switch(function(t,e){delete t.edges[e];for(var n=e+1;n<t.edges.length;n++)t.edges[n-1]=t.edges[n];t.edges.pop()}(t,o),l=t.cval_real,i){case 0:l&eo?(e=t.topleft,n=1):(e=1,n=t.righttop);break;case 1:4&l?(e=1,n=t.rightbottom):(e=t.topleft,n=1);break;case 2:4&l?(e=t.topleft,n=1):(e=t.bottomright,n=0);break;case 3:1&l?(e=t.bottomleft,n=0):(e=t.topleft,n=1);break;case 4:l&eo?(e=t.topright,n=1):(e=1,n=t.righttop);break;case 5:4&l?(e=1,n=t.rightbottom):(e=t.topright,n=1);break;case 6:4&l?(e=t.topright,n=1):(e=t.bottomright,n=0);break;case 7:1&l?(e=t.bottomleft,n=0):(e=t.topright,n=1);break;case 8:4&l?(e=1,n=t.righttop):(e=t.bottomright,n=0);break;case 9:1&l?(e=t.bottomleft,n=0):(e=1,n=t.righttop);break;case 10:1&l?(e=1,n=t.righttop):(e=0,n=t.leftbottom);break;case 11:l&to?(e=0,n=t.lefttop):(e=1,n=t.righttop);break;case 12:4&l?(e=1,n=t.rightbottom):(e=t.bottomright,n=0);break;case 13:1&l?(e=t.bottomleft,n=0):(e=1,n=t.rightbottom);break;case 14:1&l?(e=1,n=t.rightbottom):(e=0,n=t.leftbottom);break;case 15:l&to?(e=0,n=t.lefttop):(e=1,n=t.rightbottom);break;case 16:4&l?(e=0,n=t.leftbottom):(e=t.bottomright,n=0);break;case 17:l&to?(e=0,n=t.lefttop):(e=t.bottomright,n=0);break;case 18:1&l?(e=t.bottomleft,n=0):(e=0,n=t.leftbottom);break;case 19:l&to?(e=0,n=t.lefttop):(e=t.bottomleft,n=0);break;case 20:l&to?(e=0,n=t.leftbottom):(e=t.topleft,n=1);break;case 21:l&eo?(e=t.topright,n=1):(e=0,n=t.leftbottom);break;case 22:l&to?(e=0,n=t.lefttop):(e=t.topleft,n=1);break;case 23:l&eo?(e=t.topright,n=1):(e=0,n=t.lefttop);break;default:return console.log("MarchingSquaresJS-isoBands: edge index out of range!"),console.log(t),null}return void 0!==e&&void 0!==n&&void 0!==s&&void 0!==a&&void 0!==u||(console.log("MarchingSquaresJS-isoBands: undefined value!"),console.log(t),console.log(e+" "+n+" "+s+" "+a+" "+u)),{p:[e,n],x:s,y:a,o:u}}function Jo(t){var e=[],n=[];t.forEach((function(t){var r=jr(l([t]));n.push(r),e.push({ring:t,area:r})})),n.sort((function(t,e){return e-t}));var r=[];return n.forEach((function(t){for(var n=0;n<e.length;n++)if(e[n].area===t){r.push(e[n].ring),e.splice(n,1);break}})),r}function Zo(t){for(var e=t.map((function(t){return{lrCoordinates:t,grouped:!1}})),n=[];!Qo(e);)for(var r=0;r<e.length;r++)if(!e[r].grouped){var i=[];i.push(e[r].lrCoordinates),e[r].grouped=!0;for(var o=l([e[r].lrCoordinates]),s=r+1;s<e.length;s++){if(!e[s].grouped)Ko(l([e[s].lrCoordinates]),o)&&(i.push(e[s].lrCoordinates),e[s].grouped=!0)}n.push(i)}return n}function Ko(t,e){for(var n=bn(t),r=0;r<n.features.length;r++)if(!ye(n.features[r],e))return!1;return!0}function Qo(t){for(var e=0;e<t.length;e++)if(!1===t[e].grouped)return!1;return!0}function $o(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.pivot,i=n.mutate;if(!t)throw new Error("geojson is required");if(null==e||isNaN(e))throw new Error("angle is required");return 0===e||(r||(r=En(t)),!1!==i&&void 0!==i||(t=Ie(t)),R(t,(function(t){var n=Bi(r,t)+e,i=Ar(r,t),o=Q(ji(r,i,n));t[0]=o[0],t[1]=o[1]}))),t}function ts(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.origin,i=n.mutate;if(!t)throw new Error("geojson required");if("number"!=typeof e||0===e)throw new Error("invalid factor");var o=Array.isArray(r)||"object"==typeof r;return!0!==i&&(t=Ie(t)),"FeatureCollection"!==t.type||o?es(t,e,r):(F(t,(function(n,i){t.features[i]=es(n,e,r)})),t)}function es(t,e,n){var r="Point"===it(t);return n=function(t,e){null==e&&(e="centroid");if(Array.isArray(e)||"object"==typeof e)return K(e);var n=t.bbox?t.bbox:Z(t),r=n[0],i=n[1],o=n[2],s=n[3];switch(e){case"sw":case"southwest":case"westsouth":case"bottomleft":return a([r,i]);case"se":case"southeast":case"eastsouth":case"bottomright":return a([o,i]);case"nw":case"northwest":case"westnorth":case"topleft":return a([r,s]);case"ne":case"northeast":case"eastnorth":case"topright":return a([o,s]);case"center":return xn(t);case void 0:case null:case"centroid":return En(t);default:throw new Error("invalid origin")}}(t,n),1===e||r||R(t,(function(t){var r=Ar(n,t),i=Bi(n,t),o=Q(ji(n,r*e,i));t[0]=o[0],t[1]=o[1],3===t.length&&(t[2]*=e)})),t}function ns(t){var e=t[0],n=t[1];return[n[0]-e[0],n[1]-e[1]]}function rs(t,e){return t[0]*e[1]-e[0]*t[1]}function is(t,e){return!function(t,e){return 0===rs(ns(t),ns(e))}(t,e)&&function(t,e){var n,r,i=t[0],o=ns(t),s=e[0],a=ns(e),u=rs(o,a);return function(t,e){return[t[0]+e[0],t[1]+e[1]]}(i,function(t,e){return[t*e[0],t*e[1]]}(rs((r=i,[(n=s)[0]-r[0],n[1]-r[1]]),a)/u,o))}(t,e)}function os(t,e,n){var r=[],i=E(e,n),o=Q(t),s=[];return o.forEach((function(t,e){if(e!==o.length-1){var n=(l=t,c=o[e+1],h=i,p=Math.sqrt((l[0]-c[0])*(l[0]-c[0])+(l[1]-c[1])*(l[1]-c[1])),f=l[0]+h*(c[1]-l[1])/p,g=c[0]+h*(c[1]-l[1])/p,d=l[1]+h*(l[0]-c[0])/p,y=c[1]+h*(l[0]-c[0])/p,[[f,d],[g,y]]);if(r.push(n),e>0){var a=r[e-1],u=is(n,a);!1!==u&&(a[1]=u,n[0]=u),s.push(a[0]),e===o.length-2&&(s.push(n[0]),s.push(n[1]))}2===o.length&&(s.push(n[0]),s.push(n[1]))}var l,c,h,p,f,g,d,y})),h(s,t.properties)}function ss(t,e,n){var r=e[0]-t[0],i=e[1]-t[1],o=n[0]-e[0];return function(t){return(t>0)-(t<0)||+t}(r*(n[1]-e[1])-o*i)}function as(t,e){return e.geometry.coordinates[0].every((function(e){return ye(a(e),t)}))}Uo[1]=Uo[169]=Co,Uo[4]=Uo[166]=Po,Uo[16]=Uo[154]=Mo,Uo[64]=Uo[106]=Lo,Uo[168]=Uo[2]=Oo,Uo[162]=Uo[8]=Ro,Uo[138]=Uo[32]=To,Uo[42]=Uo[128]=Ao,Uo[5]=Uo[165]=function(t){return[[0,0],[0,t.leftbottom],[1,t.rightbottom],[1,0]]},Uo[20]=Uo[150]=function(t){return[[1,0],[t.bottomright,0],[t.topright,1],[1,1]]},Uo[80]=Uo[90]=function(t){return[[1,1],[1,t.righttop],[0,t.lefttop],[0,1]]},Uo[65]=Uo[105]=function(t){return[[t.bottomleft,0],[0,0],[0,1],[t.topleft,1]]},Uo[160]=Uo[10]=function(t){return[[1,t.righttop],[1,t.rightbottom],[0,t.leftbottom],[0,t.lefttop]]},Uo[130]=Uo[40]=function(t){return[[t.topleft,1],[t.topright,1],[t.bottomright,0],[t.bottomleft,0]]},Uo[85]=function(){return[[0,0],[0,1],[1,1],[1,0]]},Uo[101]=Uo[69]=function(t){return[[1,t.rightbottom],[1,0],[0,0],[0,1],[t.topleft,1]]},Uo[149]=Uo[21]=function(t){return[[t.topright,1],[1,1],[1,0],[0,0],[0,t.leftbottom]]},Uo[86]=Uo[84]=function(t){return[[1,0],[t.bottomright,0],[0,t.lefttop],[0,1],[1,1]]},Uo[89]=Uo[81]=function(t){return[[1,1],[1,t.righttop],[t.bottomleft,0],[0,0],[0,1]]},Uo[96]=Uo[74]=function(t){return[[1,t.righttop],[1,t.rightbottom],[0,t.lefttop],[0,1],[t.topleft,1]]},Uo[24]=Uo[146]=function(t){return[[1,1],[1,t.righttop],[t.bottomright,0],[t.bottomleft,0],[t.topright,1]]},Uo[6]=Uo[164]=function(t){return[[1,t.rightbottom],[1,0],[t.bottomright,0],[0,t.leftbottom],[0,t.lefttop]]},Uo[129]=Uo[41]=function(t){return[[t.topright,1],[t.bottomleft,0],[0,0],[0,t.leftbottom],[t.topleft,1]]},Uo[66]=Uo[104]=function(t){return[[t.bottomright,0],[t.bottomleft,0],[0,t.lefttop],[0,1],[t.topleft,1]]},Uo[144]=Uo[26]=function(t){return[[1,1],[1,t.righttop],[0,t.leftbottom],[0,t.lefttop],[t.topright,1]]},Uo[36]=Uo[134]=function(t){return[[1,t.rightbottom],[1,0],[t.bottomright,0],[t.topleft,1],[t.topright,1]]},Uo[9]=Uo[161]=function(t){return[[1,t.righttop],[1,t.rightbottom],[t.bottomleft,0],[0,0],[0,t.leftbottom]]},Uo[37]=Uo[133]=function(t){return[[1,t.rightbottom],[1,0],[0,0],[0,t.leftbottom],[t.topleft,1],[t.topright,1]]},Uo[148]=Uo[22]=function(t){return[[1,1],[1,0],[t.bottomright,0],[0,t.leftbottom],[0,t.lefttop],[t.topright,1]]},Uo[82]=Uo[88]=function(t){return[[1,1],[1,t.righttop],[t.bottomright,0],[t.bottomleft,0],[0,t.lefttop],[0,1]]},Uo[73]=Uo[97]=function(t){return[[1,t.righttop],[1,t.rightbottom],[t.bottomleft,0],[0,0],[0,1],[t.topleft,1]]},Uo[145]=Uo[25]=function(t){return[[1,1],[1,t.righttop],[t.bottomleft,0],[0,0],[0,t.leftbottom],[t.topright,1]]},Uo[70]=Uo[100]=function(t){return[[1,t.rightbottom],[1,0],[t.bottomright,0],[0,t.lefttop],[0,1],[t.topleft,1]]},Uo[34]=function(t){return[Ao(t),Ro(t)]},Uo[35]=function(t){return[[1,t.righttop],[1,t.rightbottom],[t.bottomright,0],[t.bottomleft,0],[0,t.leftbottom],[0,t.lefttop],[t.topleft,1],[t.topright,1]]},Uo[136]=function(t){return[To(t),Oo(t)]},Uo[153]=function(t){return[Mo(t),Co(t)]},Uo[102]=function(t){return[Po(t),Lo(t)]},Uo[155]=function(t){return[[1,1],[1,t.righttop],[t.bottomleft,0],[0,0],[0,t.leftbottom],[t.topright,1]]},Uo[103]=function(t){return[[1,t.rightbottom],[1,0],[t.bottomright,0],[0,t.lefttop],[0,1],[t.topleft,1]]},Uo[152]=function(t){return[Mo(t),Oo(t)]},Uo[156]=function(t){return[[1,1],[1,t.righttop],[t.bottomright,0],[t.bottomleft,0],[0,t.leftbottom],[0,t.lefttop],[t.topright,1]]},Uo[137]=function(t){return[To(t),Co(t)]},Uo[139]=function(t){return[[1,t.righttop],[1,t.rightbottom],[t.bottomleft,0],[0,0],[0,t.leftbottom],[t.topleft,1],[t.topright,1]]},Uo[98]=function(t){return[Ro(t),Lo(t)]},Uo[99]=function(t){return[[1,t.righttop],[1,t.rightbottom],[t.bottomright,0],[t.bottomleft,0],[0,t.lefttop],[0,1],[t.topleft,1]]},Uo[38]=function(t){return[Po(t),Ao(t)]},Uo[39]=function(t){return[[1,t.rightbottom],[1,0],[t.bottomright,0],[0,t.leftbottom],[0,t.lefttop],[t.topleft,1],[t.topright,1]]};var us=function(){function t(e){this.id=t.buildId(e),this.coordinates=e,this.innerEdges=[],this.outerEdges=[],this.outerEdgesSorted=!1}return t.buildId=function(t){return t.join(",")},t.prototype.removeInnerEdge=function(t){this.innerEdges=this.innerEdges.filter((function(e){return e.from.id!==t.from.id}))},t.prototype.removeOuterEdge=function(t){this.outerEdges=this.outerEdges.filter((function(e){return e.to.id!==t.to.id}))},t.prototype.addOuterEdge=function(t){this.outerEdges.push(t),this.outerEdgesSorted=!1},t.prototype.sortOuterEdges=function(){var t=this;this.outerEdgesSorted||(this.outerEdges.sort((function(e,n){var r=e.to,i=n.to;if(r.coordinates[0]-t.coordinates[0]>=0&&i.coordinates[0]-t.coordinates[0]<0)return 1;if(r.coordinates[0]-t.coordinates[0]<0&&i.coordinates[0]-t.coordinates[0]>=0)return-1;if(r.coordinates[0]-t.coordinates[0]==0&&i.coordinates[0]-t.coordinates[0]==0)return r.coordinates[1]-t.coordinates[1]>=0||i.coordinates[1]-t.coordinates[1]>=0?r.coordinates[1]-i.coordinates[1]:i.coordinates[1]-r.coordinates[1];var o=ss(t.coordinates,r.coordinates,i.coordinates);return o<0?1:o>0?-1:Math.pow(r.coordinates[0]-t.coordinates[0],2)+Math.pow(r.coordinates[1]-t.coordinates[1],2)-(Math.pow(i.coordinates[0]-t.coordinates[0],2)+Math.pow(i.coordinates[1]-t.coordinates[1],2))})),this.outerEdgesSorted=!0)},t.prototype.getOuterEdges=function(){return this.sortOuterEdges(),this.outerEdges},t.prototype.getOuterEdge=function(t){return this.sortOuterEdges(),this.outerEdges[t]},t.prototype.addInnerEdge=function(t){this.innerEdges.push(t)},t}(),ls=function(){function t(t,e){this.from=t,this.to=e,this.next=void 0,this.label=void 0,this.symetric=void 0,this.ring=void 0,this.from.addOuterEdge(this),this.to.addInnerEdge(this)}return t.prototype.getSymetric=function(){return this.symetric||(this.symetric=new t(this.to,this.from),this.symetric.symetric=this),this.symetric},t.prototype.deleteEdge=function(){this.from.removeOuterEdge(this),this.to.removeInnerEdge(this)},t.prototype.isEqual=function(t){return this.from.id===t.from.id&&this.to.id===t.to.id},t.prototype.toString=function(){return"Edge { "+this.from.id+" -> "+this.to.id+" }"},t.prototype.toLineString=function(){return h([this.from.coordinates,this.to.coordinates])},t.prototype.compareTo=function(t){return ss(t.from.coordinates,t.to.coordinates,this.to.coordinates)},t}(),cs=function(){function t(){this.edges=[],this.polygon=void 0,this.envelope=void 0}return t.prototype.push=function(t){this.edges.push(t),this.polygon=this.envelope=void 0},t.prototype.get=function(t){return this.edges[t]},Object.defineProperty(t.prototype,"length",{get:function(){return this.edges.length},enumerable:!0,configurable:!0}),t.prototype.forEach=function(t){this.edges.forEach(t)},t.prototype.map=function(t){return this.edges.map(t)},t.prototype.some=function(t){return this.edges.some(t)},t.prototype.isValid=function(){return!0},t.prototype.isHole=function(){var t=this,e=this.edges.reduce((function(e,n,r){return n.from.coordinates[1]>t.edges[e].from.coordinates[1]&&(e=r),e}),0),n=(0===e?this.length:e)-1,r=(e+1)%this.length,i=ss(this.edges[n].from.coordinates,this.edges[e].from.coordinates,this.edges[r].from.coordinates);return 0===i?this.edges[n].from.coordinates[0]>this.edges[r].from.coordinates[0]:i>0},t.prototype.toMultiPoint=function(){return d(this.edges.map((function(t){return t.from.coordinates})))},t.prototype.toPolygon=function(){if(this.polygon)return this.polygon;var t=this.edges.map((function(t){return t.from.coordinates}));return t.push(this.edges[0].from.coordinates),this.polygon=l([t])},t.prototype.getEnvelope=function(){return this.envelope?this.envelope:this.envelope=dn(this.toPolygon())},t.findEdgeRingContaining=function(t,e){var n,r,i=t.getEnvelope();return e.forEach((function(e){var o,s,u,l,c,h,p=e.getEnvelope();if((r&&(n=r.getEnvelope()),s=i,u=(o=p).geometry.coordinates[0].map((function(t){return t[0]})),l=o.geometry.coordinates[0].map((function(t){return t[1]})),c=s.geometry.coordinates[0].map((function(t){return t[0]})),h=s.geometry.coordinates[0].map((function(t){return t[1]})),Math.max.apply(null,u)!==Math.max.apply(null,c)||Math.max.apply(null,l)!==Math.max.apply(null,h)||Math.min.apply(null,u)!==Math.min.apply(null,c)||Math.min.apply(null,l)!==Math.min.apply(null,h))&&as(p,i)){for(var f=t.map((function(t){return t.from.coordinates})),g=void 0,d=function(t){e.some((function(e){return n=t,r=e.from.coordinates,n[0]===r[0]&&n[1]===r[1];var n,r}))||(g=t)},y=0,v=f;y<v.length;y++){d(v[y])}g&&e.inside(a(g))&&(r&&!as(n,p)||(r=e))}})),r},t.prototype.inside=function(t){return ye(t,this.toPolygon())},t}();var hs=function(){function t(){this.edges=[],this.nodes={}}return t.fromGeoJson=function(e){!function(t){if(!t)throw new Error("No geojson passed");if("FeatureCollection"!==t.type&&"GeometryCollection"!==t.type&&"MultiLineString"!==t.type&&"LineString"!==t.type&&"Feature"!==t.type)throw new Error("Invalid input type '"+t.type+"'. Geojson must be FeatureCollection, GeometryCollection, LineString, MultiLineString or Feature")}(e);var n=new t;return z(e,(function(t){et(t,"LineString","Graph::fromGeoJson"),T(t,(function(t,e){if(t){var r=n.getNode(t),i=n.getNode(e);n.addEdge(r,i)}return e}))})),n},t.prototype.getNode=function(t){var e=us.buildId(t),n=this.nodes[e];return n||(n=this.nodes[e]=new us(t)),n},t.prototype.addEdge=function(t,e){var n=new ls(t,e),r=n.getSymetric();this.edges.push(n),this.edges.push(r)},t.prototype.deleteDangles=function(){var t=this;Object.keys(this.nodes).map((function(e){return t.nodes[e]})).forEach((function(e){return t._removeIfDangle(e)}))},t.prototype._removeIfDangle=function(t){var e=this;if(t.innerEdges.length<=1){var n=t.getOuterEdges().map((function(t){return t.to}));this.removeNode(t),n.forEach((function(t){return e._removeIfDangle(t)}))}},t.prototype.deleteCutEdges=function(){var t=this;this._computeNextCWEdges(),this._findLabeledEdgeRings(),this.edges.forEach((function(e){e.label===e.symetric.label&&(t.removeEdge(e.symetric),t.removeEdge(e))}))},t.prototype._computeNextCWEdges=function(t){var e=this;void 0===t?Object.keys(this.nodes).forEach((function(t){return e._computeNextCWEdges(e.nodes[t])})):t.getOuterEdges().forEach((function(e,n){t.getOuterEdge((0===n?t.getOuterEdges().length:n)-1).symetric.next=e}))},t.prototype._computeNextCCWEdges=function(t,e){for(var n,r,i=t.getOuterEdges(),o=i.length-1;o>=0;--o){var s=i[o],a=s.symetric,u=void 0,l=void 0;s.label===e&&(u=s),a.label===e&&(l=a),u&&l&&(l&&(r=l),u&&(r&&(r.next=u,r=void 0),n||(n=u)))}r&&(r.next=n)},t.prototype._findLabeledEdgeRings=function(){var t=[],e=0;return this.edges.forEach((function(n){if(!(n.label>=0)){t.push(n);var r=n;do{r.label=e,r=r.next}while(!n.isEqual(r));e++}})),t},t.prototype.getEdgeRings=function(){var t=this;this._computeNextCWEdges(),this.edges.forEach((function(t){t.label=void 0})),this._findLabeledEdgeRings().forEach((function(e){t._findIntersectionNodes(e).forEach((function(n){t._computeNextCCWEdges(n,e.label)}))}));var e=[];return this.edges.forEach((function(n){n.ring||e.push(t._findEdgeRing(n))})),e},t.prototype._findIntersectionNodes=function(t){var e=[],n=t,r=function(){var r=0;n.from.getOuterEdges().forEach((function(e){e.label===t.label&&++r})),r>1&&e.push(n.from),n=n.next};do{r()}while(!t.isEqual(n));return e},t.prototype._findEdgeRing=function(t){var e=t,n=new cs;do{n.push(e),e.ring=n,e=e.next}while(!t.isEqual(e));return n},t.prototype.removeNode=function(t){var e=this;t.getOuterEdges().forEach((function(t){return e.removeEdge(t)})),t.innerEdges.forEach((function(t){return e.removeEdge(t)})),delete this.nodes[t.id]},t.prototype.removeEdge=function(t){this.edges=this.edges.filter((function(e){return!e.isEqual(t)})),t.deleteEdge()},t}();function ps(t,e){var n=!0;return z(t,(function(t){z(e,(function(e){if(!1===n)return!1;n=function(t,e){switch(t.type){case"Point":switch(e.type){case"Point":return n=t.coordinates,r=e.coordinates,!(n[0]===r[0]&&n[1]===r[1]);case"LineString":return!fs(e,t);case"Polygon":return!ye(t,e)}break;case"LineString":switch(e.type){case"Point":return!fs(t,e);case"LineString":return!function(t,e){if(Or(t,e).features.length>0)return!0;return!1}(t,e);case"Polygon":return!gs(e,t)}break;case"Polygon":switch(e.type){case"Point":return!ye(e,t);case"LineString":return!gs(t,e);case"Polygon":return!function(t,e){for(var n=0,r=t.coordinates[0];n<r.length;n++){if(ye(r[n],e))return!0}for(var i=0,o=e.coordinates[0];i<o.length;i++){if(ye(o[i],t))return!0}if(Or(Ii(t),Ii(e)).features.length>0)return!0;return!1}(e,t)}}var n,r;return!1}(t.geometry,e.geometry)}))})),n}function fs(t,e){for(var n=0;n<t.coordinates.length-1;n++)if(ds(t.coordinates[n],t.coordinates[n+1],e.coordinates))return!0;return!1}function gs(t,e){for(var n=0,r=e.coordinates;n<r.length;n++){if(ye(r[n],t))return!0}return Or(e,Ii(t)).features.length>0}function ds(t,e,n){var r=n[0]-t[0],i=n[1]-t[1],o=e[0]-t[0],s=e[1]-t[1];return 0==r*s-i*o&&(Math.abs(o)>=Math.abs(s)?o>0?t[0]<=n[0]&&n[0]<=e[0]:e[0]<=n[0]&&n[0]<=t[0]:s>0?t[1]<=n[1]&&n[1]<=e[1]:e[1]<=n[1]&&n[1]<=t[1])}function ys(t,e){return!(t[0]>e[0])&&(!(t[2]<e[2])&&(!(t[1]>e[1])&&!(t[3]<e[3])))}function vs(t,e){return t[0]===e[0]&&t[1]===e[1]}function _s(t,e){return[(t[0]+e[0])/2,(t[1]+e[1])/2]}function ms(t,e){for(var n=!1,r=!1,i=t.coordinates.length,o=0;o<i&&!n&&!r;){for(var s=0;s<e.coordinates.length-1;s++){var a=!0;0!==s&&s!==e.coordinates.length-2||(a=!1),bs(e.coordinates[s],e.coordinates[s+1],t.coordinates[o],a)?n=!0:r=!0}o++}return n&&r}function xs(t,e){return Or(t,Ni(e)).features.length>0}function Es(t,e){for(var n=!1,r=!1,i=t.coordinates.length,o=0;o<i&&(!n||!r);o++)ye(a(t.coordinates[o]),e)?n=!0:r=!0;return r&&n}function bs(t,e,n,r){var i=n[0]-t[0],o=n[1]-t[1],s=e[0]-t[0],a=e[1]-t[1];return 0==i*a-o*s&&(r?Math.abs(s)>=Math.abs(a)?s>0?t[0]<=n[0]&&n[0]<=e[0]:e[0]<=n[0]&&n[0]<=t[0]:a>0?t[1]<=n[1]&&n[1]<=e[1]:e[1]<=n[1]&&n[1]<=t[1]:Math.abs(s)>=Math.abs(a)?s>0?t[0]<n[0]&&n[0]<e[0]:e[0]<n[0]&&n[0]<t[0]:a>0?t[1]<n[1]&&n[1]<e[1]:e[1]<n[1]&&n[1]<t[1])}var ws=function(t){this.precision=t&&t.precision?t.precision:17,this.direction=!(!t||!t.direction)&&t.direction,this.pseudoNode=!(!t||!t.pseudoNode)&&t.pseudoNode,this.objectComparator=t&&t.objectComparator?t.objectComparator:Ss};function Is(t){return t.coordinates.map((function(e){return{type:t.type.replace("Multi",""),coordinates:e}}))}function Ns(t,e){return t.hasOwnProperty("coordinates")?t.coordinates.length===e.coordinates.length:t.length===e.length}function Ss(t,e){return Fi(t,e,{strict:!0})}ws.prototype.compare=function(t,e){if(t.type!==e.type||!Ns(t,e))return!1;switch(t.type){case"Point":return this.compareCoord(t.coordinates,e.coordinates);case"LineString":return this.compareLine(t.coordinates,e.coordinates,0,!1);case"Polygon":return this.comparePolygon(t,e);case"Feature":return this.compareFeature(t,e);default:if(0===t.type.indexOf("Multi")){var n=this,r=Is(t),i=Is(e);return r.every((function(t){return this.some((function(e){return n.compare(t,e)}))}),i)}}return!1},ws.prototype.compareCoord=function(t,e){if(t.length!==e.length)return!1;for(var n=0;n<t.length;n++)if(t[n].toFixed(this.precision)!==e[n].toFixed(this.precision))return!1;return!0},ws.prototype.compareLine=function(t,e,n,r){if(!Ns(t,e))return!1;var i=this.pseudoNode?t:this.removePseudo(t),o=this.pseudoNode?e:this.removePseudo(e);if(!r||this.compareCoord(i[0],o[0])||(o=this.fixStartIndex(o,i))){var s=this.compareCoord(i[n],o[n]);return this.direction||s?this.comparePath(i,o):!!this.compareCoord(i[n],o[o.length-(1+n)])&&this.comparePath(i.slice().reverse(),o)}},ws.prototype.fixStartIndex=function(t,e){for(var n,r=-1,i=0;i<t.length;i++)if(this.compareCoord(t[i],e[0])){r=i;break}return r>=0&&(n=[].concat(t.slice(r,t.length),t.slice(1,r+1))),n},ws.prototype.comparePath=function(t,e){var n=this;return t.every((function(t,e){return n.compareCoord(t,this[e])}),e)},ws.prototype.comparePolygon=function(t,e){if(this.compareLine(t.coordinates[0],e.coordinates[0],1,!0)){var n=t.coordinates.slice(1,t.coordinates.length),r=e.coordinates.slice(1,e.coordinates.length),i=this;return n.every((function(t){return this.some((function(e){return i.compareLine(t,e,1,!0)}))}),r)}return!1},ws.prototype.compareFeature=function(t,e){return!(t.id!==e.id||!this.objectComparator(t.properties,e.properties)||!this.compareBBox(t,e))&&this.compare(t.geometry,e.geometry)},ws.prototype.compareBBox=function(t,e){return!!(!t.bbox&&!e.bbox||t.bbox&&e.bbox&&this.compareCoord(t.bbox,e.bbox))},ws.prototype.removePseudo=function(t){return t};var Cs=ws;function Ps(t,e){var n=!1;return z(t,(function(t){z(e,(function(e){if(!0===n)return!0;n=!ps(t.geometry,e.geometry)}))})),n}var Ms=Bt((function(t){function e(t,e,n,r){this.dataset=[],this.epsilon=1,this.minPts=2,this.distance=this._euclideanDistance,this.clusters=[],this.noise=[],this._visited=[],this._assigned=[],this._datasetLength=0,this._init(t,e,n,r)}e.prototype.run=function(t,e,n,r){this._init(t,e,n,r);for(var i=0;i<this._datasetLength;i++)if(1!==this._visited[i]){this._visited[i]=1;var o=this._regionQuery(i);if(o.length<this.minPts)this.noise.push(i);else{var s=this.clusters.length;this.clusters.push([]),this._addToCluster(i,s),this._expandCluster(s,o)}}return this.clusters},e.prototype._init=function(t,e,n,r){if(t){if(!(t instanceof Array))throw Error("Dataset must be of type array, "+typeof t+" given");this.dataset=t,this.clusters=[],this.noise=[],this._datasetLength=t.length,this._visited=new Array(this._datasetLength),this._assigned=new Array(this._datasetLength)}e&&(this.epsilon=e),n&&(this.minPts=n),r&&(this.distance=r)},e.prototype._expandCluster=function(t,e){for(var n=0;n<e.length;n++){var r=e[n];if(1!==this._visited[r]){this._visited[r]=1;var i=this._regionQuery(r);i.length>=this.minPts&&(e=this._mergeArrays(e,i))}1!==this._assigned[r]&&this._addToCluster(r,t)}},e.prototype._addToCluster=function(t,e){this.clusters[e].push(t),this._assigned[t]=1},e.prototype._regionQuery=function(t){for(var e=[],n=0;n<this._datasetLength;n++){this.distance(this.dataset[t],this.dataset[n])<this.epsilon&&e.push(n)}return e},e.prototype._mergeArrays=function(t,e){for(var n=e.length,r=0;r<n;r++){var i=e[r];t.indexOf(i)<0&&t.push(i)}return t},e.prototype._euclideanDistance=function(t,e){for(var n=0,r=Math.min(t.length,e.length);r--;)n+=(t[r]-e[r])*(t[r]-e[r]);return Math.sqrt(n)},t.exports&&(t.exports=e)})),Ls=Bt((function(t){function e(t,e,n){this.k=3,this.dataset=[],this.assignments=[],this.centroids=[],this.init(t,e,n)}e.prototype.init=function(t,e,n){this.assignments=[],this.centroids=[],void 0!==t&&(this.dataset=t),void 0!==e&&(this.k=e),void 0!==n&&(this.distance=n)},e.prototype.run=function(t,e){this.init(t,e);for(var n=this.dataset.length,r=0;r<this.k;r++)this.centroids[r]=this.randomCentroid();for(var i=!0;i;){i=this.assign();for(var o=0;o<this.k;o++){for(var s=new Array(c),a=0,u=0;u<c;u++)s[u]=0;for(var l=0;l<n;l++){var c=this.dataset[l].length;if(o===this.assignments[l]){for(u=0;u<c;u++)s[u]+=this.dataset[l][u];a++}}if(a>0){for(u=0;u<c;u++)s[u]/=a;this.centroids[o]=s}else this.centroids[o]=this.randomCentroid(),i=!0}}return this.getClusters()},e.prototype.randomCentroid=function(){var t,e,n=this.dataset.length-1;do{e=Math.round(Math.random()*n),t=this.dataset[e]}while(this.centroids.indexOf(t)>=0);return t},e.prototype.assign=function(){for(var t,e=!1,n=this.dataset.length,r=0;r<n;r++)(t=this.argmin(this.dataset[r],this.centroids,this.distance))!=this.assignments[r]&&(this.assignments[r]=t,e=!0);return e},e.prototype.getClusters=function(){for(var t,e=new Array(this.k),n=0;n<this.assignments.length;n++)void 0===e[t=this.assignments[n]]&&(e[t]=[]),e[t].push(n);return e},e.prototype.argmin=function(t,e,n){for(var r,i=Number.MAX_VALUE,o=0,s=e.length,a=0;a<s;a++)(r=n(t,e[a]))<i&&(i=r,o=a);return o},e.prototype.distance=function(t,e){for(var n=0,r=Math.min(t.length,e.length);r--;){var i=t[r]-e[r];n+=i*i}return Math.sqrt(n)},t.exports&&(t.exports=e)})),Os=Bt((function(t){function e(t,e,n){this._queue=[],this._priorities=[],this._sorting="desc",this._init(t,e,n)}e.prototype.insert=function(t,e){for(var n=this._queue.length,r=n;r--;){var i=this._priorities[r];"desc"===this._sorting?e>i&&(n=r):e<i&&(n=r)}this._insertAt(t,e,n)},e.prototype.remove=function(t){for(var e=this._queue.length;e--;){if(t===this._queue[e]){this._queue.splice(e,1),this._priorities.splice(e,1);break}}},e.prototype.forEach=function(t){this._queue.forEach(t)},e.prototype.getElements=function(){return this._queue},e.prototype.getElementPriority=function(t){return this._priorities[t]},e.prototype.getPriorities=function(){return this._priorities},e.prototype.getElementsWithPriorities=function(){for(var t=[],e=0,n=this._queue.length;e<n;e++)t.push([this._queue[e],this._priorities[e]]);return t},e.prototype._init=function(t,e,n){if(t&&e){if(this._queue=[],this._priorities=[],t.length!==e.length)throw new Error("Arrays must have the same length");for(var r=0;r<t.length;r++)this.insert(t[r],e[r])}n&&(this._sorting=n)},e.prototype._insertAt=function(t,e,n){this._queue.length===n?(this._queue.push(t),this._priorities.push(e)):(this._queue.splice(n,0,t),this._priorities.splice(n,0,e))},t.exports&&(t.exports=e)})),Rs=Bt((function(t){if(t.exports)var e=Os;function n(t,e,n,r){this.epsilon=1,this.minPts=1,this.distance=this._euclideanDistance,this._reachability=[],this._processed=[],this._coreDistance=0,this._orderedList=[],this._init(t,e,n,r)}n.prototype.run=function(t,n,r,i){this._init(t,n,r,i);for(var o=0,s=this.dataset.length;o<s;o++)if(1!==this._processed[o]){this._processed[o]=1,this.clusters.push([o]);var a=this.clusters.length-1;this._orderedList.push(o);var u=new e(null,null,"asc"),l=this._regionQuery(o);void 0!==this._distanceToCore(o)&&(this._updateQueue(o,l,u),this._expandCluster(a,u))}return this.clusters},n.prototype.getReachabilityPlot=function(){for(var t=[],e=0,n=this._orderedList.length;e<n;e++){var r=this._orderedList[e],i=this._reachability[r];t.push([r,i])}return t},n.prototype._init=function(t,e,n,r){if(t){if(!(t instanceof Array))throw Error("Dataset must be of type array, "+typeof t+" given");this.dataset=t,this.clusters=[],this._reachability=new Array(this.dataset.length),this._processed=new Array(this.dataset.length),this._coreDistance=0,this._orderedList=[]}e&&(this.epsilon=e),n&&(this.minPts=n),r&&(this.distance=r)},n.prototype._updateQueue=function(t,e,n){var r=this;this._coreDistance=this._distanceToCore(t),e.forEach((function(e){if(void 0===r._processed[e]){var i=r.distance(r.dataset[t],r.dataset[e]),o=Math.max(r._coreDistance,i);void 0===r._reachability[e]?(r._reachability[e]=o,n.insert(e,o)):o<r._reachability[e]&&(r._reachability[e]=o,n.remove(e),n.insert(e,o))}}))},n.prototype._expandCluster=function(t,e){for(var n=e.getElements(),r=0,i=n.length;r<i;r++){var o=n[r];if(void 0===this._processed[o]){var s=this._regionQuery(o);this._processed[o]=1,this.clusters[t].push(o),this._orderedList.push(o),void 0!==this._distanceToCore(o)&&(this._updateQueue(o,s,e),this._expandCluster(t,e))}}},n.prototype._distanceToCore=function(t){for(var e=this.epsilon,n=0;n<e;n++){if(this._regionQuery(t,n).length>=this.minPts)return n}},n.prototype._regionQuery=function(t,e){e=e||this.epsilon;for(var n=[],r=0,i=this.dataset.length;r<i;r++)this.distance(this.dataset[t],this.dataset[r])<e&&n.push(r);return n},n.prototype._euclideanDistance=function(t,e){for(var n=0,r=Math.min(t.length,e.length);r--;)n+=(t[r]-e[r])*(t[r]-e[r]);return Math.sqrt(n)},t.exports&&(t.exports=n)})),Ts=Bt((function(t){t.exports&&(t.exports={DBSCAN:Ms,KMEANS:Ls,OPTICS:Rs,PriorityQueue:Os})}));var As=function(t,e,n){for(var r=t.length,i=0,o=0;o<r;o++){var s=(t[o]||0)-(e[o]||0);i+=s*s}return n?Math.sqrt(i):i},Ds=As,Fs=function(t,e,n){var r=Math.abs(t-e);return n?r:r*r},ks=As,Gs=function(t,e){for(var n={},r=[],i=e<<2,o=t.length,s=t[0].length>0;r.length<e&&i-- >0;){var a=t[Math.floor(Math.random()*o)],u=s?a.join("_"):""+a;n[u]||(n[u]=!0,r.push(a))}if(r.length<e)throw new Error("Error initializating clusters");return r},qs=function(t,e){var n=t[0].length?Ds:Fs,r=[],i=t.length,o=t[0].length>0,s=t[Math.floor(Math.random()*i)];o&&s.join("_");for(r.push(s);r.length<e;){for(var a=[],u=r.length,l=0,c=[],h=0;h<i;h++){for(var p=1/0,f=0;f<u;f++){var g=n(t[h],r[f]);g<=p&&(p=g)}a[h]=p}for(var d=0;d<i;d++)l+=a[d];for(var y=0;y<i;y++)c[y]={i:y,v:t[y],pr:a[y]/l,cs:0};c.sort((function(t,e){return t.pr-e.pr})),c[0].cs=c[0].pr;for(var v=1;v<i;v++)c[v].cs=c[v-1].cs+c[v].pr;for(var _=Math.random(),m=0;m<i-1&&c[m++].cs<_;);r.push(c[m-1].v)}return r};function Bs(t,e,n){n=n||[];for(var r=0;r<t;r++)n[r]=e;return n}var zs=function(t,e,n,r){var i=[],o=[],s=[],a=[],u=!1,l=r||1e4,c=t.length,h=t[0].length,p=h>0,f=[];if(n)i="kmrand"==n?Gs(t,e):"kmpp"==n?qs(t,e):n;else for(var g={};i.length<e;){var d=Math.floor(Math.random()*c);g[d]||(g[d]=!0,i.push(t[d]))}do{Bs(e,0,f);for(var y=0;y<c;y++){for(var v=1/0,_=0,m=0;m<e;m++){(a=p?ks(t[y],i[m]):Math.abs(t[y]-i[m]))<=v&&(v=a,_=m)}s[y]=_,f[_]++}for(var x=[],E=(o=[],0);E<e;E++)x[E]=p?Bs(h,0,x[E]):0,o[E]=i[E];if(p){for(var b=0;b<e;b++)i[b]=[];for(var w=0;w<c;w++)for(var I=x[s[w]],N=t[w],S=0;S<h;S++)I[S]+=N[S];u=!0;for(var C=0;C<e;C++){for(var P=i[C],M=x[C],L=o[C],O=f[C],R=0;R<h;R++)P[R]=M[R]/O||0;if(u)for(var T=0;T<h;T++)if(L[T]!=P[T]){u=!1;break}}}else{for(var A=0;A<c;A++){x[s[A]]+=t[A]}for(var D=0;D<e;D++)i[D]=x[D]/f[D]||0;u=!0;for(var F=0;F<e;F++)if(o[F]!=i[F]){u=!1;break}}u=u||--l<=0}while(!u);return{it:1e4-l,k:e,idxs:s,centroids:i}};function js(t,e){return b(Bi(t[0],t[1]))===b(Bi(e[0],e[1]))}function Us(t,e){if(t.geometry&&t.geometry.type)return t.geometry.type;if(t.type)return t.type;throw new Error("Invalid GeoJSON object for "+e)}function Vs(t){for(var e=t,n=[];e.parent;)n.unshift(e),e=e.parent;return n}var Xs={search:function(t,e,n,r){t.cleanDirty();var i=(r=r||{}).heuristic||Xs.heuristics.manhattan,o=r.closest||!1,s=new Ws((function(t){return t.f})),a=e;for(e.h=i(e,n),s.push(e);s.size()>0;){var u=s.pop();if(u===n)return Vs(u);u.closed=!0;for(var l=t.neighbors(u),c=0,h=l.length;c<h;++c){var p=l[c];if(!p.closed&&!p.isWall()){var f=u.g+p.getCost(u),g=p.visited;(!g||f<p.g)&&(p.visited=!0,p.parent=u,p.h=p.h||i(p,n),p.g=f,p.f=p.g+p.h,t.markDirty(p),o&&(p.h<a.h||p.h===a.h&&p.g<a.g)&&(a=p),g?s.rescoreElement(p):s.push(p))}}}return o?Vs(a):[]},heuristics:{manhattan:function(t,e){return Math.abs(e.x-t.x)+Math.abs(e.y-t.y)},diagonal:function(t,e){var n=Math.sqrt(2),r=Math.abs(e.x-t.x),i=Math.abs(e.y-t.y);return 1*(r+i)+(n-2)*Math.min(r,i)}},cleanNode:function(t){t.f=0,t.g=0,t.h=0,t.visited=!1,t.closed=!1,t.parent=null}};function Ys(t,e){e=e||{},this.nodes=[],this.diagonal=!!e.diagonal,this.grid=[];for(var n=0;n<t.length;n++){this.grid[n]=[];for(var r=0,i=t[n];r<i.length;r++){var o=new Hs(n,r,i[r]);this.grid[n][r]=o,this.nodes.push(o)}}this.init()}function Hs(t,e,n){this.x=t,this.y=e,this.weight=n}function Ws(t){this.content=[],this.scoreFunction=t}function Js(t,e){for(var n=0;n<e.features.length;n++)if(ye(t,e.features[n]))return!0;return!1}function Zs(t){return function(){return t}}function Ks(t){return t[0]}function Qs(t){return t[1]}function $s(){this._=null}function ta(t){t.U=t.C=t.L=t.R=t.P=t.N=null}function ea(t,e){var n=e,r=e.R,i=n.U;i?i.L===n?i.L=r:i.R=r:t._=r,r.U=i,n.U=r,n.R=r.L,n.R&&(n.R.U=n),r.L=n}function na(t,e){var n=e,r=e.L,i=n.U;i?i.L===n?i.L=r:i.R=r:t._=r,r.U=i,n.U=r,n.L=r.R,n.L&&(n.L.U=n),r.R=n}function ra(t){for(;t.L;)t=t.L;return t}function ia(t,e,n,r){var i=[null,null],o=Pa.push(i)-1;return i.left=t,i.right=e,n&&sa(i,t,e,n),r&&sa(i,e,t,r),Sa[t.index].halfedges.push(o),Sa[e.index].halfedges.push(o),i}function oa(t,e,n){var r=[e,n];return r.left=t,r}function sa(t,e,n,r){t[0]||t[1]?t.left===n?t[1]=r:t[0]=r:(t[0]=r,t.left=e,t.right=n)}function aa(t,e,n,r,i){var o,s=t[0],a=t[1],u=s[0],l=s[1],c=0,h=1,p=a[0]-u,f=a[1]-l;if(o=e-u,p||!(o>0)){if(o/=p,p<0){if(o<c)return;o<h&&(h=o)}else if(p>0){if(o>h)return;o>c&&(c=o)}if(o=r-u,p||!(o<0)){if(o/=p,p<0){if(o>h)return;o>c&&(c=o)}else if(p>0){if(o<c)return;o<h&&(h=o)}if(o=n-l,f||!(o>0)){if(o/=f,f<0){if(o<c)return;o<h&&(h=o)}else if(f>0){if(o>h)return;o>c&&(c=o)}if(o=i-l,f||!(o<0)){if(o/=f,f<0){if(o>h)return;o>c&&(c=o)}else if(f>0){if(o<c)return;o<h&&(h=o)}return!(c>0||h<1)||(c>0&&(t[0]=[u+c*p,l+c*f]),h<1&&(t[1]=[u+h*p,l+h*f]),!0)}}}}}function ua(t,e,n,r,i){var o=t[1];if(o)return!0;var s,a,u=t[0],l=t.left,c=t.right,h=l[0],p=l[1],f=c[0],g=c[1],d=(h+f)/2,y=(p+g)/2;if(g===p){if(d<e||d>=r)return;if(h>f){if(u){if(u[1]>=i)return}else u=[d,n];o=[d,i]}else{if(u){if(u[1]<n)return}else u=[d,i];o=[d,n]}}else if(a=y-(s=(h-f)/(g-p))*d,s<-1||s>1)if(h>f){if(u){if(u[1]>=i)return}else u=[(n-a)/s,n];o=[(i-a)/s,i]}else{if(u){if(u[1]<n)return}else u=[(i-a)/s,i];o=[(n-a)/s,n]}else if(p<g){if(u){if(u[0]>=r)return}else u=[e,s*e+a];o=[r,s*r+a]}else{if(u){if(u[0]<e)return}else u=[r,s*r+a];o=[e,s*e+a]}return t[0]=u,t[1]=o,!0}function la(t,e){var n=t.site,r=e.left,i=e.right;return n===i&&(i=r,r=n),i?Math.atan2(i[1]-r[1],i[0]-r[0]):(n===r?(r=e[1],i=e[0]):(r=e[0],i=e[1]),Math.atan2(r[0]-i[0],i[1]-r[1]))}function ca(t,e){return e[+(e.left!==t.site)]}function ha(t,e){return e[+(e.left===t.site)]}Ys.prototype.init=function(){this.dirtyNodes=[];for(var t=0;t<this.nodes.length;t++)Xs.cleanNode(this.nodes[t])},Ys.prototype.cleanDirty=function(){for(var t=0;t<this.dirtyNodes.length;t++)Xs.cleanNode(this.dirtyNodes[t]);this.dirtyNodes=[]},Ys.prototype.markDirty=function(t){this.dirtyNodes.push(t)},Ys.prototype.neighbors=function(t){var e=[],n=t.x,r=t.y,i=this.grid;return i[n-1]&&i[n-1][r]&&e.push(i[n-1][r]),i[n+1]&&i[n+1][r]&&e.push(i[n+1][r]),i[n]&&i[n][r-1]&&e.push(i[n][r-1]),i[n]&&i[n][r+1]&&e.push(i[n][r+1]),this.diagonal&&(i[n-1]&&i[n-1][r-1]&&e.push(i[n-1][r-1]),i[n+1]&&i[n+1][r-1]&&e.push(i[n+1][r-1]),i[n-1]&&i[n-1][r+1]&&e.push(i[n-1][r+1]),i[n+1]&&i[n+1][r+1]&&e.push(i[n+1][r+1])),e},Ys.prototype.toString=function(){for(var t,e,n,r,i=[],o=this.grid,s=0,a=o.length;s<a;s++){for(t=[],n=0,r=(e=o[s]).length;n<r;n++)t.push(e[n].weight);i.push(t.join(" "))}return i.join("\n")},Hs.prototype.toString=function(){return"["+this.x+" "+this.y+"]"},Hs.prototype.getCost=function(t){return t&&t.x!==this.x&&t.y!==this.y?1.41421*this.weight:this.weight},Hs.prototype.isWall=function(){return 0===this.weight},Ws.prototype={push:function(t){this.content.push(t),this.sinkDown(this.content.length-1)},pop:function(){var t=this.content[0],e=this.content.pop();return this.content.length>0&&(this.content[0]=e,this.bubbleUp(0)),t},remove:function(t){var e=this.content.indexOf(t),n=this.content.pop();e!==this.content.length-1&&(this.content[e]=n,this.scoreFunction(n)<this.scoreFunction(t)?this.sinkDown(e):this.bubbleUp(e))},size:function(){return this.content.length},rescoreElement:function(t){this.sinkDown(this.content.indexOf(t))},sinkDown:function(t){for(var e=this.content[t];t>0;){var n=(t+1>>1)-1,r=this.content[n];if(!(this.scoreFunction(e)<this.scoreFunction(r)))break;this.content[n]=e,this.content[t]=r,t=n}},bubbleUp:function(t){for(var e=this.content.length,n=this.content[t],r=this.scoreFunction(n);;){var i,o=t+1<<1,s=o-1,a=null;if(s<e){var u=this.content[s];(i=this.scoreFunction(u))<r&&(a=s)}if(o<e){var l=this.content[o];this.scoreFunction(l)<(null===a?r:i)&&(a=o)}if(null===a)break;this.content[t]=this.content[a],this.content[a]=n,t=a}}},$s.prototype={constructor:$s,insert:function(t,e){var n,r,i;if(t){if(e.P=t,e.N=t.N,t.N&&(t.N.P=e),t.N=e,t.R){for(t=t.R;t.L;)t=t.L;t.L=e}else t.R=e;n=t}else this._?(t=ra(this._),e.P=null,e.N=t,t.P=t.L=e,n=t):(e.P=e.N=null,this._=e,n=null);for(e.L=e.R=null,e.U=n,e.C=!0,t=e;n&&n.C;)n===(r=n.U).L?(i=r.R)&&i.C?(n.C=i.C=!1,r.C=!0,t=r):(t===n.R&&(ea(this,n),n=(t=n).U),n.C=!1,r.C=!0,na(this,r)):(i=r.L)&&i.C?(n.C=i.C=!1,r.C=!0,t=r):(t===n.L&&(na(this,n),n=(t=n).U),n.C=!1,r.C=!0,ea(this,r)),n=t.U;this._.C=!1},remove:function(t){t.N&&(t.N.P=t.P),t.P&&(t.P.N=t.N),t.N=t.P=null;var e,n,r,i=t.U,o=t.L,s=t.R;if(n=o?s?ra(s):o:s,i?i.L===t?i.L=n:i.R=n:this._=n,o&&s?(r=n.C,n.C=t.C,n.L=o,o.U=n,n!==s?(i=n.U,n.U=t.U,t=n.R,i.L=t,n.R=s,s.U=n):(n.U=i,i=n,t=n.R)):(r=t.C,t=n),t&&(t.U=i),!r)if(t&&t.C)t.C=!1;else{do{if(t===this._)break;if(t===i.L){if((e=i.R).C&&(e.C=!1,i.C=!0,ea(this,i),e=i.R),e.L&&e.L.C||e.R&&e.R.C){e.R&&e.R.C||(e.L.C=!1,e.C=!0,na(this,e),e=i.R),e.C=i.C,i.C=e.R.C=!1,ea(this,i),t=this._;break}}else if((e=i.L).C&&(e.C=!1,i.C=!0,na(this,i),e=i.L),e.L&&e.L.C||e.R&&e.R.C){e.L&&e.L.C||(e.R.C=!1,e.C=!0,ea(this,e),e=i.L),e.C=i.C,i.C=e.L.C=!1,na(this,i),t=this._;break}e.C=!0,t=i,i=i.U}while(!t.C);t&&(t.C=!1)}}};var pa,fa=[];function ga(){ta(this),this.x=this.y=this.arc=this.site=this.cy=null}function da(t){var e=t.P,n=t.N;if(e&&n){var r=e.site,i=t.site,o=n.site;if(r!==o){var s=i[0],a=i[1],u=r[0]-s,l=r[1]-a,c=o[0]-s,h=o[1]-a,p=2*(u*h-l*c);if(!(p>=-La)){var f=u*u+l*l,g=c*c+h*h,d=(h*f-l*g)/p,y=(u*g-c*f)/p,v=fa.pop()||new ga;v.arc=t,v.site=i,v.x=d+s,v.y=(v.cy=y+a)+Math.sqrt(d*d+y*y),t.circle=v;for(var _=null,m=Ca._;m;)if(v.y<m.y||v.y===m.y&&v.x<=m.x){if(!m.L){_=m.P;break}m=m.L}else{if(!m.R){_=m;break}m=m.R}Ca.insert(_,v),_||(pa=v)}}}}function ya(t){var e=t.circle;e&&(e.P||(pa=e.N),Ca.remove(e),fa.push(e),ta(e),t.circle=null)}var va=[];function _a(){ta(this),this.edge=this.site=this.circle=null}function ma(t){var e=va.pop()||new _a;return e.site=t,e}function xa(t){ya(t),Na.remove(t),va.push(t),ta(t)}function Ea(t){var e=t.circle,n=e.x,r=e.cy,i=[n,r],o=t.P,s=t.N,a=[t];xa(t);for(var u=o;u.circle&&Math.abs(n-u.circle.x)<Ma&&Math.abs(r-u.circle.cy)<Ma;)o=u.P,a.unshift(u),xa(u),u=o;a.unshift(u),ya(u);for(var l=s;l.circle&&Math.abs(n-l.circle.x)<Ma&&Math.abs(r-l.circle.cy)<Ma;)s=l.N,a.push(l),xa(l),l=s;a.push(l),ya(l);var c,h=a.length;for(c=1;c<h;++c)l=a[c],u=a[c-1],sa(l.edge,u.site,l.site,i);u=a[0],(l=a[h-1]).edge=ia(u.site,l.site,null,i),da(u),da(l)}function ba(t){for(var e,n,r,i,o=t[0],s=t[1],a=Na._;a;)if((r=wa(a,s)-o)>Ma)a=a.L;else{if(!((i=o-Ia(a,s))>Ma)){r>-Ma?(e=a.P,n=a):i>-Ma?(e=a,n=a.N):e=n=a;break}if(!a.R){e=a;break}a=a.R}!function(t){Sa[t.index]={site:t,halfedges:[]}}(t);var u=ma(t);if(Na.insert(e,u),e||n){if(e===n)return ya(e),n=ma(e.site),Na.insert(u,n),u.edge=n.edge=ia(e.site,u.site),da(e),void da(n);if(n){ya(e),ya(n);var l=e.site,c=l[0],h=l[1],p=t[0]-c,f=t[1]-h,g=n.site,d=g[0]-c,y=g[1]-h,v=2*(p*y-f*d),_=p*p+f*f,m=d*d+y*y,x=[(y*_-f*m)/v+c,(p*m-d*_)/v+h];sa(n.edge,l,g,x),u.edge=ia(l,t,null,x),n.edge=ia(t,g,null,x),da(e),da(n)}else u.edge=ia(e.site,u.site)}}function wa(t,e){var n=t.site,r=n[0],i=n[1],o=i-e;if(!o)return r;var s=t.P;if(!s)return-1/0;var a=(n=s.site)[0],u=n[1],l=u-e;if(!l)return a;var c=a-r,h=1/o-1/l,p=c/l;return h?(-p+Math.sqrt(p*p-2*h*(c*c/(-2*l)-u+l/2+i-o/2)))/h+r:(r+a)/2}function Ia(t,e){var n=t.N;if(n)return wa(n,e);var r=t.site;return r[1]===e?r[0]:1/0}var Na,Sa,Ca,Pa,Ma=1e-6,La=1e-12;function Oa(t,e){return e[1]-t[1]||e[0]-t[0]}function Ra(t,e){var n,r,i,o=t.sort(Oa).pop();for(Pa=[],Sa=new Array(t.length),Na=new $s,Ca=new $s;;)if(i=pa,o&&(!i||o[1]<i.y||o[1]===i.y&&o[0]<i.x))o[0]===n&&o[1]===r||(ba(o),n=o[0],r=o[1]),o=t.pop();else{if(!i)break;Ea(i.arc)}if(function(){for(var t,e,n,r,i=0,o=Sa.length;i<o;++i)if((t=Sa[i])&&(r=(e=t.halfedges).length)){var s=new Array(r),a=new Array(r);for(n=0;n<r;++n)s[n]=n,a[n]=la(t,Pa[e[n]]);for(s.sort((function(t,e){return a[e]-a[t]})),n=0;n<r;++n)a[n]=e[s[n]];for(n=0;n<r;++n)e[n]=a[n]}}(),e){var s=+e[0][0],a=+e[0][1],u=+e[1][0],l=+e[1][1];!function(t,e,n,r){for(var i,o=Pa.length;o--;)ua(i=Pa[o],t,e,n,r)&&aa(i,t,e,n,r)&&(Math.abs(i[0][0]-i[1][0])>Ma||Math.abs(i[0][1]-i[1][1])>Ma)||delete Pa[o]}(s,a,u,l),function(t,e,n,r){var i,o,s,a,u,l,c,h,p,f,g,d,y=Sa.length,v=!0;for(i=0;i<y;++i)if(o=Sa[i]){for(s=o.site,a=(u=o.halfedges).length;a--;)Pa[u[a]]||u.splice(a,1);for(a=0,l=u.length;a<l;)g=(f=ha(o,Pa[u[a]]))[0],d=f[1],h=(c=ca(o,Pa[u[++a%l]]))[0],p=c[1],(Math.abs(g-h)>Ma||Math.abs(d-p)>Ma)&&(u.splice(a,0,Pa.push(oa(s,f,Math.abs(g-t)<Ma&&r-d>Ma?[t,Math.abs(h-t)<Ma?p:r]:Math.abs(d-r)<Ma&&n-g>Ma?[Math.abs(p-r)<Ma?h:n,r]:Math.abs(g-n)<Ma&&d-e>Ma?[n,Math.abs(h-n)<Ma?p:e]:Math.abs(d-e)<Ma&&g-t>Ma?[Math.abs(p-e)<Ma?h:t,e]:null))-1),++l);l&&(v=!1)}if(v){var _,m,x,E=1/0;for(i=0,v=null;i<y;++i)(o=Sa[i])&&(x=(_=(s=o.site)[0]-t)*_+(m=s[1]-e)*m)<E&&(E=x,v=o);if(v){var b=[t,e],w=[t,r],I=[n,r],N=[n,e];v.halfedges.push(Pa.push(oa(s=v.site,b,w))-1,Pa.push(oa(s,w,I))-1,Pa.push(oa(s,I,N))-1,Pa.push(oa(s,N,b))-1)}}for(i=0;i<y;++i)(o=Sa[i])&&(o.halfedges.length||delete Sa[i])}(s,a,u,l)}this.edges=Pa,this.cells=Sa,Na=Ca=Pa=Sa=null}function Ta(t){return(t=t.slice()).push(t[0]),l([t])}function Aa(t,e,n,r){var i=(r=r||{}).steps||64,o=r.units||"kilometers",s=r.angle||0,a=r.pivot||t,u=r.properties||t.properties||{};if(!t)throw new Error("center is required");if(!e)throw new Error("xSemiAxis is required");if(!n)throw new Error("ySemiAxis is required");if(!P(r))throw new Error("options must be an object");if(!C(i))throw new Error("steps must be a number");if(!C(s))throw new Error("angle must be a number");var c=K(t);if("degrees"===o)var h=I(s);else e=ji(t,e,90,{units:o}),n=ji(t,n,0,{units:o}),e=K(e)[0]-c[0],n=K(n)[1]-c[1];for(var p=[],f=0;f<i;f+=1){var g=-360*f/i,d=e*n/Math.sqrt(Math.pow(n,2)+Math.pow(e,2)*Math.pow(Da(g),2)),y=e*n/Math.sqrt(Math.pow(e,2)+Math.pow(n,2)/Math.pow(Da(g),2));if(g<-90&&g>=-270&&(d=-d),g<-180&&g>=-360&&(y=-y),"degrees"===o){var v=d*Math.cos(h)+y*Math.sin(h),_=y*Math.cos(h)-d*Math.sin(h);d=v,y=_}p.push([d+c[0],y+c[1]])}return p.push(p[0]),"degrees"===o?l([p],u):$o(l([p],u),s,{pivot:a})}function Da(t){var e=t*Math.PI/180;return Math.tan(e)}function Fa(t,e){void 0===e&&(e={});var n=0,r=0,i=0;return q(t,(function(t,o,s){var a=e.weight?null==s?void 0:s[e.weight]:void 0;if(!C(a=null==a?1:a))throw new Error("weight value must be a number for feature index "+o);(a=Number(a))>0&&R(t,(function(t){n+=t[0]*a,r+=t[1]*a,i+=a}))})),a([n/i,r/i],e.properties,e)}function ka(t,e,n,r,i){var o=r.tolerance||.001,s=0,u=0,l=0,c=0;if(F(n,(function(e){var n,r=null===(n=e.properties)||void 0===n?void 0:n.weight,i=null==r?1:r;if(!C(i=Number(i)))throw new Error("weight value must be a number");if(i>0){c+=1;var o=i*me(e,t);0===o&&(o=1);var a=i/o;s+=e.geometry.coordinates[0]*a,u+=e.geometry.coordinates[1]*a,l+=a}})),c<1)throw new Error("no features to measure");var h=s/l,p=u/l;return 1===c||0===i||Math.abs(h-e[0])<o&&Math.abs(p-e[1])<o?a([h,p],{medianCandidates:r.medianCandidates}):(r.medianCandidates.push([h,p]),ka([h,p],t,n,r,i-1))}function Ga(t,e){return{x:t[0]-e[0],y:t[1]-e[1]}}function qa(t,e){var n=0,r=0;R(t,(function(i,o,s,a,u){u>n&&(n=u,r=o,e.push([]));var l=o-r,c=t.coordinates[u][l+1],h=i[0],p=i[1],f=c[0],g=c[1];e[u].push([.75*h+.25*f,.75*p+.25*g]),e[u].push([.25*h+.75*f,.25*p+.75*g])}),!0),e.forEach((function(t){t.push(t[0])}))}function Ba(t,e){var n=0,r=0,i=0;R(t,(function(o,s,a,u,l){u>i&&(i=u,r=s,e.push([[]])),l>n&&(n=l,r=s,e[u].push([]));var c=s-r,h=t.coordinates[u][l][c+1],p=o[0],f=o[1],g=h[0],d=h[1];e[u][l].push([.75*p+.25*g,.75*f+.25*d]),e[u][l].push([.25*p+.75*g,.25*f+.75*d])}),!0),e.forEach((function(t){t.forEach((function(t){t.push(t[0])}))}))}function za(t,e,n){void 0===n&&(n=2);var r=K(t),i=K(e),o=r[0]-i[0],s=r[1]-i[1];return 1===n?Math.abs(o)+Math.abs(s):Math.pow(Math.pow(o,n)+Math.pow(s,n),1/n)}function ja(t,e){var n=(e=e||{}).threshold||1e4,r=e.p||2,i=e.binary||!1,o=e.alpha||-1,s=e.standardization||!1,a=[];F(t,(function(t){a.push(En(t))}));for(var u=[],l=0;l<a.length;l++)u[l]=[];for(l=0;l<a.length;l++)for(var c=l;c<a.length;c++){l===c&&(u[l][c]=0);var h=za(a[l],a[c],r);u[l][c]=h,u[c][l]=h}for(l=0;l<a.length;l++)for(c=0;c<a.length;c++){0!==(h=u[l][c])&&(u[l][c]=i?h<=n?1:0:h<=n?Math.pow(h,o):0)}if(s)for(l=0;l<a.length;l++){var p=u[l].reduce((function(t,e){return t+e}),0);for(c=0;c<a.length;c++)u[l][c]=u[l][c]/p}return u}function Ua(t){for(var e=0,n=0,r=t;n<r.length;n++){e+=r[n]}return e/t.length}function Va(t,e){return void 0===e&&(e={}),Ya(t,"mercator",e)}function Xa(t,e){return void 0===e&&(e={}),Ya(t,"wgs84",e)}function Ya(t,e,n){void 0===n&&(n={});var r=(n=n||{}).mutate;if(!t)throw new Error("geojson is required");return Array.isArray(t)&&C(t[0])?t="mercator"===e?Ha(t):Wa(t):(!0!==r&&(t=Ie(t)),R(t,(function(t){var n="mercator"===e?Ha(t):Wa(t);t[0]=n[0],t[1]=n[1]}))),t}function Ha(t){var e=Math.PI/180,n=6378137,r=20037508.342789244,i=[n*(Math.abs(t[0])<=180?t[0]:t[0]-360*function(t){return t<0?-1:t>0?1:0}(t[0]))*e,n*Math.log(Math.tan(.25*Math.PI+.5*t[1]*e))];return i[0]>r&&(i[0]=r),i[0]<-r&&(i[0]=-r),i[1]>r&&(i[1]=r),i[1]<-r&&(i[1]=-r),i}function Wa(t){var e=180/Math.PI,n=6378137;return[t[0]*e/n,(.5*Math.PI-2*Math.atan(Math.exp(-t[1]/n)))*e]}Ra.prototype={constructor:Ra,polygons:function(){var t=this.edges;return this.cells.map((function(e){var n=e.halfedges.map((function(n){return ca(e,t[n])}));return n.data=e.site.data,n}))},triangles:function(){var t=[],e=this.edges;return this.cells.forEach((function(n,r){if(o=(i=n.halfedges).length)for(var i,o,s,a,u,l,c=n.site,h=-1,p=e[i[o-1]],f=p.left===c?p.right:p.left;++h<o;)s=f,f=(p=e[i[h]]).left===c?p.right:p.left,s&&f&&r<s.index&&r<f.index&&(u=s,l=f,((a=c)[0]-l[0])*(u[1]-a[1])-(a[0]-u[0])*(l[1]-a[1])<0)&&t.push([c.data,s.data,f.data])})),t},links:function(){return this.edges.filter((function(t){return t.right})).map((function(t){return{source:t.left.data,target:t.right.data}}))},find:function(t,e,n){for(var r,i,o=this,s=o._found||0,a=o.cells.length;!(i=o.cells[s]);)if(++s>=a)return null;var u=t-i.site[0],l=e-i.site[1],c=u*u+l*l;do{i=o.cells[r=s],s=null,i.halfedges.forEach((function(n){var r=o.edges[n],a=r.left;if(a!==i.site&&a||(a=r.right)){var u=t-a[0],l=e-a[1],h=u*u+l*l;h<c&&(c=h,s=a.index)}}))}while(null!==s);return o._found=r,null==n||c<=n*n?i.site:null}};var Ja=Object.freeze({__proto__:null,toMercator:Va,toWgs84:Xa}),Za=function(){for(var t=0,e=0,n=arguments.length;e<n;e++)t+=arguments[e].length;var r=Array(t),i=0;for(e=0;e<n;e++)for(var o=arguments[e],s=0,a=o.length;s<a;s++,i++)r[i]=o[s];return r};function Ka(t){return Array.isArray(t)?nu(t):t&&t.bbox?nu(t.bbox):[360*eu(),180*eu()]}function Qa(t,e){void 0===e&&(e={}),null==t&&(t=1);for(var n=[],r=0;r<t;r++)n.push(a(Ka(e.bbox)));return f(n)}function $a(t,e){void 0===e&&(e={}),null==t&&(t=1),C(e.num_vertices)&&void 0!==e.num_vertices||(e.num_vertices=10),C(e.max_radial_length)&&void 0!==e.max_radial_length||(e.max_radial_length=10);for(var n=[],r=function(t){var r,i=[],o=Za(Array(e.num_vertices+1)).map(Math.random);o.forEach((function(t,e,n){n[e]=e>0?t+n[e-1]:t})),o.forEach((function(t){t=2*t*Math.PI/o[o.length-1];var n=Math.random();i.push([n*(e.max_radial_length||10)*Math.sin(t),n*(e.max_radial_length||10)*Math.cos(t)])})),i[i.length-1]=i[0],i=i.map((r=Ka(e.bbox),function(t){return[t[0]+r[0],t[1]+r[1]]})),n.push(l([i]))},i=0;i<t;i++)r();return f(n)}function tu(t,e){if(void 0===e&&(e={}),!P(e=e||{}))throw new Error("options is invalid");var n=e.bbox,r=e.num_vertices,i=e.max_length,o=e.max_rotation;null==t&&(t=1),(!C(r)||void 0===r||r<2)&&(r=10),C(i)&&void 0!==i||(i=1e-4),C(o)&&void 0!==o||(o=Math.PI/8);for(var s=[],a=0;a<t;a++){for(var u=[Ka(n)],l=0;l<r-1;l++){var c=(0===l?2*Math.random()*Math.PI:Math.tan((u[l][1]-u[l-1][1])/(u[l][0]-u[l-1][0])))+(Math.random()-.5)*o*2,p=Math.random()*i;u.push([u[l][0]+p*Math.cos(c),u[l][1]+p*Math.sin(c)])}s.push(h(u))}return f(s)}function eu(){return Math.random()-.5}function nu(t){return[Math.random()*(t[2]-t[0])+t[0],Math.random()*(t[3]-t[1])+t[1]]}var ru=Object.freeze({__proto__:null,randomPosition:Ka,randomPoint:Qa,randomPolygon:$a,randomLineString:tu});function iu(t,e){if(!t)throw new Error("geojson is required");if("FeatureCollection"!==t.type)throw new Error("geojson must be a FeatureCollection");if(null==e)throw new Error("filter is required");var n=[];return F(t,(function(t){uu(t.properties,e)&&n.push(t)})),f(n)}function ou(t,e,n){if(!t)throw new Error("geojson is required");if("FeatureCollection"!==t.type)throw new Error("geojson must be a FeatureCollection");if(null==e)throw new Error("property is required");for(var r=au(t,e),i=Object.keys(r),o=0;o<i.length;o++){for(var s=i[o],a=r[s],u=[],l=0;l<a.length;l++)u.push(t.features[a[l]]);n(f(u),s,o)}}function su(t,e,n,r){var i=r;return ou(t,e,(function(t,e,o){i=0===o&&void 0===r?t:n(i,t,e,o)})),i}function au(t,e){var n={};return F(t,(function(t,r){var i=t.properties||{};if(Object.prototype.hasOwnProperty.call(i,String(e))){var o=i[e];Object.prototype.hasOwnProperty.call(n,o)?n[o].push(r):n[o]=[r]}})),n}function uu(t,e){if(void 0===t)return!1;var n=typeof e;if("number"===n||"string"===n)return Object.prototype.hasOwnProperty.call(t,e);if(Array.isArray(e)){for(var r=0;r<e.length;r++)if(!uu(t,e[r]))return!1;return!0}return lu(t,e)}function lu(t,e){for(var n=Object.keys(e),r=0;r<n.length;r++){var i=n[r];if(t[i]!==e[i])return!1}return!0}function cu(t,e){if(!e)return{};if(!e.length)return{};for(var n={},r=0;r<e.length;r++){var i=e[r];Object.prototype.hasOwnProperty.call(t,i)&&(n[i]=t[i])}return n}var hu=Object.freeze({__proto__:null,getCluster:iu,clusterEach:ou,clusterReduce:su,createBins:au,applyFilter:uu,propertiesContainsFilter:lu,filterProperties:cu}),pu=function(t,e){this.next=null,this.key=t,this.data=e,this.left=null,this.right=null};
+/**
+     * splaytree v3.1.0
+     * Fast Splay tree for Node and browser
+     *
+     * @author Alexander Milevski <info@w8r.name>
+     * @license MIT
+     * @preserve
+     */function fu(t,e){return t>e?1:t<e?-1:0}function gu(t,e,n){for(var r=new pu(null,null),i=r,o=r;;){var s=n(t,e.key);if(s<0){if(null===e.left)break;if(n(t,e.left.key)<0){var a=e.left;if(e.left=a.right,a.right=e,null===(e=a).left)break}o.left=e,o=e,e=e.left}else{if(!(s>0))break;if(null===e.right)break;if(n(t,e.right.key)>0){a=e.right;if(e.right=a.left,a.left=e,null===(e=a).right)break}i.right=e,i=e,e=e.right}}return i.right=e.left,o.left=e.right,e.left=r.right,e.right=r.left,e}function du(t,e,n,r){var i=new pu(t,e);if(null===n)return i.left=i.right=null,i;var o=r(t,(n=gu(t,n,r)).key);return o<0?(i.left=n.left,i.right=n,n.left=null):o>=0&&(i.right=n.right,i.left=n,n.right=null),i}function yu(t,e,n){var r=null,i=null;if(e){var o=n((e=gu(t,e,n)).key,t);0===o?(r=e.left,i=e.right):o<0?(i=e.right,e.right=null,r=e):(r=e.left,e.left=null,i=e)}return{left:r,right:i}}function vu(t,e,n,r,i){if(t){r(e+(n?"└── ":"├── ")+i(t)+"\n");var o=e+(n?"    ":"│   ");t.left&&vu(t.left,o,!1,r,i),t.right&&vu(t.right,o,!0,r,i)}}var _u=function(){function t(t){void 0===t&&(t=fu),this._root=null,this._size=0,this._comparator=t}return t.prototype.insert=function(t,e){return this._size++,this._root=du(t,e,this._root,this._comparator)},t.prototype.add=function(t,e){var n=new pu(t,e);null===this._root&&(n.left=n.right=null,this._size++,this._root=n);var r=this._comparator,i=gu(t,this._root,r),o=r(t,i.key);return 0===o?this._root=i:(o<0?(n.left=i.left,n.right=i,i.left=null):o>0&&(n.right=i.right,n.left=i,i.right=null),this._size++,this._root=n),this._root},t.prototype.remove=function(t){this._root=this._remove(t,this._root,this._comparator)},t.prototype._remove=function(t,e,n){var r;return null===e?null:0===n(t,(e=gu(t,e,n)).key)?(null===e.left?r=e.right:(r=gu(t,e.left,n)).right=e.right,this._size--,r):e},t.prototype.pop=function(){var t=this._root;if(t){for(;t.left;)t=t.left;return this._root=gu(t.key,this._root,this._comparator),this._root=this._remove(t.key,this._root,this._comparator),{key:t.key,data:t.data}}return null},t.prototype.findStatic=function(t){for(var e=this._root,n=this._comparator;e;){var r=n(t,e.key);if(0===r)return e;e=r<0?e.left:e.right}return null},t.prototype.find=function(t){return this._root&&(this._root=gu(t,this._root,this._comparator),0!==this._comparator(t,this._root.key))?null:this._root},t.prototype.contains=function(t){for(var e=this._root,n=this._comparator;e;){var r=n(t,e.key);if(0===r)return!0;e=r<0?e.left:e.right}return!1},t.prototype.forEach=function(t,e){for(var n=this._root,r=[],i=!1;!i;)null!==n?(r.push(n),n=n.left):0!==r.length?(n=r.pop(),t.call(e,n),n=n.right):i=!0;return this},t.prototype.range=function(t,e,n,r){for(var i=[],o=this._comparator,s=this._root;0!==i.length||s;)if(s)i.push(s),s=s.left;else{if(o((s=i.pop()).key,e)>0)break;if(o(s.key,t)>=0&&n.call(r,s))return this;s=s.right}return this},t.prototype.keys=function(){var t=[];return this.forEach((function(e){var n=e.key;return t.push(n)})),t},t.prototype.values=function(){var t=[];return this.forEach((function(e){var n=e.data;return t.push(n)})),t},t.prototype.min=function(){return this._root?this.minNode(this._root).key:null},t.prototype.max=function(){return this._root?this.maxNode(this._root).key:null},t.prototype.minNode=function(t){if(void 0===t&&(t=this._root),t)for(;t.left;)t=t.left;return t},t.prototype.maxNode=function(t){if(void 0===t&&(t=this._root),t)for(;t.right;)t=t.right;return t},t.prototype.at=function(t){for(var e=this._root,n=!1,r=0,i=[];!n;)if(e)i.push(e),e=e.left;else if(i.length>0){if(e=i.pop(),r===t)return e;r++,e=e.right}else n=!0;return null},t.prototype.next=function(t){var e=this._root,n=null;if(t.right){for(n=t.right;n.left;)n=n.left;return n}for(var r=this._comparator;e;){var i=r(t.key,e.key);if(0===i)break;i<0?(n=e,e=e.left):e=e.right}return n},t.prototype.prev=function(t){var e=this._root,n=null;if(null!==t.left){for(n=t.left;n.right;)n=n.right;return n}for(var r=this._comparator;e;){var i=r(t.key,e.key);if(0===i)break;i<0?e=e.left:(n=e,e=e.right)}return n},t.prototype.clear=function(){return this._root=null,this._size=0,this},t.prototype.toList=function(){return function(t){var e=t,n=[],r=!1,i=new pu(null,null),o=i;for(;!r;)e?(n.push(e),e=e.left):n.length>0?e=(e=o=o.next=n.pop()).right:r=!0;return o.next=null,i.next}(this._root)},t.prototype.load=function(t,e,n){void 0===e&&(e=[]),void 0===n&&(n=!1);var r=t.length,i=this._comparator;if(n&&Eu(t,e,0,r-1,i),null===this._root)this._root=mu(t,e,0,r),this._size=r;else{var o=function(t,e,n){var r=new pu(null,null),i=r,o=t,s=e;for(;null!==o&&null!==s;)n(o.key,s.key)<0?(i.next=o,o=o.next):(i.next=s,s=s.next),i=i.next;null!==o?i.next=o:null!==s&&(i.next=s);return r.next}(this.toList(),function(t,e){for(var n=new pu(null,null),r=n,i=0;i<t.length;i++)r=r.next=new pu(t[i],e[i]);return r.next=null,n.next}(t,e),i);r=this._size+r,this._root=xu({head:o},0,r)}return this},t.prototype.isEmpty=function(){return null===this._root},Object.defineProperty(t.prototype,"size",{get:function(){return this._size},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"root",{get:function(){return this._root},enumerable:!0,configurable:!0}),t.prototype.toString=function(t){void 0===t&&(t=function(t){return String(t.key)});var e=[];return vu(this._root,"",!0,(function(t){return e.push(t)}),t),e.join("")},t.prototype.update=function(t,e,n){var r=this._comparator,i=yu(t,this._root,r),o=i.left,s=i.right;r(t,e)<0?s=du(e,n,s,r):o=du(e,n,o,r),this._root=function(t,e,n){return null===e?t:(null===t||((e=gu(t.key,e,n)).left=t),e)}(o,s,r)},t.prototype.split=function(t){return yu(t,this._root,this._comparator)},t}();function mu(t,e,n,r){var i=r-n;if(i>0){var o=n+Math.floor(i/2),s=t[o],a=e[o],u=new pu(s,a);return u.left=mu(t,e,n,o),u.right=mu(t,e,o+1,r),u}return null}function xu(t,e,n){var r=n-e;if(r>0){var i=e+Math.floor(r/2),o=xu(t,e,i),s=t.head;return s.left=o,t.head=t.head.next,s.right=xu(t,i+1,n),s}return null}function Eu(t,e,n,r,i){if(!(n>=r)){for(var o=t[n+r>>1],s=n-1,a=r+1;;){do{s++}while(i(t[s],o)<0);do{a--}while(i(t[a],o)>0);if(s>=a)break;var u=t[s];t[s]=t[a],t[a]=u,u=e[s],e[s]=e[a],e[a]=u}Eu(t,e,n,a,i),Eu(t,e,a+1,r,i)}}function bu(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function wu(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}function Iu(t,e,n){return e&&wu(t.prototype,e),n&&wu(t,n),t}var Nu=function(t,e){return t.ll.x<=e.x&&e.x<=t.ur.x&&t.ll.y<=e.y&&e.y<=t.ur.y},Su=function(t,e){if(e.ur.x<t.ll.x||t.ur.x<e.ll.x||e.ur.y<t.ll.y||t.ur.y<e.ll.y)return null;var n=t.ll.x<e.ll.x?e.ll.x:t.ll.x,r=t.ur.x<e.ur.x?t.ur.x:e.ur.x;return{ll:{x:n,y:t.ll.y<e.ll.y?e.ll.y:t.ll.y},ur:{x:r,y:t.ur.y<e.ur.y?t.ur.y:e.ur.y}}},Cu=Number.EPSILON;void 0===Cu&&(Cu=Math.pow(2,-52));var Pu=Cu*Cu,Mu=function(t,e){if(-Cu<t&&t<Cu&&-Cu<e&&e<Cu)return 0;var n=t-e;return n*n<Pu*t*e?0:t<e?-1:1},Lu=function(){function t(){bu(this,t),this.reset()}return Iu(t,[{key:"reset",value:function(){this.xRounder=new Ou,this.yRounder=new Ou}},{key:"round",value:function(t,e){return{x:this.xRounder.round(t),y:this.yRounder.round(e)}}}]),t}(),Ou=function(){function t(){bu(this,t),this.tree=new _u,this.round(0)}return Iu(t,[{key:"round",value:function(t){var e=this.tree.add(t),n=this.tree.prev(e);if(null!==n&&0===Mu(e.key,n.key))return this.tree.remove(t),n.key;var r=this.tree.next(e);return null!==r&&0===Mu(e.key,r.key)?(this.tree.remove(t),r.key):t}}]),t}(),Ru=new Lu,Tu=function(t,e){return t.x*e.y-t.y*e.x},Au=function(t,e){return t.x*e.x+t.y*e.y},Du=function(t,e,n){var r={x:e.x-t.x,y:e.y-t.y},i={x:n.x-t.x,y:n.y-t.y},o=Tu(r,i);return Mu(o,0)},Fu=function(t){return Math.sqrt(Au(t,t))},ku=function(t,e,n){var r={x:e.x-t.x,y:e.y-t.y},i={x:n.x-t.x,y:n.y-t.y};return Au(i,r)/Fu(i)/Fu(r)},Gu=function(t,e,n){return 0===e.y?null:{x:t.x+e.x/e.y*(n-t.y),y:n}},qu=function(t,e,n){return 0===e.x?null:{x:n,y:t.y+e.y/e.x*(n-t.x)}},Bu=function(){function t(e,n){bu(this,t),void 0===e.events?e.events=[this]:e.events.push(this),this.point=e,this.isLeft=n}return Iu(t,null,[{key:"compare",value:function(e,n){var r=t.comparePoints(e.point,n.point);return 0!==r?r:(e.point!==n.point&&e.link(n),e.isLeft!==n.isLeft?e.isLeft?1:-1:ju.compare(e.segment,n.segment))}},{key:"comparePoints",value:function(t,e){return t.x<e.x?-1:t.x>e.x?1:t.y<e.y?-1:t.y>e.y?1:0}}]),Iu(t,[{key:"link",value:function(t){if(t.point===this.point)throw new Error("Tried to link already linked events");for(var e=t.point.events,n=0,r=e.length;n<r;n++){var i=e[n];this.point.events.push(i),i.point=this.point}this.checkForConsuming()}},{key:"checkForConsuming",value:function(){for(var t=this.point.events.length,e=0;e<t;e++){var n=this.point.events[e];if(void 0===n.segment.consumedBy)for(var r=e+1;r<t;r++){var i=this.point.events[r];void 0===i.consumedBy&&(n.otherSE.point.events===i.otherSE.point.events&&n.segment.consume(i.segment))}}}},{key:"getAvailableLinkedEvents",value:function(){for(var t=[],e=0,n=this.point.events.length;e<n;e++){var r=this.point.events[e];r!==this&&!r.segment.ringOut&&r.segment.isInResult()&&t.push(r)}return t}},{key:"getLeftmostComparator",value:function(t){var e=this,n=new Map,r=function(r){var i,o,s,a,u,l=r.otherSE;n.set(r,{sine:(i=e.point,o=t.point,s=l.point,a={x:o.x-i.x,y:o.y-i.y},u={x:s.x-i.x,y:s.y-i.y},Tu(u,a)/Fu(u)/Fu(a)),cosine:ku(e.point,t.point,l.point)})};return function(t,e){n.has(t)||r(t),n.has(e)||r(e);var i=n.get(t),o=i.sine,s=i.cosine,a=n.get(e),u=a.sine,l=a.cosine;return o>=0&&u>=0?s<l?1:s>l?-1:0:o<0&&u<0?s<l?-1:s>l?1:0:u<o?-1:u>o?1:0}}}]),t}(),zu=0,ju=function(){function t(e,n,r,i){bu(this,t),this.id=++zu,this.leftSE=e,e.segment=this,e.otherSE=n,this.rightSE=n,n.segment=this,n.otherSE=e,this.rings=r,this.windings=i}return Iu(t,null,[{key:"compare",value:function(t,e){var n=t.leftSE.point.x,r=e.leftSE.point.x,i=t.rightSE.point.x,o=e.rightSE.point.x;if(o<n)return 1;if(i<r)return-1;var s=t.leftSE.point.y,a=e.leftSE.point.y,u=t.rightSE.point.y,l=e.rightSE.point.y;if(n<r){if(a<s&&a<u)return 1;if(a>s&&a>u)return-1;var c=t.comparePoint(e.leftSE.point);if(c<0)return 1;if(c>0)return-1;var h=e.comparePoint(t.rightSE.point);return 0!==h?h:-1}if(n>r){if(s<a&&s<l)return-1;if(s>a&&s>l)return 1;var p=e.comparePoint(t.leftSE.point);if(0!==p)return p;var f=t.comparePoint(e.rightSE.point);return f<0?1:f>0?-1:1}if(s<a)return-1;if(s>a)return 1;if(i<o){var g=e.comparePoint(t.rightSE.point);if(0!==g)return g}if(i>o){var d=t.comparePoint(e.rightSE.point);if(d<0)return 1;if(d>0)return-1}if(i!==o){var y=u-s,v=i-n,_=l-a,m=o-r;if(y>v&&_<m)return 1;if(y<v&&_>m)return-1}return i>o?1:i<o||u<l?-1:u>l?1:t.id<e.id?-1:t.id>e.id?1:0}}]),Iu(t,[{key:"replaceRightSE",value:function(t){this.rightSE=t,this.rightSE.segment=this,this.rightSE.otherSE=this.leftSE,this.leftSE.otherSE=this.rightSE}},{key:"bbox",value:function(){var t=this.leftSE.point.y,e=this.rightSE.point.y;return{ll:{x:this.leftSE.point.x,y:t<e?t:e},ur:{x:this.rightSE.point.x,y:t>e?t:e}}}},{key:"vector",value:function(){return{x:this.rightSE.point.x-this.leftSE.point.x,y:this.rightSE.point.y-this.leftSE.point.y}}},{key:"isAnEndpoint",value:function(t){return t.x===this.leftSE.point.x&&t.y===this.leftSE.point.y||t.x===this.rightSE.point.x&&t.y===this.rightSE.point.y}},{key:"comparePoint",value:function(t){if(this.isAnEndpoint(t))return 0;var e=this.leftSE.point,n=this.rightSE.point,r=this.vector();if(e.x===n.x)return t.x===e.x?0:t.x<e.x?1:-1;var i=(t.y-e.y)/r.y,o=e.x+i*r.x;if(t.x===o)return 0;var s=(t.x-e.x)/r.x,a=e.y+s*r.y;return t.y===a?0:t.y<a?-1:1}},{key:"getIntersection",value:function(t){var e=this.bbox(),n=t.bbox(),r=Su(e,n);if(null===r)return null;var i=this.leftSE.point,o=this.rightSE.point,s=t.leftSE.point,a=t.rightSE.point,u=Nu(e,s)&&0===this.comparePoint(s),l=Nu(n,i)&&0===t.comparePoint(i),c=Nu(e,a)&&0===this.comparePoint(a),h=Nu(n,o)&&0===t.comparePoint(o);if(l&&u)return h&&!c?o:!h&&c?a:null;if(l)return c&&i.x===a.x&&i.y===a.y?null:i;if(u)return h&&o.x===s.x&&o.y===s.y?null:s;if(h&&c)return null;if(h)return o;if(c)return a;var p=function(t,e,n,r){if(0===e.x)return qu(n,r,t.x);if(0===r.x)return qu(t,e,n.x);if(0===e.y)return Gu(n,r,t.y);if(0===r.y)return Gu(t,e,n.y);var i=Tu(e,r);if(0==i)return null;var o={x:n.x-t.x,y:n.y-t.y},s=Tu(o,e)/i,a=Tu(o,r)/i;return{x:(t.x+a*e.x+(n.x+s*r.x))/2,y:(t.y+a*e.y+(n.y+s*r.y))/2}}(i,this.vector(),s,t.vector());return null===p?null:Nu(r,p)?Ru.round(p.x,p.y):null}},{key:"split",value:function(e){var n=[],r=void 0!==e.events,i=new Bu(e,!0),o=new Bu(e,!1),s=this.rightSE;this.replaceRightSE(o),n.push(o),n.push(i);var a=new t(i,s,this.rings.slice(),this.windings.slice());return Bu.comparePoints(a.leftSE.point,a.rightSE.point)>0&&a.swapEvents(),Bu.comparePoints(this.leftSE.point,this.rightSE.point)>0&&this.swapEvents(),r&&(i.checkForConsuming(),o.checkForConsuming()),n}},{key:"swapEvents",value:function(){var t=this.rightSE;this.rightSE=this.leftSE,this.leftSE=t,this.leftSE.isLeft=!0,this.rightSE.isLeft=!1;for(var e=0,n=this.windings.length;e<n;e++)this.windings[e]*=-1}},{key:"consume",value:function(e){for(var n=this,r=e;n.consumedBy;)n=n.consumedBy;for(;r.consumedBy;)r=r.consumedBy;var i=t.compare(n,r);if(0!==i){if(i>0){var o=n;n=r,r=o}if(n.prev===r){var s=n;n=r,r=s}for(var a=0,u=r.rings.length;a<u;a++){var l=r.rings[a],c=r.windings[a],h=n.rings.indexOf(l);-1===h?(n.rings.push(l),n.windings.push(c)):n.windings[h]+=c}r.rings=null,r.windings=null,r.consumedBy=n,r.leftSE.consumedBy=n.leftSE,r.rightSE.consumedBy=n.rightSE}}},{key:"prevInResult",value:function(){return void 0!==this._prevInResult||(this.prev?this.prev.isInResult()?this._prevInResult=this.prev:this._prevInResult=this.prev.prevInResult():this._prevInResult=null),this._prevInResult}},{key:"beforeState",value:function(){if(void 0!==this._beforeState)return this._beforeState;if(this.prev){var t=this.prev.consumedBy||this.prev;this._beforeState=t.afterState()}else this._beforeState={rings:[],windings:[],multiPolys:[]};return this._beforeState}},{key:"afterState",value:function(){if(void 0!==this._afterState)return this._afterState;var t=this.beforeState();this._afterState={rings:t.rings.slice(0),windings:t.windings.slice(0),multiPolys:[]};for(var e=this._afterState.rings,n=this._afterState.windings,r=this._afterState.multiPolys,i=0,o=this.rings.length;i<o;i++){var s=this.rings[i],a=this.windings[i],u=e.indexOf(s);-1===u?(e.push(s),n.push(a)):n[u]+=a}for(var l=[],c=[],h=0,p=e.length;h<p;h++)if(0!==n[h]){var f=e[h],g=f.poly;if(-1===c.indexOf(g))if(f.isExterior)l.push(g);else{-1===c.indexOf(g)&&c.push(g);var d=l.indexOf(f.poly);-1!==d&&l.splice(d,1)}}for(var y=0,v=l.length;y<v;y++){var _=l[y].multiPoly;-1===r.indexOf(_)&&r.push(_)}return this._afterState}},{key:"isInResult",value:function(){if(this.consumedBy)return!1;if(void 0!==this._isInResult)return this._isInResult;var t=this.beforeState().multiPolys,e=this.afterState().multiPolys;switch(Qu.type){case"union":var n=0===t.length,r=0===e.length;this._isInResult=n!==r;break;case"intersection":var i,o;t.length<e.length?(i=t.length,o=e.length):(i=e.length,o=t.length),this._isInResult=o===Qu.numMultiPolys&&i<o;break;case"xor":var s=Math.abs(t.length-e.length);this._isInResult=s%2==1;break;case"difference":var a=function(t){return 1===t.length&&t[0].isSubject};this._isInResult=a(t)!==a(e);break;default:throw new Error("Unrecognized operation type found ".concat(Qu.type))}return this._isInResult}}],[{key:"fromRing",value:function(e,n,r){var i,o,s,a=Bu.comparePoints(e,n);if(a<0)i=e,o=n,s=1;else{if(!(a>0))throw new Error("Tried to create degenerate segment at [".concat(e.x,", ").concat(e.y,"]"));i=n,o=e,s=-1}return new t(new Bu(i,!0),new Bu(o,!1),[r],[s])}}]),t}(),Uu=function(){function t(e,n,r){if(bu(this,t),!Array.isArray(e)||0===e.length)throw new Error("Input geometry is not a valid Polygon or MultiPolygon");if(this.poly=n,this.isExterior=r,this.segments=[],"number"!=typeof e[0][0]||"number"!=typeof e[0][1])throw new Error("Input geometry is not a valid Polygon or MultiPolygon");var i=Ru.round(e[0][0],e[0][1]);this.bbox={ll:{x:i.x,y:i.y},ur:{x:i.x,y:i.y}};for(var o=i,s=1,a=e.length;s<a;s++){if("number"!=typeof e[s][0]||"number"!=typeof e[s][1])throw new Error("Input geometry is not a valid Polygon or MultiPolygon");var u=Ru.round(e[s][0],e[s][1]);u.x===o.x&&u.y===o.y||(this.segments.push(ju.fromRing(o,u,this)),u.x<this.bbox.ll.x&&(this.bbox.ll.x=u.x),u.y<this.bbox.ll.y&&(this.bbox.ll.y=u.y),u.x>this.bbox.ur.x&&(this.bbox.ur.x=u.x),u.y>this.bbox.ur.y&&(this.bbox.ur.y=u.y),o=u)}i.x===o.x&&i.y===o.y||this.segments.push(ju.fromRing(o,i,this))}return Iu(t,[{key:"getSweepEvents",value:function(){for(var t=[],e=0,n=this.segments.length;e<n;e++){var r=this.segments[e];t.push(r.leftSE),t.push(r.rightSE)}return t}}]),t}(),Vu=function(){function t(e,n){if(bu(this,t),!Array.isArray(e))throw new Error("Input geometry is not a valid Polygon or MultiPolygon");this.exteriorRing=new Uu(e[0],this,!0),this.bbox={ll:{x:this.exteriorRing.bbox.ll.x,y:this.exteriorRing.bbox.ll.y},ur:{x:this.exteriorRing.bbox.ur.x,y:this.exteriorRing.bbox.ur.y}},this.interiorRings=[];for(var r=1,i=e.length;r<i;r++){var o=new Uu(e[r],this,!1);o.bbox.ll.x<this.bbox.ll.x&&(this.bbox.ll.x=o.bbox.ll.x),o.bbox.ll.y<this.bbox.ll.y&&(this.bbox.ll.y=o.bbox.ll.y),o.bbox.ur.x>this.bbox.ur.x&&(this.bbox.ur.x=o.bbox.ur.x),o.bbox.ur.y>this.bbox.ur.y&&(this.bbox.ur.y=o.bbox.ur.y),this.interiorRings.push(o)}this.multiPoly=n}return Iu(t,[{key:"getSweepEvents",value:function(){for(var t=this.exteriorRing.getSweepEvents(),e=0,n=this.interiorRings.length;e<n;e++)for(var r=this.interiorRings[e].getSweepEvents(),i=0,o=r.length;i<o;i++)t.push(r[i]);return t}}]),t}(),Xu=function(){function t(e,n){if(bu(this,t),!Array.isArray(e))throw new Error("Input geometry is not a valid Polygon or MultiPolygon");try{"number"==typeof e[0][0][0]&&(e=[e])}catch(t){}this.polys=[],this.bbox={ll:{x:Number.POSITIVE_INFINITY,y:Number.POSITIVE_INFINITY},ur:{x:Number.NEGATIVE_INFINITY,y:Number.NEGATIVE_INFINITY}};for(var r=0,i=e.length;r<i;r++){var o=new Vu(e[r],this);o.bbox.ll.x<this.bbox.ll.x&&(this.bbox.ll.x=o.bbox.ll.x),o.bbox.ll.y<this.bbox.ll.y&&(this.bbox.ll.y=o.bbox.ll.y),o.bbox.ur.x>this.bbox.ur.x&&(this.bbox.ur.x=o.bbox.ur.x),o.bbox.ur.y>this.bbox.ur.y&&(this.bbox.ur.y=o.bbox.ur.y),this.polys.push(o)}this.isSubject=n}return Iu(t,[{key:"getSweepEvents",value:function(){for(var t=[],e=0,n=this.polys.length;e<n;e++)for(var r=this.polys[e].getSweepEvents(),i=0,o=r.length;i<o;i++)t.push(r[i]);return t}}]),t}(),Yu=function(){function t(e){bu(this,t),this.events=e;for(var n=0,r=e.length;n<r;n++)e[n].segment.ringOut=this;this.poly=null}return Iu(t,null,[{key:"factory",value:function(e){for(var n=[],r=0,i=e.length;r<i;r++){var o=e[r];if(o.isInResult()&&!o.ringOut){for(var s=null,a=o.leftSE,u=o.rightSE,l=[a],c=a.point,h=[];s=a,a=u,l.push(a),a.point!==c;)for(;;){var p=a.getAvailableLinkedEvents();if(0===p.length){var f=l[0].point,g=l[l.length-1].point;throw new Error("Unable to complete output ring starting at [".concat(f.x,",")+" ".concat(f.y,"]. Last matching segment found ends at")+" [".concat(g.x,", ").concat(g.y,"]."))}if(1===p.length){u=p[0].otherSE;break}for(var d=null,y=0,v=h.length;y<v;y++)if(h[y].point===a.point){d=y;break}if(null===d){h.push({index:l.length,point:a.point});var _=a.getLeftmostComparator(s);u=p.sort(_)[0].otherSE;break}var m=h.splice(d)[0],x=l.splice(m.index);x.unshift(x[0].otherSE),n.push(new t(x.reverse()))}n.push(new t(l))}}return n}}]),Iu(t,[{key:"getGeom",value:function(){for(var t=this.events[0].point,e=[t],n=1,r=this.events.length-1;n<r;n++){var i=this.events[n].point,o=this.events[n+1].point;0!==Du(i,t,o)&&(e.push(i),t=i)}if(1===e.length)return null;var s=e[0],a=e[1];0===Du(s,t,a)&&e.shift(),e.push(e[0]);for(var u=this.isExteriorRing()?1:-1,l=this.isExteriorRing()?0:e.length-1,c=this.isExteriorRing()?e.length:-1,h=[],p=l;p!=c;p+=u)h.push([e[p].x,e[p].y]);return h}},{key:"isExteriorRing",value:function(){if(void 0===this._isExteriorRing){var t=this.enclosingRing();this._isExteriorRing=!t||!t.isExteriorRing()}return this._isExteriorRing}},{key:"enclosingRing",value:function(){return void 0===this._enclosingRing&&(this._enclosingRing=this._calcEnclosingRing()),this._enclosingRing}},{key:"_calcEnclosingRing",value:function(){for(var t=this.events[0],e=1,n=this.events.length;e<n;e++){var r=this.events[e];Bu.compare(t,r)>0&&(t=r)}for(var i=t.segment.prevInResult(),o=i?i.prevInResult():null;;){if(!i)return null;if(!o)return i.ringOut;if(o.ringOut!==i.ringOut)return o.ringOut.enclosingRing()!==i.ringOut?i.ringOut:i.ringOut.enclosingRing();i=o.prevInResult(),o=i?i.prevInResult():null}}}]),t}(),Hu=function(){function t(e){bu(this,t),this.exteriorRing=e,e.poly=this,this.interiorRings=[]}return Iu(t,[{key:"addInterior",value:function(t){this.interiorRings.push(t),t.poly=this}},{key:"getGeom",value:function(){var t=[this.exteriorRing.getGeom()];if(null===t[0])return null;for(var e=0,n=this.interiorRings.length;e<n;e++){var r=this.interiorRings[e].getGeom();null!==r&&t.push(r)}return t}}]),t}(),Wu=function(){function t(e){bu(this,t),this.rings=e,this.polys=this._composePolys(e)}return Iu(t,[{key:"getGeom",value:function(){for(var t=[],e=0,n=this.polys.length;e<n;e++){var r=this.polys[e].getGeom();null!==r&&t.push(r)}return t}},{key:"_composePolys",value:function(t){for(var e=[],n=0,r=t.length;n<r;n++){var i=t[n];if(!i.poly)if(i.isExteriorRing())e.push(new Hu(i));else{var o=i.enclosingRing();o.poly||e.push(new Hu(o)),o.poly.addInterior(i)}}return e}}]),t}(),Ju=function(){function t(e){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:ju.compare;bu(this,t),this.queue=e,this.tree=new _u(n),this.segments=[]}return Iu(t,[{key:"process",value:function(t){var e=t.segment,n=[];if(t.consumedBy)return t.isLeft?this.queue.remove(t.otherSE):this.tree.remove(e),n;var r=t.isLeft?this.tree.insert(e):this.tree.find(e);if(!r)throw new Error("Unable to find segment #".concat(e.id," ")+"[".concat(e.leftSE.point.x,", ").concat(e.leftSE.point.y,"] -> ")+"[".concat(e.rightSE.point.x,", ").concat(e.rightSE.point.y,"] ")+"in SweepLine tree. Please submit a bug report.");for(var i=r,o=r,s=void 0,a=void 0;void 0===s;)null===(i=this.tree.prev(i))?s=null:void 0===i.key.consumedBy&&(s=i.key);for(;void 0===a;)null===(o=this.tree.next(o))?a=null:void 0===o.key.consumedBy&&(a=o.key);if(t.isLeft){var u=null;if(s){var l=s.getIntersection(e);if(null!==l&&(e.isAnEndpoint(l)||(u=l),!s.isAnEndpoint(l)))for(var c=this._splitSafely(s,l),h=0,p=c.length;h<p;h++)n.push(c[h])}var f=null;if(a){var g=a.getIntersection(e);if(null!==g&&(e.isAnEndpoint(g)||(f=g),!a.isAnEndpoint(g)))for(var d=this._splitSafely(a,g),y=0,v=d.length;y<v;y++)n.push(d[y])}if(null!==u||null!==f){var _=null;if(null===u)_=f;else if(null===f)_=u;else{_=Bu.comparePoints(u,f)<=0?u:f}this.queue.remove(e.rightSE),n.push(e.rightSE);for(var m=e.split(_),x=0,E=m.length;x<E;x++)n.push(m[x])}n.length>0?(this.tree.remove(e),n.push(t)):(this.segments.push(e),e.prev=s)}else{if(s&&a){var b=s.getIntersection(a);if(null!==b){if(!s.isAnEndpoint(b))for(var w=this._splitSafely(s,b),I=0,N=w.length;I<N;I++)n.push(w[I]);if(!a.isAnEndpoint(b))for(var S=this._splitSafely(a,b),C=0,P=S.length;C<P;C++)n.push(S[C])}}this.tree.remove(e)}return n}},{key:"_splitSafely",value:function(t,e){this.tree.remove(t);var n=t.rightSE;this.queue.remove(n);var r=t.split(e);return r.push(n),void 0===t.consumedBy&&this.tree.insert(t),r}}]),t}(),Zu="undefined"!=typeof process&&process.env.POLYGON_CLIPPING_MAX_QUEUE_SIZE||1e6,Ku="undefined"!=typeof process&&process.env.POLYGON_CLIPPING_MAX_SWEEPLINE_SEGMENTS||1e6,Qu=new(function(){function t(){bu(this,t)}return Iu(t,[{key:"run",value:function(t,e,n){Qu.type=t,Ru.reset();for(var r=[new Xu(e,!0)],i=0,o=n.length;i<o;i++)r.push(new Xu(n[i],!1));if(Qu.numMultiPolys=r.length,"difference"===Qu.type)for(var s=r[0],a=1;a<r.length;)null!==Su(r[a].bbox,s.bbox)?a++:r.splice(a,1);if("intersection"===Qu.type)for(var u=0,l=r.length;u<l;u++)for(var c=r[u],h=u+1,p=r.length;h<p;h++)if(null===Su(c.bbox,r[h].bbox))return[];for(var f=new _u(Bu.compare),g=0,d=r.length;g<d;g++)for(var y=r[g].getSweepEvents(),v=0,_=y.length;v<_;v++)if(f.insert(y[v]),f.size>Zu)throw new Error("Infinite loop when putting segment endpoints in a priority queue (queue size too big). Please file a bug report.");for(var m=new Ju(f),x=f.size,E=f.pop();E;){var b=E.key;if(f.size===x){var w=b.segment;throw new Error("Unable to pop() ".concat(b.isLeft?"left":"right"," SweepEvent ")+"[".concat(b.point.x,", ").concat(b.point.y,"] from segment #").concat(w.id," ")+"[".concat(w.leftSE.point.x,", ").concat(w.leftSE.point.y,"] -> ")+"[".concat(w.rightSE.point.x,", ").concat(w.rightSE.point.y,"] from queue. ")+"Please file a bug report.")}if(f.size>Zu)throw new Error("Infinite loop when passing sweep line over endpoints (queue size too big). Please file a bug report.");if(m.segments.length>Ku)throw new Error("Infinite loop when passing sweep line over endpoints (too many sweep line segments). Please file a bug report.");for(var I=m.process(b),N=0,S=I.length;N<S;N++){var C=I[N];void 0===C.consumedBy&&f.insert(C)}x=f.size,E=f.pop()}Ru.reset();var P=Yu.factory(m.segments);return new Wu(P).getGeom()}}]),t}()),$u={union:function(t){for(var e=arguments.length,n=new Array(e>1?e-1:0),r=1;r<e;r++)n[r-1]=arguments[r];return Qu.run("union",t,n)},intersection:function(t){for(var e=arguments.length,n=new Array(e>1?e-1:0),r=1;r<e;r++)n[r-1]=arguments[r];return Qu.run("intersection",t,n)},xor:function(t){for(var e=arguments.length,n=new Array(e>1?e-1:0),r=1;r<e;r++)n[r-1]=arguments[r];return Qu.run("xor",t,n)},difference:function(t){for(var e=arguments.length,n=new Array(e>1?e-1:0),r=1;r<e;r++)n[r-1]=arguments[r];return Qu.run("difference",t,n)}};"fill"in Array.prototype||Object.defineProperty(Array.prototype,"fill",{configurable:!0,value:function(t){if(null==this)throw new TypeError(this+" is not an object");var e=Object(this),n=Math.max(Math.min(e.length,9007199254740991),0)||0,r=1 in arguments&&parseInt(Number(arguments[1]),10)||0;r=r<0?Math.max(n+r,0):Math.min(r,n);var i=2 in arguments&&void 0!==arguments[2]?parseInt(Number(arguments[2]),10)||0:n;for(i=i<0?Math.max(n+arguments[2],0):Math.min(i,n);r<i;)e[r]=t,++r;return e},writable:!0}),Number.isFinite=Number.isFinite||function(t){return"number"==typeof t&&isFinite(t)},Number.isInteger=Number.isInteger||function(t){return"number"==typeof t&&isFinite(t)&&Math.floor(t)===t},Number.parseFloat=Number.parseFloat||parseFloat,Number.isNaN=Number.isNaN||function(t){return t!=t},Math.trunc=Math.trunc||function(t){return t<0?Math.ceil(t):Math.floor(t)};var tl=function(){};tl.prototype.interfaces_=function(){return[]},tl.prototype.getClass=function(){return tl},tl.prototype.equalsWithTolerance=function(t,e,n){return Math.abs(t-e)<=n};var el=function(t){function e(e){t.call(this,e),this.name="IllegalArgumentException",this.message=e,this.stack=(new t).stack}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e}(Error),nl=function(){},rl={MAX_VALUE:{configurable:!0}};nl.isNaN=function(t){return Number.isNaN(t)},nl.doubleToLongBits=function(t){return t},nl.longBitsToDouble=function(t){return t},nl.isInfinite=function(t){return!Number.isFinite(t)},rl.MAX_VALUE.get=function(){return Number.MAX_VALUE},Object.defineProperties(nl,rl);var il=function(){},ol=function(){},sl=function(){};function al(){}var ul=function t(){if(this.x=null,this.y=null,this.z=null,0===arguments.length)this.x=0,this.y=0,this.z=t.NULL_ORDINATE;else if(1===arguments.length){var e=arguments[0];this.x=e.x,this.y=e.y,this.z=e.z}else 2===arguments.length?(this.x=arguments[0],this.y=arguments[1],this.z=t.NULL_ORDINATE):3===arguments.length&&(this.x=arguments[0],this.y=arguments[1],this.z=arguments[2])},ll={DimensionalComparator:{configurable:!0},serialVersionUID:{configurable:!0},NULL_ORDINATE:{configurable:!0},X:{configurable:!0},Y:{configurable:!0},Z:{configurable:!0}};ul.prototype.setOrdinate=function(t,e){switch(t){case ul.X:this.x=e;break;case ul.Y:this.y=e;break;case ul.Z:this.z=e;break;default:throw new el("Invalid ordinate index: "+t)}},ul.prototype.equals2D=function(){if(1===arguments.length){var t=arguments[0];return this.x===t.x&&this.y===t.y}if(2===arguments.length){var e=arguments[0],n=arguments[1];return!!tl.equalsWithTolerance(this.x,e.x,n)&&!!tl.equalsWithTolerance(this.y,e.y,n)}},ul.prototype.getOrdinate=function(t){switch(t){case ul.X:return this.x;case ul.Y:return this.y;case ul.Z:return this.z}throw new el("Invalid ordinate index: "+t)},ul.prototype.equals3D=function(t){return this.x===t.x&&this.y===t.y&&(this.z===t.z||nl.isNaN(this.z))&&nl.isNaN(t.z)},ul.prototype.equals=function(t){return t instanceof ul&&this.equals2D(t)},ul.prototype.equalInZ=function(t,e){return tl.equalsWithTolerance(this.z,t.z,e)},ul.prototype.compareTo=function(t){var e=t;return this.x<e.x?-1:this.x>e.x?1:this.y<e.y?-1:this.y>e.y?1:0},ul.prototype.clone=function(){},ul.prototype.copy=function(){return new ul(this)},ul.prototype.toString=function(){return"("+this.x+", "+this.y+", "+this.z+")"},ul.prototype.distance3D=function(t){var e=this.x-t.x,n=this.y-t.y,r=this.z-t.z;return Math.sqrt(e*e+n*n+r*r)},ul.prototype.distance=function(t){var e=this.x-t.x,n=this.y-t.y;return Math.sqrt(e*e+n*n)},ul.prototype.hashCode=function(){var t=17;return t=37*(t=37*t+ul.hashCode(this.x))+ul.hashCode(this.y)},ul.prototype.setCoordinate=function(t){this.x=t.x,this.y=t.y,this.z=t.z},ul.prototype.interfaces_=function(){return[il,ol,al]},ul.prototype.getClass=function(){return ul},ul.hashCode=function(){if(1===arguments.length){var t=arguments[0],e=nl.doubleToLongBits(t);return Math.trunc((e^e)>>>32)}},ll.DimensionalComparator.get=function(){return cl},ll.serialVersionUID.get=function(){return 0x5cbf2c235c7e5800},ll.NULL_ORDINATE.get=function(){return nl.NaN},ll.X.get=function(){return 0},ll.Y.get=function(){return 1},ll.Z.get=function(){return 2},Object.defineProperties(ul,ll);var cl=function(t){if(this._dimensionsToTest=2,0===arguments.length);else if(1===arguments.length){var e=arguments[0];if(2!==e&&3!==e)throw new el("only 2 or 3 dimensions may be specified");this._dimensionsToTest=e}};cl.prototype.compare=function(t,e){var n=t,r=e,i=cl.compare(n.x,r.x);if(0!==i)return i;var o=cl.compare(n.y,r.y);return 0!==o?o:this._dimensionsToTest<=2?0:cl.compare(n.z,r.z)},cl.prototype.interfaces_=function(){return[sl]},cl.prototype.getClass=function(){return cl},cl.compare=function(t,e){return t<e?-1:t>e?1:nl.isNaN(t)?nl.isNaN(e)?0:-1:nl.isNaN(e)?1:0};var hl=function(){};hl.prototype.create=function(){},hl.prototype.interfaces_=function(){return[]},hl.prototype.getClass=function(){return hl};var pl=function(){},fl={INTERIOR:{configurable:!0},BOUNDARY:{configurable:!0},EXTERIOR:{configurable:!0},NONE:{configurable:!0}};pl.prototype.interfaces_=function(){return[]},pl.prototype.getClass=function(){return pl},pl.toLocationSymbol=function(t){switch(t){case pl.EXTERIOR:return"e";case pl.BOUNDARY:return"b";case pl.INTERIOR:return"i";case pl.NONE:return"-"}throw new el("Unknown location value: "+t)},fl.INTERIOR.get=function(){return 0},fl.BOUNDARY.get=function(){return 1},fl.EXTERIOR.get=function(){return 2},fl.NONE.get=function(){return-1},Object.defineProperties(pl,fl);var gl=function(t,e){return t.interfaces_&&t.interfaces_().indexOf(e)>-1},dl=function(){},yl={LOG_10:{configurable:!0}};dl.prototype.interfaces_=function(){return[]},dl.prototype.getClass=function(){return dl},dl.log10=function(t){var e=Math.log(t);return nl.isInfinite(e)||nl.isNaN(e)?e:e/dl.LOG_10},dl.min=function(t,e,n,r){var i=t;return e<i&&(i=e),n<i&&(i=n),r<i&&(i=r),i},dl.clamp=function(){if("number"==typeof arguments[2]&&"number"==typeof arguments[0]&&"number"==typeof arguments[1]){var t=arguments[0],e=arguments[1],n=arguments[2];return t<e?e:t>n?n:t}if(Number.isInteger(arguments[2])&&Number.isInteger(arguments[0])&&Number.isInteger(arguments[1])){var r=arguments[0],i=arguments[1],o=arguments[2];return r<i?i:r>o?o:r}},dl.wrap=function(t,e){return t<0?e- -t%e:t%e},dl.max=function(){if(3===arguments.length){var t=arguments[0],e=arguments[1],n=arguments[2],r=t;return e>r&&(r=e),n>r&&(r=n),r}if(4===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2],a=arguments[3],u=i;return o>u&&(u=o),s>u&&(u=s),a>u&&(u=a),u}},dl.average=function(t,e){return(t+e)/2},yl.LOG_10.get=function(){return Math.log(10)},Object.defineProperties(dl,yl);var vl=function(t){this.str=t};vl.prototype.append=function(t){this.str+=t},vl.prototype.setCharAt=function(t,e){this.str=this.str.substr(0,t)+e+this.str.substr(t+1)},vl.prototype.toString=function(t){return this.str};var _l=function(t){this.value=t};_l.prototype.intValue=function(){return this.value},_l.prototype.compareTo=function(t){return this.value<t?-1:this.value>t?1:0},_l.isNaN=function(t){return Number.isNaN(t)};var ml=function(){};ml.isWhitespace=function(t){return t<=32&&t>=0||127===t},ml.toUpperCase=function(t){return t.toUpperCase()};var xl=function t(){if(this._hi=0,this._lo=0,0===arguments.length)this.init(0);else if(1===arguments.length){if("number"==typeof arguments[0]){var e=arguments[0];this.init(e)}else if(arguments[0]instanceof t){var n=arguments[0];this.init(n)}else if("string"==typeof arguments[0]){var r=arguments[0];t.call(this,t.parse(r))}}else if(2===arguments.length){var i=arguments[0],o=arguments[1];this.init(i,o)}},El={PI:{configurable:!0},TWO_PI:{configurable:!0},PI_2:{configurable:!0},E:{configurable:!0},NaN:{configurable:!0},EPS:{configurable:!0},SPLIT:{configurable:!0},MAX_PRINT_DIGITS:{configurable:!0},TEN:{configurable:!0},ONE:{configurable:!0},SCI_NOT_EXPONENT_CHAR:{configurable:!0},SCI_NOT_ZERO:{configurable:!0}};xl.prototype.le=function(t){return(this._hi<t._hi||this._hi===t._hi)&&this._lo<=t._lo},xl.prototype.extractSignificantDigits=function(t,e){var n=this.abs(),r=xl.magnitude(n._hi),i=xl.TEN.pow(r);(n=n.divide(i)).gt(xl.TEN)?(n=n.divide(xl.TEN),r+=1):n.lt(xl.ONE)&&(n=n.multiply(xl.TEN),r-=1);for(var o=r+1,s=new vl,a=xl.MAX_PRINT_DIGITS-1,u=0;u<=a;u++){t&&u===o&&s.append(".");var l=Math.trunc(n._hi);if(l<0)break;var c=!1,h=0;l>9?(c=!0,h="9"):h="0"+l,s.append(h),n=n.subtract(xl.valueOf(l)).multiply(xl.TEN),c&&n.selfAdd(xl.TEN);var p=!0,f=xl.magnitude(n._hi);if(f<0&&Math.abs(f)>=a-u&&(p=!1),!p)break}return e[0]=r,s.toString()},xl.prototype.sqr=function(){return this.multiply(this)},xl.prototype.doubleValue=function(){return this._hi+this._lo},xl.prototype.subtract=function(){if(arguments[0]instanceof xl){var t=arguments[0];return this.add(t.negate())}if("number"==typeof arguments[0]){var e=arguments[0];return this.add(-e)}},xl.prototype.equals=function(){if(1===arguments.length){var t=arguments[0];return this._hi===t._hi&&this._lo===t._lo}},xl.prototype.isZero=function(){return 0===this._hi&&0===this._lo},xl.prototype.selfSubtract=function(){if(arguments[0]instanceof xl){var t=arguments[0];return this.isNaN()?this:this.selfAdd(-t._hi,-t._lo)}if("number"==typeof arguments[0]){var e=arguments[0];return this.isNaN()?this:this.selfAdd(-e,0)}},xl.prototype.getSpecialNumberString=function(){return this.isZero()?"0.0":this.isNaN()?"NaN ":null},xl.prototype.min=function(t){return this.le(t)?this:t},xl.prototype.selfDivide=function(){if(1===arguments.length){if(arguments[0]instanceof xl){var t=arguments[0];return this.selfDivide(t._hi,t._lo)}if("number"==typeof arguments[0]){var e=arguments[0];return this.selfDivide(e,0)}}else if(2===arguments.length){var n=arguments[0],r=arguments[1],i=null,o=null,s=null,a=null,u=null,l=null,c=null,h=null;return u=this._hi/n,h=(i=(l=xl.SPLIT*u)-(i=l-u))*(s=(h=xl.SPLIT*n)-(s=h-n))-(c=u*n)+i*(a=n-s)+(o=u-i)*s+o*a,h=u+(l=(this._hi-c-h+this._lo-u*r)/n),this._hi=h,this._lo=u-h+l,this}},xl.prototype.dump=function(){return"DD<"+this._hi+", "+this._lo+">"},xl.prototype.divide=function(){if(arguments[0]instanceof xl){var t=arguments[0],e=null,n=null,r=null,i=null,o=null,s=null,a=null,u=null;n=(o=this._hi/t._hi)-(e=(s=xl.SPLIT*o)-(e=s-o)),u=e*(r=(u=xl.SPLIT*t._hi)-(r=u-t._hi))-(a=o*t._hi)+e*(i=t._hi-r)+n*r+n*i;var l=u=o+(s=(this._hi-a-u+this._lo-o*t._lo)/t._hi),c=o-u+s;return new xl(l,c)}if("number"==typeof arguments[0]){var h=arguments[0];return nl.isNaN(h)?xl.createNaN():xl.copy(this).selfDivide(h,0)}},xl.prototype.ge=function(t){return(this._hi>t._hi||this._hi===t._hi)&&this._lo>=t._lo},xl.prototype.pow=function(t){if(0===t)return xl.valueOf(1);var e=new xl(this),n=xl.valueOf(1),r=Math.abs(t);if(r>1)for(;r>0;)r%2==1&&n.selfMultiply(e),(r/=2)>0&&(e=e.sqr());else n=e;return t<0?n.reciprocal():n},xl.prototype.ceil=function(){if(this.isNaN())return xl.NaN;var t=Math.ceil(this._hi),e=0;return t===this._hi&&(e=Math.ceil(this._lo)),new xl(t,e)},xl.prototype.compareTo=function(t){var e=t;return this._hi<e._hi?-1:this._hi>e._hi?1:this._lo<e._lo?-1:this._lo>e._lo?1:0},xl.prototype.rint=function(){return this.isNaN()?this:this.add(.5).floor()},xl.prototype.setValue=function(){if(arguments[0]instanceof xl){var t=arguments[0];return this.init(t),this}if("number"==typeof arguments[0]){var e=arguments[0];return this.init(e),this}},xl.prototype.max=function(t){return this.ge(t)?this:t},xl.prototype.sqrt=function(){if(this.isZero())return xl.valueOf(0);if(this.isNegative())return xl.NaN;var t=1/Math.sqrt(this._hi),e=this._hi*t,n=xl.valueOf(e),r=this.subtract(n.sqr())._hi*(.5*t);return n.add(r)},xl.prototype.selfAdd=function(){if(1===arguments.length){if(arguments[0]instanceof xl){var t=arguments[0];return this.selfAdd(t._hi,t._lo)}if("number"==typeof arguments[0]){var e=arguments[0],n=null,r=null,i=null,o=null,s=null,a=null;return o=(i=this._hi+e)-(s=i-this._hi),r=(a=(o=e-s+(this._hi-o))+this._lo)+(i-(n=i+a)),this._hi=n+r,this._lo=r+(n-this._hi),this}}else if(2===arguments.length){var u=arguments[0],l=arguments[1],c=null,h=null,p=null,f=null,g=null,d=null,y=null;f=this._hi+u,h=this._lo+l,g=f-(d=f-this._hi),p=h-(y=h-this._lo);var v=(c=f+(d=(g=u-d+(this._hi-g))+h))+(d=(p=l-y+(this._lo-p))+(d+(f-c))),_=d+(c-v);return this._hi=v,this._lo=_,this}},xl.prototype.selfMultiply=function(){if(1===arguments.length){if(arguments[0]instanceof xl){var t=arguments[0];return this.selfMultiply(t._hi,t._lo)}if("number"==typeof arguments[0]){var e=arguments[0];return this.selfMultiply(e,0)}}else if(2===arguments.length){var n=arguments[0],r=arguments[1],i=null,o=null,s=null,a=null,u=null,l=null;i=(u=xl.SPLIT*this._hi)-this._hi,l=xl.SPLIT*n,i=u-i,o=this._hi-i,s=l-n;var c=(u=this._hi*n)+(l=i*(s=l-s)-u+i*(a=n-s)+o*s+o*a+(this._hi*r+this._lo*n)),h=l+(i=u-c);return this._hi=c,this._lo=h,this}},xl.prototype.selfSqr=function(){return this.selfMultiply(this)},xl.prototype.floor=function(){if(this.isNaN())return xl.NaN;var t=Math.floor(this._hi),e=0;return t===this._hi&&(e=Math.floor(this._lo)),new xl(t,e)},xl.prototype.negate=function(){return this.isNaN()?this:new xl(-this._hi,-this._lo)},xl.prototype.clone=function(){},xl.prototype.multiply=function(){if(arguments[0]instanceof xl){var t=arguments[0];return t.isNaN()?xl.createNaN():xl.copy(this).selfMultiply(t)}if("number"==typeof arguments[0]){var e=arguments[0];return nl.isNaN(e)?xl.createNaN():xl.copy(this).selfMultiply(e,0)}},xl.prototype.isNaN=function(){return nl.isNaN(this._hi)},xl.prototype.intValue=function(){return Math.trunc(this._hi)},xl.prototype.toString=function(){var t=xl.magnitude(this._hi);return t>=-3&&t<=20?this.toStandardNotation():this.toSciNotation()},xl.prototype.toStandardNotation=function(){var t=this.getSpecialNumberString();if(null!==t)return t;var e=new Array(1).fill(null),n=this.extractSignificantDigits(!0,e),r=e[0]+1,i=n;if("."===n.charAt(0))i="0"+n;else if(r<0)i="0."+xl.stringOfChar("0",-r)+n;else if(-1===n.indexOf(".")){var o=r-n.length;i=n+xl.stringOfChar("0",o)+".0"}return this.isNegative()?"-"+i:i},xl.prototype.reciprocal=function(){var t,e,n,r,i=null,o=null,s=null,a=null;t=(n=1/this._hi)-(i=(s=xl.SPLIT*n)-(i=s-n)),o=(a=xl.SPLIT*this._hi)-this._hi;var u=n+(s=(1-(r=n*this._hi)-(a=i*(o=a-o)-r+i*(e=this._hi-o)+t*o+t*e)-n*this._lo)/this._hi);return new xl(u,n-u+s)},xl.prototype.toSciNotation=function(){if(this.isZero())return xl.SCI_NOT_ZERO;var t=this.getSpecialNumberString();if(null!==t)return t;var e=new Array(1).fill(null),n=this.extractSignificantDigits(!1,e),r=xl.SCI_NOT_EXPONENT_CHAR+e[0];if("0"===n.charAt(0))throw new Error("Found leading zero: "+n);var i="";n.length>1&&(i=n.substring(1));var o=n.charAt(0)+"."+i;return this.isNegative()?"-"+o+r:o+r},xl.prototype.abs=function(){return this.isNaN()?xl.NaN:this.isNegative()?this.negate():new xl(this)},xl.prototype.isPositive=function(){return(this._hi>0||0===this._hi)&&this._lo>0},xl.prototype.lt=function(t){return(this._hi<t._hi||this._hi===t._hi)&&this._lo<t._lo},xl.prototype.add=function(){if(arguments[0]instanceof xl){var t=arguments[0];return xl.copy(this).selfAdd(t)}if("number"==typeof arguments[0]){var e=arguments[0];return xl.copy(this).selfAdd(e)}},xl.prototype.init=function(){if(1===arguments.length){if("number"==typeof arguments[0]){var t=arguments[0];this._hi=t,this._lo=0}else if(arguments[0]instanceof xl){var e=arguments[0];this._hi=e._hi,this._lo=e._lo}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];this._hi=n,this._lo=r}},xl.prototype.gt=function(t){return(this._hi>t._hi||this._hi===t._hi)&&this._lo>t._lo},xl.prototype.isNegative=function(){return(this._hi<0||0===this._hi)&&this._lo<0},xl.prototype.trunc=function(){return this.isNaN()?xl.NaN:this.isPositive()?this.floor():this.ceil()},xl.prototype.signum=function(){return this._hi>0?1:this._hi<0?-1:this._lo>0?1:this._lo<0?-1:0},xl.prototype.interfaces_=function(){return[al,il,ol]},xl.prototype.getClass=function(){return xl},xl.sqr=function(t){return xl.valueOf(t).selfMultiply(t)},xl.valueOf=function(){if("string"==typeof arguments[0]){var t=arguments[0];return xl.parse(t)}if("number"==typeof arguments[0]){var e=arguments[0];return new xl(e)}},xl.sqrt=function(t){return xl.valueOf(t).sqrt()},xl.parse=function(t){for(var e=0,n=t.length;ml.isWhitespace(t.charAt(e));)e++;var r=!1;if(e<n){var i=t.charAt(e);"-"!==i&&"+"!==i||(e++,"-"===i&&(r=!0))}for(var o=new xl,s=0,a=0,u=0;!(e>=n);){var l=t.charAt(e);if(e++,ml.isDigit(l)){var c=l-"0";o.selfMultiply(xl.TEN),o.selfAdd(c),s++}else{if("."!==l){if("e"===l||"E"===l){var h=t.substring(e);try{u=_l.parseInt(h)}catch(e){throw e instanceof Error?new Error("Invalid exponent "+h+" in string "+t):e}break}throw new Error("Unexpected character '"+l+"' at position "+e+" in string "+t)}a=s}}var p=o,f=s-a-u;if(0===f)p=o;else if(f>0){var g=xl.TEN.pow(f);p=o.divide(g)}else if(f<0){var d=xl.TEN.pow(-f);p=o.multiply(d)}return r?p.negate():p},xl.createNaN=function(){return new xl(nl.NaN,nl.NaN)},xl.copy=function(t){return new xl(t)},xl.magnitude=function(t){var e=Math.abs(t),n=Math.log(e)/Math.log(10),r=Math.trunc(Math.floor(n));return 10*Math.pow(10,r)<=e&&(r+=1),r},xl.stringOfChar=function(t,e){for(var n=new vl,r=0;r<e;r++)n.append(t);return n.toString()},El.PI.get=function(){return new xl(3.141592653589793,12246467991473532e-32)},El.TWO_PI.get=function(){return new xl(6.283185307179586,24492935982947064e-32)},El.PI_2.get=function(){return new xl(1.5707963267948966,6123233995736766e-32)},El.E.get=function(){return new xl(2.718281828459045,14456468917292502e-32)},El.NaN.get=function(){return new xl(nl.NaN,nl.NaN)},El.EPS.get=function(){return 123259516440783e-46},El.SPLIT.get=function(){return 134217729},El.MAX_PRINT_DIGITS.get=function(){return 32},El.TEN.get=function(){return xl.valueOf(10)},El.ONE.get=function(){return xl.valueOf(1)},El.SCI_NOT_EXPONENT_CHAR.get=function(){return"E"},El.SCI_NOT_ZERO.get=function(){return"0.0E0"},Object.defineProperties(xl,El);var bl=function(){},wl={DP_SAFE_EPSILON:{configurable:!0}};bl.prototype.interfaces_=function(){return[]},bl.prototype.getClass=function(){return bl},bl.orientationIndex=function(t,e,n){var r=bl.orientationIndexFilter(t,e,n);if(r<=1)return r;var i=xl.valueOf(e.x).selfAdd(-t.x),o=xl.valueOf(e.y).selfAdd(-t.y),s=xl.valueOf(n.x).selfAdd(-e.x),a=xl.valueOf(n.y).selfAdd(-e.y);return i.selfMultiply(a).selfSubtract(o.selfMultiply(s)).signum()},bl.signOfDet2x2=function(t,e,n,r){return t.multiply(r).selfSubtract(e.multiply(n)).signum()},bl.intersection=function(t,e,n,r){var i=xl.valueOf(r.y).selfSubtract(n.y).selfMultiply(xl.valueOf(e.x).selfSubtract(t.x)),o=xl.valueOf(r.x).selfSubtract(n.x).selfMultiply(xl.valueOf(e.y).selfSubtract(t.y)),s=i.subtract(o),a=xl.valueOf(r.x).selfSubtract(n.x).selfMultiply(xl.valueOf(t.y).selfSubtract(n.y)),u=xl.valueOf(r.y).selfSubtract(n.y).selfMultiply(xl.valueOf(t.x).selfSubtract(n.x)),l=a.subtract(u).selfDivide(s).doubleValue(),c=xl.valueOf(t.x).selfAdd(xl.valueOf(e.x).selfSubtract(t.x).selfMultiply(l)).doubleValue(),h=xl.valueOf(e.x).selfSubtract(t.x).selfMultiply(xl.valueOf(t.y).selfSubtract(n.y)),p=xl.valueOf(e.y).selfSubtract(t.y).selfMultiply(xl.valueOf(t.x).selfSubtract(n.x)),f=h.subtract(p).selfDivide(s).doubleValue(),g=xl.valueOf(n.y).selfAdd(xl.valueOf(r.y).selfSubtract(n.y).selfMultiply(f)).doubleValue();return new ul(c,g)},bl.orientationIndexFilter=function(t,e,n){var r=null,i=(t.x-n.x)*(e.y-n.y),o=(t.y-n.y)*(e.x-n.x),s=i-o;if(i>0){if(o<=0)return bl.signum(s);r=i+o}else{if(!(i<0))return bl.signum(s);if(o>=0)return bl.signum(s);r=-i-o}var a=bl.DP_SAFE_EPSILON*r;return s>=a||-s>=a?bl.signum(s):2},bl.signum=function(t){return t>0?1:t<0?-1:0},wl.DP_SAFE_EPSILON.get=function(){return 1e-15},Object.defineProperties(bl,wl);var Il=function(){},Nl={X:{configurable:!0},Y:{configurable:!0},Z:{configurable:!0},M:{configurable:!0}};Nl.X.get=function(){return 0},Nl.Y.get=function(){return 1},Nl.Z.get=function(){return 2},Nl.M.get=function(){return 3},Il.prototype.setOrdinate=function(t,e,n){},Il.prototype.size=function(){},Il.prototype.getOrdinate=function(t,e){},Il.prototype.getCoordinate=function(){},Il.prototype.getCoordinateCopy=function(t){},Il.prototype.getDimension=function(){},Il.prototype.getX=function(t){},Il.prototype.clone=function(){},Il.prototype.expandEnvelope=function(t){},Il.prototype.copy=function(){},Il.prototype.getY=function(t){},Il.prototype.toCoordinateArray=function(){},Il.prototype.interfaces_=function(){return[ol]},Il.prototype.getClass=function(){return Il},Object.defineProperties(Il,Nl);var Sl=function(){},Cl=function(t){function e(){t.call(this,"Projective point not representable on the Cartesian plane.")}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Sl),Pl=function(){};Pl.arraycopy=function(t,e,n,r,i){for(var o=0,s=e;s<e+i;s++)n[r+o]=t[s],o++},Pl.getProperty=function(t){return{"line.separator":"\n"}[t]};var Ml=function t(){if(this.x=null,this.y=null,this.w=null,0===arguments.length)this.x=0,this.y=0,this.w=1;else if(1===arguments.length){var e=arguments[0];this.x=e.x,this.y=e.y,this.w=1}else if(2===arguments.length){if("number"==typeof arguments[0]&&"number"==typeof arguments[1]){var n=arguments[0],r=arguments[1];this.x=n,this.y=r,this.w=1}else if(arguments[0]instanceof t&&arguments[1]instanceof t){var i=arguments[0],o=arguments[1];this.x=i.y*o.w-o.y*i.w,this.y=o.x*i.w-i.x*o.w,this.w=i.x*o.y-o.x*i.y}else if(arguments[0]instanceof ul&&arguments[1]instanceof ul){var s=arguments[0],a=arguments[1];this.x=s.y-a.y,this.y=a.x-s.x,this.w=s.x*a.y-a.x*s.y}}else if(3===arguments.length){var u=arguments[0],l=arguments[1],c=arguments[2];this.x=u,this.y=l,this.w=c}else if(4===arguments.length){var h=arguments[0],p=arguments[1],f=arguments[2],g=arguments[3],d=h.y-p.y,y=p.x-h.x,v=h.x*p.y-p.x*h.y,_=f.y-g.y,m=g.x-f.x,x=f.x*g.y-g.x*f.y;this.x=y*x-m*v,this.y=_*v-d*x,this.w=d*m-_*y}};Ml.prototype.getY=function(){var t=this.y/this.w;if(nl.isNaN(t)||nl.isInfinite(t))throw new Cl;return t},Ml.prototype.getX=function(){var t=this.x/this.w;if(nl.isNaN(t)||nl.isInfinite(t))throw new Cl;return t},Ml.prototype.getCoordinate=function(){var t=new ul;return t.x=this.getX(),t.y=this.getY(),t},Ml.prototype.interfaces_=function(){return[]},Ml.prototype.getClass=function(){return Ml},Ml.intersection=function(t,e,n,r){var i=t.y-e.y,o=e.x-t.x,s=t.x*e.y-e.x*t.y,a=n.y-r.y,u=r.x-n.x,l=n.x*r.y-r.x*n.y,c=i*u-a*o,h=(o*l-u*s)/c,p=(a*s-i*l)/c;if(nl.isNaN(h)||nl.isInfinite(h)||nl.isNaN(p)||nl.isInfinite(p))throw new Cl;return new ul(h,p)};var Ll=function t(){if(this._minx=null,this._maxx=null,this._miny=null,this._maxy=null,0===arguments.length)this.init();else if(1===arguments.length){if(arguments[0]instanceof ul){var e=arguments[0];this.init(e.x,e.x,e.y,e.y)}else if(arguments[0]instanceof t){var n=arguments[0];this.init(n)}}else if(2===arguments.length){var r=arguments[0],i=arguments[1];this.init(r.x,i.x,r.y,i.y)}else if(4===arguments.length){var o=arguments[0],s=arguments[1],a=arguments[2],u=arguments[3];this.init(o,s,a,u)}},Ol={serialVersionUID:{configurable:!0}};Ll.prototype.getArea=function(){return this.getWidth()*this.getHeight()},Ll.prototype.equals=function(t){if(!(t instanceof Ll))return!1;var e=t;return this.isNull()?e.isNull():this._maxx===e.getMaxX()&&this._maxy===e.getMaxY()&&this._minx===e.getMinX()&&this._miny===e.getMinY()},Ll.prototype.intersection=function(t){if(this.isNull()||t.isNull()||!this.intersects(t))return new Ll;var e=this._minx>t._minx?this._minx:t._minx,n=this._miny>t._miny?this._miny:t._miny,r=this._maxx<t._maxx?this._maxx:t._maxx,i=this._maxy<t._maxy?this._maxy:t._maxy;return new Ll(e,r,n,i)},Ll.prototype.isNull=function(){return this._maxx<this._minx},Ll.prototype.getMaxX=function(){return this._maxx},Ll.prototype.covers=function(){if(1===arguments.length){if(arguments[0]instanceof ul){var t=arguments[0];return this.covers(t.x,t.y)}if(arguments[0]instanceof Ll){var e=arguments[0];return!this.isNull()&&!e.isNull()&&(e.getMinX()>=this._minx&&e.getMaxX()<=this._maxx&&e.getMinY()>=this._miny&&e.getMaxY()<=this._maxy)}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];return!this.isNull()&&(n>=this._minx&&n<=this._maxx&&r>=this._miny&&r<=this._maxy)}},Ll.prototype.intersects=function(){if(1===arguments.length){if(arguments[0]instanceof Ll){var t=arguments[0];return!this.isNull()&&!t.isNull()&&!(t._minx>this._maxx||t._maxx<this._minx||t._miny>this._maxy||t._maxy<this._miny)}if(arguments[0]instanceof ul){var e=arguments[0];return this.intersects(e.x,e.y)}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];return!this.isNull()&&!(n>this._maxx||n<this._minx||r>this._maxy||r<this._miny)}},Ll.prototype.getMinY=function(){return this._miny},Ll.prototype.getMinX=function(){return this._minx},Ll.prototype.expandToInclude=function(){if(1===arguments.length){if(arguments[0]instanceof ul){var t=arguments[0];this.expandToInclude(t.x,t.y)}else if(arguments[0]instanceof Ll){var e=arguments[0];if(e.isNull())return null;this.isNull()?(this._minx=e.getMinX(),this._maxx=e.getMaxX(),this._miny=e.getMinY(),this._maxy=e.getMaxY()):(e._minx<this._minx&&(this._minx=e._minx),e._maxx>this._maxx&&(this._maxx=e._maxx),e._miny<this._miny&&(this._miny=e._miny),e._maxy>this._maxy&&(this._maxy=e._maxy))}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];this.isNull()?(this._minx=n,this._maxx=n,this._miny=r,this._maxy=r):(n<this._minx&&(this._minx=n),n>this._maxx&&(this._maxx=n),r<this._miny&&(this._miny=r),r>this._maxy&&(this._maxy=r))}},Ll.prototype.minExtent=function(){if(this.isNull())return 0;var t=this.getWidth(),e=this.getHeight();return t<e?t:e},Ll.prototype.getWidth=function(){return this.isNull()?0:this._maxx-this._minx},Ll.prototype.compareTo=function(t){var e=t;return this.isNull()?e.isNull()?0:-1:e.isNull()?1:this._minx<e._minx?-1:this._minx>e._minx?1:this._miny<e._miny?-1:this._miny>e._miny?1:this._maxx<e._maxx?-1:this._maxx>e._maxx?1:this._maxy<e._maxy?-1:this._maxy>e._maxy?1:0},Ll.prototype.translate=function(t,e){if(this.isNull())return null;this.init(this.getMinX()+t,this.getMaxX()+t,this.getMinY()+e,this.getMaxY()+e)},Ll.prototype.toString=function(){return"Env["+this._minx+" : "+this._maxx+", "+this._miny+" : "+this._maxy+"]"},Ll.prototype.setToNull=function(){this._minx=0,this._maxx=-1,this._miny=0,this._maxy=-1},Ll.prototype.getHeight=function(){return this.isNull()?0:this._maxy-this._miny},Ll.prototype.maxExtent=function(){if(this.isNull())return 0;var t=this.getWidth(),e=this.getHeight();return t>e?t:e},Ll.prototype.expandBy=function(){if(1===arguments.length){var t=arguments[0];this.expandBy(t,t)}else if(2===arguments.length){var e=arguments[0],n=arguments[1];if(this.isNull())return null;this._minx-=e,this._maxx+=e,this._miny-=n,this._maxy+=n,(this._minx>this._maxx||this._miny>this._maxy)&&this.setToNull()}},Ll.prototype.contains=function(){if(1===arguments.length){if(arguments[0]instanceof Ll){var t=arguments[0];return this.covers(t)}if(arguments[0]instanceof ul){var e=arguments[0];return this.covers(e)}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];return this.covers(n,r)}},Ll.prototype.centre=function(){return this.isNull()?null:new ul((this.getMinX()+this.getMaxX())/2,(this.getMinY()+this.getMaxY())/2)},Ll.prototype.init=function(){if(0===arguments.length)this.setToNull();else if(1===arguments.length){if(arguments[0]instanceof ul){var t=arguments[0];this.init(t.x,t.x,t.y,t.y)}else if(arguments[0]instanceof Ll){var e=arguments[0];this._minx=e._minx,this._maxx=e._maxx,this._miny=e._miny,this._maxy=e._maxy}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];this.init(n.x,r.x,n.y,r.y)}else if(4===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2],a=arguments[3];i<o?(this._minx=i,this._maxx=o):(this._minx=o,this._maxx=i),s<a?(this._miny=s,this._maxy=a):(this._miny=a,this._maxy=s)}},Ll.prototype.getMaxY=function(){return this._maxy},Ll.prototype.distance=function(t){if(this.intersects(t))return 0;var e=0;this._maxx<t._minx?e=t._minx-this._maxx:this._minx>t._maxx&&(e=this._minx-t._maxx);var n=0;return this._maxy<t._miny?n=t._miny-this._maxy:this._miny>t._maxy&&(n=this._miny-t._maxy),0===e?n:0===n?e:Math.sqrt(e*e+n*n)},Ll.prototype.hashCode=function(){var t=17;return t=37*(t=37*(t=37*(t=37*t+ul.hashCode(this._minx))+ul.hashCode(this._maxx))+ul.hashCode(this._miny))+ul.hashCode(this._maxy)},Ll.prototype.interfaces_=function(){return[il,al]},Ll.prototype.getClass=function(){return Ll},Ll.intersects=function(){if(3===arguments.length){var t=arguments[0],e=arguments[1],n=arguments[2];return n.x>=(t.x<e.x?t.x:e.x)&&n.x<=(t.x>e.x?t.x:e.x)&&n.y>=(t.y<e.y?t.y:e.y)&&n.y<=(t.y>e.y?t.y:e.y)}if(4===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2],s=arguments[3],a=Math.min(o.x,s.x),u=Math.max(o.x,s.x),l=Math.min(r.x,i.x),c=Math.max(r.x,i.x);return!(l>u)&&(!(c<a)&&(a=Math.min(o.y,s.y),u=Math.max(o.y,s.y),l=Math.min(r.y,i.y),c=Math.max(r.y,i.y),!(l>u)&&!(c<a)))}},Ol.serialVersionUID.get=function(){return 0x51845cd552189800},Object.defineProperties(Ll,Ol);var Rl={typeStr:/^\s*(\w+)\s*\(\s*(.*)\s*\)\s*$/,emptyTypeStr:/^\s*(\w+)\s*EMPTY\s*$/,spaces:/\s+/,parenComma:/\)\s*,\s*\(/,doubleParenComma:/\)\s*\)\s*,\s*\(\s*\(/,trimParens:/^\s*\(?(.*?)\)?\s*$/},Tl=function(t){this.geometryFactory=t||new _h};Tl.prototype.read=function(t){var e,n,r;t=t.replace(/[\n\r]/g," ");var i=Rl.typeStr.exec(t);if(-1!==t.search("EMPTY")&&((i=Rl.emptyTypeStr.exec(t))[2]=void 0),i&&(n=i[1].toLowerCase(),r=i[2],Dl[n]&&(e=Dl[n].apply(this,[r]))),void 0===e)throw new Error("Could not parse WKT "+t);return e},Tl.prototype.write=function(t){return this.extractGeometry(t)},Tl.prototype.extractGeometry=function(t){var e=t.getGeometryType().toLowerCase();if(!Al[e])return null;var n=e.toUpperCase();return t.isEmpty()?n+" EMPTY":n+"("+Al[e].apply(this,[t])+")"};var Al={coordinate:function(t){return t.x+" "+t.y},point:function(t){return Al.coordinate.call(this,t._coordinates._coordinates[0])},multipoint:function(t){for(var e=[],n=0,r=t._geometries.length;n<r;++n)e.push("("+Al.point.apply(this,[t._geometries[n]])+")");return e.join(",")},linestring:function(t){for(var e=[],n=0,r=t._points._coordinates.length;n<r;++n)e.push(Al.coordinate.apply(this,[t._points._coordinates[n]]));return e.join(",")},linearring:function(t){for(var e=[],n=0,r=t._points._coordinates.length;n<r;++n)e.push(Al.coordinate.apply(this,[t._points._coordinates[n]]));return e.join(",")},multilinestring:function(t){for(var e=[],n=0,r=t._geometries.length;n<r;++n)e.push("("+Al.linestring.apply(this,[t._geometries[n]])+")");return e.join(",")},polygon:function(t){var e=[];e.push("("+Al.linestring.apply(this,[t._shell])+")");for(var n=0,r=t._holes.length;n<r;++n)e.push("("+Al.linestring.apply(this,[t._holes[n]])+")");return e.join(",")},multipolygon:function(t){for(var e=[],n=0,r=t._geometries.length;n<r;++n)e.push("("+Al.polygon.apply(this,[t._geometries[n]])+")");return e.join(",")},geometrycollection:function(t){for(var e=[],n=0,r=t._geometries.length;n<r;++n)e.push(this.extractGeometry(t._geometries[n]));return e.join(",")}},Dl={point:function(t){if(void 0===t)return this.geometryFactory.createPoint();var e=t.trim().split(Rl.spaces);return this.geometryFactory.createPoint(new ul(Number.parseFloat(e[0]),Number.parseFloat(e[1])))},multipoint:function(t){var e;if(void 0===t)return this.geometryFactory.createMultiPoint();for(var n=t.trim().split(","),r=[],i=0,o=n.length;i<o;++i)e=n[i].replace(Rl.trimParens,"$1"),r.push(Dl.point.apply(this,[e]));return this.geometryFactory.createMultiPoint(r)},linestring:function(t){if(void 0===t)return this.geometryFactory.createLineString();for(var e,n=t.trim().split(","),r=[],i=0,o=n.length;i<o;++i)e=n[i].trim().split(Rl.spaces),r.push(new ul(Number.parseFloat(e[0]),Number.parseFloat(e[1])));return this.geometryFactory.createLineString(r)},linearring:function(t){if(void 0===t)return this.geometryFactory.createLinearRing();for(var e,n=t.trim().split(","),r=[],i=0,o=n.length;i<o;++i)e=n[i].trim().split(Rl.spaces),r.push(new ul(Number.parseFloat(e[0]),Number.parseFloat(e[1])));return this.geometryFactory.createLinearRing(r)},multilinestring:function(t){var e;if(void 0===t)return this.geometryFactory.createMultiLineString();for(var n=t.trim().split(Rl.parenComma),r=[],i=0,o=n.length;i<o;++i)e=n[i].replace(Rl.trimParens,"$1"),r.push(Dl.linestring.apply(this,[e]));return this.geometryFactory.createMultiLineString(r)},polygon:function(t){var e,n,r;if(void 0===t)return this.geometryFactory.createPolygon();for(var i,o=t.trim().split(Rl.parenComma),s=[],a=0,u=o.length;a<u;++a)e=o[a].replace(Rl.trimParens,"$1"),n=Dl.linestring.apply(this,[e]),r=this.geometryFactory.createLinearRing(n._points),0===a?i=r:s.push(r);return this.geometryFactory.createPolygon(i,s)},multipolygon:function(t){var e;if(void 0===t)return this.geometryFactory.createMultiPolygon();for(var n=t.trim().split(Rl.doubleParenComma),r=[],i=0,o=n.length;i<o;++i)e=n[i].replace(Rl.trimParens,"$1"),r.push(Dl.polygon.apply(this,[e]));return this.geometryFactory.createMultiPolygon(r)},geometrycollection:function(t){if(void 0===t)return this.geometryFactory.createGeometryCollection();for(var e=(t=t.replace(/,\s*([A-Za-z])/g,"|$1")).trim().split("|"),n=[],r=0,i=e.length;r<i;++r)n.push(this.read(e[r]));return this.geometryFactory.createGeometryCollection(n)}},Fl=function(t){this.parser=new Tl(t)};Fl.prototype.write=function(t){return this.parser.write(t)},Fl.toLineString=function(t,e){if(2!==arguments.length)throw new Error("Not implemented");return"LINESTRING ( "+t.x+" "+t.y+", "+e.x+" "+e.y+" )"};var kl=function(t){function e(e){t.call(this,e),this.name="RuntimeException",this.message=e,this.stack=(new t).stack}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e}(Error),Gl=function(t){function e(){if(t.call(this),0===arguments.length)t.call(this);else if(1===arguments.length){var e=arguments[0];t.call(this,e)}}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(kl),ql=function(){};ql.prototype.interfaces_=function(){return[]},ql.prototype.getClass=function(){return ql},ql.shouldNeverReachHere=function(){if(0===arguments.length)ql.shouldNeverReachHere(null);else if(1===arguments.length){var t=arguments[0];throw new Gl("Should never reach here"+(null!==t?": "+t:""))}},ql.isTrue=function(){var t;if(1===arguments.length)ql.isTrue(arguments[0],null);else if(2===arguments.length&&(t=arguments[1],!arguments[0]))throw null===t?new Gl:new Gl(t)},ql.equals=function(){var t,e,n;if(2===arguments.length)ql.equals(t=arguments[0],e=arguments[1],null);else if(3===arguments.length&&(t=arguments[0],n=arguments[2],!(e=arguments[1]).equals(t)))throw new Gl("Expected "+t+" but encountered "+e+(null!==n?": "+n:""))};var Bl=function(){this._result=null,this._inputLines=Array(2).fill().map((function(){return Array(2)})),this._intPt=new Array(2).fill(null),this._intLineIndex=null,this._isProper=null,this._pa=null,this._pb=null,this._precisionModel=null,this._intPt[0]=new ul,this._intPt[1]=new ul,this._pa=this._intPt[0],this._pb=this._intPt[1],this._result=0},zl={DONT_INTERSECT:{configurable:!0},DO_INTERSECT:{configurable:!0},COLLINEAR:{configurable:!0},NO_INTERSECTION:{configurable:!0},POINT_INTERSECTION:{configurable:!0},COLLINEAR_INTERSECTION:{configurable:!0}};Bl.prototype.getIndexAlongSegment=function(t,e){return this.computeIntLineIndex(),this._intLineIndex[t][e]},Bl.prototype.getTopologySummary=function(){var t=new vl;return this.isEndPoint()&&t.append(" endpoint"),this._isProper&&t.append(" proper"),this.isCollinear()&&t.append(" collinear"),t.toString()},Bl.prototype.computeIntersection=function(t,e,n,r){this._inputLines[0][0]=t,this._inputLines[0][1]=e,this._inputLines[1][0]=n,this._inputLines[1][1]=r,this._result=this.computeIntersect(t,e,n,r)},Bl.prototype.getIntersectionNum=function(){return this._result},Bl.prototype.computeIntLineIndex=function(){if(0===arguments.length)null===this._intLineIndex&&(this._intLineIndex=Array(2).fill().map((function(){return Array(2)})),this.computeIntLineIndex(0),this.computeIntLineIndex(1));else if(1===arguments.length){var t=arguments[0],e=this.getEdgeDistance(t,0),n=this.getEdgeDistance(t,1);e>n?(this._intLineIndex[t][0]=0,this._intLineIndex[t][1]=1):(this._intLineIndex[t][0]=1,this._intLineIndex[t][1]=0)}},Bl.prototype.isProper=function(){return this.hasIntersection()&&this._isProper},Bl.prototype.setPrecisionModel=function(t){this._precisionModel=t},Bl.prototype.isInteriorIntersection=function(){var t=this;if(0===arguments.length)return!!this.isInteriorIntersection(0)||!!this.isInteriorIntersection(1);if(1===arguments.length){for(var e=arguments[0],n=0;n<this._result;n++)if(!t._intPt[n].equals2D(t._inputLines[e][0])&&!t._intPt[n].equals2D(t._inputLines[e][1]))return!0;return!1}},Bl.prototype.getIntersection=function(t){return this._intPt[t]},Bl.prototype.isEndPoint=function(){return this.hasIntersection()&&!this._isProper},Bl.prototype.hasIntersection=function(){return this._result!==Bl.NO_INTERSECTION},Bl.prototype.getEdgeDistance=function(t,e){return Bl.computeEdgeDistance(this._intPt[e],this._inputLines[t][0],this._inputLines[t][1])},Bl.prototype.isCollinear=function(){return this._result===Bl.COLLINEAR_INTERSECTION},Bl.prototype.toString=function(){return Fl.toLineString(this._inputLines[0][0],this._inputLines[0][1])+" - "+Fl.toLineString(this._inputLines[1][0],this._inputLines[1][1])+this.getTopologySummary()},Bl.prototype.getEndpoint=function(t,e){return this._inputLines[t][e]},Bl.prototype.isIntersection=function(t){for(var e=0;e<this._result;e++)if(this._intPt[e].equals2D(t))return!0;return!1},Bl.prototype.getIntersectionAlongSegment=function(t,e){return this.computeIntLineIndex(),this._intPt[this._intLineIndex[t][e]]},Bl.prototype.interfaces_=function(){return[]},Bl.prototype.getClass=function(){return Bl},Bl.computeEdgeDistance=function(t,e,n){var r=Math.abs(n.x-e.x),i=Math.abs(n.y-e.y),o=-1;if(t.equals(e))o=0;else if(t.equals(n))o=r>i?r:i;else{var s=Math.abs(t.x-e.x),a=Math.abs(t.y-e.y);0!==(o=r>i?s:a)||t.equals(e)||(o=Math.max(s,a))}return ql.isTrue(!(0===o&&!t.equals(e)),"Bad distance calculation"),o},Bl.nonRobustComputeEdgeDistance=function(t,e,n){var r=t.x-e.x,i=t.y-e.y,o=Math.sqrt(r*r+i*i);return ql.isTrue(!(0===o&&!t.equals(e)),"Invalid distance calculation"),o},zl.DONT_INTERSECT.get=function(){return 0},zl.DO_INTERSECT.get=function(){return 1},zl.COLLINEAR.get=function(){return 2},zl.NO_INTERSECTION.get=function(){return 0},zl.POINT_INTERSECTION.get=function(){return 1},zl.COLLINEAR_INTERSECTION.get=function(){return 2},Object.defineProperties(Bl,zl);var jl=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.isInSegmentEnvelopes=function(t){var e=new Ll(this._inputLines[0][0],this._inputLines[0][1]),n=new Ll(this._inputLines[1][0],this._inputLines[1][1]);return e.contains(t)&&n.contains(t)},e.prototype.computeIntersection=function(){if(3!==arguments.length)return t.prototype.computeIntersection.apply(this,arguments);var e=arguments[0],n=arguments[1],r=arguments[2];if(this._isProper=!1,Ll.intersects(n,r,e)&&0===Xl.orientationIndex(n,r,e)&&0===Xl.orientationIndex(r,n,e))return this._isProper=!0,(e.equals(n)||e.equals(r))&&(this._isProper=!1),this._result=t.POINT_INTERSECTION,null;this._result=t.NO_INTERSECTION},e.prototype.normalizeToMinimum=function(t,e,n,r,i){i.x=this.smallestInAbsValue(t.x,e.x,n.x,r.x),i.y=this.smallestInAbsValue(t.y,e.y,n.y,r.y),t.x-=i.x,t.y-=i.y,e.x-=i.x,e.y-=i.y,n.x-=i.x,n.y-=i.y,r.x-=i.x,r.y-=i.y},e.prototype.safeHCoordinateIntersection=function(t,n,r,i){var o=null;try{o=Ml.intersection(t,n,r,i)}catch(s){if(!(s instanceof Cl))throw s;o=e.nearestEndpoint(t,n,r,i)}return o},e.prototype.intersection=function(t,n,r,i){var o=this.intersectionWithNormalization(t,n,r,i);return this.isInSegmentEnvelopes(o)||(o=new ul(e.nearestEndpoint(t,n,r,i))),null!==this._precisionModel&&this._precisionModel.makePrecise(o),o},e.prototype.smallestInAbsValue=function(t,e,n,r){var i=t,o=Math.abs(i);return Math.abs(e)<o&&(i=e,o=Math.abs(e)),Math.abs(n)<o&&(i=n,o=Math.abs(n)),Math.abs(r)<o&&(i=r),i},e.prototype.checkDD=function(t,e,n,r,i){var o=bl.intersection(t,e,n,r),s=this.isInSegmentEnvelopes(o);Pl.out.println("DD in env = "+s+"  --------------------- "+o),i.distance(o)>1e-4&&Pl.out.println("Distance = "+i.distance(o))},e.prototype.intersectionWithNormalization=function(t,e,n,r){var i=new ul(t),o=new ul(e),s=new ul(n),a=new ul(r),u=new ul;this.normalizeToEnvCentre(i,o,s,a,u);var l=this.safeHCoordinateIntersection(i,o,s,a);return l.x+=u.x,l.y+=u.y,l},e.prototype.computeCollinearIntersection=function(e,n,r,i){var o=Ll.intersects(e,n,r),s=Ll.intersects(e,n,i),a=Ll.intersects(r,i,e),u=Ll.intersects(r,i,n);return o&&s?(this._intPt[0]=r,this._intPt[1]=i,t.COLLINEAR_INTERSECTION):a&&u?(this._intPt[0]=e,this._intPt[1]=n,t.COLLINEAR_INTERSECTION):o&&a?(this._intPt[0]=r,this._intPt[1]=e,!r.equals(e)||s||u?t.COLLINEAR_INTERSECTION:t.POINT_INTERSECTION):o&&u?(this._intPt[0]=r,this._intPt[1]=n,!r.equals(n)||s||a?t.COLLINEAR_INTERSECTION:t.POINT_INTERSECTION):s&&a?(this._intPt[0]=i,this._intPt[1]=e,!i.equals(e)||o||u?t.COLLINEAR_INTERSECTION:t.POINT_INTERSECTION):s&&u?(this._intPt[0]=i,this._intPt[1]=n,!i.equals(n)||o||a?t.COLLINEAR_INTERSECTION:t.POINT_INTERSECTION):t.NO_INTERSECTION},e.prototype.normalizeToEnvCentre=function(t,e,n,r,i){var o=t.x<e.x?t.x:e.x,s=t.y<e.y?t.y:e.y,a=t.x>e.x?t.x:e.x,u=t.y>e.y?t.y:e.y,l=n.x<r.x?n.x:r.x,c=n.y<r.y?n.y:r.y,h=n.x>r.x?n.x:r.x,p=n.y>r.y?n.y:r.y,f=((o>l?o:l)+(a<h?a:h))/2,g=((s>c?s:c)+(u<p?u:p))/2;i.x=f,i.y=g,t.x-=i.x,t.y-=i.y,e.x-=i.x,e.y-=i.y,n.x-=i.x,n.y-=i.y,r.x-=i.x,r.y-=i.y},e.prototype.computeIntersect=function(e,n,r,i){if(this._isProper=!1,!Ll.intersects(e,n,r,i))return t.NO_INTERSECTION;var o=Xl.orientationIndex(e,n,r),s=Xl.orientationIndex(e,n,i);if(o>0&&s>0||o<0&&s<0)return t.NO_INTERSECTION;var a=Xl.orientationIndex(r,i,e),u=Xl.orientationIndex(r,i,n);return a>0&&u>0||a<0&&u<0?t.NO_INTERSECTION:0===o&&0===s&&0===a&&0===u?this.computeCollinearIntersection(e,n,r,i):(0===o||0===s||0===a||0===u?(this._isProper=!1,e.equals2D(r)||e.equals2D(i)?this._intPt[0]=e:n.equals2D(r)||n.equals2D(i)?this._intPt[0]=n:0===o?this._intPt[0]=new ul(r):0===s?this._intPt[0]=new ul(i):0===a?this._intPt[0]=new ul(e):0===u&&(this._intPt[0]=new ul(n))):(this._isProper=!0,this._intPt[0]=this.intersection(e,n,r,i)),t.POINT_INTERSECTION)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e.nearestEndpoint=function(t,e,n,r){var i=t,o=Xl.distancePointLine(t,n,r),s=Xl.distancePointLine(e,n,r);return s<o&&(o=s,i=e),(s=Xl.distancePointLine(n,t,e))<o&&(o=s,i=n),(s=Xl.distancePointLine(r,t,e))<o&&(o=s,i=r),i},e}(Bl),Ul=function(){};Ul.prototype.interfaces_=function(){return[]},Ul.prototype.getClass=function(){return Ul},Ul.orientationIndex=function(t,e,n){var r=e.x-t.x,i=e.y-t.y,o=n.x-e.x,s=n.y-e.y;return Ul.signOfDet2x2(r,i,o,s)},Ul.signOfDet2x2=function(t,e,n,r){var i=null,o=null,s=null;if(i=1,0===t||0===r)return 0===e||0===n?0:e>0?n>0?-i:i:n>0?i:-i;if(0===e||0===n)return r>0?t>0?i:-i:t>0?-i:i;if(e>0?r>0?e<=r||(i=-i,o=t,t=n,n=o,o=e,e=r,r=o):e<=-r?(i=-i,n=-n,r=-r):(o=t,t=-n,n=o,o=e,e=-r,r=o):r>0?-e<=r?(i=-i,t=-t,e=-e):(o=-t,t=n,n=o,o=-e,e=r,r=o):e>=r?(t=-t,e=-e,n=-n,r=-r):(i=-i,o=-t,t=-n,n=o,o=-e,e=-r,r=o),t>0){if(!(n>0))return i;if(!(t<=n))return i}else{if(n>0)return-i;if(!(t>=n))return-i;i=-i,t=-t,n=-n}for(;;){if((r-=(s=Math.floor(n/t))*e)<0)return-i;if(r>e)return i;if(t>(n-=s*t)+n){if(e<r+r)return i}else{if(e>r+r)return-i;n=t-n,r=e-r,i=-i}if(0===r)return 0===n?0:-i;if(0===n)return i;if((e-=(s=Math.floor(t/n))*r)<0)return i;if(e>r)return-i;if(n>(t-=s*n)+t){if(r<e+e)return-i}else{if(r>e+e)return i;t=n-t,e=r-e,i=-i}if(0===e)return 0===t?0:i;if(0===t)return-i}};var Vl=function(){this._p=null,this._crossingCount=0,this._isPointOnSegment=!1;var t=arguments[0];this._p=t};Vl.prototype.countSegment=function(t,e){if(t.x<this._p.x&&e.x<this._p.x)return null;if(this._p.x===e.x&&this._p.y===e.y)return this._isPointOnSegment=!0,null;if(t.y===this._p.y&&e.y===this._p.y){var n=t.x,r=e.x;return n>r&&(n=e.x,r=t.x),this._p.x>=n&&this._p.x<=r&&(this._isPointOnSegment=!0),null}if(t.y>this._p.y&&e.y<=this._p.y||e.y>this._p.y&&t.y<=this._p.y){var i=t.x-this._p.x,o=t.y-this._p.y,s=e.x-this._p.x,a=e.y-this._p.y,u=Ul.signOfDet2x2(i,o,s,a);if(0===u)return this._isPointOnSegment=!0,null;a<o&&(u=-u),u>0&&this._crossingCount++}},Vl.prototype.isPointInPolygon=function(){return this.getLocation()!==pl.EXTERIOR},Vl.prototype.getLocation=function(){return this._isPointOnSegment?pl.BOUNDARY:this._crossingCount%2==1?pl.INTERIOR:pl.EXTERIOR},Vl.prototype.isOnSegment=function(){return this._isPointOnSegment},Vl.prototype.interfaces_=function(){return[]},Vl.prototype.getClass=function(){return Vl},Vl.locatePointInRing=function(){if(arguments[0]instanceof ul&&gl(arguments[1],Il)){for(var t=arguments[0],e=arguments[1],n=new Vl(t),r=new ul,i=new ul,o=1;o<e.size();o++)if(e.getCoordinate(o,r),e.getCoordinate(o-1,i),n.countSegment(r,i),n.isOnSegment())return n.getLocation();return n.getLocation()}if(arguments[0]instanceof ul&&arguments[1]instanceof Array){for(var s=arguments[0],a=arguments[1],u=new Vl(s),l=1;l<a.length;l++){var c=a[l],h=a[l-1];if(u.countSegment(c,h),u.isOnSegment())return u.getLocation()}return u.getLocation()}};var Xl=function(){},Yl={CLOCKWISE:{configurable:!0},RIGHT:{configurable:!0},COUNTERCLOCKWISE:{configurable:!0},LEFT:{configurable:!0},COLLINEAR:{configurable:!0},STRAIGHT:{configurable:!0}};Xl.prototype.interfaces_=function(){return[]},Xl.prototype.getClass=function(){return Xl},Xl.orientationIndex=function(t,e,n){return bl.orientationIndex(t,e,n)},Xl.signedArea=function(){if(arguments[0]instanceof Array){var t=arguments[0];if(t.length<3)return 0;for(var e=0,n=t[0].x,r=1;r<t.length-1;r++){var i=t[r].x-n,o=t[r+1].y,s=t[r-1].y;e+=i*(s-o)}return e/2}if(gl(arguments[0],Il)){var a=arguments[0],u=a.size();if(u<3)return 0;var l=new ul,c=new ul,h=new ul;a.getCoordinate(0,c),a.getCoordinate(1,h);var p=c.x;h.x-=p;for(var f=0,g=1;g<u-1;g++)l.y=c.y,c.x=h.x,c.y=h.y,a.getCoordinate(g+1,h),h.x-=p,f+=c.x*(l.y-h.y);return f/2}},Xl.distanceLineLine=function(t,e,n,r){if(t.equals(e))return Xl.distancePointLine(t,n,r);if(n.equals(r))return Xl.distancePointLine(r,t,e);var i=!1;if(Ll.intersects(t,e,n,r)){var o=(e.x-t.x)*(r.y-n.y)-(e.y-t.y)*(r.x-n.x);if(0===o)i=!0;else{var s=(t.y-n.y)*(r.x-n.x)-(t.x-n.x)*(r.y-n.y),a=((t.y-n.y)*(e.x-t.x)-(t.x-n.x)*(e.y-t.y))/o,u=s/o;(u<0||u>1||a<0||a>1)&&(i=!0)}}else i=!0;return i?dl.min(Xl.distancePointLine(t,n,r),Xl.distancePointLine(e,n,r),Xl.distancePointLine(n,t,e),Xl.distancePointLine(r,t,e)):0},Xl.isPointInRing=function(t,e){return Xl.locatePointInRing(t,e)!==pl.EXTERIOR},Xl.computeLength=function(t){var e=t.size();if(e<=1)return 0;var n=0,r=new ul;t.getCoordinate(0,r);for(var i=r.x,o=r.y,s=1;s<e;s++){t.getCoordinate(s,r);var a=r.x,u=r.y,l=a-i,c=u-o;n+=Math.sqrt(l*l+c*c),i=a,o=u}return n},Xl.isCCW=function(t){var e=t.length-1;if(e<3)throw new el("Ring has fewer than 4 points, so orientation cannot be determined");for(var n=t[0],r=0,i=1;i<=e;i++){var o=t[i];o.y>n.y&&(n=o,r=i)}var s=r;do{(s-=1)<0&&(s=e)}while(t[s].equals2D(n)&&s!==r);var a=r;do{a=(a+1)%e}while(t[a].equals2D(n)&&a!==r);var u=t[s],l=t[a];if(u.equals2D(n)||l.equals2D(n)||u.equals2D(l))return!1;var c=Xl.computeOrientation(u,n,l),h=!1;return h=0===c?u.x>l.x:c>0,h},Xl.locatePointInRing=function(t,e){return Vl.locatePointInRing(t,e)},Xl.distancePointLinePerpendicular=function(t,e,n){var r=(n.x-e.x)*(n.x-e.x)+(n.y-e.y)*(n.y-e.y),i=((e.y-t.y)*(n.x-e.x)-(e.x-t.x)*(n.y-e.y))/r;return Math.abs(i)*Math.sqrt(r)},Xl.computeOrientation=function(t,e,n){return Xl.orientationIndex(t,e,n)},Xl.distancePointLine=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1];if(0===e.length)throw new el("Line array must contain at least one vertex");for(var n=t.distance(e[0]),r=0;r<e.length-1;r++){var i=Xl.distancePointLine(t,e[r],e[r+1]);i<n&&(n=i)}return n}if(3===arguments.length){var o=arguments[0],s=arguments[1],a=arguments[2];if(s.x===a.x&&s.y===a.y)return o.distance(s);var u=(a.x-s.x)*(a.x-s.x)+(a.y-s.y)*(a.y-s.y),l=((o.x-s.x)*(a.x-s.x)+(o.y-s.y)*(a.y-s.y))/u;if(l<=0)return o.distance(s);if(l>=1)return o.distance(a);var c=((s.y-o.y)*(a.x-s.x)-(s.x-o.x)*(a.y-s.y))/u;return Math.abs(c)*Math.sqrt(u)}},Xl.isOnLine=function(t,e){for(var n=new jl,r=1;r<e.length;r++){var i=e[r-1],o=e[r];if(n.computeIntersection(t,i,o),n.hasIntersection())return!0}return!1},Yl.CLOCKWISE.get=function(){return-1},Yl.RIGHT.get=function(){return Xl.CLOCKWISE},Yl.COUNTERCLOCKWISE.get=function(){return 1},Yl.LEFT.get=function(){return Xl.COUNTERCLOCKWISE},Yl.COLLINEAR.get=function(){return 0},Yl.STRAIGHT.get=function(){return Xl.COLLINEAR},Object.defineProperties(Xl,Yl);var Hl=function(){};Hl.prototype.filter=function(t){},Hl.prototype.interfaces_=function(){return[]},Hl.prototype.getClass=function(){return Hl};var Wl=function(){var t=arguments[0];this._envelope=null,this._factory=null,this._SRID=null,this._userData=null,this._factory=t,this._SRID=t.getSRID()},Jl={serialVersionUID:{configurable:!0},SORTINDEX_POINT:{configurable:!0},SORTINDEX_MULTIPOINT:{configurable:!0},SORTINDEX_LINESTRING:{configurable:!0},SORTINDEX_LINEARRING:{configurable:!0},SORTINDEX_MULTILINESTRING:{configurable:!0},SORTINDEX_POLYGON:{configurable:!0},SORTINDEX_MULTIPOLYGON:{configurable:!0},SORTINDEX_GEOMETRYCOLLECTION:{configurable:!0},geometryChangedFilter:{configurable:!0}};Wl.prototype.isGeometryCollection=function(){return this.getSortIndex()===Wl.SORTINDEX_GEOMETRYCOLLECTION},Wl.prototype.getFactory=function(){return this._factory},Wl.prototype.getGeometryN=function(t){return this},Wl.prototype.getArea=function(){return 0},Wl.prototype.isRectangle=function(){return!1},Wl.prototype.equals=function(){if(arguments[0]instanceof Wl){var t=arguments[0];return null!==t&&this.equalsTopo(t)}if(arguments[0]instanceof Object){var e=arguments[0];if(!(e instanceof Wl))return!1;var n=e;return this.equalsExact(n)}},Wl.prototype.equalsExact=function(t){return this===t||this.equalsExact(t,0)},Wl.prototype.geometryChanged=function(){this.apply(Wl.geometryChangedFilter)},Wl.prototype.geometryChangedAction=function(){this._envelope=null},Wl.prototype.equalsNorm=function(t){return null!==t&&this.norm().equalsExact(t.norm())},Wl.prototype.getLength=function(){return 0},Wl.prototype.getNumGeometries=function(){return 1},Wl.prototype.compareTo=function(){if(1===arguments.length){var t=arguments[0],e=t;return this.getSortIndex()!==e.getSortIndex()?this.getSortIndex()-e.getSortIndex():this.isEmpty()&&e.isEmpty()?0:this.isEmpty()?-1:e.isEmpty()?1:this.compareToSameClass(t)}if(2===arguments.length){var n=arguments[0],r=arguments[1];return this.getSortIndex()!==n.getSortIndex()?this.getSortIndex()-n.getSortIndex():this.isEmpty()&&n.isEmpty()?0:this.isEmpty()?-1:n.isEmpty()?1:this.compareToSameClass(n,r)}},Wl.prototype.getUserData=function(){return this._userData},Wl.prototype.getSRID=function(){return this._SRID},Wl.prototype.getEnvelope=function(){return this.getFactory().toGeometry(this.getEnvelopeInternal())},Wl.prototype.checkNotGeometryCollection=function(t){if(t.getSortIndex()===Wl.SORTINDEX_GEOMETRYCOLLECTION)throw new el("This method does not support GeometryCollection arguments")},Wl.prototype.equal=function(t,e,n){return 0===n?t.equals(e):t.distance(e)<=n},Wl.prototype.norm=function(){var t=this.copy();return t.normalize(),t},Wl.prototype.getPrecisionModel=function(){return this._factory.getPrecisionModel()},Wl.prototype.getEnvelopeInternal=function(){return null===this._envelope&&(this._envelope=this.computeEnvelopeInternal()),new Ll(this._envelope)},Wl.prototype.setSRID=function(t){this._SRID=t},Wl.prototype.setUserData=function(t){this._userData=t},Wl.prototype.compare=function(t,e){for(var n=t.iterator(),r=e.iterator();n.hasNext()&&r.hasNext();){var i=n.next(),o=r.next(),s=i.compareTo(o);if(0!==s)return s}return n.hasNext()?1:r.hasNext()?-1:0},Wl.prototype.hashCode=function(){return this.getEnvelopeInternal().hashCode()},Wl.prototype.isGeometryCollectionOrDerived=function(){return this.getSortIndex()===Wl.SORTINDEX_GEOMETRYCOLLECTION||this.getSortIndex()===Wl.SORTINDEX_MULTIPOINT||this.getSortIndex()===Wl.SORTINDEX_MULTILINESTRING||this.getSortIndex()===Wl.SORTINDEX_MULTIPOLYGON},Wl.prototype.interfaces_=function(){return[ol,il,al]},Wl.prototype.getClass=function(){return Wl},Wl.hasNonEmptyElements=function(t){for(var e=0;e<t.length;e++)if(!t[e].isEmpty())return!0;return!1},Wl.hasNullElements=function(t){for(var e=0;e<t.length;e++)if(null===t[e])return!0;return!1},Jl.serialVersionUID.get=function(){return 0x799ea46522854c00},Jl.SORTINDEX_POINT.get=function(){return 0},Jl.SORTINDEX_MULTIPOINT.get=function(){return 1},Jl.SORTINDEX_LINESTRING.get=function(){return 2},Jl.SORTINDEX_LINEARRING.get=function(){return 3},Jl.SORTINDEX_MULTILINESTRING.get=function(){return 4},Jl.SORTINDEX_POLYGON.get=function(){return 5},Jl.SORTINDEX_MULTIPOLYGON.get=function(){return 6},Jl.SORTINDEX_GEOMETRYCOLLECTION.get=function(){return 7},Jl.geometryChangedFilter.get=function(){return Zl},Object.defineProperties(Wl,Jl);var Zl=function(){};Zl.interfaces_=function(){return[Hl]},Zl.filter=function(t){t.geometryChangedAction()};var Kl=function(){};Kl.prototype.filter=function(t){},Kl.prototype.interfaces_=function(){return[]},Kl.prototype.getClass=function(){return Kl};var Ql=function(){},$l={Mod2BoundaryNodeRule:{configurable:!0},EndPointBoundaryNodeRule:{configurable:!0},MultiValentEndPointBoundaryNodeRule:{configurable:!0},MonoValentEndPointBoundaryNodeRule:{configurable:!0},MOD2_BOUNDARY_RULE:{configurable:!0},ENDPOINT_BOUNDARY_RULE:{configurable:!0},MULTIVALENT_ENDPOINT_BOUNDARY_RULE:{configurable:!0},MONOVALENT_ENDPOINT_BOUNDARY_RULE:{configurable:!0},OGC_SFS_BOUNDARY_RULE:{configurable:!0}};Ql.prototype.isInBoundary=function(t){},Ql.prototype.interfaces_=function(){return[]},Ql.prototype.getClass=function(){return Ql},$l.Mod2BoundaryNodeRule.get=function(){return tc},$l.EndPointBoundaryNodeRule.get=function(){return ec},$l.MultiValentEndPointBoundaryNodeRule.get=function(){return nc},$l.MonoValentEndPointBoundaryNodeRule.get=function(){return rc},$l.MOD2_BOUNDARY_RULE.get=function(){return new tc},$l.ENDPOINT_BOUNDARY_RULE.get=function(){return new ec},$l.MULTIVALENT_ENDPOINT_BOUNDARY_RULE.get=function(){return new nc},$l.MONOVALENT_ENDPOINT_BOUNDARY_RULE.get=function(){return new rc},$l.OGC_SFS_BOUNDARY_RULE.get=function(){return Ql.MOD2_BOUNDARY_RULE},Object.defineProperties(Ql,$l);var tc=function(){};tc.prototype.isInBoundary=function(t){return t%2==1},tc.prototype.interfaces_=function(){return[Ql]},tc.prototype.getClass=function(){return tc};var ec=function(){};ec.prototype.isInBoundary=function(t){return t>0},ec.prototype.interfaces_=function(){return[Ql]},ec.prototype.getClass=function(){return ec};var nc=function(){};nc.prototype.isInBoundary=function(t){return t>1},nc.prototype.interfaces_=function(){return[Ql]},nc.prototype.getClass=function(){return nc};var rc=function(){};rc.prototype.isInBoundary=function(t){return 1===t},rc.prototype.interfaces_=function(){return[Ql]},rc.prototype.getClass=function(){return rc};var ic=function(){};function oc(t){this.message=t||""}ic.prototype.add=function(){},ic.prototype.addAll=function(){},ic.prototype.isEmpty=function(){},ic.prototype.iterator=function(){},ic.prototype.size=function(){},ic.prototype.toArray=function(){},ic.prototype.remove=function(){},oc.prototype=new Error,oc.prototype.name="IndexOutOfBoundsException";var sc=function(){};sc.prototype.hasNext=function(){},sc.prototype.next=function(){},sc.prototype.remove=function(){};var ac=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.get=function(){},e.prototype.set=function(){},e.prototype.isEmpty=function(){},e}(ic);function uc(t){this.message=t||""}uc.prototype=new Error,uc.prototype.name="NoSuchElementException";var lc=function(t){function e(){t.call(this),this.array_=[],arguments[0]instanceof ic&&this.addAll(arguments[0])}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.ensureCapacity=function(){},e.prototype.interfaces_=function(){return[t,ic]},e.prototype.add=function(t){return 1===arguments.length?this.array_.push(t):this.array_.splice(arguments[0],arguments[1]),!0},e.prototype.clear=function(){this.array_=[]},e.prototype.addAll=function(t){for(var e=t.iterator();e.hasNext();)this.add(e.next());return!0},e.prototype.set=function(t,e){var n=this.array_[t];return this.array_[t]=e,n},e.prototype.iterator=function(){return new cc(this)},e.prototype.get=function(t){if(t<0||t>=this.size())throw new oc;return this.array_[t]},e.prototype.isEmpty=function(){return 0===this.array_.length},e.prototype.size=function(){return this.array_.length},e.prototype.toArray=function(){for(var t=[],e=0,n=this.array_.length;e<n;e++)t.push(this.array_[e]);return t},e.prototype.remove=function(t){for(var e=!1,n=0,r=this.array_.length;n<r;n++)if(this.array_[n]===t){this.array_.splice(n,1),e=!0;break}return e},e}(ac),cc=function(t){function e(e){t.call(this),this.arrayList_=e,this.position_=0}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.next=function(){if(this.position_===this.arrayList_.size())throw new uc;return this.arrayList_.get(this.position_++)},e.prototype.hasNext=function(){return this.position_<this.arrayList_.size()},e.prototype.set=function(t){return this.arrayList_.set(this.position_-1,t)},e.prototype.remove=function(){this.arrayList_.remove(this.arrayList_.get(this.position_))},e}(sc),hc=function(t){function e(){if(t.call(this),0===arguments.length);else if(1===arguments.length){var e=arguments[0];this.ensureCapacity(e.length),this.add(e,!0)}else if(2===arguments.length){var n=arguments[0],r=arguments[1];this.ensureCapacity(n.length),this.add(n,r)}}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={coordArrayType:{configurable:!0}};return n.coordArrayType.get=function(){return new Array(0).fill(null)},e.prototype.getCoordinate=function(t){return this.get(t)},e.prototype.addAll=function(){var e=this;if(2===arguments.length){for(var n=arguments[0],r=arguments[1],i=!1,o=n.iterator();o.hasNext();)e.add(o.next(),r),i=!0;return i}return t.prototype.addAll.apply(this,arguments)},e.prototype.clone=function(){for(var e=t.prototype.clone.call(this),n=0;n<this.size();n++)e.add(n,this.get(n).copy());return e},e.prototype.toCoordinateArray=function(){return this.toArray(e.coordArrayType)},e.prototype.add=function(){var e=this;if(1===arguments.length){var n=arguments[0];t.prototype.add.call(this,n)}else if(2===arguments.length){if(arguments[0]instanceof Array&&"boolean"==typeof arguments[1]){var r=arguments[0],i=arguments[1];return this.add(r,i,!0),!0}if(arguments[0]instanceof ul&&"boolean"==typeof arguments[1]){var o=arguments[0],s=arguments[1];if(!s&&this.size()>=1){var a=this.get(this.size()-1);if(a.equals2D(o))return null}t.prototype.add.call(this,o)}else if(arguments[0]instanceof Object&&"boolean"==typeof arguments[1]){var u=arguments[0],l=arguments[1];return this.add(u,l),!0}}else if(3===arguments.length){if("boolean"==typeof arguments[2]&&arguments[0]instanceof Array&&"boolean"==typeof arguments[1]){var c=arguments[0],h=arguments[1],p=arguments[2];if(p)for(var f=0;f<c.length;f++)e.add(c[f],h);else for(var g=c.length-1;g>=0;g--)e.add(c[g],h);return!0}if("boolean"==typeof arguments[2]&&Number.isInteger(arguments[0])&&arguments[1]instanceof ul){var d=arguments[0],y=arguments[1],v=arguments[2];if(!v){var _=this.size();if(_>0){if(d>0){var m=this.get(d-1);if(m.equals2D(y))return null}if(d<_){var x=this.get(d);if(x.equals2D(y))return null}}}t.prototype.add.call(this,d,y)}}else if(4===arguments.length){var E=arguments[0],b=arguments[1],w=arguments[2],I=arguments[3],N=1;w>I&&(N=-1);for(var S=w;S!==I;S+=N)e.add(E[S],b);return!0}},e.prototype.closeRing=function(){this.size()>0&&this.add(new ul(this.get(0)),!1)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},Object.defineProperties(e,n),e}(lc),pc=function(){},fc={ForwardComparator:{configurable:!0},BidirectionalComparator:{configurable:!0},coordArrayType:{configurable:!0}};fc.ForwardComparator.get=function(){return gc},fc.BidirectionalComparator.get=function(){return dc},fc.coordArrayType.get=function(){return new Array(0).fill(null)},pc.prototype.interfaces_=function(){return[]},pc.prototype.getClass=function(){return pc},pc.isRing=function(t){return!(t.length<4)&&!!t[0].equals2D(t[t.length-1])},pc.ptNotInList=function(t,e){for(var n=0;n<t.length;n++){var r=t[n];if(pc.indexOf(r,e)<0)return r}return null},pc.scroll=function(t,e){var n=pc.indexOf(e,t);if(n<0)return null;var r=new Array(t.length).fill(null);Pl.arraycopy(t,n,r,0,t.length-n),Pl.arraycopy(t,0,r,t.length-n,n),Pl.arraycopy(r,0,t,0,t.length)},pc.equals=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1];if(t===e)return!0;if(null===t||null===e)return!1;if(t.length!==e.length)return!1;for(var n=0;n<t.length;n++)if(!t[n].equals(e[n]))return!1;return!0}if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2];if(r===i)return!0;if(null===r||null===i)return!1;if(r.length!==i.length)return!1;for(var s=0;s<r.length;s++)if(0!==o.compare(r[s],i[s]))return!1;return!0}},pc.intersection=function(t,e){for(var n=new hc,r=0;r<t.length;r++)e.intersects(t[r])&&n.add(t[r],!0);return n.toCoordinateArray()},pc.hasRepeatedPoints=function(t){for(var e=1;e<t.length;e++)if(t[e-1].equals(t[e]))return!0;return!1},pc.removeRepeatedPoints=function(t){return pc.hasRepeatedPoints(t)?new hc(t,!1).toCoordinateArray():t},pc.reverse=function(t){for(var e=t.length-1,n=Math.trunc(e/2),r=0;r<=n;r++){var i=t[r];t[r]=t[e-r],t[e-r]=i}},pc.removeNull=function(t){for(var e=0,n=0;n<t.length;n++)null!==t[n]&&e++;var r=new Array(e).fill(null);if(0===e)return r;for(var i=0,o=0;o<t.length;o++)null!==t[o]&&(r[i++]=t[o]);return r},pc.copyDeep=function(){if(1===arguments.length){for(var t=arguments[0],e=new Array(t.length).fill(null),n=0;n<t.length;n++)e[n]=new ul(t[n]);return e}if(5===arguments.length)for(var r=arguments[0],i=arguments[1],o=arguments[2],s=arguments[3],a=arguments[4],u=0;u<a;u++)o[s+u]=new ul(r[i+u])},pc.isEqualReversed=function(t,e){for(var n=0;n<t.length;n++){var r=t[n],i=e[t.length-n-1];if(0!==r.compareTo(i))return!1}return!0},pc.envelope=function(t){for(var e=new Ll,n=0;n<t.length;n++)e.expandToInclude(t[n]);return e},pc.toCoordinateArray=function(t){return t.toArray(pc.coordArrayType)},pc.atLeastNCoordinatesOrNothing=function(t,e){return e.length>=t?e:[]},pc.indexOf=function(t,e){for(var n=0;n<e.length;n++)if(t.equals(e[n]))return n;return-1},pc.increasingDirection=function(t){for(var e=0;e<Math.trunc(t.length/2);e++){var n=t.length-1-e,r=t[e].compareTo(t[n]);if(0!==r)return r}return 1},pc.compare=function(t,e){for(var n=0;n<t.length&&n<e.length;){var r=t[n].compareTo(e[n]);if(0!==r)return r;n++}return n<e.length?-1:n<t.length?1:0},pc.minCoordinate=function(t){for(var e=null,n=0;n<t.length;n++)(null===e||e.compareTo(t[n])>0)&&(e=t[n]);return e},pc.extract=function(t,e,n){e=dl.clamp(e,0,t.length);var r=(n=dl.clamp(n,-1,t.length))-e+1;n<0&&(r=0),e>=t.length&&(r=0),n<e&&(r=0);var i=new Array(r).fill(null);if(0===r)return i;for(var o=0,s=e;s<=n;s++)i[o++]=t[s];return i},Object.defineProperties(pc,fc);var gc=function(){};gc.prototype.compare=function(t,e){return pc.compare(t,e)},gc.prototype.interfaces_=function(){return[sl]},gc.prototype.getClass=function(){return gc};var dc=function(){};dc.prototype.compare=function(t,e){var n=t,r=e;if(n.length<r.length)return-1;if(n.length>r.length)return 1;if(0===n.length)return 0;var i=pc.compare(n,r);return pc.isEqualReversed(n,r)?0:i},dc.prototype.OLDcompare=function(t,e){var n=t,r=e;if(n.length<r.length)return-1;if(n.length>r.length)return 1;if(0===n.length)return 0;for(var i=pc.increasingDirection(n),o=pc.increasingDirection(r),s=i>0?0:n.length-1,a=o>0?0:n.length-1,u=0;u<n.length;u++){var l=n[s].compareTo(r[a]);if(0!==l)return l;s+=i,a+=o}return 0},dc.prototype.interfaces_=function(){return[sl]},dc.prototype.getClass=function(){return dc};var yc=function(){};yc.prototype.get=function(){},yc.prototype.put=function(){},yc.prototype.size=function(){},yc.prototype.values=function(){},yc.prototype.entrySet=function(){};var vc=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e}(yc);function _c(t){this.message=t||""}function mc(){}_c.prototype=new Error,_c.prototype.name="OperationNotSupported",mc.prototype=new ic,mc.prototype.contains=function(){};var xc=function(t){function e(){t.call(this),this.array_=[],arguments[0]instanceof ic&&this.addAll(arguments[0])}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.contains=function(t){for(var e=0,n=this.array_.length;e<n;e++){if(this.array_[e]===t)return!0}return!1},e.prototype.add=function(t){return!this.contains(t)&&(this.array_.push(t),!0)},e.prototype.addAll=function(t){for(var e=t.iterator();e.hasNext();)this.add(e.next());return!0},e.prototype.remove=function(t){throw new Error},e.prototype.size=function(){return this.array_.length},e.prototype.isEmpty=function(){return 0===this.array_.length},e.prototype.toArray=function(){for(var t=[],e=0,n=this.array_.length;e<n;e++)t.push(this.array_[e]);return t},e.prototype.iterator=function(){return new Ec(this)},e}(mc),Ec=function(t){function e(e){t.call(this),this.hashSet_=e,this.position_=0}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.next=function(){if(this.position_===this.hashSet_.size())throw new uc;return this.hashSet_.array_[this.position_++]},e.prototype.hasNext=function(){return this.position_<this.hashSet_.size()},e.prototype.remove=function(){throw new _c},e}(sc);function bc(t){return null===t?0:t.color}function wc(t){return null===t?null:t.parent}function Ic(t,e){null!==t&&(t.color=e)}function Nc(t){return null===t?null:t.left}function Sc(t){return null===t?null:t.right}function Cc(){this.root_=null,this.size_=0}Cc.prototype=new vc,Cc.prototype.get=function(t){for(var e=this.root_;null!==e;){var n=t.compareTo(e.key);if(n<0)e=e.left;else{if(!(n>0))return e.value;e=e.right}}return null},Cc.prototype.put=function(t,e){if(null===this.root_)return this.root_={key:t,value:e,left:null,right:null,parent:null,color:0,getValue:function(){return this.value},getKey:function(){return this.key}},this.size_=1,null;var n,r,i=this.root_;do{if(n=i,(r=t.compareTo(i.key))<0)i=i.left;else{if(!(r>0)){var o=i.value;return i.value=e,o}i=i.right}}while(null!==i);var s={key:t,left:null,right:null,value:e,parent:n,color:0,getValue:function(){return this.value},getKey:function(){return this.key}};return r<0?n.left=s:n.right=s,this.fixAfterInsertion(s),this.size_++,null},Cc.prototype.fixAfterInsertion=function(t){var e=this;for(t.color=1;null!=t&&t!==this.root_&&1===t.parent.color;)if(wc(t)===Nc(wc(wc(t)))){var n=Sc(wc(wc(t)));1===bc(n)?(Ic(wc(t),0),Ic(n,0),Ic(wc(wc(t)),1),t=wc(wc(t))):(t===Sc(wc(t))&&(t=wc(t),e.rotateLeft(t)),Ic(wc(t),0),Ic(wc(wc(t)),1),e.rotateRight(wc(wc(t))))}else{var r=Nc(wc(wc(t)));1===bc(r)?(Ic(wc(t),0),Ic(r,0),Ic(wc(wc(t)),1),t=wc(wc(t))):(t===Nc(wc(t))&&(t=wc(t),e.rotateRight(t)),Ic(wc(t),0),Ic(wc(wc(t)),1),e.rotateLeft(wc(wc(t))))}this.root_.color=0},Cc.prototype.values=function(){var t=new lc,e=this.getFirstEntry();if(null!==e)for(t.add(e.value);null!==(e=Cc.successor(e));)t.add(e.value);return t},Cc.prototype.entrySet=function(){var t=new xc,e=this.getFirstEntry();if(null!==e)for(t.add(e);null!==(e=Cc.successor(e));)t.add(e);return t},Cc.prototype.rotateLeft=function(t){if(null!=t){var e=t.right;t.right=e.left,null!=e.left&&(e.left.parent=t),e.parent=t.parent,null===t.parent?this.root_=e:t.parent.left===t?t.parent.left=e:t.parent.right=e,e.left=t,t.parent=e}},Cc.prototype.rotateRight=function(t){if(null!=t){var e=t.left;t.left=e.right,null!=e.right&&(e.right.parent=t),e.parent=t.parent,null===t.parent?this.root_=e:t.parent.right===t?t.parent.right=e:t.parent.left=e,e.right=t,t.parent=e}},Cc.prototype.getFirstEntry=function(){var t=this.root_;if(null!=t)for(;null!=t.left;)t=t.left;return t},Cc.successor=function(t){if(null===t)return null;if(null!==t.right){for(var e=t.right;null!==e.left;)e=e.left;return e}for(var n=t.parent,r=t;null!==n&&r===n.right;)r=n,n=n.parent;return n},Cc.prototype.size=function(){return this.size_};var Pc=function(){};function Mc(){}function Lc(){this.array_=[],arguments[0]instanceof ic&&this.addAll(arguments[0])}Pc.prototype.interfaces_=function(){return[]},Pc.prototype.getClass=function(){return Pc},Mc.prototype=new mc,Lc.prototype=new Mc,Lc.prototype.contains=function(t){for(var e=0,n=this.array_.length;e<n;e++){if(0===this.array_[e].compareTo(t))return!0}return!1},Lc.prototype.add=function(t){if(this.contains(t))return!1;for(var e=0,n=this.array_.length;e<n;e++){if(1===this.array_[e].compareTo(t))return this.array_.splice(e,0,t),!0}return this.array_.push(t),!0},Lc.prototype.addAll=function(t){for(var e=t.iterator();e.hasNext();)this.add(e.next());return!0},Lc.prototype.remove=function(t){throw new _c},Lc.prototype.size=function(){return this.array_.length},Lc.prototype.isEmpty=function(){return 0===this.array_.length},Lc.prototype.toArray=function(){for(var t=[],e=0,n=this.array_.length;e<n;e++)t.push(this.array_[e]);return t},Lc.prototype.iterator=function(){return new Oc(this)};var Oc=function(t){this.treeSet_=t,this.position_=0};Oc.prototype.next=function(){if(this.position_===this.treeSet_.size())throw new uc;return this.treeSet_.array_[this.position_++]},Oc.prototype.hasNext=function(){return this.position_<this.treeSet_.size()},Oc.prototype.remove=function(){throw new _c};var Rc=function(){};Rc.sort=function(){var t,e,n,r,i=arguments[0];if(1===arguments.length)r=function(t,e){return t.compareTo(e)},i.sort(r);else if(2===arguments.length)n=arguments[1],r=function(t,e){return n.compare(t,e)},i.sort(r);else if(3===arguments.length){(e=i.slice(arguments[1],arguments[2])).sort();var o=i.slice(0,arguments[1]).concat(e,i.slice(arguments[2],i.length));for(i.splice(0,i.length),t=0;t<o.length;t++)i.push(o[t])}else if(4===arguments.length)for(e=i.slice(arguments[1],arguments[2]),n=arguments[3],r=function(t,e){return n.compare(t,e)},e.sort(r),o=i.slice(0,arguments[1]).concat(e,i.slice(arguments[2],i.length)),i.splice(0,i.length),t=0;t<o.length;t++)i.push(o[t])},Rc.asList=function(t){for(var e=new lc,n=0,r=t.length;n<r;n++)e.add(t[n]);return e};var Tc=function(){},Ac={P:{configurable:!0},L:{configurable:!0},A:{configurable:!0},FALSE:{configurable:!0},TRUE:{configurable:!0},DONTCARE:{configurable:!0},SYM_FALSE:{configurable:!0},SYM_TRUE:{configurable:!0},SYM_DONTCARE:{configurable:!0},SYM_P:{configurable:!0},SYM_L:{configurable:!0},SYM_A:{configurable:!0}};Ac.P.get=function(){return 0},Ac.L.get=function(){return 1},Ac.A.get=function(){return 2},Ac.FALSE.get=function(){return-1},Ac.TRUE.get=function(){return-2},Ac.DONTCARE.get=function(){return-3},Ac.SYM_FALSE.get=function(){return"F"},Ac.SYM_TRUE.get=function(){return"T"},Ac.SYM_DONTCARE.get=function(){return"*"},Ac.SYM_P.get=function(){return"0"},Ac.SYM_L.get=function(){return"1"},Ac.SYM_A.get=function(){return"2"},Tc.prototype.interfaces_=function(){return[]},Tc.prototype.getClass=function(){return Tc},Tc.toDimensionSymbol=function(t){switch(t){case Tc.FALSE:return Tc.SYM_FALSE;case Tc.TRUE:return Tc.SYM_TRUE;case Tc.DONTCARE:return Tc.SYM_DONTCARE;case Tc.P:return Tc.SYM_P;case Tc.L:return Tc.SYM_L;case Tc.A:return Tc.SYM_A}throw new el("Unknown dimension value: "+t)},Tc.toDimensionValue=function(t){switch(ml.toUpperCase(t)){case Tc.SYM_FALSE:return Tc.FALSE;case Tc.SYM_TRUE:return Tc.TRUE;case Tc.SYM_DONTCARE:return Tc.DONTCARE;case Tc.SYM_P:return Tc.P;case Tc.SYM_L:return Tc.L;case Tc.SYM_A:return Tc.A}throw new el("Unknown dimension symbol: "+t)},Object.defineProperties(Tc,Ac);var Dc=function(){};Dc.prototype.filter=function(t){},Dc.prototype.interfaces_=function(){return[]},Dc.prototype.getClass=function(){return Dc};var Fc=function(){};Fc.prototype.filter=function(t,e){},Fc.prototype.isDone=function(){},Fc.prototype.isGeometryChanged=function(){},Fc.prototype.interfaces_=function(){return[]},Fc.prototype.getClass=function(){return Fc};var kc=function(t){function e(e,n){if(t.call(this,n),this._geometries=e||[],t.hasNullElements(this._geometries))throw new el("geometries must not contain null elements")}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.computeEnvelopeInternal=function(){for(var t=new Ll,e=0;e<this._geometries.length;e++)t.expandToInclude(this._geometries[e].getEnvelopeInternal());return t},e.prototype.getGeometryN=function(t){return this._geometries[t]},e.prototype.getSortIndex=function(){return t.SORTINDEX_GEOMETRYCOLLECTION},e.prototype.getCoordinates=function(){for(var t=new Array(this.getNumPoints()).fill(null),e=-1,n=0;n<this._geometries.length;n++)for(var r=this._geometries[n].getCoordinates(),i=0;i<r.length;i++)t[++e]=r[i];return t},e.prototype.getArea=function(){for(var t=0,e=0;e<this._geometries.length;e++)t+=this._geometries[e].getArea();return t},e.prototype.equalsExact=function(){var e=this;if(2===arguments.length){var n=arguments[0],r=arguments[1];if(!this.isEquivalentClass(n))return!1;var i=n;if(this._geometries.length!==i._geometries.length)return!1;for(var o=0;o<this._geometries.length;o++)if(!e._geometries[o].equalsExact(i._geometries[o],r))return!1;return!0}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.normalize=function(){for(var t=0;t<this._geometries.length;t++)this._geometries[t].normalize();Rc.sort(this._geometries)},e.prototype.getCoordinate=function(){return this.isEmpty()?null:this._geometries[0].getCoordinate()},e.prototype.getBoundaryDimension=function(){for(var t=Tc.FALSE,e=0;e<this._geometries.length;e++)t=Math.max(t,this._geometries[e].getBoundaryDimension());return t},e.prototype.getDimension=function(){for(var t=Tc.FALSE,e=0;e<this._geometries.length;e++)t=Math.max(t,this._geometries[e].getDimension());return t},e.prototype.getLength=function(){for(var t=0,e=0;e<this._geometries.length;e++)t+=this._geometries[e].getLength();return t},e.prototype.getNumPoints=function(){for(var t=0,e=0;e<this._geometries.length;e++)t+=this._geometries[e].getNumPoints();return t},e.prototype.getNumGeometries=function(){return this._geometries.length},e.prototype.reverse=function(){for(var t=this._geometries.length,e=new Array(t).fill(null),n=0;n<this._geometries.length;n++)e[n]=this._geometries[n].reverse();return this.getFactory().createGeometryCollection(e)},e.prototype.compareToSameClass=function(){var t=this;if(1===arguments.length){var e=arguments[0],n=new Lc(Rc.asList(this._geometries)),r=new Lc(Rc.asList(e._geometries));return this.compare(n,r)}if(2===arguments.length){for(var i=arguments[0],o=arguments[1],s=i,a=this.getNumGeometries(),u=s.getNumGeometries(),l=0;l<a&&l<u;){var c=t.getGeometryN(l),h=s.getGeometryN(l),p=c.compareToSameClass(h,o);if(0!==p)return p;l++}return l<a?1:l<u?-1:0}},e.prototype.apply=function(){var t=this;if(gl(arguments[0],Kl))for(var e=arguments[0],n=0;n<this._geometries.length;n++)t._geometries[n].apply(e);else if(gl(arguments[0],Fc)){var r=arguments[0];if(0===this._geometries.length)return null;for(var i=0;i<this._geometries.length&&(t._geometries[i].apply(r),!r.isDone());i++);r.isGeometryChanged()&&this.geometryChanged()}else if(gl(arguments[0],Dc)){var o=arguments[0];o.filter(this);for(var s=0;s<this._geometries.length;s++)t._geometries[s].apply(o)}else if(gl(arguments[0],Hl)){var a=arguments[0];a.filter(this);for(var u=0;u<this._geometries.length;u++)t._geometries[u].apply(a)}},e.prototype.getBoundary=function(){return this.checkNotGeometryCollection(this),ql.shouldNeverReachHere(),null},e.prototype.clone=function(){var e=t.prototype.clone.call(this);e._geometries=new Array(this._geometries.length).fill(null);for(var n=0;n<this._geometries.length;n++)e._geometries[n]=this._geometries[n].clone();return e},e.prototype.getGeometryType=function(){return"GeometryCollection"},e.prototype.copy=function(){for(var t=new Array(this._geometries.length).fill(null),n=0;n<t.length;n++)t[n]=this._geometries[n].copy();return new e(t,this._factory)},e.prototype.isEmpty=function(){for(var t=0;t<this._geometries.length;t++)if(!this._geometries[t].isEmpty())return!1;return!0},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return-0x4f07bcb1f857d800},Object.defineProperties(e,n),e}(Wl),Gc=function(t){function e(){t.apply(this,arguments)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.getSortIndex=function(){return Wl.SORTINDEX_MULTILINESTRING},e.prototype.equalsExact=function(){if(2===arguments.length){var e=arguments[0],n=arguments[1];return!!this.isEquivalentClass(e)&&t.prototype.equalsExact.call(this,e,n)}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.getBoundaryDimension=function(){return this.isClosed()?Tc.FALSE:0},e.prototype.isClosed=function(){if(this.isEmpty())return!1;for(var t=0;t<this._geometries.length;t++)if(!this._geometries[t].isClosed())return!1;return!0},e.prototype.getDimension=function(){return 1},e.prototype.reverse=function(){for(var t=this._geometries.length,e=new Array(t).fill(null),n=0;n<this._geometries.length;n++)e[t-1-n]=this._geometries[n].reverse();return this.getFactory().createMultiLineString(e)},e.prototype.getBoundary=function(){return new qc(this).getBoundary()},e.prototype.getGeometryType=function(){return"MultiLineString"},e.prototype.copy=function(){for(var t=new Array(this._geometries.length).fill(null),n=0;n<t.length;n++)t[n]=this._geometries[n].copy();return new e(t,this._factory)},e.prototype.interfaces_=function(){return[Pc]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return 0x7155d2ab4afa8000},Object.defineProperties(e,n),e}(kc),qc=function(){if(this._geom=null,this._geomFact=null,this._bnRule=null,this._endpointMap=null,1===arguments.length){var t=arguments[0],e=Ql.MOD2_BOUNDARY_RULE;this._geom=t,this._geomFact=t.getFactory(),this._bnRule=e}else if(2===arguments.length){var n=arguments[0],r=arguments[1];this._geom=n,this._geomFact=n.getFactory(),this._bnRule=r}};qc.prototype.boundaryMultiLineString=function(t){if(this._geom.isEmpty())return this.getEmptyMultiPoint();var e=this.computeBoundaryCoordinates(t);return 1===e.length?this._geomFact.createPoint(e[0]):this._geomFact.createMultiPointFromCoords(e)},qc.prototype.getBoundary=function(){return this._geom instanceof Zc?this.boundaryLineString(this._geom):this._geom instanceof Gc?this.boundaryMultiLineString(this._geom):this._geom.getBoundary()},qc.prototype.boundaryLineString=function(t){return this._geom.isEmpty()?this.getEmptyMultiPoint():t.isClosed()?this._bnRule.isInBoundary(2)?t.getStartPoint():this._geomFact.createMultiPoint():this._geomFact.createMultiPoint([t.getStartPoint(),t.getEndPoint()])},qc.prototype.getEmptyMultiPoint=function(){return this._geomFact.createMultiPoint()},qc.prototype.computeBoundaryCoordinates=function(t){var e=this,n=new lc;this._endpointMap=new Cc;for(var r=0;r<t.getNumGeometries();r++){var i=t.getGeometryN(r);0!==i.getNumPoints()&&(e.addEndpoint(i.getCoordinateN(0)),e.addEndpoint(i.getCoordinateN(i.getNumPoints()-1)))}for(var o=this._endpointMap.entrySet().iterator();o.hasNext();){var s=o.next(),a=s.getValue().count;e._bnRule.isInBoundary(a)&&n.add(s.getKey())}return pc.toCoordinateArray(n)},qc.prototype.addEndpoint=function(t){var e=this._endpointMap.get(t);null===e&&(e=new Bc,this._endpointMap.put(t,e)),e.count++},qc.prototype.interfaces_=function(){return[]},qc.prototype.getClass=function(){return qc},qc.getBoundary=function(){if(1===arguments.length){var t=arguments[0],e=new qc(t);return e.getBoundary()}if(2===arguments.length){var n=arguments[0],r=arguments[1],i=new qc(n,r);return i.getBoundary()}};var Bc=function(){this.count=null};function zc(){}function jc(){}Bc.prototype.interfaces_=function(){return[]},Bc.prototype.getClass=function(){return Bc};var Uc=function(){};function Vc(){}function Xc(){}function Yc(){}var Hc=function(){},Wc={NEWLINE:{configurable:!0},SIMPLE_ORDINATE_FORMAT:{configurable:!0}};Hc.prototype.interfaces_=function(){return[]},Hc.prototype.getClass=function(){return Hc},Hc.chars=function(t,e){for(var n=new Array(e).fill(null),r=0;r<e;r++)n[r]=t;return String(n)},Hc.getStackTrace=function(){if(1===arguments.length){var t=arguments[0],e=new Vc,n=new zc(e);return t.printStackTrace(n),e.toString()}if(2===arguments.length){for(var r=arguments[0],i=arguments[1],o="",s=new jc(Hc.getStackTrace(r)),a=new Yc(s),u=0;u<i;u++)try{o+=a.readLine()+Hc.NEWLINE}catch(t){if(!(t instanceof Xc))throw t;ql.shouldNeverReachHere()}return o}},Hc.split=function(t,e){for(var n=e.length,r=new lc,i=""+t,o=i.indexOf(e);o>=0;){var s=i.substring(0,o);r.add(s),o=(i=i.substring(o+n)).indexOf(e)}i.length>0&&r.add(i);for(var a=new Array(r.size()).fill(null),u=0;u<a.length;u++)a[u]=r.get(u);return a},Hc.toString=function(){if(1===arguments.length){var t=arguments[0];return Hc.SIMPLE_ORDINATE_FORMAT.format(t)}},Hc.spaces=function(t){return Hc.chars(" ",t)},Wc.NEWLINE.get=function(){return Pl.getProperty("line.separator")},Wc.SIMPLE_ORDINATE_FORMAT.get=function(){return new Uc("0.#")},Object.defineProperties(Hc,Wc);var Jc=function(){};Jc.prototype.interfaces_=function(){return[]},Jc.prototype.getClass=function(){return Jc},Jc.copyCoord=function(t,e,n,r){for(var i=Math.min(t.getDimension(),n.getDimension()),o=0;o<i;o++)n.setOrdinate(r,o,t.getOrdinate(e,o))},Jc.isRing=function(t){var e=t.size();return 0===e||!(e<=3)&&(t.getOrdinate(0,Il.X)===t.getOrdinate(e-1,Il.X)&&t.getOrdinate(0,Il.Y)===t.getOrdinate(e-1,Il.Y))},Jc.isEqual=function(t,e){var n=t.size();if(n!==e.size())return!1;for(var r=Math.min(t.getDimension(),e.getDimension()),i=0;i<n;i++)for(var o=0;o<r;o++){var s=t.getOrdinate(i,o),a=e.getOrdinate(i,o);if(t.getOrdinate(i,o)!==e.getOrdinate(i,o)&&(!nl.isNaN(s)||!nl.isNaN(a)))return!1}return!0},Jc.extend=function(t,e,n){var r=t.create(n,e.getDimension()),i=e.size();if(Jc.copy(e,0,r,0,i),i>0)for(var o=i;o<n;o++)Jc.copy(e,i-1,r,o,1);return r},Jc.reverse=function(t){for(var e=t.size()-1,n=Math.trunc(e/2),r=0;r<=n;r++)Jc.swap(t,r,e-r)},Jc.swap=function(t,e,n){if(e===n)return null;for(var r=0;r<t.getDimension();r++){var i=t.getOrdinate(e,r);t.setOrdinate(e,r,t.getOrdinate(n,r)),t.setOrdinate(n,r,i)}},Jc.copy=function(t,e,n,r,i){for(var o=0;o<i;o++)Jc.copyCoord(t,e+o,n,r+o)},Jc.toString=function(){if(1===arguments.length){var t=arguments[0],e=t.size();if(0===e)return"()";var n=t.getDimension(),r=new vl;r.append("(");for(var i=0;i<e;i++){i>0&&r.append(" ");for(var o=0;o<n;o++)o>0&&r.append(","),r.append(Hc.toString(t.getOrdinate(i,o)))}return r.append(")"),r.toString()}},Jc.ensureValidRing=function(t,e){var n=e.size();return 0===n?e:n<=3?Jc.createClosedRing(t,e,4):e.getOrdinate(0,Il.X)===e.getOrdinate(n-1,Il.X)&&e.getOrdinate(0,Il.Y)===e.getOrdinate(n-1,Il.Y)?e:Jc.createClosedRing(t,e,n+1)},Jc.createClosedRing=function(t,e,n){var r=t.create(n,e.getDimension()),i=e.size();Jc.copy(e,0,r,0,i);for(var o=i;o<n;o++)Jc.copy(e,0,r,o,1);return r};var Zc=function(t){function e(e,n){t.call(this,n),this._points=null,this.init(e)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.computeEnvelopeInternal=function(){return this.isEmpty()?new Ll:this._points.expandEnvelope(new Ll)},e.prototype.isRing=function(){return this.isClosed()&&this.isSimple()},e.prototype.getSortIndex=function(){return t.SORTINDEX_LINESTRING},e.prototype.getCoordinates=function(){return this._points.toCoordinateArray()},e.prototype.equalsExact=function(){var e=this;if(2===arguments.length){var n=arguments[0],r=arguments[1];if(!this.isEquivalentClass(n))return!1;var i=n;if(this._points.size()!==i._points.size())return!1;for(var o=0;o<this._points.size();o++)if(!e.equal(e._points.getCoordinate(o),i._points.getCoordinate(o),r))return!1;return!0}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.normalize=function(){for(var t=this,e=0;e<Math.trunc(this._points.size()/2);e++){var n=t._points.size()-1-e;if(!t._points.getCoordinate(e).equals(t._points.getCoordinate(n)))return t._points.getCoordinate(e).compareTo(t._points.getCoordinate(n))>0&&Jc.reverse(t._points),null}},e.prototype.getCoordinate=function(){return this.isEmpty()?null:this._points.getCoordinate(0)},e.prototype.getBoundaryDimension=function(){return this.isClosed()?Tc.FALSE:0},e.prototype.isClosed=function(){return!this.isEmpty()&&this.getCoordinateN(0).equals2D(this.getCoordinateN(this.getNumPoints()-1))},e.prototype.getEndPoint=function(){return this.isEmpty()?null:this.getPointN(this.getNumPoints()-1)},e.prototype.getDimension=function(){return 1},e.prototype.getLength=function(){return Xl.computeLength(this._points)},e.prototype.getNumPoints=function(){return this._points.size()},e.prototype.reverse=function(){var t=this._points.copy();return Jc.reverse(t),this.getFactory().createLineString(t)},e.prototype.compareToSameClass=function(){var t=this;if(1===arguments.length){for(var e=arguments[0],n=e,r=0,i=0;r<this._points.size()&&i<n._points.size();){var o=t._points.getCoordinate(r).compareTo(n._points.getCoordinate(i));if(0!==o)return o;r++,i++}return r<this._points.size()?1:i<n._points.size()?-1:0}if(2===arguments.length){var s=arguments[0],a=arguments[1],u=s;return a.compare(this._points,u._points)}},e.prototype.apply=function(){var t=this;if(gl(arguments[0],Kl))for(var e=arguments[0],n=0;n<this._points.size();n++)e.filter(t._points.getCoordinate(n));else if(gl(arguments[0],Fc)){var r=arguments[0];if(0===this._points.size())return null;for(var i=0;i<this._points.size()&&(r.filter(t._points,i),!r.isDone());i++);r.isGeometryChanged()&&this.geometryChanged()}else if(gl(arguments[0],Dc)){var o=arguments[0];o.filter(this)}else if(gl(arguments[0],Hl)){var s=arguments[0];s.filter(this)}},e.prototype.getBoundary=function(){return new qc(this).getBoundary()},e.prototype.isEquivalentClass=function(t){return t instanceof e},e.prototype.clone=function(){var e=t.prototype.clone.call(this);return e._points=this._points.clone(),e},e.prototype.getCoordinateN=function(t){return this._points.getCoordinate(t)},e.prototype.getGeometryType=function(){return"LineString"},e.prototype.copy=function(){return new e(this._points.copy(),this._factory)},e.prototype.getCoordinateSequence=function(){return this._points},e.prototype.isEmpty=function(){return 0===this._points.size()},e.prototype.init=function(t){if(null===t&&(t=this.getFactory().getCoordinateSequenceFactory().create([])),1===t.size())throw new el("Invalid number of points in LineString (found "+t.size()+" - must be 0 or >= 2)");this._points=t},e.prototype.isCoordinate=function(t){for(var e=0;e<this._points.size();e++)if(this._points.getCoordinate(e).equals(t))return!0;return!1},e.prototype.getStartPoint=function(){return this.isEmpty()?null:this.getPointN(0)},e.prototype.getPointN=function(t){return this.getFactory().createPoint(this._points.getCoordinate(t))},e.prototype.interfaces_=function(){return[Pc]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return 0x2b2b51ba435c8e00},Object.defineProperties(e,n),e}(Wl),Kc=function(){};Kc.prototype.interfaces_=function(){return[]},Kc.prototype.getClass=function(){return Kc};var Qc=function(t){function e(e,n){t.call(this,n),this._coordinates=e||null,this.init(this._coordinates)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.computeEnvelopeInternal=function(){if(this.isEmpty())return new Ll;var t=new Ll;return t.expandToInclude(this._coordinates.getX(0),this._coordinates.getY(0)),t},e.prototype.getSortIndex=function(){return t.SORTINDEX_POINT},e.prototype.getCoordinates=function(){return this.isEmpty()?[]:[this.getCoordinate()]},e.prototype.equalsExact=function(){if(2===arguments.length){var e=arguments[0],n=arguments[1];return!!this.isEquivalentClass(e)&&(!(!this.isEmpty()||!e.isEmpty())||this.isEmpty()===e.isEmpty()&&this.equal(e.getCoordinate(),this.getCoordinate(),n))}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.normalize=function(){},e.prototype.getCoordinate=function(){return 0!==this._coordinates.size()?this._coordinates.getCoordinate(0):null},e.prototype.getBoundaryDimension=function(){return Tc.FALSE},e.prototype.getDimension=function(){return 0},e.prototype.getNumPoints=function(){return this.isEmpty()?0:1},e.prototype.reverse=function(){return this.copy()},e.prototype.getX=function(){if(null===this.getCoordinate())throw new Error("getX called on empty Point");return this.getCoordinate().x},e.prototype.compareToSameClass=function(){if(1===arguments.length){var t=arguments[0],e=t;return this.getCoordinate().compareTo(e.getCoordinate())}if(2===arguments.length){var n=arguments[0],r=arguments[1],i=n;return r.compare(this._coordinates,i._coordinates)}},e.prototype.apply=function(){if(gl(arguments[0],Kl)){var t=arguments[0];if(this.isEmpty())return null;t.filter(this.getCoordinate())}else if(gl(arguments[0],Fc)){var e=arguments[0];if(this.isEmpty())return null;e.filter(this._coordinates,0),e.isGeometryChanged()&&this.geometryChanged()}else if(gl(arguments[0],Dc)){var n=arguments[0];n.filter(this)}else if(gl(arguments[0],Hl)){var r=arguments[0];r.filter(this)}},e.prototype.getBoundary=function(){return this.getFactory().createGeometryCollection(null)},e.prototype.clone=function(){var e=t.prototype.clone.call(this);return e._coordinates=this._coordinates.clone(),e},e.prototype.getGeometryType=function(){return"Point"},e.prototype.copy=function(){return new e(this._coordinates.copy(),this._factory)},e.prototype.getCoordinateSequence=function(){return this._coordinates},e.prototype.getY=function(){if(null===this.getCoordinate())throw new Error("getY called on empty Point");return this.getCoordinate().y},e.prototype.isEmpty=function(){return 0===this._coordinates.size()},e.prototype.init=function(t){null===t&&(t=this.getFactory().getCoordinateSequenceFactory().create([])),ql.isTrue(t.size()<=1),this._coordinates=t},e.prototype.isSimple=function(){return!0},e.prototype.interfaces_=function(){return[Kc]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return 0x44077bad161cbc00},Object.defineProperties(e,n),e}(Wl),$c=function(){};$c.prototype.interfaces_=function(){return[]},$c.prototype.getClass=function(){return $c};var th=function(t){function e(e,n,r){if(t.call(this,r),this._shell=null,this._holes=null,null===e&&(e=this.getFactory().createLinearRing()),null===n&&(n=[]),t.hasNullElements(n))throw new el("holes must not contain null elements");if(e.isEmpty()&&t.hasNonEmptyElements(n))throw new el("shell is empty but holes are not");this._shell=e,this._holes=n}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.computeEnvelopeInternal=function(){return this._shell.getEnvelopeInternal()},e.prototype.getSortIndex=function(){return t.SORTINDEX_POLYGON},e.prototype.getCoordinates=function(){if(this.isEmpty())return[];for(var t=new Array(this.getNumPoints()).fill(null),e=-1,n=this._shell.getCoordinates(),r=0;r<n.length;r++)t[++e]=n[r];for(var i=0;i<this._holes.length;i++)for(var o=this._holes[i].getCoordinates(),s=0;s<o.length;s++)t[++e]=o[s];return t},e.prototype.getArea=function(){var t=0;t+=Math.abs(Xl.signedArea(this._shell.getCoordinateSequence()));for(var e=0;e<this._holes.length;e++)t-=Math.abs(Xl.signedArea(this._holes[e].getCoordinateSequence()));return t},e.prototype.isRectangle=function(){if(0!==this.getNumInteriorRing())return!1;if(null===this._shell)return!1;if(5!==this._shell.getNumPoints())return!1;for(var t=this._shell.getCoordinateSequence(),e=this.getEnvelopeInternal(),n=0;n<5;n++){var r=t.getX(n);if(r!==e.getMinX()&&r!==e.getMaxX())return!1;var i=t.getY(n);if(i!==e.getMinY()&&i!==e.getMaxY())return!1}for(var o=t.getX(0),s=t.getY(0),a=1;a<=4;a++){var u=t.getX(a),l=t.getY(a);if(u!==o===(l!==s))return!1;o=u,s=l}return!0},e.prototype.equalsExact=function(){var e=this;if(2===arguments.length){var n=arguments[0],r=arguments[1];if(!this.isEquivalentClass(n))return!1;var i=n,o=this._shell,s=i._shell;if(!o.equalsExact(s,r))return!1;if(this._holes.length!==i._holes.length)return!1;for(var a=0;a<this._holes.length;a++)if(!e._holes[a].equalsExact(i._holes[a],r))return!1;return!0}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.normalize=function(){var t=this;if(0===arguments.length){this.normalize(this._shell,!0);for(var e=0;e<this._holes.length;e++)t.normalize(t._holes[e],!1);Rc.sort(this._holes)}else if(2===arguments.length){var n=arguments[0],r=arguments[1];if(n.isEmpty())return null;var i=new Array(n.getCoordinates().length-1).fill(null);Pl.arraycopy(n.getCoordinates(),0,i,0,i.length);var o=pc.minCoordinate(n.getCoordinates());pc.scroll(i,o),Pl.arraycopy(i,0,n.getCoordinates(),0,i.length),n.getCoordinates()[i.length]=i[0],Xl.isCCW(n.getCoordinates())===r&&pc.reverse(n.getCoordinates())}},e.prototype.getCoordinate=function(){return this._shell.getCoordinate()},e.prototype.getNumInteriorRing=function(){return this._holes.length},e.prototype.getBoundaryDimension=function(){return 1},e.prototype.getDimension=function(){return 2},e.prototype.getLength=function(){var t=0;t+=this._shell.getLength();for(var e=0;e<this._holes.length;e++)t+=this._holes[e].getLength();return t},e.prototype.getNumPoints=function(){for(var t=this._shell.getNumPoints(),e=0;e<this._holes.length;e++)t+=this._holes[e].getNumPoints();return t},e.prototype.reverse=function(){var t=this.copy();t._shell=this._shell.copy().reverse(),t._holes=new Array(this._holes.length).fill(null);for(var e=0;e<this._holes.length;e++)t._holes[e]=this._holes[e].copy().reverse();return t},e.prototype.convexHull=function(){return this.getExteriorRing().convexHull()},e.prototype.compareToSameClass=function(){var t=this;if(1===arguments.length){var e=arguments[0],n=this._shell,r=e._shell;return n.compareToSameClass(r)}if(2===arguments.length){var i=arguments[0],o=arguments[1],s=i,a=this._shell,u=s._shell,l=a.compareToSameClass(u,o);if(0!==l)return l;for(var c=this.getNumInteriorRing(),h=s.getNumInteriorRing(),p=0;p<c&&p<h;){var f=t.getInteriorRingN(p),g=s.getInteriorRingN(p),d=f.compareToSameClass(g,o);if(0!==d)return d;p++}return p<c?1:p<h?-1:0}},e.prototype.apply=function(t){var e=this;if(gl(t,Kl)){this._shell.apply(t);for(var n=0;n<this._holes.length;n++)e._holes[n].apply(t)}else if(gl(t,Fc)){if(this._shell.apply(t),!t.isDone())for(var r=0;r<this._holes.length&&(e._holes[r].apply(t),!t.isDone());r++);t.isGeometryChanged()&&this.geometryChanged()}else if(gl(t,Dc))t.filter(this);else if(gl(t,Hl)){t.filter(this),this._shell.apply(t);for(var i=0;i<this._holes.length;i++)e._holes[i].apply(t)}},e.prototype.getBoundary=function(){if(this.isEmpty())return this.getFactory().createMultiLineString();var t=new Array(this._holes.length+1).fill(null);t[0]=this._shell;for(var e=0;e<this._holes.length;e++)t[e+1]=this._holes[e];return t.length<=1?this.getFactory().createLinearRing(t[0].getCoordinateSequence()):this.getFactory().createMultiLineString(t)},e.prototype.clone=function(){var e=t.prototype.clone.call(this);e._shell=this._shell.clone(),e._holes=new Array(this._holes.length).fill(null);for(var n=0;n<this._holes.length;n++)e._holes[n]=this._holes[n].clone();return e},e.prototype.getGeometryType=function(){return"Polygon"},e.prototype.copy=function(){for(var t=this._shell.copy(),n=new Array(this._holes.length).fill(null),r=0;r<n.length;r++)n[r]=this._holes[r].copy();return new e(t,n,this._factory)},e.prototype.getExteriorRing=function(){return this._shell},e.prototype.isEmpty=function(){return this._shell.isEmpty()},e.prototype.getInteriorRingN=function(t){return this._holes[t]},e.prototype.interfaces_=function(){return[$c]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return-0x307ffefd8dc97200},Object.defineProperties(e,n),e}(Wl),eh=function(t){function e(){t.apply(this,arguments)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.getSortIndex=function(){return Wl.SORTINDEX_MULTIPOINT},e.prototype.isValid=function(){return!0},e.prototype.equalsExact=function(){if(2===arguments.length){var e=arguments[0],n=arguments[1];return!!this.isEquivalentClass(e)&&t.prototype.equalsExact.call(this,e,n)}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.getCoordinate=function(){if(1===arguments.length){var e=arguments[0];return this._geometries[e].getCoordinate()}return t.prototype.getCoordinate.apply(this,arguments)},e.prototype.getBoundaryDimension=function(){return Tc.FALSE},e.prototype.getDimension=function(){return 0},e.prototype.getBoundary=function(){return this.getFactory().createGeometryCollection(null)},e.prototype.getGeometryType=function(){return"MultiPoint"},e.prototype.copy=function(){for(var t=new Array(this._geometries.length).fill(null),n=0;n<t.length;n++)t[n]=this._geometries[n].copy();return new e(t,this._factory)},e.prototype.interfaces_=function(){return[Kc]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return-0x6fb1ed4162e0fc00},Object.defineProperties(e,n),e}(kc),nh=function(t){function e(e,n){e instanceof ul&&n instanceof _h&&(e=n.getCoordinateSequenceFactory().create(e)),t.call(this,e,n),this.validateConstruction()}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={MINIMUM_VALID_SIZE:{configurable:!0},serialVersionUID:{configurable:!0}};return e.prototype.getSortIndex=function(){return Wl.SORTINDEX_LINEARRING},e.prototype.getBoundaryDimension=function(){return Tc.FALSE},e.prototype.isClosed=function(){return!!this.isEmpty()||t.prototype.isClosed.call(this)},e.prototype.reverse=function(){var t=this._points.copy();return Jc.reverse(t),this.getFactory().createLinearRing(t)},e.prototype.validateConstruction=function(){if(!this.isEmpty()&&!t.prototype.isClosed.call(this))throw new el("Points of LinearRing do not form a closed linestring");if(this.getCoordinateSequence().size()>=1&&this.getCoordinateSequence().size()<e.MINIMUM_VALID_SIZE)throw new el("Invalid number of points in LinearRing (found "+this.getCoordinateSequence().size()+" - must be 0 or >= 4)")},e.prototype.getGeometryType=function(){return"LinearRing"},e.prototype.copy=function(){return new e(this._points.copy(),this._factory)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},n.MINIMUM_VALID_SIZE.get=function(){return 4},n.serialVersionUID.get=function(){return-0x3b229e262367a600},Object.defineProperties(e,n),e}(Zc),rh=function(t){function e(){t.apply(this,arguments)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={serialVersionUID:{configurable:!0}};return e.prototype.getSortIndex=function(){return Wl.SORTINDEX_MULTIPOLYGON},e.prototype.equalsExact=function(){if(2===arguments.length){var e=arguments[0],n=arguments[1];return!!this.isEquivalentClass(e)&&t.prototype.equalsExact.call(this,e,n)}return t.prototype.equalsExact.apply(this,arguments)},e.prototype.getBoundaryDimension=function(){return 1},e.prototype.getDimension=function(){return 2},e.prototype.reverse=function(){for(var t=this._geometries.length,e=new Array(t).fill(null),n=0;n<this._geometries.length;n++)e[n]=this._geometries[n].reverse();return this.getFactory().createMultiPolygon(e)},e.prototype.getBoundary=function(){if(this.isEmpty())return this.getFactory().createMultiLineString();for(var t=new lc,e=0;e<this._geometries.length;e++)for(var n=this._geometries[e].getBoundary(),r=0;r<n.getNumGeometries();r++)t.add(n.getGeometryN(r));var i=new Array(t.size()).fill(null);return this.getFactory().createMultiLineString(t.toArray(i))},e.prototype.getGeometryType=function(){return"MultiPolygon"},e.prototype.copy=function(){for(var t=new Array(this._geometries.length).fill(null),n=0;n<t.length;n++)t[n]=this._geometries[n].copy();return new e(t,this._factory)},e.prototype.interfaces_=function(){return[$c]},e.prototype.getClass=function(){return e},n.serialVersionUID.get=function(){return-0x7a5aa1369171980},Object.defineProperties(e,n),e}(kc),ih=function(t){this._factory=t||null,this._isUserDataCopied=!1},oh={NoOpGeometryOperation:{configurable:!0},CoordinateOperation:{configurable:!0},CoordinateSequenceOperation:{configurable:!0}};ih.prototype.setCopyUserData=function(t){this._isUserDataCopied=t},ih.prototype.edit=function(t,e){if(null===t)return null;var n=this.editInternal(t,e);return this._isUserDataCopied&&n.setUserData(t.getUserData()),n},ih.prototype.editInternal=function(t,e){return null===this._factory&&(this._factory=t.getFactory()),t instanceof kc?this.editGeometryCollection(t,e):t instanceof th?this.editPolygon(t,e):t instanceof Qc||t instanceof Zc?e.edit(t,this._factory):(ql.shouldNeverReachHere("Unsupported Geometry class: "+t.getClass().getName()),null)},ih.prototype.editGeometryCollection=function(t,e){for(var n=e.edit(t,this._factory),r=new lc,i=0;i<n.getNumGeometries();i++){var o=this.edit(n.getGeometryN(i),e);null===o||o.isEmpty()||r.add(o)}return n.getClass()===eh?this._factory.createMultiPoint(r.toArray([])):n.getClass()===Gc?this._factory.createMultiLineString(r.toArray([])):n.getClass()===rh?this._factory.createMultiPolygon(r.toArray([])):this._factory.createGeometryCollection(r.toArray([]))},ih.prototype.editPolygon=function(t,e){var n=e.edit(t,this._factory);if(null===n&&(n=this._factory.createPolygon(null)),n.isEmpty())return n;var r=this.edit(n.getExteriorRing(),e);if(null===r||r.isEmpty())return this._factory.createPolygon();for(var i=new lc,o=0;o<n.getNumInteriorRing();o++){var s=this.edit(n.getInteriorRingN(o),e);null===s||s.isEmpty()||i.add(s)}return this._factory.createPolygon(r,i.toArray([]))},ih.prototype.interfaces_=function(){return[]},ih.prototype.getClass=function(){return ih},ih.GeometryEditorOperation=function(){},oh.NoOpGeometryOperation.get=function(){return sh},oh.CoordinateOperation.get=function(){return ah},oh.CoordinateSequenceOperation.get=function(){return uh},Object.defineProperties(ih,oh);var sh=function(){};sh.prototype.edit=function(t,e){return t},sh.prototype.interfaces_=function(){return[ih.GeometryEditorOperation]},sh.prototype.getClass=function(){return sh};var ah=function(){};ah.prototype.edit=function(t,e){var n=this.editCoordinates(t.getCoordinates(),t);return null===n?t:t instanceof nh?e.createLinearRing(n):t instanceof Zc?e.createLineString(n):t instanceof Qc?n.length>0?e.createPoint(n[0]):e.createPoint():t},ah.prototype.interfaces_=function(){return[ih.GeometryEditorOperation]},ah.prototype.getClass=function(){return ah};var uh=function(){};uh.prototype.edit=function(t,e){return t instanceof nh?e.createLinearRing(this.edit(t.getCoordinateSequence(),t)):t instanceof Zc?e.createLineString(this.edit(t.getCoordinateSequence(),t)):t instanceof Qc?e.createPoint(this.edit(t.getCoordinateSequence(),t)):t},uh.prototype.interfaces_=function(){return[ih.GeometryEditorOperation]},uh.prototype.getClass=function(){return uh};var lh=function(){var t=this;if(this._dimension=3,this._coordinates=null,1===arguments.length){if(arguments[0]instanceof Array)this._coordinates=arguments[0],this._dimension=3;else if(Number.isInteger(arguments[0])){var e=arguments[0];this._coordinates=new Array(e).fill(null);for(var n=0;n<e;n++)t._coordinates[n]=new ul}else if(gl(arguments[0],Il)){var r=arguments[0];if(null===r)return this._coordinates=new Array(0).fill(null),null;this._dimension=r.getDimension(),this._coordinates=new Array(r.size()).fill(null);for(var i=0;i<this._coordinates.length;i++)t._coordinates[i]=r.getCoordinateCopy(i)}}else if(2===arguments.length)if(arguments[0]instanceof Array&&Number.isInteger(arguments[1])){var o=arguments[0],s=arguments[1];this._coordinates=o,this._dimension=s,null===o&&(this._coordinates=new Array(0).fill(null))}else if(Number.isInteger(arguments[0])&&Number.isInteger(arguments[1])){var a=arguments[0],u=arguments[1];this._coordinates=new Array(a).fill(null),this._dimension=u;for(var l=0;l<a;l++)t._coordinates[l]=new ul}},ch={serialVersionUID:{configurable:!0}};lh.prototype.setOrdinate=function(t,e,n){switch(e){case Il.X:this._coordinates[t].x=n;break;case Il.Y:this._coordinates[t].y=n;break;case Il.Z:this._coordinates[t].z=n;break;default:throw new el("invalid ordinateIndex")}},lh.prototype.size=function(){return this._coordinates.length},lh.prototype.getOrdinate=function(t,e){switch(e){case Il.X:return this._coordinates[t].x;case Il.Y:return this._coordinates[t].y;case Il.Z:return this._coordinates[t].z}return nl.NaN},lh.prototype.getCoordinate=function(){if(1===arguments.length){var t=arguments[0];return this._coordinates[t]}if(2===arguments.length){var e=arguments[0],n=arguments[1];n.x=this._coordinates[e].x,n.y=this._coordinates[e].y,n.z=this._coordinates[e].z}},lh.prototype.getCoordinateCopy=function(t){return new ul(this._coordinates[t])},lh.prototype.getDimension=function(){return this._dimension},lh.prototype.getX=function(t){return this._coordinates[t].x},lh.prototype.clone=function(){for(var t=new Array(this.size()).fill(null),e=0;e<this._coordinates.length;e++)t[e]=this._coordinates[e].clone();return new lh(t,this._dimension)},lh.prototype.expandEnvelope=function(t){for(var e=0;e<this._coordinates.length;e++)t.expandToInclude(this._coordinates[e]);return t},lh.prototype.copy=function(){for(var t=new Array(this.size()).fill(null),e=0;e<this._coordinates.length;e++)t[e]=this._coordinates[e].copy();return new lh(t,this._dimension)},lh.prototype.toString=function(){if(this._coordinates.length>0){var t=new vl(17*this._coordinates.length);t.append("("),t.append(this._coordinates[0]);for(var e=1;e<this._coordinates.length;e++)t.append(", "),t.append(this._coordinates[e]);return t.append(")"),t.toString()}return"()"},lh.prototype.getY=function(t){return this._coordinates[t].y},lh.prototype.toCoordinateArray=function(){return this._coordinates},lh.prototype.interfaces_=function(){return[Il,al]},lh.prototype.getClass=function(){return lh},ch.serialVersionUID.get=function(){return-0xcb44a778db18e00},Object.defineProperties(lh,ch);var hh=function(){},ph={serialVersionUID:{configurable:!0},instanceObject:{configurable:!0}};hh.prototype.readResolve=function(){return hh.instance()},hh.prototype.create=function(){if(1===arguments.length){if(arguments[0]instanceof Array){var t=arguments[0];return new lh(t)}if(gl(arguments[0],Il)){var e=arguments[0];return new lh(e)}}else if(2===arguments.length){var n=arguments[0],r=arguments[1];return r>3&&(r=3),r<2?new lh(n):new lh(n,r)}},hh.prototype.interfaces_=function(){return[hl,al]},hh.prototype.getClass=function(){return hh},hh.instance=function(){return hh.instanceObject},ph.serialVersionUID.get=function(){return-0x38e49fa6cf6f2e00},ph.instanceObject.get=function(){return new hh},Object.defineProperties(hh,ph);var fh=function(t){function e(){t.call(this),this.map_=new Map}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.get=function(t){return this.map_.get(t)||null},e.prototype.put=function(t,e){return this.map_.set(t,e),e},e.prototype.values=function(){for(var t=new lc,e=this.map_.values(),n=e.next();!n.done;)t.add(n.value),n=e.next();return t},e.prototype.entrySet=function(){var t=new xc;return this.map_.entries().forEach((function(e){return t.add(e)})),t},e.prototype.size=function(){return this.map_.size()},e}(yc),gh=function t(){if(this._modelType=null,this._scale=null,0===arguments.length)this._modelType=t.FLOATING;else if(1===arguments.length)if(arguments[0]instanceof yh){var e=arguments[0];this._modelType=e,e===t.FIXED&&this.setScale(1)}else if("number"==typeof arguments[0]){var n=arguments[0];this._modelType=t.FIXED,this.setScale(n)}else if(arguments[0]instanceof t){var r=arguments[0];this._modelType=r._modelType,this._scale=r._scale}},dh={serialVersionUID:{configurable:!0},maximumPreciseValue:{configurable:!0}};gh.prototype.equals=function(t){if(!(t instanceof gh))return!1;var e=t;return this._modelType===e._modelType&&this._scale===e._scale},gh.prototype.compareTo=function(t){var e=t,n=this.getMaximumSignificantDigits(),r=e.getMaximumSignificantDigits();return new _l(n).compareTo(new _l(r))},gh.prototype.getScale=function(){return this._scale},gh.prototype.isFloating=function(){return this._modelType===gh.FLOATING||this._modelType===gh.FLOATING_SINGLE},gh.prototype.getType=function(){return this._modelType},gh.prototype.toString=function(){var t="UNKNOWN";return this._modelType===gh.FLOATING?t="Floating":this._modelType===gh.FLOATING_SINGLE?t="Floating-Single":this._modelType===gh.FIXED&&(t="Fixed (Scale="+this.getScale()+")"),t},gh.prototype.makePrecise=function(){if("number"==typeof arguments[0]){var t=arguments[0];if(nl.isNaN(t))return t;if(this._modelType===gh.FLOATING_SINGLE){return t}return this._modelType===gh.FIXED?Math.round(t*this._scale)/this._scale:t}if(arguments[0]instanceof ul){var e=arguments[0];if(this._modelType===gh.FLOATING)return null;e.x=this.makePrecise(e.x),e.y=this.makePrecise(e.y)}},gh.prototype.getMaximumSignificantDigits=function(){var t=16;return this._modelType===gh.FLOATING?t=16:this._modelType===gh.FLOATING_SINGLE?t=6:this._modelType===gh.FIXED&&(t=1+Math.trunc(Math.ceil(Math.log(this.getScale())/Math.log(10)))),t},gh.prototype.setScale=function(t){this._scale=Math.abs(t)},gh.prototype.interfaces_=function(){return[al,il]},gh.prototype.getClass=function(){return gh},gh.mostPrecise=function(t,e){return t.compareTo(e)>=0?t:e},dh.serialVersionUID.get=function(){return 0x6bee6404e9a25c00},dh.maximumPreciseValue.get=function(){return 9007199254740992},Object.defineProperties(gh,dh);var yh=function t(e){this._name=e||null,t.nameToTypeMap.put(e,this)},vh={serialVersionUID:{configurable:!0},nameToTypeMap:{configurable:!0}};yh.prototype.readResolve=function(){return yh.nameToTypeMap.get(this._name)},yh.prototype.toString=function(){return this._name},yh.prototype.interfaces_=function(){return[al]},yh.prototype.getClass=function(){return yh},vh.serialVersionUID.get=function(){return-552860263173159e4},vh.nameToTypeMap.get=function(){return new fh},Object.defineProperties(yh,vh),gh.Type=yh,gh.FIXED=new yh("FIXED"),gh.FLOATING=new yh("FLOATING"),gh.FLOATING_SINGLE=new yh("FLOATING SINGLE");var _h=function t(){this._precisionModel=new gh,this._SRID=0,this._coordinateSequenceFactory=t.getDefaultCoordinateSequenceFactory(),0===arguments.length||(1===arguments.length?gl(arguments[0],hl)?this._coordinateSequenceFactory=arguments[0]:arguments[0]instanceof gh&&(this._precisionModel=arguments[0]):2===arguments.length?(this._precisionModel=arguments[0],this._SRID=arguments[1]):3===arguments.length&&(this._precisionModel=arguments[0],this._SRID=arguments[1],this._coordinateSequenceFactory=arguments[2]))},mh={serialVersionUID:{configurable:!0}};_h.prototype.toGeometry=function(t){return t.isNull()?this.createPoint(null):t.getMinX()===t.getMaxX()&&t.getMinY()===t.getMaxY()?this.createPoint(new ul(t.getMinX(),t.getMinY())):t.getMinX()===t.getMaxX()||t.getMinY()===t.getMaxY()?this.createLineString([new ul(t.getMinX(),t.getMinY()),new ul(t.getMaxX(),t.getMaxY())]):this.createPolygon(this.createLinearRing([new ul(t.getMinX(),t.getMinY()),new ul(t.getMinX(),t.getMaxY()),new ul(t.getMaxX(),t.getMaxY()),new ul(t.getMaxX(),t.getMinY()),new ul(t.getMinX(),t.getMinY())]),null)},_h.prototype.createLineString=function(t){return t?t instanceof Array?new Zc(this.getCoordinateSequenceFactory().create(t),this):gl(t,Il)?new Zc(t,this):void 0:new Zc(this.getCoordinateSequenceFactory().create([]),this)},_h.prototype.createMultiLineString=function(){if(0===arguments.length)return new Gc(null,this);if(1===arguments.length){var t=arguments[0];return new Gc(t,this)}},_h.prototype.buildGeometry=function(t){for(var e=null,n=!1,r=!1,i=t.iterator();i.hasNext();){var o=i.next(),s=o.getClass();null===e&&(e=s),s!==e&&(n=!0),o.isGeometryCollectionOrDerived()&&(r=!0)}if(null===e)return this.createGeometryCollection();if(n||r)return this.createGeometryCollection(_h.toGeometryArray(t));var a=t.iterator().next();if(t.size()>1){if(a instanceof th)return this.createMultiPolygon(_h.toPolygonArray(t));if(a instanceof Zc)return this.createMultiLineString(_h.toLineStringArray(t));if(a instanceof Qc)return this.createMultiPoint(_h.toPointArray(t));ql.shouldNeverReachHere("Unhandled class: "+a.getClass().getName())}return a},_h.prototype.createMultiPointFromCoords=function(t){return this.createMultiPoint(null!==t?this.getCoordinateSequenceFactory().create(t):null)},_h.prototype.createPoint=function(){if(0===arguments.length)return this.createPoint(this.getCoordinateSequenceFactory().create([]));if(1===arguments.length){if(arguments[0]instanceof ul){var t=arguments[0];return this.createPoint(null!==t?this.getCoordinateSequenceFactory().create([t]):null)}if(gl(arguments[0],Il)){var e=arguments[0];return new Qc(e,this)}}},_h.prototype.getCoordinateSequenceFactory=function(){return this._coordinateSequenceFactory},_h.prototype.createPolygon=function(){if(0===arguments.length)return new th(null,null,this);if(1===arguments.length){if(gl(arguments[0],Il)){var t=arguments[0];return this.createPolygon(this.createLinearRing(t))}if(arguments[0]instanceof Array){var e=arguments[0];return this.createPolygon(this.createLinearRing(e))}if(arguments[0]instanceof nh){var n=arguments[0];return this.createPolygon(n,null)}}else if(2===arguments.length){var r=arguments[0],i=arguments[1];return new th(r,i,this)}},_h.prototype.getSRID=function(){return this._SRID},_h.prototype.createGeometryCollection=function(){if(0===arguments.length)return new kc(null,this);if(1===arguments.length){var t=arguments[0];return new kc(t,this)}},_h.prototype.createGeometry=function(t){return new ih(this).edit(t,{edit:function(){if(2===arguments.length){var t=arguments[0];return this._coordinateSequenceFactory.create(t)}}})},_h.prototype.getPrecisionModel=function(){return this._precisionModel},_h.prototype.createLinearRing=function(){if(0===arguments.length)return this.createLinearRing(this.getCoordinateSequenceFactory().create([]));if(1===arguments.length){if(arguments[0]instanceof Array){var t=arguments[0];return this.createLinearRing(null!==t?this.getCoordinateSequenceFactory().create(t):null)}if(gl(arguments[0],Il)){var e=arguments[0];return new nh(e,this)}}},_h.prototype.createMultiPolygon=function(){if(0===arguments.length)return new rh(null,this);if(1===arguments.length){var t=arguments[0];return new rh(t,this)}},_h.prototype.createMultiPoint=function(){var t=this;if(0===arguments.length)return new eh(null,this);if(1===arguments.length){if(arguments[0]instanceof Array){var e=arguments[0];return new eh(e,this)}if(arguments[0]instanceof Array){var n=arguments[0];return this.createMultiPoint(null!==n?this.getCoordinateSequenceFactory().create(n):null)}if(gl(arguments[0],Il)){var r=arguments[0];if(null===r)return this.createMultiPoint(new Array(0).fill(null));for(var i=new Array(r.size()).fill(null),o=0;o<r.size();o++){var s=t.getCoordinateSequenceFactory().create(1,r.getDimension());Jc.copy(r,o,s,0,1),i[o]=t.createPoint(s)}return this.createMultiPoint(i)}}},_h.prototype.interfaces_=function(){return[al]},_h.prototype.getClass=function(){return _h},_h.toMultiPolygonArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.toGeometryArray=function(t){if(null===t)return null;var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.getDefaultCoordinateSequenceFactory=function(){return hh.instance()},_h.toMultiLineStringArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.toLineStringArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.toMultiPointArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.toLinearRingArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.toPointArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.toPolygonArray=function(t){var e=new Array(t.size()).fill(null);return t.toArray(e)},_h.createPointFromInternalCoord=function(t,e){return e.getPrecisionModel().makePrecise(t),e.getFactory().createPoint(t)},mh.serialVersionUID.get=function(){return-0x5ea75f2051eeb400},Object.defineProperties(_h,mh);var xh=["Point","MultiPoint","LineString","MultiLineString","Polygon","MultiPolygon"],Eh=function(t){this.geometryFactory=t||new _h};Eh.prototype.read=function(t){var e,n=(e="string"==typeof t?JSON.parse(t):t).type;if(!bh[n])throw new Error("Unknown GeoJSON type: "+e.type);return-1!==xh.indexOf(n)?bh[n].apply(this,[e.coordinates]):"GeometryCollection"===n?bh[n].apply(this,[e.geometries]):bh[n].apply(this,[e])},Eh.prototype.write=function(t){var e=t.getGeometryType();if(!wh[e])throw new Error("Geometry is not supported");return wh[e].apply(this,[t])};var bh={Feature:function(t){var e={};for(var n in t)e[n]=t[n];if(t.geometry){var r=t.geometry.type;if(!bh[r])throw new Error("Unknown GeoJSON type: "+t.type);e.geometry=this.read(t.geometry)}return t.bbox&&(e.bbox=bh.bbox.apply(this,[t.bbox])),e},FeatureCollection:function(t){var e={};if(t.features){e.features=[];for(var n=0;n<t.features.length;++n)e.features.push(this.read(t.features[n]))}return t.bbox&&(e.bbox=this.parse.bbox.apply(this,[t.bbox])),e},coordinates:function(t){for(var e=[],n=0;n<t.length;++n){var r=t[n];e.push(new ul(r[0],r[1]))}return e},bbox:function(t){return this.geometryFactory.createLinearRing([new ul(t[0],t[1]),new ul(t[2],t[1]),new ul(t[2],t[3]),new ul(t[0],t[3]),new ul(t[0],t[1])])},Point:function(t){var e=new ul(t[0],t[1]);return this.geometryFactory.createPoint(e)},MultiPoint:function(t){for(var e=[],n=0;n<t.length;++n)e.push(bh.Point.apply(this,[t[n]]));return this.geometryFactory.createMultiPoint(e)},LineString:function(t){var e=bh.coordinates.apply(this,[t]);return this.geometryFactory.createLineString(e)},MultiLineString:function(t){for(var e=[],n=0;n<t.length;++n)e.push(bh.LineString.apply(this,[t[n]]));return this.geometryFactory.createMultiLineString(e)},Polygon:function(t){for(var e=bh.coordinates.apply(this,[t[0]]),n=this.geometryFactory.createLinearRing(e),r=[],i=1;i<t.length;++i){var o=t[i],s=bh.coordinates.apply(this,[o]),a=this.geometryFactory.createLinearRing(s);r.push(a)}return this.geometryFactory.createPolygon(n,r)},MultiPolygon:function(t){for(var e=[],n=0;n<t.length;++n){var r=t[n];e.push(bh.Polygon.apply(this,[r]))}return this.geometryFactory.createMultiPolygon(e)},GeometryCollection:function(t){for(var e=[],n=0;n<t.length;++n){var r=t[n];e.push(this.read(r))}return this.geometryFactory.createGeometryCollection(e)}},wh={coordinate:function(t){return[t.x,t.y]},Point:function(t){return{type:"Point",coordinates:wh.coordinate.apply(this,[t.getCoordinate()])}},MultiPoint:function(t){for(var e=[],n=0;n<t._geometries.length;++n){var r=t._geometries[n],i=wh.Point.apply(this,[r]);e.push(i.coordinates)}return{type:"MultiPoint",coordinates:e}},LineString:function(t){for(var e=[],n=t.getCoordinates(),r=0;r<n.length;++r){var i=n[r];e.push(wh.coordinate.apply(this,[i]))}return{type:"LineString",coordinates:e}},MultiLineString:function(t){for(var e=[],n=0;n<t._geometries.length;++n){var r=t._geometries[n],i=wh.LineString.apply(this,[r]);e.push(i.coordinates)}return{type:"MultiLineString",coordinates:e}},Polygon:function(t){var e=[],n=wh.LineString.apply(this,[t._shell]);e.push(n.coordinates);for(var r=0;r<t._holes.length;++r){var i=t._holes[r],o=wh.LineString.apply(this,[i]);e.push(o.coordinates)}return{type:"Polygon",coordinates:e}},MultiPolygon:function(t){for(var e=[],n=0;n<t._geometries.length;++n){var r=t._geometries[n],i=wh.Polygon.apply(this,[r]);e.push(i.coordinates)}return{type:"MultiPolygon",coordinates:e}},GeometryCollection:function(t){for(var e=[],n=0;n<t._geometries.length;++n){var r=t._geometries[n],i=r.getGeometryType();e.push(wh[i].apply(this,[r]))}return{type:"GeometryCollection",geometries:e}}},Ih=function(t){this.geometryFactory=t||new _h,this.precisionModel=this.geometryFactory.getPrecisionModel(),this.parser=new Eh(this.geometryFactory)};Ih.prototype.read=function(t){var e=this.parser.read(t);return this.precisionModel.getType()===gh.FIXED&&this.reducePrecision(e),e},Ih.prototype.reducePrecision=function(t){var e,n;if(t.coordinate)this.precisionModel.makePrecise(t.coordinate);else if(t.points)for(e=0,n=t.points.length;e<n;e++)this.precisionModel.makePrecise(t.points[e]);else if(t.geometries)for(e=0,n=t.geometries.length;e<n;e++)this.reducePrecision(t.geometries[e])};var Nh=function(){this.parser=new Eh(this.geometryFactory)};Nh.prototype.write=function(t){return this.parser.write(t)};var Sh=function(){},Ch={ON:{configurable:!0},LEFT:{configurable:!0},RIGHT:{configurable:!0}};function Ph(t){this.message=t||""}function Mh(){this.array_=[]}Sh.prototype.interfaces_=function(){return[]},Sh.prototype.getClass=function(){return Sh},Sh.opposite=function(t){return t===Sh.LEFT?Sh.RIGHT:t===Sh.RIGHT?Sh.LEFT:t},Ch.ON.get=function(){return 0},Ch.LEFT.get=function(){return 1},Ch.RIGHT.get=function(){return 2},Object.defineProperties(Sh,Ch),Ph.prototype=new Error,Ph.prototype.name="EmptyStackException",Mh.prototype=new ac,Mh.prototype.add=function(t){return this.array_.push(t),!0},Mh.prototype.get=function(t){if(t<0||t>=this.size())throw new Error;return this.array_[t]},Mh.prototype.push=function(t){return this.array_.push(t),t},Mh.prototype.pop=function(t){if(0===this.array_.length)throw new Ph;return this.array_.pop()},Mh.prototype.peek=function(){if(0===this.array_.length)throw new Ph;return this.array_[this.array_.length-1]},Mh.prototype.empty=function(){return 0===this.array_.length},Mh.prototype.isEmpty=function(){return this.empty()},Mh.prototype.search=function(t){return this.array_.indexOf(t)},Mh.prototype.size=function(){return this.array_.length},Mh.prototype.toArray=function(){for(var t=[],e=0,n=this.array_.length;e<n;e++)t.push(this.array_[e]);return t};var Lh=function(){this._minIndex=-1,this._minCoord=null,this._minDe=null,this._orientedDe=null};Lh.prototype.getCoordinate=function(){return this._minCoord},Lh.prototype.getRightmostSide=function(t,e){var n=this.getRightmostSideOfSegment(t,e);return n<0&&(n=this.getRightmostSideOfSegment(t,e-1)),n<0&&(this._minCoord=null,this.checkForRightmostCoordinate(t)),n},Lh.prototype.findRightmostEdgeAtVertex=function(){var t=this._minDe.getEdge().getCoordinates();ql.isTrue(this._minIndex>0&&this._minIndex<t.length,"rightmost point expected to be interior vertex of edge");var e=t[this._minIndex-1],n=t[this._minIndex+1],r=Xl.computeOrientation(this._minCoord,n,e),i=!1;(e.y<this._minCoord.y&&n.y<this._minCoord.y&&r===Xl.COUNTERCLOCKWISE||e.y>this._minCoord.y&&n.y>this._minCoord.y&&r===Xl.CLOCKWISE)&&(i=!0),i&&(this._minIndex=this._minIndex-1)},Lh.prototype.getRightmostSideOfSegment=function(t,e){var n=t.getEdge().getCoordinates();if(e<0||e+1>=n.length)return-1;if(n[e].y===n[e+1].y)return-1;var r=Sh.LEFT;return n[e].y<n[e+1].y&&(r=Sh.RIGHT),r},Lh.prototype.getEdge=function(){return this._orientedDe},Lh.prototype.checkForRightmostCoordinate=function(t){for(var e=this,n=t.getEdge().getCoordinates(),r=0;r<n.length-1;r++)(null===e._minCoord||n[r].x>e._minCoord.x)&&(e._minDe=t,e._minIndex=r,e._minCoord=n[r])},Lh.prototype.findRightmostEdgeAtNode=function(){var t=this._minDe.getNode().getEdges();this._minDe=t.getRightmostEdge(),this._minDe.isForward()||(this._minDe=this._minDe.getSym(),this._minIndex=this._minDe.getEdge().getCoordinates().length-1)},Lh.prototype.findEdge=function(t){for(var e=t.iterator();e.hasNext();){var n=e.next();n.isForward()&&this.checkForRightmostCoordinate(n)}ql.isTrue(0!==this._minIndex||this._minCoord.equals(this._minDe.getCoordinate()),"inconsistency in rightmost processing"),0===this._minIndex?this.findRightmostEdgeAtNode():this.findRightmostEdgeAtVertex(),this._orientedDe=this._minDe,this.getRightmostSide(this._minDe,this._minIndex)===Sh.LEFT&&(this._orientedDe=this._minDe.getSym())},Lh.prototype.interfaces_=function(){return[]},Lh.prototype.getClass=function(){return Lh};var Oh=function(t){function e(n,r){t.call(this,e.msgWithCoord(n,r)),this.pt=r?new ul(r):null,this.name="TopologyException"}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.getCoordinate=function(){return this.pt},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e.msgWithCoord=function(t,e){return e?t:t+" [ "+e+" ]"},e}(kl),Rh=function(){this.array_=[]};Rh.prototype.addLast=function(t){this.array_.push(t)},Rh.prototype.removeFirst=function(){return this.array_.shift()},Rh.prototype.isEmpty=function(){return 0===this.array_.length};var Th=function(){this._finder=null,this._dirEdgeList=new lc,this._nodes=new lc,this._rightMostCoord=null,this._env=null,this._finder=new Lh};Th.prototype.clearVisitedEdges=function(){for(var t=this._dirEdgeList.iterator();t.hasNext();){t.next().setVisited(!1)}},Th.prototype.getRightmostCoordinate=function(){return this._rightMostCoord},Th.prototype.computeNodeDepth=function(t){for(var e=null,n=t.getEdges().iterator();n.hasNext();){var r=n.next();if(r.isVisited()||r.getSym().isVisited()){e=r;break}}if(null===e)throw new Oh("unable to find edge to compute depths at "+t.getCoordinate());t.getEdges().computeDepths(e);for(var i=t.getEdges().iterator();i.hasNext();){var o=i.next();o.setVisited(!0),this.copySymDepths(o)}},Th.prototype.computeDepth=function(t){this.clearVisitedEdges();var e=this._finder.getEdge();e.setEdgeDepths(Sh.RIGHT,t),this.copySymDepths(e),this.computeDepths(e)},Th.prototype.create=function(t){this.addReachable(t),this._finder.findEdge(this._dirEdgeList),this._rightMostCoord=this._finder.getCoordinate()},Th.prototype.findResultEdges=function(){for(var t=this._dirEdgeList.iterator();t.hasNext();){var e=t.next();e.getDepth(Sh.RIGHT)>=1&&e.getDepth(Sh.LEFT)<=0&&!e.isInteriorAreaEdge()&&e.setInResult(!0)}},Th.prototype.computeDepths=function(t){var e=new xc,n=new Rh,r=t.getNode();for(n.addLast(r),e.add(r),t.setVisited(!0);!n.isEmpty();){var i=n.removeFirst();e.add(i),this.computeNodeDepth(i);for(var o=i.getEdges().iterator();o.hasNext();){var s=o.next().getSym();if(!s.isVisited()){var a=s.getNode();e.contains(a)||(n.addLast(a),e.add(a))}}}},Th.prototype.compareTo=function(t){var e=t;return this._rightMostCoord.x<e._rightMostCoord.x?-1:this._rightMostCoord.x>e._rightMostCoord.x?1:0},Th.prototype.getEnvelope=function(){if(null===this._env){for(var t=new Ll,e=this._dirEdgeList.iterator();e.hasNext();)for(var n=e.next().getEdge().getCoordinates(),r=0;r<n.length-1;r++)t.expandToInclude(n[r]);this._env=t}return this._env},Th.prototype.addReachable=function(t){var e=new Mh;for(e.add(t);!e.empty();){var n=e.pop();this.add(n,e)}},Th.prototype.copySymDepths=function(t){var e=t.getSym();e.setDepth(Sh.LEFT,t.getDepth(Sh.RIGHT)),e.setDepth(Sh.RIGHT,t.getDepth(Sh.LEFT))},Th.prototype.add=function(t,e){t.setVisited(!0),this._nodes.add(t);for(var n=t.getEdges().iterator();n.hasNext();){var r=n.next();this._dirEdgeList.add(r);var i=r.getSym().getNode();i.isVisited()||e.push(i)}},Th.prototype.getNodes=function(){return this._nodes},Th.prototype.getDirectedEdges=function(){return this._dirEdgeList},Th.prototype.interfaces_=function(){return[il]},Th.prototype.getClass=function(){return Th};var Ah=function t(){var e=this;if(this.location=null,1===arguments.length){if(arguments[0]instanceof Array){var n=arguments[0];this.init(n.length)}else if(Number.isInteger(arguments[0])){var r=arguments[0];this.init(1),this.location[Sh.ON]=r}else if(arguments[0]instanceof t){var i=arguments[0];if(this.init(i.location.length),null!==i)for(var o=0;o<this.location.length;o++)e.location[o]=i.location[o]}}else if(3===arguments.length){var s=arguments[0],a=arguments[1],u=arguments[2];this.init(3),this.location[Sh.ON]=s,this.location[Sh.LEFT]=a,this.location[Sh.RIGHT]=u}};Ah.prototype.setAllLocations=function(t){for(var e=0;e<this.location.length;e++)this.location[e]=t},Ah.prototype.isNull=function(){for(var t=0;t<this.location.length;t++)if(this.location[t]!==pl.NONE)return!1;return!0},Ah.prototype.setAllLocationsIfNull=function(t){for(var e=0;e<this.location.length;e++)this.location[e]===pl.NONE&&(this.location[e]=t)},Ah.prototype.isLine=function(){return 1===this.location.length},Ah.prototype.merge=function(t){if(t.location.length>this.location.length){var e=new Array(3).fill(null);e[Sh.ON]=this.location[Sh.ON],e[Sh.LEFT]=pl.NONE,e[Sh.RIGHT]=pl.NONE,this.location=e}for(var n=0;n<this.location.length;n++)this.location[n]===pl.NONE&&n<t.location.length&&(this.location[n]=t.location[n])},Ah.prototype.getLocations=function(){return this.location},Ah.prototype.flip=function(){if(this.location.length<=1)return null;var t=this.location[Sh.LEFT];this.location[Sh.LEFT]=this.location[Sh.RIGHT],this.location[Sh.RIGHT]=t},Ah.prototype.toString=function(){var t=new vl;return this.location.length>1&&t.append(pl.toLocationSymbol(this.location[Sh.LEFT])),t.append(pl.toLocationSymbol(this.location[Sh.ON])),this.location.length>1&&t.append(pl.toLocationSymbol(this.location[Sh.RIGHT])),t.toString()},Ah.prototype.setLocations=function(t,e,n){this.location[Sh.ON]=t,this.location[Sh.LEFT]=e,this.location[Sh.RIGHT]=n},Ah.prototype.get=function(t){return t<this.location.length?this.location[t]:pl.NONE},Ah.prototype.isArea=function(){return this.location.length>1},Ah.prototype.isAnyNull=function(){for(var t=0;t<this.location.length;t++)if(this.location[t]===pl.NONE)return!0;return!1},Ah.prototype.setLocation=function(){if(1===arguments.length){var t=arguments[0];this.setLocation(Sh.ON,t)}else if(2===arguments.length){var e=arguments[0],n=arguments[1];this.location[e]=n}},Ah.prototype.init=function(t){this.location=new Array(t).fill(null),this.setAllLocations(pl.NONE)},Ah.prototype.isEqualOnSide=function(t,e){return this.location[e]===t.location[e]},Ah.prototype.allPositionsEqual=function(t){for(var e=0;e<this.location.length;e++)if(this.location[e]!==t)return!1;return!0},Ah.prototype.interfaces_=function(){return[]},Ah.prototype.getClass=function(){return Ah};var Dh=function t(){if(this.elt=new Array(2).fill(null),1===arguments.length){if(Number.isInteger(arguments[0])){var e=arguments[0];this.elt[0]=new Ah(e),this.elt[1]=new Ah(e)}else if(arguments[0]instanceof t){var n=arguments[0];this.elt[0]=new Ah(n.elt[0]),this.elt[1]=new Ah(n.elt[1])}}else if(2===arguments.length){var r=arguments[0],i=arguments[1];this.elt[0]=new Ah(pl.NONE),this.elt[1]=new Ah(pl.NONE),this.elt[r].setLocation(i)}else if(3===arguments.length){var o=arguments[0],s=arguments[1],a=arguments[2];this.elt[0]=new Ah(o,s,a),this.elt[1]=new Ah(o,s,a)}else if(4===arguments.length){var u=arguments[0],l=arguments[1],c=arguments[2],h=arguments[3];this.elt[0]=new Ah(pl.NONE,pl.NONE,pl.NONE),this.elt[1]=new Ah(pl.NONE,pl.NONE,pl.NONE),this.elt[u].setLocations(l,c,h)}};Dh.prototype.getGeometryCount=function(){var t=0;return this.elt[0].isNull()||t++,this.elt[1].isNull()||t++,t},Dh.prototype.setAllLocations=function(t,e){this.elt[t].setAllLocations(e)},Dh.prototype.isNull=function(t){return this.elt[t].isNull()},Dh.prototype.setAllLocationsIfNull=function(){if(1===arguments.length){var t=arguments[0];this.setAllLocationsIfNull(0,t),this.setAllLocationsIfNull(1,t)}else if(2===arguments.length){var e=arguments[0],n=arguments[1];this.elt[e].setAllLocationsIfNull(n)}},Dh.prototype.isLine=function(t){return this.elt[t].isLine()},Dh.prototype.merge=function(t){for(var e=this,n=0;n<2;n++)null===e.elt[n]&&null!==t.elt[n]?e.elt[n]=new Ah(t.elt[n]):e.elt[n].merge(t.elt[n])},Dh.prototype.flip=function(){this.elt[0].flip(),this.elt[1].flip()},Dh.prototype.getLocation=function(){if(1===arguments.length){var t=arguments[0];return this.elt[t].get(Sh.ON)}if(2===arguments.length){var e=arguments[0],n=arguments[1];return this.elt[e].get(n)}},Dh.prototype.toString=function(){var t=new vl;return null!==this.elt[0]&&(t.append("A:"),t.append(this.elt[0].toString())),null!==this.elt[1]&&(t.append(" B:"),t.append(this.elt[1].toString())),t.toString()},Dh.prototype.isArea=function(){if(0===arguments.length)return this.elt[0].isArea()||this.elt[1].isArea();if(1===arguments.length){var t=arguments[0];return this.elt[t].isArea()}},Dh.prototype.isAnyNull=function(t){return this.elt[t].isAnyNull()},Dh.prototype.setLocation=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1];this.elt[t].setLocation(Sh.ON,e)}else if(3===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[2];this.elt[n].setLocation(r,i)}},Dh.prototype.isEqualOnSide=function(t,e){return this.elt[0].isEqualOnSide(t.elt[0],e)&&this.elt[1].isEqualOnSide(t.elt[1],e)},Dh.prototype.allPositionsEqual=function(t,e){return this.elt[t].allPositionsEqual(e)},Dh.prototype.toLine=function(t){this.elt[t].isArea()&&(this.elt[t]=new Ah(this.elt[t].location[0]))},Dh.prototype.interfaces_=function(){return[]},Dh.prototype.getClass=function(){return Dh},Dh.toLineLabel=function(t){for(var e=new Dh(pl.NONE),n=0;n<2;n++)e.setLocation(n,t.getLocation(n));return e};var Fh=function(){this._startDe=null,this._maxNodeDegree=-1,this._edges=new lc,this._pts=new lc,this._label=new Dh(pl.NONE),this._ring=null,this._isHole=null,this._shell=null,this._holes=new lc,this._geometryFactory=null;var t=arguments[0],e=arguments[1];this._geometryFactory=e,this.computePoints(t),this.computeRing()};Fh.prototype.computeRing=function(){if(null!==this._ring)return null;for(var t=new Array(this._pts.size()).fill(null),e=0;e<this._pts.size();e++)t[e]=this._pts.get(e);this._ring=this._geometryFactory.createLinearRing(t),this._isHole=Xl.isCCW(this._ring.getCoordinates())},Fh.prototype.isIsolated=function(){return 1===this._label.getGeometryCount()},Fh.prototype.computePoints=function(t){var e=this;this._startDe=t;var n=t,r=!0;do{if(null===n)throw new Oh("Found null DirectedEdge");if(n.getEdgeRing()===e)throw new Oh("Directed Edge visited twice during ring-building at "+n.getCoordinate());e._edges.add(n);var i=n.getLabel();ql.isTrue(i.isArea()),e.mergeLabel(i),e.addPoints(n.getEdge(),n.isForward(),r),r=!1,e.setEdgeRing(n,e),n=e.getNext(n)}while(n!==this._startDe)},Fh.prototype.getLinearRing=function(){return this._ring},Fh.prototype.getCoordinate=function(t){return this._pts.get(t)},Fh.prototype.computeMaxNodeDegree=function(){var t=this;this._maxNodeDegree=0;var e=this._startDe;do{var n=e.getNode().getEdges().getOutgoingDegree(t);n>t._maxNodeDegree&&(t._maxNodeDegree=n),e=t.getNext(e)}while(e!==this._startDe);this._maxNodeDegree*=2},Fh.prototype.addPoints=function(t,e,n){var r=t.getCoordinates();if(e){var i=1;n&&(i=0);for(var o=i;o<r.length;o++)this._pts.add(r[o])}else{var s=r.length-2;n&&(s=r.length-1);for(var a=s;a>=0;a--)this._pts.add(r[a])}},Fh.prototype.isHole=function(){return this._isHole},Fh.prototype.setInResult=function(){var t=this._startDe;do{t.getEdge().setInResult(!0),t=t.getNext()}while(t!==this._startDe)},Fh.prototype.containsPoint=function(t){var e=this.getLinearRing();if(!e.getEnvelopeInternal().contains(t))return!1;if(!Xl.isPointInRing(t,e.getCoordinates()))return!1;for(var n=this._holes.iterator();n.hasNext();){if(n.next().containsPoint(t))return!1}return!0},Fh.prototype.addHole=function(t){this._holes.add(t)},Fh.prototype.isShell=function(){return null===this._shell},Fh.prototype.getLabel=function(){return this._label},Fh.prototype.getEdges=function(){return this._edges},Fh.prototype.getMaxNodeDegree=function(){return this._maxNodeDegree<0&&this.computeMaxNodeDegree(),this._maxNodeDegree},Fh.prototype.getShell=function(){return this._shell},Fh.prototype.mergeLabel=function(){if(1===arguments.length){var t=arguments[0];this.mergeLabel(t,0),this.mergeLabel(t,1)}else if(2===arguments.length){var e=arguments[0],n=arguments[1],r=e.getLocation(n,Sh.RIGHT);if(r===pl.NONE)return null;if(this._label.getLocation(n)===pl.NONE)return this._label.setLocation(n,r),null}},Fh.prototype.setShell=function(t){this._shell=t,null!==t&&t.addHole(this)},Fh.prototype.toPolygon=function(t){for(var e=new Array(this._holes.size()).fill(null),n=0;n<this._holes.size();n++)e[n]=this._holes.get(n).getLinearRing();return t.createPolygon(this.getLinearRing(),e)},Fh.prototype.interfaces_=function(){return[]},Fh.prototype.getClass=function(){return Fh};var kh=function(t){function e(){var e=arguments[0],n=arguments[1];t.call(this,e,n)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.setEdgeRing=function(t,e){t.setMinEdgeRing(e)},e.prototype.getNext=function(t){return t.getNextMin()},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Fh),Gh=function(t){function e(){var e=arguments[0],n=arguments[1];t.call(this,e,n)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.buildMinimalRings=function(){var t=new lc,e=this._startDe;do{if(null===e.getMinEdgeRing()){var n=new kh(e,this._geometryFactory);t.add(n)}e=e.getNext()}while(e!==this._startDe);return t},e.prototype.setEdgeRing=function(t,e){t.setEdgeRing(e)},e.prototype.linkDirectedEdgesForMinimalEdgeRings=function(){var t=this._startDe;do{t.getNode().getEdges().linkMinimalDirectedEdges(this),t=t.getNext()}while(t!==this._startDe)},e.prototype.getNext=function(t){return t.getNext()},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Fh),qh=function(){if(this._label=null,this._isInResult=!1,this._isCovered=!1,this._isCoveredSet=!1,this._isVisited=!1,0===arguments.length);else if(1===arguments.length){var t=arguments[0];this._label=t}};qh.prototype.setVisited=function(t){this._isVisited=t},qh.prototype.setInResult=function(t){this._isInResult=t},qh.prototype.isCovered=function(){return this._isCovered},qh.prototype.isCoveredSet=function(){return this._isCoveredSet},qh.prototype.setLabel=function(t){this._label=t},qh.prototype.getLabel=function(){return this._label},qh.prototype.setCovered=function(t){this._isCovered=t,this._isCoveredSet=!0},qh.prototype.updateIM=function(t){ql.isTrue(this._label.getGeometryCount()>=2,"found partial label"),this.computeIM(t)},qh.prototype.isInResult=function(){return this._isInResult},qh.prototype.isVisited=function(){return this._isVisited},qh.prototype.interfaces_=function(){return[]},qh.prototype.getClass=function(){return qh};var Bh=function(t){function e(){t.call(this),this._coord=null,this._edges=null;var e=arguments[0],n=arguments[1];this._coord=e,this._edges=n,this._label=new Dh(0,pl.NONE)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.isIncidentEdgeInResult=function(){for(var t=this.getEdges().getEdges().iterator();t.hasNext();){if(t.next().getEdge().isInResult())return!0}return!1},e.prototype.isIsolated=function(){return 1===this._label.getGeometryCount()},e.prototype.getCoordinate=function(){return this._coord},e.prototype.print=function(t){t.println("node "+this._coord+" lbl: "+this._label)},e.prototype.computeIM=function(t){},e.prototype.computeMergedLocation=function(t,e){var n=pl.NONE;if(n=this._label.getLocation(e),!t.isNull(e)){var r=t.getLocation(e);n!==pl.BOUNDARY&&(n=r)}return n},e.prototype.setLabel=function(){if(2!==arguments.length)return t.prototype.setLabel.apply(this,arguments);var e=arguments[0],n=arguments[1];null===this._label?this._label=new Dh(e,n):this._label.setLocation(e,n)},e.prototype.getEdges=function(){return this._edges},e.prototype.mergeLabel=function(){var t=this;if(arguments[0]instanceof e){var n=arguments[0];this.mergeLabel(n._label)}else if(arguments[0]instanceof Dh)for(var r=arguments[0],i=0;i<2;i++){var o=t.computeMergedLocation(r,i),s=t._label.getLocation(i);s===pl.NONE&&t._label.setLocation(i,o)}},e.prototype.add=function(t){this._edges.insert(t),t.setNode(this)},e.prototype.setLabelBoundary=function(t){if(null===this._label)return null;var e=pl.NONE;null!==this._label&&(e=this._label.getLocation(t));var n=null;switch(e){case pl.BOUNDARY:n=pl.INTERIOR;break;case pl.INTERIOR:default:n=pl.BOUNDARY}this._label.setLocation(t,n)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(qh),zh=function(){this.nodeMap=new Cc,this.nodeFact=null;var t=arguments[0];this.nodeFact=t};zh.prototype.find=function(t){return this.nodeMap.get(t)},zh.prototype.addNode=function(){if(arguments[0]instanceof ul){var t=arguments[0],e=this.nodeMap.get(t);return null===e&&(e=this.nodeFact.createNode(t),this.nodeMap.put(t,e)),e}if(arguments[0]instanceof Bh){var n=arguments[0],r=this.nodeMap.get(n.getCoordinate());return null===r?(this.nodeMap.put(n.getCoordinate(),n),n):(r.mergeLabel(n),r)}},zh.prototype.print=function(t){for(var e=this.iterator();e.hasNext();){e.next().print(t)}},zh.prototype.iterator=function(){return this.nodeMap.values().iterator()},zh.prototype.values=function(){return this.nodeMap.values()},zh.prototype.getBoundaryNodes=function(t){for(var e=new lc,n=this.iterator();n.hasNext();){var r=n.next();r.getLabel().getLocation(t)===pl.BOUNDARY&&e.add(r)}return e},zh.prototype.add=function(t){var e=t.getCoordinate();this.addNode(e).add(t)},zh.prototype.interfaces_=function(){return[]},zh.prototype.getClass=function(){return zh};var jh=function(){},Uh={NE:{configurable:!0},NW:{configurable:!0},SW:{configurable:!0},SE:{configurable:!0}};jh.prototype.interfaces_=function(){return[]},jh.prototype.getClass=function(){return jh},jh.isNorthern=function(t){return t===jh.NE||t===jh.NW},jh.isOpposite=function(t,e){return t!==e&&2===(t-e+4)%4},jh.commonHalfPlane=function(t,e){if(t===e)return t;if(2===(t-e+4)%4)return-1;var n=t<e?t:e;return 0===n&&3===(t>e?t:e)?3:n},jh.isInHalfPlane=function(t,e){return e===jh.SE?t===jh.SE||t===jh.SW:t===e||t===e+1},jh.quadrant=function(){if("number"==typeof arguments[0]&&"number"==typeof arguments[1]){var t=arguments[0],e=arguments[1];if(0===t&&0===e)throw new el("Cannot compute the quadrant for point ( "+t+", "+e+" )");return t>=0?e>=0?jh.NE:jh.SE:e>=0?jh.NW:jh.SW}if(arguments[0]instanceof ul&&arguments[1]instanceof ul){var n=arguments[0],r=arguments[1];if(r.x===n.x&&r.y===n.y)throw new el("Cannot compute the quadrant for two identical points "+n);return r.x>=n.x?r.y>=n.y?jh.NE:jh.SE:r.y>=n.y?jh.NW:jh.SW}},Uh.NE.get=function(){return 0},Uh.NW.get=function(){return 1},Uh.SW.get=function(){return 2},Uh.SE.get=function(){return 3},Object.defineProperties(jh,Uh);var Vh=function(){if(this._edge=null,this._label=null,this._node=null,this._p0=null,this._p1=null,this._dx=null,this._dy=null,this._quadrant=null,1===arguments.length){var t=arguments[0];this._edge=t}else if(3===arguments.length){var e=arguments[0],n=arguments[1],r=arguments[2],i=null;this._edge=e,this.init(n,r),this._label=i}else if(4===arguments.length){var o=arguments[0],s=arguments[1],a=arguments[2],u=arguments[3];this._edge=o,this.init(s,a),this._label=u}};Vh.prototype.compareDirection=function(t){return this._dx===t._dx&&this._dy===t._dy?0:this._quadrant>t._quadrant?1:this._quadrant<t._quadrant?-1:Xl.computeOrientation(t._p0,t._p1,this._p1)},Vh.prototype.getDy=function(){return this._dy},Vh.prototype.getCoordinate=function(){return this._p0},Vh.prototype.setNode=function(t){this._node=t},Vh.prototype.print=function(t){var e=Math.atan2(this._dy,this._dx),n=this.getClass().getName(),r=n.lastIndexOf("."),i=n.substring(r+1);t.print("  "+i+": "+this._p0+" - "+this._p1+" "+this._quadrant+":"+e+"   "+this._label)},Vh.prototype.compareTo=function(t){var e=t;return this.compareDirection(e)},Vh.prototype.getDirectedCoordinate=function(){return this._p1},Vh.prototype.getDx=function(){return this._dx},Vh.prototype.getLabel=function(){return this._label},Vh.prototype.getEdge=function(){return this._edge},Vh.prototype.getQuadrant=function(){return this._quadrant},Vh.prototype.getNode=function(){return this._node},Vh.prototype.toString=function(){var t=Math.atan2(this._dy,this._dx),e=this.getClass().getName(),n=e.lastIndexOf(".");return"  "+e.substring(n+1)+": "+this._p0+" - "+this._p1+" "+this._quadrant+":"+t+"   "+this._label},Vh.prototype.computeLabel=function(t){},Vh.prototype.init=function(t,e){this._p0=t,this._p1=e,this._dx=e.x-t.x,this._dy=e.y-t.y,this._quadrant=jh.quadrant(this._dx,this._dy),ql.isTrue(!(0===this._dx&&0===this._dy),"EdgeEnd with identical endpoints found")},Vh.prototype.interfaces_=function(){return[il]},Vh.prototype.getClass=function(){return Vh};var Xh=function(t){function e(){var e=arguments[0],n=arguments[1];if(t.call(this,e),this._isForward=null,this._isInResult=!1,this._isVisited=!1,this._sym=null,this._next=null,this._nextMin=null,this._edgeRing=null,this._minEdgeRing=null,this._depth=[0,-999,-999],this._isForward=n,n)this.init(e.getCoordinate(0),e.getCoordinate(1));else{var r=e.getNumPoints()-1;this.init(e.getCoordinate(r),e.getCoordinate(r-1))}this.computeDirectedLabel()}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.getNextMin=function(){return this._nextMin},e.prototype.getDepth=function(t){return this._depth[t]},e.prototype.setVisited=function(t){this._isVisited=t},e.prototype.computeDirectedLabel=function(){this._label=new Dh(this._edge.getLabel()),this._isForward||this._label.flip()},e.prototype.getNext=function(){return this._next},e.prototype.setDepth=function(t,e){if(-999!==this._depth[t]&&this._depth[t]!==e)throw new Oh("assigned depths do not match",this.getCoordinate());this._depth[t]=e},e.prototype.isInteriorAreaEdge=function(){for(var t=this,e=!0,n=0;n<2;n++)t._label.isArea(n)&&t._label.getLocation(n,Sh.LEFT)===pl.INTERIOR&&t._label.getLocation(n,Sh.RIGHT)===pl.INTERIOR||(e=!1);return e},e.prototype.setNextMin=function(t){this._nextMin=t},e.prototype.print=function(e){t.prototype.print.call(this,e),e.print(" "+this._depth[Sh.LEFT]+"/"+this._depth[Sh.RIGHT]),e.print(" ("+this.getDepthDelta()+")"),this._isInResult&&e.print(" inResult")},e.prototype.setMinEdgeRing=function(t){this._minEdgeRing=t},e.prototype.isLineEdge=function(){var t=this._label.isLine(0)||this._label.isLine(1),e=!this._label.isArea(0)||this._label.allPositionsEqual(0,pl.EXTERIOR),n=!this._label.isArea(1)||this._label.allPositionsEqual(1,pl.EXTERIOR);return t&&e&&n},e.prototype.setEdgeRing=function(t){this._edgeRing=t},e.prototype.getMinEdgeRing=function(){return this._minEdgeRing},e.prototype.getDepthDelta=function(){var t=this._edge.getDepthDelta();return this._isForward||(t=-t),t},e.prototype.setInResult=function(t){this._isInResult=t},e.prototype.getSym=function(){return this._sym},e.prototype.isForward=function(){return this._isForward},e.prototype.getEdge=function(){return this._edge},e.prototype.printEdge=function(t){this.print(t),t.print(" "),this._isForward?this._edge.print(t):this._edge.printReverse(t)},e.prototype.setSym=function(t){this._sym=t},e.prototype.setVisitedEdge=function(t){this.setVisited(t),this._sym.setVisited(t)},e.prototype.setEdgeDepths=function(t,e){var n=this.getEdge().getDepthDelta();this._isForward||(n=-n);var r=1;t===Sh.LEFT&&(r=-1);var i=Sh.opposite(t),o=e+n*r;this.setDepth(t,e),this.setDepth(i,o)},e.prototype.getEdgeRing=function(){return this._edgeRing},e.prototype.isInResult=function(){return this._isInResult},e.prototype.setNext=function(t){this._next=t},e.prototype.isVisited=function(){return this._isVisited},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e.depthFactor=function(t,e){return t===pl.EXTERIOR&&e===pl.INTERIOR?1:t===pl.INTERIOR&&e===pl.EXTERIOR?-1:0},e}(Vh),Yh=function(){};Yh.prototype.createNode=function(t){return new Bh(t,null)},Yh.prototype.interfaces_=function(){return[]},Yh.prototype.getClass=function(){return Yh};var Hh=function(){if(this._edges=new lc,this._nodes=null,this._edgeEndList=new lc,0===arguments.length)this._nodes=new zh(new Yh);else if(1===arguments.length){var t=arguments[0];this._nodes=new zh(t)}};Hh.prototype.printEdges=function(t){t.println("Edges:");for(var e=0;e<this._edges.size();e++){t.println("edge "+e+":");var n=this._edges.get(e);n.print(t),n.eiList.print(t)}},Hh.prototype.find=function(t){return this._nodes.find(t)},Hh.prototype.addNode=function(){if(arguments[0]instanceof Bh){var t=arguments[0];return this._nodes.addNode(t)}if(arguments[0]instanceof ul){var e=arguments[0];return this._nodes.addNode(e)}},Hh.prototype.getNodeIterator=function(){return this._nodes.iterator()},Hh.prototype.linkResultDirectedEdges=function(){for(var t=this._nodes.iterator();t.hasNext();){t.next().getEdges().linkResultDirectedEdges()}},Hh.prototype.debugPrintln=function(t){Pl.out.println(t)},Hh.prototype.isBoundaryNode=function(t,e){var n=this._nodes.find(e);if(null===n)return!1;var r=n.getLabel();return null!==r&&r.getLocation(t)===pl.BOUNDARY},Hh.prototype.linkAllDirectedEdges=function(){for(var t=this._nodes.iterator();t.hasNext();){t.next().getEdges().linkAllDirectedEdges()}},Hh.prototype.matchInSameDirection=function(t,e,n,r){return!!t.equals(n)&&(Xl.computeOrientation(t,e,r)===Xl.COLLINEAR&&jh.quadrant(t,e)===jh.quadrant(n,r))},Hh.prototype.getEdgeEnds=function(){return this._edgeEndList},Hh.prototype.debugPrint=function(t){Pl.out.print(t)},Hh.prototype.getEdgeIterator=function(){return this._edges.iterator()},Hh.prototype.findEdgeInSameDirection=function(t,e){for(var n=this,r=0;r<this._edges.size();r++){var i=n._edges.get(r),o=i.getCoordinates();if(n.matchInSameDirection(t,e,o[0],o[1]))return i;if(n.matchInSameDirection(t,e,o[o.length-1],o[o.length-2]))return i}return null},Hh.prototype.insertEdge=function(t){this._edges.add(t)},Hh.prototype.findEdgeEnd=function(t){for(var e=this.getEdgeEnds().iterator();e.hasNext();){var n=e.next();if(n.getEdge()===t)return n}return null},Hh.prototype.addEdges=function(t){for(var e=this,n=t.iterator();n.hasNext();){var r=n.next();e._edges.add(r);var i=new Xh(r,!0),o=new Xh(r,!1);i.setSym(o),o.setSym(i),e.add(i),e.add(o)}},Hh.prototype.add=function(t){this._nodes.add(t),this._edgeEndList.add(t)},Hh.prototype.getNodes=function(){return this._nodes.values()},Hh.prototype.findEdge=function(t,e){for(var n=0;n<this._edges.size();n++){var r=this._edges.get(n),i=r.getCoordinates();if(t.equals(i[0])&&e.equals(i[1]))return r}return null},Hh.prototype.interfaces_=function(){return[]},Hh.prototype.getClass=function(){return Hh},Hh.linkResultDirectedEdges=function(t){for(var e=t.iterator();e.hasNext();){e.next().getEdges().linkResultDirectedEdges()}};var Wh=function(){this._geometryFactory=null,this._shellList=new lc;var t=arguments[0];this._geometryFactory=t};Wh.prototype.sortShellsAndHoles=function(t,e,n){for(var r=t.iterator();r.hasNext();){var i=r.next();i.isHole()?n.add(i):e.add(i)}},Wh.prototype.computePolygons=function(t){for(var e=new lc,n=t.iterator();n.hasNext();){var r=n.next().toPolygon(this._geometryFactory);e.add(r)}return e},Wh.prototype.placeFreeHoles=function(t,e){for(var n=e.iterator();n.hasNext();){var r=n.next();if(null===r.getShell()){var i=this.findEdgeRingContaining(r,t);if(null===i)throw new Oh("unable to assign hole to a shell",r.getCoordinate(0));r.setShell(i)}}},Wh.prototype.buildMinimalEdgeRings=function(t,e,n){for(var r=new lc,i=t.iterator();i.hasNext();){var o=i.next();if(o.getMaxNodeDegree()>2){o.linkDirectedEdgesForMinimalEdgeRings();var s=o.buildMinimalRings(),a=this.findShell(s);null!==a?(this.placePolygonHoles(a,s),e.add(a)):n.addAll(s)}else r.add(o)}return r},Wh.prototype.containsPoint=function(t){for(var e=this._shellList.iterator();e.hasNext();){if(e.next().containsPoint(t))return!0}return!1},Wh.prototype.buildMaximalEdgeRings=function(t){for(var e=new lc,n=t.iterator();n.hasNext();){var r=n.next();if(r.isInResult()&&r.getLabel().isArea()&&null===r.getEdgeRing()){var i=new Gh(r,this._geometryFactory);e.add(i),i.setInResult()}}return e},Wh.prototype.placePolygonHoles=function(t,e){for(var n=e.iterator();n.hasNext();){var r=n.next();r.isHole()&&r.setShell(t)}},Wh.prototype.getPolygons=function(){return this.computePolygons(this._shellList)},Wh.prototype.findEdgeRingContaining=function(t,e){for(var n=t.getLinearRing(),r=n.getEnvelopeInternal(),i=n.getCoordinateN(0),o=null,s=null,a=e.iterator();a.hasNext();){var u=a.next(),l=u.getLinearRing(),c=l.getEnvelopeInternal();null!==o&&(s=o.getLinearRing().getEnvelopeInternal());var h=!1;c.contains(r)&&Xl.isPointInRing(i,l.getCoordinates())&&(h=!0),h&&(null===o||s.contains(c))&&(o=u)}return o},Wh.prototype.findShell=function(t){for(var e=0,n=null,r=t.iterator();r.hasNext();){var i=r.next();i.isHole()||(n=i,e++)}return ql.isTrue(e<=1,"found two shells in MinimalEdgeRing list"),n},Wh.prototype.add=function(){if(1===arguments.length){var t=arguments[0];this.add(t.getEdgeEnds(),t.getNodes())}else if(2===arguments.length){var e=arguments[0],n=arguments[1];Hh.linkResultDirectedEdges(n);var r=this.buildMaximalEdgeRings(e),i=new lc,o=this.buildMinimalEdgeRings(r,this._shellList,i);this.sortShellsAndHoles(o,this._shellList,i),this.placeFreeHoles(this._shellList,i)}},Wh.prototype.interfaces_=function(){return[]},Wh.prototype.getClass=function(){return Wh};var Jh=function(){};Jh.prototype.getBounds=function(){},Jh.prototype.interfaces_=function(){return[]},Jh.prototype.getClass=function(){return Jh};var Zh=function(){this._bounds=null,this._item=null;var t=arguments[0],e=arguments[1];this._bounds=t,this._item=e};Zh.prototype.getItem=function(){return this._item},Zh.prototype.getBounds=function(){return this._bounds},Zh.prototype.interfaces_=function(){return[Jh,al]},Zh.prototype.getClass=function(){return Zh};var Kh=function(){this._size=null,this._items=null,this._size=0,this._items=new lc,this._items.add(null)};Kh.prototype.poll=function(){if(this.isEmpty())return null;var t=this._items.get(1);return this._items.set(1,this._items.get(this._size)),this._size-=1,this.reorder(1),t},Kh.prototype.size=function(){return this._size},Kh.prototype.reorder=function(t){for(var e=this,n=null,r=this._items.get(t);2*t<=this._size&&((n=2*t)!==e._size&&e._items.get(n+1).compareTo(e._items.get(n))<0&&n++,e._items.get(n).compareTo(r)<0);t=n)e._items.set(t,e._items.get(n));this._items.set(t,r)},Kh.prototype.clear=function(){this._size=0,this._items.clear()},Kh.prototype.isEmpty=function(){return 0===this._size},Kh.prototype.add=function(t){this._items.add(null),this._size+=1;var e=this._size;for(this._items.set(0,t);t.compareTo(this._items.get(Math.trunc(e/2)))<0;e/=2)this._items.set(e,this._items.get(Math.trunc(e/2)));this._items.set(e,t)},Kh.prototype.interfaces_=function(){return[]},Kh.prototype.getClass=function(){return Kh};var Qh=function(){};Qh.prototype.visitItem=function(t){},Qh.prototype.interfaces_=function(){return[]},Qh.prototype.getClass=function(){return Qh};var $h=function(){};$h.prototype.insert=function(t,e){},$h.prototype.remove=function(t,e){},$h.prototype.query=function(){},$h.prototype.interfaces_=function(){return[]},$h.prototype.getClass=function(){return $h};var tp=function(){if(this._childBoundables=new lc,this._bounds=null,this._level=null,0===arguments.length);else if(1===arguments.length){var t=arguments[0];this._level=t}},ep={serialVersionUID:{configurable:!0}};tp.prototype.getLevel=function(){return this._level},tp.prototype.size=function(){return this._childBoundables.size()},tp.prototype.getChildBoundables=function(){return this._childBoundables},tp.prototype.addChildBoundable=function(t){ql.isTrue(null===this._bounds),this._childBoundables.add(t)},tp.prototype.isEmpty=function(){return this._childBoundables.isEmpty()},tp.prototype.getBounds=function(){return null===this._bounds&&(this._bounds=this.computeBounds()),this._bounds},tp.prototype.interfaces_=function(){return[Jh,al]},tp.prototype.getClass=function(){return tp},ep.serialVersionUID.get=function(){return 0x5a1e55ec41369800},Object.defineProperties(tp,ep);var np=function(){};np.reverseOrder=function(){return{compare:function(t,e){return e.compareTo(t)}}},np.min=function(t){return np.sort(t),t.get(0)},np.sort=function(t,e){var n=t.toArray();e?Rc.sort(n,e):Rc.sort(n);for(var r=t.iterator(),i=0,o=n.length;i<o;i++)r.next(),r.set(n[i])},np.singletonList=function(t){var e=new lc;return e.add(t),e};var rp=function(){this._boundable1=null,this._boundable2=null,this._distance=null,this._itemDistance=null;var t=arguments[0],e=arguments[1],n=arguments[2];this._boundable1=t,this._boundable2=e,this._itemDistance=n,this._distance=this.distance()};rp.prototype.expandToQueue=function(t,e){var n=rp.isComposite(this._boundable1),r=rp.isComposite(this._boundable2);if(n&&r)return rp.area(this._boundable1)>rp.area(this._boundable2)?(this.expand(this._boundable1,this._boundable2,t,e),null):(this.expand(this._boundable2,this._boundable1,t,e),null);if(n)return this.expand(this._boundable1,this._boundable2,t,e),null;if(r)return this.expand(this._boundable2,this._boundable1,t,e),null;throw new el("neither boundable is composite")},rp.prototype.isLeaves=function(){return!(rp.isComposite(this._boundable1)||rp.isComposite(this._boundable2))},rp.prototype.compareTo=function(t){var e=t;return this._distance<e._distance?-1:this._distance>e._distance?1:0},rp.prototype.expand=function(t,e,n,r){for(var i=t.getChildBoundables().iterator();i.hasNext();){var o=i.next(),s=new rp(o,e,this._itemDistance);s.getDistance()<r&&n.add(s)}},rp.prototype.getBoundable=function(t){return 0===t?this._boundable1:this._boundable2},rp.prototype.getDistance=function(){return this._distance},rp.prototype.distance=function(){return this.isLeaves()?this._itemDistance.distance(this._boundable1,this._boundable2):this._boundable1.getBounds().distance(this._boundable2.getBounds())},rp.prototype.interfaces_=function(){return[il]},rp.prototype.getClass=function(){return rp},rp.area=function(t){return t.getBounds().getArea()},rp.isComposite=function(t){return t instanceof tp};var ip=function t(){if(this._root=null,this._built=!1,this._itemBoundables=new lc,this._nodeCapacity=null,0===arguments.length){var e=t.DEFAULT_NODE_CAPACITY;this._nodeCapacity=e}else if(1===arguments.length){var n=arguments[0];ql.isTrue(n>1,"Node capacity must be greater than 1"),this._nodeCapacity=n}},op={IntersectsOp:{configurable:!0},serialVersionUID:{configurable:!0},DEFAULT_NODE_CAPACITY:{configurable:!0}};ip.prototype.getNodeCapacity=function(){return this._nodeCapacity},ip.prototype.lastNode=function(t){return t.get(t.size()-1)},ip.prototype.size=function(){var t=this;if(0===arguments.length)return this.isEmpty()?0:(this.build(),this.size(this._root));if(1===arguments.length){for(var e=arguments[0],n=0,r=e.getChildBoundables().iterator();r.hasNext();){var i=r.next();i instanceof tp?n+=t.size(i):i instanceof Zh&&(n+=1)}return n}},ip.prototype.removeItem=function(t,e){for(var n=null,r=t.getChildBoundables().iterator();r.hasNext();){var i=r.next();i instanceof Zh&&i.getItem()===e&&(n=i)}return null!==n&&(t.getChildBoundables().remove(n),!0)},ip.prototype.itemsTree=function(){var t=this;if(0===arguments.length){this.build();var e=this.itemsTree(this._root);return null===e?new lc:e}if(1===arguments.length){for(var n=arguments[0],r=new lc,i=n.getChildBoundables().iterator();i.hasNext();){var o=i.next();if(o instanceof tp){var s=t.itemsTree(o);null!==s&&r.add(s)}else o instanceof Zh?r.add(o.getItem()):ql.shouldNeverReachHere()}return r.size()<=0?null:r}},ip.prototype.insert=function(t,e){ql.isTrue(!this._built,"Cannot insert items into an STR packed R-tree after it has been built."),this._itemBoundables.add(new Zh(t,e))},ip.prototype.boundablesAtLevel=function(){var t=this;if(1===arguments.length){var e=arguments[0],n=new lc;return this.boundablesAtLevel(e,this._root,n),n}if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2];if(ql.isTrue(r>-2),i.getLevel()===r)return o.add(i),null;for(var s=i.getChildBoundables().iterator();s.hasNext();){var a=s.next();a instanceof tp?t.boundablesAtLevel(r,a,o):(ql.isTrue(a instanceof Zh),-1===r&&o.add(a))}return null}},ip.prototype.query=function(){var t=this;if(1===arguments.length){var e=arguments[0];this.build();var n=new lc;return this.isEmpty()||this.getIntersectsOp().intersects(this._root.getBounds(),e)&&this.query(e,this._root,n),n}if(2===arguments.length){var r=arguments[0],i=arguments[1];if(this.build(),this.isEmpty())return null;this.getIntersectsOp().intersects(this._root.getBounds(),r)&&this.query(r,this._root,i)}else if(3===arguments.length)if(gl(arguments[2],Qh)&&arguments[0]instanceof Object&&arguments[1]instanceof tp)for(var o=arguments[0],s=arguments[1],a=arguments[2],u=s.getChildBoundables(),l=0;l<u.size();l++){var c=u.get(l);t.getIntersectsOp().intersects(c.getBounds(),o)&&(c instanceof tp?t.query(o,c,a):c instanceof Zh?a.visitItem(c.getItem()):ql.shouldNeverReachHere())}else if(gl(arguments[2],ac)&&arguments[0]instanceof Object&&arguments[1]instanceof tp)for(var h=arguments[0],p=arguments[1],f=arguments[2],g=p.getChildBoundables(),d=0;d<g.size();d++){var y=g.get(d);t.getIntersectsOp().intersects(y.getBounds(),h)&&(y instanceof tp?t.query(h,y,f):y instanceof Zh?f.add(y.getItem()):ql.shouldNeverReachHere())}},ip.prototype.build=function(){if(this._built)return null;this._root=this._itemBoundables.isEmpty()?this.createNode(0):this.createHigherLevels(this._itemBoundables,-1),this._itemBoundables=null,this._built=!0},ip.prototype.getRoot=function(){return this.build(),this._root},ip.prototype.remove=function(){var t=this;if(2===arguments.length){var e=arguments[0],n=arguments[1];return this.build(),!!this.getIntersectsOp().intersects(this._root.getBounds(),e)&&this.remove(e,this._root,n)}if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2],s=this.removeItem(i,o);if(s)return!0;for(var a=null,u=i.getChildBoundables().iterator();u.hasNext();){var l=u.next();if(t.getIntersectsOp().intersects(l.getBounds(),r)&&(l instanceof tp&&(s=t.remove(r,l,o)))){a=l;break}}return null!==a&&a.getChildBoundables().isEmpty()&&i.getChildBoundables().remove(a),s}},ip.prototype.createHigherLevels=function(t,e){ql.isTrue(!t.isEmpty());var n=this.createParentBoundables(t,e+1);return 1===n.size()?n.get(0):this.createHigherLevels(n,e+1)},ip.prototype.depth=function(){var t=this;if(0===arguments.length)return this.isEmpty()?0:(this.build(),this.depth(this._root));if(1===arguments.length){for(var e=arguments[0],n=0,r=e.getChildBoundables().iterator();r.hasNext();){var i=r.next();if(i instanceof tp){var o=t.depth(i);o>n&&(n=o)}}return n+1}},ip.prototype.createParentBoundables=function(t,e){var n=this;ql.isTrue(!t.isEmpty());var r=new lc;r.add(this.createNode(e));var i=new lc(t);np.sort(i,this.getComparator());for(var o=i.iterator();o.hasNext();){var s=o.next();n.lastNode(r).getChildBoundables().size()===n.getNodeCapacity()&&r.add(n.createNode(e)),n.lastNode(r).addChildBoundable(s)}return r},ip.prototype.isEmpty=function(){return this._built?this._root.isEmpty():this._itemBoundables.isEmpty()},ip.prototype.interfaces_=function(){return[al]},ip.prototype.getClass=function(){return ip},ip.compareDoubles=function(t,e){return t>e?1:t<e?-1:0},op.IntersectsOp.get=function(){return sp},op.serialVersionUID.get=function(){return-0x35ef64c82d4c5400},op.DEFAULT_NODE_CAPACITY.get=function(){return 10},Object.defineProperties(ip,op);var sp=function(){},ap=function(){};ap.prototype.distance=function(t,e){},ap.prototype.interfaces_=function(){return[]},ap.prototype.getClass=function(){return ap};var up=function(t){function e(n){n=n||e.DEFAULT_NODE_CAPACITY,t.call(this,n)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={STRtreeNode:{configurable:!0},serialVersionUID:{configurable:!0},xComparator:{configurable:!0},yComparator:{configurable:!0},intersectsOp:{configurable:!0},DEFAULT_NODE_CAPACITY:{configurable:!0}};return e.prototype.createParentBoundablesFromVerticalSlices=function(t,e){ql.isTrue(t.length>0);for(var n=new lc,r=0;r<t.length;r++)n.addAll(this.createParentBoundablesFromVerticalSlice(t[r],e));return n},e.prototype.createNode=function(t){return new lp(t)},e.prototype.size=function(){return 0===arguments.length?t.prototype.size.call(this):t.prototype.size.apply(this,arguments)},e.prototype.insert=function(){if(2!==arguments.length)return t.prototype.insert.apply(this,arguments);var e=arguments[0],n=arguments[1];if(e.isNull())return null;t.prototype.insert.call(this,e,n)},e.prototype.getIntersectsOp=function(){return e.intersectsOp},e.prototype.verticalSlices=function(t,e){for(var n=Math.trunc(Math.ceil(t.size()/e)),r=new Array(e).fill(null),i=t.iterator(),o=0;o<e;o++){r[o]=new lc;for(var s=0;i.hasNext()&&s<n;){var a=i.next();r[o].add(a),s++}}return r},e.prototype.query=function(){if(1===arguments.length){var e=arguments[0];return t.prototype.query.call(this,e)}if(2===arguments.length){var n=arguments[0],r=arguments[1];t.prototype.query.call(this,n,r)}else if(3===arguments.length)if(gl(arguments[2],Qh)&&arguments[0]instanceof Object&&arguments[1]instanceof tp){var i=arguments[0],o=arguments[1],s=arguments[2];t.prototype.query.call(this,i,o,s)}else if(gl(arguments[2],ac)&&arguments[0]instanceof Object&&arguments[1]instanceof tp){var a=arguments[0],u=arguments[1],l=arguments[2];t.prototype.query.call(this,a,u,l)}},e.prototype.getComparator=function(){return e.yComparator},e.prototype.createParentBoundablesFromVerticalSlice=function(e,n){return t.prototype.createParentBoundables.call(this,e,n)},e.prototype.remove=function(){if(2===arguments.length){var e=arguments[0],n=arguments[1];return t.prototype.remove.call(this,e,n)}return t.prototype.remove.apply(this,arguments)},e.prototype.depth=function(){return 0===arguments.length?t.prototype.depth.call(this):t.prototype.depth.apply(this,arguments)},e.prototype.createParentBoundables=function(t,n){ql.isTrue(!t.isEmpty());var r=Math.trunc(Math.ceil(t.size()/this.getNodeCapacity())),i=new lc(t);np.sort(i,e.xComparator);var o=this.verticalSlices(i,Math.trunc(Math.ceil(Math.sqrt(r))));return this.createParentBoundablesFromVerticalSlices(o,n)},e.prototype.nearestNeighbour=function(){if(1===arguments.length){if(gl(arguments[0],ap)){var t=arguments[0],n=new rp(this.getRoot(),this.getRoot(),t);return this.nearestNeighbour(n)}if(arguments[0]instanceof rp){var r=arguments[0];return this.nearestNeighbour(r,nl.POSITIVE_INFINITY)}}else if(2===arguments.length){if(arguments[0]instanceof e&&gl(arguments[1],ap)){var i=arguments[0],o=arguments[1],s=new rp(this.getRoot(),i.getRoot(),o);return this.nearestNeighbour(s)}if(arguments[0]instanceof rp&&"number"==typeof arguments[1]){var a=arguments[0],u=arguments[1],l=u,c=null,h=new Kh;for(h.add(a);!h.isEmpty()&&l>0;){var p=h.poll(),f=p.getDistance();if(f>=l)break;p.isLeaves()?(l=f,c=p):p.expandToQueue(h,l)}return[c.getBoundable(0).getItem(),c.getBoundable(1).getItem()]}}else if(3===arguments.length){var g=arguments[0],d=arguments[1],y=arguments[2],v=new Zh(g,d),_=new rp(this.getRoot(),v,y);return this.nearestNeighbour(_)[0]}},e.prototype.interfaces_=function(){return[$h,al]},e.prototype.getClass=function(){return e},e.centreX=function(t){return e.avg(t.getMinX(),t.getMaxX())},e.avg=function(t,e){return(t+e)/2},e.centreY=function(t){return e.avg(t.getMinY(),t.getMaxY())},n.STRtreeNode.get=function(){return lp},n.serialVersionUID.get=function(){return 0x39920f7d5f261e0},n.xComparator.get=function(){return{interfaces_:function(){return[sl]},compare:function(n,r){return t.compareDoubles(e.centreX(n.getBounds()),e.centreX(r.getBounds()))}}},n.yComparator.get=function(){return{interfaces_:function(){return[sl]},compare:function(n,r){return t.compareDoubles(e.centreY(n.getBounds()),e.centreY(r.getBounds()))}}},n.intersectsOp.get=function(){return{interfaces_:function(){return[t.IntersectsOp]},intersects:function(t,e){return t.intersects(e)}}},n.DEFAULT_NODE_CAPACITY.get=function(){return 10},Object.defineProperties(e,n),e}(ip),lp=function(t){function e(){var e=arguments[0];t.call(this,e)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.computeBounds=function(){for(var t=null,e=this.getChildBoundables().iterator();e.hasNext();){var n=e.next();null===t?t=new Ll(n.getBounds()):t.expandToInclude(n.getBounds())}return t},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(tp),cp=function(){};cp.prototype.interfaces_=function(){return[]},cp.prototype.getClass=function(){return cp},cp.relativeSign=function(t,e){return t<e?-1:t>e?1:0},cp.compare=function(t,e,n){if(e.equals2D(n))return 0;var r=cp.relativeSign(e.x,n.x),i=cp.relativeSign(e.y,n.y);switch(t){case 0:return cp.compareValue(r,i);case 1:return cp.compareValue(i,r);case 2:return cp.compareValue(i,-r);case 3:return cp.compareValue(-r,i);case 4:return cp.compareValue(-r,-i);case 5:return cp.compareValue(-i,-r);case 6:return cp.compareValue(-i,r);case 7:return cp.compareValue(r,-i)}return ql.shouldNeverReachHere("invalid octant value"),0},cp.compareValue=function(t,e){return t<0?-1:t>0?1:e<0?-1:e>0?1:0};var hp=function(){this._segString=null,this.coord=null,this.segmentIndex=null,this._segmentOctant=null,this._isInterior=null;var t=arguments[0],e=arguments[1],n=arguments[2],r=arguments[3];this._segString=t,this.coord=new ul(e),this.segmentIndex=n,this._segmentOctant=r,this._isInterior=!e.equals2D(t.getCoordinate(n))};hp.prototype.getCoordinate=function(){return this.coord},hp.prototype.print=function(t){t.print(this.coord),t.print(" seg # = "+this.segmentIndex)},hp.prototype.compareTo=function(t){var e=t;return this.segmentIndex<e.segmentIndex?-1:this.segmentIndex>e.segmentIndex?1:this.coord.equals2D(e.coord)?0:cp.compare(this._segmentOctant,this.coord,e.coord)},hp.prototype.isEndPoint=function(t){return 0===this.segmentIndex&&!this._isInterior||this.segmentIndex===t},hp.prototype.isInterior=function(){return this._isInterior},hp.prototype.interfaces_=function(){return[il]},hp.prototype.getClass=function(){return hp};var pp=function(){this._nodeMap=new Cc,this._edge=null;var t=arguments[0];this._edge=t};pp.prototype.getSplitCoordinates=function(){var t=new hc;this.addEndpoints();for(var e=this.iterator(),n=e.next();e.hasNext();){var r=e.next();this.addEdgeCoordinates(n,r,t),n=r}return t.toCoordinateArray()},pp.prototype.addCollapsedNodes=function(){var t=new lc;this.findCollapsesFromInsertedNodes(t),this.findCollapsesFromExistingVertices(t);for(var e=t.iterator();e.hasNext();){var n=e.next().intValue();this.add(this._edge.getCoordinate(n),n)}},pp.prototype.print=function(t){t.println("Intersections:");for(var e=this.iterator();e.hasNext();){e.next().print(t)}},pp.prototype.findCollapsesFromExistingVertices=function(t){for(var e=0;e<this._edge.size()-2;e++){var n=this._edge.getCoordinate(e),r=this._edge.getCoordinate(e+2);n.equals2D(r)&&t.add(new _l(e+1))}},pp.prototype.addEdgeCoordinates=function(t,e,n){var r=this._edge.getCoordinate(e.segmentIndex),i=e.isInterior()||!e.coord.equals2D(r);n.add(new ul(t.coord),!1);for(var o=t.segmentIndex+1;o<=e.segmentIndex;o++)n.add(this._edge.getCoordinate(o));i&&n.add(new ul(e.coord))},pp.prototype.iterator=function(){return this._nodeMap.values().iterator()},pp.prototype.addSplitEdges=function(t){this.addEndpoints(),this.addCollapsedNodes();for(var e=this.iterator(),n=e.next();e.hasNext();){var r=e.next(),i=this.createSplitEdge(n,r);t.add(i),n=r}},pp.prototype.findCollapseIndex=function(t,e,n){if(!t.coord.equals2D(e.coord))return!1;var r=e.segmentIndex-t.segmentIndex;return e.isInterior()||r--,1===r&&(n[0]=t.segmentIndex+1,!0)},pp.prototype.findCollapsesFromInsertedNodes=function(t){for(var e=new Array(1).fill(null),n=this.iterator(),r=n.next();n.hasNext();){var i=n.next();this.findCollapseIndex(r,i,e)&&t.add(new _l(e[0])),r=i}},pp.prototype.getEdge=function(){return this._edge},pp.prototype.addEndpoints=function(){var t=this._edge.size()-1;this.add(this._edge.getCoordinate(0),0),this.add(this._edge.getCoordinate(t),t)},pp.prototype.createSplitEdge=function(t,e){var n=e.segmentIndex-t.segmentIndex+2,r=this._edge.getCoordinate(e.segmentIndex),i=e.isInterior()||!e.coord.equals2D(r);i||n--;var o=new Array(n).fill(null),s=0;o[s++]=new ul(t.coord);for(var a=t.segmentIndex+1;a<=e.segmentIndex;a++)o[s++]=this._edge.getCoordinate(a);return i&&(o[s]=new ul(e.coord)),new yp(o,this._edge.getData())},pp.prototype.add=function(t,e){var n=new hp(this._edge,t,e,this._edge.getSegmentOctant(e)),r=this._nodeMap.get(n);return null!==r?(ql.isTrue(r.coord.equals2D(t),"Found equal nodes with different coordinates"),r):(this._nodeMap.put(n,n),n)},pp.prototype.checkSplitEdgesCorrectness=function(t){var e=this._edge.getCoordinates(),n=t.get(0).getCoordinate(0);if(!n.equals2D(e[0]))throw new kl("bad split edge start point at "+n);var r=t.get(t.size()-1).getCoordinates(),i=r[r.length-1];if(!i.equals2D(e[e.length-1]))throw new kl("bad split edge end point at "+i)},pp.prototype.interfaces_=function(){return[]},pp.prototype.getClass=function(){return pp};var fp=function(){};fp.prototype.interfaces_=function(){return[]},fp.prototype.getClass=function(){return fp},fp.octant=function(){if("number"==typeof arguments[0]&&"number"==typeof arguments[1]){var t=arguments[0],e=arguments[1];if(0===t&&0===e)throw new el("Cannot compute the octant for point ( "+t+", "+e+" )");var n=Math.abs(t),r=Math.abs(e);return t>=0?e>=0?n>=r?0:1:n>=r?7:6:e>=0?n>=r?3:2:n>=r?4:5}if(arguments[0]instanceof ul&&arguments[1]instanceof ul){var i=arguments[0],o=arguments[1],s=o.x-i.x,a=o.y-i.y;if(0===s&&0===a)throw new el("Cannot compute the octant for two identical points "+i);return fp.octant(s,a)}};var gp=function(){};gp.prototype.getCoordinates=function(){},gp.prototype.size=function(){},gp.prototype.getCoordinate=function(t){},gp.prototype.isClosed=function(){},gp.prototype.setData=function(t){},gp.prototype.getData=function(){},gp.prototype.interfaces_=function(){return[]},gp.prototype.getClass=function(){return gp};var dp=function(){};dp.prototype.addIntersection=function(t,e){},dp.prototype.interfaces_=function(){return[gp]},dp.prototype.getClass=function(){return dp};var yp=function(){this._nodeList=new pp(this),this._pts=null,this._data=null;var t=arguments[0],e=arguments[1];this._pts=t,this._data=e};yp.prototype.getCoordinates=function(){return this._pts},yp.prototype.size=function(){return this._pts.length},yp.prototype.getCoordinate=function(t){return this._pts[t]},yp.prototype.isClosed=function(){return this._pts[0].equals(this._pts[this._pts.length-1])},yp.prototype.getSegmentOctant=function(t){return t===this._pts.length-1?-1:this.safeOctant(this.getCoordinate(t),this.getCoordinate(t+1))},yp.prototype.setData=function(t){this._data=t},yp.prototype.safeOctant=function(t,e){return t.equals2D(e)?0:fp.octant(t,e)},yp.prototype.getData=function(){return this._data},yp.prototype.addIntersection=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1];this.addIntersectionNode(t,e)}else if(4===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[3],o=new ul(n.getIntersection(i));this.addIntersection(o,r)}},yp.prototype.toString=function(){return Fl.toLineString(new lh(this._pts))},yp.prototype.getNodeList=function(){return this._nodeList},yp.prototype.addIntersectionNode=function(t,e){var n=e,r=n+1;if(r<this._pts.length){var i=this._pts[r];t.equals2D(i)&&(n=r)}return this._nodeList.add(t,n)},yp.prototype.addIntersections=function(t,e,n){for(var r=0;r<t.getIntersectionNum();r++)this.addIntersection(t,e,n,r)},yp.prototype.interfaces_=function(){return[dp]},yp.prototype.getClass=function(){return yp},yp.getNodedSubstrings=function(){if(1===arguments.length){var t=arguments[0],e=new lc;return yp.getNodedSubstrings(t,e),e}if(2===arguments.length)for(var n=arguments[0],r=arguments[1],i=n.iterator();i.hasNext();){var o=i.next();o.getNodeList().addSplitEdges(r)}};var vp=function(){if(this.p0=null,this.p1=null,0===arguments.length)this.p0=new ul,this.p1=new ul;else if(1===arguments.length){var t=arguments[0];this.p0=new ul(t.p0),this.p1=new ul(t.p1)}else if(2===arguments.length)this.p0=arguments[0],this.p1=arguments[1];else if(4===arguments.length){var e=arguments[0],n=arguments[1],r=arguments[2],i=arguments[3];this.p0=new ul(e,n),this.p1=new ul(r,i)}},_p={serialVersionUID:{configurable:!0}};vp.prototype.minX=function(){return Math.min(this.p0.x,this.p1.x)},vp.prototype.orientationIndex=function(){if(arguments[0]instanceof vp){var t=arguments[0],e=Xl.orientationIndex(this.p0,this.p1,t.p0),n=Xl.orientationIndex(this.p0,this.p1,t.p1);return e>=0&&n>=0||e<=0&&n<=0?Math.max(e,n):0}if(arguments[0]instanceof ul){var r=arguments[0];return Xl.orientationIndex(this.p0,this.p1,r)}},vp.prototype.toGeometry=function(t){return t.createLineString([this.p0,this.p1])},vp.prototype.isVertical=function(){return this.p0.x===this.p1.x},vp.prototype.equals=function(t){if(!(t instanceof vp))return!1;var e=t;return this.p0.equals(e.p0)&&this.p1.equals(e.p1)},vp.prototype.intersection=function(t){var e=new jl;return e.computeIntersection(this.p0,this.p1,t.p0,t.p1),e.hasIntersection()?e.getIntersection(0):null},vp.prototype.project=function(){if(arguments[0]instanceof ul){var t=arguments[0];if(t.equals(this.p0)||t.equals(this.p1))return new ul(t);var e=this.projectionFactor(t),n=new ul;return n.x=this.p0.x+e*(this.p1.x-this.p0.x),n.y=this.p0.y+e*(this.p1.y-this.p0.y),n}if(arguments[0]instanceof vp){var r=arguments[0],i=this.projectionFactor(r.p0),o=this.projectionFactor(r.p1);if(i>=1&&o>=1)return null;if(i<=0&&o<=0)return null;var s=this.project(r.p0);i<0&&(s=this.p0),i>1&&(s=this.p1);var a=this.project(r.p1);return o<0&&(a=this.p0),o>1&&(a=this.p1),new vp(s,a)}},vp.prototype.normalize=function(){this.p1.compareTo(this.p0)<0&&this.reverse()},vp.prototype.angle=function(){return Math.atan2(this.p1.y-this.p0.y,this.p1.x-this.p0.x)},vp.prototype.getCoordinate=function(t){return 0===t?this.p0:this.p1},vp.prototype.distancePerpendicular=function(t){return Xl.distancePointLinePerpendicular(t,this.p0,this.p1)},vp.prototype.minY=function(){return Math.min(this.p0.y,this.p1.y)},vp.prototype.midPoint=function(){return vp.midPoint(this.p0,this.p1)},vp.prototype.projectionFactor=function(t){if(t.equals(this.p0))return 0;if(t.equals(this.p1))return 1;var e=this.p1.x-this.p0.x,n=this.p1.y-this.p0.y,r=e*e+n*n;return r<=0?nl.NaN:((t.x-this.p0.x)*e+(t.y-this.p0.y)*n)/r},vp.prototype.closestPoints=function(t){var e=this.intersection(t);if(null!==e)return[e,e];var n=new Array(2).fill(null),r=nl.MAX_VALUE,i=null,o=this.closestPoint(t.p0);r=o.distance(t.p0),n[0]=o,n[1]=t.p0;var s=this.closestPoint(t.p1);(i=s.distance(t.p1))<r&&(r=i,n[0]=s,n[1]=t.p1);var a=t.closestPoint(this.p0);(i=a.distance(this.p0))<r&&(r=i,n[0]=this.p0,n[1]=a);var u=t.closestPoint(this.p1);return(i=u.distance(this.p1))<r&&(r=i,n[0]=this.p1,n[1]=u),n},vp.prototype.closestPoint=function(t){var e=this.projectionFactor(t);return e>0&&e<1?this.project(t):this.p0.distance(t)<this.p1.distance(t)?this.p0:this.p1},vp.prototype.maxX=function(){return Math.max(this.p0.x,this.p1.x)},vp.prototype.getLength=function(){return this.p0.distance(this.p1)},vp.prototype.compareTo=function(t){var e=t,n=this.p0.compareTo(e.p0);return 0!==n?n:this.p1.compareTo(e.p1)},vp.prototype.reverse=function(){var t=this.p0;this.p0=this.p1,this.p1=t},vp.prototype.equalsTopo=function(t){return this.p0.equals(t.p0)&&(this.p1.equals(t.p1)||this.p0.equals(t.p1))&&this.p1.equals(t.p0)},vp.prototype.lineIntersection=function(t){try{return Ml.intersection(this.p0,this.p1,t.p0,t.p1)}catch(t){if(!(t instanceof Cl))throw t}return null},vp.prototype.maxY=function(){return Math.max(this.p0.y,this.p1.y)},vp.prototype.pointAlongOffset=function(t,e){var n=this.p0.x+t*(this.p1.x-this.p0.x),r=this.p0.y+t*(this.p1.y-this.p0.y),i=this.p1.x-this.p0.x,o=this.p1.y-this.p0.y,s=Math.sqrt(i*i+o*o),a=0,u=0;if(0!==e){if(s<=0)throw new Error("Cannot compute offset from zero-length line segment");a=e*i/s,u=e*o/s}return new ul(n-u,r+a)},vp.prototype.setCoordinates=function(){if(1===arguments.length){var t=arguments[0];this.setCoordinates(t.p0,t.p1)}else if(2===arguments.length){var e=arguments[0],n=arguments[1];this.p0.x=e.x,this.p0.y=e.y,this.p1.x=n.x,this.p1.y=n.y}},vp.prototype.segmentFraction=function(t){var e=this.projectionFactor(t);return e<0?e=0:(e>1||nl.isNaN(e))&&(e=1),e},vp.prototype.toString=function(){return"LINESTRING( "+this.p0.x+" "+this.p0.y+", "+this.p1.x+" "+this.p1.y+")"},vp.prototype.isHorizontal=function(){return this.p0.y===this.p1.y},vp.prototype.distance=function(){if(arguments[0]instanceof vp){var t=arguments[0];return Xl.distanceLineLine(this.p0,this.p1,t.p0,t.p1)}if(arguments[0]instanceof ul){var e=arguments[0];return Xl.distancePointLine(e,this.p0,this.p1)}},vp.prototype.pointAlong=function(t){var e=new ul;return e.x=this.p0.x+t*(this.p1.x-this.p0.x),e.y=this.p0.y+t*(this.p1.y-this.p0.y),e},vp.prototype.hashCode=function(){var t=nl.doubleToLongBits(this.p0.x);t^=31*nl.doubleToLongBits(this.p0.y);var e=Math.trunc(t)^Math.trunc(t>>32),n=nl.doubleToLongBits(this.p1.x);return n^=31*nl.doubleToLongBits(this.p1.y),e^(Math.trunc(n)^Math.trunc(n>>32))},vp.prototype.interfaces_=function(){return[il,al]},vp.prototype.getClass=function(){return vp},vp.midPoint=function(t,e){return new ul((t.x+e.x)/2,(t.y+e.y)/2)},_p.serialVersionUID.get=function(){return 0x2d2172135f411c00},Object.defineProperties(vp,_p);var mp=function(){this.tempEnv1=new Ll,this.tempEnv2=new Ll,this._overlapSeg1=new vp,this._overlapSeg2=new vp};mp.prototype.overlap=function(){if(2===arguments.length);else if(4===arguments.length){var t=arguments[0],e=arguments[1],n=arguments[2],r=arguments[3];t.getLineSegment(e,this._overlapSeg1),n.getLineSegment(r,this._overlapSeg2),this.overlap(this._overlapSeg1,this._overlapSeg2)}},mp.prototype.interfaces_=function(){return[]},mp.prototype.getClass=function(){return mp};var xp=function(){this._pts=null,this._start=null,this._end=null,this._env=null,this._context=null,this._id=null;var t=arguments[0],e=arguments[1],n=arguments[2],r=arguments[3];this._pts=t,this._start=e,this._end=n,this._context=r};xp.prototype.getLineSegment=function(t,e){e.p0=this._pts[t],e.p1=this._pts[t+1]},xp.prototype.computeSelect=function(t,e,n,r){var i=this._pts[e],o=this._pts[n];if(r.tempEnv1.init(i,o),n-e==1)return r.select(this,e),null;if(!t.intersects(r.tempEnv1))return null;var s=Math.trunc((e+n)/2);e<s&&this.computeSelect(t,e,s,r),s<n&&this.computeSelect(t,s,n,r)},xp.prototype.getCoordinates=function(){for(var t=new Array(this._end-this._start+1).fill(null),e=0,n=this._start;n<=this._end;n++)t[e++]=this._pts[n];return t},xp.prototype.computeOverlaps=function(t,e){this.computeOverlapsInternal(this._start,this._end,t,t._start,t._end,e)},xp.prototype.setId=function(t){this._id=t},xp.prototype.select=function(t,e){this.computeSelect(t,this._start,this._end,e)},xp.prototype.getEnvelope=function(){if(null===this._env){var t=this._pts[this._start],e=this._pts[this._end];this._env=new Ll(t,e)}return this._env},xp.prototype.getEndIndex=function(){return this._end},xp.prototype.getStartIndex=function(){return this._start},xp.prototype.getContext=function(){return this._context},xp.prototype.getId=function(){return this._id},xp.prototype.computeOverlapsInternal=function(t,e,n,r,i,o){var s=this._pts[t],a=this._pts[e],u=n._pts[r],l=n._pts[i];if(e-t==1&&i-r==1)return o.overlap(this,t,n,r),null;if(o.tempEnv1.init(s,a),o.tempEnv2.init(u,l),!o.tempEnv1.intersects(o.tempEnv2))return null;var c=Math.trunc((t+e)/2),h=Math.trunc((r+i)/2);t<c&&(r<h&&this.computeOverlapsInternal(t,c,n,r,h,o),h<i&&this.computeOverlapsInternal(t,c,n,h,i,o)),c<e&&(r<h&&this.computeOverlapsInternal(c,e,n,r,h,o),h<i&&this.computeOverlapsInternal(c,e,n,h,i,o))},xp.prototype.interfaces_=function(){return[]},xp.prototype.getClass=function(){return xp};var Ep=function(){};Ep.prototype.interfaces_=function(){return[]},Ep.prototype.getClass=function(){return Ep},Ep.getChainStartIndices=function(t){var e=0,n=new lc;n.add(new _l(e));do{var r=Ep.findChainEnd(t,e);n.add(new _l(r)),e=r}while(e<t.length-1);return Ep.toIntArray(n)},Ep.findChainEnd=function(t,e){for(var n=e;n<t.length-1&&t[n].equals2D(t[n+1]);)n++;if(n>=t.length-1)return t.length-1;for(var r=jh.quadrant(t[n],t[n+1]),i=e+1;i<t.length;){if(!t[i-1].equals2D(t[i]))if(jh.quadrant(t[i-1],t[i])!==r)break;i++}return i-1},Ep.getChains=function(){if(1===arguments.length){var t=arguments[0];return Ep.getChains(t,null)}if(2===arguments.length){for(var e=arguments[0],n=arguments[1],r=new lc,i=Ep.getChainStartIndices(e),o=0;o<i.length-1;o++){var s=new xp(e,i[o],i[o+1],n);r.add(s)}return r}},Ep.toIntArray=function(t){for(var e=new Array(t.size()).fill(null),n=0;n<e.length;n++)e[n]=t.get(n).intValue();return e};var bp=function(){};bp.prototype.computeNodes=function(t){},bp.prototype.getNodedSubstrings=function(){},bp.prototype.interfaces_=function(){return[]},bp.prototype.getClass=function(){return bp};var wp=function(){if(this._segInt=null,0===arguments.length);else if(1===arguments.length){var t=arguments[0];this.setSegmentIntersector(t)}};wp.prototype.setSegmentIntersector=function(t){this._segInt=t},wp.prototype.interfaces_=function(){return[bp]},wp.prototype.getClass=function(){return wp};var Ip=function(t){function e(e){e?t.call(this,e):t.call(this),this._monoChains=new lc,this._index=new up,this._idCounter=0,this._nodedSegStrings=null,this._nOverlaps=0}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var n={SegmentOverlapAction:{configurable:!0}};return e.prototype.getMonotoneChains=function(){return this._monoChains},e.prototype.getNodedSubstrings=function(){return yp.getNodedSubstrings(this._nodedSegStrings)},e.prototype.getIndex=function(){return this._index},e.prototype.add=function(t){for(var e=this,n=Ep.getChains(t.getCoordinates(),t).iterator();n.hasNext();){var r=n.next();r.setId(e._idCounter++),e._index.insert(r.getEnvelope(),r),e._monoChains.add(r)}},e.prototype.computeNodes=function(t){this._nodedSegStrings=t;for(var e=t.iterator();e.hasNext();)this.add(e.next());this.intersectChains()},e.prototype.intersectChains=function(){for(var t=this,e=new Np(this._segInt),n=this._monoChains.iterator();n.hasNext();)for(var r=n.next(),i=t._index.query(r.getEnvelope()).iterator();i.hasNext();){var o=i.next();if(o.getId()>r.getId()&&(r.computeOverlaps(o,e),t._nOverlaps++),t._segInt.isDone())return null}},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},n.SegmentOverlapAction.get=function(){return Np},Object.defineProperties(e,n),e}(wp),Np=function(t){function e(){t.call(this),this._si=null;var e=arguments[0];this._si=e}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.overlap=function(){if(4!==arguments.length)return t.prototype.overlap.apply(this,arguments);var e=arguments[0],n=arguments[1],r=arguments[2],i=arguments[3],o=e.getContext(),s=r.getContext();this._si.processIntersections(o,n,s,i)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(mp),Sp=function t(){if(this._quadrantSegments=t.DEFAULT_QUADRANT_SEGMENTS,this._endCapStyle=t.CAP_ROUND,this._joinStyle=t.JOIN_ROUND,this._mitreLimit=t.DEFAULT_MITRE_LIMIT,this._isSingleSided=!1,this._simplifyFactor=t.DEFAULT_SIMPLIFY_FACTOR,0===arguments.length);else if(1===arguments.length){var e=arguments[0];this.setQuadrantSegments(e)}else if(2===arguments.length){var n=arguments[0],r=arguments[1];this.setQuadrantSegments(n),this.setEndCapStyle(r)}else if(4===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2],a=arguments[3];this.setQuadrantSegments(i),this.setEndCapStyle(o),this.setJoinStyle(s),this.setMitreLimit(a)}},Cp={CAP_ROUND:{configurable:!0},CAP_FLAT:{configurable:!0},CAP_SQUARE:{configurable:!0},JOIN_ROUND:{configurable:!0},JOIN_MITRE:{configurable:!0},JOIN_BEVEL:{configurable:!0},DEFAULT_QUADRANT_SEGMENTS:{configurable:!0},DEFAULT_MITRE_LIMIT:{configurable:!0},DEFAULT_SIMPLIFY_FACTOR:{configurable:!0}};Sp.prototype.getEndCapStyle=function(){return this._endCapStyle},Sp.prototype.isSingleSided=function(){return this._isSingleSided},Sp.prototype.setQuadrantSegments=function(t){this._quadrantSegments=t,0===this._quadrantSegments&&(this._joinStyle=Sp.JOIN_BEVEL),this._quadrantSegments<0&&(this._joinStyle=Sp.JOIN_MITRE,this._mitreLimit=Math.abs(this._quadrantSegments)),t<=0&&(this._quadrantSegments=1),this._joinStyle!==Sp.JOIN_ROUND&&(this._quadrantSegments=Sp.DEFAULT_QUADRANT_SEGMENTS)},Sp.prototype.getJoinStyle=function(){return this._joinStyle},Sp.prototype.setJoinStyle=function(t){this._joinStyle=t},Sp.prototype.setSimplifyFactor=function(t){this._simplifyFactor=t<0?0:t},Sp.prototype.getSimplifyFactor=function(){return this._simplifyFactor},Sp.prototype.getQuadrantSegments=function(){return this._quadrantSegments},Sp.prototype.setEndCapStyle=function(t){this._endCapStyle=t},Sp.prototype.getMitreLimit=function(){return this._mitreLimit},Sp.prototype.setMitreLimit=function(t){this._mitreLimit=t},Sp.prototype.setSingleSided=function(t){this._isSingleSided=t},Sp.prototype.interfaces_=function(){return[]},Sp.prototype.getClass=function(){return Sp},Sp.bufferDistanceError=function(t){var e=Math.PI/2/t;return 1-Math.cos(e/2)},Cp.CAP_ROUND.get=function(){return 1},Cp.CAP_FLAT.get=function(){return 2},Cp.CAP_SQUARE.get=function(){return 3},Cp.JOIN_ROUND.get=function(){return 1},Cp.JOIN_MITRE.get=function(){return 2},Cp.JOIN_BEVEL.get=function(){return 3},Cp.DEFAULT_QUADRANT_SEGMENTS.get=function(){return 8},Cp.DEFAULT_MITRE_LIMIT.get=function(){return 5},Cp.DEFAULT_SIMPLIFY_FACTOR.get=function(){return.01},Object.defineProperties(Sp,Cp);var Pp=function(t){this._distanceTol=null,this._isDeleted=null,this._angleOrientation=Xl.COUNTERCLOCKWISE,this._inputLine=t||null},Mp={INIT:{configurable:!0},DELETE:{configurable:!0},KEEP:{configurable:!0},NUM_PTS_TO_CHECK:{configurable:!0}};Pp.prototype.isDeletable=function(t,e,n,r){var i=this._inputLine[t],o=this._inputLine[e],s=this._inputLine[n];return!!this.isConcave(i,o,s)&&(!!this.isShallow(i,o,s,r)&&this.isShallowSampled(i,o,t,n,r))},Pp.prototype.deleteShallowConcavities=function(){for(var t=this,e=1,n=this.findNextNonDeletedIndex(e),r=this.findNextNonDeletedIndex(n),i=!1;r<this._inputLine.length;){var o=!1;t.isDeletable(e,n,r,t._distanceTol)&&(t._isDeleted[n]=Pp.DELETE,o=!0,i=!0),e=o?r:n,n=t.findNextNonDeletedIndex(e),r=t.findNextNonDeletedIndex(n)}return i},Pp.prototype.isShallowConcavity=function(t,e,n,r){return Xl.computeOrientation(t,e,n)===this._angleOrientation&&Xl.distancePointLine(e,t,n)<r},Pp.prototype.isShallowSampled=function(t,e,n,r,i){var o=Math.trunc((r-n)/Pp.NUM_PTS_TO_CHECK);o<=0&&(o=1);for(var s=n;s<r;s+=o)if(!this.isShallow(t,e,this._inputLine[s],i))return!1;return!0},Pp.prototype.isConcave=function(t,e,n){var r=Xl.computeOrientation(t,e,n)===this._angleOrientation;return r},Pp.prototype.simplify=function(t){this._distanceTol=Math.abs(t),t<0&&(this._angleOrientation=Xl.CLOCKWISE),this._isDeleted=new Array(this._inputLine.length).fill(null);var e=!1;do{e=this.deleteShallowConcavities()}while(e);return this.collapseLine()},Pp.prototype.findNextNonDeletedIndex=function(t){for(var e=t+1;e<this._inputLine.length&&this._isDeleted[e]===Pp.DELETE;)e++;return e},Pp.prototype.isShallow=function(t,e,n,r){return Xl.distancePointLine(e,t,n)<r},Pp.prototype.collapseLine=function(){for(var t=new hc,e=0;e<this._inputLine.length;e++)this._isDeleted[e]!==Pp.DELETE&&t.add(this._inputLine[e]);return t.toCoordinateArray()},Pp.prototype.interfaces_=function(){return[]},Pp.prototype.getClass=function(){return Pp},Pp.simplify=function(t,e){return new Pp(t).simplify(e)},Mp.INIT.get=function(){return 0},Mp.DELETE.get=function(){return 1},Mp.KEEP.get=function(){return 1},Mp.NUM_PTS_TO_CHECK.get=function(){return 10},Object.defineProperties(Pp,Mp);var Lp=function(){this._ptList=null,this._precisionModel=null,this._minimimVertexDistance=0,this._ptList=new lc},Op={COORDINATE_ARRAY_TYPE:{configurable:!0}};Lp.prototype.getCoordinates=function(){return this._ptList.toArray(Lp.COORDINATE_ARRAY_TYPE)},Lp.prototype.setPrecisionModel=function(t){this._precisionModel=t},Lp.prototype.addPt=function(t){var e=new ul(t);if(this._precisionModel.makePrecise(e),this.isRedundant(e))return null;this._ptList.add(e)},Lp.prototype.revere=function(){},Lp.prototype.addPts=function(t,e){if(e)for(var n=0;n<t.length;n++)this.addPt(t[n]);else for(var r=t.length-1;r>=0;r--)this.addPt(t[r])},Lp.prototype.isRedundant=function(t){if(this._ptList.size()<1)return!1;var e=this._ptList.get(this._ptList.size()-1);return t.distance(e)<this._minimimVertexDistance},Lp.prototype.toString=function(){return(new _h).createLineString(this.getCoordinates()).toString()},Lp.prototype.closeRing=function(){if(this._ptList.size()<1)return null;var t=new ul(this._ptList.get(0)),e=this._ptList.get(this._ptList.size()-1);if(t.equals(e))return null;this._ptList.add(t)},Lp.prototype.setMinimumVertexDistance=function(t){this._minimimVertexDistance=t},Lp.prototype.interfaces_=function(){return[]},Lp.prototype.getClass=function(){return Lp},Op.COORDINATE_ARRAY_TYPE.get=function(){return new Array(0).fill(null)},Object.defineProperties(Lp,Op);var Rp=function(){},Tp={PI_TIMES_2:{configurable:!0},PI_OVER_2:{configurable:!0},PI_OVER_4:{configurable:!0},COUNTERCLOCKWISE:{configurable:!0},CLOCKWISE:{configurable:!0},NONE:{configurable:!0}};Rp.prototype.interfaces_=function(){return[]},Rp.prototype.getClass=function(){return Rp},Rp.toDegrees=function(t){return 180*t/Math.PI},Rp.normalize=function(t){for(;t>Math.PI;)t-=Rp.PI_TIMES_2;for(;t<=-Math.PI;)t+=Rp.PI_TIMES_2;return t},Rp.angle=function(){if(1===arguments.length){var t=arguments[0];return Math.atan2(t.y,t.x)}if(2===arguments.length){var e=arguments[0],n=arguments[1],r=n.x-e.x,i=n.y-e.y;return Math.atan2(i,r)}},Rp.isAcute=function(t,e,n){var r=t.x-e.x,i=t.y-e.y;return r*(n.x-e.x)+i*(n.y-e.y)>0},Rp.isObtuse=function(t,e,n){var r=t.x-e.x,i=t.y-e.y;return r*(n.x-e.x)+i*(n.y-e.y)<0},Rp.interiorAngle=function(t,e,n){var r=Rp.angle(e,t),i=Rp.angle(e,n);return Math.abs(i-r)},Rp.normalizePositive=function(t){if(t<0){for(;t<0;)t+=Rp.PI_TIMES_2;t>=Rp.PI_TIMES_2&&(t=0)}else{for(;t>=Rp.PI_TIMES_2;)t-=Rp.PI_TIMES_2;t<0&&(t=0)}return t},Rp.angleBetween=function(t,e,n){var r=Rp.angle(e,t),i=Rp.angle(e,n);return Rp.diff(r,i)},Rp.diff=function(t,e){var n=null;return(n=t<e?e-t:t-e)>Math.PI&&(n=2*Math.PI-n),n},Rp.toRadians=function(t){return t*Math.PI/180},Rp.getTurn=function(t,e){var n=Math.sin(e-t);return n>0?Rp.COUNTERCLOCKWISE:n<0?Rp.CLOCKWISE:Rp.NONE},Rp.angleBetweenOriented=function(t,e,n){var r=Rp.angle(e,t),i=Rp.angle(e,n)-r;return i<=-Math.PI?i+Rp.PI_TIMES_2:i>Math.PI?i-Rp.PI_TIMES_2:i},Tp.PI_TIMES_2.get=function(){return 2*Math.PI},Tp.PI_OVER_2.get=function(){return Math.PI/2},Tp.PI_OVER_4.get=function(){return Math.PI/4},Tp.COUNTERCLOCKWISE.get=function(){return Xl.COUNTERCLOCKWISE},Tp.CLOCKWISE.get=function(){return Xl.CLOCKWISE},Tp.NONE.get=function(){return Xl.COLLINEAR},Object.defineProperties(Rp,Tp);var Ap=function t(){this._maxCurveSegmentError=0,this._filletAngleQuantum=null,this._closingSegLengthFactor=1,this._segList=null,this._distance=0,this._precisionModel=null,this._bufParams=null,this._li=null,this._s0=null,this._s1=null,this._s2=null,this._seg0=new vp,this._seg1=new vp,this._offset0=new vp,this._offset1=new vp,this._side=0,this._hasNarrowConcaveAngle=!1;var e=arguments[0],n=arguments[1],r=arguments[2];this._precisionModel=e,this._bufParams=n,this._li=new jl,this._filletAngleQuantum=Math.PI/2/n.getQuadrantSegments(),n.getQuadrantSegments()>=8&&n.getJoinStyle()===Sp.JOIN_ROUND&&(this._closingSegLengthFactor=t.MAX_CLOSING_SEG_LEN_FACTOR),this.init(r)},Dp={OFFSET_SEGMENT_SEPARATION_FACTOR:{configurable:!0},INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR:{configurable:!0},CURVE_VERTEX_SNAP_DISTANCE_FACTOR:{configurable:!0},MAX_CLOSING_SEG_LEN_FACTOR:{configurable:!0}};Ap.prototype.addNextSegment=function(t,e){if(this._s0=this._s1,this._s1=this._s2,this._s2=t,this._seg0.setCoordinates(this._s0,this._s1),this.computeOffsetSegment(this._seg0,this._side,this._distance,this._offset0),this._seg1.setCoordinates(this._s1,this._s2),this.computeOffsetSegment(this._seg1,this._side,this._distance,this._offset1),this._s1.equals(this._s2))return null;var n=Xl.computeOrientation(this._s0,this._s1,this._s2),r=n===Xl.CLOCKWISE&&this._side===Sh.LEFT||n===Xl.COUNTERCLOCKWISE&&this._side===Sh.RIGHT;0===n?this.addCollinear(e):r?this.addOutsideTurn(n,e):this.addInsideTurn(n,e)},Ap.prototype.addLineEndCap=function(t,e){var n=new vp(t,e),r=new vp;this.computeOffsetSegment(n,Sh.LEFT,this._distance,r);var i=new vp;this.computeOffsetSegment(n,Sh.RIGHT,this._distance,i);var o=e.x-t.x,s=e.y-t.y,a=Math.atan2(s,o);switch(this._bufParams.getEndCapStyle()){case Sp.CAP_ROUND:this._segList.addPt(r.p1),this.addFilletArc(e,a+Math.PI/2,a-Math.PI/2,Xl.CLOCKWISE,this._distance),this._segList.addPt(i.p1);break;case Sp.CAP_FLAT:this._segList.addPt(r.p1),this._segList.addPt(i.p1);break;case Sp.CAP_SQUARE:var u=new ul;u.x=Math.abs(this._distance)*Math.cos(a),u.y=Math.abs(this._distance)*Math.sin(a);var l=new ul(r.p1.x+u.x,r.p1.y+u.y),c=new ul(i.p1.x+u.x,i.p1.y+u.y);this._segList.addPt(l),this._segList.addPt(c)}},Ap.prototype.getCoordinates=function(){return this._segList.getCoordinates()},Ap.prototype.addMitreJoin=function(t,e,n,r){var i=!0,o=null;try{o=Ml.intersection(e.p0,e.p1,n.p0,n.p1),(r<=0?1:o.distance(t)/Math.abs(r))>this._bufParams.getMitreLimit()&&(i=!1)}catch(t){if(!(t instanceof Cl))throw t;o=new ul(0,0),i=!1}i?this._segList.addPt(o):this.addLimitedMitreJoin(e,n,r,this._bufParams.getMitreLimit())},Ap.prototype.addFilletCorner=function(t,e,n,r,i){var o=e.x-t.x,s=e.y-t.y,a=Math.atan2(s,o),u=n.x-t.x,l=n.y-t.y,c=Math.atan2(l,u);r===Xl.CLOCKWISE?a<=c&&(a+=2*Math.PI):a>=c&&(a-=2*Math.PI),this._segList.addPt(e),this.addFilletArc(t,a,c,r,i),this._segList.addPt(n)},Ap.prototype.addOutsideTurn=function(t,e){if(this._offset0.p1.distance(this._offset1.p0)<this._distance*Ap.OFFSET_SEGMENT_SEPARATION_FACTOR)return this._segList.addPt(this._offset0.p1),null;this._bufParams.getJoinStyle()===Sp.JOIN_MITRE?this.addMitreJoin(this._s1,this._offset0,this._offset1,this._distance):this._bufParams.getJoinStyle()===Sp.JOIN_BEVEL?this.addBevelJoin(this._offset0,this._offset1):(e&&this._segList.addPt(this._offset0.p1),this.addFilletCorner(this._s1,this._offset0.p1,this._offset1.p0,t,this._distance),this._segList.addPt(this._offset1.p0))},Ap.prototype.createSquare=function(t){this._segList.addPt(new ul(t.x+this._distance,t.y+this._distance)),this._segList.addPt(new ul(t.x+this._distance,t.y-this._distance)),this._segList.addPt(new ul(t.x-this._distance,t.y-this._distance)),this._segList.addPt(new ul(t.x-this._distance,t.y+this._distance)),this._segList.closeRing()},Ap.prototype.addSegments=function(t,e){this._segList.addPts(t,e)},Ap.prototype.addFirstSegment=function(){this._segList.addPt(this._offset1.p0)},Ap.prototype.addLastSegment=function(){this._segList.addPt(this._offset1.p1)},Ap.prototype.initSideSegments=function(t,e,n){this._s1=t,this._s2=e,this._side=n,this._seg1.setCoordinates(t,e),this.computeOffsetSegment(this._seg1,n,this._distance,this._offset1)},Ap.prototype.addLimitedMitreJoin=function(t,e,n,r){var i=this._seg0.p1,o=Rp.angle(i,this._seg0.p0),s=Rp.angleBetweenOriented(this._seg0.p0,i,this._seg1.p1)/2,a=Rp.normalize(o+s),u=Rp.normalize(a+Math.PI),l=r*n,c=n-l*Math.abs(Math.sin(s)),h=i.x+l*Math.cos(u),p=i.y+l*Math.sin(u),f=new ul(h,p),g=new vp(i,f),d=g.pointAlongOffset(1,c),y=g.pointAlongOffset(1,-c);this._side===Sh.LEFT?(this._segList.addPt(d),this._segList.addPt(y)):(this._segList.addPt(y),this._segList.addPt(d))},Ap.prototype.computeOffsetSegment=function(t,e,n,r){var i=e===Sh.LEFT?1:-1,o=t.p1.x-t.p0.x,s=t.p1.y-t.p0.y,a=Math.sqrt(o*o+s*s),u=i*n*o/a,l=i*n*s/a;r.p0.x=t.p0.x-l,r.p0.y=t.p0.y+u,r.p1.x=t.p1.x-l,r.p1.y=t.p1.y+u},Ap.prototype.addFilletArc=function(t,e,n,r,i){var o=r===Xl.CLOCKWISE?-1:1,s=Math.abs(e-n),a=Math.trunc(s/this._filletAngleQuantum+.5);if(a<1)return null;for(var u=s/a,l=0,c=new ul;l<s;){var h=e+o*l;c.x=t.x+i*Math.cos(h),c.y=t.y+i*Math.sin(h),this._segList.addPt(c),l+=u}},Ap.prototype.addInsideTurn=function(t,e){if(this._li.computeIntersection(this._offset0.p0,this._offset0.p1,this._offset1.p0,this._offset1.p1),this._li.hasIntersection())this._segList.addPt(this._li.getIntersection(0));else if(this._hasNarrowConcaveAngle=!0,this._offset0.p1.distance(this._offset1.p0)<this._distance*Ap.INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR)this._segList.addPt(this._offset0.p1);else{if(this._segList.addPt(this._offset0.p1),this._closingSegLengthFactor>0){var n=new ul((this._closingSegLengthFactor*this._offset0.p1.x+this._s1.x)/(this._closingSegLengthFactor+1),(this._closingSegLengthFactor*this._offset0.p1.y+this._s1.y)/(this._closingSegLengthFactor+1));this._segList.addPt(n);var r=new ul((this._closingSegLengthFactor*this._offset1.p0.x+this._s1.x)/(this._closingSegLengthFactor+1),(this._closingSegLengthFactor*this._offset1.p0.y+this._s1.y)/(this._closingSegLengthFactor+1));this._segList.addPt(r)}else this._segList.addPt(this._s1);this._segList.addPt(this._offset1.p0)}},Ap.prototype.createCircle=function(t){var e=new ul(t.x+this._distance,t.y);this._segList.addPt(e),this.addFilletArc(t,0,2*Math.PI,-1,this._distance),this._segList.closeRing()},Ap.prototype.addBevelJoin=function(t,e){this._segList.addPt(t.p1),this._segList.addPt(e.p0)},Ap.prototype.init=function(t){this._distance=t,this._maxCurveSegmentError=t*(1-Math.cos(this._filletAngleQuantum/2)),this._segList=new Lp,this._segList.setPrecisionModel(this._precisionModel),this._segList.setMinimumVertexDistance(t*Ap.CURVE_VERTEX_SNAP_DISTANCE_FACTOR)},Ap.prototype.addCollinear=function(t){this._li.computeIntersection(this._s0,this._s1,this._s1,this._s2),this._li.getIntersectionNum()>=2&&(this._bufParams.getJoinStyle()===Sp.JOIN_BEVEL||this._bufParams.getJoinStyle()===Sp.JOIN_MITRE?(t&&this._segList.addPt(this._offset0.p1),this._segList.addPt(this._offset1.p0)):this.addFilletCorner(this._s1,this._offset0.p1,this._offset1.p0,Xl.CLOCKWISE,this._distance))},Ap.prototype.closeRing=function(){this._segList.closeRing()},Ap.prototype.hasNarrowConcaveAngle=function(){return this._hasNarrowConcaveAngle},Ap.prototype.interfaces_=function(){return[]},Ap.prototype.getClass=function(){return Ap},Dp.OFFSET_SEGMENT_SEPARATION_FACTOR.get=function(){return.001},Dp.INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR.get=function(){return.001},Dp.CURVE_VERTEX_SNAP_DISTANCE_FACTOR.get=function(){return 1e-6},Dp.MAX_CLOSING_SEG_LEN_FACTOR.get=function(){return 80},Object.defineProperties(Ap,Dp);var Fp=function(){this._distance=0,this._precisionModel=null,this._bufParams=null;var t=arguments[0],e=arguments[1];this._precisionModel=t,this._bufParams=e};Fp.prototype.getOffsetCurve=function(t,e){if(this._distance=e,0===e)return null;var n=e<0,r=Math.abs(e),i=this.getSegGen(r);t.length<=1?this.computePointCurve(t[0],i):this.computeOffsetCurve(t,n,i);var o=i.getCoordinates();return n&&pc.reverse(o),o},Fp.prototype.computeSingleSidedBufferCurve=function(t,e,n){var r=this.simplifyTolerance(this._distance);if(e){n.addSegments(t,!0);var i=Pp.simplify(t,-r),o=i.length-1;n.initSideSegments(i[o],i[o-1],Sh.LEFT),n.addFirstSegment();for(var s=o-2;s>=0;s--)n.addNextSegment(i[s],!0)}else{n.addSegments(t,!1);var a=Pp.simplify(t,r),u=a.length-1;n.initSideSegments(a[0],a[1],Sh.LEFT),n.addFirstSegment();for(var l=2;l<=u;l++)n.addNextSegment(a[l],!0)}n.addLastSegment(),n.closeRing()},Fp.prototype.computeRingBufferCurve=function(t,e,n){var r=this.simplifyTolerance(this._distance);e===Sh.RIGHT&&(r=-r);var i=Pp.simplify(t,r),o=i.length-1;n.initSideSegments(i[o-1],i[0],e);for(var s=1;s<=o;s++){var a=1!==s;n.addNextSegment(i[s],a)}n.closeRing()},Fp.prototype.computeLineBufferCurve=function(t,e){var n=this.simplifyTolerance(this._distance),r=Pp.simplify(t,n),i=r.length-1;e.initSideSegments(r[0],r[1],Sh.LEFT);for(var o=2;o<=i;o++)e.addNextSegment(r[o],!0);e.addLastSegment(),e.addLineEndCap(r[i-1],r[i]);var s=Pp.simplify(t,-n),a=s.length-1;e.initSideSegments(s[a],s[a-1],Sh.LEFT);for(var u=a-2;u>=0;u--)e.addNextSegment(s[u],!0);e.addLastSegment(),e.addLineEndCap(s[1],s[0]),e.closeRing()},Fp.prototype.computePointCurve=function(t,e){switch(this._bufParams.getEndCapStyle()){case Sp.CAP_ROUND:e.createCircle(t);break;case Sp.CAP_SQUARE:e.createSquare(t)}},Fp.prototype.getLineCurve=function(t,e){if(this._distance=e,e<0&&!this._bufParams.isSingleSided())return null;if(0===e)return null;var n=Math.abs(e),r=this.getSegGen(n);if(t.length<=1)this.computePointCurve(t[0],r);else if(this._bufParams.isSingleSided()){var i=e<0;this.computeSingleSidedBufferCurve(t,i,r)}else this.computeLineBufferCurve(t,r);return r.getCoordinates()},Fp.prototype.getBufferParameters=function(){return this._bufParams},Fp.prototype.simplifyTolerance=function(t){return t*this._bufParams.getSimplifyFactor()},Fp.prototype.getRingCurve=function(t,e,n){if(this._distance=n,t.length<=2)return this.getLineCurve(t,n);if(0===n)return Fp.copyCoordinates(t);var r=this.getSegGen(n);return this.computeRingBufferCurve(t,e,r),r.getCoordinates()},Fp.prototype.computeOffsetCurve=function(t,e,n){var r=this.simplifyTolerance(this._distance);if(e){var i=Pp.simplify(t,-r),o=i.length-1;n.initSideSegments(i[o],i[o-1],Sh.LEFT),n.addFirstSegment();for(var s=o-2;s>=0;s--)n.addNextSegment(i[s],!0)}else{var a=Pp.simplify(t,r),u=a.length-1;n.initSideSegments(a[0],a[1],Sh.LEFT),n.addFirstSegment();for(var l=2;l<=u;l++)n.addNextSegment(a[l],!0)}n.addLastSegment()},Fp.prototype.getSegGen=function(t){return new Ap(this._precisionModel,this._bufParams,t)},Fp.prototype.interfaces_=function(){return[]},Fp.prototype.getClass=function(){return Fp},Fp.copyCoordinates=function(t){for(var e=new Array(t.length).fill(null),n=0;n<e.length;n++)e[n]=new ul(t[n]);return e};var kp=function(){this._subgraphs=null,this._seg=new vp,this._cga=new Xl;var t=arguments[0];this._subgraphs=t},Gp={DepthSegment:{configurable:!0}};kp.prototype.findStabbedSegments=function(){var t=this;if(1===arguments.length){for(var e=arguments[0],n=new lc,r=this._subgraphs.iterator();r.hasNext();){var i=r.next(),o=i.getEnvelope();e.y<o.getMinY()||e.y>o.getMaxY()||t.findStabbedSegments(e,i.getDirectedEdges(),n)}return n}if(3===arguments.length)if(gl(arguments[2],ac)&&arguments[0]instanceof ul&&arguments[1]instanceof Xh)for(var s=arguments[0],a=arguments[1],u=arguments[2],l=a.getEdge().getCoordinates(),c=0;c<l.length-1;c++){t._seg.p0=l[c],t._seg.p1=l[c+1],t._seg.p0.y>t._seg.p1.y&&t._seg.reverse();var h=Math.max(t._seg.p0.x,t._seg.p1.x);if(!(h<s.x)&&!(t._seg.isHorizontal()||s.y<t._seg.p0.y||s.y>t._seg.p1.y||Xl.computeOrientation(t._seg.p0,t._seg.p1,s)===Xl.RIGHT)){var p=a.getDepth(Sh.LEFT);t._seg.p0.equals(l[c])||(p=a.getDepth(Sh.RIGHT));var f=new qp(t._seg,p);u.add(f)}}else if(gl(arguments[2],ac)&&arguments[0]instanceof ul&&gl(arguments[1],ac))for(var g=arguments[0],d=arguments[1],y=arguments[2],v=d.iterator();v.hasNext();){var _=v.next();_.isForward()&&t.findStabbedSegments(g,_,y)}},kp.prototype.getDepth=function(t){var e=this.findStabbedSegments(t);return 0===e.size()?0:np.min(e)._leftDepth},kp.prototype.interfaces_=function(){return[]},kp.prototype.getClass=function(){return kp},Gp.DepthSegment.get=function(){return qp},Object.defineProperties(kp,Gp);var qp=function(){this._upwardSeg=null,this._leftDepth=null;var t=arguments[0],e=arguments[1];this._upwardSeg=new vp(t),this._leftDepth=e};qp.prototype.compareTo=function(t){var e=t;if(this._upwardSeg.minX()>=e._upwardSeg.maxX())return 1;if(this._upwardSeg.maxX()<=e._upwardSeg.minX())return-1;var n=this._upwardSeg.orientationIndex(e._upwardSeg);return 0!==n||0!==(n=-1*e._upwardSeg.orientationIndex(this._upwardSeg))?n:this._upwardSeg.compareTo(e._upwardSeg)},qp.prototype.compareX=function(t,e){var n=t.p0.compareTo(e.p0);return 0!==n?n:t.p1.compareTo(e.p1)},qp.prototype.toString=function(){return this._upwardSeg.toString()},qp.prototype.interfaces_=function(){return[il]},qp.prototype.getClass=function(){return qp};var Bp=function(t,e,n){this.p0=t||null,this.p1=e||null,this.p2=n||null};Bp.prototype.area=function(){return Bp.area(this.p0,this.p1,this.p2)},Bp.prototype.signedArea=function(){return Bp.signedArea(this.p0,this.p1,this.p2)},Bp.prototype.interpolateZ=function(t){if(null===t)throw new el("Supplied point is null.");return Bp.interpolateZ(t,this.p0,this.p1,this.p2)},Bp.prototype.longestSideLength=function(){return Bp.longestSideLength(this.p0,this.p1,this.p2)},Bp.prototype.isAcute=function(){return Bp.isAcute(this.p0,this.p1,this.p2)},Bp.prototype.circumcentre=function(){return Bp.circumcentre(this.p0,this.p1,this.p2)},Bp.prototype.area3D=function(){return Bp.area3D(this.p0,this.p1,this.p2)},Bp.prototype.centroid=function(){return Bp.centroid(this.p0,this.p1,this.p2)},Bp.prototype.inCentre=function(){return Bp.inCentre(this.p0,this.p1,this.p2)},Bp.prototype.interfaces_=function(){return[]},Bp.prototype.getClass=function(){return Bp},Bp.area=function(t,e,n){return Math.abs(((n.x-t.x)*(e.y-t.y)-(e.x-t.x)*(n.y-t.y))/2)},Bp.signedArea=function(t,e,n){return((n.x-t.x)*(e.y-t.y)-(e.x-t.x)*(n.y-t.y))/2},Bp.det=function(t,e,n,r){return t*r-e*n},Bp.interpolateZ=function(t,e,n,r){var i=e.x,o=e.y,s=n.x-i,a=r.x-i,u=n.y-o,l=r.y-o,c=s*l-a*u,h=t.x-i,p=t.y-o,f=(l*h-a*p)/c,g=(-u*h+s*p)/c;return e.z+f*(n.z-e.z)+g*(r.z-e.z)},Bp.longestSideLength=function(t,e,n){var r=t.distance(e),i=e.distance(n),o=n.distance(t),s=r;return i>s&&(s=i),o>s&&(s=o),s},Bp.isAcute=function(t,e,n){return!!Rp.isAcute(t,e,n)&&(!!Rp.isAcute(e,n,t)&&!!Rp.isAcute(n,t,e))},Bp.circumcentre=function(t,e,n){var r=n.x,i=n.y,o=t.x-r,s=t.y-i,a=e.x-r,u=e.y-i,l=2*Bp.det(o,s,a,u),c=Bp.det(s,o*o+s*s,u,a*a+u*u),h=Bp.det(o,o*o+s*s,a,a*a+u*u);return new ul(r-c/l,i+h/l)},Bp.perpendicularBisector=function(t,e){var n=e.x-t.x,r=e.y-t.y,i=new Ml(t.x+n/2,t.y+r/2,1),o=new Ml(t.x-r+n/2,t.y+n+r/2,1);return new Ml(i,o)},Bp.angleBisector=function(t,e,n){var r=e.distance(t),i=r/(r+e.distance(n)),o=n.x-t.x,s=n.y-t.y;return new ul(t.x+i*o,t.y+i*s)},Bp.area3D=function(t,e,n){var r=e.x-t.x,i=e.y-t.y,o=e.z-t.z,s=n.x-t.x,a=n.y-t.y,u=n.z-t.z,l=i*u-o*a,c=o*s-r*u,h=r*a-i*s,p=l*l+c*c+h*h,f=Math.sqrt(p)/2;return f},Bp.centroid=function(t,e,n){var r=(t.x+e.x+n.x)/3,i=(t.y+e.y+n.y)/3;return new ul(r,i)},Bp.inCentre=function(t,e,n){var r=e.distance(n),i=t.distance(n),o=t.distance(e),s=r+i+o,a=(r*t.x+i*e.x+o*n.x)/s,u=(r*t.y+i*e.y+o*n.y)/s;return new ul(a,u)};var zp=function(){this._inputGeom=null,this._distance=null,this._curveBuilder=null,this._curveList=new lc;var t=arguments[0],e=arguments[1],n=arguments[2];this._inputGeom=t,this._distance=e,this._curveBuilder=n};zp.prototype.addPoint=function(t){if(this._distance<=0)return null;var e=t.getCoordinates(),n=this._curveBuilder.getLineCurve(e,this._distance);this.addCurve(n,pl.EXTERIOR,pl.INTERIOR)},zp.prototype.addPolygon=function(t){var e=this,n=this._distance,r=Sh.LEFT;this._distance<0&&(n=-this._distance,r=Sh.RIGHT);var i=t.getExteriorRing(),o=pc.removeRepeatedPoints(i.getCoordinates());if(this._distance<0&&this.isErodedCompletely(i,this._distance))return null;if(this._distance<=0&&o.length<3)return null;this.addPolygonRing(o,n,r,pl.EXTERIOR,pl.INTERIOR);for(var s=0;s<t.getNumInteriorRing();s++){var a=t.getInteriorRingN(s),u=pc.removeRepeatedPoints(a.getCoordinates());e._distance>0&&e.isErodedCompletely(a,-e._distance)||e.addPolygonRing(u,n,Sh.opposite(r),pl.INTERIOR,pl.EXTERIOR)}},zp.prototype.isTriangleErodedCompletely=function(t,e){var n=new Bp(t[0],t[1],t[2]),r=n.inCentre();return Xl.distancePointLine(r,n.p0,n.p1)<Math.abs(e)},zp.prototype.addLineString=function(t){if(this._distance<=0&&!this._curveBuilder.getBufferParameters().isSingleSided())return null;var e=pc.removeRepeatedPoints(t.getCoordinates()),n=this._curveBuilder.getLineCurve(e,this._distance);this.addCurve(n,pl.EXTERIOR,pl.INTERIOR)},zp.prototype.addCurve=function(t,e,n){if(null===t||t.length<2)return null;var r=new yp(t,new Dh(0,pl.BOUNDARY,e,n));this._curveList.add(r)},zp.prototype.getCurves=function(){return this.add(this._inputGeom),this._curveList},zp.prototype.addPolygonRing=function(t,e,n,r,i){if(0===e&&t.length<nh.MINIMUM_VALID_SIZE)return null;var o=r,s=i;t.length>=nh.MINIMUM_VALID_SIZE&&Xl.isCCW(t)&&(o=i,s=r,n=Sh.opposite(n));var a=this._curveBuilder.getRingCurve(t,n,e);this.addCurve(a,o,s)},zp.prototype.add=function(t){if(t.isEmpty())return null;t instanceof th?this.addPolygon(t):t instanceof Zc?this.addLineString(t):t instanceof Qc?this.addPoint(t):(t instanceof eh||t instanceof Gc||t instanceof rh||t instanceof kc)&&this.addCollection(t)},zp.prototype.isErodedCompletely=function(t,e){var n=t.getCoordinates();if(n.length<4)return e<0;if(4===n.length)return this.isTriangleErodedCompletely(n,e);var r=t.getEnvelopeInternal(),i=Math.min(r.getHeight(),r.getWidth());return e<0&&2*Math.abs(e)>i},zp.prototype.addCollection=function(t){for(var e=0;e<t.getNumGeometries();e++){var n=t.getGeometryN(e);this.add(n)}},zp.prototype.interfaces_=function(){return[]},zp.prototype.getClass=function(){return zp};var jp=function(){};jp.prototype.locate=function(t){},jp.prototype.interfaces_=function(){return[]},jp.prototype.getClass=function(){return jp};var Up=function(){this._parent=null,this._atStart=null,this._max=null,this._index=null,this._subcollectionIterator=null;var t=arguments[0];this._parent=t,this._atStart=!0,this._index=0,this._max=t.getNumGeometries()};Up.prototype.next=function(){if(this._atStart)return this._atStart=!1,Up.isAtomic(this._parent)&&this._index++,this._parent;if(null!==this._subcollectionIterator){if(this._subcollectionIterator.hasNext())return this._subcollectionIterator.next();this._subcollectionIterator=null}if(this._index>=this._max)throw new uc;var t=this._parent.getGeometryN(this._index++);return t instanceof kc?(this._subcollectionIterator=new Up(t),this._subcollectionIterator.next()):t},Up.prototype.remove=function(){throw new Error(this.getClass().getName())},Up.prototype.hasNext=function(){if(this._atStart)return!0;if(null!==this._subcollectionIterator){if(this._subcollectionIterator.hasNext())return!0;this._subcollectionIterator=null}return!(this._index>=this._max)},Up.prototype.interfaces_=function(){return[sc]},Up.prototype.getClass=function(){return Up},Up.isAtomic=function(t){return!(t instanceof kc)};var Vp=function(){this._geom=null;var t=arguments[0];this._geom=t};Vp.prototype.locate=function(t){return Vp.locate(t,this._geom)},Vp.prototype.interfaces_=function(){return[jp]},Vp.prototype.getClass=function(){return Vp},Vp.isPointInRing=function(t,e){return!!e.getEnvelopeInternal().intersects(t)&&Xl.isPointInRing(t,e.getCoordinates())},Vp.containsPointInPolygon=function(t,e){if(e.isEmpty())return!1;var n=e.getExteriorRing();if(!Vp.isPointInRing(t,n))return!1;for(var r=0;r<e.getNumInteriorRing();r++){var i=e.getInteriorRingN(r);if(Vp.isPointInRing(t,i))return!1}return!0},Vp.containsPoint=function(t,e){if(e instanceof th)return Vp.containsPointInPolygon(t,e);if(e instanceof kc)for(var n=new Up(e);n.hasNext();){var r=n.next();if(r!==e&&Vp.containsPoint(t,r))return!0}return!1},Vp.locate=function(t,e){return e.isEmpty()?pl.EXTERIOR:Vp.containsPoint(t,e)?pl.INTERIOR:pl.EXTERIOR};var Xp=function(){this._edgeMap=new Cc,this._edgeList=null,this._ptInAreaLocation=[pl.NONE,pl.NONE]};Xp.prototype.getNextCW=function(t){this.getEdges();var e=this._edgeList.indexOf(t),n=e-1;return 0===e&&(n=this._edgeList.size()-1),this._edgeList.get(n)},Xp.prototype.propagateSideLabels=function(t){for(var e=pl.NONE,n=this.iterator();n.hasNext();){var r=n.next().getLabel();r.isArea(t)&&r.getLocation(t,Sh.LEFT)!==pl.NONE&&(e=r.getLocation(t,Sh.LEFT))}if(e===pl.NONE)return null;for(var i=e,o=this.iterator();o.hasNext();){var s=o.next(),a=s.getLabel();if(a.getLocation(t,Sh.ON)===pl.NONE&&a.setLocation(t,Sh.ON,i),a.isArea(t)){var u=a.getLocation(t,Sh.LEFT),l=a.getLocation(t,Sh.RIGHT);if(l!==pl.NONE){if(l!==i)throw new Oh("side location conflict",s.getCoordinate());u===pl.NONE&&ql.shouldNeverReachHere("found single null side (at "+s.getCoordinate()+")"),i=u}else ql.isTrue(a.getLocation(t,Sh.LEFT)===pl.NONE,"found single null side"),a.setLocation(t,Sh.RIGHT,i),a.setLocation(t,Sh.LEFT,i)}}},Xp.prototype.getCoordinate=function(){var t=this.iterator();return t.hasNext()?t.next().getCoordinate():null},Xp.prototype.print=function(t){Pl.out.println("EdgeEndStar:   "+this.getCoordinate());for(var e=this.iterator();e.hasNext();){e.next().print(t)}},Xp.prototype.isAreaLabelsConsistent=function(t){return this.computeEdgeEndLabels(t.getBoundaryNodeRule()),this.checkAreaLabelsConsistent(0)},Xp.prototype.checkAreaLabelsConsistent=function(t){var e=this.getEdges();if(e.size()<=0)return!0;var n=e.size()-1,r=e.get(n).getLabel().getLocation(t,Sh.LEFT);ql.isTrue(r!==pl.NONE,"Found unlabelled area edge");for(var i=r,o=this.iterator();o.hasNext();){var s=o.next().getLabel();ql.isTrue(s.isArea(t),"Found non-area edge");var a=s.getLocation(t,Sh.LEFT),u=s.getLocation(t,Sh.RIGHT);if(a===u)return!1;if(u!==i)return!1;i=a}return!0},Xp.prototype.findIndex=function(t){this.iterator();for(var e=0;e<this._edgeList.size();e++){if(this._edgeList.get(e)===t)return e}return-1},Xp.prototype.iterator=function(){return this.getEdges().iterator()},Xp.prototype.getEdges=function(){return null===this._edgeList&&(this._edgeList=new lc(this._edgeMap.values())),this._edgeList},Xp.prototype.getLocation=function(t,e,n){return this._ptInAreaLocation[t]===pl.NONE&&(this._ptInAreaLocation[t]=Vp.locate(e,n[t].getGeometry())),this._ptInAreaLocation[t]},Xp.prototype.toString=function(){var t=new vl;t.append("EdgeEndStar:   "+this.getCoordinate()),t.append("\n");for(var e=this.iterator();e.hasNext();){var n=e.next();t.append(n),t.append("\n")}return t.toString()},Xp.prototype.computeEdgeEndLabels=function(t){for(var e=this.iterator();e.hasNext();){e.next().computeLabel(t)}},Xp.prototype.computeLabelling=function(t){this.computeEdgeEndLabels(t[0].getBoundaryNodeRule()),this.propagateSideLabels(0),this.propagateSideLabels(1);for(var e=[!1,!1],n=this.iterator();n.hasNext();)for(var r=n.next().getLabel(),i=0;i<2;i++)r.isLine(i)&&r.getLocation(i)===pl.BOUNDARY&&(e[i]=!0);for(var o=this.iterator();o.hasNext();)for(var s=o.next(),a=s.getLabel(),u=0;u<2;u++)if(a.isAnyNull(u)){var l=pl.NONE;if(e[u])l=pl.EXTERIOR;else{var c=s.getCoordinate();l=this.getLocation(u,c,t)}a.setAllLocationsIfNull(u,l)}},Xp.prototype.getDegree=function(){return this._edgeMap.size()},Xp.prototype.insertEdgeEnd=function(t,e){this._edgeMap.put(t,e),this._edgeList=null},Xp.prototype.interfaces_=function(){return[]},Xp.prototype.getClass=function(){return Xp};var Yp=function(t){function e(){t.call(this),this._resultAreaEdgeList=null,this._label=null,this._SCANNING_FOR_INCOMING=1,this._LINKING_TO_OUTGOING=2}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.linkResultDirectedEdges=function(){var t=this;this.getResultAreaEdges();for(var e=null,n=null,r=this._SCANNING_FOR_INCOMING,i=0;i<this._resultAreaEdgeList.size();i++){var o=t._resultAreaEdgeList.get(i),s=o.getSym();if(o.getLabel().isArea())switch(null===e&&o.isInResult()&&(e=o),r){case t._SCANNING_FOR_INCOMING:if(!s.isInResult())continue;n=s,r=t._LINKING_TO_OUTGOING;break;case t._LINKING_TO_OUTGOING:if(!o.isInResult())continue;n.setNext(o),r=t._SCANNING_FOR_INCOMING}}if(r===this._LINKING_TO_OUTGOING){if(null===e)throw new Oh("no outgoing dirEdge found",this.getCoordinate());ql.isTrue(e.isInResult(),"unable to link last incoming dirEdge"),n.setNext(e)}},e.prototype.insert=function(t){var e=t;this.insertEdgeEnd(e,e)},e.prototype.getRightmostEdge=function(){var t=this.getEdges(),e=t.size();if(e<1)return null;var n=t.get(0);if(1===e)return n;var r=t.get(e-1),i=n.getQuadrant(),o=r.getQuadrant();return jh.isNorthern(i)&&jh.isNorthern(o)?n:jh.isNorthern(i)||jh.isNorthern(o)?0!==n.getDy()?n:0!==r.getDy()?r:(ql.shouldNeverReachHere("found two horizontal edges incident on node"),null):r},e.prototype.print=function(t){Pl.out.println("DirectedEdgeStar: "+this.getCoordinate());for(var e=this.iterator();e.hasNext();){var n=e.next();t.print("out "),n.print(t),t.println(),t.print("in "),n.getSym().print(t),t.println()}},e.prototype.getResultAreaEdges=function(){if(null!==this._resultAreaEdgeList)return this._resultAreaEdgeList;this._resultAreaEdgeList=new lc;for(var t=this.iterator();t.hasNext();){var e=t.next();(e.isInResult()||e.getSym().isInResult())&&this._resultAreaEdgeList.add(e)}return this._resultAreaEdgeList},e.prototype.updateLabelling=function(t){for(var e=this.iterator();e.hasNext();){var n=e.next().getLabel();n.setAllLocationsIfNull(0,t.getLocation(0)),n.setAllLocationsIfNull(1,t.getLocation(1))}},e.prototype.linkAllDirectedEdges=function(){this.getEdges();for(var t=null,e=null,n=this._edgeList.size()-1;n>=0;n--){var r=this._edgeList.get(n),i=r.getSym();null===e&&(e=i),null!==t&&i.setNext(t),t=r}e.setNext(t)},e.prototype.computeDepths=function(){var t=this;if(1===arguments.length){var e=arguments[0],n=this.findIndex(e),r=e.getDepth(Sh.LEFT),i=e.getDepth(Sh.RIGHT),o=this.computeDepths(n+1,this._edgeList.size(),r),s=this.computeDepths(0,n,o);if(s!==i)throw new Oh("depth mismatch at "+e.getCoordinate())}else if(3===arguments.length){for(var a=arguments[0],u=arguments[1],l=arguments[2],c=l,h=a;h<u;h++){var p=t._edgeList.get(h);p.setEdgeDepths(Sh.RIGHT,c),c=p.getDepth(Sh.LEFT)}return c}},e.prototype.mergeSymLabels=function(){for(var t=this.iterator();t.hasNext();){var e=t.next();e.getLabel().merge(e.getSym().getLabel())}},e.prototype.linkMinimalDirectedEdges=function(t){for(var e=this,n=null,r=null,i=this._SCANNING_FOR_INCOMING,o=this._resultAreaEdgeList.size()-1;o>=0;o--){var s=e._resultAreaEdgeList.get(o),a=s.getSym();switch(null===n&&s.getEdgeRing()===t&&(n=s),i){case e._SCANNING_FOR_INCOMING:if(a.getEdgeRing()!==t)continue;r=a,i=e._LINKING_TO_OUTGOING;break;case e._LINKING_TO_OUTGOING:if(s.getEdgeRing()!==t)continue;r.setNextMin(s),i=e._SCANNING_FOR_INCOMING}}i===this._LINKING_TO_OUTGOING&&(ql.isTrue(null!==n,"found null for first outgoing dirEdge"),ql.isTrue(n.getEdgeRing()===t,"unable to link last incoming dirEdge"),r.setNextMin(n))},e.prototype.getOutgoingDegree=function(){if(0===arguments.length){for(var t=0,e=this.iterator();e.hasNext();){var n=e.next();n.isInResult()&&t++}return t}if(1===arguments.length){for(var r=arguments[0],i=0,o=this.iterator();o.hasNext();){var s=o.next();s.getEdgeRing()===r&&i++}return i}},e.prototype.getLabel=function(){return this._label},e.prototype.findCoveredLineEdges=function(){for(var t=pl.NONE,e=this.iterator();e.hasNext();){var n=e.next(),r=n.getSym();if(!n.isLineEdge()){if(n.isInResult()){t=pl.INTERIOR;break}if(r.isInResult()){t=pl.EXTERIOR;break}}}if(t===pl.NONE)return null;for(var i=t,o=this.iterator();o.hasNext();){var s=o.next(),a=s.getSym();s.isLineEdge()?s.getEdge().setCovered(i===pl.INTERIOR):(s.isInResult()&&(i=pl.EXTERIOR),a.isInResult()&&(i=pl.INTERIOR))}},e.prototype.computeLabelling=function(e){t.prototype.computeLabelling.call(this,e),this._label=new Dh(pl.NONE);for(var n=this.iterator();n.hasNext();)for(var r=n.next().getEdge().getLabel(),i=0;i<2;i++){var o=r.getLocation(i);o!==pl.INTERIOR&&o!==pl.BOUNDARY||this._label.setLocation(i,pl.INTERIOR)}},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Xp),Hp=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.createNode=function(t){return new Bh(t,new Yp)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Yh),Wp=function t(){this._pts=null,this._orientation=null;var e=arguments[0];this._pts=e,this._orientation=t.orientation(e)};Wp.prototype.compareTo=function(t){var e=t;return Wp.compareOriented(this._pts,this._orientation,e._pts,e._orientation)},Wp.prototype.interfaces_=function(){return[il]},Wp.prototype.getClass=function(){return Wp},Wp.orientation=function(t){return 1===pc.increasingDirection(t)},Wp.compareOriented=function(t,e,n,r){for(var i=e?1:-1,o=r?1:-1,s=e?t.length:-1,a=r?n.length:-1,u=e?0:t.length-1,l=r?0:n.length-1;;){var c=t[u].compareTo(n[l]);if(0!==c)return c;var h=(u+=i)===s,p=(l+=o)===a;if(h&&!p)return-1;if(!h&&p)return 1;if(h&&p)return 0}};var Jp=function(){this._edges=new lc,this._ocaMap=new Cc};Jp.prototype.print=function(t){t.print("MULTILINESTRING ( ");for(var e=0;e<this._edges.size();e++){var n=this._edges.get(e);e>0&&t.print(","),t.print("(");for(var r=n.getCoordinates(),i=0;i<r.length;i++)i>0&&t.print(","),t.print(r[i].x+" "+r[i].y);t.println(")")}t.print(")  ")},Jp.prototype.addAll=function(t){for(var e=t.iterator();e.hasNext();)this.add(e.next())},Jp.prototype.findEdgeIndex=function(t){for(var e=0;e<this._edges.size();e++)if(this._edges.get(e).equals(t))return e;return-1},Jp.prototype.iterator=function(){return this._edges.iterator()},Jp.prototype.getEdges=function(){return this._edges},Jp.prototype.get=function(t){return this._edges.get(t)},Jp.prototype.findEqualEdge=function(t){var e=new Wp(t.getCoordinates());return this._ocaMap.get(e)},Jp.prototype.add=function(t){this._edges.add(t);var e=new Wp(t.getCoordinates());this._ocaMap.put(e,t)},Jp.prototype.interfaces_=function(){return[]},Jp.prototype.getClass=function(){return Jp};var Zp=function(){};Zp.prototype.processIntersections=function(t,e,n,r){},Zp.prototype.isDone=function(){},Zp.prototype.interfaces_=function(){return[]},Zp.prototype.getClass=function(){return Zp};var Kp=function(){this._hasIntersection=!1,this._hasProper=!1,this._hasProperInterior=!1,this._hasInterior=!1,this._properIntersectionPoint=null,this._li=null,this._isSelfIntersection=null,this.numIntersections=0,this.numInteriorIntersections=0,this.numProperIntersections=0,this.numTests=0;var t=arguments[0];this._li=t};Kp.prototype.isTrivialIntersection=function(t,e,n,r){if(t===n&&1===this._li.getIntersectionNum()){if(Kp.isAdjacentSegments(e,r))return!0;if(t.isClosed()){var i=t.size()-1;if(0===e&&r===i||0===r&&e===i)return!0}}return!1},Kp.prototype.getProperIntersectionPoint=function(){return this._properIntersectionPoint},Kp.prototype.hasProperInteriorIntersection=function(){return this._hasProperInterior},Kp.prototype.getLineIntersector=function(){return this._li},Kp.prototype.hasProperIntersection=function(){return this._hasProper},Kp.prototype.processIntersections=function(t,e,n,r){if(t===n&&e===r)return null;this.numTests++;var i=t.getCoordinates()[e],o=t.getCoordinates()[e+1],s=n.getCoordinates()[r],a=n.getCoordinates()[r+1];this._li.computeIntersection(i,o,s,a),this._li.hasIntersection()&&(this.numIntersections++,this._li.isInteriorIntersection()&&(this.numInteriorIntersections++,this._hasInterior=!0),this.isTrivialIntersection(t,e,n,r)||(this._hasIntersection=!0,t.addIntersections(this._li,e,0),n.addIntersections(this._li,r,1),this._li.isProper()&&(this.numProperIntersections++,this._hasProper=!0,this._hasProperInterior=!0)))},Kp.prototype.hasIntersection=function(){return this._hasIntersection},Kp.prototype.isDone=function(){return!1},Kp.prototype.hasInteriorIntersection=function(){return this._hasInterior},Kp.prototype.interfaces_=function(){return[Zp]},Kp.prototype.getClass=function(){return Kp},Kp.isAdjacentSegments=function(t,e){return 1===Math.abs(t-e)};var Qp=function(){this.coord=null,this.segmentIndex=null,this.dist=null;var t=arguments[0],e=arguments[1],n=arguments[2];this.coord=new ul(t),this.segmentIndex=e,this.dist=n};Qp.prototype.getSegmentIndex=function(){return this.segmentIndex},Qp.prototype.getCoordinate=function(){return this.coord},Qp.prototype.print=function(t){t.print(this.coord),t.print(" seg # = "+this.segmentIndex),t.println(" dist = "+this.dist)},Qp.prototype.compareTo=function(t){var e=t;return this.compare(e.segmentIndex,e.dist)},Qp.prototype.isEndPoint=function(t){return 0===this.segmentIndex&&0===this.dist||this.segmentIndex===t},Qp.prototype.toString=function(){return this.coord+" seg # = "+this.segmentIndex+" dist = "+this.dist},Qp.prototype.getDistance=function(){return this.dist},Qp.prototype.compare=function(t,e){return this.segmentIndex<t?-1:this.segmentIndex>t?1:this.dist<e?-1:this.dist>e?1:0},Qp.prototype.interfaces_=function(){return[il]},Qp.prototype.getClass=function(){return Qp};var $p=function(){this._nodeMap=new Cc,this.edge=null;var t=arguments[0];this.edge=t};$p.prototype.print=function(t){t.println("Intersections:");for(var e=this.iterator();e.hasNext();){e.next().print(t)}},$p.prototype.iterator=function(){return this._nodeMap.values().iterator()},$p.prototype.addSplitEdges=function(t){this.addEndpoints();for(var e=this.iterator(),n=e.next();e.hasNext();){var r=e.next(),i=this.createSplitEdge(n,r);t.add(i),n=r}},$p.prototype.addEndpoints=function(){var t=this.edge.pts.length-1;this.add(this.edge.pts[0],0,0),this.add(this.edge.pts[t],t,0)},$p.prototype.createSplitEdge=function(t,e){var n=e.segmentIndex-t.segmentIndex+2,r=this.edge.pts[e.segmentIndex],i=e.dist>0||!e.coord.equals2D(r);i||n--;var o=new Array(n).fill(null),s=0;o[s++]=new ul(t.coord);for(var a=t.segmentIndex+1;a<=e.segmentIndex;a++)o[s++]=this.edge.pts[a];return i&&(o[s]=e.coord),new of(o,new Dh(this.edge._label))},$p.prototype.add=function(t,e,n){var r=new Qp(t,e,n),i=this._nodeMap.get(r);return null!==i?i:(this._nodeMap.put(r,r),r)},$p.prototype.isIntersection=function(t){for(var e=this.iterator();e.hasNext();){if(e.next().coord.equals(t))return!0}return!1},$p.prototype.interfaces_=function(){return[]},$p.prototype.getClass=function(){return $p};var tf=function(){};tf.prototype.getChainStartIndices=function(t){var e=0,n=new lc;n.add(new _l(e));do{var r=this.findChainEnd(t,e);n.add(new _l(r)),e=r}while(e<t.length-1);return tf.toIntArray(n)},tf.prototype.findChainEnd=function(t,e){for(var n=jh.quadrant(t[e],t[e+1]),r=e+1;r<t.length;){if(jh.quadrant(t[r-1],t[r])!==n)break;r++}return r-1},tf.prototype.interfaces_=function(){return[]},tf.prototype.getClass=function(){return tf},tf.toIntArray=function(t){for(var e=new Array(t.size()).fill(null),n=0;n<e.length;n++)e[n]=t.get(n).intValue();return e};var ef=function(){this.e=null,this.pts=null,this.startIndex=null,this.env1=new Ll,this.env2=new Ll;var t=arguments[0];this.e=t,this.pts=t.getCoordinates();var e=new tf;this.startIndex=e.getChainStartIndices(this.pts)};ef.prototype.getCoordinates=function(){return this.pts},ef.prototype.getMaxX=function(t){var e=this.pts[this.startIndex[t]].x,n=this.pts[this.startIndex[t+1]].x;return e>n?e:n},ef.prototype.getMinX=function(t){var e=this.pts[this.startIndex[t]].x,n=this.pts[this.startIndex[t+1]].x;return e<n?e:n},ef.prototype.computeIntersectsForChain=function(){if(4===arguments.length){var t=arguments[0],e=arguments[1],n=arguments[2],r=arguments[3];this.computeIntersectsForChain(this.startIndex[t],this.startIndex[t+1],e,e.startIndex[n],e.startIndex[n+1],r)}else if(6===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2],a=arguments[3],u=arguments[4],l=arguments[5],c=this.pts[i],h=this.pts[o],p=s.pts[a],f=s.pts[u];if(o-i==1&&u-a==1)return l.addIntersections(this.e,i,s.e,a),null;if(this.env1.init(c,h),this.env2.init(p,f),!this.env1.intersects(this.env2))return null;var g=Math.trunc((i+o)/2),d=Math.trunc((a+u)/2);i<g&&(a<d&&this.computeIntersectsForChain(i,g,s,a,d,l),d<u&&this.computeIntersectsForChain(i,g,s,d,u,l)),g<o&&(a<d&&this.computeIntersectsForChain(g,o,s,a,d,l),d<u&&this.computeIntersectsForChain(g,o,s,d,u,l))}},ef.prototype.getStartIndexes=function(){return this.startIndex},ef.prototype.computeIntersects=function(t,e){for(var n=0;n<this.startIndex.length-1;n++)for(var r=0;r<t.startIndex.length-1;r++)this.computeIntersectsForChain(n,t,r,e)},ef.prototype.interfaces_=function(){return[]},ef.prototype.getClass=function(){return ef};var nf=function t(){this._depth=Array(2).fill().map((function(){return Array(3)}));for(var e=0;e<2;e++)for(var n=0;n<3;n++)this._depth[e][n]=t.NULL_VALUE},rf={NULL_VALUE:{configurable:!0}};nf.prototype.getDepth=function(t,e){return this._depth[t][e]},nf.prototype.setDepth=function(t,e,n){this._depth[t][e]=n},nf.prototype.isNull=function(){var t=this;if(0===arguments.length){for(var e=0;e<2;e++)for(var n=0;n<3;n++)if(t._depth[e][n]!==nf.NULL_VALUE)return!1;return!0}if(1===arguments.length){var r=arguments[0];return this._depth[r][1]===nf.NULL_VALUE}if(2===arguments.length){var i=arguments[0],o=arguments[1];return this._depth[i][o]===nf.NULL_VALUE}},nf.prototype.normalize=function(){for(var t=this,e=0;e<2;e++)if(!t.isNull(e)){var n=t._depth[e][1];t._depth[e][2]<n&&(n=t._depth[e][2]),n<0&&(n=0);for(var r=1;r<3;r++){var i=0;t._depth[e][r]>n&&(i=1),t._depth[e][r]=i}}},nf.prototype.getDelta=function(t){return this._depth[t][Sh.RIGHT]-this._depth[t][Sh.LEFT]},nf.prototype.getLocation=function(t,e){return this._depth[t][e]<=0?pl.EXTERIOR:pl.INTERIOR},nf.prototype.toString=function(){return"A: "+this._depth[0][1]+","+this._depth[0][2]+" B: "+this._depth[1][1]+","+this._depth[1][2]},nf.prototype.add=function(){var t=this;if(1===arguments.length)for(var e=arguments[0],n=0;n<2;n++)for(var r=1;r<3;r++){var i=e.getLocation(n,r);i!==pl.EXTERIOR&&i!==pl.INTERIOR||(t.isNull(n,r)?t._depth[n][r]=nf.depthAtLocation(i):t._depth[n][r]+=nf.depthAtLocation(i))}else if(3===arguments.length){var o=arguments[0],s=arguments[1],a=arguments[2];a===pl.INTERIOR&&this._depth[o][s]++}},nf.prototype.interfaces_=function(){return[]},nf.prototype.getClass=function(){return nf},nf.depthAtLocation=function(t){return t===pl.EXTERIOR?0:t===pl.INTERIOR?1:nf.NULL_VALUE},rf.NULL_VALUE.get=function(){return-1},Object.defineProperties(nf,rf);var of=function(t){function e(){if(t.call(this),this.pts=null,this._env=null,this.eiList=new $p(this),this._name=null,this._mce=null,this._isIsolated=!0,this._depth=new nf,this._depthDelta=0,1===arguments.length){var n=arguments[0];e.call(this,n,null)}else if(2===arguments.length){var r=arguments[0],i=arguments[1];this.pts=r,this._label=i}}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.getDepth=function(){return this._depth},e.prototype.getCollapsedEdge=function(){var t=new Array(2).fill(null);return t[0]=this.pts[0],t[1]=this.pts[1],new e(t,Dh.toLineLabel(this._label))},e.prototype.isIsolated=function(){return this._isIsolated},e.prototype.getCoordinates=function(){return this.pts},e.prototype.setIsolated=function(t){this._isIsolated=t},e.prototype.setName=function(t){this._name=t},e.prototype.equals=function(t){if(!(t instanceof e))return!1;var n=t;if(this.pts.length!==n.pts.length)return!1;for(var r=!0,i=!0,o=this.pts.length,s=0;s<this.pts.length;s++)if(this.pts[s].equals2D(n.pts[s])||(r=!1),this.pts[s].equals2D(n.pts[--o])||(i=!1),!r&&!i)return!1;return!0},e.prototype.getCoordinate=function(){if(0===arguments.length)return this.pts.length>0?this.pts[0]:null;if(1===arguments.length){var t=arguments[0];return this.pts[t]}},e.prototype.print=function(t){t.print("edge "+this._name+": "),t.print("LINESTRING (");for(var e=0;e<this.pts.length;e++)e>0&&t.print(","),t.print(this.pts[e].x+" "+this.pts[e].y);t.print(")  "+this._label+" "+this._depthDelta)},e.prototype.computeIM=function(t){e.updateIM(this._label,t)},e.prototype.isCollapsed=function(){return!!this._label.isArea()&&(3===this.pts.length&&!!this.pts[0].equals(this.pts[2]))},e.prototype.isClosed=function(){return this.pts[0].equals(this.pts[this.pts.length-1])},e.prototype.getMaximumSegmentIndex=function(){return this.pts.length-1},e.prototype.getDepthDelta=function(){return this._depthDelta},e.prototype.getNumPoints=function(){return this.pts.length},e.prototype.printReverse=function(t){t.print("edge "+this._name+": ");for(var e=this.pts.length-1;e>=0;e--)t.print(this.pts[e]+" ");t.println("")},e.prototype.getMonotoneChainEdge=function(){return null===this._mce&&(this._mce=new ef(this)),this._mce},e.prototype.getEnvelope=function(){if(null===this._env){this._env=new Ll;for(var t=0;t<this.pts.length;t++)this._env.expandToInclude(this.pts[t])}return this._env},e.prototype.addIntersection=function(t,e,n,r){var i=new ul(t.getIntersection(r)),o=e,s=t.getEdgeDistance(n,r),a=o+1;if(a<this.pts.length){var u=this.pts[a];i.equals2D(u)&&(o=a,s=0)}this.eiList.add(i,o,s)},e.prototype.toString=function(){var t=new vl;t.append("edge "+this._name+": "),t.append("LINESTRING (");for(var e=0;e<this.pts.length;e++)e>0&&t.append(","),t.append(this.pts[e].x+" "+this.pts[e].y);return t.append(")  "+this._label+" "+this._depthDelta),t.toString()},e.prototype.isPointwiseEqual=function(t){if(this.pts.length!==t.pts.length)return!1;for(var e=0;e<this.pts.length;e++)if(!this.pts[e].equals2D(t.pts[e]))return!1;return!0},e.prototype.setDepthDelta=function(t){this._depthDelta=t},e.prototype.getEdgeIntersectionList=function(){return this.eiList},e.prototype.addIntersections=function(t,e,n){for(var r=0;r<t.getIntersectionNum();r++)this.addIntersection(t,e,n,r)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e.updateIM=function(){if(2!==arguments.length)return t.prototype.updateIM.apply(this,arguments);var e=arguments[0],n=arguments[1];n.setAtLeastIfValid(e.getLocation(0,Sh.ON),e.getLocation(1,Sh.ON),1),e.isArea()&&(n.setAtLeastIfValid(e.getLocation(0,Sh.LEFT),e.getLocation(1,Sh.LEFT),2),n.setAtLeastIfValid(e.getLocation(0,Sh.RIGHT),e.getLocation(1,Sh.RIGHT),2))},e}(qh),sf=function(t){this._workingPrecisionModel=null,this._workingNoder=null,this._geomFact=null,this._graph=null,this._edgeList=new Jp,this._bufParams=t||null};sf.prototype.setWorkingPrecisionModel=function(t){this._workingPrecisionModel=t},sf.prototype.insertUniqueEdge=function(t){var e=this._edgeList.findEqualEdge(t);if(null!==e){var n=e.getLabel(),r=t.getLabel();e.isPointwiseEqual(t)||(r=new Dh(t.getLabel())).flip(),n.merge(r);var i=sf.depthDelta(r),o=e.getDepthDelta()+i;e.setDepthDelta(o)}else this._edgeList.add(t),t.setDepthDelta(sf.depthDelta(t.getLabel()))},sf.prototype.buildSubgraphs=function(t,e){for(var n=new lc,r=t.iterator();r.hasNext();){var i=r.next(),o=i.getRightmostCoordinate(),s=new kp(n).getDepth(o);i.computeDepth(s),i.findResultEdges(),n.add(i),e.add(i.getDirectedEdges(),i.getNodes())}},sf.prototype.createSubgraphs=function(t){for(var e=new lc,n=t.getNodes().iterator();n.hasNext();){var r=n.next();if(!r.isVisited()){var i=new Th;i.create(r),e.add(i)}}return np.sort(e,np.reverseOrder()),e},sf.prototype.createEmptyResultGeometry=function(){return this._geomFact.createPolygon()},sf.prototype.getNoder=function(t){if(null!==this._workingNoder)return this._workingNoder;var e=new Ip,n=new jl;return n.setPrecisionModel(t),e.setSegmentIntersector(new Kp(n)),e},sf.prototype.buffer=function(t,e){var n=this._workingPrecisionModel;null===n&&(n=t.getPrecisionModel()),this._geomFact=t.getFactory();var r=new Fp(n,this._bufParams),i=new zp(t,e,r).getCurves();if(i.size()<=0)return this.createEmptyResultGeometry();this.computeNodedEdges(i,n),this._graph=new Hh(new Hp),this._graph.addEdges(this._edgeList.getEdges());var o=this.createSubgraphs(this._graph),s=new Wh(this._geomFact);this.buildSubgraphs(o,s);var a=s.getPolygons();return a.size()<=0?this.createEmptyResultGeometry():this._geomFact.buildGeometry(a)},sf.prototype.computeNodedEdges=function(t,e){var n=this.getNoder(e);n.computeNodes(t);for(var r=n.getNodedSubstrings().iterator();r.hasNext();){var i=r.next(),o=i.getCoordinates();if(2!==o.length||!o[0].equals2D(o[1])){var s=i.getData(),a=new of(i.getCoordinates(),new Dh(s));this.insertUniqueEdge(a)}}},sf.prototype.setNoder=function(t){this._workingNoder=t},sf.prototype.interfaces_=function(){return[]},sf.prototype.getClass=function(){return sf},sf.depthDelta=function(t){var e=t.getLocation(0,Sh.LEFT),n=t.getLocation(0,Sh.RIGHT);return e===pl.INTERIOR&&n===pl.EXTERIOR?1:e===pl.EXTERIOR&&n===pl.INTERIOR?-1:0},sf.convertSegStrings=function(t){for(var e=new _h,n=new lc;t.hasNext();){var r=t.next(),i=e.createLineString(r.getCoordinates());n.add(i)}return e.buildGeometry(n)};var af=function(){if(this._noder=null,this._scaleFactor=null,this._offsetX=null,this._offsetY=null,this._isScaled=!1,2===arguments.length){var t=arguments[0],e=arguments[1];this._noder=t,this._scaleFactor=e,this._offsetX=0,this._offsetY=0,this._isScaled=!this.isIntegerPrecision()}else if(4===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[2],o=arguments[3];this._noder=n,this._scaleFactor=r,this._offsetX=i,this._offsetY=o,this._isScaled=!this.isIntegerPrecision()}};af.prototype.rescale=function(){var t=this;if(gl(arguments[0],ic))for(var e=arguments[0],n=e.iterator();n.hasNext();){var r=n.next();t.rescale(r.getCoordinates())}else if(arguments[0]instanceof Array){for(var i=arguments[0],o=0;o<i.length;o++)i[o].x=i[o].x/t._scaleFactor+t._offsetX,i[o].y=i[o].y/t._scaleFactor+t._offsetY;2===i.length&&i[0].equals2D(i[1])&&Pl.out.println(i)}},af.prototype.scale=function(){var t=this;if(gl(arguments[0],ic)){for(var e=arguments[0],n=new lc,r=e.iterator();r.hasNext();){var i=r.next();n.add(new yp(t.scale(i.getCoordinates()),i.getData()))}return n}if(arguments[0]instanceof Array){for(var o=arguments[0],s=new Array(o.length).fill(null),a=0;a<o.length;a++)s[a]=new ul(Math.round((o[a].x-t._offsetX)*t._scaleFactor),Math.round((o[a].y-t._offsetY)*t._scaleFactor),o[a].z);var u=pc.removeRepeatedPoints(s);return u}},af.prototype.isIntegerPrecision=function(){return 1===this._scaleFactor},af.prototype.getNodedSubstrings=function(){var t=this._noder.getNodedSubstrings();return this._isScaled&&this.rescale(t),t},af.prototype.computeNodes=function(t){var e=t;this._isScaled&&(e=this.scale(t)),this._noder.computeNodes(e)},af.prototype.interfaces_=function(){return[bp]},af.prototype.getClass=function(){return af};var uf=function(){this._li=new jl,this._segStrings=null;var t=arguments[0];this._segStrings=t},lf={fact:{configurable:!0}};uf.prototype.checkEndPtVertexIntersections=function(){var t=this;if(0===arguments.length)for(var e=this._segStrings.iterator();e.hasNext();){var n=e.next(),r=n.getCoordinates();t.checkEndPtVertexIntersections(r[0],t._segStrings),t.checkEndPtVertexIntersections(r[r.length-1],t._segStrings)}else if(2===arguments.length)for(var i=arguments[0],o=arguments[1],s=o.iterator();s.hasNext();)for(var a=s.next(),u=a.getCoordinates(),l=1;l<u.length-1;l++)if(u[l].equals(i))throw new kl("found endpt/interior pt intersection at index "+l+" :pt "+i)},uf.prototype.checkInteriorIntersections=function(){var t=this;if(0===arguments.length)for(var e=this._segStrings.iterator();e.hasNext();)for(var n=e.next(),r=this._segStrings.iterator();r.hasNext();){var i=r.next();t.checkInteriorIntersections(n,i)}else if(2===arguments.length)for(var o=arguments[0],s=arguments[1],a=o.getCoordinates(),u=s.getCoordinates(),l=0;l<a.length-1;l++)for(var c=0;c<u.length-1;c++)t.checkInteriorIntersections(o,l,s,c);else if(4===arguments.length){var h=arguments[0],p=arguments[1],f=arguments[2],g=arguments[3];if(h===f&&p===g)return null;var d=h.getCoordinates()[p],y=h.getCoordinates()[p+1],v=f.getCoordinates()[g],_=f.getCoordinates()[g+1];if(this._li.computeIntersection(d,y,v,_),this._li.hasIntersection()&&(this._li.isProper()||this.hasInteriorIntersection(this._li,d,y)||this.hasInteriorIntersection(this._li,v,_)))throw new kl("found non-noded intersection at "+d+"-"+y+" and "+v+"-"+_)}},uf.prototype.checkValid=function(){this.checkEndPtVertexIntersections(),this.checkInteriorIntersections(),this.checkCollapses()},uf.prototype.checkCollapses=function(){var t=this;if(0===arguments.length)for(var e=this._segStrings.iterator();e.hasNext();){var n=e.next();t.checkCollapses(n)}else if(1===arguments.length)for(var r=arguments[0],i=r.getCoordinates(),o=0;o<i.length-2;o++)t.checkCollapse(i[o],i[o+1],i[o+2])},uf.prototype.hasInteriorIntersection=function(t,e,n){for(var r=0;r<t.getIntersectionNum();r++){var i=t.getIntersection(r);if(!i.equals(e)&&!i.equals(n))return!0}return!1},uf.prototype.checkCollapse=function(t,e,n){if(t.equals(n))throw new kl("found non-noded collapse at "+uf.fact.createLineString([t,e,n]))},uf.prototype.interfaces_=function(){return[]},uf.prototype.getClass=function(){return uf},lf.fact.get=function(){return new _h},Object.defineProperties(uf,lf);var cf=function(){this._li=null,this._pt=null,this._originalPt=null,this._ptScaled=null,this._p0Scaled=null,this._p1Scaled=null,this._scaleFactor=null,this._minx=null,this._maxx=null,this._miny=null,this._maxy=null,this._corner=new Array(4).fill(null),this._safeEnv=null;var t=arguments[0],e=arguments[1],n=arguments[2];if(this._originalPt=t,this._pt=t,this._scaleFactor=e,this._li=n,e<=0)throw new el("Scale factor must be non-zero");1!==e&&(this._pt=new ul(this.scale(t.x),this.scale(t.y)),this._p0Scaled=new ul,this._p1Scaled=new ul),this.initCorners(this._pt)},hf={SAFE_ENV_EXPANSION_FACTOR:{configurable:!0}};cf.prototype.intersectsScaled=function(t,e){var n=Math.min(t.x,e.x),r=Math.max(t.x,e.x),i=Math.min(t.y,e.y),o=Math.max(t.y,e.y),s=this._maxx<n||this._minx>r||this._maxy<i||this._miny>o;if(s)return!1;var a=this.intersectsToleranceSquare(t,e);return ql.isTrue(!(s&&a),"Found bad envelope test"),a},cf.prototype.initCorners=function(t){var e=.5;this._minx=t.x-e,this._maxx=t.x+e,this._miny=t.y-e,this._maxy=t.y+e,this._corner[0]=new ul(this._maxx,this._maxy),this._corner[1]=new ul(this._minx,this._maxy),this._corner[2]=new ul(this._minx,this._miny),this._corner[3]=new ul(this._maxx,this._miny)},cf.prototype.intersects=function(t,e){return 1===this._scaleFactor?this.intersectsScaled(t,e):(this.copyScaled(t,this._p0Scaled),this.copyScaled(e,this._p1Scaled),this.intersectsScaled(this._p0Scaled,this._p1Scaled))},cf.prototype.scale=function(t){return Math.round(t*this._scaleFactor)},cf.prototype.getCoordinate=function(){return this._originalPt},cf.prototype.copyScaled=function(t,e){e.x=this.scale(t.x),e.y=this.scale(t.y)},cf.prototype.getSafeEnvelope=function(){if(null===this._safeEnv){var t=cf.SAFE_ENV_EXPANSION_FACTOR/this._scaleFactor;this._safeEnv=new Ll(this._originalPt.x-t,this._originalPt.x+t,this._originalPt.y-t,this._originalPt.y+t)}return this._safeEnv},cf.prototype.intersectsPixelClosure=function(t,e){return this._li.computeIntersection(t,e,this._corner[0],this._corner[1]),!!this._li.hasIntersection()||(this._li.computeIntersection(t,e,this._corner[1],this._corner[2]),!!this._li.hasIntersection()||(this._li.computeIntersection(t,e,this._corner[2],this._corner[3]),!!this._li.hasIntersection()||(this._li.computeIntersection(t,e,this._corner[3],this._corner[0]),!!this._li.hasIntersection())))},cf.prototype.intersectsToleranceSquare=function(t,e){var n=!1,r=!1;return this._li.computeIntersection(t,e,this._corner[0],this._corner[1]),!!this._li.isProper()||(this._li.computeIntersection(t,e,this._corner[1],this._corner[2]),!!this._li.isProper()||(this._li.hasIntersection()&&(n=!0),this._li.computeIntersection(t,e,this._corner[2],this._corner[3]),!!this._li.isProper()||(this._li.hasIntersection()&&(r=!0),this._li.computeIntersection(t,e,this._corner[3],this._corner[0]),!!this._li.isProper()||(!(!n||!r)||(!!t.equals(this._pt)||!!e.equals(this._pt))))))},cf.prototype.addSnappedNode=function(t,e){var n=t.getCoordinate(e),r=t.getCoordinate(e+1);return!!this.intersects(n,r)&&(t.addIntersection(this.getCoordinate(),e),!0)},cf.prototype.interfaces_=function(){return[]},cf.prototype.getClass=function(){return cf},hf.SAFE_ENV_EXPANSION_FACTOR.get=function(){return.75},Object.defineProperties(cf,hf);var pf=function(){this.tempEnv1=new Ll,this.selectedSegment=new vp};pf.prototype.select=function(){if(1===arguments.length);else if(2===arguments.length){var t=arguments[0],e=arguments[1];t.getLineSegment(e,this.selectedSegment),this.select(this.selectedSegment)}},pf.prototype.interfaces_=function(){return[]},pf.prototype.getClass=function(){return pf};var ff=function(){this._index=null;var t=arguments[0];this._index=t},gf={HotPixelSnapAction:{configurable:!0}};ff.prototype.snap=function(){if(1===arguments.length){var t=arguments[0];return this.snap(t,null,-1)}if(3===arguments.length){var e=arguments[0],n=arguments[1],r=arguments[2],i=e.getSafeEnvelope(),o=new df(e,n,r);return this._index.query(i,{interfaces_:function(){return[Qh]},visitItem:function(t){t.select(i,o)}}),o.isNodeAdded()}},ff.prototype.interfaces_=function(){return[]},ff.prototype.getClass=function(){return ff},gf.HotPixelSnapAction.get=function(){return df},Object.defineProperties(ff,gf);var df=function(t){function e(){t.call(this),this._hotPixel=null,this._parentEdge=null,this._hotPixelVertexIndex=null,this._isNodeAdded=!1;var e=arguments[0],n=arguments[1],r=arguments[2];this._hotPixel=e,this._parentEdge=n,this._hotPixelVertexIndex=r}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.isNodeAdded=function(){return this._isNodeAdded},e.prototype.select=function(){if(2!==arguments.length)return t.prototype.select.apply(this,arguments);var e=arguments[0],n=arguments[1],r=e.getContext();if(null!==this._parentEdge&&r===this._parentEdge&&n===this._hotPixelVertexIndex)return null;this._isNodeAdded=this._hotPixel.addSnappedNode(r,n)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(pf),yf=function(){this._li=null,this._interiorIntersections=null;var t=arguments[0];this._li=t,this._interiorIntersections=new lc};yf.prototype.processIntersections=function(t,e,n,r){if(t===n&&e===r)return null;var i=t.getCoordinates()[e],o=t.getCoordinates()[e+1],s=n.getCoordinates()[r],a=n.getCoordinates()[r+1];if(this._li.computeIntersection(i,o,s,a),this._li.hasIntersection()&&this._li.isInteriorIntersection()){for(var u=0;u<this._li.getIntersectionNum();u++)this._interiorIntersections.add(this._li.getIntersection(u));t.addIntersections(this._li,e,0),n.addIntersections(this._li,r,1)}},yf.prototype.isDone=function(){return!1},yf.prototype.getInteriorIntersections=function(){return this._interiorIntersections},yf.prototype.interfaces_=function(){return[Zp]},yf.prototype.getClass=function(){return yf};var vf=function(){this._pm=null,this._li=null,this._scaleFactor=null,this._noder=null,this._pointSnapper=null,this._nodedSegStrings=null;var t=arguments[0];this._pm=t,this._li=new jl,this._li.setPrecisionModel(t),this._scaleFactor=t.getScale()};vf.prototype.checkCorrectness=function(t){var e=yp.getNodedSubstrings(t),n=new uf(e);try{n.checkValid()}catch(t){if(!(t instanceof Sl))throw t;t.printStackTrace()}},vf.prototype.getNodedSubstrings=function(){return yp.getNodedSubstrings(this._nodedSegStrings)},vf.prototype.snapRound=function(t,e){var n=this.findInteriorIntersections(t,e);this.computeIntersectionSnaps(n),this.computeVertexSnaps(t)},vf.prototype.findInteriorIntersections=function(t,e){var n=new yf(e);return this._noder.setSegmentIntersector(n),this._noder.computeNodes(t),n.getInteriorIntersections()},vf.prototype.computeVertexSnaps=function(){var t=this;if(gl(arguments[0],ic))for(var e=arguments[0],n=e.iterator();n.hasNext();){var r=n.next();t.computeVertexSnaps(r)}else if(arguments[0]instanceof yp)for(var i=arguments[0],o=i.getCoordinates(),s=0;s<o.length;s++){var a=new cf(o[s],t._scaleFactor,t._li),u=t._pointSnapper.snap(a,i,s);u&&i.addIntersection(o[s],s)}},vf.prototype.computeNodes=function(t){this._nodedSegStrings=t,this._noder=new Ip,this._pointSnapper=new ff(this._noder.getIndex()),this.snapRound(t,this._li)},vf.prototype.computeIntersectionSnaps=function(t){for(var e=this,n=t.iterator();n.hasNext();){var r=n.next(),i=new cf(r,e._scaleFactor,e._li);e._pointSnapper.snap(i)}},vf.prototype.interfaces_=function(){return[bp]},vf.prototype.getClass=function(){return vf};var _f=function(){if(this._argGeom=null,this._distance=null,this._bufParams=new Sp,this._resultGeometry=null,this._saveException=null,1===arguments.length){var t=arguments[0];this._argGeom=t}else if(2===arguments.length){var e=arguments[0],n=arguments[1];this._argGeom=e,this._bufParams=n}},mf={CAP_ROUND:{configurable:!0},CAP_BUTT:{configurable:!0},CAP_FLAT:{configurable:!0},CAP_SQUARE:{configurable:!0},MAX_PRECISION_DIGITS:{configurable:!0}};_f.prototype.bufferFixedPrecision=function(t){var e=new af(new vf(new gh(1)),t.getScale()),n=new sf(this._bufParams);n.setWorkingPrecisionModel(t),n.setNoder(e),this._resultGeometry=n.buffer(this._argGeom,this._distance)},_f.prototype.bufferReducedPrecision=function(){var t=this;if(0===arguments.length){for(var e=_f.MAX_PRECISION_DIGITS;e>=0;e--){try{t.bufferReducedPrecision(e)}catch(e){if(!(e instanceof Oh))throw e;t._saveException=e}if(null!==t._resultGeometry)return null}throw this._saveException}if(1===arguments.length){var n=arguments[0],r=_f.precisionScaleFactor(this._argGeom,this._distance,n),i=new gh(r);this.bufferFixedPrecision(i)}},_f.prototype.computeGeometry=function(){if(this.bufferOriginalPrecision(),null!==this._resultGeometry)return null;var t=this._argGeom.getFactory().getPrecisionModel();t.getType()===gh.FIXED?this.bufferFixedPrecision(t):this.bufferReducedPrecision()},_f.prototype.setQuadrantSegments=function(t){this._bufParams.setQuadrantSegments(t)},_f.prototype.bufferOriginalPrecision=function(){try{var t=new sf(this._bufParams);this._resultGeometry=t.buffer(this._argGeom,this._distance)}catch(t){if(!(t instanceof kl))throw t;this._saveException=t}},_f.prototype.getResultGeometry=function(t){return this._distance=t,this.computeGeometry(),this._resultGeometry},_f.prototype.setEndCapStyle=function(t){this._bufParams.setEndCapStyle(t)},_f.prototype.interfaces_=function(){return[]},_f.prototype.getClass=function(){return _f},_f.bufferOp=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1],n=new _f(t),r=n.getResultGeometry(e);return r}if(3===arguments.length){if(Number.isInteger(arguments[2])&&arguments[0]instanceof Wl&&"number"==typeof arguments[1]){var i=arguments[0],o=arguments[1],s=arguments[2],a=new _f(i);a.setQuadrantSegments(s);var u=a.getResultGeometry(o);return u}if(arguments[2]instanceof Sp&&arguments[0]instanceof Wl&&"number"==typeof arguments[1]){var l=arguments[0],c=arguments[1],h=arguments[2],p=new _f(l,h),f=p.getResultGeometry(c);return f}}else if(4===arguments.length){var g=arguments[0],d=arguments[1],y=arguments[2],v=arguments[3],_=new _f(g);_.setQuadrantSegments(y),_.setEndCapStyle(v);var m=_.getResultGeometry(d);return m}},_f.precisionScaleFactor=function(t,e,n){var r=t.getEnvelopeInternal(),i=dl.max(Math.abs(r.getMaxX()),Math.abs(r.getMaxY()),Math.abs(r.getMinX()),Math.abs(r.getMinY()))+2*(e>0?e:0),o=n-Math.trunc(Math.log(i)/Math.log(10)+1);return Math.pow(10,o)},mf.CAP_ROUND.get=function(){return Sp.CAP_ROUND},mf.CAP_BUTT.get=function(){return Sp.CAP_FLAT},mf.CAP_FLAT.get=function(){return Sp.CAP_FLAT},mf.CAP_SQUARE.get=function(){return Sp.CAP_SQUARE},mf.MAX_PRECISION_DIGITS.get=function(){return 12},Object.defineProperties(_f,mf);var xf=function(){this._pt=[new ul,new ul],this._distance=nl.NaN,this._isNull=!0};xf.prototype.getCoordinates=function(){return this._pt},xf.prototype.getCoordinate=function(t){return this._pt[t]},xf.prototype.setMinimum=function(){if(1===arguments.length){var t=arguments[0];this.setMinimum(t._pt[0],t._pt[1])}else if(2===arguments.length){var e=arguments[0],n=arguments[1];if(this._isNull)return this.initialize(e,n),null;var r=e.distance(n);r<this._distance&&this.initialize(e,n,r)}},xf.prototype.initialize=function(){if(0===arguments.length)this._isNull=!0;else if(2===arguments.length){var t=arguments[0],e=arguments[1];this._pt[0].setCoordinate(t),this._pt[1].setCoordinate(e),this._distance=t.distance(e),this._isNull=!1}else if(3===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[2];this._pt[0].setCoordinate(n),this._pt[1].setCoordinate(r),this._distance=i,this._isNull=!1}},xf.prototype.getDistance=function(){return this._distance},xf.prototype.setMaximum=function(){if(1===arguments.length){var t=arguments[0];this.setMaximum(t._pt[0],t._pt[1])}else if(2===arguments.length){var e=arguments[0],n=arguments[1];if(this._isNull)return this.initialize(e,n),null;var r=e.distance(n);r>this._distance&&this.initialize(e,n,r)}},xf.prototype.interfaces_=function(){return[]},xf.prototype.getClass=function(){return xf};var Ef=function(){};Ef.prototype.interfaces_=function(){return[]},Ef.prototype.getClass=function(){return Ef},Ef.computeDistance=function(){if(arguments[2]instanceof xf&&arguments[0]instanceof Zc&&arguments[1]instanceof ul)for(var t=arguments[0],e=arguments[1],n=arguments[2],r=t.getCoordinates(),i=new vp,o=0;o<r.length-1;o++){i.setCoordinates(r[o],r[o+1]);var s=i.closestPoint(e);n.setMinimum(s,e)}else if(arguments[2]instanceof xf&&arguments[0]instanceof th&&arguments[1]instanceof ul){var a=arguments[0],u=arguments[1],l=arguments[2];Ef.computeDistance(a.getExteriorRing(),u,l);for(var c=0;c<a.getNumInteriorRing();c++)Ef.computeDistance(a.getInteriorRingN(c),u,l)}else if(arguments[2]instanceof xf&&arguments[0]instanceof Wl&&arguments[1]instanceof ul){var h=arguments[0],p=arguments[1],f=arguments[2];if(h instanceof Zc)Ef.computeDistance(h,p,f);else if(h instanceof th)Ef.computeDistance(h,p,f);else if(h instanceof kc)for(var g=h,d=0;d<g.getNumGeometries();d++){var y=g.getGeometryN(d);Ef.computeDistance(y,p,f)}else f.setMinimum(h.getCoordinate(),p)}else if(arguments[2]instanceof xf&&arguments[0]instanceof vp&&arguments[1]instanceof ul){var v=arguments[0],_=arguments[1],m=arguments[2],x=v.closestPoint(_);m.setMinimum(x,_)}};var bf=function(t){this._maxPtDist=new xf,this._inputGeom=t||null},wf={MaxPointDistanceFilter:{configurable:!0},MaxMidpointDistanceFilter:{configurable:!0}};bf.prototype.computeMaxMidpointDistance=function(t){var e=new Nf(this._inputGeom);t.apply(e),this._maxPtDist.setMaximum(e.getMaxPointDistance())},bf.prototype.computeMaxVertexDistance=function(t){var e=new If(this._inputGeom);t.apply(e),this._maxPtDist.setMaximum(e.getMaxPointDistance())},bf.prototype.findDistance=function(t){return this.computeMaxVertexDistance(t),this.computeMaxMidpointDistance(t),this._maxPtDist.getDistance()},bf.prototype.getDistancePoints=function(){return this._maxPtDist},bf.prototype.interfaces_=function(){return[]},bf.prototype.getClass=function(){return bf},wf.MaxPointDistanceFilter.get=function(){return If},wf.MaxMidpointDistanceFilter.get=function(){return Nf},Object.defineProperties(bf,wf);var If=function(t){this._maxPtDist=new xf,this._minPtDist=new xf,this._geom=t||null};If.prototype.filter=function(t){this._minPtDist.initialize(),Ef.computeDistance(this._geom,t,this._minPtDist),this._maxPtDist.setMaximum(this._minPtDist)},If.prototype.getMaxPointDistance=function(){return this._maxPtDist},If.prototype.interfaces_=function(){return[Kl]},If.prototype.getClass=function(){return If};var Nf=function(t){this._maxPtDist=new xf,this._minPtDist=new xf,this._geom=t||null};Nf.prototype.filter=function(t,e){if(0===e)return null;var n=t.getCoordinate(e-1),r=t.getCoordinate(e),i=new ul((n.x+r.x)/2,(n.y+r.y)/2);this._minPtDist.initialize(),Ef.computeDistance(this._geom,i,this._minPtDist),this._maxPtDist.setMaximum(this._minPtDist)},Nf.prototype.isDone=function(){return!1},Nf.prototype.isGeometryChanged=function(){return!1},Nf.prototype.getMaxPointDistance=function(){return this._maxPtDist},Nf.prototype.interfaces_=function(){return[Fc]},Nf.prototype.getClass=function(){return Nf};var Sf=function(t){this._comps=t||null};Sf.prototype.filter=function(t){t instanceof th&&this._comps.add(t)},Sf.prototype.interfaces_=function(){return[Dc]},Sf.prototype.getClass=function(){return Sf},Sf.getPolygons=function(){if(1===arguments.length){var t=arguments[0];return Sf.getPolygons(t,new lc)}if(2===arguments.length){var e=arguments[0],n=arguments[1];return e instanceof th?n.add(e):e instanceof kc&&e.apply(new Sf(n)),n}};var Cf=function(){if(this._lines=null,this._isForcedToLineString=!1,1===arguments.length){var t=arguments[0];this._lines=t}else if(2===arguments.length){var e=arguments[0],n=arguments[1];this._lines=e,this._isForcedToLineString=n}};Cf.prototype.filter=function(t){if(this._isForcedToLineString&&t instanceof nh){var e=t.getFactory().createLineString(t.getCoordinateSequence());return this._lines.add(e),null}t instanceof Zc&&this._lines.add(t)},Cf.prototype.setForceToLineString=function(t){this._isForcedToLineString=t},Cf.prototype.interfaces_=function(){return[Hl]},Cf.prototype.getClass=function(){return Cf},Cf.getGeometry=function(){if(1===arguments.length){var t=arguments[0];return t.getFactory().buildGeometry(Cf.getLines(t))}if(2===arguments.length){var e=arguments[0],n=arguments[1];return e.getFactory().buildGeometry(Cf.getLines(e,n))}},Cf.getLines=function(){if(1===arguments.length){var t=arguments[0];return Cf.getLines(t,!1)}if(2===arguments.length){if(gl(arguments[0],ic)&&gl(arguments[1],ic)){for(var e=arguments[0],n=arguments[1],r=e.iterator();r.hasNext();){var i=r.next();Cf.getLines(i,n)}return n}if(arguments[0]instanceof Wl&&"boolean"==typeof arguments[1]){var o=arguments[0],s=arguments[1],a=new lc;return o.apply(new Cf(a,s)),a}if(arguments[0]instanceof Wl&&gl(arguments[1],ic)){var u=arguments[0],l=arguments[1];return u instanceof Zc?l.add(u):u.apply(new Cf(l)),l}}else if(3===arguments.length){if("boolean"==typeof arguments[2]&&gl(arguments[0],ic)&&gl(arguments[1],ic)){for(var c=arguments[0],h=arguments[1],p=arguments[2],f=c.iterator();f.hasNext();){var g=f.next();Cf.getLines(g,h,p)}return h}if("boolean"==typeof arguments[2]&&arguments[0]instanceof Wl&&gl(arguments[1],ic)){var d=arguments[0],y=arguments[1],v=arguments[2];return d.apply(new Cf(y,v)),y}}};var Pf=function(){if(this._boundaryRule=Ql.OGC_SFS_BOUNDARY_RULE,this._isIn=null,this._numBoundaries=null,0===arguments.length);else if(1===arguments.length){var t=arguments[0];if(null===t)throw new el("Rule must be non-null");this._boundaryRule=t}};Pf.prototype.locateInternal=function(){var t=this;if(arguments[0]instanceof ul&&arguments[1]instanceof th){var e=arguments[0],n=arguments[1];if(n.isEmpty())return pl.EXTERIOR;var r=n.getExteriorRing(),i=this.locateInPolygonRing(e,r);if(i===pl.EXTERIOR)return pl.EXTERIOR;if(i===pl.BOUNDARY)return pl.BOUNDARY;for(var o=0;o<n.getNumInteriorRing();o++){var s=n.getInteriorRingN(o),a=t.locateInPolygonRing(e,s);if(a===pl.INTERIOR)return pl.EXTERIOR;if(a===pl.BOUNDARY)return pl.BOUNDARY}return pl.INTERIOR}if(arguments[0]instanceof ul&&arguments[1]instanceof Zc){var u=arguments[0],l=arguments[1];if(!l.getEnvelopeInternal().intersects(u))return pl.EXTERIOR;var c=l.getCoordinates();return l.isClosed()||!u.equals(c[0])&&!u.equals(c[c.length-1])?Xl.isOnLine(u,c)?pl.INTERIOR:pl.EXTERIOR:pl.BOUNDARY}if(arguments[0]instanceof ul&&arguments[1]instanceof Qc){var h=arguments[0],p=arguments[1],f=p.getCoordinate();return f.equals2D(h)?pl.INTERIOR:pl.EXTERIOR}},Pf.prototype.locateInPolygonRing=function(t,e){return e.getEnvelopeInternal().intersects(t)?Xl.locatePointInRing(t,e.getCoordinates()):pl.EXTERIOR},Pf.prototype.intersects=function(t,e){return this.locate(t,e)!==pl.EXTERIOR},Pf.prototype.updateLocationInfo=function(t){t===pl.INTERIOR&&(this._isIn=!0),t===pl.BOUNDARY&&this._numBoundaries++},Pf.prototype.computeLocation=function(t,e){var n=this;if(e instanceof Qc&&this.updateLocationInfo(this.locateInternal(t,e)),e instanceof Zc)this.updateLocationInfo(this.locateInternal(t,e));else if(e instanceof th)this.updateLocationInfo(this.locateInternal(t,e));else if(e instanceof Gc)for(var r=e,i=0;i<r.getNumGeometries();i++){var o=r.getGeometryN(i);n.updateLocationInfo(n.locateInternal(t,o))}else if(e instanceof rh)for(var s=e,a=0;a<s.getNumGeometries();a++){var u=s.getGeometryN(a);n.updateLocationInfo(n.locateInternal(t,u))}else if(e instanceof kc)for(var l=new Up(e);l.hasNext();){var c=l.next();c!==e&&n.computeLocation(t,c)}},Pf.prototype.locate=function(t,e){return e.isEmpty()?pl.EXTERIOR:e instanceof Zc||e instanceof th?this.locateInternal(t,e):(this._isIn=!1,this._numBoundaries=0,this.computeLocation(t,e),this._boundaryRule.isInBoundary(this._numBoundaries)?pl.BOUNDARY:this._numBoundaries>0||this._isIn?pl.INTERIOR:pl.EXTERIOR)},Pf.prototype.interfaces_=function(){return[]},Pf.prototype.getClass=function(){return Pf};var Mf=function t(){if(this._component=null,this._segIndex=null,this._pt=null,2===arguments.length){var e=arguments[0],n=arguments[1];t.call(this,e,t.INSIDE_AREA,n)}else if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2];this._component=r,this._segIndex=i,this._pt=o}},Lf={INSIDE_AREA:{configurable:!0}};Mf.prototype.isInsideArea=function(){return this._segIndex===Mf.INSIDE_AREA},Mf.prototype.getCoordinate=function(){return this._pt},Mf.prototype.getGeometryComponent=function(){return this._component},Mf.prototype.getSegmentIndex=function(){return this._segIndex},Mf.prototype.interfaces_=function(){return[]},Mf.prototype.getClass=function(){return Mf},Lf.INSIDE_AREA.get=function(){return-1},Object.defineProperties(Mf,Lf);var Of=function(t){this._pts=t||null};Of.prototype.filter=function(t){t instanceof Qc&&this._pts.add(t)},Of.prototype.interfaces_=function(){return[Dc]},Of.prototype.getClass=function(){return Of},Of.getPoints=function(){if(1===arguments.length){var t=arguments[0];return t instanceof Qc?np.singletonList(t):Of.getPoints(t,new lc)}if(2===arguments.length){var e=arguments[0],n=arguments[1];return e instanceof Qc?n.add(e):e instanceof kc&&e.apply(new Of(n)),n}};var Rf=function(){this._locations=null;var t=arguments[0];this._locations=t};Rf.prototype.filter=function(t){(t instanceof Qc||t instanceof Zc||t instanceof th)&&this._locations.add(new Mf(t,0,t.getCoordinate()))},Rf.prototype.interfaces_=function(){return[Dc]},Rf.prototype.getClass=function(){return Rf},Rf.getLocations=function(t){var e=new lc;return t.apply(new Rf(e)),e};var Tf=function(){if(this._geom=null,this._terminateDistance=0,this._ptLocator=new Pf,this._minDistanceLocation=null,this._minDistance=nl.MAX_VALUE,2===arguments.length){var t=arguments[0],e=arguments[1];this._geom=[t,e],this._terminateDistance=0}else if(3===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[2];this._geom=new Array(2).fill(null),this._geom[0]=n,this._geom[1]=r,this._terminateDistance=i}};Tf.prototype.computeContainmentDistance=function(){var t=this;if(0===arguments.length){var e=new Array(2).fill(null);if(this.computeContainmentDistance(0,e),this._minDistance<=this._terminateDistance)return null;this.computeContainmentDistance(1,e)}else if(2===arguments.length){var n=arguments[0],r=arguments[1],i=1-n,o=Sf.getPolygons(this._geom[n]);if(o.size()>0){var s=Rf.getLocations(this._geom[i]);if(this.computeContainmentDistance(s,o,r),this._minDistance<=this._terminateDistance)return this._minDistanceLocation[i]=r[0],this._minDistanceLocation[n]=r[1],null}}else if(3===arguments.length)if(arguments[2]instanceof Array&&gl(arguments[0],ac)&&gl(arguments[1],ac)){for(var a=arguments[0],u=arguments[1],l=arguments[2],c=0;c<a.size();c++)for(var h=a.get(c),p=0;p<u.size();p++)if(t.computeContainmentDistance(h,u.get(p),l),t._minDistance<=t._terminateDistance)return null}else if(arguments[2]instanceof Array&&arguments[0]instanceof Mf&&arguments[1]instanceof th){var f=arguments[0],g=arguments[1],d=arguments[2],y=f.getCoordinate();if(pl.EXTERIOR!==this._ptLocator.locate(y,g))return this._minDistance=0,d[0]=f,d[1]=new Mf(g,y),null}},Tf.prototype.computeMinDistanceLinesPoints=function(t,e,n){for(var r=this,i=0;i<t.size();i++)for(var o=t.get(i),s=0;s<e.size();s++){var a=e.get(s);if(r.computeMinDistance(o,a,n),r._minDistance<=r._terminateDistance)return null}},Tf.prototype.computeFacetDistance=function(){var t=new Array(2).fill(null),e=Cf.getLines(this._geom[0]),n=Cf.getLines(this._geom[1]),r=Of.getPoints(this._geom[0]),i=Of.getPoints(this._geom[1]);return this.computeMinDistanceLines(e,n,t),this.updateMinDistance(t,!1),this._minDistance<=this._terminateDistance?null:(t[0]=null,t[1]=null,this.computeMinDistanceLinesPoints(e,i,t),this.updateMinDistance(t,!1),this._minDistance<=this._terminateDistance?null:(t[0]=null,t[1]=null,this.computeMinDistanceLinesPoints(n,r,t),this.updateMinDistance(t,!0),this._minDistance<=this._terminateDistance?null:(t[0]=null,t[1]=null,this.computeMinDistancePoints(r,i,t),void this.updateMinDistance(t,!1))))},Tf.prototype.nearestLocations=function(){return this.computeMinDistance(),this._minDistanceLocation},Tf.prototype.updateMinDistance=function(t,e){if(null===t[0])return null;e?(this._minDistanceLocation[0]=t[1],this._minDistanceLocation[1]=t[0]):(this._minDistanceLocation[0]=t[0],this._minDistanceLocation[1]=t[1])},Tf.prototype.nearestPoints=function(){return this.computeMinDistance(),[this._minDistanceLocation[0].getCoordinate(),this._minDistanceLocation[1].getCoordinate()]},Tf.prototype.computeMinDistance=function(){var t=this;if(0===arguments.length){if(null!==this._minDistanceLocation)return null;if(this._minDistanceLocation=new Array(2).fill(null),this.computeContainmentDistance(),this._minDistance<=this._terminateDistance)return null;this.computeFacetDistance()}else if(3===arguments.length)if(arguments[2]instanceof Array&&arguments[0]instanceof Zc&&arguments[1]instanceof Qc){var e=arguments[0],n=arguments[1],r=arguments[2];if(e.getEnvelopeInternal().distance(n.getEnvelopeInternal())>this._minDistance)return null;for(var i=e.getCoordinates(),o=n.getCoordinate(),s=0;s<i.length-1;s++){var a=Xl.distancePointLine(o,i[s],i[s+1]);if(a<t._minDistance){t._minDistance=a;var u=new vp(i[s],i[s+1]),l=u.closestPoint(o);r[0]=new Mf(e,s,l),r[1]=new Mf(n,0,o)}if(t._minDistance<=t._terminateDistance)return null}}else if(arguments[2]instanceof Array&&arguments[0]instanceof Zc&&arguments[1]instanceof Zc){var c=arguments[0],h=arguments[1],p=arguments[2];if(c.getEnvelopeInternal().distance(h.getEnvelopeInternal())>this._minDistance)return null;for(var f=c.getCoordinates(),g=h.getCoordinates(),d=0;d<f.length-1;d++)for(var y=0;y<g.length-1;y++){var v=Xl.distanceLineLine(f[d],f[d+1],g[y],g[y+1]);if(v<t._minDistance){t._minDistance=v;var _=new vp(f[d],f[d+1]),m=new vp(g[y],g[y+1]),x=_.closestPoints(m);p[0]=new Mf(c,d,x[0]),p[1]=new Mf(h,y,x[1])}if(t._minDistance<=t._terminateDistance)return null}}},Tf.prototype.computeMinDistancePoints=function(t,e,n){for(var r=this,i=0;i<t.size();i++)for(var o=t.get(i),s=0;s<e.size();s++){var a=e.get(s),u=o.getCoordinate().distance(a.getCoordinate());if(u<r._minDistance&&(r._minDistance=u,n[0]=new Mf(o,0,o.getCoordinate()),n[1]=new Mf(a,0,a.getCoordinate())),r._minDistance<=r._terminateDistance)return null}},Tf.prototype.distance=function(){if(null===this._geom[0]||null===this._geom[1])throw new el("null geometries are not supported");return this._geom[0].isEmpty()||this._geom[1].isEmpty()?0:(this.computeMinDistance(),this._minDistance)},Tf.prototype.computeMinDistanceLines=function(t,e,n){for(var r=this,i=0;i<t.size();i++)for(var o=t.get(i),s=0;s<e.size();s++){var a=e.get(s);if(r.computeMinDistance(o,a,n),r._minDistance<=r._terminateDistance)return null}},Tf.prototype.interfaces_=function(){return[]},Tf.prototype.getClass=function(){return Tf},Tf.distance=function(t,e){return new Tf(t,e).distance()},Tf.isWithinDistance=function(t,e,n){return new Tf(t,e,n).distance()<=n},Tf.nearestPoints=function(t,e){return new Tf(t,e).nearestPoints()};var Af=function(){this._pt=[new ul,new ul],this._distance=nl.NaN,this._isNull=!0};Af.prototype.getCoordinates=function(){return this._pt},Af.prototype.getCoordinate=function(t){return this._pt[t]},Af.prototype.setMinimum=function(){if(1===arguments.length){var t=arguments[0];this.setMinimum(t._pt[0],t._pt[1])}else if(2===arguments.length){var e=arguments[0],n=arguments[1];if(this._isNull)return this.initialize(e,n),null;var r=e.distance(n);r<this._distance&&this.initialize(e,n,r)}},Af.prototype.initialize=function(){if(0===arguments.length)this._isNull=!0;else if(2===arguments.length){var t=arguments[0],e=arguments[1];this._pt[0].setCoordinate(t),this._pt[1].setCoordinate(e),this._distance=t.distance(e),this._isNull=!1}else if(3===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[2];this._pt[0].setCoordinate(n),this._pt[1].setCoordinate(r),this._distance=i,this._isNull=!1}},Af.prototype.toString=function(){return Fl.toLineString(this._pt[0],this._pt[1])},Af.prototype.getDistance=function(){return this._distance},Af.prototype.setMaximum=function(){if(1===arguments.length){var t=arguments[0];this.setMaximum(t._pt[0],t._pt[1])}else if(2===arguments.length){var e=arguments[0],n=arguments[1];if(this._isNull)return this.initialize(e,n),null;var r=e.distance(n);r>this._distance&&this.initialize(e,n,r)}},Af.prototype.interfaces_=function(){return[]},Af.prototype.getClass=function(){return Af};var Df=function(){};Df.prototype.interfaces_=function(){return[]},Df.prototype.getClass=function(){return Df},Df.computeDistance=function(){if(arguments[2]instanceof Af&&arguments[0]instanceof Zc&&arguments[1]instanceof ul)for(var t=arguments[0],e=arguments[1],n=arguments[2],r=new vp,i=t.getCoordinates(),o=0;o<i.length-1;o++){r.setCoordinates(i[o],i[o+1]);var s=r.closestPoint(e);n.setMinimum(s,e)}else if(arguments[2]instanceof Af&&arguments[0]instanceof th&&arguments[1]instanceof ul){var a=arguments[0],u=arguments[1],l=arguments[2];Df.computeDistance(a.getExteriorRing(),u,l);for(var c=0;c<a.getNumInteriorRing();c++)Df.computeDistance(a.getInteriorRingN(c),u,l)}else if(arguments[2]instanceof Af&&arguments[0]instanceof Wl&&arguments[1]instanceof ul){var h=arguments[0],p=arguments[1],f=arguments[2];if(h instanceof Zc)Df.computeDistance(h,p,f);else if(h instanceof th)Df.computeDistance(h,p,f);else if(h instanceof kc)for(var g=h,d=0;d<g.getNumGeometries();d++){var y=g.getGeometryN(d);Df.computeDistance(y,p,f)}else f.setMinimum(h.getCoordinate(),p)}else if(arguments[2]instanceof Af&&arguments[0]instanceof vp&&arguments[1]instanceof ul){var v=arguments[0],_=arguments[1],m=arguments[2],x=v.closestPoint(_);m.setMinimum(x,_)}};var Ff=function(){this._g0=null,this._g1=null,this._ptDist=new Af,this._densifyFrac=0;var t=arguments[0],e=arguments[1];this._g0=t,this._g1=e},kf={MaxPointDistanceFilter:{configurable:!0},MaxDensifiedByFractionDistanceFilter:{configurable:!0}};Ff.prototype.getCoordinates=function(){return this._ptDist.getCoordinates()},Ff.prototype.setDensifyFraction=function(t){if(t>1||t<=0)throw new el("Fraction is not in range (0.0 - 1.0]");this._densifyFrac=t},Ff.prototype.compute=function(t,e){this.computeOrientedDistance(t,e,this._ptDist),this.computeOrientedDistance(e,t,this._ptDist)},Ff.prototype.distance=function(){return this.compute(this._g0,this._g1),this._ptDist.getDistance()},Ff.prototype.computeOrientedDistance=function(t,e,n){var r=new Gf(e);if(t.apply(r),n.setMaximum(r.getMaxPointDistance()),this._densifyFrac>0){var i=new qf(e,this._densifyFrac);t.apply(i),n.setMaximum(i.getMaxPointDistance())}},Ff.prototype.orientedDistance=function(){return this.computeOrientedDistance(this._g0,this._g1,this._ptDist),this._ptDist.getDistance()},Ff.prototype.interfaces_=function(){return[]},Ff.prototype.getClass=function(){return Ff},Ff.distance=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1],n=new Ff(t,e);return n.distance()}if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2],s=new Ff(r,i);return s.setDensifyFraction(o),s.distance()}},kf.MaxPointDistanceFilter.get=function(){return Gf},kf.MaxDensifiedByFractionDistanceFilter.get=function(){return qf},Object.defineProperties(Ff,kf);var Gf=function(){this._maxPtDist=new Af,this._minPtDist=new Af,this._euclideanDist=new Df,this._geom=null;var t=arguments[0];this._geom=t};Gf.prototype.filter=function(t){this._minPtDist.initialize(),Df.computeDistance(this._geom,t,this._minPtDist),this._maxPtDist.setMaximum(this._minPtDist)},Gf.prototype.getMaxPointDistance=function(){return this._maxPtDist},Gf.prototype.interfaces_=function(){return[Kl]},Gf.prototype.getClass=function(){return Gf};var qf=function(){this._maxPtDist=new Af,this._minPtDist=new Af,this._geom=null,this._numSubSegs=0;var t=arguments[0],e=arguments[1];this._geom=t,this._numSubSegs=Math.trunc(Math.round(1/e))};qf.prototype.filter=function(t,e){var n=this;if(0===e)return null;for(var r=t.getCoordinate(e-1),i=t.getCoordinate(e),o=(i.x-r.x)/this._numSubSegs,s=(i.y-r.y)/this._numSubSegs,a=0;a<this._numSubSegs;a++){var u=r.x+a*o,l=r.y+a*s,c=new ul(u,l);n._minPtDist.initialize(),Df.computeDistance(n._geom,c,n._minPtDist),n._maxPtDist.setMaximum(n._minPtDist)}},qf.prototype.isDone=function(){return!1},qf.prototype.isGeometryChanged=function(){return!1},qf.prototype.getMaxPointDistance=function(){return this._maxPtDist},qf.prototype.interfaces_=function(){return[Fc]},qf.prototype.getClass=function(){return qf};var Bf=function(t,e,n){this._minValidDistance=null,this._maxValidDistance=null,this._minDistanceFound=null,this._maxDistanceFound=null,this._isValid=!0,this._errMsg=null,this._errorLocation=null,this._errorIndicator=null,this._input=t||null,this._bufDistance=e||null,this._result=n||null},zf={VERBOSE:{configurable:!0},MAX_DISTANCE_DIFF_FRAC:{configurable:!0}};Bf.prototype.checkMaximumDistance=function(t,e,n){var r=new Ff(e,t);if(r.setDensifyFraction(.25),this._maxDistanceFound=r.orientedDistance(),this._maxDistanceFound>n){this._isValid=!1;var i=r.getCoordinates();this._errorLocation=i[1],this._errorIndicator=t.getFactory().createLineString(i),this._errMsg="Distance between buffer curve and input is too large ("+this._maxDistanceFound+" at "+Fl.toLineString(i[0],i[1])+")"}},Bf.prototype.isValid=function(){var t=Math.abs(this._bufDistance),e=Bf.MAX_DISTANCE_DIFF_FRAC*t;return this._minValidDistance=t-e,this._maxValidDistance=t+e,!(!this._input.isEmpty()&&!this._result.isEmpty())||(this._bufDistance>0?this.checkPositiveValid():this.checkNegativeValid(),Bf.VERBOSE&&Pl.out.println("Min Dist= "+this._minDistanceFound+"  err= "+(1-this._minDistanceFound/this._bufDistance)+"  Max Dist= "+this._maxDistanceFound+"  err= "+(this._maxDistanceFound/this._bufDistance-1)),this._isValid)},Bf.prototype.checkNegativeValid=function(){if(!(this._input instanceof th||this._input instanceof rh||this._input instanceof kc))return null;var t=this.getPolygonLines(this._input);if(this.checkMinimumDistance(t,this._result,this._minValidDistance),!this._isValid)return null;this.checkMaximumDistance(t,this._result,this._maxValidDistance)},Bf.prototype.getErrorIndicator=function(){return this._errorIndicator},Bf.prototype.checkMinimumDistance=function(t,e,n){var r=new Tf(t,e,n);if(this._minDistanceFound=r.distance(),this._minDistanceFound<n){this._isValid=!1;var i=r.nearestPoints();this._errorLocation=r.nearestPoints()[1],this._errorIndicator=t.getFactory().createLineString(i),this._errMsg="Distance between buffer curve and input is too small ("+this._minDistanceFound+" at "+Fl.toLineString(i[0],i[1])+" )"}},Bf.prototype.checkPositiveValid=function(){var t=this._result.getBoundary();if(this.checkMinimumDistance(this._input,t,this._minValidDistance),!this._isValid)return null;this.checkMaximumDistance(this._input,t,this._maxValidDistance)},Bf.prototype.getErrorLocation=function(){return this._errorLocation},Bf.prototype.getPolygonLines=function(t){for(var e=new lc,n=new Cf(e),r=Sf.getPolygons(t).iterator();r.hasNext();){r.next().apply(n)}return t.getFactory().buildGeometry(e)},Bf.prototype.getErrorMessage=function(){return this._errMsg},Bf.prototype.interfaces_=function(){return[]},Bf.prototype.getClass=function(){return Bf},zf.VERBOSE.get=function(){return!1},zf.MAX_DISTANCE_DIFF_FRAC.get=function(){return.012},Object.defineProperties(Bf,zf);var jf=function(t,e,n){this._isValid=!0,this._errorMsg=null,this._errorLocation=null,this._errorIndicator=null,this._input=t||null,this._distance=e||null,this._result=n||null},Uf={VERBOSE:{configurable:!0},MAX_ENV_DIFF_FRAC:{configurable:!0}};jf.prototype.isValid=function(){return this.checkPolygonal(),this._isValid?(this.checkExpectedEmpty(),this._isValid?(this.checkEnvelope(),this._isValid?(this.checkArea(),this._isValid?(this.checkDistance(),this._isValid):this._isValid):this._isValid):this._isValid):this._isValid},jf.prototype.checkEnvelope=function(){if(this._distance<0)return null;var t=this._distance*jf.MAX_ENV_DIFF_FRAC;0===t&&(t=.001);var e=new Ll(this._input.getEnvelopeInternal());e.expandBy(this._distance);var n=new Ll(this._result.getEnvelopeInternal());n.expandBy(t),n.contains(e)||(this._isValid=!1,this._errorMsg="Buffer envelope is incorrect",this._errorIndicator=this._input.getFactory().toGeometry(n)),this.report("Envelope")},jf.prototype.checkDistance=function(){var t=new Bf(this._input,this._distance,this._result);t.isValid()||(this._isValid=!1,this._errorMsg=t.getErrorMessage(),this._errorLocation=t.getErrorLocation(),this._errorIndicator=t.getErrorIndicator()),this.report("Distance")},jf.prototype.checkArea=function(){var t=this._input.getArea(),e=this._result.getArea();this._distance>0&&t>e&&(this._isValid=!1,this._errorMsg="Area of positive buffer is smaller than input",this._errorIndicator=this._result),this._distance<0&&t<e&&(this._isValid=!1,this._errorMsg="Area of negative buffer is larger than input",this._errorIndicator=this._result),this.report("Area")},jf.prototype.checkPolygonal=function(){this._result instanceof th||this._result instanceof rh||(this._isValid=!1),this._errorMsg="Result is not polygonal",this._errorIndicator=this._result,this.report("Polygonal")},jf.prototype.getErrorIndicator=function(){return this._errorIndicator},jf.prototype.getErrorLocation=function(){return this._errorLocation},jf.prototype.checkExpectedEmpty=function(){return this._input.getDimension()>=2||this._distance>0?null:(this._result.isEmpty()||(this._isValid=!1,this._errorMsg="Result is non-empty",this._errorIndicator=this._result),void this.report("ExpectedEmpty"))},jf.prototype.report=function(t){if(!jf.VERBOSE)return null;Pl.out.println("Check "+t+": "+(this._isValid?"passed":"FAILED"))},jf.prototype.getErrorMessage=function(){return this._errorMsg},jf.prototype.interfaces_=function(){return[]},jf.prototype.getClass=function(){return jf},jf.isValidMsg=function(t,e,n){var r=new jf(t,e,n);return r.isValid()?null:r.getErrorMessage()},jf.isValid=function(t,e,n){return!!new jf(t,e,n).isValid()},Uf.VERBOSE.get=function(){return!1},Uf.MAX_ENV_DIFF_FRAC.get=function(){return.012},Object.defineProperties(jf,Uf);var Vf=function(){this._pts=null,this._data=null;var t=arguments[0],e=arguments[1];this._pts=t,this._data=e};Vf.prototype.getCoordinates=function(){return this._pts},Vf.prototype.size=function(){return this._pts.length},Vf.prototype.getCoordinate=function(t){return this._pts[t]},Vf.prototype.isClosed=function(){return this._pts[0].equals(this._pts[this._pts.length-1])},Vf.prototype.getSegmentOctant=function(t){return t===this._pts.length-1?-1:fp.octant(this.getCoordinate(t),this.getCoordinate(t+1))},Vf.prototype.setData=function(t){this._data=t},Vf.prototype.getData=function(){return this._data},Vf.prototype.toString=function(){return Fl.toLineString(new lh(this._pts))},Vf.prototype.interfaces_=function(){return[gp]},Vf.prototype.getClass=function(){return Vf};var Xf=function(){this._findAllIntersections=!1,this._isCheckEndSegmentsOnly=!1,this._li=null,this._interiorIntersection=null,this._intSegments=null,this._intersections=new lc,this._intersectionCount=0,this._keepIntersections=!0;var t=arguments[0];this._li=t,this._interiorIntersection=null};Xf.prototype.getInteriorIntersection=function(){return this._interiorIntersection},Xf.prototype.setCheckEndSegmentsOnly=function(t){this._isCheckEndSegmentsOnly=t},Xf.prototype.getIntersectionSegments=function(){return this._intSegments},Xf.prototype.count=function(){return this._intersectionCount},Xf.prototype.getIntersections=function(){return this._intersections},Xf.prototype.setFindAllIntersections=function(t){this._findAllIntersections=t},Xf.prototype.setKeepIntersections=function(t){this._keepIntersections=t},Xf.prototype.processIntersections=function(t,e,n,r){if(!this._findAllIntersections&&this.hasIntersection())return null;if(t===n&&e===r)return null;if(this._isCheckEndSegmentsOnly&&!(this.isEndSegment(t,e)||this.isEndSegment(n,r)))return null;var i=t.getCoordinates()[e],o=t.getCoordinates()[e+1],s=n.getCoordinates()[r],a=n.getCoordinates()[r+1];this._li.computeIntersection(i,o,s,a),this._li.hasIntersection()&&this._li.isInteriorIntersection()&&(this._intSegments=new Array(4).fill(null),this._intSegments[0]=i,this._intSegments[1]=o,this._intSegments[2]=s,this._intSegments[3]=a,this._interiorIntersection=this._li.getIntersection(0),this._keepIntersections&&this._intersections.add(this._interiorIntersection),this._intersectionCount++)},Xf.prototype.isEndSegment=function(t,e){return 0===e||e>=t.size()-2},Xf.prototype.hasIntersection=function(){return null!==this._interiorIntersection},Xf.prototype.isDone=function(){return!this._findAllIntersections&&null!==this._interiorIntersection},Xf.prototype.interfaces_=function(){return[Zp]},Xf.prototype.getClass=function(){return Xf},Xf.createAllIntersectionsFinder=function(t){var e=new Xf(t);return e.setFindAllIntersections(!0),e},Xf.createAnyIntersectionFinder=function(t){return new Xf(t)},Xf.createIntersectionCounter=function(t){var e=new Xf(t);return e.setFindAllIntersections(!0),e.setKeepIntersections(!1),e};var Yf=function(){this._li=new jl,this._segStrings=null,this._findAllIntersections=!1,this._segInt=null,this._isValid=!0;var t=arguments[0];this._segStrings=t};Yf.prototype.execute=function(){if(null!==this._segInt)return null;this.checkInteriorIntersections()},Yf.prototype.getIntersections=function(){return this._segInt.getIntersections()},Yf.prototype.isValid=function(){return this.execute(),this._isValid},Yf.prototype.setFindAllIntersections=function(t){this._findAllIntersections=t},Yf.prototype.checkInteriorIntersections=function(){this._isValid=!0,this._segInt=new Xf(this._li),this._segInt.setFindAllIntersections(this._findAllIntersections);var t=new Ip;if(t.setSegmentIntersector(this._segInt),t.computeNodes(this._segStrings),this._segInt.hasIntersection())return this._isValid=!1,null},Yf.prototype.checkValid=function(){if(this.execute(),!this._isValid)throw new Oh(this.getErrorMessage(),this._segInt.getInteriorIntersection())},Yf.prototype.getErrorMessage=function(){if(this._isValid)return"no intersections found";var t=this._segInt.getIntersectionSegments();return"found non-noded intersection between "+Fl.toLineString(t[0],t[1])+" and "+Fl.toLineString(t[2],t[3])},Yf.prototype.interfaces_=function(){return[]},Yf.prototype.getClass=function(){return Yf},Yf.computeIntersections=function(t){var e=new Yf(t);return e.setFindAllIntersections(!0),e.isValid(),e.getIntersections()};var Hf=function t(){this._nv=null;var e=arguments[0];this._nv=new Yf(t.toSegmentStrings(e))};Hf.prototype.checkValid=function(){this._nv.checkValid()},Hf.prototype.interfaces_=function(){return[]},Hf.prototype.getClass=function(){return Hf},Hf.toSegmentStrings=function(t){for(var e=new lc,n=t.iterator();n.hasNext();){var r=n.next();e.add(new Vf(r.getCoordinates(),r))}return e},Hf.checkValid=function(t){new Hf(t).checkValid()};var Wf=function(t){this._mapOp=t};Wf.prototype.map=function(t){for(var e=new lc,n=0;n<t.getNumGeometries();n++){var r=this._mapOp.map(t.getGeometryN(n));r.isEmpty()||e.add(r)}return t.getFactory().createGeometryCollection(_h.toGeometryArray(e))},Wf.prototype.interfaces_=function(){return[]},Wf.prototype.getClass=function(){return Wf},Wf.map=function(t,e){return new Wf(e).map(t)};var Jf=function(){this._op=null,this._geometryFactory=null,this._ptLocator=null,this._lineEdgesList=new lc,this._resultLineList=new lc;var t=arguments[0],e=arguments[1],n=arguments[2];this._op=t,this._geometryFactory=e,this._ptLocator=n};Jf.prototype.collectLines=function(t){for(var e=this,n=this._op.getGraph().getEdgeEnds().iterator();n.hasNext();){var r=n.next();e.collectLineEdge(r,t,e._lineEdgesList),e.collectBoundaryTouchEdge(r,t,e._lineEdgesList)}},Jf.prototype.labelIsolatedLine=function(t,e){var n=this._ptLocator.locate(t.getCoordinate(),this._op.getArgGeometry(e));t.getLabel().setLocation(e,n)},Jf.prototype.build=function(t){return this.findCoveredLineEdges(),this.collectLines(t),this.buildLines(t),this._resultLineList},Jf.prototype.collectLineEdge=function(t,e,n){var r=t.getLabel(),i=t.getEdge();t.isLineEdge()&&(t.isVisited()||!Mg.isResultOfOp(r,e)||i.isCovered()||(n.add(i),t.setVisitedEdge(!0)))},Jf.prototype.findCoveredLineEdges=function(){for(var t=this._op.getGraph().getNodes().iterator();t.hasNext();){t.next().getEdges().findCoveredLineEdges()}for(var e=this._op.getGraph().getEdgeEnds().iterator();e.hasNext();){var n=e.next(),r=n.getEdge();if(n.isLineEdge()&&!r.isCoveredSet()){var i=this._op.isCoveredByA(n.getCoordinate());r.setCovered(i)}}},Jf.prototype.labelIsolatedLines=function(t){for(var e=t.iterator();e.hasNext();){var n=e.next(),r=n.getLabel();n.isIsolated()&&(r.isNull(0)?this.labelIsolatedLine(n,0):this.labelIsolatedLine(n,1))}},Jf.prototype.buildLines=function(t){for(var e=this._lineEdgesList.iterator();e.hasNext();){var n=e.next(),r=this._geometryFactory.createLineString(n.getCoordinates());this._resultLineList.add(r),n.setInResult(!0)}},Jf.prototype.collectBoundaryTouchEdge=function(t,e,n){var r=t.getLabel();return t.isLineEdge()||t.isVisited()||t.isInteriorAreaEdge()||t.getEdge().isInResult()?null:(ql.isTrue(!(t.isInResult()||t.getSym().isInResult())||!t.getEdge().isInResult()),void(Mg.isResultOfOp(r,e)&&e===Mg.INTERSECTION&&(n.add(t.getEdge()),t.setVisitedEdge(!0))))},Jf.prototype.interfaces_=function(){return[]},Jf.prototype.getClass=function(){return Jf};var Zf=function(){this._op=null,this._geometryFactory=null,this._resultPointList=new lc;var t=arguments[0],e=arguments[1];this._op=t,this._geometryFactory=e};Zf.prototype.filterCoveredNodeToPoint=function(t){var e=t.getCoordinate();if(!this._op.isCoveredByLA(e)){var n=this._geometryFactory.createPoint(e);this._resultPointList.add(n)}},Zf.prototype.extractNonCoveredResultNodes=function(t){for(var e=this._op.getGraph().getNodes().iterator();e.hasNext();){var n=e.next();if(!n.isInResult()&&(!n.isIncidentEdgeInResult()&&(0===n.getEdges().getDegree()||t===Mg.INTERSECTION))){var r=n.getLabel();Mg.isResultOfOp(r,t)&&this.filterCoveredNodeToPoint(n)}}},Zf.prototype.build=function(t){return this.extractNonCoveredResultNodes(t),this._resultPointList},Zf.prototype.interfaces_=function(){return[]},Zf.prototype.getClass=function(){return Zf};var Kf=function(){this._inputGeom=null,this._factory=null,this._pruneEmptyGeometry=!0,this._preserveGeometryCollectionType=!0,this._preserveCollections=!1,this._preserveType=!1};Kf.prototype.transformPoint=function(t,e){return this._factory.createPoint(this.transformCoordinates(t.getCoordinateSequence(),t))},Kf.prototype.transformPolygon=function(t,e){var n=!0,r=this.transformLinearRing(t.getExteriorRing(),t);null!==r&&r instanceof nh&&!r.isEmpty()||(n=!1);for(var i=new lc,o=0;o<t.getNumInteriorRing();o++){var s=this.transformLinearRing(t.getInteriorRingN(o),t);null===s||s.isEmpty()||(s instanceof nh||(n=!1),i.add(s))}if(n)return this._factory.createPolygon(r,i.toArray([]));var a=new lc;return null!==r&&a.add(r),a.addAll(i),this._factory.buildGeometry(a)},Kf.prototype.createCoordinateSequence=function(t){return this._factory.getCoordinateSequenceFactory().create(t)},Kf.prototype.getInputGeometry=function(){return this._inputGeom},Kf.prototype.transformMultiLineString=function(t,e){for(var n=new lc,r=0;r<t.getNumGeometries();r++){var i=this.transformLineString(t.getGeometryN(r),t);null!==i&&(i.isEmpty()||n.add(i))}return this._factory.buildGeometry(n)},Kf.prototype.transformCoordinates=function(t,e){return this.copy(t)},Kf.prototype.transformLineString=function(t,e){return this._factory.createLineString(this.transformCoordinates(t.getCoordinateSequence(),t))},Kf.prototype.transformMultiPoint=function(t,e){for(var n=new lc,r=0;r<t.getNumGeometries();r++){var i=this.transformPoint(t.getGeometryN(r),t);null!==i&&(i.isEmpty()||n.add(i))}return this._factory.buildGeometry(n)},Kf.prototype.transformMultiPolygon=function(t,e){for(var n=new lc,r=0;r<t.getNumGeometries();r++){var i=this.transformPolygon(t.getGeometryN(r),t);null!==i&&(i.isEmpty()||n.add(i))}return this._factory.buildGeometry(n)},Kf.prototype.copy=function(t){return t.copy()},Kf.prototype.transformGeometryCollection=function(t,e){for(var n=new lc,r=0;r<t.getNumGeometries();r++){var i=this.transform(t.getGeometryN(r));null!==i&&(this._pruneEmptyGeometry&&i.isEmpty()||n.add(i))}return this._preserveGeometryCollectionType?this._factory.createGeometryCollection(_h.toGeometryArray(n)):this._factory.buildGeometry(n)},Kf.prototype.transform=function(t){if(this._inputGeom=t,this._factory=t.getFactory(),t instanceof Qc)return this.transformPoint(t,null);if(t instanceof eh)return this.transformMultiPoint(t,null);if(t instanceof nh)return this.transformLinearRing(t,null);if(t instanceof Zc)return this.transformLineString(t,null);if(t instanceof Gc)return this.transformMultiLineString(t,null);if(t instanceof th)return this.transformPolygon(t,null);if(t instanceof rh)return this.transformMultiPolygon(t,null);if(t instanceof kc)return this.transformGeometryCollection(t,null);throw new el("Unknown Geometry subtype: "+t.getClass().getName())},Kf.prototype.transformLinearRing=function(t,e){var n=this.transformCoordinates(t.getCoordinateSequence(),t);if(null===n)return this._factory.createLinearRing(null);var r=n.size();return r>0&&r<4&&!this._preserveType?this._factory.createLineString(n):this._factory.createLinearRing(n)},Kf.prototype.interfaces_=function(){return[]},Kf.prototype.getClass=function(){return Kf};var Qf=function t(){if(this._snapTolerance=0,this._srcPts=null,this._seg=new vp,this._allowSnappingToSourceVertices=!1,this._isClosed=!1,arguments[0]instanceof Zc&&"number"==typeof arguments[1]){var e=arguments[0],n=arguments[1];t.call(this,e.getCoordinates(),n)}else if(arguments[0]instanceof Array&&"number"==typeof arguments[1]){var r=arguments[0],i=arguments[1];this._srcPts=r,this._isClosed=t.isClosed(r),this._snapTolerance=i}};Qf.prototype.snapVertices=function(t,e){for(var n=this._isClosed?t.size()-1:t.size(),r=0;r<n;r++){var i=t.get(r),o=this.findSnapForVertex(i,e);null!==o&&(t.set(r,new ul(o)),0===r&&this._isClosed&&t.set(t.size()-1,new ul(o)))}},Qf.prototype.findSnapForVertex=function(t,e){for(var n=0;n<e.length;n++){if(t.equals2D(e[n]))return null;if(t.distance(e[n])<this._snapTolerance)return e[n]}return null},Qf.prototype.snapTo=function(t){var e=new hc(this._srcPts);return this.snapVertices(e,t),this.snapSegments(e,t),e.toCoordinateArray()},Qf.prototype.snapSegments=function(t,e){if(0===e.length)return null;var n=e.length;e[0].equals2D(e[e.length-1])&&(n=e.length-1);for(var r=0;r<n;r++){var i=e[r],o=this.findSegmentIndexToSnap(i,t);o>=0&&t.add(o+1,new ul(i),!1)}},Qf.prototype.findSegmentIndexToSnap=function(t,e){for(var n=this,r=nl.MAX_VALUE,i=-1,o=0;o<e.size()-1;o++){if(n._seg.p0=e.get(o),n._seg.p1=e.get(o+1),n._seg.p0.equals2D(t)||n._seg.p1.equals2D(t)){if(n._allowSnappingToSourceVertices)continue;return-1}var s=n._seg.distance(t);s<n._snapTolerance&&s<r&&(r=s,i=o)}return i},Qf.prototype.setAllowSnappingToSourceVertices=function(t){this._allowSnappingToSourceVertices=t},Qf.prototype.interfaces_=function(){return[]},Qf.prototype.getClass=function(){return Qf},Qf.isClosed=function(t){return!(t.length<=1)&&t[0].equals2D(t[t.length-1])};var $f=function(t){this._srcGeom=t||null},tg={SNAP_PRECISION_FACTOR:{configurable:!0}};$f.prototype.snapTo=function(t,e){var n=this.extractTargetCoordinates(t);return new eg(e,n).transform(this._srcGeom)},$f.prototype.snapToSelf=function(t,e){var n=this.extractTargetCoordinates(this._srcGeom),r=new eg(t,n,!0).transform(this._srcGeom),i=r;return e&&gl(i,$c)&&(i=r.buffer(0)),i},$f.prototype.computeSnapTolerance=function(t){return this.computeMinimumSegmentLength(t)/10},$f.prototype.extractTargetCoordinates=function(t){for(var e=new Lc,n=t.getCoordinates(),r=0;r<n.length;r++)e.add(n[r]);return e.toArray(new Array(0).fill(null))},$f.prototype.computeMinimumSegmentLength=function(t){for(var e=nl.MAX_VALUE,n=0;n<t.length-1;n++){var r=t[n].distance(t[n+1]);r<e&&(e=r)}return e},$f.prototype.interfaces_=function(){return[]},$f.prototype.getClass=function(){return $f},$f.snap=function(t,e,n){var r=new Array(2).fill(null),i=new $f(t);r[0]=i.snapTo(e,n);var o=new $f(e);return r[1]=o.snapTo(r[0],n),r},$f.computeOverlaySnapTolerance=function(){if(1===arguments.length){var t=arguments[0],e=$f.computeSizeBasedSnapTolerance(t),n=t.getPrecisionModel();if(n.getType()===gh.FIXED){var r=1/n.getScale()*2/1.415;r>e&&(e=r)}return e}if(2===arguments.length){var i=arguments[0],o=arguments[1];return Math.min($f.computeOverlaySnapTolerance(i),$f.computeOverlaySnapTolerance(o))}},$f.computeSizeBasedSnapTolerance=function(t){var e=t.getEnvelopeInternal();return Math.min(e.getHeight(),e.getWidth())*$f.SNAP_PRECISION_FACTOR},$f.snapToSelf=function(t,e,n){return new $f(t).snapToSelf(e,n)},tg.SNAP_PRECISION_FACTOR.get=function(){return 1e-9},Object.defineProperties($f,tg);var eg=function(t){function e(e,n,r){t.call(this),this._snapTolerance=e||null,this._snapPts=n||null,this._isSelfSnap=void 0!==r&&r}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.snapLine=function(t,e){var n=new Qf(t,this._snapTolerance);return n.setAllowSnappingToSourceVertices(this._isSelfSnap),n.snapTo(e)},e.prototype.transformCoordinates=function(t,e){var n=t.toCoordinateArray(),r=this.snapLine(n,this._snapPts);return this._factory.getCoordinateSequenceFactory().create(r)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Kf),ng=function(){this._isFirst=!0,this._commonMantissaBitsCount=53,this._commonBits=0,this._commonSignExp=null};ng.prototype.getCommon=function(){return nl.longBitsToDouble(this._commonBits)},ng.prototype.add=function(t){var e=nl.doubleToLongBits(t);return this._isFirst?(this._commonBits=e,this._commonSignExp=ng.signExpBits(this._commonBits),this._isFirst=!1,null):ng.signExpBits(e)!==this._commonSignExp?(this._commonBits=0,null):(this._commonMantissaBitsCount=ng.numCommonMostSigMantissaBits(this._commonBits,e),void(this._commonBits=ng.zeroLowerBits(this._commonBits,64-(12+this._commonMantissaBitsCount))))},ng.prototype.toString=function(){if(1===arguments.length){var t=arguments[0],e=nl.longBitsToDouble(t),n=nl.toBinaryString(t),r="0000000000000000000000000000000000000000000000000000000000000000"+n,i=r.substring(r.length-64),o=i.substring(0,1)+"  "+i.substring(1,12)+"(exp) "+i.substring(12)+" [ "+e+" ]";return o}},ng.prototype.interfaces_=function(){return[]},ng.prototype.getClass=function(){return ng},ng.getBit=function(t,e){return 0!=(t&1<<e)?1:0},ng.signExpBits=function(t){return t>>52},ng.zeroLowerBits=function(t,e){return t&~((1<<e)-1)},ng.numCommonMostSigMantissaBits=function(t,e){for(var n=0,r=52;r>=0;r--){if(ng.getBit(t,r)!==ng.getBit(e,r))return n;n++}return 52};var rg=function(){this._commonCoord=null,this._ccFilter=new og},ig={CommonCoordinateFilter:{configurable:!0},Translater:{configurable:!0}};rg.prototype.addCommonBits=function(t){var e=new sg(this._commonCoord);t.apply(e),t.geometryChanged()},rg.prototype.removeCommonBits=function(t){if(0===this._commonCoord.x&&0===this._commonCoord.y)return t;var e=new ul(this._commonCoord);e.x=-e.x,e.y=-e.y;var n=new sg(e);return t.apply(n),t.geometryChanged(),t},rg.prototype.getCommonCoordinate=function(){return this._commonCoord},rg.prototype.add=function(t){t.apply(this._ccFilter),this._commonCoord=this._ccFilter.getCommonCoordinate()},rg.prototype.interfaces_=function(){return[]},rg.prototype.getClass=function(){return rg},ig.CommonCoordinateFilter.get=function(){return og},ig.Translater.get=function(){return sg},Object.defineProperties(rg,ig);var og=function(){this._commonBitsX=new ng,this._commonBitsY=new ng};og.prototype.filter=function(t){this._commonBitsX.add(t.x),this._commonBitsY.add(t.y)},og.prototype.getCommonCoordinate=function(){return new ul(this._commonBitsX.getCommon(),this._commonBitsY.getCommon())},og.prototype.interfaces_=function(){return[Kl]},og.prototype.getClass=function(){return og};var sg=function(){this.trans=null;var t=arguments[0];this.trans=t};sg.prototype.filter=function(t,e){var n=t.getOrdinate(e,0)+this.trans.x,r=t.getOrdinate(e,1)+this.trans.y;t.setOrdinate(e,0,n),t.setOrdinate(e,1,r)},sg.prototype.isDone=function(){return!1},sg.prototype.isGeometryChanged=function(){return!0},sg.prototype.interfaces_=function(){return[Fc]},sg.prototype.getClass=function(){return sg};var ag=function(t,e){this._geom=new Array(2).fill(null),this._snapTolerance=null,this._cbr=null,this._geom[0]=t,this._geom[1]=e,this.computeSnapTolerance()};ag.prototype.selfSnap=function(t){return new $f(t).snapTo(t,this._snapTolerance)},ag.prototype.removeCommonBits=function(t){this._cbr=new rg,this._cbr.add(t[0]),this._cbr.add(t[1]);var e=new Array(2).fill(null);return e[0]=this._cbr.removeCommonBits(t[0].copy()),e[1]=this._cbr.removeCommonBits(t[1].copy()),e},ag.prototype.prepareResult=function(t){return this._cbr.addCommonBits(t),t},ag.prototype.getResultGeometry=function(t){var e=this.snap(this._geom),n=Mg.overlayOp(e[0],e[1],t);return this.prepareResult(n)},ag.prototype.checkValid=function(t){t.isValid()||Pl.out.println("Snapped geometry is invalid")},ag.prototype.computeSnapTolerance=function(){this._snapTolerance=$f.computeOverlaySnapTolerance(this._geom[0],this._geom[1])},ag.prototype.snap=function(t){var e=this.removeCommonBits(t);return $f.snap(e[0],e[1],this._snapTolerance)},ag.prototype.interfaces_=function(){return[]},ag.prototype.getClass=function(){return ag},ag.overlayOp=function(t,e,n){return new ag(t,e).getResultGeometry(n)},ag.union=function(t,e){return ag.overlayOp(t,e,Mg.UNION)},ag.intersection=function(t,e){return ag.overlayOp(t,e,Mg.INTERSECTION)},ag.symDifference=function(t,e){return ag.overlayOp(t,e,Mg.SYMDIFFERENCE)},ag.difference=function(t,e){return ag.overlayOp(t,e,Mg.DIFFERENCE)};var ug=function(t,e){this._geom=new Array(2).fill(null),this._geom[0]=t,this._geom[1]=e};ug.prototype.getResultGeometry=function(t){var e=null,n=!1,r=null;try{e=Mg.overlayOp(this._geom[0],this._geom[1],t);n=!0}catch(t){if(!(t instanceof kl))throw t;r=t}if(!n)try{e=ag.overlayOp(this._geom[0],this._geom[1],t)}catch(t){throw t instanceof kl?r:t}return e},ug.prototype.interfaces_=function(){return[]},ug.prototype.getClass=function(){return ug},ug.overlayOp=function(t,e,n){return new ug(t,e).getResultGeometry(n)},ug.union=function(t,e){return ug.overlayOp(t,e,Mg.UNION)},ug.intersection=function(t,e){return ug.overlayOp(t,e,Mg.INTERSECTION)},ug.symDifference=function(t,e){return ug.overlayOp(t,e,Mg.SYMDIFFERENCE)},ug.difference=function(t,e){return ug.overlayOp(t,e,Mg.DIFFERENCE)};var lg=function(){this.mce=null,this.chainIndex=null;var t=arguments[0],e=arguments[1];this.mce=t,this.chainIndex=e};lg.prototype.computeIntersections=function(t,e){this.mce.computeIntersectsForChain(this.chainIndex,t.mce,t.chainIndex,e)},lg.prototype.interfaces_=function(){return[]},lg.prototype.getClass=function(){return lg};var cg=function t(){if(this._label=null,this._xValue=null,this._eventType=null,this._insertEvent=null,this._deleteEventIndex=null,this._obj=null,2===arguments.length){var e=arguments[0],n=arguments[1];this._eventType=t.DELETE,this._xValue=e,this._insertEvent=n}else if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2];this._eventType=t.INSERT,this._label=r,this._xValue=i,this._obj=o}},hg={INSERT:{configurable:!0},DELETE:{configurable:!0}};cg.prototype.isDelete=function(){return this._eventType===cg.DELETE},cg.prototype.setDeleteEventIndex=function(t){this._deleteEventIndex=t},cg.prototype.getObject=function(){return this._obj},cg.prototype.compareTo=function(t){var e=t;return this._xValue<e._xValue?-1:this._xValue>e._xValue?1:this._eventType<e._eventType?-1:this._eventType>e._eventType?1:0},cg.prototype.getInsertEvent=function(){return this._insertEvent},cg.prototype.isInsert=function(){return this._eventType===cg.INSERT},cg.prototype.isSameLabel=function(t){return null!==this._label&&this._label===t._label},cg.prototype.getDeleteEventIndex=function(){return this._deleteEventIndex},cg.prototype.interfaces_=function(){return[il]},cg.prototype.getClass=function(){return cg},hg.INSERT.get=function(){return 1},hg.DELETE.get=function(){return 2},Object.defineProperties(cg,hg);var pg=function(){};pg.prototype.interfaces_=function(){return[]},pg.prototype.getClass=function(){return pg};var fg=function(){this._hasIntersection=!1,this._hasProper=!1,this._hasProperInterior=!1,this._properIntersectionPoint=null,this._li=null,this._includeProper=null,this._recordIsolated=null,this._isSelfIntersection=null,this._numIntersections=0,this.numTests=0,this._bdyNodes=null,this._isDone=!1,this._isDoneWhenProperInt=!1;var t=arguments[0],e=arguments[1],n=arguments[2];this._li=t,this._includeProper=e,this._recordIsolated=n};fg.prototype.isTrivialIntersection=function(t,e,n,r){if(t===n&&1===this._li.getIntersectionNum()){if(fg.isAdjacentSegments(e,r))return!0;if(t.isClosed()){var i=t.getNumPoints()-1;if(0===e&&r===i||0===r&&e===i)return!0}}return!1},fg.prototype.getProperIntersectionPoint=function(){return this._properIntersectionPoint},fg.prototype.setIsDoneIfProperInt=function(t){this._isDoneWhenProperInt=t},fg.prototype.hasProperInteriorIntersection=function(){return this._hasProperInterior},fg.prototype.isBoundaryPointInternal=function(t,e){for(var n=e.iterator();n.hasNext();){var r=n.next().getCoordinate();if(t.isIntersection(r))return!0}return!1},fg.prototype.hasProperIntersection=function(){return this._hasProper},fg.prototype.hasIntersection=function(){return this._hasIntersection},fg.prototype.isDone=function(){return this._isDone},fg.prototype.isBoundaryPoint=function(t,e){return null!==e&&(!!this.isBoundaryPointInternal(t,e[0])||!!this.isBoundaryPointInternal(t,e[1]))},fg.prototype.setBoundaryNodes=function(t,e){this._bdyNodes=new Array(2).fill(null),this._bdyNodes[0]=t,this._bdyNodes[1]=e},fg.prototype.addIntersections=function(t,e,n,r){if(t===n&&e===r)return null;this.numTests++;var i=t.getCoordinates()[e],o=t.getCoordinates()[e+1],s=n.getCoordinates()[r],a=n.getCoordinates()[r+1];this._li.computeIntersection(i,o,s,a),this._li.hasIntersection()&&(this._recordIsolated&&(t.setIsolated(!1),n.setIsolated(!1)),this._numIntersections++,this.isTrivialIntersection(t,e,n,r)||(this._hasIntersection=!0,!this._includeProper&&this._li.isProper()||(t.addIntersections(this._li,e,0),n.addIntersections(this._li,r,1)),this._li.isProper()&&(this._properIntersectionPoint=this._li.getIntersection(0).copy(),this._hasProper=!0,this._isDoneWhenProperInt&&(this._isDone=!0),this.isBoundaryPoint(this._li,this._bdyNodes)||(this._hasProperInterior=!0))))},fg.prototype.interfaces_=function(){return[]},fg.prototype.getClass=function(){return fg},fg.isAdjacentSegments=function(t,e){return 1===Math.abs(t-e)};var gg=function(t){function e(){t.call(this),this.events=new lc,this.nOverlaps=null}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.prepareEvents=function(){np.sort(this.events);for(var t=0;t<this.events.size();t++){var e=this.events.get(t);e.isDelete()&&e.getInsertEvent().setDeleteEventIndex(t)}},e.prototype.computeIntersections=function(){var t=this;if(1===arguments.length){var e=arguments[0];this.nOverlaps=0,this.prepareEvents();for(var n=0;n<this.events.size();n++){var r=t.events.get(n);if(r.isInsert()&&t.processOverlaps(n,r.getDeleteEventIndex(),r,e),e.isDone())break}}else if(3===arguments.length)if(arguments[2]instanceof fg&&gl(arguments[0],ac)&&gl(arguments[1],ac)){var i=arguments[0],o=arguments[1],s=arguments[2];this.addEdges(i,i),this.addEdges(o,o),this.computeIntersections(s)}else if("boolean"==typeof arguments[2]&&gl(arguments[0],ac)&&arguments[1]instanceof fg){var a=arguments[0],u=arguments[1],l=arguments[2];l?this.addEdges(a,null):this.addEdges(a),this.computeIntersections(u)}},e.prototype.addEdge=function(t,e){for(var n=t.getMonotoneChainEdge(),r=n.getStartIndexes(),i=0;i<r.length-1;i++){var o=new lg(n,i),s=new cg(e,n.getMinX(i),o);this.events.add(s),this.events.add(new cg(n.getMaxX(i),s))}},e.prototype.processOverlaps=function(t,e,n,r){for(var i=n.getObject(),o=t;o<e;o++){var s=this.events.get(o);if(s.isInsert()){var a=s.getObject();n.isSameLabel(s)||(i.computeIntersections(a,r),this.nOverlaps++)}}},e.prototype.addEdges=function(){var t=this;if(1===arguments.length)for(var e=arguments[0],n=e.iterator();n.hasNext();){var r=n.next();t.addEdge(r,r)}else if(2===arguments.length)for(var i=arguments[0],o=arguments[1],s=i.iterator();s.hasNext();){var a=s.next();t.addEdge(a,o)}},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(pg),dg=function(){this._min=nl.POSITIVE_INFINITY,this._max=nl.NEGATIVE_INFINITY},yg={NodeComparator:{configurable:!0}};dg.prototype.getMin=function(){return this._min},dg.prototype.intersects=function(t,e){return!(this._min>e||this._max<t)},dg.prototype.getMax=function(){return this._max},dg.prototype.toString=function(){return Fl.toLineString(new ul(this._min,0),new ul(this._max,0))},dg.prototype.interfaces_=function(){return[]},dg.prototype.getClass=function(){return dg},yg.NodeComparator.get=function(){return vg},Object.defineProperties(dg,yg);var vg=function(){};vg.prototype.compare=function(t,e){var n=t,r=e,i=(n._min+n._max)/2,o=(r._min+r._max)/2;return i<o?-1:i>o?1:0},vg.prototype.interfaces_=function(){return[sl]},vg.prototype.getClass=function(){return vg};var _g=function(t){function e(){t.call(this),this._item=null;var e=arguments[0],n=arguments[1],r=arguments[2];this._min=e,this._max=n,this._item=r}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.query=function(t,e,n){if(!this.intersects(t,e))return null;n.visitItem(this._item)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(dg),mg=function(t){function e(){t.call(this),this._node1=null,this._node2=null;var e=arguments[0],n=arguments[1];this._node1=e,this._node2=n,this.buildExtent(this._node1,this._node2)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.buildExtent=function(t,e){this._min=Math.min(t._min,e._min),this._max=Math.max(t._max,e._max)},e.prototype.query=function(t,e,n){if(!this.intersects(t,e))return null;null!==this._node1&&this._node1.query(t,e,n),null!==this._node2&&this._node2.query(t,e,n)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(dg),xg=function(){this._leaves=new lc,this._root=null,this._level=0};xg.prototype.buildTree=function(){np.sort(this._leaves,new dg.NodeComparator);for(var t=this._leaves,e=null,n=new lc;;){if(this.buildLevel(t,n),1===n.size())return n.get(0);e=t,t=n,n=e}},xg.prototype.insert=function(t,e,n){if(null!==this._root)throw new Error("Index cannot be added to once it has been queried");this._leaves.add(new _g(t,e,n))},xg.prototype.query=function(t,e,n){this.init(),this._root.query(t,e,n)},xg.prototype.buildRoot=function(){if(null!==this._root)return null;this._root=this.buildTree()},xg.prototype.printNode=function(t){Pl.out.println(Fl.toLineString(new ul(t._min,this._level),new ul(t._max,this._level)))},xg.prototype.init=function(){if(null!==this._root)return null;this.buildRoot()},xg.prototype.buildLevel=function(t,e){this._level++,e.clear();for(var n=0;n<t.size();n+=2){var r=t.get(n);if(null===(n+1<t.size()?t.get(n):null))e.add(r);else{var i=new mg(t.get(n),t.get(n+1));e.add(i)}}},xg.prototype.interfaces_=function(){return[]},xg.prototype.getClass=function(){return xg};var Eg=function(){this._items=new lc};Eg.prototype.visitItem=function(t){this._items.add(t)},Eg.prototype.getItems=function(){return this._items},Eg.prototype.interfaces_=function(){return[Qh]},Eg.prototype.getClass=function(){return Eg};var bg=function(){this._index=null;var t=arguments[0];if(!gl(t,$c))throw new el("Argument must be Polygonal");this._index=new Ng(t)},wg={SegmentVisitor:{configurable:!0},IntervalIndexedGeometry:{configurable:!0}};bg.prototype.locate=function(t){var e=new Vl(t),n=new Ig(e);return this._index.query(t.y,t.y,n),e.getLocation()},bg.prototype.interfaces_=function(){return[jp]},bg.prototype.getClass=function(){return bg},wg.SegmentVisitor.get=function(){return Ig},wg.IntervalIndexedGeometry.get=function(){return Ng},Object.defineProperties(bg,wg);var Ig=function(){this._counter=null;var t=arguments[0];this._counter=t};Ig.prototype.visitItem=function(t){var e=t;this._counter.countSegment(e.getCoordinate(0),e.getCoordinate(1))},Ig.prototype.interfaces_=function(){return[Qh]},Ig.prototype.getClass=function(){return Ig};var Ng=function(){this._index=new xg;var t=arguments[0];this.init(t)};Ng.prototype.init=function(t){for(var e=Cf.getLines(t).iterator();e.hasNext();){var n=e.next().getCoordinates();this.addLine(n)}},Ng.prototype.addLine=function(t){for(var e=1;e<t.length;e++){var n=new vp(t[e-1],t[e]),r=Math.min(n.p0.y,n.p1.y),i=Math.max(n.p0.y,n.p1.y);this._index.insert(r,i,n)}},Ng.prototype.query=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1],n=new Eg;return this._index.query(t,e,n),n.getItems()}if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2];this._index.query(r,i,o)}},Ng.prototype.interfaces_=function(){return[]},Ng.prototype.getClass=function(){return Ng};var Sg=function(t){function e(){if(t.call(this),this._parentGeom=null,this._lineEdgeMap=new fh,this._boundaryNodeRule=null,this._useBoundaryDeterminationRule=!0,this._argIndex=null,this._boundaryNodes=null,this._hasTooFewPoints=!1,this._invalidPoint=null,this._areaPtLocator=null,this._ptLocator=new Pf,2===arguments.length){var e=arguments[0],n=arguments[1],r=Ql.OGC_SFS_BOUNDARY_RULE;this._argIndex=e,this._parentGeom=n,this._boundaryNodeRule=r,null!==n&&this.add(n)}else if(3===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2];this._argIndex=i,this._parentGeom=o,this._boundaryNodeRule=s,null!==o&&this.add(o)}}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.insertBoundaryPoint=function(t,n){var r=this._nodes.addNode(n).getLabel(),i=1;r.getLocation(t,Sh.ON)===pl.BOUNDARY&&i++;var o=e.determineBoundary(this._boundaryNodeRule,i);r.setLocation(t,o)},e.prototype.computeSelfNodes=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1];return this.computeSelfNodes(t,e,!1)}if(3===arguments.length){var n=arguments[0],r=arguments[1],i=arguments[2],o=new fg(n,!0,!1);o.setIsDoneIfProperInt(i);var s=this.createEdgeSetIntersector(),a=this._parentGeom instanceof nh||this._parentGeom instanceof th||this._parentGeom instanceof rh,u=r||!a;return s.computeIntersections(this._edges,o,u),this.addSelfIntersectionNodes(this._argIndex),o}},e.prototype.computeSplitEdges=function(t){for(var e=this._edges.iterator();e.hasNext();){e.next().eiList.addSplitEdges(t)}},e.prototype.computeEdgeIntersections=function(t,e,n){var r=new fg(e,n,!0);return r.setBoundaryNodes(this.getBoundaryNodes(),t.getBoundaryNodes()),this.createEdgeSetIntersector().computeIntersections(this._edges,t._edges,r),r},e.prototype.getGeometry=function(){return this._parentGeom},e.prototype.getBoundaryNodeRule=function(){return this._boundaryNodeRule},e.prototype.hasTooFewPoints=function(){return this._hasTooFewPoints},e.prototype.addPoint=function(){if(arguments[0]instanceof Qc){var t=arguments[0],e=t.getCoordinate();this.insertPoint(this._argIndex,e,pl.INTERIOR)}else if(arguments[0]instanceof ul){var n=arguments[0];this.insertPoint(this._argIndex,n,pl.INTERIOR)}},e.prototype.addPolygon=function(t){this.addPolygonRing(t.getExteriorRing(),pl.EXTERIOR,pl.INTERIOR);for(var e=0;e<t.getNumInteriorRing();e++){var n=t.getInteriorRingN(e);this.addPolygonRing(n,pl.INTERIOR,pl.EXTERIOR)}},e.prototype.addEdge=function(t){this.insertEdge(t);var e=t.getCoordinates();this.insertPoint(this._argIndex,e[0],pl.BOUNDARY),this.insertPoint(this._argIndex,e[e.length-1],pl.BOUNDARY)},e.prototype.addLineString=function(t){var e=pc.removeRepeatedPoints(t.getCoordinates());if(e.length<2)return this._hasTooFewPoints=!0,this._invalidPoint=e[0],null;var n=new of(e,new Dh(this._argIndex,pl.INTERIOR));this._lineEdgeMap.put(t,n),this.insertEdge(n),ql.isTrue(e.length>=2,"found LineString with single point"),this.insertBoundaryPoint(this._argIndex,e[0]),this.insertBoundaryPoint(this._argIndex,e[e.length-1])},e.prototype.getInvalidPoint=function(){return this._invalidPoint},e.prototype.getBoundaryPoints=function(){for(var t=this.getBoundaryNodes(),e=new Array(t.size()).fill(null),n=0,r=t.iterator();r.hasNext();){var i=r.next();e[n++]=i.getCoordinate().copy()}return e},e.prototype.getBoundaryNodes=function(){return null===this._boundaryNodes&&(this._boundaryNodes=this._nodes.getBoundaryNodes(this._argIndex)),this._boundaryNodes},e.prototype.addSelfIntersectionNode=function(t,e,n){if(this.isBoundaryNode(t,e))return null;n===pl.BOUNDARY&&this._useBoundaryDeterminationRule?this.insertBoundaryPoint(t,e):this.insertPoint(t,e,n)},e.prototype.addPolygonRing=function(t,e,n){if(t.isEmpty())return null;var r=pc.removeRepeatedPoints(t.getCoordinates());if(r.length<4)return this._hasTooFewPoints=!0,this._invalidPoint=r[0],null;var i=e,o=n;Xl.isCCW(r)&&(i=n,o=e);var s=new of(r,new Dh(this._argIndex,pl.BOUNDARY,i,o));this._lineEdgeMap.put(t,s),this.insertEdge(s),this.insertPoint(this._argIndex,r[0],pl.BOUNDARY)},e.prototype.insertPoint=function(t,e,n){var r=this._nodes.addNode(e),i=r.getLabel();null===i?r._label=new Dh(t,n):i.setLocation(t,n)},e.prototype.createEdgeSetIntersector=function(){return new gg},e.prototype.addSelfIntersectionNodes=function(t){for(var e=this._edges.iterator();e.hasNext();)for(var n=e.next(),r=n.getLabel().getLocation(t),i=n.eiList.iterator();i.hasNext();){var o=i.next();this.addSelfIntersectionNode(t,o.coord,r)}},e.prototype.add=function(){if(1!==arguments.length)return t.prototype.add.apply(this,arguments);var e=arguments[0];if(e.isEmpty())return null;if(e instanceof rh&&(this._useBoundaryDeterminationRule=!1),e instanceof th)this.addPolygon(e);else if(e instanceof Zc)this.addLineString(e);else if(e instanceof Qc)this.addPoint(e);else if(e instanceof eh)this.addCollection(e);else if(e instanceof Gc)this.addCollection(e);else if(e instanceof rh)this.addCollection(e);else{if(!(e instanceof kc))throw new Error(e.getClass().getName());this.addCollection(e)}},e.prototype.addCollection=function(t){for(var e=0;e<t.getNumGeometries();e++){var n=t.getGeometryN(e);this.add(n)}},e.prototype.locate=function(t){return gl(this._parentGeom,$c)&&this._parentGeom.getNumGeometries()>50?(null===this._areaPtLocator&&(this._areaPtLocator=new bg(this._parentGeom)),this._areaPtLocator.locate(t)):this._ptLocator.locate(t,this._parentGeom)},e.prototype.findEdge=function(){if(1===arguments.length){var e=arguments[0];return this._lineEdgeMap.get(e)}return t.prototype.findEdge.apply(this,arguments)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e.determineBoundary=function(t,e){return t.isInBoundary(e)?pl.BOUNDARY:pl.INTERIOR},e}(Hh),Cg=function(){if(this._li=new jl,this._resultPrecisionModel=null,this._arg=null,1===arguments.length){var t=arguments[0];this.setComputationPrecision(t.getPrecisionModel()),this._arg=new Array(1).fill(null),this._arg[0]=new Sg(0,t)}else if(2===arguments.length){var e=arguments[0],n=arguments[1],r=Ql.OGC_SFS_BOUNDARY_RULE;e.getPrecisionModel().compareTo(n.getPrecisionModel())>=0?this.setComputationPrecision(e.getPrecisionModel()):this.setComputationPrecision(n.getPrecisionModel()),this._arg=new Array(2).fill(null),this._arg[0]=new Sg(0,e,r),this._arg[1]=new Sg(1,n,r)}else if(3===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2];i.getPrecisionModel().compareTo(o.getPrecisionModel())>=0?this.setComputationPrecision(i.getPrecisionModel()):this.setComputationPrecision(o.getPrecisionModel()),this._arg=new Array(2).fill(null),this._arg[0]=new Sg(0,i,s),this._arg[1]=new Sg(1,o,s)}};Cg.prototype.getArgGeometry=function(t){return this._arg[t].getGeometry()},Cg.prototype.setComputationPrecision=function(t){this._resultPrecisionModel=t,this._li.setPrecisionModel(this._resultPrecisionModel)},Cg.prototype.interfaces_=function(){return[]},Cg.prototype.getClass=function(){return Cg};var Pg=function(){};Pg.prototype.interfaces_=function(){return[]},Pg.prototype.getClass=function(){return Pg},Pg.map=function(){if(arguments[0]instanceof Wl&&gl(arguments[1],Pg.MapOp)){for(var t=arguments[0],e=arguments[1],n=new lc,r=0;r<t.getNumGeometries();r++){var i=e.map(t.getGeometryN(r));null!==i&&n.add(i)}return t.getFactory().buildGeometry(n)}if(gl(arguments[0],ic)&&gl(arguments[1],Pg.MapOp)){for(var o=arguments[0],s=arguments[1],a=new lc,u=o.iterator();u.hasNext();){var l=u.next(),c=s.map(l);null!==c&&a.add(c)}return a}},Pg.MapOp=function(){};var Mg=function(t){function e(){var e=arguments[0],n=arguments[1];t.call(this,e,n),this._ptLocator=new Pf,this._geomFact=null,this._resultGeom=null,this._graph=null,this._edgeList=new Jp,this._resultPolyList=new lc,this._resultLineList=new lc,this._resultPointList=new lc,this._graph=new Hh(new Hp),this._geomFact=e.getFactory()}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.insertUniqueEdge=function(t){var e=this._edgeList.findEqualEdge(t);if(null!==e){var n=e.getLabel(),r=t.getLabel();e.isPointwiseEqual(t)||(r=new Dh(t.getLabel())).flip();var i=e.getDepth();i.isNull()&&i.add(n),i.add(r),n.merge(r)}else this._edgeList.add(t)},e.prototype.getGraph=function(){return this._graph},e.prototype.cancelDuplicateResultEdges=function(){for(var t=this._graph.getEdgeEnds().iterator();t.hasNext();){var e=t.next(),n=e.getSym();e.isInResult()&&n.isInResult()&&(e.setInResult(!1),n.setInResult(!1))}},e.prototype.isCoveredByLA=function(t){return!!this.isCovered(t,this._resultLineList)||!!this.isCovered(t,this._resultPolyList)},e.prototype.computeGeometry=function(t,n,r,i){var o=new lc;return o.addAll(t),o.addAll(n),o.addAll(r),o.isEmpty()?e.createEmptyResult(i,this._arg[0].getGeometry(),this._arg[1].getGeometry(),this._geomFact):this._geomFact.buildGeometry(o)},e.prototype.mergeSymLabels=function(){for(var t=this._graph.getNodes().iterator();t.hasNext();){t.next().getEdges().mergeSymLabels()}},e.prototype.isCovered=function(t,e){for(var n=e.iterator();n.hasNext();){var r=n.next();if(this._ptLocator.locate(t,r)!==pl.EXTERIOR)return!0}return!1},e.prototype.replaceCollapsedEdges=function(){for(var t=new lc,e=this._edgeList.iterator();e.hasNext();){var n=e.next();n.isCollapsed()&&(e.remove(),t.add(n.getCollapsedEdge()))}this._edgeList.addAll(t)},e.prototype.updateNodeLabelling=function(){for(var t=this._graph.getNodes().iterator();t.hasNext();){var e=t.next(),n=e.getEdges().getLabel();e.getLabel().merge(n)}},e.prototype.getResultGeometry=function(t){return this.computeOverlay(t),this._resultGeom},e.prototype.insertUniqueEdges=function(t){for(var e=t.iterator();e.hasNext();){var n=e.next();this.insertUniqueEdge(n)}},e.prototype.computeOverlay=function(t){this.copyPoints(0),this.copyPoints(1),this._arg[0].computeSelfNodes(this._li,!1),this._arg[1].computeSelfNodes(this._li,!1),this._arg[0].computeEdgeIntersections(this._arg[1],this._li,!0);var e=new lc;this._arg[0].computeSplitEdges(e),this._arg[1].computeSplitEdges(e),this.insertUniqueEdges(e),this.computeLabelsFromDepths(),this.replaceCollapsedEdges(),Hf.checkValid(this._edgeList.getEdges()),this._graph.addEdges(this._edgeList.getEdges()),this.computeLabelling(),this.labelIncompleteNodes(),this.findResultAreaEdges(t),this.cancelDuplicateResultEdges();var n=new Wh(this._geomFact);n.add(this._graph),this._resultPolyList=n.getPolygons();var r=new Jf(this,this._geomFact,this._ptLocator);this._resultLineList=r.build(t);var i=new Zf(this,this._geomFact,this._ptLocator);this._resultPointList=i.build(t),this._resultGeom=this.computeGeometry(this._resultPointList,this._resultLineList,this._resultPolyList,t)},e.prototype.labelIncompleteNode=function(t,e){var n=this._ptLocator.locate(t.getCoordinate(),this._arg[e].getGeometry());t.getLabel().setLocation(e,n)},e.prototype.copyPoints=function(t){for(var e=this._arg[t].getNodeIterator();e.hasNext();){var n=e.next();this._graph.addNode(n.getCoordinate()).setLabel(t,n.getLabel().getLocation(t))}},e.prototype.findResultAreaEdges=function(t){for(var n=this._graph.getEdgeEnds().iterator();n.hasNext();){var r=n.next(),i=r.getLabel();i.isArea()&&!r.isInteriorAreaEdge()&&e.isResultOfOp(i.getLocation(0,Sh.RIGHT),i.getLocation(1,Sh.RIGHT),t)&&r.setInResult(!0)}},e.prototype.computeLabelsFromDepths=function(){for(var t=this._edgeList.iterator();t.hasNext();){var e=t.next(),n=e.getLabel(),r=e.getDepth();if(!r.isNull()){r.normalize();for(var i=0;i<2;i++)n.isNull(i)||!n.isArea()||r.isNull(i)||(0===r.getDelta(i)?n.toLine(i):(ql.isTrue(!r.isNull(i,Sh.LEFT),"depth of LEFT side has not been initialized"),n.setLocation(i,Sh.LEFT,r.getLocation(i,Sh.LEFT)),ql.isTrue(!r.isNull(i,Sh.RIGHT),"depth of RIGHT side has not been initialized"),n.setLocation(i,Sh.RIGHT,r.getLocation(i,Sh.RIGHT))))}}},e.prototype.computeLabelling=function(){for(var t=this._graph.getNodes().iterator();t.hasNext();){t.next().getEdges().computeLabelling(this._arg)}this.mergeSymLabels(),this.updateNodeLabelling()},e.prototype.labelIncompleteNodes=function(){for(var t=this._graph.getNodes().iterator();t.hasNext();){var e=t.next(),n=e.getLabel();e.isIsolated()&&(n.isNull(0)?this.labelIncompleteNode(e,0):this.labelIncompleteNode(e,1)),e.getEdges().updateLabelling(n)}},e.prototype.isCoveredByA=function(t){return!!this.isCovered(t,this._resultPolyList)},e.prototype.interfaces_=function(){return[]},e.prototype.getClass=function(){return e},e}(Cg);Mg.overlayOp=function(t,e,n){return new Mg(t,e).getResultGeometry(n)},Mg.intersection=function(t,e){if(t.isEmpty()||e.isEmpty())return Mg.createEmptyResult(Mg.INTERSECTION,t,e,t.getFactory());if(t.isGeometryCollection()){var n=e;return Wf.map(t,{interfaces_:function(){return[Pg.MapOp]},map:function(t){return t.intersection(n)}})}return t.checkNotGeometryCollection(t),t.checkNotGeometryCollection(e),ug.overlayOp(t,e,Mg.INTERSECTION)},Mg.symDifference=function(t,e){if(t.isEmpty()||e.isEmpty()){if(t.isEmpty()&&e.isEmpty())return Mg.createEmptyResult(Mg.SYMDIFFERENCE,t,e,t.getFactory());if(t.isEmpty())return e.copy();if(e.isEmpty())return t.copy()}return t.checkNotGeometryCollection(t),t.checkNotGeometryCollection(e),ug.overlayOp(t,e,Mg.SYMDIFFERENCE)},Mg.resultDimension=function(t,e,n){var r=e.getDimension(),i=n.getDimension(),o=-1;switch(t){case Mg.INTERSECTION:o=Math.min(r,i);break;case Mg.UNION:o=Math.max(r,i);break;case Mg.DIFFERENCE:o=r;break;case Mg.SYMDIFFERENCE:o=Math.max(r,i)}return o},Mg.createEmptyResult=function(t,e,n,r){var i=null;switch(Mg.resultDimension(t,e,n)){case-1:i=r.createGeometryCollection(new Array(0).fill(null));break;case 0:i=r.createPoint();break;case 1:i=r.createLineString();break;case 2:i=r.createPolygon()}return i},Mg.difference=function(t,e){return t.isEmpty()?Mg.createEmptyResult(Mg.DIFFERENCE,t,e,t.getFactory()):e.isEmpty()?t.copy():(t.checkNotGeometryCollection(t),t.checkNotGeometryCollection(e),ug.overlayOp(t,e,Mg.DIFFERENCE))},Mg.isResultOfOp=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1],n=t.getLocation(0),r=t.getLocation(1);return Mg.isResultOfOp(n,r,e)}if(3===arguments.length){var i=arguments[0],o=arguments[1],s=arguments[2];switch(i===pl.BOUNDARY&&(i=pl.INTERIOR),o===pl.BOUNDARY&&(o=pl.INTERIOR),s){case Mg.INTERSECTION:return i===pl.INTERIOR&&o===pl.INTERIOR;case Mg.UNION:return i===pl.INTERIOR||o===pl.INTERIOR;case Mg.DIFFERENCE:return i===pl.INTERIOR&&o!==pl.INTERIOR;case Mg.SYMDIFFERENCE:return i===pl.INTERIOR&&o!==pl.INTERIOR||i!==pl.INTERIOR&&o===pl.INTERIOR}return!1}},Mg.INTERSECTION=1,Mg.UNION=2,Mg.DIFFERENCE=3,Mg.SYMDIFFERENCE=4;var Lg=function(){this._g=null,this._boundaryDistanceTolerance=null,this._linework=null,this._ptLocator=new Pf,this._seg=new vp;var t=arguments[0],e=arguments[1];this._g=t,this._boundaryDistanceTolerance=e,this._linework=this.extractLinework(t)};Lg.prototype.isWithinToleranceOfBoundary=function(t){for(var e=this,n=0;n<this._linework.getNumGeometries();n++)for(var r=e._linework.getGeometryN(n).getCoordinateSequence(),i=0;i<r.size()-1;i++){if(r.getCoordinate(i,e._seg.p0),r.getCoordinate(i+1,e._seg.p1),e._seg.distance(t)<=e._boundaryDistanceTolerance)return!0}return!1},Lg.prototype.getLocation=function(t){return this.isWithinToleranceOfBoundary(t)?pl.BOUNDARY:this._ptLocator.locate(t,this._g)},Lg.prototype.extractLinework=function(t){var e=new Og;t.apply(e);var n=e.getLinework(),r=_h.toLineStringArray(n);return t.getFactory().createMultiLineString(r)},Lg.prototype.interfaces_=function(){return[]},Lg.prototype.getClass=function(){return Lg};var Og=function(){this._linework=null,this._linework=new lc};Og.prototype.getLinework=function(){return this._linework},Og.prototype.filter=function(t){if(t instanceof th){var e=t;this._linework.add(e.getExteriorRing());for(var n=0;n<e.getNumInteriorRing();n++)this._linework.add(e.getInteriorRingN(n))}},Og.prototype.interfaces_=function(){return[Dc]},Og.prototype.getClass=function(){return Og};var Rg=function(){this._g=null,this._doLeft=!0,this._doRight=!0;var t=arguments[0];this._g=t};Rg.prototype.extractPoints=function(t,e,n){for(var r=t.getCoordinates(),i=0;i<r.length-1;i++)this.computeOffsetPoints(r[i],r[i+1],e,n)},Rg.prototype.setSidesToGenerate=function(t,e){this._doLeft=t,this._doRight=e},Rg.prototype.getPoints=function(t){for(var e=new lc,n=Cf.getLines(this._g).iterator();n.hasNext();){var r=n.next();this.extractPoints(r,t,e)}return e},Rg.prototype.computeOffsetPoints=function(t,e,n,r){var i=e.x-t.x,o=e.y-t.y,s=Math.sqrt(i*i+o*o),a=n*i/s,u=n*o/s,l=(e.x+t.x)/2,c=(e.y+t.y)/2;if(this._doLeft){var h=new ul(l-u,c+a);r.add(h)}if(this._doRight){var p=new ul(l+u,c-a);r.add(p)}},Rg.prototype.interfaces_=function(){return[]},Rg.prototype.getClass=function(){return Rg};var Tg=function t(){this._geom=null,this._locFinder=null,this._location=new Array(3).fill(null),this._invalidLocation=null,this._boundaryDistanceTolerance=t.TOLERANCE,this._testCoords=new lc;var e=arguments[0],n=arguments[1],r=arguments[2];this._boundaryDistanceTolerance=t.computeBoundaryDistanceTolerance(e,n),this._geom=[e,n,r],this._locFinder=[new Lg(this._geom[0],this._boundaryDistanceTolerance),new Lg(this._geom[1],this._boundaryDistanceTolerance),new Lg(this._geom[2],this._boundaryDistanceTolerance)]},Ag={TOLERANCE:{configurable:!0}};Tg.prototype.reportResult=function(t,e,n){Pl.out.println("Overlay result invalid - A:"+pl.toLocationSymbol(e[0])+" B:"+pl.toLocationSymbol(e[1])+" expected:"+(n?"i":"e")+" actual:"+pl.toLocationSymbol(e[2]))},Tg.prototype.isValid=function(t){this.addTestPts(this._geom[0]),this.addTestPts(this._geom[1]);var e=this.checkValid(t);return e},Tg.prototype.checkValid=function(){var t=this;if(1===arguments.length){for(var e=arguments[0],n=0;n<this._testCoords.size();n++){var r=t._testCoords.get(n);if(!t.checkValid(e,r))return t._invalidLocation=r,!1}return!0}if(2===arguments.length){var i=arguments[0],o=arguments[1];return this._location[0]=this._locFinder[0].getLocation(o),this._location[1]=this._locFinder[1].getLocation(o),this._location[2]=this._locFinder[2].getLocation(o),!!Tg.hasLocation(this._location,pl.BOUNDARY)||this.isValidResult(i,this._location)}},Tg.prototype.addTestPts=function(t){var e=new Rg(t);this._testCoords.addAll(e.getPoints(5*this._boundaryDistanceTolerance))},Tg.prototype.isValidResult=function(t,e){var n=Mg.isResultOfOp(e[0],e[1],t),r=!(n^e[2]===pl.INTERIOR);return r||this.reportResult(t,e,n),r},Tg.prototype.getInvalidLocation=function(){return this._invalidLocation},Tg.prototype.interfaces_=function(){return[]},Tg.prototype.getClass=function(){return Tg},Tg.hasLocation=function(t,e){for(var n=0;n<3;n++)if(t[n]===e)return!0;return!1},Tg.computeBoundaryDistanceTolerance=function(t,e){return Math.min($f.computeSizeBasedSnapTolerance(t),$f.computeSizeBasedSnapTolerance(e))},Tg.isValid=function(t,e,n,r){return new Tg(t,e,r).isValid(n)},Ag.TOLERANCE.get=function(){return 1e-6},Object.defineProperties(Tg,Ag);var Dg=function t(e){this._geomFactory=null,this._skipEmpty=!1,this._inputGeoms=null,this._geomFactory=t.extractFactory(e),this._inputGeoms=e};Dg.prototype.extractElements=function(t,e){if(null===t)return null;for(var n=0;n<t.getNumGeometries();n++){var r=t.getGeometryN(n);this._skipEmpty&&r.isEmpty()||e.add(r)}},Dg.prototype.combine=function(){for(var t=new lc,e=this._inputGeoms.iterator();e.hasNext();){var n=e.next();this.extractElements(n,t)}return 0===t.size()?null!==this._geomFactory?this._geomFactory.createGeometryCollection(null):null:this._geomFactory.buildGeometry(t)},Dg.prototype.interfaces_=function(){return[]},Dg.prototype.getClass=function(){return Dg},Dg.combine=function(){if(1===arguments.length){var t=arguments[0],e=new Dg(t);return e.combine()}if(2===arguments.length){var n=arguments[0],r=arguments[1],i=new Dg(Dg.createList(n,r));return i.combine()}if(3===arguments.length){var o=arguments[0],s=arguments[1],a=arguments[2],u=new Dg(Dg.createList(o,s,a));return u.combine()}},Dg.extractFactory=function(t){return t.isEmpty()?null:t.iterator().next().getFactory()},Dg.createList=function(){if(2===arguments.length){var t=arguments[0],e=arguments[1],n=new lc;return n.add(t),n.add(e),n}if(3===arguments.length){var r=arguments[0],i=arguments[1],o=arguments[2],s=new lc;return s.add(r),s.add(i),s.add(o),s}};var Fg=function(){this._inputPolys=null,this._geomFactory=null;var t=arguments[0];this._inputPolys=t,null===this._inputPolys&&(this._inputPolys=new lc)},kg={STRTREE_NODE_CAPACITY:{configurable:!0}};Fg.prototype.reduceToGeometries=function(t){for(var e=new lc,n=t.iterator();n.hasNext();){var r=n.next(),i=null;gl(r,ac)?i=this.unionTree(r):r instanceof Wl&&(i=r),e.add(i)}return e},Fg.prototype.extractByEnvelope=function(t,e,n){for(var r=new lc,i=0;i<e.getNumGeometries();i++){var o=e.getGeometryN(i);o.getEnvelopeInternal().intersects(t)?r.add(o):n.add(o)}return this._geomFactory.buildGeometry(r)},Fg.prototype.unionOptimized=function(t,e){var n=t.getEnvelopeInternal(),r=e.getEnvelopeInternal();if(!n.intersects(r))return Dg.combine(t,e);if(t.getNumGeometries()<=1&&e.getNumGeometries()<=1)return this.unionActual(t,e);var i=n.intersection(r);return this.unionUsingEnvelopeIntersection(t,e,i)},Fg.prototype.union=function(){if(null===this._inputPolys)throw new Error("union() method cannot be called twice");if(this._inputPolys.isEmpty())return null;this._geomFactory=this._inputPolys.iterator().next().getFactory();for(var t=new up(Fg.STRTREE_NODE_CAPACITY),e=this._inputPolys.iterator();e.hasNext();){var n=e.next();t.insert(n.getEnvelopeInternal(),n)}this._inputPolys=null;var r=t.itemsTree();return this.unionTree(r)},Fg.prototype.binaryUnion=function(){if(1===arguments.length){var t=arguments[0];return this.binaryUnion(t,0,t.size())}if(3===arguments.length){var e=arguments[0],n=arguments[1],r=arguments[2];if(r-n<=1){var i=Fg.getGeometry(e,n);return this.unionSafe(i,null)}if(r-n==2)return this.unionSafe(Fg.getGeometry(e,n),Fg.getGeometry(e,n+1));var o=Math.trunc((r+n)/2),s=this.binaryUnion(e,n,o),a=this.binaryUnion(e,o,r);return this.unionSafe(s,a)}},Fg.prototype.repeatedUnion=function(t){for(var e=null,n=t.iterator();n.hasNext();){var r=n.next();e=null===e?r.copy():e.union(r)}return e},Fg.prototype.unionSafe=function(t,e){return null===t&&null===e?null:null===t?e.copy():null===e?t.copy():this.unionOptimized(t,e)},Fg.prototype.unionActual=function(t,e){return Fg.restrictToPolygons(t.union(e))},Fg.prototype.unionTree=function(t){var e=this.reduceToGeometries(t);return this.binaryUnion(e)},Fg.prototype.unionUsingEnvelopeIntersection=function(t,e,n){var r=new lc,i=this.extractByEnvelope(n,t,r),o=this.extractByEnvelope(n,e,r),s=this.unionActual(i,o);return r.add(s),Dg.combine(r)},Fg.prototype.bufferUnion=function(){if(1===arguments.length){var t=arguments[0],e=t.get(0).getFactory(),n=e.buildGeometry(t),r=n.buffer(0);return r}if(2===arguments.length){var i=arguments[0],o=arguments[1],s=i.getFactory(),a=s.createGeometryCollection([i,o]),u=a.buffer(0);return u}},Fg.prototype.interfaces_=function(){return[]},Fg.prototype.getClass=function(){return Fg},Fg.restrictToPolygons=function(t){if(gl(t,$c))return t;var e=Sf.getPolygons(t);return 1===e.size()?e.get(0):t.getFactory().createMultiPolygon(_h.toPolygonArray(e))},Fg.getGeometry=function(t,e){return e>=t.size()?null:t.get(e)},Fg.union=function(t){return new Fg(t).union()},kg.STRTREE_NODE_CAPACITY.get=function(){return 4},Object.defineProperties(Fg,kg);var Gg=function(){};function qg(){return new Bg}function Bg(){this.reset()}Gg.prototype.interfaces_=function(){return[]},Gg.prototype.getClass=function(){return Gg},Gg.union=function(t,e){if(t.isEmpty()||e.isEmpty()){if(t.isEmpty()&&e.isEmpty())return Mg.createEmptyResult(Mg.UNION,t,e,t.getFactory());if(t.isEmpty())return e.copy();if(e.isEmpty())return t.copy()}return t.checkNotGeometryCollection(t),t.checkNotGeometryCollection(e),ug.overlayOp(t,e,Mg.UNION)},Bg.prototype={constructor:Bg,reset:function(){this.s=this.t=0},add:function(t){jg(zg,t,this.t),jg(this,zg.s,this.s),this.s?this.t+=zg.t:this.s=zg.t},valueOf:function(){return this.s}};var zg=new Bg;function jg(t,e,n){var r=t.s=e+n,i=r-e,o=r-i;t.t=e-o+(n-i)}var Ug=1e-6,Vg=Math.PI,Xg=Vg/2,Yg=Vg/4,Hg=2*Vg,Wg=180/Vg,Jg=Vg/180,Zg=Math.abs,Kg=Math.atan,Qg=Math.atan2,$g=Math.cos,td=Math.sin,ed=Math.sqrt;function nd(t){return t>1?0:t<-1?Vg:Math.acos(t)}function rd(t){return t>1?Xg:t<-1?-Xg:Math.asin(t)}function id(){}function od(t,e){t&&ad.hasOwnProperty(t.type)&&ad[t.type](t,e)}var sd={Feature:function(t,e){od(t.geometry,e)},FeatureCollection:function(t,e){for(var n=t.features,r=-1,i=n.length;++r<i;)od(n[r].geometry,e)}},ad={Sphere:function(t,e){e.sphere()},Point:function(t,e){t=t.coordinates,e.point(t[0],t[1],t[2])},MultiPoint:function(t,e){for(var n=t.coordinates,r=-1,i=n.length;++r<i;)t=n[r],e.point(t[0],t[1],t[2])},LineString:function(t,e){ud(t.coordinates,e,0)},MultiLineString:function(t,e){for(var n=t.coordinates,r=-1,i=n.length;++r<i;)ud(n[r],e,0)},Polygon:function(t,e){ld(t.coordinates,e)},MultiPolygon:function(t,e){for(var n=t.coordinates,r=-1,i=n.length;++r<i;)ld(n[r],e)},GeometryCollection:function(t,e){for(var n=t.geometries,r=-1,i=n.length;++r<i;)od(n[r],e)}};function ud(t,e,n){var r,i=-1,o=t.length-n;for(e.lineStart();++i<o;)r=t[i],e.point(r[0],r[1],r[2]);e.lineEnd()}function ld(t,e){var n=-1,r=t.length;for(e.polygonStart();++n<r;)ud(t[n],e,1);e.polygonEnd()}qg(),qg();function cd(t){return[Qg(t[1],t[0]),rd(t[2])]}function hd(t){var e=t[0],n=t[1],r=$g(n);return[r*$g(e),r*td(e),td(n)]}function pd(t,e){return t[0]*e[0]+t[1]*e[1]+t[2]*e[2]}function fd(t,e){return[t[1]*e[2]-t[2]*e[1],t[2]*e[0]-t[0]*e[2],t[0]*e[1]-t[1]*e[0]]}function gd(t,e){t[0]+=e[0],t[1]+=e[1],t[2]+=e[2]}function dd(t,e){return[t[0]*e,t[1]*e,t[2]*e]}function yd(t){var e=ed(t[0]*t[0]+t[1]*t[1]+t[2]*t[2]);t[0]/=e,t[1]/=e,t[2]/=e}qg();function vd(t,e){function n(n,r){return n=t(n,r),e(n[0],n[1])}return t.invert&&e.invert&&(n.invert=function(n,r){return(n=e.invert(n,r))&&t.invert(n[0],n[1])}),n}function _d(t,e){return[t>Vg?t-Hg:t<-Vg?t+Hg:t,e]}function md(t){return function(e,n){return[(e+=t)>Vg?e-Hg:e<-Vg?e+Hg:e,n]}}function xd(t){var e=md(t);return e.invert=md(-t),e}function Ed(t,e){var n=$g(t),r=td(t),i=$g(e),o=td(e);function s(t,e){var s=$g(e),a=$g(t)*s,u=td(t)*s,l=td(e),c=l*n+a*r;return[Qg(u*i-c*o,a*n-l*r),rd(c*i+u*o)]}return s.invert=function(t,e){var s=$g(e),a=$g(t)*s,u=td(t)*s,l=td(e),c=l*i-u*o;return[Qg(u*i+l*o,a*n+c*r),rd(c*n-a*r)]},s}function bd(t,e){(e=hd(e))[0]-=t,yd(e);var n=nd(-e[1]);return((-e[2]<0?-n:n)+Hg-Ug)%Hg}function wd(){var t,e=[];return{point:function(e,n){t.push([e,n])},lineStart:function(){e.push(t=[])},lineEnd:id,rejoin:function(){e.length>1&&e.push(e.pop().concat(e.shift()))},result:function(){var n=e;return e=[],t=null,n}}}function Id(t,e){return Zg(t[0]-e[0])<Ug&&Zg(t[1]-e[1])<Ug}function Nd(t,e,n,r){this.x=t,this.z=e,this.o=n,this.e=r,this.v=!1,this.n=this.p=null}function Sd(t,e,n,r,i){var o,s,a=[],u=[];if(t.forEach((function(t){if(!((e=t.length-1)<=0)){var e,n,r=t[0],s=t[e];if(Id(r,s)){for(i.lineStart(),o=0;o<e;++o)i.point((r=t[o])[0],r[1]);i.lineEnd()}else a.push(n=new Nd(r,t,null,!0)),u.push(n.o=new Nd(r,null,n,!1)),a.push(n=new Nd(s,t,null,!1)),u.push(n.o=new Nd(s,null,n,!0))}})),a.length){for(u.sort(e),Cd(a),Cd(u),o=0,s=u.length;o<s;++o)u[o].e=n=!n;for(var l,c,h=a[0];;){for(var p=h,f=!0;p.v;)if((p=p.n)===h)return;l=p.z,i.lineStart();do{if(p.v=p.o.v=!0,p.e){if(f)for(o=0,s=l.length;o<s;++o)i.point((c=l[o])[0],c[1]);else r(p.x,p.n.x,1,i);p=p.n}else{if(f)for(l=p.p.z,o=l.length-1;o>=0;--o)i.point((c=l[o])[0],c[1]);else r(p.x,p.p.x,-1,i);p=p.p}l=(p=p.o).z,f=!f}while(!p.v);i.lineEnd()}}}function Cd(t){if(e=t.length){for(var e,n,r=0,i=t[0];++r<e;)i.n=n=t[r],n.p=i,i=n;i.n=n=t[0],n.p=i}}function Pd(t,e){return t<e?-1:t>e?1:t>=e?0:NaN}_d.invert=_d;var Md,Ld;1===(Md=Pd).length&&(Ld=Md,Md=function(t,e){return Pd(Ld(t),e)});function Od(t){for(var e,n,r,i=t.length,o=-1,s=0;++o<i;)s+=t[o].length;for(n=new Array(s);--i>=0;)for(e=(r=t[i]).length;--e>=0;)n[--s]=r[e];return n}var Rd=1e9,Td=-Rd;function Ad(t,e,n,r){function i(i,o){return t<=i&&i<=n&&e<=o&&o<=r}function o(i,o,a,l){var c=0,h=0;if(null==i||(c=s(i,a))!==(h=s(o,a))||u(i,o)<0^a>0)do{l.point(0===c||3===c?t:n,c>1?r:e)}while((c=(c+a+4)%4)!==h);else l.point(o[0],o[1])}function s(r,i){return Zg(r[0]-t)<Ug?i>0?0:3:Zg(r[0]-n)<Ug?i>0?2:1:Zg(r[1]-e)<Ug?i>0?1:0:i>0?3:2}function a(t,e){return u(t.x,e.x)}function u(t,e){var n=s(t,1),r=s(e,1);return n!==r?n-r:0===n?e[1]-t[1]:1===n?t[0]-e[0]:2===n?t[1]-e[1]:e[0]-t[0]}return function(s){var u,l,c,h,p,f,g,d,y,v,_,m=s,x=wd(),E={point:b,lineStart:function(){E.point=w,l&&l.push(c=[]);v=!0,y=!1,g=d=NaN},lineEnd:function(){u&&(w(h,p),f&&y&&x.rejoin(),u.push(x.result()));E.point=b,y&&m.lineEnd()},polygonStart:function(){m=x,u=[],l=[],_=!0},polygonEnd:function(){var e=function(){for(var e=0,n=0,i=l.length;n<i;++n)for(var o,s,a=l[n],u=1,c=a.length,h=a[0],p=h[0],f=h[1];u<c;++u)o=p,s=f,p=(h=a[u])[0],f=h[1],s<=r?f>r&&(p-o)*(r-s)>(f-s)*(t-o)&&++e:f<=r&&(p-o)*(r-s)<(f-s)*(t-o)&&--e;return e}(),n=_&&e,i=(u=Od(u)).length;(n||i)&&(s.polygonStart(),n&&(s.lineStart(),o(null,null,1,s),s.lineEnd()),i&&Sd(u,a,e,o,s),s.polygonEnd());m=s,u=l=c=null}};function b(t,e){i(t,e)&&m.point(t,e)}function w(o,s){var a=i(o,s);if(l&&c.push([o,s]),v)h=o,p=s,f=a,v=!1,a&&(m.lineStart(),m.point(o,s));else if(a&&y)m.point(o,s);else{var u=[g=Math.max(Td,Math.min(Rd,g)),d=Math.max(Td,Math.min(Rd,d))],x=[o=Math.max(Td,Math.min(Rd,o)),s=Math.max(Td,Math.min(Rd,s))];!function(t,e,n,r,i,o){var s,a=t[0],u=t[1],l=0,c=1,h=e[0]-a,p=e[1]-u;if(s=n-a,h||!(s>0)){if(s/=h,h<0){if(s<l)return;s<c&&(c=s)}else if(h>0){if(s>c)return;s>l&&(l=s)}if(s=i-a,h||!(s<0)){if(s/=h,h<0){if(s>c)return;s>l&&(l=s)}else if(h>0){if(s<l)return;s<c&&(c=s)}if(s=r-u,p||!(s>0)){if(s/=p,p<0){if(s<l)return;s<c&&(c=s)}else if(p>0){if(s>c)return;s>l&&(l=s)}if(s=o-u,p||!(s<0)){if(s/=p,p<0){if(s>c)return;s>l&&(l=s)}else if(p>0){if(s<l)return;s<c&&(c=s)}return l>0&&(t[0]=a+l*h,t[1]=u+l*p),c<1&&(e[0]=a+c*h,e[1]=u+c*p),!0}}}}}(u,x,t,e,n,r)?a&&(m.lineStart(),m.point(o,s),_=!1):(y||(m.lineStart(),m.point(u[0],u[1])),m.point(x[0],x[1]),a||m.lineEnd(),_=!1)}g=o,d=s,y=a}return E}}var Dd=qg();qg();function Fd(t){return t}qg(),qg();var kd=1/0,Gd=kd,qd=-kd,Bd=qd,zd={point:function(t,e){t<kd&&(kd=t);t>qd&&(qd=t);e<Gd&&(Gd=e);e>Bd&&(Bd=e)},lineStart:id,lineEnd:id,polygonStart:id,polygonEnd:id,result:function(){var t=[[kd,Gd],[qd,Bd]];return qd=Bd=-(Gd=kd=1/0),t}};qg();function jd(t,e,n,r){return function(i,o){var s,a,u,l=e(o),c=i.invert(r[0],r[1]),h=wd(),p=e(h),f=!1,g={point:d,lineStart:v,lineEnd:_,polygonStart:function(){g.point=m,g.lineStart=x,g.lineEnd=E,a=[],s=[]},polygonEnd:function(){g.point=d,g.lineStart=v,g.lineEnd=_,a=Od(a);var t=function(t,e){var n=e[0],r=e[1],i=[td(n),-$g(n),0],o=0,s=0;Dd.reset();for(var a=0,u=t.length;a<u;++a)if(c=(l=t[a]).length)for(var l,c,h=l[c-1],p=h[0],f=h[1]/2+Yg,g=td(f),d=$g(f),y=0;y<c;++y,p=_,g=x,d=E,h=v){var v=l[y],_=v[0],m=v[1]/2+Yg,x=td(m),E=$g(m),b=_-p,w=b>=0?1:-1,I=w*b,N=I>Vg,S=g*x;if(Dd.add(Qg(S*w*td(I),d*E+S*$g(I))),o+=N?b+w*Hg:b,N^p>=n^_>=n){var C=fd(hd(h),hd(v));yd(C);var P=fd(i,C);yd(P);var M=(N^b>=0?-1:1)*rd(P[2]);(r>M||r===M&&(C[0]||C[1]))&&(s+=N^b>=0?1:-1)}}return(o<-1e-6||o<Ug&&Dd<-1e-6)^1&s}(s,c);a.length?(f||(o.polygonStart(),f=!0),Sd(a,Vd,t,n,o)):t&&(f||(o.polygonStart(),f=!0),o.lineStart(),n(null,null,1,o),o.lineEnd()),f&&(o.polygonEnd(),f=!1),a=s=null},sphere:function(){o.polygonStart(),o.lineStart(),n(null,null,1,o),o.lineEnd(),o.polygonEnd()}};function d(e,n){var r=i(e,n);t(e=r[0],n=r[1])&&o.point(e,n)}function y(t,e){var n=i(t,e);l.point(n[0],n[1])}function v(){g.point=y,l.lineStart()}function _(){g.point=d,l.lineEnd()}function m(t,e){u.push([t,e]);var n=i(t,e);p.point(n[0],n[1])}function x(){p.lineStart(),u=[]}function E(){m(u[0][0],u[0][1]),p.lineEnd();var t,e,n,r,i=p.clean(),l=h.result(),c=l.length;if(u.pop(),s.push(u),u=null,c)if(1&i){if((e=(n=l[0]).length-1)>0){for(f||(o.polygonStart(),f=!0),o.lineStart(),t=0;t<e;++t)o.point((r=n[t])[0],r[1]);o.lineEnd()}}else c>1&&2&i&&l.push(l.pop().concat(l.shift())),a.push(l.filter(Ud))}return g}}function Ud(t){return t.length>1}function Vd(t,e){return((t=t.x)[0]<0?t[1]-Xg-Ug:Xg-t[1])-((e=e.x)[0]<0?e[1]-Xg-Ug:Xg-e[1])}var Xd=jd((function(){return!0}),(function(t){var e,n=NaN,r=NaN,i=NaN;return{lineStart:function(){t.lineStart(),e=1},point:function(o,s){var a=o>0?Vg:-Vg,u=Zg(o-n);Zg(u-Vg)<Ug?(t.point(n,r=(r+s)/2>0?Xg:-Xg),t.point(i,r),t.lineEnd(),t.lineStart(),t.point(a,r),t.point(o,r),e=0):i!==a&&u>=Vg&&(Zg(n-i)<Ug&&(n-=i*Ug),Zg(o-a)<Ug&&(o-=a*Ug),r=function(t,e,n,r){var i,o,s=td(t-n);return Zg(s)>Ug?Kg((td(e)*(o=$g(r))*td(n)-td(r)*(i=$g(e))*td(t))/(i*o*s)):(e+r)/2}(n,r,o,s),t.point(i,r),t.lineEnd(),t.lineStart(),t.point(a,r),e=0),t.point(n=o,r=s),i=a},lineEnd:function(){t.lineEnd(),n=r=NaN},clean:function(){return 2-e}}}),(function(t,e,n,r){var i;if(null==t)i=n*Xg,r.point(-Vg,i),r.point(0,i),r.point(Vg,i),r.point(Vg,0),r.point(Vg,-i),r.point(0,-i),r.point(-Vg,-i),r.point(-Vg,0),r.point(-Vg,i);else if(Zg(t[0]-e[0])>Ug){var o=t[0]<e[0]?Vg:-Vg;i=n*o/2,r.point(-o,i),r.point(0,i),r.point(o,i)}else r.point(e[0],e[1])}),[-Vg,-Xg]);function Yd(t,e){var n=$g(t),r=n>0,i=Zg(n)>Ug;function o(t,e){return $g(t)*$g(e)>n}function s(t,e,r){var i=[1,0,0],o=fd(hd(t),hd(e)),s=pd(o,o),a=o[0],u=s-a*a;if(!u)return!r&&t;var l=n*s/u,c=-n*a/u,h=fd(i,o),p=dd(i,l);gd(p,dd(o,c));var f=h,g=pd(p,f),d=pd(f,f),y=g*g-d*(pd(p,p)-1);if(!(y<0)){var v=ed(y),_=dd(f,(-g-v)/d);if(gd(_,p),_=cd(_),!r)return _;var m,x=t[0],E=e[0],b=t[1],w=e[1];E<x&&(m=x,x=E,E=m);var I=E-x,N=Zg(I-Vg)<Ug;if(!N&&w<b&&(m=b,b=w,w=m),N||I<Ug?N?b+w>0^_[1]<(Zg(_[0]-x)<Ug?b:w):b<=_[1]&&_[1]<=w:I>Vg^(x<=_[0]&&_[0]<=E)){var S=dd(f,(-g+v)/d);return gd(S,p),[_,cd(S)]}}}function a(e,n){var i=r?t:Vg-t,o=0;return e<-i?o|=1:e>i&&(o|=2),n<-i?o|=4:n>i&&(o|=8),o}return jd(o,(function(t){var e,n,u,l,c;return{lineStart:function(){l=u=!1,c=1},point:function(h,p){var f,g=[h,p],d=o(h,p),y=r?d?0:a(h,p):d?a(h+(h<0?Vg:-Vg),p):0;if(!e&&(l=u=d)&&t.lineStart(),d!==u&&(!(f=s(e,g))||Id(e,f)||Id(g,f))&&(g[0]+=Ug,g[1]+=Ug,d=o(g[0],g[1])),d!==u)c=0,d?(t.lineStart(),f=s(g,e),t.point(f[0],f[1])):(f=s(e,g),t.point(f[0],f[1]),t.lineEnd()),e=f;else if(i&&e&&r^d){var v;y&n||!(v=s(g,e,!0))||(c=0,r?(t.lineStart(),t.point(v[0][0],v[0][1]),t.point(v[1][0],v[1][1]),t.lineEnd()):(t.point(v[1][0],v[1][1]),t.lineEnd(),t.lineStart(),t.point(v[0][0],v[0][1])))}!d||e&&Id(e,g)||t.point(g[0],g[1]),e=g,u=d,n=y},lineEnd:function(){u&&t.lineEnd(),e=null},clean:function(){return c|(l&&u)<<1}}}),(function(n,r,i,o){!function(t,e,n,r,i,o){if(n){var s=$g(e),a=td(e),u=r*n;null==i?(i=e+r*Hg,o=e-u/2):(i=bd(s,i),o=bd(s,o),(r>0?i<o:i>o)&&(i+=r*Hg));for(var l,c=i;r>0?c>o:c<o;c-=u)l=cd([s,-a*$g(c),-a*td(c)]),t.point(l[0],l[1])}}(o,t,e,i,n,r)}),r?[0,-t]:[-Vg,t-Vg])}function Hd(t){return function(e){var n=new Wd;for(var r in t)n[r]=t[r];return n.stream=e,n}}function Wd(){}function Jd(t,e,n){var r=e[1][0]-e[0][0],i=e[1][1]-e[0][1],o=t.clipExtent&&t.clipExtent();t.scale(150).translate([0,0]),null!=o&&t.clipExtent(null),function(t,e){t&&sd.hasOwnProperty(t.type)?sd[t.type](t,e):od(t,e)}(n,t.stream(zd));var s=zd.result(),a=Math.min(r/(s[1][0]-s[0][0]),i/(s[1][1]-s[0][1])),u=+e[0][0]+(r-a*(s[1][0]+s[0][0]))/2,l=+e[0][1]+(i-a*(s[1][1]+s[0][1]))/2;return null!=o&&t.clipExtent(o),t.scale(150*a).translate([u,l])}Wd.prototype={constructor:Wd,point:function(t,e){this.stream.point(t,e)},sphere:function(){this.stream.sphere()},lineStart:function(){this.stream.lineStart()},lineEnd:function(){this.stream.lineEnd()},polygonStart:function(){this.stream.polygonStart()},polygonEnd:function(){this.stream.polygonEnd()}};var Zd=$g(30*Jg);function Kd(t,e){return+e?function(t,e){function n(r,i,o,s,a,u,l,c,h,p,f,g,d,y){var v=l-r,_=c-i,m=v*v+_*_;if(m>4*e&&d--){var x=s+p,E=a+f,b=u+g,w=ed(x*x+E*E+b*b),I=rd(b/=w),N=Zg(Zg(b)-1)<Ug||Zg(o-h)<Ug?(o+h)/2:Qg(E,x),S=t(N,I),C=S[0],P=S[1],M=C-r,L=P-i,O=_*M-v*L;(O*O/m>e||Zg((v*M+_*L)/m-.5)>.3||s*p+a*f+u*g<Zd)&&(n(r,i,o,s,a,u,C,P,N,x/=w,E/=w,b,d,y),y.point(C,P),n(C,P,N,x,E,b,l,c,h,p,f,g,d,y))}}return function(e){var r,i,o,s,a,u,l,c,h,p,f,g,d={point:y,lineStart:v,lineEnd:m,polygonStart:function(){e.polygonStart(),d.lineStart=x},polygonEnd:function(){e.polygonEnd(),d.lineStart=v}};function y(n,r){n=t(n,r),e.point(n[0],n[1])}function v(){c=NaN,d.point=_,e.lineStart()}function _(r,i){var o=hd([r,i]),s=t(r,i);n(c,h,l,p,f,g,c=s[0],h=s[1],l=r,p=o[0],f=o[1],g=o[2],16,e),e.point(c,h)}function m(){d.point=y,e.lineEnd()}function x(){v(),d.point=E,d.lineEnd=b}function E(t,e){_(r=t,e),i=c,o=h,s=p,a=f,u=g,d.point=_}function b(){n(c,h,l,p,f,g,i,o,r,s,a,u,16,e),d.lineEnd=m,m()}return d}}(t,e):function(t){return Hd({point:function(e,n){e=t(e,n),this.stream.point(e[0],e[1])}})}(t)}var Qd=Hd({point:function(t,e){this.stream.point(t*Jg,e*Jg)}});function $d(t){return function(t){var e,n,r,i,o,s,a,u,l,c,h=150,p=480,f=250,g=0,d=0,y=0,v=0,_=0,m=null,x=Xd,E=null,b=Fd,w=.5,I=Kd(C,w);function N(t){return[(t=o(t[0]*Jg,t[1]*Jg))[0]*h+n,r-t[1]*h]}function S(t){return(t=o.invert((t[0]-n)/h,(r-t[1])/h))&&[t[0]*Wg,t[1]*Wg]}function C(t,i){return[(t=e(t,i))[0]*h+n,r-t[1]*h]}function P(){o=vd(i=function(t,e,n){return(t%=Hg)?e||n?vd(xd(t),Ed(e,n)):xd(t):e||n?Ed(e,n):_d}(y,v,_),e);var t=e(g,d);return n=p-t[0]*h,r=f+t[1]*h,M()}function M(){return l=c=null,N}return N.stream=function(t){return l&&c===t?l:l=Qd(x(i,I(b(c=t))))},N.clipAngle=function(t){return arguments.length?(x=+t?Yd(m=t*Jg,6*Jg):(m=null,Xd),M()):m*Wg},N.clipExtent=function(t){return arguments.length?(b=null==t?(E=s=a=u=null,Fd):Ad(E=+t[0][0],s=+t[0][1],a=+t[1][0],u=+t[1][1]),M()):null==E?null:[[E,s],[a,u]]},N.scale=function(t){return arguments.length?(h=+t,P()):h},N.translate=function(t){return arguments.length?(p=+t[0],f=+t[1],P()):[p,f]},N.center=function(t){return arguments.length?(g=t[0]%360*Jg,d=t[1]%360*Jg,P()):[g*Wg,d*Wg]},N.rotate=function(t){return arguments.length?(y=t[0]%360*Jg,v=t[1]%360*Jg,_=t.length>2?t[2]%360*Jg:0,P()):[y*Wg,v*Wg,_*Wg]},N.precision=function(t){return arguments.length?(I=Kd(C,w=t*t),M()):ed(w)},N.fitExtent=function(t,e){return Jd(N,t,e)},N.fitSize=function(t,e){return function(t,e,n){return Jd(t,[[0,0],e],n)}(N,t,e)},function(){return e=t.apply(this,arguments),N.invert=e.invert&&S,P()}}((function(){return t}))()}var ty=function(t){return function(e,n){var r=$g(e),i=$g(n),o=t(r*i);return[o*i*td(e),o*td(n)]}}((function(t){return(t=nd(t))&&t/td(t)}));function ey(){return $d(ty).scale(79.4188).clipAngle(179.999)}function ny(t,n,r,i){var s=t.properties||{},a="Feature"===t.type?t.geometry:t;if("GeometryCollection"===a.type){var u=[];return q(t,(function(t){var e=ny(t,n,r,i);e&&u.push(e)})),f(u)}var l=function(t){var n=xn(t).geometry.coordinates,r=[-n[0],-n[1]];return ey().rotate(r).scale(e)}(a),c={type:a.type,coordinates:iy(a.coordinates,l)},h=(new Ih).read(c),p=m(x(n,r),"meters"),g=_f.bufferOp(h,p,i);if(!ry((g=(new Nh).write(g)).coordinates))return o({type:g.type,coordinates:oy(g.coordinates,l)},s)}function ry(t){return Array.isArray(t[0])?ry(t[0]):isNaN(t[0])}function iy(t,e){return"object"!=typeof t[0]?e(t):t.map((function(t){return iy(t,e)}))}function oy(t,e){return"object"!=typeof t[0]?e.invert(t):t.map((function(t){return oy(t,e)}))}function sy(t,e,n){void 0===n&&(n={});var r=rt(t),i=rt(e),o=$u.intersection(r.coordinates,i.coordinates);return 0===o.length?null:1===o.length?l(o[0],n.properties):y(o,n.properties)}function ay(t,e,n){void 0===n&&(n={});var r=JSON.stringify(n.properties||{}),i=t[0],o=t[1],s=t[2],a=t[3],u=(o+a)/2,l=(i+s)/2,c=2*e/me([i,u],[s,u],n)*(s-i),h=2*e/me([l,o],[l,a],n)*(a-o),p=c/2,g=2*p,d=Math.sqrt(3)/2*h,y=s-i,v=a-o,_=3/4*g,m=d,x=(y-g)/(g-p/2),E=Math.floor(x),b=(E*_-p/2-y)/2-p/2+_/2,w=Math.floor((v-d)/d),I=(v-w*d)/2,N=w*d-v>d/2;N&&(I-=d/4);for(var S=[],C=[],P=0;P<6;P++){var M=2*Math.PI/6*P;S.push(Math.cos(M)),C.push(Math.sin(M))}for(var L=[],O=0;O<=E;O++)for(var R=0;R<=w;R++){var T=O%2==1;if((0!==R||!T)&&(0!==R||!N)){var A=O*_+i-b,D=R*m+o+I;if(T&&(D-=d/2),!0===n.triangles)ly([A,D],c/2,h/2,JSON.parse(r),S,C).forEach((function(t){n.mask?sy(n.mask,t)&&L.push(t):L.push(t)}));else{var F=uy([A,D],c/2,h/2,JSON.parse(r),S,C);n.mask?sy(n.mask,F)&&L.push(F):L.push(F)}}}return f(L)}function uy(t,e,n,r,i,o){for(var s=[],a=0;a<6;a++){var u=t[0]+e*i[a],c=t[1]+n*o[a];s.push([u,c])}return s.push(s[0].slice()),l([s],r)}function ly(t,e,n,r,i,o){for(var s=[],a=0;a<6;a++){var u=[];u.push(t),u.push([t[0]+e*i[a],t[1]+n*o[a]]),u.push([t[0]+e*i[(a+1)%6],t[1]+n*o[(a+1)%6]]),u.push(t),s.push(l([u],r))}return s}function cy(t){return y(t)}function hy(t){return l(t&&t.geometry.coordinates||[[[180,90],[-180,90],[-180,-90],[180,-90],[180,90]]])}function py(t,e,n){return void 0===n&&(n={}),function(t,e,n,r){void 0===r&&(r={});for(var i=[],o=t[0],s=t[1],a=t[2],u=t[3],c=e/me([o,s],[a,s],r)*(a-o),h=n/me([o,s],[o,u],r)*(u-s),p=a-o,g=u-s,d=Math.floor(p/c),y=Math.floor(g/h),v=(g-y*h)/2,_=o+(p-d*c)/2,m=0;m<d;m++){for(var x=s+v,E=0;E<y;E++){var b=l([[[_,x],[_,x+h],[_+c,x+h],[_+c,x],[_,x]]],r.properties);r.mask?Ps(r.mask,b)&&i.push(b):i.push(b),x+=h}_+=c}return f(i)}(t,e,e,n)}function fy(t,e,n){void 0===n&&(n={});for(var r=[],i=e/me([t[0],t[1]],[t[2],t[1]],n)*(t[2]-t[0]),o=e/me([t[0],t[1]],[t[0],t[3]],n)*(t[3]-t[1]),s=0,a=t[0];a<=t[2];){for(var u=0,c=t[1];c<=t[3];){var h=null,p=null;s%2==0&&u%2==0?(h=l([[[a,c],[a,c+o],[a+i,c],[a,c]]],n.properties),p=l([[[a,c+o],[a+i,c+o],[a+i,c],[a,c+o]]],n.properties)):s%2==0&&u%2==1?(h=l([[[a,c],[a+i,c+o],[a+i,c],[a,c]]],n.properties),p=l([[[a,c],[a,c+o],[a+i,c+o],[a,c]]],n.properties)):u%2==0&&s%2==1?(h=l([[[a,c],[a,c+o],[a+i,c+o],[a,c]]],n.properties),p=l([[[a,c],[a+i,c+o],[a+i,c],[a,c]]],n.properties)):u%2==1&&s%2==1&&(h=l([[[a,c],[a,c+o],[a+i,c],[a,c]]],n.properties),p=l([[[a,c+o],[a+i,c+o],[a+i,c],[a,c+o]]],n.properties)),n.mask?(sy(n.mask,h)&&r.push(h),sy(n.mask,p)&&r.push(p)):(r.push(h),r.push(p)),c+=o,u++}s++,a+=i}return f(r)}ty.invert=function(t){return function(e,n){var r=ed(e*e+n*n),i=t(r),o=td(i),s=$g(i);return[Qg(e*o,r*s),rd(r&&n*o/r)]}}((function(t){return t})),t.along=function(t,e,n){void 0===n&&(n={});for(var r=rt(t).coordinates,i=0,o=0;o<r.length&&!(e>=i&&o===r.length-1);o++){if(i>=e){var s=e-i;if(s){var u=mn(r[o],r[o-1])-180;return vn(r[o],s,u,n)}return a(r[o])}i+=me(r[o],r[o+1],n)}return a(r[r.length-1])},t.angle=function(t,e,n,r){if(void 0===r&&(r={}),!P(r))throw new Error("options is invalid");if(!t)throw new Error("startPoint is required");if(!e)throw new Error("midPoint is required");if(!n)throw new Error("endPoint is required");var i=t,o=e,s=n,a=b(!0!==r.mercator?mn(i,o):Bi(i,o)),u=b(!0!==r.mercator?mn(s,o):Bi(s,o)),l=Math.abs(a-u);return!0===r.explementary?360-l:l},t.applyFilter=uu,t.area=jr,t.areaFactors=i,t.bbox=Z,t.bboxClip=function(t,e){var n=rt(t),r=n.type,i="Feature"===t.type?t.properties:{},o=n.coordinates;switch(r){case"LineString":case"MultiLineString":var s=[];return"LineString"===r&&(o=[o]),o.forEach((function(t){!function(t,e,n){var r,i,o,s,a,u=t.length,l=Ri(t[0],e),c=[];for(n||(n=[]),r=1;r<u;r++){for(s=t[r-1],i=o=Ri(a=t[r],e);;){if(!(l|i)){c.push(s),i!==o?(c.push(a),r<u-1&&(n.push(c),c=[])):r===u-1&&c.push(a);break}if(l&i)break;l?l=Ri(s=Oi(s,a,l,e),e):i=Ri(a=Oi(s,a,i,e),e)}l=o}c.length&&n.push(c)}(t,e,s)})),1===s.length?h(s[0],i):g(s,i);case"Polygon":return l(Ti(o,e),i);case"MultiPolygon":return y(o.map((function(t){return Ti(t,e)})),i);default:throw new Error("geometry "+r+" not supported")}},t.bboxPolygon=gn,t.bearing=mn,t.bearingToAngle=b,t.bearingToAzimuth=b,t.bezier=fn,t.bezierSpline=fn,t.booleanClockwise=Yi,t.booleanContains=function(t,e){var n=rt(t),r=rt(e),i=n.type,o=r.type,s=n.coordinates,a=r.coordinates;switch(i){case"Point":switch(o){case"Point":return vs(s,a);default:throw new Error("feature2 "+o+" geometry not supported")}case"MultiPoint":switch(o){case"Point":return function(t,e){var n,r=!1;for(n=0;n<t.coordinates.length;n++)if(vs(t.coordinates[n],e.coordinates)){r=!0;break}return r}(n,r);case"MultiPoint":return function(t,e){for(var n=0,r=e.coordinates;n<r.length;n++){for(var i=r[n],o=!1,s=0,a=t.coordinates;s<a.length;s++){if(vs(i,a[s])){o=!0;break}}if(!o)return!1}return!0}(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}case"LineString":switch(o){case"Point":return Wr(r,n,{ignoreEndVertices:!0});case"LineString":return function(t,e){for(var n=!1,r=0,i=e.coordinates;r<i.length;r++){var o=i[r];if(Wr({type:"Point",coordinates:o},t,{ignoreEndVertices:!0})&&(n=!0),!Wr({type:"Point",coordinates:o},t,{ignoreEndVertices:!1}))return!1}return n}(n,r);case"MultiPoint":return function(t,e){for(var n=!1,r=0,i=e.coordinates;r<i.length;r++){var o=i[r];if(Wr(o,t,{ignoreEndVertices:!0})&&(n=!0),!Wr(o,t))return!1}if(n)return!0;return!1}(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}case"Polygon":switch(o){case"Point":return ye(r,n,{ignoreBoundary:!0});case"LineString":return function(t,e){var n=!1,r=0,i=Z(t),o=Z(e);if(!ys(i,o))return!1;for(;r<e.coordinates.length-1;r++){if(ye({type:"Point",coordinates:_s(e.coordinates[r],e.coordinates[r+1])},t,{ignoreBoundary:!0})){n=!0;break}}return n}(n,r);case"Polygon":return function(t,e){if("Feature"===t.type&&null===t.geometry)return!1;if("Feature"===e.type&&null===e.geometry)return!1;var n=Z(t),r=Z(e);if(!ys(n,r))return!1;for(var i=rt(e).coordinates,o=0,s=i;o<s.length;o++)for(var a=0,u=s[o];a<u.length;a++){if(!ye(u[a],t))return!1}return!0}(n,r);case"MultiPoint":return function(t,e){for(var n=0,r=e.coordinates;n<r.length;n++){if(!ye(r[n],t,{ignoreBoundary:!0}))return!1}return!0}(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}default:throw new Error("feature1 "+i+" geometry not supported")}},t.booleanCrosses=function(t,e){var n=rt(t),r=rt(e),i=n.type,o=r.type;switch(i){case"MultiPoint":switch(o){case"LineString":return ms(n,r);case"Polygon":return Es(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}case"LineString":switch(o){case"MultiPoint":return ms(r,n);case"LineString":return function(t,e){if(Or(t,e).features.length>0)for(var n=0;n<t.coordinates.length-1;n++)for(var r=0;r<e.coordinates.length-1;r++){var i=!0;if(0!==r&&r!==e.coordinates.length-2||(i=!1),bs(t.coordinates[n],t.coordinates[n+1],e.coordinates[r],i))return!0}return!1}(n,r);case"Polygon":return xs(n,r);default:throw new Error("feature2 "+o+" geometry not supported")}case"Polygon":switch(o){case"MultiPoint":return Es(r,n);case"LineString":return xs(r,n);default:throw new Error("feature2 "+o+" geometry not supported")}default:throw new Error("feature1 "+i+" geometry not supported")}},t.booleanDisjoint=ps,t.booleanEqual=function(t,e){return rt(t).type===rt(e).type&&new Cs({precision:6}).compare(tn(t),tn(e))},t.booleanIntersects=Ps,t.booleanOverlap=function(t,e){var n=rt(t),r=rt(e),i=n.type,o=r.type;if("MultiPoint"===i&&"MultiPoint"!==o||("LineString"===i||"MultiLineString"===i)&&"LineString"!==o&&"MultiLineString"!==o||("Polygon"===i||"MultiPolygon"===i)&&"Polygon"!==o&&"MultiPolygon"!==o)throw new Error("features must be of the same type");if("Point"===i)throw new Error("Point geometry not supported");if(new Cs({precision:6}).compare(t,e))return!1;var s=0;switch(i){case"MultiPoint":for(var a=0;a<n.coordinates.length;a++)for(var u=0;u<r.coordinates.length;u++){var l=n.coordinates[a],c=r.coordinates[u];if(l[0]===c[0]&&l[1]===c[1])return!0}return!1;case"LineString":case"MultiLineString":U(t,(function(t){U(e,(function(e){ki(t,e).features.length&&s++}))}));break;case"Polygon":case"MultiPolygon":U(t,(function(t){U(e,(function(e){Or(t,e).features.length&&s++}))}))}return s>0},t.booleanParallel=function(t,e){if(!t)throw new Error("line1 is required");if(!e)throw new Error("line2 is required");if("LineString"!==Us(t,"line1"))throw new Error("line1 must be a LineString");if("LineString"!==Us(e,"line2"))throw new Error("line2 must be a LineString");for(var n=Zn(tn(t)).features,r=Zn(tn(e)).features,i=0;i<n.length;i++){var o=n[i].geometry.coordinates;if(!r[i])break;if(!js(o,r[i].geometry.coordinates))return!1}return!0},t.booleanPointInPolygon=ye,t.booleanPointOnLine=Wr,t.booleanWithin=Zr,t.buffer=function(t,e,n){var r=(n=n||{}).units||"kilometers",i=n.steps||8;if(!t)throw new Error("geojson is required");if("object"!=typeof n)throw new Error("options must be an object");if("number"!=typeof i)throw new Error("steps must be an number");if(void 0===e)throw new Error("radius is required");if(i<=0)throw new Error("steps must be greater than 0");var o=[];switch(t.type){case"GeometryCollection":return q(t,(function(t){var n=ny(t,e,r,i);n&&o.push(n)})),f(o);case"FeatureCollection":return F(t,(function(t){var n=ny(t,e,r,i);n&&F(n,(function(t){t&&o.push(t)}))})),f(o)}return ny(t,e,r,i)},t.center=xn,t.centerMean=Fa,t.centerMedian=function(t,e){if(void 0===e&&(e={}),!P(e=e||{}))throw new Error("options is invalid");var n=e.counter||10;if(!C(n))throw new Error("counter must be a number");var r=e.weight,i=Fa(t,{weight:e.weight}),o=f([]);F(t,(function(t){var e;o.features.push(En(t,{properties:{weight:null===(e=t.properties)||void 0===e?void 0:e[r]}}))}));var s={tolerance:e.tolerance,medianCandidates:[]};return ka(i.geometry.coordinates,[0,0],o,s,n)},t.centerOfMass=function t(e,n){switch(void 0===n&&(n={}),it(e)){case"Point":return a(K(e),n.properties);case"Polygon":var r=[];R(e,(function(t){r.push(t)}));var i,o,s,u,l,c,h,p,f=En(e,{properties:n.properties}),g=f.geometry.coordinates,d=0,y=0,v=0,_=r.map((function(t){return[t[0]-g[0],t[1]-g[1]]}));for(i=0;i<r.length-1;i++)u=(o=_[i])[0],c=o[1],l=(s=_[i+1])[0],v+=p=u*(h=s[1])-l*c,d+=(u+l)*p,y+=(c+h)*p;if(0===v)return f;var m=1/(6*(.5*v));return a([g[0]+m*d,g[1]+m*y],n.properties);default:var x=de(e);return x?t(x,{properties:n.properties}):En(e,{properties:n.properties})}},t.centroid=En,t.circle=_n,t.cleanCoords=tn,t.clone=Ie,t.clusterEach=ou,t.clusterReduce=su,t.clusters=hu,t.clustersDbscan=function(t,e,n){void 0===n&&(n={}),!0!==n.mutate&&(t=Ie(t)),n.minPoints=n.minPoints||3;var r=new Ts.DBSCAN,i=r.run(G(t),N(e,n.units),n.minPoints,me),o=-1;return i.forEach((function(e){o++,e.forEach((function(e){var n=t.features[e];n.properties||(n.properties={}),n.properties.cluster=o,n.properties.dbscan="core"}))})),r.noise.forEach((function(e){var n=t.features[e];n.properties||(n.properties={}),n.properties.cluster?n.properties.dbscan="edge":n.properties.dbscan="noise"})),t},t.clustersKmeans=function(t,e){void 0===e&&(e={});var n=t.features.length;e.numberOfClusters=e.numberOfClusters||Math.round(Math.sqrt(n/2)),e.numberOfClusters>n&&(e.numberOfClusters=n),!0!==e.mutate&&(t=Ie(t));var r=G(t),i=r.slice(0,e.numberOfClusters),o=zs(r,e.numberOfClusters,i),s={};return o.centroids.forEach((function(t,e){s[e]=t})),F(t,(function(t,e){var n=o.idxs[e];t.properties.cluster=n,t.properties.centroid=s[n]})),t},t.collect=function(t,e,n,r){var i=Nt(6),o=e.features.map((function(t){var e;return{minX:t.geometry.coordinates[0],minY:t.geometry.coordinates[1],maxX:t.geometry.coordinates[0],maxY:t.geometry.coordinates[1],property:null===(e=t.properties)||void 0===e?void 0:e[n]}}));return i.load(o),t.features.forEach((function(t){t.properties||(t.properties={});var e=Z(t),n=i.search({minX:e[0],minY:e[1],maxX:e[2],maxY:e[3]}),o=[];n.forEach((function(e){ye([e.minX,e.minY],t)&&o.push(e.property)})),t.properties[r]=o})),t},t.collectionOf=nt,t.combine=function(t){var e={MultiPoint:{coordinates:[],properties:[]},MultiLineString:{coordinates:[],properties:[]},MultiPolygon:{coordinates:[],properties:[]}};return F(t,(function(t){var n,r,i,o;switch(null===(o=t.geometry)||void 0===o?void 0:o.type){case"Point":e.MultiPoint.coordinates.push(t.geometry.coordinates),e.MultiPoint.properties.push(t.properties);break;case"MultiPoint":(n=e.MultiPoint.coordinates).push.apply(n,t.geometry.coordinates),e.MultiPoint.properties.push(t.properties);break;case"LineString":e.MultiLineString.coordinates.push(t.geometry.coordinates),e.MultiLineString.properties.push(t.properties);break;case"MultiLineString":(r=e.MultiLineString.coordinates).push.apply(r,t.geometry.coordinates),e.MultiLineString.properties.push(t.properties);break;case"Polygon":e.MultiPolygon.coordinates.push(t.geometry.coordinates),e.MultiPolygon.properties.push(t.properties);break;case"MultiPolygon":(i=e.MultiPolygon.coordinates).push.apply(i,t.geometry.coordinates),e.MultiPolygon.properties.push(t.properties)}})),f(Object.keys(e).filter((function(t){return e[t].coordinates.length})).sort().map((function(t){return o({type:t,coordinates:e[t].coordinates},{collectedProperties:e[t].properties})})))},t.concave=function(t,e){void 0===e&&(e={});var n=e.maxEdge||1/0,r=xe(function(t){var e=[],n={};return F(t,(function(t){if(t.geometry){var r=t.geometry.coordinates.join("-");Object.prototype.hasOwnProperty.call(n,r)||(e.push(t),n[r]=!0)}})),f(e)}(t));if(r.features=r.features.filter((function(t){var r=t.geometry.coordinates[0][0],i=t.geometry.coordinates[0][1],o=t.geometry.coordinates[0][2],s=me(r,i,e),a=me(i,o,e),u=me(r,o,e);return s<=n&&a<=n&&u<=n})),r.features.length<1)return null;var i=$e(r);return 1===i.coordinates.length&&(i.coordinates=i.coordinates[0],i.type="Polygon"),o(i)},t.containsNumber=$,t.convertArea=S,t.convertDistance=N,t.convertLength=N,t.convex=de,t.coordAll=G,t.coordEach=R,t.coordReduce=T,t.createBins=au,t.degrees2radians=I,t.degreesToRadians=I,t.destination=vn,t.difference=function(t,e){var n=rt(t),r=rt(e),i=t.properties||{},o=$u.difference(n.coordinates,r.coordinates);return 0===o.length?null:1===o.length?l(o[0],i):y(o,i)},t.dissolve=function(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.propertyName;nt(t,"Polygon","dissolve");var r=[];if(!e.propertyName)return ni(y($u.union.apply(null,t.features.map((function(t){return t.geometry.coordinates})))));var i={};F(t,(function(t){Object.prototype.hasOwnProperty.call(i,t.properties[n])||(i[t.properties[n]]=[]),i[t.properties[n]].push(t)}));for(var o=Object.keys(i),s=0;s<o.length;s++){var a=y($u.union.apply(null,i[o[s]].map((function(t){return t.geometry.coordinates}))));a.properties[n]=o[s],r.push(a)}return ni(f(r))},t.distance=me,t.distanceToDegrees=E,t.distanceToRadians=x,t.distanceWeight=ja,t.earthRadius=e,t.ellipse=Aa,t.envelope=dn,t.explode=bn,t.factors=n,t.feature=o,t.featureCollection=f,t.featureEach=F,t.featureOf=et,t.featureReduce=k,t.filterProperties=cu,t.findPoint=W,t.findSegment=H,t.flatten=ni,t.flattenEach=z,t.flattenReduce=j,t.flip=function(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.mutate;if(!t)throw new Error("geojson is required");return!1!==n&&void 0!==n||(t=Ie(t)),R(t,(function(t){var e=t[0],n=t[1];t[0]=n,t[1]=e})),t},t.geojsonType=tt,t.geomEach=q,t.geomReduce=B,t.geometry=s,t.geometryCollection=v,t.getCluster=iu,t.getCoord=K,t.getCoords=Q,t.getGeom=rt,t.getType=it,t.greatCircle=function(t,e,n){if("object"!=typeof(n=n||{}))throw new Error("options is invalid");var r=n.properties,i=n.npoints,o=n.offset;return t=K(t),e=K(e),r=r||{},i=i||100,o=o||10,new vi({x:t[0],y:t[1]},{x:e[0],y:e[1]},r).Arc(i,{offset:o}).json()},t.helpers=O,t.hexGrid=ay,t.inside=ye,t.interpolate=function(t,e,n){if("object"!=typeof(n=n||{}))throw new Error("options is invalid");var r=n.gridType,i=n.property,o=n.weight;if(!t)throw new Error("points is required");if(nt(t,"Point","input must contain Points"),!e)throw new Error("cellSize is required");if(void 0!==o&&"number"!=typeof o)throw new Error("weight must be a number");i=i||"elevation",r=r||"square",o=o||1;var s,a=Z(t);switch(r){case"point":case"points":s=ti(a,e,n);break;case"square":case"squares":s=py(a,e,n);break;case"hex":case"hexes":s=ay(a,e,n);break;case"triangle":case"triangles":s=fy(a,e,n);break;default:throw new Error("invalid gridType")}var u=[];return F(s,(function(e){var s=0,a=0;F(t,(function(t){var u,l=me("point"===r?e:En(e),t,n);if(void 0!==i&&(u=t.properties[i]),void 0===u&&(u=t.geometry.coordinates[2]),void 0===u)throw new Error("zValue is missing");0===l&&(s=u);var c=1/Math.pow(l,o);a+=c,s+=c*u}));var l=Ie(e);l.properties[i]=s/a,u.push(l)})),f(u)},t.intersect=sy,t.invariant=ot,t.isNumber=C,t.isObject=P,t.isobands=function(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.zProperty||"elevation",i=n.commonProperties||{},o=n.breaksProperties||[];if(nt(t,"Point","Input must contain Points"),!e)throw new Error("breaks is required");if(!Array.isArray(e))throw new Error("breaks is not an Array");if(!P(i))throw new Error("commonProperties is not an Object");if(!Array.isArray(o))throw new Error("breaksProperties is not an Array");var s=Zi(t,{zProperty:r,flip:!0}),a=function(t,e,n){for(var r=[],i=1;i<e.length;i++){var o=+e[i-1],s=+e[i],a=Zo(Jo($i(t,o,s-o))),u={};u.groupedRings=a,u[n]=o+"-"+s,r.push(u)}return r}(s,e,r);return f((a=function(t,e,n){var r=Z(n),i=r[2]-r[0],o=r[3]-r[1],s=r[0],a=r[1],u=e[0].length-1,l=e.length-1,c=i/u,h=o/l,p=function(t){t[0]=t[0]*c+s,t[1]=t[1]*h+a};return t.forEach((function(t){t.groupedRings.forEach((function(t){t.forEach((function(t){t.forEach(p)}))}))})),t}(a,s,t)).map((function(t,e){if(o[e]&&!P(o[e]))throw new Error("Each mappedProperty is required to be an Object");var n=ct({},i,o[e]);return n[r]=t[r],y(t.groupedRings,n)})))},t.isolines=function(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.zProperty||"elevation",i=n.commonProperties||{},o=n.breaksProperties||[];if(nt(t,"Point","Input must contain Points"),!e)throw new Error("breaks is required");if(!Array.isArray(e))throw new Error("breaks must be an Array");if(!P(i))throw new Error("commonProperties must be an Object");if(!Array.isArray(o))throw new Error("breaksProperties must be an Array");var s=_t(t,{zProperty:r,flip:!0});return f(function(t,e,n){var r=Z(n),i=r[2]-r[0],o=r[3]-r[1],s=r[0],a=r[1],u=e[0].length-1,l=e.length-1,c=i/u,h=o/l,p=function(t){t[0]=t[0]*c+s,t[1]=t[1]*h+a};return t.forEach((function(t){R(t,p)})),t}(function(t,e,n,r,i){for(var o=[],s=1;s<e.length;s++){var a=+e[s],u=ct({},r,i[s]);u[n]=a;var l=g(ft(t,a),u);o.push(l)}return o}(s,e,r,i,o),s,t))},t.kinks=function(t){var e,n,r={type:"FeatureCollection",features:[]};if("LineString"===(n="Feature"===t.type?t.geometry:t).type)e=[n.coordinates];else if("MultiLineString"===n.type)e=n.coordinates;else if("MultiPolygon"===n.type)e=[].concat.apply([],n.coordinates);else{if("Polygon"!==n.type)throw new Error("Input must be a LineString, MultiLineString, Polygon, or MultiPolygon Feature or Geometry");e=n.coordinates}return e.forEach((function(t){e.forEach((function(e){for(var n=0;n<t.length-1;n++)for(var i=n;i<e.length-1;i++){if(t===e){if(1===Math.abs(n-i))continue;if(0===n&&i===t.length-2&&t[n][0]===t[t.length-1][0]&&t[n][1]===t[t.length-1][1])continue}var o=Gr(t[n][0],t[n][1],t[n+1][0],t[n+1][1],e[i][0],e[i][1],e[i+1][0],e[i+1][1]);o&&r.features.push(a([o[0],o[1]]))}}))})),r},t.length=Yr,t.lengthToDegrees=E,t.lengthToRadians=x,t.lineArc=bi,t.lineChunk=function(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.units,i=n.reverse;if(!t)throw new Error("geojson is required");if(e<=0)throw new Error("segmentLength must be greater than 0");var o=[];return z(t,(function(t){i&&(t.geometry.coordinates=t.geometry.coordinates.reverse()),function(t,e,n,r){var i=Yr(t,{units:n});if(i<=e)return r(t);var o=i/e;Number.isInteger(o)||(o=Math.floor(o)+1);for(var s=0;s<o;s++){r(Hr(t,e*s,e*(s+1),{units:n}),s)}}(t,e,r,(function(t){o.push(t)}))})),f(o)},t.lineDistance=Yr,t.lineEach=X,t.lineIntersect=Or,t.lineOffset=function(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.units;if(!t)throw new Error("geojson is required");if(null==e||isNaN(e))throw new Error("distance is required");var i=it(t),o=t.properties;switch(i){case"LineString":return os(t,e,r);case"MultiLineString":var s=[];return z(t,(function(t){s.push(os(t,e,r).geometry.coordinates)})),g(s,o);default:throw new Error("geometry "+i+" is not supported")}},t.lineOverlap=ki,t.lineReduce=Y,t.lineSegment=Zn,t.lineSlice=function(t,e,n){var r=Q(n);if("LineString"!==it(n))throw new Error("line must be a LineString");for(var i,o=Tr(n,t),s=Tr(n,e),a=[(i=o.properties.index<=s.properties.index?[o,s]:[s,o])[0].geometry.coordinates],u=i[0].properties.index+1;u<i[1].properties.index+1;u++)a.push(r[u]);return a.push(i[1].geometry.coordinates),h(a,n.properties)},t.lineSliceAlong=Hr,t.lineSplit=function(t,e){if(!t)throw new Error("line is required");if(!e)throw new Error("splitter is required");var n=it(t),r=it(e);if("LineString"!==n)throw new Error("line must be LineString");if("FeatureCollection"===r)throw new Error("splitter cannot be a FeatureCollection");if("GeometryCollection"===r)throw new Error("splitter cannot be a GeometryCollection");var i=ei(e,{precision:7});switch(r){case"Point":return mi(t,i);case"MultiPoint":return _i(t,i);case"LineString":case"MultiLineString":case"Polygon":case"MultiPolygon":return _i(t,Or(t,i))}},t.lineString=h,t.lineStringToPolygon=Ci,t.lineStrings=p,t.lineToPolygon=Ci,t.mask=function(t,e){var n,r=hy(e),i=null;return"FeatureCollection"===t.type?i=cy(2===(n=t).features.length?$u.union(n.features[0].geometry.coordinates,n.features[1].geometry.coordinates):$u.union.apply($u,n.features.map((function(t){return t.geometry.coordinates})))):i=cy($u.union(t.geometry.coordinates)),i.geometry.coordinates.forEach((function(t){r.geometry.coordinates.push(t[0])})),r},t.meta=J,t.midpoint=function(t,e){return vn(t,me(t,e)/2,mn(t,e))},t.moranIndex=function(t,e){var n=e.inputField,r=e.threshold||1e5,i=e.p||2,o=e.binary||!1,s=ja(t,{alpha:e.alpha||-1,binary:o,p:i,standardization:e.standardization||!0,threshold:r}),a=[];F(t,(function(t){var e=t.properties||{};a.push(e[n])}));for(var u=Ua(a),l=function(t){for(var e=Ua(t),n=0,r=0,i=t;r<i.length;r++){var o=i[r];n+=Math.pow(o-e,2)}return n/t.length}(a),c=0,h=0,p=0,f=0,g=s.length,d=0;d<g;d++){for(var y=0,v=0;v<g;v++)c+=s[d][v]*(a[d]-u)*(a[v]-u),h+=s[d][v],p+=Math.pow(s[d][v]+s[v][d],2),y+=s[d][v]+s[v][d];f+=Math.pow(y,2)}var _=c/h/l,m=-1/(g-1),x=(g*g*(p*=.5)-g*f+h*h*3)/((g-1)*(g+1)*(h*h))-m*m,E=Math.sqrt(x);return{expectedMoranIndex:m,moranIndex:_,stdNorm:E,zNorm:(_-m)/E}},t.multiLineString=g,t.multiPoint=d,t.multiPolygon=y,t.nearest=Jn,t.nearestPoint=Jn,t.nearestPointOnLine=Tr,t.nearestPointToLine=function(t,e,n){void 0===n&&(n={});var r=n.units,i=n.properties||{},o=function(t){var e=[];switch(t.geometry?t.geometry.type:t.type){case"GeometryCollection":return q(t,(function(t){"Point"===t.type&&e.push({type:"Feature",properties:{},geometry:t})})),{type:"FeatureCollection",features:e};case"FeatureCollection":return t.features=t.features.filter((function(t){return"Point"===t.geometry.type})),t;default:throw new Error("points must be a Point Collection")}}(t);if(!o.features.length)throw new Error("points must contain features");if(!e)throw new Error("line is required");if("LineString"!==it(e))throw new Error("line must be a LineString");var s=1/0,a=null;return F(o,(function(t){var n=Dr(t,e,{units:r});n<s&&(s=n,a=t)})),a&&(a.properties=ct({dist:s},a.properties,i)),a},t.planepoint=function(t,e){var n=K(t),r=rt(e).coordinates[0];if(r.length<4)throw new Error("OuterRing of a Polygon must have 4 or more Positions.");var i=e.properties||{},o=i.a,s=i.b,a=i.c,u=n[0],l=n[1],c=r[0][0],h=r[0][1],p=void 0!==o?o:r[0][2],f=r[1][0],g=r[1][1],d=void 0!==s?s:r[1][2],y=r[2][0],v=r[2][1],_=void 0!==a?a:r[2][2];return(_*(u-c)*(l-g)+p*(u-f)*(l-v)+d*(u-y)*(l-h)-d*(u-c)*(l-v)-_*(u-f)*(l-h)-p*(u-y)*(l-g))/((u-c)*(l-g)+(u-f)*(l-v)+(u-y)*(l-h)-(u-c)*(l-v)-(u-f)*(l-h)-(u-y)*(l-g))},t.point=a,t.pointGrid=ti,t.pointOnFeature=qr,t.pointOnLine=Tr,t.pointOnSurface=qr,t.pointToLineDistance=Dr,t.points=u,t.pointsWithinPolygon=_e,t.polygon=l,t.polygonSmooth=function(t,e){var n=[],r=e.iterations||1;if(!t)throw new Error("inputPolys is required");return q(t,(function(t,e,i){var o,s,a;switch(t.type){case"Polygon":o=[[]];for(var u=0;u<r;u++)a=[[]],s=t,u>0&&(s=l(o).geometry),qa(s,a),o=a.slice(0);n.push(l(o,i));break;case"MultiPolygon":o=[[[]]];for(var c=0;c<r;c++)a=[[[]]],s=t,c>0&&(s=y(o).geometry),Ba(s,a),o=a.slice(0);n.push(y(o,i));break;default:throw new Error("geometry is invalid, must be Polygon or MultiPolygon")}})),f(n)},t.polygonTangents=function(t,e){var n,r,i,o,s=Q(t),u=Q(e),l=Z(e),c=0,h=null;switch(s[0]>l[0]&&s[0]<l[2]&&s[1]>l[1]&&s[1]<l[3]&&(c=(h=Jn(t,bn(e))).properties.featureIndex),it(e)){case"Polygon":n=u[0][c],r=u[0][0],null!==h&&h.geometry.coordinates[1]<s[1]&&(r=u[0][c]),o=Xi(u[0][0],u[0][u[0].length-1],s);var p=Ui(u[0],s,o,i,n,r);n=p[0],r=p[1];break;case"MultiPolygon":for(var g=0,d=0,y=0,v=0;v<u[0].length;v++){g=v;for(var _=!1,m=0;m<u[0][v].length;m++){if(d=m,y===c){_=!0;break}y++}if(_)break}n=u[0][g][d],r=u[0][g][d],o=Xi(u[0][0][0],u[0][0][u[0][0].length-1],s),u.forEach((function(t){var e=Ui(t[0],s,o,i,n,r);n=e[0],r=e[1]}))}return f([a(n),a(r)])},t.polygonToLine=Ii,t.polygonToLineString=Ii,t.polygonize=function(t){var e=hs.fromGeoJson(t);e.deleteDangles(),e.deleteCutEdges();var n=[],r=[];return e.getEdgeRings().filter((function(t){return t.isValid()})).forEach((function(t){t.isHole()?n.push(t):r.push(t)})),n.forEach((function(t){cs.findEdgeRingContaining(t,r)&&r.push(t)})),f(r.map((function(t){return t.toPolygon()})))},t.polygons=c,t.projection=Ja,t.propEach=A,t.propReduce=D,t.propertiesContainsFilter=lu,t.radians2degrees=w,t.radiansToDegrees=w,t.radiansToDistance=m,t.radiansToLength=m,t.random=ru,t.randomLineString=tu,t.randomPoint=Qa,t.randomPolygon=$a,t.randomPosition=Ka,t.rewind=function(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.reverse||!1,r=e.mutate||!1;if(!t)throw new Error("<geojson> is required");if("boolean"!=typeof n)throw new Error("<reverse> must be a boolean");if("boolean"!=typeof r)throw new Error("<mutate> must be a boolean");!1===r&&(t=Ie(t));var i=[];switch(t.type){case"GeometryCollection":return q(t,(function(t){Hi(t,n)})),t;case"FeatureCollection":return F(t,(function(t){F(Hi(t,n),(function(t){i.push(t)}))})),f(i)}return Hi(t,n)},t.rhumbBearing=Bi,t.rhumbDestination=ji,t.rhumbDistance=Ar,t.round=_,t.sample=function(t,e){if(!t)throw new Error("featurecollection is required");if(null==e)throw new Error("num is required");if("number"!=typeof e)throw new Error("num must be a number");return f(function(t,e){var n,r,i=t.slice(0),o=t.length,s=o-e;for(;o-- >s;)n=i[r=Math.floor((o+1)*Math.random())],i[r]=i[o],i[o]=n;return i.slice(s)}(t.features,e))},t.sector=function(t,e,n,r,i){if(!P(i=i||{}))throw new Error("options is invalid");var o=i.properties;if(!t)throw new Error("center is required");if(null==n)throw new Error("bearing1 is required");if(null==r)throw new Error("bearing2 is required");if(!e)throw new Error("radius is required");if("object"!=typeof i)throw new Error("options must be an object");if(qi(n)===qi(r))return _n(t,e,i);var s=Q(t),a=bi(t,e,n,r,i),u=[[s]];return R(a,(function(t){u[0].push(t)})),u[0].push(s),l(u,o)},t.segmentEach=U,t.segmentReduce=V,t.shortestPath=function(t,e,n){if(!P(n=n||{}))throw new Error("options is invalid");var r=n.resolution,i=n.minDistance,s=n.obstacles||f([]);if(!t)throw new Error("start is required");if(!e)throw new Error("end is required");if(r&&!C(r)||r<=0)throw new Error("options.resolution must be a number, greater than 0");if(i)throw new Error("options.minDistance is not yet implemented");var u=K(t),l=K(e);switch(t=a(u),e=a(l),it(s)){case"FeatureCollection":if(0===s.features.length)return h([u,l]);break;case"Polygon":s=f([o(rt(s))]);break;default:throw new Error("invalid obstacles")}var c=s;c.features.push(t),c.features.push(e);var p=Z(ts(gn(Z(c)),1.15));r||(r=me([p[0],p[1]],[p[2],p[1]],n)/100),c.features.pop(),c.features.pop();for(var g=p[0],d=p[1],y=p[2],v=p[3],_=r/me([g,d],[y,d],n)*(y-g),m=r/me([g,d],[g,v],n)*(v-d),x=y-g,E=v-d,b=Math.floor(x/_),w=Math.floor(E/m),I=(x-b*_)/2,N=[],S=[],M=[],L=[],O=1/0,R=1/0,T=v-(E-w*m)/2,A=0;T>=d;){for(var D=[],F=[],k=g+I,G=0;k<=y;){var q=a([k,T]),B=Js(q,s);D.push(B?0:1),F.push(k+"|"+T);var z=me(q,t);!B&&z<O&&(O=z,M={x:G,y:A});var j=me(q,e);!B&&j<R&&(R=j,L={x:G,y:A}),k+=_,G++}S.push(D),N.push(F),T-=m,A++}var U=new Ys(S,{diagonal:!0}),V=U.grid[M.y][M.x],X=U.grid[L.y][L.x],Y=Xs.search(U,V,X),H=[u];return Y.forEach((function(t){var e=N[t.x][t.y].split("|");H.push([+e[0],+e[1]])})),H.push(l),tn(h(H))},t.simplify=function(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=void 0!==e.tolerance?e.tolerance:1,r=e.highQuality||!1,i=e.mutate||!1;if(!t)throw new Error("geojson is required");if(n&&n<0)throw new Error("invalid tolerance");return!0!==i&&(t=Ie(t)),q(t,(function(t){!function(t,e,n){var r=t.type;if("Point"===r||"MultiPoint"===r)return t;tn(t,!0);var i=t.coordinates;switch(r){case"LineString":t.coordinates=ln(i,e,n);break;case"MultiLineString":t.coordinates=i.map((function(t){return ln(t,e,n)}));break;case"Polygon":t.coordinates=cn(i,e,n);break;case"MultiPolygon":t.coordinates=i.map((function(t){return cn(t,e,n)}))}}(t,n,r)})),t},t.square=yn,t.squareGrid=py,t.standardDeviationalEllipse=function(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.steps||64,r=e.weight,i=e.properties||{};if(!C(n))throw new Error("steps must be a number");if(!P(i))throw new Error("properties must be a number");var o=G(t).length,s=Fa(t,{weight:r}),a=0,u=0,l=0;F(t,(function(t){var e=t.properties[r]||1,n=Ga(Q(t),Q(s));a+=Math.pow(n.x,2)*e,u+=Math.pow(n.y,2)*e,l+=n.x*n.y*e}));var c=a-u,h=Math.sqrt(Math.pow(c,2)+4*Math.pow(l,2)),p=2*l,g=Math.atan((c+h)/p),d=180*g/Math.PI,y=0,v=0,_=0;F(t,(function(t){var e=t.properties[r]||1,n=Ga(Q(t),Q(s));y+=Math.pow(n.x*Math.cos(g)-n.y*Math.sin(g),2)*e,v+=Math.pow(n.x*Math.sin(g)+n.y*Math.cos(g),2)*e,_+=e}));var m=Math.sqrt(2*y/_),x=Math.sqrt(2*v/_),E=Aa(s,m,x,{units:"degrees",angle:d,steps:n,properties:i}),b=_e(t,f([E])),w={meanCenterCoordinates:Q(s),semiMajorAxis:m,semiMinorAxis:x,numberOfFeatures:o,angle:d,percentageWithinEllipse:100*G(b).length/o};return E.properties.standardDeviationalEllipse=w,E},t.tag=function(t,e,n,r){return t=Ie(t),e=Ie(e),F(t,(function(t){t.properties||(t.properties={}),F(e,(function(e){void 0===t.properties[r]&&ye(t,e)&&(t.properties[r]=e.properties[n])}))})),t},t.tesselate=function(t){if(!t.geometry||"Polygon"!==t.geometry.type&&"MultiPolygon"!==t.geometry.type)throw new Error("input must be a Polygon or MultiPolygon");var e={type:"FeatureCollection",features:[]};return"Polygon"===t.geometry.type?e.features=Wn(t.geometry.coordinates):t.geometry.coordinates.forEach((function(t){e.features=e.features.concat(Wn(t))})),e},t.tin=xe,t.toMercator=Va,t.toWgs84=Xa,t.transformRotate=$o,t.transformScale=ts,t.transformTranslate=function(t,e,n,r){if(!P(r=r||{}))throw new Error("options is invalid");var i=r.units,o=r.zTranslation,s=r.mutate;if(!t)throw new Error("geojson is required");if(null==e||isNaN(e))throw new Error("distance is required");if(o&&"number"!=typeof o&&isNaN(o))throw new Error("zTranslation is not a number");if(o=void 0!==o?o:0,0===e&&0===o)return t;if(null==n||isNaN(n))throw new Error("direction is required");return e<0&&(e=-e,n+=180),!1!==s&&void 0!==s||(t=Ie(t)),R(t,(function(t){var r=Q(ji(t,e,n,{units:i}));t[0]=r[0],t[1]=r[1],o&&3===t.length&&(t[2]+=o)})),t},t.triangleGrid=fy,t.truncate=ei,t.union=function(t,e,n){void 0===n&&(n={});var r=rt(t),i=rt(e),o=$u.union(r.coordinates,i.coordinates);return 0===o.length?null:1===o.length?l(o[0],n.properties):y(o,n.properties)},t.unitsFactors=r,t.unkinkPolygon=function(t){var e=[];return z(t,(function(t){"Polygon"===t.geometry.type&&F(oi(t),(function(n){e.push(l(n.geometry.coordinates,t.properties))}))})),f(e)},t.validateBBox=M,t.validateId=L,t.voronoi=function(t,e){if(!P(e=e||{}))throw new Error("options is invalid");var n=e.bbox||[-180,-85,180,85];if(!t)throw new Error("points is required");if(!Array.isArray(n))throw new Error("bbox is invalid");return nt(t,"Point","points"),f(function(){var t=Ks,e=Qs,n=null;function r(r){return new Ra(r.map((function(n,i){var o=[Math.round(t(n,i,r)/Ma)*Ma,Math.round(e(n,i,r)/Ma)*Ma];return o.index=i,o.data=n,o})),n)}return r.polygons=function(t){return r(t).polygons()},r.links=function(t){return r(t).links()},r.triangles=function(t){return r(t).triangles()},r.x=function(e){return arguments.length?(t="function"==typeof e?e:Zs(+e),r):t},r.y=function(t){return arguments.length?(e="function"==typeof t?t:Zs(+t),r):e},r.extent=function(t){return arguments.length?(n=null==t?null:[[+t[0][0],+t[0][1]],[+t[1][0],+t[1][1]]],r):n&&[[n[0][0],n[0][1]],[n[1][0],n[1][1]]]},r.size=function(t){return arguments.length?(n=null==t?null:[[0,0],[+t[0],+t[1]]],r):n&&[n[1][0]-n[0][0],n[1][1]-n[0][1]]},r}().x((function(t){return t.geometry.coordinates[0]})).y((function(t){return t.geometry.coordinates[1]})).extent([[n[0],n[1]],[n[2],n[3]]]).polygons(t.features).map(Ta))},t.within=_e,Object.defineProperty(t,"__esModule",{value:!0})}));
+
+}).call(this)}).call(this,require('_process'))
+},{"_process":256}],174:[function(require,module,exports){
 (function (Buffer){(function (){
 'use strict'
 
@@ -16907,7 +17357,7 @@ exports.stringifyObject = function (op, sep, cl, indent) {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":219,"jsonparse":179,"through":207}],171:[function(require,module,exports){
+},{"buffer":224,"jsonparse":183,"through":212}],175:[function(require,module,exports){
 'use strict';
 
 /**
@@ -16953,7 +17403,7 @@ const convert = {
 
 module.exports = convert;
 
-},{}],172:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 'use strict';
 
 const convert = require('./convert');
@@ -17218,7 +17668,7 @@ const metarParser = function (metarString) {
 
 module.exports = metarParser;
 
-},{"./convert":171}],173:[function(require,module,exports){
+},{"./convert":175}],177:[function(require,module,exports){
 /* globals document, ImageData */
 
 const parseFont = require('./lib/parse-font')
@@ -17255,7 +17705,7 @@ exports.loadImage = function (src, options) {
   })
 }
 
-},{"./lib/parse-font":174}],174:[function(require,module,exports){
+},{"./lib/parse-font":178}],178:[function(require,module,exports){
 'use strict'
 
 /**
@@ -17358,7 +17808,7 @@ module.exports = str => {
   return (cache[str] = font)
 }
 
-},{}],175:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 /**
  * chroma.js - JavaScript library for color conversions
  *
@@ -20943,7 +21393,7 @@ module.exports = str => {
 
 }));
 
-},{}],176:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 'use strict';
 
 const RBush = require('rbush');
@@ -21165,7 +21615,7 @@ class GeoJsonGeometriesLookup {
 
 module.exports = GeoJsonGeometriesLookup;
 
-},{"@turf/bbox":163,"@turf/boolean-contains":164,"geojson-geometries":177,"rbush":198}],177:[function(require,module,exports){
+},{"@turf/bbox":166,"@turf/boolean-contains":167,"geojson-geometries":181,"rbush":203}],181:[function(require,module,exports){
 'use strict';
 
 const POINT = 'Point';
@@ -21329,7 +21779,7 @@ class GeoJsonGeometries {
 
 module.exports = GeoJsonGeometries;
 
-},{}],178:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 var JSONStream = require('JSONStream');
 
 var open = '{"type":"FeatureCollection","features":[',
@@ -21345,7 +21795,7 @@ module.exports.stringify = function() {
     return jsonstream;
 };
 
-},{"JSONStream":170}],179:[function(require,module,exports){
+},{"JSONStream":174}],183:[function(require,module,exports){
 (function (Buffer){(function (){
 /*global Buffer*/
 // Named constants with unique integer values
@@ -21762,7 +22212,7 @@ Parser.C = C;
 module.exports = Parser;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":219}],180:[function(require,module,exports){
+},{"buffer":224}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -30347,7 +30797,7 @@ exports.VERSION = VERSION;
 exports.Zone = Zone;
 
 
-},{}],181:[function(require,module,exports){
+},{}],185:[function(require,module,exports){
 (function() {
     // http://www.met.tamu.edu/class/metar/metar-pg10-sky.html
     // https://ww8.fltplan.com/AreaForecast/abbreviations.htm
@@ -30770,7 +31220,7 @@ exports.Zone = Zone;
     }
 })();
 
-},{}],182:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 // Top level file is just a mixin of submodules & constants
 'use strict';
 
@@ -30790,7 +31240,7 @@ module.exports.inflateRaw = inflateRaw;
 module.exports.ungzip = ungzip;
 module.exports.constants = constants;
 
-},{"./lib/deflate":183,"./lib/inflate":184,"./lib/zlib/constants":188}],183:[function(require,module,exports){
+},{"./lib/deflate":187,"./lib/inflate":188,"./lib/zlib/constants":192}],187:[function(require,module,exports){
 'use strict';
 
 
@@ -31172,7 +31622,7 @@ module.exports.deflateRaw = deflateRaw;
 module.exports.gzip = gzip;
 module.exports.constants = require('./zlib/constants');
 
-},{"./utils/common":185,"./utils/strings":186,"./zlib/constants":188,"./zlib/deflate":190,"./zlib/messages":195,"./zlib/zstream":197}],184:[function(require,module,exports){
+},{"./utils/common":189,"./utils/strings":190,"./zlib/constants":192,"./zlib/deflate":194,"./zlib/messages":199,"./zlib/zstream":201}],188:[function(require,module,exports){
 'use strict';
 
 
@@ -31593,7 +32043,7 @@ module.exports.inflateRaw = inflateRaw;
 module.exports.ungzip = inflate;
 module.exports.constants = require('./zlib/constants');
 
-},{"./utils/common":185,"./utils/strings":186,"./zlib/constants":188,"./zlib/gzheader":191,"./zlib/inflate":193,"./zlib/messages":195,"./zlib/zstream":197}],185:[function(require,module,exports){
+},{"./utils/common":189,"./utils/strings":190,"./zlib/constants":192,"./zlib/gzheader":195,"./zlib/inflate":197,"./zlib/messages":199,"./zlib/zstream":201}],189:[function(require,module,exports){
 'use strict';
 
 
@@ -31643,7 +32093,7 @@ module.exports.flattenChunks = (chunks) => {
   return result;
 };
 
-},{}],186:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 // String encode/decode helpers
 'use strict';
 
@@ -31819,7 +32269,7 @@ module.exports.utf8border = (buf, max) => {
   return (pos + _utf8len[buf[pos]] > max) ? pos : max;
 };
 
-},{}],187:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -31872,7 +32322,7 @@ const adler32 = (adler, buf, len, pos) => {
 
 module.exports = adler32;
 
-},{}],188:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -31942,7 +32392,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],189:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -32003,7 +32453,7 @@ const crc32 = (crc, buf, len, pos) => {
 
 module.exports = crc32;
 
-},{}],190:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -33855,7 +34305,7 @@ module.exports.deflatePrime = deflatePrime;
 module.exports.deflateTune = deflateTune;
 */
 
-},{"./adler32":187,"./constants":188,"./crc32":189,"./messages":195,"./trees":196}],191:[function(require,module,exports){
+},{"./adler32":191,"./constants":192,"./crc32":193,"./messages":199,"./trees":200}],195:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -33915,7 +34365,7 @@ function GZheader() {
 
 module.exports = GZheader;
 
-},{}],192:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -34261,7 +34711,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],193:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -35810,7 +36260,7 @@ module.exports.inflateSyncPoint = inflateSyncPoint;
 module.exports.inflateUndermine = inflateUndermine;
 */
 
-},{"./adler32":187,"./constants":188,"./crc32":189,"./inffast":192,"./inftrees":194}],194:[function(require,module,exports){
+},{"./adler32":191,"./constants":192,"./crc32":193,"./inffast":196,"./inftrees":198}],198:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -36156,7 +36606,7 @@ const inflate_table = (type, lens, lens_index, codes, table, table_index, work, 
 
 module.exports = inflate_table;
 
-},{}],195:[function(require,module,exports){
+},{}],199:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -36190,7 +36640,7 @@ module.exports = {
   '-6':   'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],196:[function(require,module,exports){
+},{}],200:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -37421,7 +37871,7 @@ module.exports._tr_flush_block  = _tr_flush_block;
 module.exports._tr_tally = _tr_tally;
 module.exports._tr_align = _tr_align;
 
-},{}],197:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -37470,10 +37920,7346 @@ function ZStream() {
 
 module.exports = ZStream;
 
-},{}],198:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.proj4 = factory());
+}(this, (function () { 'use strict';
+
+    var globals = function(defs) {
+      defs('EPSG:4326', "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees");
+      defs('EPSG:4269', "+title=NAD83 (long/lat) +proj=longlat +a=6378137.0 +b=6356752.31414036 +ellps=GRS80 +datum=NAD83 +units=degrees");
+      defs('EPSG:3857', "+title=WGS 84 / Pseudo-Mercator +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs");
+
+      defs.WGS84 = defs['EPSG:4326'];
+      defs['EPSG:3785'] = defs['EPSG:3857']; // maintain backward compat, official code is 3857
+      defs.GOOGLE = defs['EPSG:3857'];
+      defs['EPSG:900913'] = defs['EPSG:3857'];
+      defs['EPSG:102113'] = defs['EPSG:3857'];
+    };
+
+    var PJD_3PARAM = 1;
+    var PJD_7PARAM = 2;
+    var PJD_GRIDSHIFT = 3;
+    var PJD_WGS84 = 4; // WGS84 or equivalent
+    var PJD_NODATUM = 5; // WGS84 or equivalent
+    var SRS_WGS84_SEMIMAJOR = 6378137.0;  // only used in grid shift transforms
+    var SRS_WGS84_SEMIMINOR = 6356752.314;  // only used in grid shift transforms
+    var SRS_WGS84_ESQUARED = 0.0066943799901413165; // only used in grid shift transforms
+    var SEC_TO_RAD = 4.84813681109535993589914102357e-6;
+    var HALF_PI = Math.PI/2;
+    // ellipoid pj_set_ell.c
+    var SIXTH = 0.1666666666666666667;
+    /* 1/6 */
+    var RA4 = 0.04722222222222222222;
+    /* 17/360 */
+    var RA6 = 0.02215608465608465608;
+    var EPSLN = 1.0e-10;
+    // you'd think you could use Number.EPSILON above but that makes
+    // Mollweide get into an infinate loop.
+
+    var D2R = 0.01745329251994329577;
+    var R2D = 57.29577951308232088;
+    var FORTPI = Math.PI/4;
+    var TWO_PI = Math.PI * 2;
+    // SPI is slightly greater than Math.PI, so values that exceed the -180..180
+    // degree range by a tiny amount don't get wrapped. This prevents points that
+    // have drifted from their original location along the 180th meridian (due to
+    // floating point error) from changing their sign.
+    var SPI = 3.14159265359;
+
+    var exports$1 = {};
+    exports$1.greenwich = 0.0; //"0dE",
+    exports$1.lisbon = -9.131906111111; //"9d07'54.862\"W",
+    exports$1.paris = 2.337229166667; //"2d20'14.025\"E",
+    exports$1.bogota = -74.080916666667; //"74d04'51.3\"W",
+    exports$1.madrid = -3.687938888889; //"3d41'16.58\"W",
+    exports$1.rome = 12.452333333333; //"12d27'8.4\"E",
+    exports$1.bern = 7.439583333333; //"7d26'22.5\"E",
+    exports$1.jakarta = 106.807719444444; //"106d48'27.79\"E",
+    exports$1.ferro = -17.666666666667; //"17d40'W",
+    exports$1.brussels = 4.367975; //"4d22'4.71\"E",
+    exports$1.stockholm = 18.058277777778; //"18d3'29.8\"E",
+    exports$1.athens = 23.7163375; //"23d42'58.815\"E",
+    exports$1.oslo = 10.722916666667; //"10d43'22.5\"E"
+
+    var units = {
+      ft: {to_meter: 0.3048},
+      'us-ft': {to_meter: 1200 / 3937}
+    };
+
+    var ignoredChar = /[\s_\-\/\(\)]/g;
+    function match(obj, key) {
+      if (obj[key]) {
+        return obj[key];
+      }
+      var keys = Object.keys(obj);
+      var lkey = key.toLowerCase().replace(ignoredChar, '');
+      var i = -1;
+      var testkey, processedKey;
+      while (++i < keys.length) {
+        testkey = keys[i];
+        processedKey = testkey.toLowerCase().replace(ignoredChar, '');
+        if (processedKey === lkey) {
+          return obj[testkey];
+        }
+      }
+    }
+
+    var parseProj = function(defData) {
+      var self = {};
+      var paramObj = defData.split('+').map(function(v) {
+        return v.trim();
+      }).filter(function(a) {
+        return a;
+      }).reduce(function(p, a) {
+        var split = a.split('=');
+        split.push(true);
+        p[split[0].toLowerCase()] = split[1];
+        return p;
+      }, {});
+      var paramName, paramVal, paramOutname;
+      var params = {
+        proj: 'projName',
+        datum: 'datumCode',
+        rf: function(v) {
+          self.rf = parseFloat(v);
+        },
+        lat_0: function(v) {
+          self.lat0 = v * D2R;
+        },
+        lat_1: function(v) {
+          self.lat1 = v * D2R;
+        },
+        lat_2: function(v) {
+          self.lat2 = v * D2R;
+        },
+        lat_ts: function(v) {
+          self.lat_ts = v * D2R;
+        },
+        lon_0: function(v) {
+          self.long0 = v * D2R;
+        },
+        lon_1: function(v) {
+          self.long1 = v * D2R;
+        },
+        lon_2: function(v) {
+          self.long2 = v * D2R;
+        },
+        alpha: function(v) {
+          self.alpha = parseFloat(v) * D2R;
+        },
+        gamma: function(v) {
+          self.rectified_grid_angle = parseFloat(v);
+        },
+        lonc: function(v) {
+          self.longc = v * D2R;
+        },
+        x_0: function(v) {
+          self.x0 = parseFloat(v);
+        },
+        y_0: function(v) {
+          self.y0 = parseFloat(v);
+        },
+        k_0: function(v) {
+          self.k0 = parseFloat(v);
+        },
+        k: function(v) {
+          self.k0 = parseFloat(v);
+        },
+        a: function(v) {
+          self.a = parseFloat(v);
+        },
+        b: function(v) {
+          self.b = parseFloat(v);
+        },
+        r_a: function() {
+          self.R_A = true;
+        },
+        zone: function(v) {
+          self.zone = parseInt(v, 10);
+        },
+        south: function() {
+          self.utmSouth = true;
+        },
+        towgs84: function(v) {
+          self.datum_params = v.split(",").map(function(a) {
+            return parseFloat(a);
+          });
+        },
+        to_meter: function(v) {
+          self.to_meter = parseFloat(v);
+        },
+        units: function(v) {
+          self.units = v;
+          var unit = match(units, v);
+          if (unit) {
+            self.to_meter = unit.to_meter;
+          }
+        },
+        from_greenwich: function(v) {
+          self.from_greenwich = v * D2R;
+        },
+        pm: function(v) {
+          var pm = match(exports$1, v);
+          self.from_greenwich = (pm ? pm : parseFloat(v)) * D2R;
+        },
+        nadgrids: function(v) {
+          if (v === '@null') {
+            self.datumCode = 'none';
+          }
+          else {
+            self.nadgrids = v;
+          }
+        },
+        axis: function(v) {
+          var legalAxis = "ewnsud";
+          if (v.length === 3 && legalAxis.indexOf(v.substr(0, 1)) !== -1 && legalAxis.indexOf(v.substr(1, 1)) !== -1 && legalAxis.indexOf(v.substr(2, 1)) !== -1) {
+            self.axis = v;
+          }
+        },
+        approx: function() {
+          self.approx = true;
+        }
+      };
+      for (paramName in paramObj) {
+        paramVal = paramObj[paramName];
+        if (paramName in params) {
+          paramOutname = params[paramName];
+          if (typeof paramOutname === 'function') {
+            paramOutname(paramVal);
+          }
+          else {
+            self[paramOutname] = paramVal;
+          }
+        }
+        else {
+          self[paramName] = paramVal;
+        }
+      }
+      if(typeof self.datumCode === 'string' && self.datumCode !== "WGS84"){
+        self.datumCode = self.datumCode.toLowerCase();
+      }
+      return self;
+    };
+
+    var NEUTRAL = 1;
+    var KEYWORD = 2;
+    var NUMBER = 3;
+    var QUOTED = 4;
+    var AFTERQUOTE = 5;
+    var ENDED = -1;
+    var whitespace = /\s/;
+    var latin = /[A-Za-z]/;
+    var keyword = /[A-Za-z84]/;
+    var endThings = /[,\]]/;
+    var digets = /[\d\.E\-\+]/;
+    // const ignoredChar = /[\s_\-\/\(\)]/g;
+    function Parser(text) {
+      if (typeof text !== 'string') {
+        throw new Error('not a string');
+      }
+      this.text = text.trim();
+      this.level = 0;
+      this.place = 0;
+      this.root = null;
+      this.stack = [];
+      this.currentObject = null;
+      this.state = NEUTRAL;
+    }
+    Parser.prototype.readCharicter = function() {
+      var char = this.text[this.place++];
+      if (this.state !== QUOTED) {
+        while (whitespace.test(char)) {
+          if (this.place >= this.text.length) {
+            return;
+          }
+          char = this.text[this.place++];
+        }
+      }
+      switch (this.state) {
+        case NEUTRAL:
+          return this.neutral(char);
+        case KEYWORD:
+          return this.keyword(char)
+        case QUOTED:
+          return this.quoted(char);
+        case AFTERQUOTE:
+          return this.afterquote(char);
+        case NUMBER:
+          return this.number(char);
+        case ENDED:
+          return;
+      }
+    };
+    Parser.prototype.afterquote = function(char) {
+      if (char === '"') {
+        this.word += '"';
+        this.state = QUOTED;
+        return;
+      }
+      if (endThings.test(char)) {
+        this.word = this.word.trim();
+        this.afterItem(char);
+        return;
+      }
+      throw new Error('havn\'t handled "' +char + '" in afterquote yet, index ' + this.place);
+    };
+    Parser.prototype.afterItem = function(char) {
+      if (char === ',') {
+        if (this.word !== null) {
+          this.currentObject.push(this.word);
+        }
+        this.word = null;
+        this.state = NEUTRAL;
+        return;
+      }
+      if (char === ']') {
+        this.level--;
+        if (this.word !== null) {
+          this.currentObject.push(this.word);
+          this.word = null;
+        }
+        this.state = NEUTRAL;
+        this.currentObject = this.stack.pop();
+        if (!this.currentObject) {
+          this.state = ENDED;
+        }
+
+        return;
+      }
+    };
+    Parser.prototype.number = function(char) {
+      if (digets.test(char)) {
+        this.word += char;
+        return;
+      }
+      if (endThings.test(char)) {
+        this.word = parseFloat(this.word);
+        this.afterItem(char);
+        return;
+      }
+      throw new Error('havn\'t handled "' +char + '" in number yet, index ' + this.place);
+    };
+    Parser.prototype.quoted = function(char) {
+      if (char === '"') {
+        this.state = AFTERQUOTE;
+        return;
+      }
+      this.word += char;
+      return;
+    };
+    Parser.prototype.keyword = function(char) {
+      if (keyword.test(char)) {
+        this.word += char;
+        return;
+      }
+      if (char === '[') {
+        var newObjects = [];
+        newObjects.push(this.word);
+        this.level++;
+        if (this.root === null) {
+          this.root = newObjects;
+        } else {
+          this.currentObject.push(newObjects);
+        }
+        this.stack.push(this.currentObject);
+        this.currentObject = newObjects;
+        this.state = NEUTRAL;
+        return;
+      }
+      if (endThings.test(char)) {
+        this.afterItem(char);
+        return;
+      }
+      throw new Error('havn\'t handled "' +char + '" in keyword yet, index ' + this.place);
+    };
+    Parser.prototype.neutral = function(char) {
+      if (latin.test(char)) {
+        this.word = char;
+        this.state = KEYWORD;
+        return;
+      }
+      if (char === '"') {
+        this.word = '';
+        this.state = QUOTED;
+        return;
+      }
+      if (digets.test(char)) {
+        this.word = char;
+        this.state = NUMBER;
+        return;
+      }
+      if (endThings.test(char)) {
+        this.afterItem(char);
+        return;
+      }
+      throw new Error('havn\'t handled "' +char + '" in neutral yet, index ' + this.place);
+    };
+    Parser.prototype.output = function() {
+      while (this.place < this.text.length) {
+        this.readCharicter();
+      }
+      if (this.state === ENDED) {
+        return this.root;
+      }
+      throw new Error('unable to parse string "' +this.text + '". State is ' + this.state);
+    };
+
+    function parseString(txt) {
+      var parser = new Parser(txt);
+      return parser.output();
+    }
+
+    function mapit(obj, key, value) {
+      if (Array.isArray(key)) {
+        value.unshift(key);
+        key = null;
+      }
+      var thing = key ? {} : obj;
+
+      var out = value.reduce(function(newObj, item) {
+        sExpr(item, newObj);
+        return newObj
+      }, thing);
+      if (key) {
+        obj[key] = out;
+      }
+    }
+
+    function sExpr(v, obj) {
+      if (!Array.isArray(v)) {
+        obj[v] = true;
+        return;
+      }
+      var key = v.shift();
+      if (key === 'PARAMETER') {
+        key = v.shift();
+      }
+      if (v.length === 1) {
+        if (Array.isArray(v[0])) {
+          obj[key] = {};
+          sExpr(v[0], obj[key]);
+          return;
+        }
+        obj[key] = v[0];
+        return;
+      }
+      if (!v.length) {
+        obj[key] = true;
+        return;
+      }
+      if (key === 'TOWGS84') {
+        obj[key] = v;
+        return;
+      }
+      if (key === 'AXIS') {
+        if (!(key in obj)) {
+          obj[key] = [];
+        }
+        obj[key].push(v);
+        return;
+      }
+      if (!Array.isArray(key)) {
+        obj[key] = {};
+      }
+
+      var i;
+      switch (key) {
+        case 'UNIT':
+        case 'PRIMEM':
+        case 'VERT_DATUM':
+          obj[key] = {
+            name: v[0].toLowerCase(),
+            convert: v[1]
+          };
+          if (v.length === 3) {
+            sExpr(v[2], obj[key]);
+          }
+          return;
+        case 'SPHEROID':
+        case 'ELLIPSOID':
+          obj[key] = {
+            name: v[0],
+            a: v[1],
+            rf: v[2]
+          };
+          if (v.length === 4) {
+            sExpr(v[3], obj[key]);
+          }
+          return;
+        case 'PROJECTEDCRS':
+        case 'PROJCRS':
+        case 'GEOGCS':
+        case 'GEOCCS':
+        case 'PROJCS':
+        case 'LOCAL_CS':
+        case 'GEODCRS':
+        case 'GEODETICCRS':
+        case 'GEODETICDATUM':
+        case 'EDATUM':
+        case 'ENGINEERINGDATUM':
+        case 'VERT_CS':
+        case 'VERTCRS':
+        case 'VERTICALCRS':
+        case 'COMPD_CS':
+        case 'COMPOUNDCRS':
+        case 'ENGINEERINGCRS':
+        case 'ENGCRS':
+        case 'FITTED_CS':
+        case 'LOCAL_DATUM':
+        case 'DATUM':
+          v[0] = ['name', v[0]];
+          mapit(obj, key, v);
+          return;
+        default:
+          i = -1;
+          while (++i < v.length) {
+            if (!Array.isArray(v[i])) {
+              return sExpr(v, obj[key]);
+            }
+          }
+          return mapit(obj, key, v);
+      }
+    }
+
+    var D2R$1 = 0.01745329251994329577;
+    function rename(obj, params) {
+      var outName = params[0];
+      var inName = params[1];
+      if (!(outName in obj) && (inName in obj)) {
+        obj[outName] = obj[inName];
+        if (params.length === 3) {
+          obj[outName] = params[2](obj[outName]);
+        }
+      }
+    }
+
+    function d2r(input) {
+      return input * D2R$1;
+    }
+
+    function cleanWKT(wkt) {
+      if (wkt.type === 'GEOGCS') {
+        wkt.projName = 'longlat';
+      } else if (wkt.type === 'LOCAL_CS') {
+        wkt.projName = 'identity';
+        wkt.local = true;
+      } else {
+        if (typeof wkt.PROJECTION === 'object') {
+          wkt.projName = Object.keys(wkt.PROJECTION)[0];
+        } else {
+          wkt.projName = wkt.PROJECTION;
+        }
+      }
+      if (wkt.AXIS) {
+        var axisOrder = '';
+        for (var i = 0, ii = wkt.AXIS.length; i < ii; ++i) {
+          var axis = [wkt.AXIS[i][0].toLowerCase(), wkt.AXIS[i][1].toLowerCase()];
+          if (axis[0].indexOf('north') !== -1 || ((axis[0] === 'y' || axis[0] === 'lat') && axis[1] === 'north')) {
+            axisOrder += 'n';
+          } else if (axis[0].indexOf('south') !== -1 || ((axis[0] === 'y' || axis[0] === 'lat') && axis[1] === 'south')) {
+            axisOrder += 's';
+          } else if (axis[0].indexOf('east') !== -1 || ((axis[0] === 'x' || axis[0] === 'lon') && axis[1] === 'east')) {
+            axisOrder += 'e';
+          } else if (axis[0].indexOf('west') !== -1 || ((axis[0] === 'x' || axis[0] === 'lon') && axis[1] === 'west')) {
+            axisOrder += 'w';
+          }
+        }
+        if (axisOrder.length === 2) {
+          axisOrder += 'u';
+        }
+        if (axisOrder.length === 3) {
+          wkt.axis = axisOrder;
+        }
+      }
+      if (wkt.UNIT) {
+        wkt.units = wkt.UNIT.name.toLowerCase();
+        if (wkt.units === 'metre') {
+          wkt.units = 'meter';
+        }
+        if (wkt.UNIT.convert) {
+          if (wkt.type === 'GEOGCS') {
+            if (wkt.DATUM && wkt.DATUM.SPHEROID) {
+              wkt.to_meter = wkt.UNIT.convert*wkt.DATUM.SPHEROID.a;
+            }
+          } else {
+            wkt.to_meter = wkt.UNIT.convert;
+          }
+        }
+      }
+      var geogcs = wkt.GEOGCS;
+      if (wkt.type === 'GEOGCS') {
+        geogcs = wkt;
+      }
+      if (geogcs) {
+        //if(wkt.GEOGCS.PRIMEM&&wkt.GEOGCS.PRIMEM.convert){
+        //  wkt.from_greenwich=wkt.GEOGCS.PRIMEM.convert*D2R;
+        //}
+        if (geogcs.DATUM) {
+          wkt.datumCode = geogcs.DATUM.name.toLowerCase();
+        } else {
+          wkt.datumCode = geogcs.name.toLowerCase();
+        }
+        if (wkt.datumCode.slice(0, 2) === 'd_') {
+          wkt.datumCode = wkt.datumCode.slice(2);
+        }
+        if (wkt.datumCode === 'new_zealand_geodetic_datum_1949' || wkt.datumCode === 'new_zealand_1949') {
+          wkt.datumCode = 'nzgd49';
+        }
+        if (wkt.datumCode === 'wgs_1984' || wkt.datumCode === 'world_geodetic_system_1984') {
+          if (wkt.PROJECTION === 'Mercator_Auxiliary_Sphere') {
+            wkt.sphere = true;
+          }
+          wkt.datumCode = 'wgs84';
+        }
+        if (wkt.datumCode.slice(-6) === '_ferro') {
+          wkt.datumCode = wkt.datumCode.slice(0, - 6);
+        }
+        if (wkt.datumCode.slice(-8) === '_jakarta') {
+          wkt.datumCode = wkt.datumCode.slice(0, - 8);
+        }
+        if (~wkt.datumCode.indexOf('belge')) {
+          wkt.datumCode = 'rnb72';
+        }
+        if (geogcs.DATUM && geogcs.DATUM.SPHEROID) {
+          wkt.ellps = geogcs.DATUM.SPHEROID.name.replace('_19', '').replace(/[Cc]larke\_18/, 'clrk');
+          if (wkt.ellps.toLowerCase().slice(0, 13) === 'international') {
+            wkt.ellps = 'intl';
+          }
+
+          wkt.a = geogcs.DATUM.SPHEROID.a;
+          wkt.rf = parseFloat(geogcs.DATUM.SPHEROID.rf, 10);
+        }
+
+        if (geogcs.DATUM && geogcs.DATUM.TOWGS84) {
+          wkt.datum_params = geogcs.DATUM.TOWGS84;
+        }
+        if (~wkt.datumCode.indexOf('osgb_1936')) {
+          wkt.datumCode = 'osgb36';
+        }
+        if (~wkt.datumCode.indexOf('osni_1952')) {
+          wkt.datumCode = 'osni52';
+        }
+        if (~wkt.datumCode.indexOf('tm65')
+          || ~wkt.datumCode.indexOf('geodetic_datum_of_1965')) {
+          wkt.datumCode = 'ire65';
+        }
+        if (wkt.datumCode === 'ch1903+') {
+          wkt.datumCode = 'ch1903';
+        }
+        if (~wkt.datumCode.indexOf('israel')) {
+          wkt.datumCode = 'isr93';
+        }
+      }
+      if (wkt.b && !isFinite(wkt.b)) {
+        wkt.b = wkt.a;
+      }
+
+      function toMeter(input) {
+        var ratio = wkt.to_meter || 1;
+        return input * ratio;
+      }
+      var renamer = function(a) {
+        return rename(wkt, a);
+      };
+      var list = [
+        ['standard_parallel_1', 'Standard_Parallel_1'],
+        ['standard_parallel_1', 'Latitude of 1st standard parallel'],
+        ['standard_parallel_2', 'Standard_Parallel_2'],
+        ['standard_parallel_2', 'Latitude of 2nd standard parallel'],
+        ['false_easting', 'False_Easting'],
+        ['false_easting', 'False easting'],
+        ['false-easting', 'Easting at false origin'],
+        ['false_northing', 'False_Northing'],
+        ['false_northing', 'False northing'],
+        ['false_northing', 'Northing at false origin'],
+        ['central_meridian', 'Central_Meridian'],
+        ['central_meridian', 'Longitude of natural origin'],
+        ['central_meridian', 'Longitude of false origin'],
+        ['latitude_of_origin', 'Latitude_Of_Origin'],
+        ['latitude_of_origin', 'Central_Parallel'],
+        ['latitude_of_origin', 'Latitude of natural origin'],
+        ['latitude_of_origin', 'Latitude of false origin'],
+        ['scale_factor', 'Scale_Factor'],
+        ['k0', 'scale_factor'],
+        ['latitude_of_center', 'Latitude_Of_Center'],
+        ['latitude_of_center', 'Latitude_of_center'],
+        ['lat0', 'latitude_of_center', d2r],
+        ['longitude_of_center', 'Longitude_Of_Center'],
+        ['longitude_of_center', 'Longitude_of_center'],
+        ['longc', 'longitude_of_center', d2r],
+        ['x0', 'false_easting', toMeter],
+        ['y0', 'false_northing', toMeter],
+        ['long0', 'central_meridian', d2r],
+        ['lat0', 'latitude_of_origin', d2r],
+        ['lat0', 'standard_parallel_1', d2r],
+        ['lat1', 'standard_parallel_1', d2r],
+        ['lat2', 'standard_parallel_2', d2r],
+        ['azimuth', 'Azimuth'],
+        ['alpha', 'azimuth', d2r],
+        ['srsCode', 'name']
+      ];
+      list.forEach(renamer);
+      if (!wkt.long0 && wkt.longc && (wkt.projName === 'Albers_Conic_Equal_Area' || wkt.projName === 'Lambert_Azimuthal_Equal_Area')) {
+        wkt.long0 = wkt.longc;
+      }
+      if (!wkt.lat_ts && wkt.lat1 && (wkt.projName === 'Stereographic_South_Pole' || wkt.projName === 'Polar Stereographic (variant B)')) {
+        wkt.lat0 = d2r(wkt.lat1 > 0 ? 90 : -90);
+        wkt.lat_ts = wkt.lat1;
+      }
+    }
+    var wkt = function(wkt) {
+      var lisp = parseString(wkt);
+      var type = lisp.shift();
+      var name = lisp.shift();
+      lisp.unshift(['name', name]);
+      lisp.unshift(['type', type]);
+      var obj = {};
+      sExpr(lisp, obj);
+      cleanWKT(obj);
+      return obj;
+    };
+
+    function defs(name) {
+      /*global console*/
+      var that = this;
+      if (arguments.length === 2) {
+        var def = arguments[1];
+        if (typeof def === 'string') {
+          if (def.charAt(0) === '+') {
+            defs[name] = parseProj(arguments[1]);
+          }
+          else {
+            defs[name] = wkt(arguments[1]);
+          }
+        } else {
+          defs[name] = def;
+        }
+      }
+      else if (arguments.length === 1) {
+        if (Array.isArray(name)) {
+          return name.map(function(v) {
+            if (Array.isArray(v)) {
+              defs.apply(that, v);
+            }
+            else {
+              defs(v);
+            }
+          });
+        }
+        else if (typeof name === 'string') {
+          if (name in defs) {
+            return defs[name];
+          }
+        }
+        else if ('EPSG' in name) {
+          defs['EPSG:' + name.EPSG] = name;
+        }
+        else if ('ESRI' in name) {
+          defs['ESRI:' + name.ESRI] = name;
+        }
+        else if ('IAU2000' in name) {
+          defs['IAU2000:' + name.IAU2000] = name;
+        }
+        else {
+          console.log(name);
+        }
+        return;
+      }
+
+
+    }
+    globals(defs);
+
+    function testObj(code){
+      return typeof code === 'string';
+    }
+    function testDef(code){
+      return code in defs;
+    }
+    var codeWords = ['PROJECTEDCRS', 'PROJCRS', 'GEOGCS','GEOCCS','PROJCS','LOCAL_CS', 'GEODCRS', 'GEODETICCRS', 'GEODETICDATUM', 'ENGCRS', 'ENGINEERINGCRS'];
+    function testWKT(code){
+      return codeWords.some(function (word) {
+        return code.indexOf(word) > -1;
+      });
+    }
+    var codes = ['3857', '900913', '3785', '102113'];
+    function checkMercator(item) {
+      var auth = match(item, 'authority');
+      if (!auth) {
+        return;
+      }
+      var code = match(auth, 'epsg');
+      return code && codes.indexOf(code) > -1;
+    }
+    function checkProjStr(item) {
+      var ext = match(item, 'extension');
+      if (!ext) {
+        return;
+      }
+      return match(ext, 'proj4');
+    }
+    function testProj(code){
+      return code[0] === '+';
+    }
+    function parse(code){
+      if (testObj(code)) {
+        //check to see if this is a WKT string
+        if (testDef(code)) {
+          return defs[code];
+        }
+        if (testWKT(code)) {
+          var out = wkt(code);
+          // test of spetial case, due to this being a very common and often malformed
+          if (checkMercator(out)) {
+            return defs['EPSG:3857'];
+          }
+          var maybeProjStr = checkProjStr(out);
+          if (maybeProjStr) {
+            return parseProj(maybeProjStr);
+          }
+          return out;
+        }
+        if (testProj(code)) {
+          return parseProj(code);
+        }
+      }else{
+        return code;
+      }
+    }
+
+    var extend = function(destination, source) {
+      destination = destination || {};
+      var value, property;
+      if (!source) {
+        return destination;
+      }
+      for (property in source) {
+        value = source[property];
+        if (value !== undefined) {
+          destination[property] = value;
+        }
+      }
+      return destination;
+    };
+
+    var msfnz = function(eccent, sinphi, cosphi) {
+      var con = eccent * sinphi;
+      return cosphi / (Math.sqrt(1 - con * con));
+    };
+
+    var sign = function(x) {
+      return x<0 ? -1 : 1;
+    };
+
+    var adjust_lon = function(x) {
+      return (Math.abs(x) <= SPI) ? x : (x - (sign(x) * TWO_PI));
+    };
+
+    var tsfnz = function(eccent, phi, sinphi) {
+      var con = eccent * sinphi;
+      var com = 0.5 * eccent;
+      con = Math.pow(((1 - con) / (1 + con)), com);
+      return (Math.tan(0.5 * (HALF_PI - phi)) / con);
+    };
+
+    var phi2z = function(eccent, ts) {
+      var eccnth = 0.5 * eccent;
+      var con, dphi;
+      var phi = HALF_PI - 2 * Math.atan(ts);
+      for (var i = 0; i <= 15; i++) {
+        con = eccent * Math.sin(phi);
+        dphi = HALF_PI - 2 * Math.atan(ts * (Math.pow(((1 - con) / (1 + con)), eccnth))) - phi;
+        phi += dphi;
+        if (Math.abs(dphi) <= 0.0000000001) {
+          return phi;
+        }
+      }
+      //console.log("phi2z has NoConvergence");
+      return -9999;
+    };
+
+    function init() {
+      var con = this.b / this.a;
+      this.es = 1 - con * con;
+      if(!('x0' in this)){
+        this.x0 = 0;
+      }
+      if(!('y0' in this)){
+        this.y0 = 0;
+      }
+      this.e = Math.sqrt(this.es);
+      if (this.lat_ts) {
+        if (this.sphere) {
+          this.k0 = Math.cos(this.lat_ts);
+        }
+        else {
+          this.k0 = msfnz(this.e, Math.sin(this.lat_ts), Math.cos(this.lat_ts));
+        }
+      }
+      else {
+        if (!this.k0) {
+          if (this.k) {
+            this.k0 = this.k;
+          }
+          else {
+            this.k0 = 1;
+          }
+        }
+      }
+    }
+
+    /* Mercator forward equations--mapping lat,long to x,y
+      --------------------------------------------------*/
+
+    function forward(p) {
+      var lon = p.x;
+      var lat = p.y;
+      // convert to radians
+      if (lat * R2D > 90 && lat * R2D < -90 && lon * R2D > 180 && lon * R2D < -180) {
+        return null;
+      }
+
+      var x, y;
+      if (Math.abs(Math.abs(lat) - HALF_PI) <= EPSLN) {
+        return null;
+      }
+      else {
+        if (this.sphere) {
+          x = this.x0 + this.a * this.k0 * adjust_lon(lon - this.long0);
+          y = this.y0 + this.a * this.k0 * Math.log(Math.tan(FORTPI + 0.5 * lat));
+        }
+        else {
+          var sinphi = Math.sin(lat);
+          var ts = tsfnz(this.e, lat, sinphi);
+          x = this.x0 + this.a * this.k0 * adjust_lon(lon - this.long0);
+          y = this.y0 - this.a * this.k0 * Math.log(ts);
+        }
+        p.x = x;
+        p.y = y;
+        return p;
+      }
+    }
+
+    /* Mercator inverse equations--mapping x,y to lat/long
+      --------------------------------------------------*/
+    function inverse(p) {
+
+      var x = p.x - this.x0;
+      var y = p.y - this.y0;
+      var lon, lat;
+
+      if (this.sphere) {
+        lat = HALF_PI - 2 * Math.atan(Math.exp(-y / (this.a * this.k0)));
+      }
+      else {
+        var ts = Math.exp(-y / (this.a * this.k0));
+        lat = phi2z(this.e, ts);
+        if (lat === -9999) {
+          return null;
+        }
+      }
+      lon = adjust_lon(this.long0 + x / (this.a * this.k0));
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$1 = ["Mercator", "Popular Visualisation Pseudo Mercator", "Mercator_1SP", "Mercator_Auxiliary_Sphere", "merc"];
+    var merc = {
+      init: init,
+      forward: forward,
+      inverse: inverse,
+      names: names$1
+    };
+
+    function init$1() {
+      //no-op for longlat
+    }
+
+    function identity(pt) {
+      return pt;
+    }
+    var names$2 = ["longlat", "identity"];
+    var longlat = {
+      init: init$1,
+      forward: identity,
+      inverse: identity,
+      names: names$2
+    };
+
+    var projs = [merc, longlat];
+    var names = {};
+    var projStore = [];
+
+    function add(proj, i) {
+      var len = projStore.length;
+      if (!proj.names) {
+        console.log(i);
+        return true;
+      }
+      projStore[len] = proj;
+      proj.names.forEach(function(n) {
+        names[n.toLowerCase()] = len;
+      });
+      return this;
+    }
+
+    function get(name) {
+      if (!name) {
+        return false;
+      }
+      var n = name.toLowerCase();
+      if (typeof names[n] !== 'undefined' && projStore[names[n]]) {
+        return projStore[names[n]];
+      }
+    }
+
+    function start() {
+      projs.forEach(add);
+    }
+    var projections = {
+      start: start,
+      add: add,
+      get: get
+    };
+
+    var exports$2 = {};
+    exports$2.MERIT = {
+      a: 6378137.0,
+      rf: 298.257,
+      ellipseName: "MERIT 1983"
+    };
+
+    exports$2.SGS85 = {
+      a: 6378136.0,
+      rf: 298.257,
+      ellipseName: "Soviet Geodetic System 85"
+    };
+
+    exports$2.GRS80 = {
+      a: 6378137.0,
+      rf: 298.257222101,
+      ellipseName: "GRS 1980(IUGG, 1980)"
+    };
+
+    exports$2.IAU76 = {
+      a: 6378140.0,
+      rf: 298.257,
+      ellipseName: "IAU 1976"
+    };
+
+    exports$2.airy = {
+      a: 6377563.396,
+      b: 6356256.910,
+      ellipseName: "Airy 1830"
+    };
+
+    exports$2.APL4 = {
+      a: 6378137,
+      rf: 298.25,
+      ellipseName: "Appl. Physics. 1965"
+    };
+
+    exports$2.NWL9D = {
+      a: 6378145.0,
+      rf: 298.25,
+      ellipseName: "Naval Weapons Lab., 1965"
+    };
+
+    exports$2.mod_airy = {
+      a: 6377340.189,
+      b: 6356034.446,
+      ellipseName: "Modified Airy"
+    };
+
+    exports$2.andrae = {
+      a: 6377104.43,
+      rf: 300.0,
+      ellipseName: "Andrae 1876 (Den., Iclnd.)"
+    };
+
+    exports$2.aust_SA = {
+      a: 6378160.0,
+      rf: 298.25,
+      ellipseName: "Australian Natl & S. Amer. 1969"
+    };
+
+    exports$2.GRS67 = {
+      a: 6378160.0,
+      rf: 298.2471674270,
+      ellipseName: "GRS 67(IUGG 1967)"
+    };
+
+    exports$2.bessel = {
+      a: 6377397.155,
+      rf: 299.1528128,
+      ellipseName: "Bessel 1841"
+    };
+
+    exports$2.bess_nam = {
+      a: 6377483.865,
+      rf: 299.1528128,
+      ellipseName: "Bessel 1841 (Namibia)"
+    };
+
+    exports$2.clrk66 = {
+      a: 6378206.4,
+      b: 6356583.8,
+      ellipseName: "Clarke 1866"
+    };
+
+    exports$2.clrk80 = {
+      a: 6378249.145,
+      rf: 293.4663,
+      ellipseName: "Clarke 1880 mod."
+    };
+
+    exports$2.clrk58 = {
+      a: 6378293.645208759,
+      rf: 294.2606763692654,
+      ellipseName: "Clarke 1858"
+    };
+
+    exports$2.CPM = {
+      a: 6375738.7,
+      rf: 334.29,
+      ellipseName: "Comm. des Poids et Mesures 1799"
+    };
+
+    exports$2.delmbr = {
+      a: 6376428.0,
+      rf: 311.5,
+      ellipseName: "Delambre 1810 (Belgium)"
+    };
+
+    exports$2.engelis = {
+      a: 6378136.05,
+      rf: 298.2566,
+      ellipseName: "Engelis 1985"
+    };
+
+    exports$2.evrst30 = {
+      a: 6377276.345,
+      rf: 300.8017,
+      ellipseName: "Everest 1830"
+    };
+
+    exports$2.evrst48 = {
+      a: 6377304.063,
+      rf: 300.8017,
+      ellipseName: "Everest 1948"
+    };
+
+    exports$2.evrst56 = {
+      a: 6377301.243,
+      rf: 300.8017,
+      ellipseName: "Everest 1956"
+    };
+
+    exports$2.evrst69 = {
+      a: 6377295.664,
+      rf: 300.8017,
+      ellipseName: "Everest 1969"
+    };
+
+    exports$2.evrstSS = {
+      a: 6377298.556,
+      rf: 300.8017,
+      ellipseName: "Everest (Sabah & Sarawak)"
+    };
+
+    exports$2.fschr60 = {
+      a: 6378166.0,
+      rf: 298.3,
+      ellipseName: "Fischer (Mercury Datum) 1960"
+    };
+
+    exports$2.fschr60m = {
+      a: 6378155.0,
+      rf: 298.3,
+      ellipseName: "Fischer 1960"
+    };
+
+    exports$2.fschr68 = {
+      a: 6378150.0,
+      rf: 298.3,
+      ellipseName: "Fischer 1968"
+    };
+
+    exports$2.helmert = {
+      a: 6378200.0,
+      rf: 298.3,
+      ellipseName: "Helmert 1906"
+    };
+
+    exports$2.hough = {
+      a: 6378270.0,
+      rf: 297.0,
+      ellipseName: "Hough"
+    };
+
+    exports$2.intl = {
+      a: 6378388.0,
+      rf: 297.0,
+      ellipseName: "International 1909 (Hayford)"
+    };
+
+    exports$2.kaula = {
+      a: 6378163.0,
+      rf: 298.24,
+      ellipseName: "Kaula 1961"
+    };
+
+    exports$2.lerch = {
+      a: 6378139.0,
+      rf: 298.257,
+      ellipseName: "Lerch 1979"
+    };
+
+    exports$2.mprts = {
+      a: 6397300.0,
+      rf: 191.0,
+      ellipseName: "Maupertius 1738"
+    };
+
+    exports$2.new_intl = {
+      a: 6378157.5,
+      b: 6356772.2,
+      ellipseName: "New International 1967"
+    };
+
+    exports$2.plessis = {
+      a: 6376523.0,
+      rf: 6355863.0,
+      ellipseName: "Plessis 1817 (France)"
+    };
+
+    exports$2.krass = {
+      a: 6378245.0,
+      rf: 298.3,
+      ellipseName: "Krassovsky, 1942"
+    };
+
+    exports$2.SEasia = {
+      a: 6378155.0,
+      b: 6356773.3205,
+      ellipseName: "Southeast Asia"
+    };
+
+    exports$2.walbeck = {
+      a: 6376896.0,
+      b: 6355834.8467,
+      ellipseName: "Walbeck"
+    };
+
+    exports$2.WGS60 = {
+      a: 6378165.0,
+      rf: 298.3,
+      ellipseName: "WGS 60"
+    };
+
+    exports$2.WGS66 = {
+      a: 6378145.0,
+      rf: 298.25,
+      ellipseName: "WGS 66"
+    };
+
+    exports$2.WGS7 = {
+      a: 6378135.0,
+      rf: 298.26,
+      ellipseName: "WGS 72"
+    };
+
+    var WGS84 = exports$2.WGS84 = {
+      a: 6378137.0,
+      rf: 298.257223563,
+      ellipseName: "WGS 84"
+    };
+
+    exports$2.sphere = {
+      a: 6370997.0,
+      b: 6370997.0,
+      ellipseName: "Normal Sphere (r=6370997)"
+    };
+
+    function eccentricity(a, b, rf, R_A) {
+      var a2 = a * a; // used in geocentric
+      var b2 = b * b; // used in geocentric
+      var es = (a2 - b2) / a2; // e ^ 2
+      var e = 0;
+      if (R_A) {
+        a *= 1 - es * (SIXTH + es * (RA4 + es * RA6));
+        a2 = a * a;
+        es = 0;
+      } else {
+        e = Math.sqrt(es); // eccentricity
+      }
+      var ep2 = (a2 - b2) / b2; // used in geocentric
+      return {
+        es: es,
+        e: e,
+        ep2: ep2
+      };
+    }
+    function sphere(a, b, rf, ellps, sphere) {
+      if (!a) { // do we have an ellipsoid?
+        var ellipse = match(exports$2, ellps);
+        if (!ellipse) {
+          ellipse = WGS84;
+        }
+        a = ellipse.a;
+        b = ellipse.b;
+        rf = ellipse.rf;
+      }
+
+      if (rf && !b) {
+        b = (1.0 - 1.0 / rf) * a;
+      }
+      if (rf === 0 || Math.abs(a - b) < EPSLN) {
+        sphere = true;
+        b = a;
+      }
+      return {
+        a: a,
+        b: b,
+        rf: rf,
+        sphere: sphere
+      };
+    }
+
+    var exports$3 = {};
+    exports$3.wgs84 = {
+      towgs84: "0,0,0",
+      ellipse: "WGS84",
+      datumName: "WGS84"
+    };
+
+    exports$3.ch1903 = {
+      towgs84: "674.374,15.056,405.346",
+      ellipse: "bessel",
+      datumName: "swiss"
+    };
+
+    exports$3.ggrs87 = {
+      towgs84: "-199.87,74.79,246.62",
+      ellipse: "GRS80",
+      datumName: "Greek_Geodetic_Reference_System_1987"
+    };
+
+    exports$3.nad83 = {
+      towgs84: "0,0,0",
+      ellipse: "GRS80",
+      datumName: "North_American_Datum_1983"
+    };
+
+    exports$3.nad27 = {
+      nadgrids: "@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat",
+      ellipse: "clrk66",
+      datumName: "North_American_Datum_1927"
+    };
+
+    exports$3.potsdam = {
+      towgs84: "598.1,73.7,418.2,0.202,0.045,-2.455,6.7",
+      ellipse: "bessel",
+      datumName: "Potsdam Rauenberg 1950 DHDN"
+    };
+
+    exports$3.carthage = {
+      towgs84: "-263.0,6.0,431.0",
+      ellipse: "clark80",
+      datumName: "Carthage 1934 Tunisia"
+    };
+
+    exports$3.hermannskogel = {
+      towgs84: "577.326,90.129,463.919,5.137,1.474,5.297,2.4232",
+      ellipse: "bessel",
+      datumName: "Hermannskogel"
+    };
+
+    exports$3.osni52 = {
+      towgs84: "482.530,-130.596,564.557,-1.042,-0.214,-0.631,8.15",
+      ellipse: "airy",
+      datumName: "Irish National"
+    };
+
+    exports$3.ire65 = {
+      towgs84: "482.530,-130.596,564.557,-1.042,-0.214,-0.631,8.15",
+      ellipse: "mod_airy",
+      datumName: "Ireland 1965"
+    };
+
+    exports$3.rassadiran = {
+      towgs84: "-133.63,-157.5,-158.62",
+      ellipse: "intl",
+      datumName: "Rassadiran"
+    };
+
+    exports$3.nzgd49 = {
+      towgs84: "59.47,-5.04,187.44,0.47,-0.1,1.024,-4.5993",
+      ellipse: "intl",
+      datumName: "New Zealand Geodetic Datum 1949"
+    };
+
+    exports$3.osgb36 = {
+      towgs84: "446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894",
+      ellipse: "airy",
+      datumName: "Airy 1830"
+    };
+
+    exports$3.s_jtsk = {
+      towgs84: "589,76,480",
+      ellipse: 'bessel',
+      datumName: 'S-JTSK (Ferro)'
+    };
+
+    exports$3.beduaram = {
+      towgs84: '-106,-87,188',
+      ellipse: 'clrk80',
+      datumName: 'Beduaram'
+    };
+
+    exports$3.gunung_segara = {
+      towgs84: '-403,684,41',
+      ellipse: 'bessel',
+      datumName: 'Gunung Segara Jakarta'
+    };
+
+    exports$3.rnb72 = {
+      towgs84: "106.869,-52.2978,103.724,-0.33657,0.456955,-1.84218,1",
+      ellipse: "intl",
+      datumName: "Reseau National Belge 1972"
+    };
+
+    function datum(datumCode, datum_params, a, b, es, ep2, nadgrids) {
+      var out = {};
+
+      if (datumCode === undefined || datumCode === 'none') {
+        out.datum_type = PJD_NODATUM;
+      } else {
+        out.datum_type = PJD_WGS84;
+      }
+
+      if (datum_params) {
+        out.datum_params = datum_params.map(parseFloat);
+        if (out.datum_params[0] !== 0 || out.datum_params[1] !== 0 || out.datum_params[2] !== 0) {
+          out.datum_type = PJD_3PARAM;
+        }
+        if (out.datum_params.length > 3) {
+          if (out.datum_params[3] !== 0 || out.datum_params[4] !== 0 || out.datum_params[5] !== 0 || out.datum_params[6] !== 0) {
+            out.datum_type = PJD_7PARAM;
+            out.datum_params[3] *= SEC_TO_RAD;
+            out.datum_params[4] *= SEC_TO_RAD;
+            out.datum_params[5] *= SEC_TO_RAD;
+            out.datum_params[6] = (out.datum_params[6] / 1000000.0) + 1.0;
+          }
+        }
+      }
+
+      if (nadgrids) {
+        out.datum_type = PJD_GRIDSHIFT;
+        out.grids = nadgrids;
+      }
+      out.a = a; //datum object also uses these values
+      out.b = b;
+      out.es = es;
+      out.ep2 = ep2;
+      return out;
+    }
+
+    /**
+     * Resources for details of NTv2 file formats:
+     * - https://web.archive.org/web/20140127204822if_/http://www.mgs.gov.on.ca:80/stdprodconsume/groups/content/@mgs/@iandit/documents/resourcelist/stel02_047447.pdf
+     * - http://mimaka.com/help/gs/html/004_NTV2%20Data%20Format.htm
+     */
+
+    var loadedNadgrids = {};
+
+    /**
+     * Load a binary NTv2 file (.gsb) to a key that can be used in a proj string like +nadgrids=<key>. Pass the NTv2 file
+     * as an ArrayBuffer.
+     */
+    function nadgrid(key, data) {
+      var view = new DataView(data);
+      var isLittleEndian = detectLittleEndian(view);
+      var header = readHeader(view, isLittleEndian);
+      if (header.nSubgrids > 1) {
+        console.log('Only single NTv2 subgrids are currently supported, subsequent sub grids are ignored');
+      }
+      var subgrids = readSubgrids(view, header, isLittleEndian);
+      var nadgrid = {header: header, subgrids: subgrids};
+      loadedNadgrids[key] = nadgrid;
+      return nadgrid;
+    }
+
+    /**
+     * Given a proj4 value for nadgrids, return an array of loaded grids
+     */
+    function getNadgrids(nadgrids) {
+      // Format details: http://proj.maptools.org/gen_parms.html
+      if (nadgrids === undefined) { return null; }
+      var grids = nadgrids.split(',');
+      return grids.map(parseNadgridString);
+    }
+
+    function parseNadgridString(value) {
+      if (value.length === 0) {
+        return null;
+      }
+      var optional = value[0] === '@';
+      if (optional) {
+        value = value.slice(1);
+      }
+      if (value === 'null') {
+        return {name: 'null', mandatory: !optional, grid: null, isNull: true};
+      }
+      return {
+        name: value,
+        mandatory: !optional,
+        grid: loadedNadgrids[value] || null,
+        isNull: false
+      };
+    }
+
+    function secondsToRadians(seconds) {
+      return (seconds / 3600) * Math.PI / 180;
+    }
+
+    function detectLittleEndian(view) {
+      var nFields = view.getInt32(8, false);
+      if (nFields === 11) {
+        return false;
+      }
+      nFields = view.getInt32(8, true);
+      if (nFields !== 11) {
+        console.warn('Failed to detect nadgrid endian-ness, defaulting to little-endian');
+      }
+      return true;
+    }
+
+    function readHeader(view, isLittleEndian) {
+      return {
+        nFields: view.getInt32(8, isLittleEndian),
+        nSubgridFields: view.getInt32(24, isLittleEndian),
+        nSubgrids: view.getInt32(40, isLittleEndian),
+        shiftType: decodeString(view, 56, 56 + 8).trim(),
+        fromSemiMajorAxis: view.getFloat64(120, isLittleEndian),
+        fromSemiMinorAxis: view.getFloat64(136, isLittleEndian),
+        toSemiMajorAxis: view.getFloat64(152, isLittleEndian),
+        toSemiMinorAxis: view.getFloat64(168, isLittleEndian),
+      };
+    }
+
+    function decodeString(view, start, end) {
+      return String.fromCharCode.apply(null, new Uint8Array(view.buffer.slice(start, end)));
+    }
+
+    function readSubgrids(view, header, isLittleEndian) {
+      var gridOffset = 176;
+      var grids = [];
+      for (var i = 0; i < header.nSubgrids; i++) {
+        var subHeader = readGridHeader(view, gridOffset, isLittleEndian);
+        var nodes = readGridNodes(view, gridOffset, subHeader, isLittleEndian);
+        var lngColumnCount = Math.round(
+          1 + (subHeader.upperLongitude - subHeader.lowerLongitude) / subHeader.longitudeInterval);
+        var latColumnCount = Math.round(
+          1 + (subHeader.upperLatitude - subHeader.lowerLatitude) / subHeader.latitudeInterval);
+        // Proj4 operates on radians whereas the coordinates are in seconds in the grid
+        grids.push({
+          ll: [secondsToRadians(subHeader.lowerLongitude), secondsToRadians(subHeader.lowerLatitude)],
+          del: [secondsToRadians(subHeader.longitudeInterval), secondsToRadians(subHeader.latitudeInterval)],
+          lim: [lngColumnCount, latColumnCount],
+          count: subHeader.gridNodeCount,
+          cvs: mapNodes(nodes)
+        });
+      }
+      return grids;
+    }
+
+    function mapNodes(nodes) {
+      return nodes.map(function (r) {return [secondsToRadians(r.longitudeShift), secondsToRadians(r.latitudeShift)];});
+    }
+
+    function readGridHeader(view, offset, isLittleEndian) {
+      return {
+        name: decodeString(view, offset + 8, offset + 16).trim(),
+        parent: decodeString(view, offset + 24, offset + 24 + 8).trim(),
+        lowerLatitude: view.getFloat64(offset + 72, isLittleEndian),
+        upperLatitude: view.getFloat64(offset + 88, isLittleEndian),
+        lowerLongitude: view.getFloat64(offset + 104, isLittleEndian),
+        upperLongitude: view.getFloat64(offset + 120, isLittleEndian),
+        latitudeInterval: view.getFloat64(offset + 136, isLittleEndian),
+        longitudeInterval: view.getFloat64(offset + 152, isLittleEndian),
+        gridNodeCount: view.getInt32(offset + 168, isLittleEndian)
+      };
+    }
+
+    function readGridNodes(view, offset, gridHeader, isLittleEndian) {
+      var nodesOffset = offset + 176;
+      var gridRecordLength = 16;
+      var gridShiftRecords = [];
+      for (var i = 0; i < gridHeader.gridNodeCount; i++) {
+        var record = {
+          latitudeShift: view.getFloat32(nodesOffset + i * gridRecordLength, isLittleEndian),
+          longitudeShift: view.getFloat32(nodesOffset + i * gridRecordLength + 4, isLittleEndian),
+          latitudeAccuracy: view.getFloat32(nodesOffset + i * gridRecordLength + 8, isLittleEndian),
+          longitudeAccuracy: view.getFloat32(nodesOffset + i * gridRecordLength + 12, isLittleEndian),
+        };
+        gridShiftRecords.push(record);
+      }
+      return gridShiftRecords;
+    }
+
+    function Projection(srsCode,callback) {
+      if (!(this instanceof Projection)) {
+        return new Projection(srsCode);
+      }
+      callback = callback || function(error){
+        if(error){
+          throw error;
+        }
+      };
+      var json = parse(srsCode);
+      if(typeof json !== 'object'){
+        callback(srsCode);
+        return;
+      }
+      var ourProj = Projection.projections.get(json.projName);
+      if(!ourProj){
+        callback(srsCode);
+        return;
+      }
+      if (json.datumCode && json.datumCode !== 'none') {
+        var datumDef = match(exports$3, json.datumCode);
+        if (datumDef) {
+          json.datum_params = json.datum_params || (datumDef.towgs84 ? datumDef.towgs84.split(',') : null);
+          json.ellps = datumDef.ellipse;
+          json.datumName = datumDef.datumName ? datumDef.datumName : json.datumCode;
+        }
+      }
+      json.k0 = json.k0 || 1.0;
+      json.axis = json.axis || 'enu';
+      json.ellps = json.ellps || 'wgs84';
+      json.lat1 = json.lat1 || json.lat0; // Lambert_Conformal_Conic_1SP, for example, needs this
+
+      var sphere_ = sphere(json.a, json.b, json.rf, json.ellps, json.sphere);
+      var ecc = eccentricity(sphere_.a, sphere_.b, sphere_.rf, json.R_A);
+      var nadgrids = getNadgrids(json.nadgrids);
+      var datumObj = json.datum || datum(json.datumCode, json.datum_params, sphere_.a, sphere_.b, ecc.es, ecc.ep2,
+        nadgrids);
+
+      extend(this, json); // transfer everything over from the projection because we don't know what we'll need
+      extend(this, ourProj); // transfer all the methods from the projection
+
+      // copy the 4 things over we calculated in deriveConstants.sphere
+      this.a = sphere_.a;
+      this.b = sphere_.b;
+      this.rf = sphere_.rf;
+      this.sphere = sphere_.sphere;
+
+      // copy the 3 things we calculated in deriveConstants.eccentricity
+      this.es = ecc.es;
+      this.e = ecc.e;
+      this.ep2 = ecc.ep2;
+
+      // add in the datum object
+      this.datum = datumObj;
+
+      // init the projection
+      this.init();
+
+      // legecy callback from back in the day when it went to spatialreference.org
+      callback(null, this);
+
+    }
+    Projection.projections = projections;
+    Projection.projections.start();
+
+    'use strict';
+    function compareDatums(source, dest) {
+      if (source.datum_type !== dest.datum_type) {
+        return false; // false, datums are not equal
+      } else if (source.a !== dest.a || Math.abs(source.es - dest.es) > 0.000000000050) {
+        // the tolerance for es is to ensure that GRS80 and WGS84
+        // are considered identical
+        return false;
+      } else if (source.datum_type === PJD_3PARAM) {
+        return (source.datum_params[0] === dest.datum_params[0] && source.datum_params[1] === dest.datum_params[1] && source.datum_params[2] === dest.datum_params[2]);
+      } else if (source.datum_type === PJD_7PARAM) {
+        return (source.datum_params[0] === dest.datum_params[0] && source.datum_params[1] === dest.datum_params[1] && source.datum_params[2] === dest.datum_params[2] && source.datum_params[3] === dest.datum_params[3] && source.datum_params[4] === dest.datum_params[4] && source.datum_params[5] === dest.datum_params[5] && source.datum_params[6] === dest.datum_params[6]);
+      } else {
+        return true; // datums are equal
+      }
+    } // cs_compare_datums()
+
+    /*
+     * The function Convert_Geodetic_To_Geocentric converts geodetic coordinates
+     * (latitude, longitude, and height) to geocentric coordinates (X, Y, Z),
+     * according to the current ellipsoid parameters.
+     *
+     *    Latitude  : Geodetic latitude in radians                     (input)
+     *    Longitude : Geodetic longitude in radians                    (input)
+     *    Height    : Geodetic height, in meters                       (input)
+     *    X         : Calculated Geocentric X coordinate, in meters    (output)
+     *    Y         : Calculated Geocentric Y coordinate, in meters    (output)
+     *    Z         : Calculated Geocentric Z coordinate, in meters    (output)
+     *
+     */
+    function geodeticToGeocentric(p, es, a) {
+      var Longitude = p.x;
+      var Latitude = p.y;
+      var Height = p.z ? p.z : 0; //Z value not always supplied
+
+      var Rn; /*  Earth radius at location  */
+      var Sin_Lat; /*  Math.sin(Latitude)  */
+      var Sin2_Lat; /*  Square of Math.sin(Latitude)  */
+      var Cos_Lat; /*  Math.cos(Latitude)  */
+
+      /*
+       ** Don't blow up if Latitude is just a little out of the value
+       ** range as it may just be a rounding issue.  Also removed longitude
+       ** test, it should be wrapped by Math.cos() and Math.sin().  NFW for PROJ.4, Sep/2001.
+       */
+      if (Latitude < -HALF_PI && Latitude > -1.001 * HALF_PI) {
+        Latitude = -HALF_PI;
+      } else if (Latitude > HALF_PI && Latitude < 1.001 * HALF_PI) {
+        Latitude = HALF_PI;
+      } else if (Latitude < -HALF_PI) {
+        /* Latitude out of range */
+        //..reportError('geocent:lat out of range:' + Latitude);
+        return { x: -Infinity, y: -Infinity, z: p.z };
+      } else if (Latitude > HALF_PI) {
+        /* Latitude out of range */
+        return { x: Infinity, y: Infinity, z: p.z };
+      }
+
+      if (Longitude > Math.PI) {
+        Longitude -= (2 * Math.PI);
+      }
+      Sin_Lat = Math.sin(Latitude);
+      Cos_Lat = Math.cos(Latitude);
+      Sin2_Lat = Sin_Lat * Sin_Lat;
+      Rn = a / (Math.sqrt(1.0e0 - es * Sin2_Lat));
+      return {
+        x: (Rn + Height) * Cos_Lat * Math.cos(Longitude),
+        y: (Rn + Height) * Cos_Lat * Math.sin(Longitude),
+        z: ((Rn * (1 - es)) + Height) * Sin_Lat
+      };
+    } // cs_geodetic_to_geocentric()
+
+    function geocentricToGeodetic(p, es, a, b) {
+      /* local defintions and variables */
+      /* end-criterium of loop, accuracy of sin(Latitude) */
+      var genau = 1e-12;
+      var genau2 = (genau * genau);
+      var maxiter = 30;
+
+      var P; /* distance between semi-minor axis and location */
+      var RR; /* distance between center and location */
+      var CT; /* sin of geocentric latitude */
+      var ST; /* cos of geocentric latitude */
+      var RX;
+      var RK;
+      var RN; /* Earth radius at location */
+      var CPHI0; /* cos of start or old geodetic latitude in iterations */
+      var SPHI0; /* sin of start or old geodetic latitude in iterations */
+      var CPHI; /* cos of searched geodetic latitude */
+      var SPHI; /* sin of searched geodetic latitude */
+      var SDPHI; /* end-criterium: addition-theorem of sin(Latitude(iter)-Latitude(iter-1)) */
+      var iter; /* # of continous iteration, max. 30 is always enough (s.a.) */
+
+      var X = p.x;
+      var Y = p.y;
+      var Z = p.z ? p.z : 0.0; //Z value not always supplied
+      var Longitude;
+      var Latitude;
+      var Height;
+
+      P = Math.sqrt(X * X + Y * Y);
+      RR = Math.sqrt(X * X + Y * Y + Z * Z);
+
+      /*      special cases for latitude and longitude */
+      if (P / a < genau) {
+
+        /*  special case, if P=0. (X=0., Y=0.) */
+        Longitude = 0.0;
+
+        /*  if (X,Y,Z)=(0.,0.,0.) then Height becomes semi-minor axis
+         *  of ellipsoid (=center of mass), Latitude becomes PI/2 */
+        if (RR / a < genau) {
+          Latitude = HALF_PI;
+          Height = -b;
+          return {
+            x: p.x,
+            y: p.y,
+            z: p.z
+          };
+        }
+      } else {
+        /*  ellipsoidal (geodetic) longitude
+         *  interval: -PI < Longitude <= +PI */
+        Longitude = Math.atan2(Y, X);
+      }
+
+      /* --------------------------------------------------------------
+       * Following iterative algorithm was developped by
+       * "Institut for Erdmessung", University of Hannover, July 1988.
+       * Internet: www.ife.uni-hannover.de
+       * Iterative computation of CPHI,SPHI and Height.
+       * Iteration of CPHI and SPHI to 10**-12 radian resp.
+       * 2*10**-7 arcsec.
+       * --------------------------------------------------------------
+       */
+      CT = Z / RR;
+      ST = P / RR;
+      RX = 1.0 / Math.sqrt(1.0 - es * (2.0 - es) * ST * ST);
+      CPHI0 = ST * (1.0 - es) * RX;
+      SPHI0 = CT * RX;
+      iter = 0;
+
+      /* loop to find sin(Latitude) resp. Latitude
+       * until |sin(Latitude(iter)-Latitude(iter-1))| < genau */
+      do {
+        iter++;
+        RN = a / Math.sqrt(1.0 - es * SPHI0 * SPHI0);
+
+        /*  ellipsoidal (geodetic) height */
+        Height = P * CPHI0 + Z * SPHI0 - RN * (1.0 - es * SPHI0 * SPHI0);
+
+        RK = es * RN / (RN + Height);
+        RX = 1.0 / Math.sqrt(1.0 - RK * (2.0 - RK) * ST * ST);
+        CPHI = ST * (1.0 - RK) * RX;
+        SPHI = CT * RX;
+        SDPHI = SPHI * CPHI0 - CPHI * SPHI0;
+        CPHI0 = CPHI;
+        SPHI0 = SPHI;
+      }
+      while (SDPHI * SDPHI > genau2 && iter < maxiter);
+
+      /*      ellipsoidal (geodetic) latitude */
+      Latitude = Math.atan(SPHI / Math.abs(CPHI));
+      return {
+        x: Longitude,
+        y: Latitude,
+        z: Height
+      };
+    } // cs_geocentric_to_geodetic()
+
+    /****************************************************************/
+    // pj_geocentic_to_wgs84( p )
+    //  p = point to transform in geocentric coordinates (x,y,z)
+
+
+    /** point object, nothing fancy, just allows values to be
+        passed back and forth by reference rather than by value.
+        Other point classes may be used as long as they have
+        x and y properties, which will get modified in the transform method.
+    */
+    function geocentricToWgs84(p, datum_type, datum_params) {
+
+      if (datum_type === PJD_3PARAM) {
+        // if( x[io] === HUGE_VAL )
+        //    continue;
+        return {
+          x: p.x + datum_params[0],
+          y: p.y + datum_params[1],
+          z: p.z + datum_params[2],
+        };
+      } else if (datum_type === PJD_7PARAM) {
+        var Dx_BF = datum_params[0];
+        var Dy_BF = datum_params[1];
+        var Dz_BF = datum_params[2];
+        var Rx_BF = datum_params[3];
+        var Ry_BF = datum_params[4];
+        var Rz_BF = datum_params[5];
+        var M_BF = datum_params[6];
+        // if( x[io] === HUGE_VAL )
+        //    continue;
+        return {
+          x: M_BF * (p.x - Rz_BF * p.y + Ry_BF * p.z) + Dx_BF,
+          y: M_BF * (Rz_BF * p.x + p.y - Rx_BF * p.z) + Dy_BF,
+          z: M_BF * (-Ry_BF * p.x + Rx_BF * p.y + p.z) + Dz_BF
+        };
+      }
+    } // cs_geocentric_to_wgs84
+
+    /****************************************************************/
+    // pj_geocentic_from_wgs84()
+    //  coordinate system definition,
+    //  point to transform in geocentric coordinates (x,y,z)
+    function geocentricFromWgs84(p, datum_type, datum_params) {
+
+      if (datum_type === PJD_3PARAM) {
+        //if( x[io] === HUGE_VAL )
+        //    continue;
+        return {
+          x: p.x - datum_params[0],
+          y: p.y - datum_params[1],
+          z: p.z - datum_params[2],
+        };
+
+      } else if (datum_type === PJD_7PARAM) {
+        var Dx_BF = datum_params[0];
+        var Dy_BF = datum_params[1];
+        var Dz_BF = datum_params[2];
+        var Rx_BF = datum_params[3];
+        var Ry_BF = datum_params[4];
+        var Rz_BF = datum_params[5];
+        var M_BF = datum_params[6];
+        var x_tmp = (p.x - Dx_BF) / M_BF;
+        var y_tmp = (p.y - Dy_BF) / M_BF;
+        var z_tmp = (p.z - Dz_BF) / M_BF;
+        //if( x[io] === HUGE_VAL )
+        //    continue;
+
+        return {
+          x: x_tmp + Rz_BF * y_tmp - Ry_BF * z_tmp,
+          y: -Rz_BF * x_tmp + y_tmp + Rx_BF * z_tmp,
+          z: Ry_BF * x_tmp - Rx_BF * y_tmp + z_tmp
+        };
+      } //cs_geocentric_from_wgs84()
+    }
+
+    function checkParams(type) {
+      return (type === PJD_3PARAM || type === PJD_7PARAM);
+    }
+
+    var datum_transform = function(source, dest, point) {
+      // Short cut if the datums are identical.
+      if (compareDatums(source, dest)) {
+        return point; // in this case, zero is sucess,
+        // whereas cs_compare_datums returns 1 to indicate TRUE
+        // confusing, should fix this
+      }
+
+      // Explicitly skip datum transform by setting 'datum=none' as parameter for either source or dest
+      if (source.datum_type === PJD_NODATUM || dest.datum_type === PJD_NODATUM) {
+        return point;
+      }
+
+      // If this datum requires grid shifts, then apply it to geodetic coordinates.
+      var source_a = source.a;
+      var source_es = source.es;
+      if (source.datum_type === PJD_GRIDSHIFT) {
+        var gridShiftCode = applyGridShift(source, false, point);
+        if (gridShiftCode !== 0) {
+          return undefined;
+        }
+        source_a = SRS_WGS84_SEMIMAJOR;
+        source_es = SRS_WGS84_ESQUARED;
+      }
+
+      var dest_a = dest.a;
+      var dest_b = dest.b;
+      var dest_es = dest.es;
+      if (dest.datum_type === PJD_GRIDSHIFT) {
+        dest_a = SRS_WGS84_SEMIMAJOR;
+        dest_b = SRS_WGS84_SEMIMINOR;
+        dest_es = SRS_WGS84_ESQUARED;
+      }
+
+      // Do we need to go through geocentric coordinates?
+      if (source_es === dest_es && source_a === dest_a && !checkParams(source.datum_type) &&  !checkParams(dest.datum_type)) {
+        return point;
+      }
+
+      // Convert to geocentric coordinates.
+      point = geodeticToGeocentric(point, source_es, source_a);
+      // Convert between datums
+      if (checkParams(source.datum_type)) {
+        point = geocentricToWgs84(point, source.datum_type, source.datum_params);
+      }
+      if (checkParams(dest.datum_type)) {
+        point = geocentricFromWgs84(point, dest.datum_type, dest.datum_params);
+      }
+      point = geocentricToGeodetic(point, dest_es, dest_a, dest_b);
+
+      if (dest.datum_type === PJD_GRIDSHIFT) {
+        var destGridShiftResult = applyGridShift(dest, true, point);
+        if (destGridShiftResult !== 0) {
+          return undefined;
+        }
+      }
+
+      return point;
+    };
+
+    function applyGridShift(source, inverse, point) {
+      if (source.grids === null || source.grids.length === 0) {
+        console.log('Grid shift grids not found');
+        return -1;
+      }
+      var input = {x: -point.x, y: point.y};
+      var output = {x: Number.NaN, y: Number.NaN};
+      var attemptedGrids = [];
+      for (var i = 0; i < source.grids.length; i++) {
+        var grid = source.grids[i];
+        attemptedGrids.push(grid.name);
+        if (grid.isNull) {
+          output = input;
+          break;
+        }
+        if (grid.grid === null) {
+          if (grid.mandatory) {
+            console.log("Unable to find mandatory grid '" + grid.name + "'");
+            return -1;
+          }
+          continue;
+        }
+        var subgrid = grid.grid.subgrids[0];
+        // skip tables that don't match our point at all
+        var epsilon = (Math.abs(subgrid.del[1]) + Math.abs(subgrid.del[0])) / 10000.0;
+        var minX = subgrid.ll[0] - epsilon;
+        var minY = subgrid.ll[1] - epsilon;
+        var maxX = subgrid.ll[0] + (subgrid.lim[0] - 1) * subgrid.del[0] + epsilon;
+        var maxY = subgrid.ll[1] + (subgrid.lim[1] - 1) * subgrid.del[1] + epsilon;
+        if (minY > input.y || minX > input.x || maxY < input.y || maxX < input.x ) {
+          continue;
+        }
+        output = applySubgridShift(input, inverse, subgrid);
+        if (!isNaN(output.x)) {
+          break;
+        }
+      }
+      if (isNaN(output.x)) {
+        console.log("Failed to find a grid shift table for location '"+
+          -input.x * R2D + " " + input.y * R2D + " tried: '" + attemptedGrids + "'");
+        return -1;
+      }
+      point.x = -output.x;
+      point.y = output.y;
+      return 0;
+    }
+
+    function applySubgridShift(pin, inverse, ct) {
+      var val = {x: Number.NaN, y: Number.NaN};
+      if (isNaN(pin.x)) { return val; }
+      var tb = {x: pin.x, y: pin.y};
+      tb.x -= ct.ll[0];
+      tb.y -= ct.ll[1];
+      tb.x = adjust_lon(tb.x - Math.PI) + Math.PI;
+      var t = nadInterpolate(tb, ct);
+      if (inverse) {
+        if (isNaN(t.x)) {
+          return val;
+        }
+        t.x = tb.x - t.x;
+        t.y = tb.y - t.y;
+        var i = 9, tol = 1e-12;
+        var dif, del;
+        do {
+          del = nadInterpolate(t, ct);
+          if (isNaN(del.x)) {
+            console.log("Inverse grid shift iteration failed, presumably at grid edge.  Using first approximation.");
+            break;
+          }
+          dif = {x: tb.x - (del.x + t.x), y: tb.y - (del.y + t.y)};
+          t.x += dif.x;
+          t.y += dif.y;
+        } while (i-- && Math.abs(dif.x) > tol && Math.abs(dif.y) > tol);
+        if (i < 0) {
+          console.log("Inverse grid shift iterator failed to converge.");
+          return val;
+        }
+        val.x = adjust_lon(t.x + ct.ll[0]);
+        val.y = t.y + ct.ll[1];
+      } else {
+        if (!isNaN(t.x)) {
+          val.x = pin.x + t.x;
+          val.y = pin.y + t.y;
+        }
+      }
+      return val;
+    }
+
+    function nadInterpolate(pin, ct) {
+      var t = {x: pin.x / ct.del[0], y: pin.y / ct.del[1]};
+      var indx = {x: Math.floor(t.x), y: Math.floor(t.y)};
+      var frct = {x: t.x - 1.0 * indx.x, y: t.y - 1.0 * indx.y};
+      var val= {x: Number.NaN, y: Number.NaN};
+      var inx;
+      if (indx.x < 0 || indx.x >= ct.lim[0]) {
+        return val;
+      }
+      if (indx.y < 0 || indx.y >= ct.lim[1]) {
+        return val;
+      }
+      inx = (indx.y * ct.lim[0]) + indx.x;
+      var f00 = {x: ct.cvs[inx][0], y: ct.cvs[inx][1]};
+      inx++;
+      var f10= {x: ct.cvs[inx][0], y: ct.cvs[inx][1]};
+      inx += ct.lim[0];
+      var f11 = {x: ct.cvs[inx][0], y: ct.cvs[inx][1]};
+      inx--;
+      var f01 = {x: ct.cvs[inx][0], y: ct.cvs[inx][1]};
+      var m11 = frct.x * frct.y, m10 = frct.x * (1.0 - frct.y),
+        m00 = (1.0 - frct.x) * (1.0 - frct.y), m01 = (1.0 - frct.x) * frct.y;
+      val.x = (m00 * f00.x + m10 * f10.x + m01 * f01.x + m11 * f11.x);
+      val.y = (m00 * f00.y + m10 * f10.y + m01 * f01.y + m11 * f11.y);
+      return val;
+    }
+
+    var adjust_axis = function(crs, denorm, point) {
+      var xin = point.x,
+        yin = point.y,
+        zin = point.z || 0.0;
+      var v, t, i;
+      var out = {};
+      for (i = 0; i < 3; i++) {
+        if (denorm && i === 2 && point.z === undefined) {
+          continue;
+        }
+        if (i === 0) {
+          v = xin;
+          if ("ew".indexOf(crs.axis[i]) !== -1) {
+            t = 'x';
+          } else {
+            t = 'y';
+          }
+
+        }
+        else if (i === 1) {
+          v = yin;
+          if ("ns".indexOf(crs.axis[i]) !== -1) {
+            t = 'y';
+          } else {
+            t = 'x';
+          }
+        }
+        else {
+          v = zin;
+          t = 'z';
+        }
+        switch (crs.axis[i]) {
+        case 'e':
+          out[t] = v;
+          break;
+        case 'w':
+          out[t] = -v;
+          break;
+        case 'n':
+          out[t] = v;
+          break;
+        case 's':
+          out[t] = -v;
+          break;
+        case 'u':
+          if (point[t] !== undefined) {
+            out.z = v;
+          }
+          break;
+        case 'd':
+          if (point[t] !== undefined) {
+            out.z = -v;
+          }
+          break;
+        default:
+          //console.log("ERROR: unknow axis ("+crs.axis[i]+") - check definition of "+crs.projName);
+          return null;
+        }
+      }
+      return out;
+    };
+
+    var toPoint = function (array){
+      var out = {
+        x: array[0],
+        y: array[1]
+      };
+      if (array.length>2) {
+        out.z = array[2];
+      }
+      if (array.length>3) {
+        out.m = array[3];
+      }
+      return out;
+    };
+
+    var checkSanity = function (point) {
+      checkCoord(point.x);
+      checkCoord(point.y);
+    };
+    function checkCoord(num) {
+      if (typeof Number.isFinite === 'function') {
+        if (Number.isFinite(num)) {
+          return;
+        }
+        throw new TypeError('coordinates must be finite numbers');
+      }
+      if (typeof num !== 'number' || num !== num || !isFinite(num)) {
+        throw new TypeError('coordinates must be finite numbers');
+      }
+    }
+
+    function checkNotWGS(source, dest) {
+      return ((source.datum.datum_type === PJD_3PARAM || source.datum.datum_type === PJD_7PARAM) && dest.datumCode !== 'WGS84') || ((dest.datum.datum_type === PJD_3PARAM || dest.datum.datum_type === PJD_7PARAM) && source.datumCode !== 'WGS84');
+    }
+
+    function transform(source, dest, point, enforceAxis) {
+      var wgs84;
+      if (Array.isArray(point)) {
+        point = toPoint(point);
+      }
+      checkSanity(point);
+      // Workaround for datum shifts towgs84, if either source or destination projection is not wgs84
+      if (source.datum && dest.datum && checkNotWGS(source, dest)) {
+        wgs84 = new Projection('WGS84');
+        point = transform(source, wgs84, point, enforceAxis);
+        source = wgs84;
+      }
+      // DGR, 2010/11/12
+      if (enforceAxis && source.axis !== 'enu') {
+        point = adjust_axis(source, false, point);
+      }
+      // Transform source points to long/lat, if they aren't already.
+      if (source.projName === 'longlat') {
+        point = {
+          x: point.x * D2R,
+          y: point.y * D2R,
+          z: point.z || 0
+        };
+      } else {
+        if (source.to_meter) {
+          point = {
+            x: point.x * source.to_meter,
+            y: point.y * source.to_meter,
+            z: point.z || 0
+          };
+        }
+        point = source.inverse(point); // Convert Cartesian to longlat
+        if (!point) {
+          return;
+        }
+      }
+      // Adjust for the prime meridian if necessary
+      if (source.from_greenwich) {
+        point.x += source.from_greenwich;
+      }
+
+      // Convert datums if needed, and if possible.
+      point = datum_transform(source.datum, dest.datum, point);
+      if (!point) {
+        return;
+      }
+
+      // Adjust for the prime meridian if necessary
+      if (dest.from_greenwich) {
+        point = {
+          x: point.x - dest.from_greenwich,
+          y: point.y,
+          z: point.z || 0
+        };
+      }
+
+      if (dest.projName === 'longlat') {
+        // convert radians to decimal degrees
+        point = {
+          x: point.x * R2D,
+          y: point.y * R2D,
+          z: point.z || 0
+        };
+      } else { // else project
+        point = dest.forward(point);
+        if (dest.to_meter) {
+          point = {
+            x: point.x / dest.to_meter,
+            y: point.y / dest.to_meter,
+            z: point.z || 0
+          };
+        }
+      }
+
+      // DGR, 2010/11/12
+      if (enforceAxis && dest.axis !== 'enu') {
+        return adjust_axis(dest, true, point);
+      }
+
+      return point;
+    }
+
+    var wgs84 = Projection('WGS84');
+
+    function transformer(from, to, coords, enforceAxis) {
+      var transformedArray, out, keys;
+      if (Array.isArray(coords)) {
+        transformedArray = transform(from, to, coords, enforceAxis) || {x: NaN, y: NaN};
+        if (coords.length > 2) {
+          if ((typeof from.name !== 'undefined' && from.name === 'geocent') || (typeof to.name !== 'undefined' && to.name === 'geocent')) {
+            if (typeof transformedArray.z === 'number') {
+              return [transformedArray.x, transformedArray.y, transformedArray.z].concat(coords.splice(3));
+            } else {
+              return [transformedArray.x, transformedArray.y, coords[2]].concat(coords.splice(3));
+            }
+          } else {
+            return [transformedArray.x, transformedArray.y].concat(coords.splice(2));
+          }
+        } else {
+          return [transformedArray.x, transformedArray.y];
+        }
+      } else {
+        out = transform(from, to, coords, enforceAxis);
+        keys = Object.keys(coords);
+        if (keys.length === 2) {
+          return out;
+        }
+        keys.forEach(function (key) {
+          if ((typeof from.name !== 'undefined' && from.name === 'geocent') || (typeof to.name !== 'undefined' && to.name === 'geocent')) {
+            if (key === 'x' || key === 'y' || key === 'z') {
+              return;
+            }
+          } else {
+            if (key === 'x' || key === 'y') {
+              return;
+            }
+          }
+          out[key] = coords[key];
+        });
+        return out;
+      }
+    }
+
+    function checkProj(item) {
+      if (item instanceof Projection) {
+        return item;
+      }
+      if (item.oProj) {
+        return item.oProj;
+      }
+      return Projection(item);
+    }
+
+    function proj4$1(fromProj, toProj, coord) {
+      fromProj = checkProj(fromProj);
+      var single = false;
+      var obj;
+      if (typeof toProj === 'undefined') {
+        toProj = fromProj;
+        fromProj = wgs84;
+        single = true;
+      } else if (typeof toProj.x !== 'undefined' || Array.isArray(toProj)) {
+        coord = toProj;
+        toProj = fromProj;
+        fromProj = wgs84;
+        single = true;
+      }
+      toProj = checkProj(toProj);
+      if (coord) {
+        return transformer(fromProj, toProj, coord);
+      } else {
+        obj = {
+          forward: function (coords, enforceAxis) {
+            return transformer(fromProj, toProj, coords, enforceAxis);
+          },
+          inverse: function (coords, enforceAxis) {
+            return transformer(toProj, fromProj, coords, enforceAxis);
+          }
+        };
+        if (single) {
+          obj.oProj = toProj;
+        }
+        return obj;
+      }
+    }
+
+    /**
+     * UTM zones are grouped, and assigned to one of a group of 6
+     * sets.
+     *
+     * {int} @private
+     */
+    var NUM_100K_SETS = 6;
+
+    /**
+     * The column letters (for easting) of the lower left value, per
+     * set.
+     *
+     * {string} @private
+     */
+    var SET_ORIGIN_COLUMN_LETTERS = 'AJSAJS';
+
+    /**
+     * The row letters (for northing) of the lower left value, per
+     * set.
+     *
+     * {string} @private
+     */
+    var SET_ORIGIN_ROW_LETTERS = 'AFAFAF';
+
+    var A = 65; // A
+    var I = 73; // I
+    var O = 79; // O
+    var V = 86; // V
+    var Z = 90; // Z
+    var mgrs = {
+      forward: forward$1,
+      inverse: inverse$1,
+      toPoint: toPoint$1
+    };
+    /**
+     * Conversion of lat/lon to MGRS.
+     *
+     * @param {object} ll Object literal with lat and lon properties on a
+     *     WGS84 ellipsoid.
+     * @param {int} accuracy Accuracy in digits (5 for 1 m, 4 for 10 m, 3 for
+     *      100 m, 2 for 1000 m or 1 for 10000 m). Optional, default is 5.
+     * @return {string} the MGRS string for the given location and accuracy.
+     */
+    function forward$1(ll, accuracy) {
+      accuracy = accuracy || 5; // default accuracy 1m
+      return encode(LLtoUTM({
+        lat: ll[1],
+        lon: ll[0]
+      }), accuracy);
+    }
+
+    /**
+     * Conversion of MGRS to lat/lon.
+     *
+     * @param {string} mgrs MGRS string.
+     * @return {array} An array with left (longitude), bottom (latitude), right
+     *     (longitude) and top (latitude) values in WGS84, representing the
+     *     bounding box for the provided MGRS reference.
+     */
+    function inverse$1(mgrs) {
+      var bbox = UTMtoLL(decode(mgrs.toUpperCase()));
+      if (bbox.lat && bbox.lon) {
+        return [bbox.lon, bbox.lat, bbox.lon, bbox.lat];
+      }
+      return [bbox.left, bbox.bottom, bbox.right, bbox.top];
+    }
+
+    function toPoint$1(mgrs) {
+      var bbox = UTMtoLL(decode(mgrs.toUpperCase()));
+      if (bbox.lat && bbox.lon) {
+        return [bbox.lon, bbox.lat];
+      }
+      return [(bbox.left + bbox.right) / 2, (bbox.top + bbox.bottom) / 2];
+    }
+    /**
+     * Conversion from degrees to radians.
+     *
+     * @private
+     * @param {number} deg the angle in degrees.
+     * @return {number} the angle in radians.
+     */
+    function degToRad(deg) {
+      return (deg * (Math.PI / 180.0));
+    }
+
+    /**
+     * Conversion from radians to degrees.
+     *
+     * @private
+     * @param {number} rad the angle in radians.
+     * @return {number} the angle in degrees.
+     */
+    function radToDeg(rad) {
+      return (180.0 * (rad / Math.PI));
+    }
+
+    /**
+     * Converts a set of Longitude and Latitude co-ordinates to UTM
+     * using the WGS84 ellipsoid.
+     *
+     * @private
+     * @param {object} ll Object literal with lat and lon properties
+     *     representing the WGS84 coordinate to be converted.
+     * @return {object} Object literal containing the UTM value with easting,
+     *     northing, zoneNumber and zoneLetter properties, and an optional
+     *     accuracy property in digits. Returns null if the conversion failed.
+     */
+    function LLtoUTM(ll) {
+      var Lat = ll.lat;
+      var Long = ll.lon;
+      var a = 6378137.0; //ellip.radius;
+      var eccSquared = 0.00669438; //ellip.eccsq;
+      var k0 = 0.9996;
+      var LongOrigin;
+      var eccPrimeSquared;
+      var N, T, C, A, M;
+      var LatRad = degToRad(Lat);
+      var LongRad = degToRad(Long);
+      var LongOriginRad;
+      var ZoneNumber;
+      // (int)
+      ZoneNumber = Math.floor((Long + 180) / 6) + 1;
+
+      //Make sure the longitude 180.00 is in Zone 60
+      if (Long === 180) {
+        ZoneNumber = 60;
+      }
+
+      // Special zone for Norway
+      if (Lat >= 56.0 && Lat < 64.0 && Long >= 3.0 && Long < 12.0) {
+        ZoneNumber = 32;
+      }
+
+      // Special zones for Svalbard
+      if (Lat >= 72.0 && Lat < 84.0) {
+        if (Long >= 0.0 && Long < 9.0) {
+          ZoneNumber = 31;
+        }
+        else if (Long >= 9.0 && Long < 21.0) {
+          ZoneNumber = 33;
+        }
+        else if (Long >= 21.0 && Long < 33.0) {
+          ZoneNumber = 35;
+        }
+        else if (Long >= 33.0 && Long < 42.0) {
+          ZoneNumber = 37;
+        }
+      }
+
+      LongOrigin = (ZoneNumber - 1) * 6 - 180 + 3; //+3 puts origin
+      // in middle of
+      // zone
+      LongOriginRad = degToRad(LongOrigin);
+
+      eccPrimeSquared = (eccSquared) / (1 - eccSquared);
+
+      N = a / Math.sqrt(1 - eccSquared * Math.sin(LatRad) * Math.sin(LatRad));
+      T = Math.tan(LatRad) * Math.tan(LatRad);
+      C = eccPrimeSquared * Math.cos(LatRad) * Math.cos(LatRad);
+      A = Math.cos(LatRad) * (LongRad - LongOriginRad);
+
+      M = a * ((1 - eccSquared / 4 - 3 * eccSquared * eccSquared / 64 - 5 * eccSquared * eccSquared * eccSquared / 256) * LatRad - (3 * eccSquared / 8 + 3 * eccSquared * eccSquared / 32 + 45 * eccSquared * eccSquared * eccSquared / 1024) * Math.sin(2 * LatRad) + (15 * eccSquared * eccSquared / 256 + 45 * eccSquared * eccSquared * eccSquared / 1024) * Math.sin(4 * LatRad) - (35 * eccSquared * eccSquared * eccSquared / 3072) * Math.sin(6 * LatRad));
+
+      var UTMEasting = (k0 * N * (A + (1 - T + C) * A * A * A / 6.0 + (5 - 18 * T + T * T + 72 * C - 58 * eccPrimeSquared) * A * A * A * A * A / 120.0) + 500000.0);
+
+      var UTMNorthing = (k0 * (M + N * Math.tan(LatRad) * (A * A / 2 + (5 - T + 9 * C + 4 * C * C) * A * A * A * A / 24.0 + (61 - 58 * T + T * T + 600 * C - 330 * eccPrimeSquared) * A * A * A * A * A * A / 720.0)));
+      if (Lat < 0.0) {
+        UTMNorthing += 10000000.0; //10000000 meter offset for
+        // southern hemisphere
+      }
+
+      return {
+        northing: Math.round(UTMNorthing),
+        easting: Math.round(UTMEasting),
+        zoneNumber: ZoneNumber,
+        zoneLetter: getLetterDesignator(Lat)
+      };
+    }
+
+    /**
+     * Converts UTM coords to lat/long, using the WGS84 ellipsoid. This is a convenience
+     * class where the Zone can be specified as a single string eg."60N" which
+     * is then broken down into the ZoneNumber and ZoneLetter.
+     *
+     * @private
+     * @param {object} utm An object literal with northing, easting, zoneNumber
+     *     and zoneLetter properties. If an optional accuracy property is
+     *     provided (in meters), a bounding box will be returned instead of
+     *     latitude and longitude.
+     * @return {object} An object literal containing either lat and lon values
+     *     (if no accuracy was provided), or top, right, bottom and left values
+     *     for the bounding box calculated according to the provided accuracy.
+     *     Returns null if the conversion failed.
+     */
+    function UTMtoLL(utm) {
+
+      var UTMNorthing = utm.northing;
+      var UTMEasting = utm.easting;
+      var zoneLetter = utm.zoneLetter;
+      var zoneNumber = utm.zoneNumber;
+      // check the ZoneNummber is valid
+      if (zoneNumber < 0 || zoneNumber > 60) {
+        return null;
+      }
+
+      var k0 = 0.9996;
+      var a = 6378137.0; //ellip.radius;
+      var eccSquared = 0.00669438; //ellip.eccsq;
+      var eccPrimeSquared;
+      var e1 = (1 - Math.sqrt(1 - eccSquared)) / (1 + Math.sqrt(1 - eccSquared));
+      var N1, T1, C1, R1, D, M;
+      var LongOrigin;
+      var mu, phi1Rad;
+
+      // remove 500,000 meter offset for longitude
+      var x = UTMEasting - 500000.0;
+      var y = UTMNorthing;
+
+      // We must know somehow if we are in the Northern or Southern
+      // hemisphere, this is the only time we use the letter So even
+      // if the Zone letter isn't exactly correct it should indicate
+      // the hemisphere correctly
+      if (zoneLetter < 'N') {
+        y -= 10000000.0; // remove 10,000,000 meter offset used
+        // for southern hemisphere
+      }
+
+      // There are 60 zones with zone 1 being at West -180 to -174
+      LongOrigin = (zoneNumber - 1) * 6 - 180 + 3; // +3 puts origin
+      // in middle of
+      // zone
+
+      eccPrimeSquared = (eccSquared) / (1 - eccSquared);
+
+      M = y / k0;
+      mu = M / (a * (1 - eccSquared / 4 - 3 * eccSquared * eccSquared / 64 - 5 * eccSquared * eccSquared * eccSquared / 256));
+
+      phi1Rad = mu + (3 * e1 / 2 - 27 * e1 * e1 * e1 / 32) * Math.sin(2 * mu) + (21 * e1 * e1 / 16 - 55 * e1 * e1 * e1 * e1 / 32) * Math.sin(4 * mu) + (151 * e1 * e1 * e1 / 96) * Math.sin(6 * mu);
+      // double phi1 = ProjMath.radToDeg(phi1Rad);
+
+      N1 = a / Math.sqrt(1 - eccSquared * Math.sin(phi1Rad) * Math.sin(phi1Rad));
+      T1 = Math.tan(phi1Rad) * Math.tan(phi1Rad);
+      C1 = eccPrimeSquared * Math.cos(phi1Rad) * Math.cos(phi1Rad);
+      R1 = a * (1 - eccSquared) / Math.pow(1 - eccSquared * Math.sin(phi1Rad) * Math.sin(phi1Rad), 1.5);
+      D = x / (N1 * k0);
+
+      var lat = phi1Rad - (N1 * Math.tan(phi1Rad) / R1) * (D * D / 2 - (5 + 3 * T1 + 10 * C1 - 4 * C1 * C1 - 9 * eccPrimeSquared) * D * D * D * D / 24 + (61 + 90 * T1 + 298 * C1 + 45 * T1 * T1 - 252 * eccPrimeSquared - 3 * C1 * C1) * D * D * D * D * D * D / 720);
+      lat = radToDeg(lat);
+
+      var lon = (D - (1 + 2 * T1 + C1) * D * D * D / 6 + (5 - 2 * C1 + 28 * T1 - 3 * C1 * C1 + 8 * eccPrimeSquared + 24 * T1 * T1) * D * D * D * D * D / 120) / Math.cos(phi1Rad);
+      lon = LongOrigin + radToDeg(lon);
+
+      var result;
+      if (utm.accuracy) {
+        var topRight = UTMtoLL({
+          northing: utm.northing + utm.accuracy,
+          easting: utm.easting + utm.accuracy,
+          zoneLetter: utm.zoneLetter,
+          zoneNumber: utm.zoneNumber
+        });
+        result = {
+          top: topRight.lat,
+          right: topRight.lon,
+          bottom: lat,
+          left: lon
+        };
+      }
+      else {
+        result = {
+          lat: lat,
+          lon: lon
+        };
+      }
+      return result;
+    }
+
+    /**
+     * Calculates the MGRS letter designator for the given latitude.
+     *
+     * @private
+     * @param {number} lat The latitude in WGS84 to get the letter designator
+     *     for.
+     * @return {char} The letter designator.
+     */
+    function getLetterDesignator(lat) {
+      //This is here as an error flag to show that the Latitude is
+      //outside MGRS limits
+      var LetterDesignator = 'Z';
+
+      if ((84 >= lat) && (lat >= 72)) {
+        LetterDesignator = 'X';
+      }
+      else if ((72 > lat) && (lat >= 64)) {
+        LetterDesignator = 'W';
+      }
+      else if ((64 > lat) && (lat >= 56)) {
+        LetterDesignator = 'V';
+      }
+      else if ((56 > lat) && (lat >= 48)) {
+        LetterDesignator = 'U';
+      }
+      else if ((48 > lat) && (lat >= 40)) {
+        LetterDesignator = 'T';
+      }
+      else if ((40 > lat) && (lat >= 32)) {
+        LetterDesignator = 'S';
+      }
+      else if ((32 > lat) && (lat >= 24)) {
+        LetterDesignator = 'R';
+      }
+      else if ((24 > lat) && (lat >= 16)) {
+        LetterDesignator = 'Q';
+      }
+      else if ((16 > lat) && (lat >= 8)) {
+        LetterDesignator = 'P';
+      }
+      else if ((8 > lat) && (lat >= 0)) {
+        LetterDesignator = 'N';
+      }
+      else if ((0 > lat) && (lat >= -8)) {
+        LetterDesignator = 'M';
+      }
+      else if ((-8 > lat) && (lat >= -16)) {
+        LetterDesignator = 'L';
+      }
+      else if ((-16 > lat) && (lat >= -24)) {
+        LetterDesignator = 'K';
+      }
+      else if ((-24 > lat) && (lat >= -32)) {
+        LetterDesignator = 'J';
+      }
+      else if ((-32 > lat) && (lat >= -40)) {
+        LetterDesignator = 'H';
+      }
+      else if ((-40 > lat) && (lat >= -48)) {
+        LetterDesignator = 'G';
+      }
+      else if ((-48 > lat) && (lat >= -56)) {
+        LetterDesignator = 'F';
+      }
+      else if ((-56 > lat) && (lat >= -64)) {
+        LetterDesignator = 'E';
+      }
+      else if ((-64 > lat) && (lat >= -72)) {
+        LetterDesignator = 'D';
+      }
+      else if ((-72 > lat) && (lat >= -80)) {
+        LetterDesignator = 'C';
+      }
+      return LetterDesignator;
+    }
+
+    /**
+     * Encodes a UTM location as MGRS string.
+     *
+     * @private
+     * @param {object} utm An object literal with easting, northing,
+     *     zoneLetter, zoneNumber
+     * @param {number} accuracy Accuracy in digits (1-5).
+     * @return {string} MGRS string for the given UTM location.
+     */
+    function encode(utm, accuracy) {
+      // prepend with leading zeroes
+      var seasting = "00000" + utm.easting,
+        snorthing = "00000" + utm.northing;
+
+      return utm.zoneNumber + utm.zoneLetter + get100kID(utm.easting, utm.northing, utm.zoneNumber) + seasting.substr(seasting.length - 5, accuracy) + snorthing.substr(snorthing.length - 5, accuracy);
+    }
+
+    /**
+     * Get the two letter 100k designator for a given UTM easting,
+     * northing and zone number value.
+     *
+     * @private
+     * @param {number} easting
+     * @param {number} northing
+     * @param {number} zoneNumber
+     * @return the two letter 100k designator for the given UTM location.
+     */
+    function get100kID(easting, northing, zoneNumber) {
+      var setParm = get100kSetForZone(zoneNumber);
+      var setColumn = Math.floor(easting / 100000);
+      var setRow = Math.floor(northing / 100000) % 20;
+      return getLetter100kID(setColumn, setRow, setParm);
+    }
+
+    /**
+     * Given a UTM zone number, figure out the MGRS 100K set it is in.
+     *
+     * @private
+     * @param {number} i An UTM zone number.
+     * @return {number} the 100k set the UTM zone is in.
+     */
+    function get100kSetForZone(i) {
+      var setParm = i % NUM_100K_SETS;
+      if (setParm === 0) {
+        setParm = NUM_100K_SETS;
+      }
+
+      return setParm;
+    }
+
+    /**
+     * Get the two-letter MGRS 100k designator given information
+     * translated from the UTM northing, easting and zone number.
+     *
+     * @private
+     * @param {number} column the column index as it relates to the MGRS
+     *        100k set spreadsheet, created from the UTM easting.
+     *        Values are 1-8.
+     * @param {number} row the row index as it relates to the MGRS 100k set
+     *        spreadsheet, created from the UTM northing value. Values
+     *        are from 0-19.
+     * @param {number} parm the set block, as it relates to the MGRS 100k set
+     *        spreadsheet, created from the UTM zone. Values are from
+     *        1-60.
+     * @return two letter MGRS 100k code.
+     */
+    function getLetter100kID(column, row, parm) {
+      // colOrigin and rowOrigin are the letters at the origin of the set
+      var index = parm - 1;
+      var colOrigin = SET_ORIGIN_COLUMN_LETTERS.charCodeAt(index);
+      var rowOrigin = SET_ORIGIN_ROW_LETTERS.charCodeAt(index);
+
+      // colInt and rowInt are the letters to build to return
+      var colInt = colOrigin + column - 1;
+      var rowInt = rowOrigin + row;
+      var rollover = false;
+
+      if (colInt > Z) {
+        colInt = colInt - Z + A - 1;
+        rollover = true;
+      }
+
+      if (colInt === I || (colOrigin < I && colInt > I) || ((colInt > I || colOrigin < I) && rollover)) {
+        colInt++;
+      }
+
+      if (colInt === O || (colOrigin < O && colInt > O) || ((colInt > O || colOrigin < O) && rollover)) {
+        colInt++;
+
+        if (colInt === I) {
+          colInt++;
+        }
+      }
+
+      if (colInt > Z) {
+        colInt = colInt - Z + A - 1;
+      }
+
+      if (rowInt > V) {
+        rowInt = rowInt - V + A - 1;
+        rollover = true;
+      }
+      else {
+        rollover = false;
+      }
+
+      if (((rowInt === I) || ((rowOrigin < I) && (rowInt > I))) || (((rowInt > I) || (rowOrigin < I)) && rollover)) {
+        rowInt++;
+      }
+
+      if (((rowInt === O) || ((rowOrigin < O) && (rowInt > O))) || (((rowInt > O) || (rowOrigin < O)) && rollover)) {
+        rowInt++;
+
+        if (rowInt === I) {
+          rowInt++;
+        }
+      }
+
+      if (rowInt > V) {
+        rowInt = rowInt - V + A - 1;
+      }
+
+      var twoLetter = String.fromCharCode(colInt) + String.fromCharCode(rowInt);
+      return twoLetter;
+    }
+
+    /**
+     * Decode the UTM parameters from a MGRS string.
+     *
+     * @private
+     * @param {string} mgrsString an UPPERCASE coordinate string is expected.
+     * @return {object} An object literal with easting, northing, zoneLetter,
+     *     zoneNumber and accuracy (in meters) properties.
+     */
+    function decode(mgrsString) {
+
+      if (mgrsString && mgrsString.length === 0) {
+        throw ("MGRSPoint coverting from nothing");
+      }
+
+      var length = mgrsString.length;
+
+      var hunK = null;
+      var sb = "";
+      var testChar;
+      var i = 0;
+
+      // get Zone number
+      while (!(/[A-Z]/).test(testChar = mgrsString.charAt(i))) {
+        if (i >= 2) {
+          throw ("MGRSPoint bad conversion from: " + mgrsString);
+        }
+        sb += testChar;
+        i++;
+      }
+
+      var zoneNumber = parseInt(sb, 10);
+
+      if (i === 0 || i + 3 > length) {
+        // A good MGRS string has to be 4-5 digits long,
+        // ##AAA/#AAA at least.
+        throw ("MGRSPoint bad conversion from: " + mgrsString);
+      }
+
+      var zoneLetter = mgrsString.charAt(i++);
+
+      // Should we check the zone letter here? Why not.
+      if (zoneLetter <= 'A' || zoneLetter === 'B' || zoneLetter === 'Y' || zoneLetter >= 'Z' || zoneLetter === 'I' || zoneLetter === 'O') {
+        throw ("MGRSPoint zone letter " + zoneLetter + " not handled: " + mgrsString);
+      }
+
+      hunK = mgrsString.substring(i, i += 2);
+
+      var set = get100kSetForZone(zoneNumber);
+
+      var east100k = getEastingFromChar(hunK.charAt(0), set);
+      var north100k = getNorthingFromChar(hunK.charAt(1), set);
+
+      // We have a bug where the northing may be 2000000 too low.
+      // How
+      // do we know when to roll over?
+
+      while (north100k < getMinNorthing(zoneLetter)) {
+        north100k += 2000000;
+      }
+
+      // calculate the char index for easting/northing separator
+      var remainder = length - i;
+
+      if (remainder % 2 !== 0) {
+        throw ("MGRSPoint has to have an even number \nof digits after the zone letter and two 100km letters - front \nhalf for easting meters, second half for \nnorthing meters" + mgrsString);
+      }
+
+      var sep = remainder / 2;
+
+      var sepEasting = 0.0;
+      var sepNorthing = 0.0;
+      var accuracyBonus, sepEastingString, sepNorthingString, easting, northing;
+      if (sep > 0) {
+        accuracyBonus = 100000.0 / Math.pow(10, sep);
+        sepEastingString = mgrsString.substring(i, i + sep);
+        sepEasting = parseFloat(sepEastingString) * accuracyBonus;
+        sepNorthingString = mgrsString.substring(i + sep);
+        sepNorthing = parseFloat(sepNorthingString) * accuracyBonus;
+      }
+
+      easting = sepEasting + east100k;
+      northing = sepNorthing + north100k;
+
+      return {
+        easting: easting,
+        northing: northing,
+        zoneLetter: zoneLetter,
+        zoneNumber: zoneNumber,
+        accuracy: accuracyBonus
+      };
+    }
+
+    /**
+     * Given the first letter from a two-letter MGRS 100k zone, and given the
+     * MGRS table set for the zone number, figure out the easting value that
+     * should be added to the other, secondary easting value.
+     *
+     * @private
+     * @param {char} e The first letter from a two-letter MGRS 100´k zone.
+     * @param {number} set The MGRS table set for the zone number.
+     * @return {number} The easting value for the given letter and set.
+     */
+    function getEastingFromChar(e, set) {
+      // colOrigin is the letter at the origin of the set for the
+      // column
+      var curCol = SET_ORIGIN_COLUMN_LETTERS.charCodeAt(set - 1);
+      var eastingValue = 100000.0;
+      var rewindMarker = false;
+
+      while (curCol !== e.charCodeAt(0)) {
+        curCol++;
+        if (curCol === I) {
+          curCol++;
+        }
+        if (curCol === O) {
+          curCol++;
+        }
+        if (curCol > Z) {
+          if (rewindMarker) {
+            throw ("Bad character: " + e);
+          }
+          curCol = A;
+          rewindMarker = true;
+        }
+        eastingValue += 100000.0;
+      }
+
+      return eastingValue;
+    }
+
+    /**
+     * Given the second letter from a two-letter MGRS 100k zone, and given the
+     * MGRS table set for the zone number, figure out the northing value that
+     * should be added to the other, secondary northing value. You have to
+     * remember that Northings are determined from the equator, and the vertical
+     * cycle of letters mean a 2000000 additional northing meters. This happens
+     * approx. every 18 degrees of latitude. This method does *NOT* count any
+     * additional northings. You have to figure out how many 2000000 meters need
+     * to be added for the zone letter of the MGRS coordinate.
+     *
+     * @private
+     * @param {char} n Second letter of the MGRS 100k zone
+     * @param {number} set The MGRS table set number, which is dependent on the
+     *     UTM zone number.
+     * @return {number} The northing value for the given letter and set.
+     */
+    function getNorthingFromChar(n, set) {
+
+      if (n > 'V') {
+        throw ("MGRSPoint given invalid Northing " + n);
+      }
+
+      // rowOrigin is the letter at the origin of the set for the
+      // column
+      var curRow = SET_ORIGIN_ROW_LETTERS.charCodeAt(set - 1);
+      var northingValue = 0.0;
+      var rewindMarker = false;
+
+      while (curRow !== n.charCodeAt(0)) {
+        curRow++;
+        if (curRow === I) {
+          curRow++;
+        }
+        if (curRow === O) {
+          curRow++;
+        }
+        // fixing a bug making whole application hang in this loop
+        // when 'n' is a wrong character
+        if (curRow > V) {
+          if (rewindMarker) { // making sure that this loop ends
+            throw ("Bad character: " + n);
+          }
+          curRow = A;
+          rewindMarker = true;
+        }
+        northingValue += 100000.0;
+      }
+
+      return northingValue;
+    }
+
+    /**
+     * The function getMinNorthing returns the minimum northing value of a MGRS
+     * zone.
+     *
+     * Ported from Geotrans' c Lattitude_Band_Value structure table.
+     *
+     * @private
+     * @param {char} zoneLetter The MGRS zone to get the min northing for.
+     * @return {number}
+     */
+    function getMinNorthing(zoneLetter) {
+      var northing;
+      switch (zoneLetter) {
+      case 'C':
+        northing = 1100000.0;
+        break;
+      case 'D':
+        northing = 2000000.0;
+        break;
+      case 'E':
+        northing = 2800000.0;
+        break;
+      case 'F':
+        northing = 3700000.0;
+        break;
+      case 'G':
+        northing = 4600000.0;
+        break;
+      case 'H':
+        northing = 5500000.0;
+        break;
+      case 'J':
+        northing = 6400000.0;
+        break;
+      case 'K':
+        northing = 7300000.0;
+        break;
+      case 'L':
+        northing = 8200000.0;
+        break;
+      case 'M':
+        northing = 9100000.0;
+        break;
+      case 'N':
+        northing = 0.0;
+        break;
+      case 'P':
+        northing = 800000.0;
+        break;
+      case 'Q':
+        northing = 1700000.0;
+        break;
+      case 'R':
+        northing = 2600000.0;
+        break;
+      case 'S':
+        northing = 3500000.0;
+        break;
+      case 'T':
+        northing = 4400000.0;
+        break;
+      case 'U':
+        northing = 5300000.0;
+        break;
+      case 'V':
+        northing = 6200000.0;
+        break;
+      case 'W':
+        northing = 7000000.0;
+        break;
+      case 'X':
+        northing = 7900000.0;
+        break;
+      default:
+        northing = -1.0;
+      }
+      if (northing >= 0.0) {
+        return northing;
+      }
+      else {
+        throw ("Invalid zone letter: " + zoneLetter);
+      }
+
+    }
+
+    function Point(x, y, z) {
+      if (!(this instanceof Point)) {
+        return new Point(x, y, z);
+      }
+      if (Array.isArray(x)) {
+        this.x = x[0];
+        this.y = x[1];
+        this.z = x[2] || 0.0;
+      } else if(typeof x === 'object') {
+        this.x = x.x;
+        this.y = x.y;
+        this.z = x.z || 0.0;
+      } else if (typeof x === 'string' && typeof y === 'undefined') {
+        var coords = x.split(',');
+        this.x = parseFloat(coords[0], 10);
+        this.y = parseFloat(coords[1], 10);
+        this.z = parseFloat(coords[2], 10) || 0.0;
+      } else {
+        this.x = x;
+        this.y = y;
+        this.z = z || 0.0;
+      }
+      console.warn('proj4.Point will be removed in version 3, use proj4.toPoint');
+    }
+
+    Point.fromMGRS = function(mgrsStr) {
+      return new Point(toPoint$1(mgrsStr));
+    };
+    Point.prototype.toMGRS = function(accuracy) {
+      return forward$1([this.x, this.y], accuracy);
+    };
+
+    var C00 = 1;
+    var C02 = 0.25;
+    var C04 = 0.046875;
+    var C06 = 0.01953125;
+    var C08 = 0.01068115234375;
+    var C22 = 0.75;
+    var C44 = 0.46875;
+    var C46 = 0.01302083333333333333;
+    var C48 = 0.00712076822916666666;
+    var C66 = 0.36458333333333333333;
+    var C68 = 0.00569661458333333333;
+    var C88 = 0.3076171875;
+
+    var pj_enfn = function(es) {
+      var en = [];
+      en[0] = C00 - es * (C02 + es * (C04 + es * (C06 + es * C08)));
+      en[1] = es * (C22 - es * (C04 + es * (C06 + es * C08)));
+      var t = es * es;
+      en[2] = t * (C44 - es * (C46 + es * C48));
+      t *= es;
+      en[3] = t * (C66 - es * C68);
+      en[4] = t * es * C88;
+      return en;
+    };
+
+    var pj_mlfn = function(phi, sphi, cphi, en) {
+      cphi *= sphi;
+      sphi *= sphi;
+      return (en[0] * phi - cphi * (en[1] + sphi * (en[2] + sphi * (en[3] + sphi * en[4]))));
+    };
+
+    var MAX_ITER = 20;
+
+    var pj_inv_mlfn = function(arg, es, en) {
+      var k = 1 / (1 - es);
+      var phi = arg;
+      for (var i = MAX_ITER; i; --i) { /* rarely goes over 2 iterations */
+        var s = Math.sin(phi);
+        var t = 1 - es * s * s;
+        //t = this.pj_mlfn(phi, s, Math.cos(phi), en) - arg;
+        //phi -= t * (t * Math.sqrt(t)) * k;
+        t = (pj_mlfn(phi, s, Math.cos(phi), en) - arg) * (t * Math.sqrt(t)) * k;
+        phi -= t;
+        if (Math.abs(t) < EPSLN) {
+          return phi;
+        }
+      }
+      //..reportError("cass:pj_inv_mlfn: Convergence error");
+      return phi;
+    };
+
+    // Heavily based on this tmerc projection implementation
+    // https://github.com/mbloch/mapshaper-proj/blob/master/src/projections/tmerc.js
+
+    function init$2() {
+      this.x0 = this.x0 !== undefined ? this.x0 : 0;
+      this.y0 = this.y0 !== undefined ? this.y0 : 0;
+      this.long0 = this.long0 !== undefined ? this.long0 : 0;
+      this.lat0 = this.lat0 !== undefined ? this.lat0 : 0;
+
+      if (this.es) {
+        this.en = pj_enfn(this.es);
+        this.ml0 = pj_mlfn(this.lat0, Math.sin(this.lat0), Math.cos(this.lat0), this.en);
+      }
+    }
+
+    /**
+        Transverse Mercator Forward  - long/lat to x/y
+        long/lat in radians
+      */
+    function forward$2(p) {
+      var lon = p.x;
+      var lat = p.y;
+
+      var delta_lon = adjust_lon(lon - this.long0);
+      var con;
+      var x, y;
+      var sin_phi = Math.sin(lat);
+      var cos_phi = Math.cos(lat);
+
+      if (!this.es) {
+        var b = cos_phi * Math.sin(delta_lon);
+
+        if ((Math.abs(Math.abs(b) - 1)) < EPSLN) {
+          return (93);
+        }
+        else {
+          x = 0.5 * this.a * this.k0 * Math.log((1 + b) / (1 - b)) + this.x0;
+          y = cos_phi * Math.cos(delta_lon) / Math.sqrt(1 - Math.pow(b, 2));
+          b = Math.abs(y);
+
+          if (b >= 1) {
+            if ((b - 1) > EPSLN) {
+              return (93);
+            }
+            else {
+              y = 0;
+            }
+          }
+          else {
+            y = Math.acos(y);
+          }
+
+          if (lat < 0) {
+            y = -y;
+          }
+
+          y = this.a * this.k0 * (y - this.lat0) + this.y0;
+        }
+      }
+      else {
+        var al = cos_phi * delta_lon;
+        var als = Math.pow(al, 2);
+        var c = this.ep2 * Math.pow(cos_phi, 2);
+        var cs = Math.pow(c, 2);
+        var tq = Math.abs(cos_phi) > EPSLN ? Math.tan(lat) : 0;
+        var t = Math.pow(tq, 2);
+        var ts = Math.pow(t, 2);
+        con = 1 - this.es * Math.pow(sin_phi, 2);
+        al = al / Math.sqrt(con);
+        var ml = pj_mlfn(lat, sin_phi, cos_phi, this.en);
+
+        x = this.a * (this.k0 * al * (1 +
+          als / 6 * (1 - t + c +
+          als / 20 * (5 - 18 * t + ts + 14 * c - 58 * t * c +
+          als / 42 * (61 + 179 * ts - ts * t - 479 * t))))) +
+          this.x0;
+
+        y = this.a * (this.k0 * (ml - this.ml0 +
+          sin_phi * delta_lon * al / 2 * (1 +
+          als / 12 * (5 - t + 9 * c + 4 * cs +
+          als / 30 * (61 + ts - 58 * t + 270 * c - 330 * t * c +
+          als / 56 * (1385 + 543 * ts - ts * t - 3111 * t)))))) +
+          this.y0;
+      }
+
+      p.x = x;
+      p.y = y;
+
+      return p;
+    }
+
+    /**
+        Transverse Mercator Inverse  -  x/y to long/lat
+      */
+    function inverse$2(p) {
+      var con, phi;
+      var lat, lon;
+      var x = (p.x - this.x0) * (1 / this.a);
+      var y = (p.y - this.y0) * (1 / this.a);
+
+      if (!this.es) {
+        var f = Math.exp(x / this.k0);
+        var g = 0.5 * (f - 1 / f);
+        var temp = this.lat0 + y / this.k0;
+        var h = Math.cos(temp);
+        con = Math.sqrt((1 - Math.pow(h, 2)) / (1 + Math.pow(g, 2)));
+        lat = Math.asin(con);
+
+        if (y < 0) {
+          lat = -lat;
+        }
+
+        if ((g === 0) && (h === 0)) {
+          lon = 0;
+        }
+        else {
+          lon = adjust_lon(Math.atan2(g, h) + this.long0);
+        }
+      }
+      else { // ellipsoidal form
+        con = this.ml0 + y / this.k0;
+        phi = pj_inv_mlfn(con, this.es, this.en);
+
+        if (Math.abs(phi) < HALF_PI) {
+          var sin_phi = Math.sin(phi);
+          var cos_phi = Math.cos(phi);
+          var tan_phi = Math.abs(cos_phi) > EPSLN ? Math.tan(phi) : 0;
+          var c = this.ep2 * Math.pow(cos_phi, 2);
+          var cs = Math.pow(c, 2);
+          var t = Math.pow(tan_phi, 2);
+          var ts = Math.pow(t, 2);
+          con = 1 - this.es * Math.pow(sin_phi, 2);
+          var d = x * Math.sqrt(con) / this.k0;
+          var ds = Math.pow(d, 2);
+          con = con * tan_phi;
+
+          lat = phi - (con * ds / (1 - this.es)) * 0.5 * (1 -
+            ds / 12 * (5 + 3 * t - 9 * c * t + c - 4 * cs -
+            ds / 30 * (61 + 90 * t - 252 * c * t + 45 * ts + 46 * c -
+            ds / 56 * (1385 + 3633 * t + 4095 * ts + 1574 * ts * t))));
+
+          lon = adjust_lon(this.long0 + (d * (1 -
+            ds / 6 * (1 + 2 * t + c -
+            ds / 20 * (5 + 28 * t + 24 * ts + 8 * c * t + 6 * c -
+            ds / 42 * (61 + 662 * t + 1320 * ts + 720 * ts * t)))) / cos_phi));
+        }
+        else {
+          lat = HALF_PI * sign(y);
+          lon = 0;
+        }
+      }
+
+      p.x = lon;
+      p.y = lat;
+
+      return p;
+    }
+
+    var names$3 = ["Fast_Transverse_Mercator", "Fast Transverse Mercator"];
+    var tmerc = {
+      init: init$2,
+      forward: forward$2,
+      inverse: inverse$2,
+      names: names$3
+    };
+
+    var sinh = function(x) {
+      var r = Math.exp(x);
+      r = (r - 1 / r) / 2;
+      return r;
+    };
+
+    var hypot = function(x, y) {
+      x = Math.abs(x);
+      y = Math.abs(y);
+      var a = Math.max(x, y);
+      var b = Math.min(x, y) / (a ? a : 1);
+
+      return a * Math.sqrt(1 + Math.pow(b, 2));
+    };
+
+    var log1py = function(x) {
+      var y = 1 + x;
+      var z = y - 1;
+
+      return z === 0 ? x : x * Math.log(y) / z;
+    };
+
+    var asinhy = function(x) {
+      var y = Math.abs(x);
+      y = log1py(y * (1 + y / (hypot(1, y) + 1)));
+
+      return x < 0 ? -y : y;
+    };
+
+    var gatg = function(pp, B) {
+      var cos_2B = 2 * Math.cos(2 * B);
+      var i = pp.length - 1;
+      var h1 = pp[i];
+      var h2 = 0;
+      var h;
+
+      while (--i >= 0) {
+        h = -h2 + cos_2B * h1 + pp[i];
+        h2 = h1;
+        h1 = h;
+      }
+
+      return (B + h * Math.sin(2 * B));
+    };
+
+    var clens = function(pp, arg_r) {
+      var r = 2 * Math.cos(arg_r);
+      var i = pp.length - 1;
+      var hr1 = pp[i];
+      var hr2 = 0;
+      var hr;
+
+      while (--i >= 0) {
+        hr = -hr2 + r * hr1 + pp[i];
+        hr2 = hr1;
+        hr1 = hr;
+      }
+
+      return Math.sin(arg_r) * hr;
+    };
+
+    var cosh = function(x) {
+      var r = Math.exp(x);
+      r = (r + 1 / r) / 2;
+      return r;
+    };
+
+    var clens_cmplx = function(pp, arg_r, arg_i) {
+      var sin_arg_r = Math.sin(arg_r);
+      var cos_arg_r = Math.cos(arg_r);
+      var sinh_arg_i = sinh(arg_i);
+      var cosh_arg_i = cosh(arg_i);
+      var r = 2 * cos_arg_r * cosh_arg_i;
+      var i = -2 * sin_arg_r * sinh_arg_i;
+      var j = pp.length - 1;
+      var hr = pp[j];
+      var hi1 = 0;
+      var hr1 = 0;
+      var hi = 0;
+      var hr2;
+      var hi2;
+
+      while (--j >= 0) {
+        hr2 = hr1;
+        hi2 = hi1;
+        hr1 = hr;
+        hi1 = hi;
+        hr = -hr2 + r * hr1 - i * hi1 + pp[j];
+        hi = -hi2 + i * hr1 + r * hi1;
+      }
+
+      r = sin_arg_r * cosh_arg_i;
+      i = cos_arg_r * sinh_arg_i;
+
+      return [r * hr - i * hi, r * hi + i * hr];
+    };
+
+    // Heavily based on this etmerc projection implementation
+    // https://github.com/mbloch/mapshaper-proj/blob/master/src/projections/etmerc.js
+
+    function init$3() {
+      if (!this.approx && (isNaN(this.es) || this.es <= 0)) {
+        throw new Error('Incorrect elliptical usage. Try using the +approx option in the proj string, or PROJECTION["Fast_Transverse_Mercator"] in the WKT.');
+      }
+      if (this.approx) {
+        // When '+approx' is set, use tmerc instead
+        tmerc.init.apply(this);
+        this.forward = tmerc.forward;
+        this.inverse = tmerc.inverse;
+      }
+
+      this.x0 = this.x0 !== undefined ? this.x0 : 0;
+      this.y0 = this.y0 !== undefined ? this.y0 : 0;
+      this.long0 = this.long0 !== undefined ? this.long0 : 0;
+      this.lat0 = this.lat0 !== undefined ? this.lat0 : 0;
+
+      this.cgb = [];
+      this.cbg = [];
+      this.utg = [];
+      this.gtu = [];
+
+      var f = this.es / (1 + Math.sqrt(1 - this.es));
+      var n = f / (2 - f);
+      var np = n;
+
+      this.cgb[0] = n * (2 + n * (-2 / 3 + n * (-2 + n * (116 / 45 + n * (26 / 45 + n * (-2854 / 675 ))))));
+      this.cbg[0] = n * (-2 + n * ( 2 / 3 + n * ( 4 / 3 + n * (-82 / 45 + n * (32 / 45 + n * (4642 / 4725))))));
+
+      np = np * n;
+      this.cgb[1] = np * (7 / 3 + n * (-8 / 5 + n * (-227 / 45 + n * (2704 / 315 + n * (2323 / 945)))));
+      this.cbg[1] = np * (5 / 3 + n * (-16 / 15 + n * ( -13 / 9 + n * (904 / 315 + n * (-1522 / 945)))));
+
+      np = np * n;
+      this.cgb[2] = np * (56 / 15 + n * (-136 / 35 + n * (-1262 / 105 + n * (73814 / 2835))));
+      this.cbg[2] = np * (-26 / 15 + n * (34 / 21 + n * (8 / 5 + n * (-12686 / 2835))));
+
+      np = np * n;
+      this.cgb[3] = np * (4279 / 630 + n * (-332 / 35 + n * (-399572 / 14175)));
+      this.cbg[3] = np * (1237 / 630 + n * (-12 / 5 + n * ( -24832 / 14175)));
+
+      np = np * n;
+      this.cgb[4] = np * (4174 / 315 + n * (-144838 / 6237));
+      this.cbg[4] = np * (-734 / 315 + n * (109598 / 31185));
+
+      np = np * n;
+      this.cgb[5] = np * (601676 / 22275);
+      this.cbg[5] = np * (444337 / 155925);
+
+      np = Math.pow(n, 2);
+      this.Qn = this.k0 / (1 + n) * (1 + np * (1 / 4 + np * (1 / 64 + np / 256)));
+
+      this.utg[0] = n * (-0.5 + n * ( 2 / 3 + n * (-37 / 96 + n * ( 1 / 360 + n * (81 / 512 + n * (-96199 / 604800))))));
+      this.gtu[0] = n * (0.5 + n * (-2 / 3 + n * (5 / 16 + n * (41 / 180 + n * (-127 / 288 + n * (7891 / 37800))))));
+
+      this.utg[1] = np * (-1 / 48 + n * (-1 / 15 + n * (437 / 1440 + n * (-46 / 105 + n * (1118711 / 3870720)))));
+      this.gtu[1] = np * (13 / 48 + n * (-3 / 5 + n * (557 / 1440 + n * (281 / 630 + n * (-1983433 / 1935360)))));
+
+      np = np * n;
+      this.utg[2] = np * (-17 / 480 + n * (37 / 840 + n * (209 / 4480 + n * (-5569 / 90720 ))));
+      this.gtu[2] = np * (61 / 240 + n * (-103 / 140 + n * (15061 / 26880 + n * (167603 / 181440))));
+
+      np = np * n;
+      this.utg[3] = np * (-4397 / 161280 + n * (11 / 504 + n * (830251 / 7257600)));
+      this.gtu[3] = np * (49561 / 161280 + n * (-179 / 168 + n * (6601661 / 7257600)));
+
+      np = np * n;
+      this.utg[4] = np * (-4583 / 161280 + n * (108847 / 3991680));
+      this.gtu[4] = np * (34729 / 80640 + n * (-3418889 / 1995840));
+
+      np = np * n;
+      this.utg[5] = np * (-20648693 / 638668800);
+      this.gtu[5] = np * (212378941 / 319334400);
+
+      var Z = gatg(this.cbg, this.lat0);
+      this.Zb = -this.Qn * (Z + clens(this.gtu, 2 * Z));
+    }
+
+    function forward$3(p) {
+      var Ce = adjust_lon(p.x - this.long0);
+      var Cn = p.y;
+
+      Cn = gatg(this.cbg, Cn);
+      var sin_Cn = Math.sin(Cn);
+      var cos_Cn = Math.cos(Cn);
+      var sin_Ce = Math.sin(Ce);
+      var cos_Ce = Math.cos(Ce);
+
+      Cn = Math.atan2(sin_Cn, cos_Ce * cos_Cn);
+      Ce = Math.atan2(sin_Ce * cos_Cn, hypot(sin_Cn, cos_Cn * cos_Ce));
+      Ce = asinhy(Math.tan(Ce));
+
+      var tmp = clens_cmplx(this.gtu, 2 * Cn, 2 * Ce);
+
+      Cn = Cn + tmp[0];
+      Ce = Ce + tmp[1];
+
+      var x;
+      var y;
+
+      if (Math.abs(Ce) <= 2.623395162778) {
+        x = this.a * (this.Qn * Ce) + this.x0;
+        y = this.a * (this.Qn * Cn + this.Zb) + this.y0;
+      }
+      else {
+        x = Infinity;
+        y = Infinity;
+      }
+
+      p.x = x;
+      p.y = y;
+
+      return p;
+    }
+
+    function inverse$3(p) {
+      var Ce = (p.x - this.x0) * (1 / this.a);
+      var Cn = (p.y - this.y0) * (1 / this.a);
+
+      Cn = (Cn - this.Zb) / this.Qn;
+      Ce = Ce / this.Qn;
+
+      var lon;
+      var lat;
+
+      if (Math.abs(Ce) <= 2.623395162778) {
+        var tmp = clens_cmplx(this.utg, 2 * Cn, 2 * Ce);
+
+        Cn = Cn + tmp[0];
+        Ce = Ce + tmp[1];
+        Ce = Math.atan(sinh(Ce));
+
+        var sin_Cn = Math.sin(Cn);
+        var cos_Cn = Math.cos(Cn);
+        var sin_Ce = Math.sin(Ce);
+        var cos_Ce = Math.cos(Ce);
+
+        Cn = Math.atan2(sin_Cn * cos_Ce, hypot(sin_Ce, cos_Ce * cos_Cn));
+        Ce = Math.atan2(sin_Ce, cos_Ce * cos_Cn);
+
+        lon = adjust_lon(Ce + this.long0);
+        lat = gatg(this.cgb, Cn);
+      }
+      else {
+        lon = Infinity;
+        lat = Infinity;
+      }
+
+      p.x = lon;
+      p.y = lat;
+
+      return p;
+    }
+
+    var names$4 = ["Extended_Transverse_Mercator", "Extended Transverse Mercator", "etmerc", "Transverse_Mercator", "Transverse Mercator", "tmerc"];
+    var etmerc = {
+      init: init$3,
+      forward: forward$3,
+      inverse: inverse$3,
+      names: names$4
+    };
+
+    var adjust_zone = function(zone, lon) {
+      if (zone === undefined) {
+        zone = Math.floor((adjust_lon(lon) + Math.PI) * 30 / Math.PI) + 1;
+
+        if (zone < 0) {
+          return 0;
+        } else if (zone > 60) {
+          return 60;
+        }
+      }
+      return zone;
+    };
+
+    var dependsOn = 'etmerc';
+    function init$4() {
+      var zone = adjust_zone(this.zone, this.long0);
+      if (zone === undefined) {
+        throw new Error('unknown utm zone');
+      }
+      this.lat0 = 0;
+      this.long0 =  ((6 * Math.abs(zone)) - 183) * D2R;
+      this.x0 = 500000;
+      this.y0 = this.utmSouth ? 10000000 : 0;
+      this.k0 = 0.9996;
+
+      etmerc.init.apply(this);
+      this.forward = etmerc.forward;
+      this.inverse = etmerc.inverse;
+    }
+
+    var names$5 = ["Universal Transverse Mercator System", "utm"];
+    var utm = {
+      init: init$4,
+      names: names$5,
+      dependsOn: dependsOn
+    };
+
+    var srat = function(esinp, exp) {
+      return (Math.pow((1 - esinp) / (1 + esinp), exp));
+    };
+
+    var MAX_ITER$1 = 20;
+    function init$6() {
+      var sphi = Math.sin(this.lat0);
+      var cphi = Math.cos(this.lat0);
+      cphi *= cphi;
+      this.rc = Math.sqrt(1 - this.es) / (1 - this.es * sphi * sphi);
+      this.C = Math.sqrt(1 + this.es * cphi * cphi / (1 - this.es));
+      this.phic0 = Math.asin(sphi / this.C);
+      this.ratexp = 0.5 * this.C * this.e;
+      this.K = Math.tan(0.5 * this.phic0 + FORTPI) / (Math.pow(Math.tan(0.5 * this.lat0 + FORTPI), this.C) * srat(this.e * sphi, this.ratexp));
+    }
+
+    function forward$5(p) {
+      var lon = p.x;
+      var lat = p.y;
+
+      p.y = 2 * Math.atan(this.K * Math.pow(Math.tan(0.5 * lat + FORTPI), this.C) * srat(this.e * Math.sin(lat), this.ratexp)) - HALF_PI;
+      p.x = this.C * lon;
+      return p;
+    }
+
+    function inverse$5(p) {
+      var DEL_TOL = 1e-14;
+      var lon = p.x / this.C;
+      var lat = p.y;
+      var num = Math.pow(Math.tan(0.5 * lat + FORTPI) / this.K, 1 / this.C);
+      for (var i = MAX_ITER$1; i > 0; --i) {
+        lat = 2 * Math.atan(num * srat(this.e * Math.sin(p.y), - 0.5 * this.e)) - HALF_PI;
+        if (Math.abs(lat - p.y) < DEL_TOL) {
+          break;
+        }
+        p.y = lat;
+      }
+      /* convergence failed */
+      if (!i) {
+        return null;
+      }
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$7 = ["gauss"];
+    var gauss = {
+      init: init$6,
+      forward: forward$5,
+      inverse: inverse$5,
+      names: names$7
+    };
+
+    function init$5() {
+      gauss.init.apply(this);
+      if (!this.rc) {
+        return;
+      }
+      this.sinc0 = Math.sin(this.phic0);
+      this.cosc0 = Math.cos(this.phic0);
+      this.R2 = 2 * this.rc;
+      if (!this.title) {
+        this.title = "Oblique Stereographic Alternative";
+      }
+    }
+
+    function forward$4(p) {
+      var sinc, cosc, cosl, k;
+      p.x = adjust_lon(p.x - this.long0);
+      gauss.forward.apply(this, [p]);
+      sinc = Math.sin(p.y);
+      cosc = Math.cos(p.y);
+      cosl = Math.cos(p.x);
+      k = this.k0 * this.R2 / (1 + this.sinc0 * sinc + this.cosc0 * cosc * cosl);
+      p.x = k * cosc * Math.sin(p.x);
+      p.y = k * (this.cosc0 * sinc - this.sinc0 * cosc * cosl);
+      p.x = this.a * p.x + this.x0;
+      p.y = this.a * p.y + this.y0;
+      return p;
+    }
+
+    function inverse$4(p) {
+      var sinc, cosc, lon, lat, rho;
+      p.x = (p.x - this.x0) / this.a;
+      p.y = (p.y - this.y0) / this.a;
+
+      p.x /= this.k0;
+      p.y /= this.k0;
+      if ((rho = Math.sqrt(p.x * p.x + p.y * p.y))) {
+        var c = 2 * Math.atan2(rho, this.R2);
+        sinc = Math.sin(c);
+        cosc = Math.cos(c);
+        lat = Math.asin(cosc * this.sinc0 + p.y * sinc * this.cosc0 / rho);
+        lon = Math.atan2(p.x * sinc, rho * this.cosc0 * cosc - p.y * this.sinc0 * sinc);
+      }
+      else {
+        lat = this.phic0;
+        lon = 0;
+      }
+
+      p.x = lon;
+      p.y = lat;
+      gauss.inverse.apply(this, [p]);
+      p.x = adjust_lon(p.x + this.long0);
+      return p;
+    }
+
+    var names$6 = ["Stereographic_North_Pole", "Oblique_Stereographic", "Polar_Stereographic", "sterea","Oblique Stereographic Alternative","Double_Stereographic"];
+    var sterea = {
+      init: init$5,
+      forward: forward$4,
+      inverse: inverse$4,
+      names: names$6
+    };
+
+    function ssfn_(phit, sinphi, eccen) {
+      sinphi *= eccen;
+      return (Math.tan(0.5 * (HALF_PI + phit)) * Math.pow((1 - sinphi) / (1 + sinphi), 0.5 * eccen));
+    }
+
+    function init$7() {
+      this.coslat0 = Math.cos(this.lat0);
+      this.sinlat0 = Math.sin(this.lat0);
+      if (this.sphere) {
+        if (this.k0 === 1 && !isNaN(this.lat_ts) && Math.abs(this.coslat0) <= EPSLN) {
+          this.k0 = 0.5 * (1 + sign(this.lat0) * Math.sin(this.lat_ts));
+        }
+      }
+      else {
+        if (Math.abs(this.coslat0) <= EPSLN) {
+          if (this.lat0 > 0) {
+            //North pole
+            //trace('stere:north pole');
+            this.con = 1;
+          }
+          else {
+            //South pole
+            //trace('stere:south pole');
+            this.con = -1;
+          }
+        }
+        this.cons = Math.sqrt(Math.pow(1 + this.e, 1 + this.e) * Math.pow(1 - this.e, 1 - this.e));
+        if (this.k0 === 1 && !isNaN(this.lat_ts) && Math.abs(this.coslat0) <= EPSLN) {
+          this.k0 = 0.5 * this.cons * msfnz(this.e, Math.sin(this.lat_ts), Math.cos(this.lat_ts)) / tsfnz(this.e, this.con * this.lat_ts, this.con * Math.sin(this.lat_ts));
+        }
+        this.ms1 = msfnz(this.e, this.sinlat0, this.coslat0);
+        this.X0 = 2 * Math.atan(this.ssfn_(this.lat0, this.sinlat0, this.e)) - HALF_PI;
+        this.cosX0 = Math.cos(this.X0);
+        this.sinX0 = Math.sin(this.X0);
+      }
+    }
+
+    // Stereographic forward equations--mapping lat,long to x,y
+    function forward$6(p) {
+      var lon = p.x;
+      var lat = p.y;
+      var sinlat = Math.sin(lat);
+      var coslat = Math.cos(lat);
+      var A, X, sinX, cosX, ts, rh;
+      var dlon = adjust_lon(lon - this.long0);
+
+      if (Math.abs(Math.abs(lon - this.long0) - Math.PI) <= EPSLN && Math.abs(lat + this.lat0) <= EPSLN) {
+        //case of the origine point
+        //trace('stere:this is the origin point');
+        p.x = NaN;
+        p.y = NaN;
+        return p;
+      }
+      if (this.sphere) {
+        //trace('stere:sphere case');
+        A = 2 * this.k0 / (1 + this.sinlat0 * sinlat + this.coslat0 * coslat * Math.cos(dlon));
+        p.x = this.a * A * coslat * Math.sin(dlon) + this.x0;
+        p.y = this.a * A * (this.coslat0 * sinlat - this.sinlat0 * coslat * Math.cos(dlon)) + this.y0;
+        return p;
+      }
+      else {
+        X = 2 * Math.atan(this.ssfn_(lat, sinlat, this.e)) - HALF_PI;
+        cosX = Math.cos(X);
+        sinX = Math.sin(X);
+        if (Math.abs(this.coslat0) <= EPSLN) {
+          ts = tsfnz(this.e, lat * this.con, this.con * sinlat);
+          rh = 2 * this.a * this.k0 * ts / this.cons;
+          p.x = this.x0 + rh * Math.sin(lon - this.long0);
+          p.y = this.y0 - this.con * rh * Math.cos(lon - this.long0);
+          //trace(p.toString());
+          return p;
+        }
+        else if (Math.abs(this.sinlat0) < EPSLN) {
+          //Eq
+          //trace('stere:equateur');
+          A = 2 * this.a * this.k0 / (1 + cosX * Math.cos(dlon));
+          p.y = A * sinX;
+        }
+        else {
+          //other case
+          //trace('stere:normal case');
+          A = 2 * this.a * this.k0 * this.ms1 / (this.cosX0 * (1 + this.sinX0 * sinX + this.cosX0 * cosX * Math.cos(dlon)));
+          p.y = A * (this.cosX0 * sinX - this.sinX0 * cosX * Math.cos(dlon)) + this.y0;
+        }
+        p.x = A * cosX * Math.sin(dlon) + this.x0;
+      }
+      //trace(p.toString());
+      return p;
+    }
+
+    //* Stereographic inverse equations--mapping x,y to lat/long
+    function inverse$6(p) {
+      p.x -= this.x0;
+      p.y -= this.y0;
+      var lon, lat, ts, ce, Chi;
+      var rh = Math.sqrt(p.x * p.x + p.y * p.y);
+      if (this.sphere) {
+        var c = 2 * Math.atan(rh / (2 * this.a * this.k0));
+        lon = this.long0;
+        lat = this.lat0;
+        if (rh <= EPSLN) {
+          p.x = lon;
+          p.y = lat;
+          return p;
+        }
+        lat = Math.asin(Math.cos(c) * this.sinlat0 + p.y * Math.sin(c) * this.coslat0 / rh);
+        if (Math.abs(this.coslat0) < EPSLN) {
+          if (this.lat0 > 0) {
+            lon = adjust_lon(this.long0 + Math.atan2(p.x, - 1 * p.y));
+          }
+          else {
+            lon = adjust_lon(this.long0 + Math.atan2(p.x, p.y));
+          }
+        }
+        else {
+          lon = adjust_lon(this.long0 + Math.atan2(p.x * Math.sin(c), rh * this.coslat0 * Math.cos(c) - p.y * this.sinlat0 * Math.sin(c)));
+        }
+        p.x = lon;
+        p.y = lat;
+        return p;
+      }
+      else {
+        if (Math.abs(this.coslat0) <= EPSLN) {
+          if (rh <= EPSLN) {
+            lat = this.lat0;
+            lon = this.long0;
+            p.x = lon;
+            p.y = lat;
+            //trace(p.toString());
+            return p;
+          }
+          p.x *= this.con;
+          p.y *= this.con;
+          ts = rh * this.cons / (2 * this.a * this.k0);
+          lat = this.con * phi2z(this.e, ts);
+          lon = this.con * adjust_lon(this.con * this.long0 + Math.atan2(p.x, - 1 * p.y));
+        }
+        else {
+          ce = 2 * Math.atan(rh * this.cosX0 / (2 * this.a * this.k0 * this.ms1));
+          lon = this.long0;
+          if (rh <= EPSLN) {
+            Chi = this.X0;
+          }
+          else {
+            Chi = Math.asin(Math.cos(ce) * this.sinX0 + p.y * Math.sin(ce) * this.cosX0 / rh);
+            lon = adjust_lon(this.long0 + Math.atan2(p.x * Math.sin(ce), rh * this.cosX0 * Math.cos(ce) - p.y * this.sinX0 * Math.sin(ce)));
+          }
+          lat = -1 * phi2z(this.e, Math.tan(0.5 * (HALF_PI + Chi)));
+        }
+      }
+      p.x = lon;
+      p.y = lat;
+
+      //trace(p.toString());
+      return p;
+
+    }
+
+    var names$8 = ["stere", "Stereographic_South_Pole", "Polar Stereographic (variant B)"];
+    var stere = {
+      init: init$7,
+      forward: forward$6,
+      inverse: inverse$6,
+      names: names$8,
+      ssfn_: ssfn_
+    };
+
+    /*
+      references:
+        Formules et constantes pour le Calcul pour la
+        projection cylindrique conforme à axe oblique et pour la transformation entre
+        des systèmes de référence.
+        http://www.swisstopo.admin.ch/internet/swisstopo/fr/home/topics/survey/sys/refsys/switzerland.parsysrelated1.31216.downloadList.77004.DownloadFile.tmp/swissprojectionfr.pdf
+      */
+
+    function init$8() {
+      var phy0 = this.lat0;
+      this.lambda0 = this.long0;
+      var sinPhy0 = Math.sin(phy0);
+      var semiMajorAxis = this.a;
+      var invF = this.rf;
+      var flattening = 1 / invF;
+      var e2 = 2 * flattening - Math.pow(flattening, 2);
+      var e = this.e = Math.sqrt(e2);
+      this.R = this.k0 * semiMajorAxis * Math.sqrt(1 - e2) / (1 - e2 * Math.pow(sinPhy0, 2));
+      this.alpha = Math.sqrt(1 + e2 / (1 - e2) * Math.pow(Math.cos(phy0), 4));
+      this.b0 = Math.asin(sinPhy0 / this.alpha);
+      var k1 = Math.log(Math.tan(Math.PI / 4 + this.b0 / 2));
+      var k2 = Math.log(Math.tan(Math.PI / 4 + phy0 / 2));
+      var k3 = Math.log((1 + e * sinPhy0) / (1 - e * sinPhy0));
+      this.K = k1 - this.alpha * k2 + this.alpha * e / 2 * k3;
+    }
+
+    function forward$7(p) {
+      var Sa1 = Math.log(Math.tan(Math.PI / 4 - p.y / 2));
+      var Sa2 = this.e / 2 * Math.log((1 + this.e * Math.sin(p.y)) / (1 - this.e * Math.sin(p.y)));
+      var S = -this.alpha * (Sa1 + Sa2) + this.K;
+
+      // spheric latitude
+      var b = 2 * (Math.atan(Math.exp(S)) - Math.PI / 4);
+
+      // spheric longitude
+      var I = this.alpha * (p.x - this.lambda0);
+
+      // psoeudo equatorial rotation
+      var rotI = Math.atan(Math.sin(I) / (Math.sin(this.b0) * Math.tan(b) + Math.cos(this.b0) * Math.cos(I)));
+
+      var rotB = Math.asin(Math.cos(this.b0) * Math.sin(b) - Math.sin(this.b0) * Math.cos(b) * Math.cos(I));
+
+      p.y = this.R / 2 * Math.log((1 + Math.sin(rotB)) / (1 - Math.sin(rotB))) + this.y0;
+      p.x = this.R * rotI + this.x0;
+      return p;
+    }
+
+    function inverse$7(p) {
+      var Y = p.x - this.x0;
+      var X = p.y - this.y0;
+
+      var rotI = Y / this.R;
+      var rotB = 2 * (Math.atan(Math.exp(X / this.R)) - Math.PI / 4);
+
+      var b = Math.asin(Math.cos(this.b0) * Math.sin(rotB) + Math.sin(this.b0) * Math.cos(rotB) * Math.cos(rotI));
+      var I = Math.atan(Math.sin(rotI) / (Math.cos(this.b0) * Math.cos(rotI) - Math.sin(this.b0) * Math.tan(rotB)));
+
+      var lambda = this.lambda0 + I / this.alpha;
+
+      var S = 0;
+      var phy = b;
+      var prevPhy = -1000;
+      var iteration = 0;
+      while (Math.abs(phy - prevPhy) > 0.0000001) {
+        if (++iteration > 20) {
+          //...reportError("omercFwdInfinity");
+          return;
+        }
+        //S = Math.log(Math.tan(Math.PI / 4 + phy / 2));
+        S = 1 / this.alpha * (Math.log(Math.tan(Math.PI / 4 + b / 2)) - this.K) + this.e * Math.log(Math.tan(Math.PI / 4 + Math.asin(this.e * Math.sin(phy)) / 2));
+        prevPhy = phy;
+        phy = 2 * Math.atan(Math.exp(S)) - Math.PI / 2;
+      }
+
+      p.x = lambda;
+      p.y = phy;
+      return p;
+    }
+
+    var names$9 = ["somerc"];
+    var somerc = {
+      init: init$8,
+      forward: forward$7,
+      inverse: inverse$7,
+      names: names$9
+    };
+
+    var TOL = 1e-7;
+
+    function isTypeA(P) {
+      var typeAProjections = ['Hotine_Oblique_Mercator','Hotine_Oblique_Mercator_Azimuth_Natural_Origin'];
+      var projectionName = typeof P.PROJECTION === "object" ? Object.keys(P.PROJECTION)[0] : P.PROJECTION;
+      
+      return 'no_uoff' in P || 'no_off' in P || typeAProjections.indexOf(projectionName) !== -1;
+    }
+
+
+    /* Initialize the Oblique Mercator  projection
+        ------------------------------------------*/
+    function init$9() {  
+      var con, com, cosph0, D, F, H, L, sinph0, p, J, gamma = 0,
+        gamma0, lamc = 0, lam1 = 0, lam2 = 0, phi1 = 0, phi2 = 0, alpha_c = 0;
+      
+      // only Type A uses the no_off or no_uoff property
+      // https://github.com/OSGeo/proj.4/issues/104
+      this.no_off = isTypeA(this);
+      this.no_rot = 'no_rot' in this;
+      
+      var alp = false;
+      if ("alpha" in this) {
+        alp = true;
+      }
+
+      var gam = false;
+      if ("rectified_grid_angle" in this) {
+        gam = true;
+      }
+
+      if (alp) {
+        alpha_c = this.alpha;
+      }
+      
+      if (gam) {
+        gamma = (this.rectified_grid_angle * D2R);
+      }
+      
+      if (alp || gam) {
+        lamc = this.longc;
+      } else {
+        lam1 = this.long1;
+        phi1 = this.lat1;
+        lam2 = this.long2;
+        phi2 = this.lat2;
+        
+        if (Math.abs(phi1 - phi2) <= TOL || (con = Math.abs(phi1)) <= TOL ||
+            Math.abs(con - HALF_PI) <= TOL || Math.abs(Math.abs(this.lat0) - HALF_PI) <= TOL ||
+            Math.abs(Math.abs(phi2) - HALF_PI) <= TOL) {
+          throw new Error();
+        }
+      }
+      
+      var one_es = 1.0 - this.es;
+      com = Math.sqrt(one_es);
+      
+      if (Math.abs(this.lat0) > EPSLN) {
+        sinph0 = Math.sin(this.lat0);
+        cosph0 = Math.cos(this.lat0);
+        con = 1 - this.es * sinph0 * sinph0;
+        this.B = cosph0 * cosph0;
+        this.B = Math.sqrt(1 + this.es * this.B * this.B / one_es);
+        this.A = this.B * this.k0 * com / con;
+        D = this.B * com / (cosph0 * Math.sqrt(con));
+        F = D * D -1;
+        
+        if (F <= 0) {
+          F = 0;
+        } else {
+          F = Math.sqrt(F);
+          if (this.lat0 < 0) {
+            F = -F;
+          }
+        }
+        
+        this.E = F += D;
+        this.E *= Math.pow(tsfnz(this.e, this.lat0, sinph0), this.B);
+      } else {
+        this.B = 1 / com;
+        this.A = this.k0;
+        this.E = D = F = 1;
+      }
+      
+      if (alp || gam) {
+        if (alp) {
+          gamma0 = Math.asin(Math.sin(alpha_c) / D);
+          if (!gam) {
+            gamma = alpha_c;
+          }
+        } else {
+          gamma0 = gamma;
+          alpha_c = Math.asin(D * Math.sin(gamma0));
+        }
+        this.lam0 = lamc - Math.asin(0.5 * (F - 1 / F) * Math.tan(gamma0)) / this.B;
+      } else {
+        H = Math.pow(tsfnz(this.e, phi1, Math.sin(phi1)), this.B);
+        L = Math.pow(tsfnz(this.e, phi2, Math.sin(phi2)), this.B);
+        F = this.E / H;
+        p = (L - H) / (L + H);
+        J = this.E * this.E;
+        J = (J - L * H) / (J + L * H);
+        con = lam1 - lam2;
+        
+        if (con < -Math.pi) {
+          lam2 -=TWO_PI;
+        } else if (con > Math.pi) {
+          lam2 += TWO_PI;
+        }
+        
+        this.lam0 = adjust_lon(0.5 * (lam1 + lam2) - Math.atan(J * Math.tan(0.5 * this.B * (lam1 - lam2)) / p) / this.B);
+        gamma0 = Math.atan(2 * Math.sin(this.B * adjust_lon(lam1 - this.lam0)) / (F - 1 / F));
+        gamma = alpha_c = Math.asin(D * Math.sin(gamma0));
+      }
+      
+      this.singam = Math.sin(gamma0);
+      this.cosgam = Math.cos(gamma0);
+      this.sinrot = Math.sin(gamma);
+      this.cosrot = Math.cos(gamma);
+      
+      this.rB = 1 / this.B;
+      this.ArB = this.A * this.rB;
+      this.BrA = 1 / this.ArB;
+      if (this.no_off) {
+        this.u_0 = 0;
+      } else {
+        this.u_0 = Math.abs(this.ArB * Math.atan(Math.sqrt(D * D - 1) / Math.cos(alpha_c)));
+        
+        if (this.lat0 < 0) {
+          this.u_0 = - this.u_0;
+        }  
+      }
+        
+      F = 0.5 * gamma0;
+      this.v_pole_n = this.ArB * Math.log(Math.tan(FORTPI - F));
+      this.v_pole_s = this.ArB * Math.log(Math.tan(FORTPI + F));
+    }
+
+
+    /* Oblique Mercator forward equations--mapping lat,long to x,y
+        ----------------------------------------------------------*/
+    function forward$8(p) {
+      var coords = {};
+      var S, T, U, V, W, temp, u, v;
+      p.x = p.x - this.lam0;
+      
+      if (Math.abs(Math.abs(p.y) - HALF_PI) > EPSLN) {
+        W = this.E / Math.pow(tsfnz(this.e, p.y, Math.sin(p.y)), this.B);
+        
+        temp = 1 / W;
+        S = 0.5 * (W - temp);
+        T = 0.5 * (W + temp);
+        V = Math.sin(this.B * p.x);
+        U = (S * this.singam - V * this.cosgam) / T;
+            
+        if (Math.abs(Math.abs(U) - 1.0) < EPSLN) {
+          throw new Error();
+        }
+        
+        v = 0.5 * this.ArB * Math.log((1 - U)/(1 + U));
+        temp = Math.cos(this.B * p.x);
+        
+        if (Math.abs(temp) < TOL) {
+          u = this.A * p.x;
+        } else {
+          u = this.ArB * Math.atan2((S * this.cosgam + V * this.singam), temp);
+        }    
+      } else {
+        v = p.y > 0 ? this.v_pole_n : this.v_pole_s;
+        u = this.ArB * p.y;
+      }
+         
+      if (this.no_rot) {
+        coords.x = u;
+        coords.y = v;
+      } else {
+        u -= this.u_0;
+        coords.x = v * this.cosrot + u * this.sinrot;
+        coords.y = u * this.cosrot - v * this.sinrot;
+      }
+      
+      coords.x = (this.a * coords.x + this.x0);
+      coords.y = (this.a * coords.y + this.y0);
+      
+      return coords;
+    }
+
+    function inverse$8(p) {
+      var u, v, Qp, Sp, Tp, Vp, Up;
+      var coords = {};
+      
+      p.x = (p.x - this.x0) * (1.0 / this.a);
+      p.y = (p.y - this.y0) * (1.0 / this.a);
+
+      if (this.no_rot) {
+        v = p.y;
+        u = p.x;
+      } else {
+        v = p.x * this.cosrot - p.y * this.sinrot;
+        u = p.y * this.cosrot + p.x * this.sinrot + this.u_0;
+      }
+      
+      Qp = Math.exp(-this.BrA * v);
+      Sp = 0.5 * (Qp - 1 / Qp);
+      Tp = 0.5 * (Qp + 1 / Qp);
+      Vp = Math.sin(this.BrA * u);
+      Up = (Vp * this.cosgam + Sp * this.singam) / Tp;
+      
+      if (Math.abs(Math.abs(Up) - 1) < EPSLN) {
+        coords.x = 0;
+        coords.y = Up < 0 ? -HALF_PI : HALF_PI;
+      } else {
+        coords.y = this.E / Math.sqrt((1 + Up) / (1 - Up));
+        coords.y = phi2z(this.e, Math.pow(coords.y, 1 / this.B));
+        
+        if (coords.y === Infinity) {
+          throw new Error();
+        }
+            
+        coords.x = -this.rB * Math.atan2((Sp * this.cosgam - Vp * this.singam), Math.cos(this.BrA * u));
+      }
+      
+      coords.x += this.lam0;
+      
+      return coords;
+    }
+
+    var names$10 = ["Hotine_Oblique_Mercator", "Hotine Oblique Mercator", "Hotine_Oblique_Mercator_Azimuth_Natural_Origin", "Hotine_Oblique_Mercator_Two_Point_Natural_Origin", "Hotine_Oblique_Mercator_Azimuth_Center", "Oblique_Mercator", "omerc"];
+    var omerc = {
+      init: init$9,
+      forward: forward$8,
+      inverse: inverse$8,
+      names: names$10
+    };
+
+    function init$10() {
+      
+      //double lat0;                    /* the reference latitude               */
+      //double long0;                   /* the reference longitude              */
+      //double lat1;                    /* first standard parallel              */
+      //double lat2;                    /* second standard parallel             */
+      //double r_maj;                   /* major axis                           */
+      //double r_min;                   /* minor axis                           */
+      //double false_east;              /* x offset in meters                   */
+      //double false_north;             /* y offset in meters                   */
+      
+      //the above value can be set with proj4.defs
+      //example: proj4.defs("EPSG:2154","+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+
+      if (!this.lat2) {
+        this.lat2 = this.lat1;
+      } //if lat2 is not defined
+      if (!this.k0) {
+        this.k0 = 1;
+      }
+      this.x0 = this.x0 || 0;
+      this.y0 = this.y0 || 0;
+      // Standard Parallels cannot be equal and on opposite sides of the equator
+      if (Math.abs(this.lat1 + this.lat2) < EPSLN) {
+        return;
+      }
+
+      var temp = this.b / this.a;
+      this.e = Math.sqrt(1 - temp * temp);
+
+      var sin1 = Math.sin(this.lat1);
+      var cos1 = Math.cos(this.lat1);
+      var ms1 = msfnz(this.e, sin1, cos1);
+      var ts1 = tsfnz(this.e, this.lat1, sin1);
+
+      var sin2 = Math.sin(this.lat2);
+      var cos2 = Math.cos(this.lat2);
+      var ms2 = msfnz(this.e, sin2, cos2);
+      var ts2 = tsfnz(this.e, this.lat2, sin2);
+
+      var ts0 = tsfnz(this.e, this.lat0, Math.sin(this.lat0));
+
+      if (Math.abs(this.lat1 - this.lat2) > EPSLN) {
+        this.ns = Math.log(ms1 / ms2) / Math.log(ts1 / ts2);
+      }
+      else {
+        this.ns = sin1;
+      }
+      if (isNaN(this.ns)) {
+        this.ns = sin1;
+      }
+      this.f0 = ms1 / (this.ns * Math.pow(ts1, this.ns));
+      this.rh = this.a * this.f0 * Math.pow(ts0, this.ns);
+      if (!this.title) {
+        this.title = "Lambert Conformal Conic";
+      }
+    }
+
+    // Lambert Conformal conic forward equations--mapping lat,long to x,y
+    // -----------------------------------------------------------------
+    function forward$9(p) {
+
+      var lon = p.x;
+      var lat = p.y;
+
+      // singular cases :
+      if (Math.abs(2 * Math.abs(lat) - Math.PI) <= EPSLN) {
+        lat = sign(lat) * (HALF_PI - 2 * EPSLN);
+      }
+
+      var con = Math.abs(Math.abs(lat) - HALF_PI);
+      var ts, rh1;
+      if (con > EPSLN) {
+        ts = tsfnz(this.e, lat, Math.sin(lat));
+        rh1 = this.a * this.f0 * Math.pow(ts, this.ns);
+      }
+      else {
+        con = lat * this.ns;
+        if (con <= 0) {
+          return null;
+        }
+        rh1 = 0;
+      }
+      var theta = this.ns * adjust_lon(lon - this.long0);
+      p.x = this.k0 * (rh1 * Math.sin(theta)) + this.x0;
+      p.y = this.k0 * (this.rh - rh1 * Math.cos(theta)) + this.y0;
+
+      return p;
+    }
+
+    // Lambert Conformal Conic inverse equations--mapping x,y to lat/long
+    // -----------------------------------------------------------------
+    function inverse$9(p) {
+
+      var rh1, con, ts;
+      var lat, lon;
+      var x = (p.x - this.x0) / this.k0;
+      var y = (this.rh - (p.y - this.y0) / this.k0);
+      if (this.ns > 0) {
+        rh1 = Math.sqrt(x * x + y * y);
+        con = 1;
+      }
+      else {
+        rh1 = -Math.sqrt(x * x + y * y);
+        con = -1;
+      }
+      var theta = 0;
+      if (rh1 !== 0) {
+        theta = Math.atan2((con * x), (con * y));
+      }
+      if ((rh1 !== 0) || (this.ns > 0)) {
+        con = 1 / this.ns;
+        ts = Math.pow((rh1 / (this.a * this.f0)), con);
+        lat = phi2z(this.e, ts);
+        if (lat === -9999) {
+          return null;
+        }
+      }
+      else {
+        lat = -HALF_PI;
+      }
+      lon = adjust_lon(theta / this.ns + this.long0);
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$11 = [
+      "Lambert Tangential Conformal Conic Projection",
+      "Lambert_Conformal_Conic",
+      "Lambert_Conformal_Conic_1SP",
+      "Lambert_Conformal_Conic_2SP",
+      "lcc",
+      "Lambert Conic Conformal (1SP)",
+      "Lambert Conic Conformal (2SP)"
+    ];
+
+    var lcc = {
+      init: init$10,
+      forward: forward$9,
+      inverse: inverse$9,
+      names: names$11
+    };
+
+    function init$11() {
+      this.a = 6377397.155;
+      this.es = 0.006674372230614;
+      this.e = Math.sqrt(this.es);
+      if (!this.lat0) {
+        this.lat0 = 0.863937979737193;
+      }
+      if (!this.long0) {
+        this.long0 = 0.7417649320975901 - 0.308341501185665;
+      }
+      /* if scale not set default to 0.9999 */
+      if (!this.k0) {
+        this.k0 = 0.9999;
+      }
+      this.s45 = 0.785398163397448; /* 45 */
+      this.s90 = 2 * this.s45;
+      this.fi0 = this.lat0;
+      this.e2 = this.es;
+      this.e = Math.sqrt(this.e2);
+      this.alfa = Math.sqrt(1 + (this.e2 * Math.pow(Math.cos(this.fi0), 4)) / (1 - this.e2));
+      this.uq = 1.04216856380474;
+      this.u0 = Math.asin(Math.sin(this.fi0) / this.alfa);
+      this.g = Math.pow((1 + this.e * Math.sin(this.fi0)) / (1 - this.e * Math.sin(this.fi0)), this.alfa * this.e / 2);
+      this.k = Math.tan(this.u0 / 2 + this.s45) / Math.pow(Math.tan(this.fi0 / 2 + this.s45), this.alfa) * this.g;
+      this.k1 = this.k0;
+      this.n0 = this.a * Math.sqrt(1 - this.e2) / (1 - this.e2 * Math.pow(Math.sin(this.fi0), 2));
+      this.s0 = 1.37008346281555;
+      this.n = Math.sin(this.s0);
+      this.ro0 = this.k1 * this.n0 / Math.tan(this.s0);
+      this.ad = this.s90 - this.uq;
+    }
+
+    /* ellipsoid */
+    /* calculate xy from lat/lon */
+    /* Constants, identical to inverse transform function */
+    function forward$10(p) {
+      var gfi, u, deltav, s, d, eps, ro;
+      var lon = p.x;
+      var lat = p.y;
+      var delta_lon = adjust_lon(lon - this.long0);
+      /* Transformation */
+      gfi = Math.pow(((1 + this.e * Math.sin(lat)) / (1 - this.e * Math.sin(lat))), (this.alfa * this.e / 2));
+      u = 2 * (Math.atan(this.k * Math.pow(Math.tan(lat / 2 + this.s45), this.alfa) / gfi) - this.s45);
+      deltav = -delta_lon * this.alfa;
+      s = Math.asin(Math.cos(this.ad) * Math.sin(u) + Math.sin(this.ad) * Math.cos(u) * Math.cos(deltav));
+      d = Math.asin(Math.cos(u) * Math.sin(deltav) / Math.cos(s));
+      eps = this.n * d;
+      ro = this.ro0 * Math.pow(Math.tan(this.s0 / 2 + this.s45), this.n) / Math.pow(Math.tan(s / 2 + this.s45), this.n);
+      p.y = ro * Math.cos(eps) / 1;
+      p.x = ro * Math.sin(eps) / 1;
+
+      if (!this.czech) {
+        p.y *= -1;
+        p.x *= -1;
+      }
+      return (p);
+    }
+
+    /* calculate lat/lon from xy */
+    function inverse$10(p) {
+      var u, deltav, s, d, eps, ro, fi1;
+      var ok;
+
+      /* Transformation */
+      /* revert y, x*/
+      var tmp = p.x;
+      p.x = p.y;
+      p.y = tmp;
+      if (!this.czech) {
+        p.y *= -1;
+        p.x *= -1;
+      }
+      ro = Math.sqrt(p.x * p.x + p.y * p.y);
+      eps = Math.atan2(p.y, p.x);
+      d = eps / Math.sin(this.s0);
+      s = 2 * (Math.atan(Math.pow(this.ro0 / ro, 1 / this.n) * Math.tan(this.s0 / 2 + this.s45)) - this.s45);
+      u = Math.asin(Math.cos(this.ad) * Math.sin(s) - Math.sin(this.ad) * Math.cos(s) * Math.cos(d));
+      deltav = Math.asin(Math.cos(s) * Math.sin(d) / Math.cos(u));
+      p.x = this.long0 - deltav / this.alfa;
+      fi1 = u;
+      ok = 0;
+      var iter = 0;
+      do {
+        p.y = 2 * (Math.atan(Math.pow(this.k, - 1 / this.alfa) * Math.pow(Math.tan(u / 2 + this.s45), 1 / this.alfa) * Math.pow((1 + this.e * Math.sin(fi1)) / (1 - this.e * Math.sin(fi1)), this.e / 2)) - this.s45);
+        if (Math.abs(fi1 - p.y) < 0.0000000001) {
+          ok = 1;
+        }
+        fi1 = p.y;
+        iter += 1;
+      } while (ok === 0 && iter < 15);
+      if (iter >= 15) {
+        return null;
+      }
+
+      return (p);
+    }
+
+    var names$12 = ["Krovak", "krovak"];
+    var krovak = {
+      init: init$11,
+      forward: forward$10,
+      inverse: inverse$10,
+      names: names$12
+    };
+
+    var mlfn = function(e0, e1, e2, e3, phi) {
+      return (e0 * phi - e1 * Math.sin(2 * phi) + e2 * Math.sin(4 * phi) - e3 * Math.sin(6 * phi));
+    };
+
+    var e0fn = function(x) {
+      return (1 - 0.25 * x * (1 + x / 16 * (3 + 1.25 * x)));
+    };
+
+    var e1fn = function(x) {
+      return (0.375 * x * (1 + 0.25 * x * (1 + 0.46875 * x)));
+    };
+
+    var e2fn = function(x) {
+      return (0.05859375 * x * x * (1 + 0.75 * x));
+    };
+
+    var e3fn = function(x) {
+      return (x * x * x * (35 / 3072));
+    };
+
+    var gN = function(a, e, sinphi) {
+      var temp = e * sinphi;
+      return a / Math.sqrt(1 - temp * temp);
+    };
+
+    var adjust_lat = function(x) {
+      return (Math.abs(x) < HALF_PI) ? x : (x - (sign(x) * Math.PI));
+    };
+
+    var imlfn = function(ml, e0, e1, e2, e3) {
+      var phi;
+      var dphi;
+
+      phi = ml / e0;
+      for (var i = 0; i < 15; i++) {
+        dphi = (ml - (e0 * phi - e1 * Math.sin(2 * phi) + e2 * Math.sin(4 * phi) - e3 * Math.sin(6 * phi))) / (e0 - 2 * e1 * Math.cos(2 * phi) + 4 * e2 * Math.cos(4 * phi) - 6 * e3 * Math.cos(6 * phi));
+        phi += dphi;
+        if (Math.abs(dphi) <= 0.0000000001) {
+          return phi;
+        }
+      }
+
+      //..reportError("IMLFN-CONV:Latitude failed to converge after 15 iterations");
+      return NaN;
+    };
+
+    function init$12() {
+      if (!this.sphere) {
+        this.e0 = e0fn(this.es);
+        this.e1 = e1fn(this.es);
+        this.e2 = e2fn(this.es);
+        this.e3 = e3fn(this.es);
+        this.ml0 = this.a * mlfn(this.e0, this.e1, this.e2, this.e3, this.lat0);
+      }
+    }
+
+    /* Cassini forward equations--mapping lat,long to x,y
+      -----------------------------------------------------------------------*/
+    function forward$11(p) {
+
+      /* Forward equations
+          -----------------*/
+      var x, y;
+      var lam = p.x;
+      var phi = p.y;
+      lam = adjust_lon(lam - this.long0);
+
+      if (this.sphere) {
+        x = this.a * Math.asin(Math.cos(phi) * Math.sin(lam));
+        y = this.a * (Math.atan2(Math.tan(phi), Math.cos(lam)) - this.lat0);
+      }
+      else {
+        //ellipsoid
+        var sinphi = Math.sin(phi);
+        var cosphi = Math.cos(phi);
+        var nl = gN(this.a, this.e, sinphi);
+        var tl = Math.tan(phi) * Math.tan(phi);
+        var al = lam * Math.cos(phi);
+        var asq = al * al;
+        var cl = this.es * cosphi * cosphi / (1 - this.es);
+        var ml = this.a * mlfn(this.e0, this.e1, this.e2, this.e3, phi);
+
+        x = nl * al * (1 - asq * tl * (1 / 6 - (8 - tl + 8 * cl) * asq / 120));
+        y = ml - this.ml0 + nl * sinphi / cosphi * asq * (0.5 + (5 - tl + 6 * cl) * asq / 24);
+
+
+      }
+
+      p.x = x + this.x0;
+      p.y = y + this.y0;
+      return p;
+    }
+
+    /* Inverse equations
+      -----------------*/
+    function inverse$11(p) {
+      p.x -= this.x0;
+      p.y -= this.y0;
+      var x = p.x / this.a;
+      var y = p.y / this.a;
+      var phi, lam;
+
+      if (this.sphere) {
+        var dd = y + this.lat0;
+        phi = Math.asin(Math.sin(dd) * Math.cos(x));
+        lam = Math.atan2(Math.tan(x), Math.cos(dd));
+      }
+      else {
+        /* ellipsoid */
+        var ml1 = this.ml0 / this.a + y;
+        var phi1 = imlfn(ml1, this.e0, this.e1, this.e2, this.e3);
+        if (Math.abs(Math.abs(phi1) - HALF_PI) <= EPSLN) {
+          p.x = this.long0;
+          p.y = HALF_PI;
+          if (y < 0) {
+            p.y *= -1;
+          }
+          return p;
+        }
+        var nl1 = gN(this.a, this.e, Math.sin(phi1));
+
+        var rl1 = nl1 * nl1 * nl1 / this.a / this.a * (1 - this.es);
+        var tl1 = Math.pow(Math.tan(phi1), 2);
+        var dl = x * this.a / nl1;
+        var dsq = dl * dl;
+        phi = phi1 - nl1 * Math.tan(phi1) / rl1 * dl * dl * (0.5 - (1 + 3 * tl1) * dl * dl / 24);
+        lam = dl * (1 - dsq * (tl1 / 3 + (1 + 3 * tl1) * tl1 * dsq / 15)) / Math.cos(phi1);
+
+      }
+
+      p.x = adjust_lon(lam + this.long0);
+      p.y = adjust_lat(phi);
+      return p;
+
+    }
+
+    var names$13 = ["Cassini", "Cassini_Soldner", "cass"];
+    var cass = {
+      init: init$12,
+      forward: forward$11,
+      inverse: inverse$11,
+      names: names$13
+    };
+
+    var qsfnz = function(eccent, sinphi) {
+      var con;
+      if (eccent > 1.0e-7) {
+        con = eccent * sinphi;
+        return ((1 - eccent * eccent) * (sinphi / (1 - con * con) - (0.5 / eccent) * Math.log((1 - con) / (1 + con))));
+      }
+      else {
+        return (2 * sinphi);
+      }
+    };
+
+    /*
+      reference
+        "New Equal-Area Map Projections for Noncircular Regions", John P. Snyder,
+        The American Cartographer, Vol 15, No. 4, October 1988, pp. 341-355.
+      */
+
+    var S_POLE = 1;
+
+    var N_POLE = 2;
+    var EQUIT = 3;
+    var OBLIQ = 4;
+
+    /* Initialize the Lambert Azimuthal Equal Area projection
+      ------------------------------------------------------*/
+    function init$13() {
+      var t = Math.abs(this.lat0);
+      if (Math.abs(t - HALF_PI) < EPSLN) {
+        this.mode = this.lat0 < 0 ? this.S_POLE : this.N_POLE;
+      }
+      else if (Math.abs(t) < EPSLN) {
+        this.mode = this.EQUIT;
+      }
+      else {
+        this.mode = this.OBLIQ;
+      }
+      if (this.es > 0) {
+        var sinphi;
+
+        this.qp = qsfnz(this.e, 1);
+        this.mmf = 0.5 / (1 - this.es);
+        this.apa = authset(this.es);
+        switch (this.mode) {
+        case this.N_POLE:
+          this.dd = 1;
+          break;
+        case this.S_POLE:
+          this.dd = 1;
+          break;
+        case this.EQUIT:
+          this.rq = Math.sqrt(0.5 * this.qp);
+          this.dd = 1 / this.rq;
+          this.xmf = 1;
+          this.ymf = 0.5 * this.qp;
+          break;
+        case this.OBLIQ:
+          this.rq = Math.sqrt(0.5 * this.qp);
+          sinphi = Math.sin(this.lat0);
+          this.sinb1 = qsfnz(this.e, sinphi) / this.qp;
+          this.cosb1 = Math.sqrt(1 - this.sinb1 * this.sinb1);
+          this.dd = Math.cos(this.lat0) / (Math.sqrt(1 - this.es * sinphi * sinphi) * this.rq * this.cosb1);
+          this.ymf = (this.xmf = this.rq) / this.dd;
+          this.xmf *= this.dd;
+          break;
+        }
+      }
+      else {
+        if (this.mode === this.OBLIQ) {
+          this.sinph0 = Math.sin(this.lat0);
+          this.cosph0 = Math.cos(this.lat0);
+        }
+      }
+    }
+
+    /* Lambert Azimuthal Equal Area forward equations--mapping lat,long to x,y
+      -----------------------------------------------------------------------*/
+    function forward$12(p) {
+
+      /* Forward equations
+          -----------------*/
+      var x, y, coslam, sinlam, sinphi, q, sinb, cosb, b, cosphi;
+      var lam = p.x;
+      var phi = p.y;
+
+      lam = adjust_lon(lam - this.long0);
+      if (this.sphere) {
+        sinphi = Math.sin(phi);
+        cosphi = Math.cos(phi);
+        coslam = Math.cos(lam);
+        if (this.mode === this.OBLIQ || this.mode === this.EQUIT) {
+          y = (this.mode === this.EQUIT) ? 1 + cosphi * coslam : 1 + this.sinph0 * sinphi + this.cosph0 * cosphi * coslam;
+          if (y <= EPSLN) {
+            return null;
+          }
+          y = Math.sqrt(2 / y);
+          x = y * cosphi * Math.sin(lam);
+          y *= (this.mode === this.EQUIT) ? sinphi : this.cosph0 * sinphi - this.sinph0 * cosphi * coslam;
+        }
+        else if (this.mode === this.N_POLE || this.mode === this.S_POLE) {
+          if (this.mode === this.N_POLE) {
+            coslam = -coslam;
+          }
+          if (Math.abs(phi + this.lat0) < EPSLN) {
+            return null;
+          }
+          y = FORTPI - phi * 0.5;
+          y = 2 * ((this.mode === this.S_POLE) ? Math.cos(y) : Math.sin(y));
+          x = y * Math.sin(lam);
+          y *= coslam;
+        }
+      }
+      else {
+        sinb = 0;
+        cosb = 0;
+        b = 0;
+        coslam = Math.cos(lam);
+        sinlam = Math.sin(lam);
+        sinphi = Math.sin(phi);
+        q = qsfnz(this.e, sinphi);
+        if (this.mode === this.OBLIQ || this.mode === this.EQUIT) {
+          sinb = q / this.qp;
+          cosb = Math.sqrt(1 - sinb * sinb);
+        }
+        switch (this.mode) {
+        case this.OBLIQ:
+          b = 1 + this.sinb1 * sinb + this.cosb1 * cosb * coslam;
+          break;
+        case this.EQUIT:
+          b = 1 + cosb * coslam;
+          break;
+        case this.N_POLE:
+          b = HALF_PI + phi;
+          q = this.qp - q;
+          break;
+        case this.S_POLE:
+          b = phi - HALF_PI;
+          q = this.qp + q;
+          break;
+        }
+        if (Math.abs(b) < EPSLN) {
+          return null;
+        }
+        switch (this.mode) {
+        case this.OBLIQ:
+        case this.EQUIT:
+          b = Math.sqrt(2 / b);
+          if (this.mode === this.OBLIQ) {
+            y = this.ymf * b * (this.cosb1 * sinb - this.sinb1 * cosb * coslam);
+          }
+          else {
+            y = (b = Math.sqrt(2 / (1 + cosb * coslam))) * sinb * this.ymf;
+          }
+          x = this.xmf * b * cosb * sinlam;
+          break;
+        case this.N_POLE:
+        case this.S_POLE:
+          if (q >= 0) {
+            x = (b = Math.sqrt(q)) * sinlam;
+            y = coslam * ((this.mode === this.S_POLE) ? b : -b);
+          }
+          else {
+            x = y = 0;
+          }
+          break;
+        }
+      }
+
+      p.x = this.a * x + this.x0;
+      p.y = this.a * y + this.y0;
+      return p;
+    }
+
+    /* Inverse equations
+      -----------------*/
+    function inverse$12(p) {
+      p.x -= this.x0;
+      p.y -= this.y0;
+      var x = p.x / this.a;
+      var y = p.y / this.a;
+      var lam, phi, cCe, sCe, q, rho, ab;
+      if (this.sphere) {
+        var cosz = 0,
+          rh, sinz = 0;
+
+        rh = Math.sqrt(x * x + y * y);
+        phi = rh * 0.5;
+        if (phi > 1) {
+          return null;
+        }
+        phi = 2 * Math.asin(phi);
+        if (this.mode === this.OBLIQ || this.mode === this.EQUIT) {
+          sinz = Math.sin(phi);
+          cosz = Math.cos(phi);
+        }
+        switch (this.mode) {
+        case this.EQUIT:
+          phi = (Math.abs(rh) <= EPSLN) ? 0 : Math.asin(y * sinz / rh);
+          x *= sinz;
+          y = cosz * rh;
+          break;
+        case this.OBLIQ:
+          phi = (Math.abs(rh) <= EPSLN) ? this.lat0 : Math.asin(cosz * this.sinph0 + y * sinz * this.cosph0 / rh);
+          x *= sinz * this.cosph0;
+          y = (cosz - Math.sin(phi) * this.sinph0) * rh;
+          break;
+        case this.N_POLE:
+          y = -y;
+          phi = HALF_PI - phi;
+          break;
+        case this.S_POLE:
+          phi -= HALF_PI;
+          break;
+        }
+        lam = (y === 0 && (this.mode === this.EQUIT || this.mode === this.OBLIQ)) ? 0 : Math.atan2(x, y);
+      }
+      else {
+        ab = 0;
+        if (this.mode === this.OBLIQ || this.mode === this.EQUIT) {
+          x /= this.dd;
+          y *= this.dd;
+          rho = Math.sqrt(x * x + y * y);
+          if (rho < EPSLN) {
+            p.x = this.long0;
+            p.y = this.lat0;
+            return p;
+          }
+          sCe = 2 * Math.asin(0.5 * rho / this.rq);
+          cCe = Math.cos(sCe);
+          x *= (sCe = Math.sin(sCe));
+          if (this.mode === this.OBLIQ) {
+            ab = cCe * this.sinb1 + y * sCe * this.cosb1 / rho;
+            q = this.qp * ab;
+            y = rho * this.cosb1 * cCe - y * this.sinb1 * sCe;
+          }
+          else {
+            ab = y * sCe / rho;
+            q = this.qp * ab;
+            y = rho * cCe;
+          }
+        }
+        else if (this.mode === this.N_POLE || this.mode === this.S_POLE) {
+          if (this.mode === this.N_POLE) {
+            y = -y;
+          }
+          q = (x * x + y * y);
+          if (!q) {
+            p.x = this.long0;
+            p.y = this.lat0;
+            return p;
+          }
+          ab = 1 - q / this.qp;
+          if (this.mode === this.S_POLE) {
+            ab = -ab;
+          }
+        }
+        lam = Math.atan2(x, y);
+        phi = authlat(Math.asin(ab), this.apa);
+      }
+
+      p.x = adjust_lon(this.long0 + lam);
+      p.y = phi;
+      return p;
+    }
+
+    /* determine latitude from authalic latitude */
+    var P00 = 0.33333333333333333333;
+
+    var P01 = 0.17222222222222222222;
+    var P02 = 0.10257936507936507936;
+    var P10 = 0.06388888888888888888;
+    var P11 = 0.06640211640211640211;
+    var P20 = 0.01641501294219154443;
+
+    function authset(es) {
+      var t;
+      var APA = [];
+      APA[0] = es * P00;
+      t = es * es;
+      APA[0] += t * P01;
+      APA[1] = t * P10;
+      t *= es;
+      APA[0] += t * P02;
+      APA[1] += t * P11;
+      APA[2] = t * P20;
+      return APA;
+    }
+
+    function authlat(beta, APA) {
+      var t = beta + beta;
+      return (beta + APA[0] * Math.sin(t) + APA[1] * Math.sin(t + t) + APA[2] * Math.sin(t + t + t));
+    }
+
+    var names$14 = ["Lambert Azimuthal Equal Area", "Lambert_Azimuthal_Equal_Area", "laea"];
+    var laea = {
+      init: init$13,
+      forward: forward$12,
+      inverse: inverse$12,
+      names: names$14,
+      S_POLE: S_POLE,
+      N_POLE: N_POLE,
+      EQUIT: EQUIT,
+      OBLIQ: OBLIQ
+    };
+
+    var asinz = function(x) {
+      if (Math.abs(x) > 1) {
+        x = (x > 1) ? 1 : -1;
+      }
+      return Math.asin(x);
+    };
+
+    function init$14() {
+
+      if (Math.abs(this.lat1 + this.lat2) < EPSLN) {
+        return;
+      }
+      this.temp = this.b / this.a;
+      this.es = 1 - Math.pow(this.temp, 2);
+      this.e3 = Math.sqrt(this.es);
+
+      this.sin_po = Math.sin(this.lat1);
+      this.cos_po = Math.cos(this.lat1);
+      this.t1 = this.sin_po;
+      this.con = this.sin_po;
+      this.ms1 = msfnz(this.e3, this.sin_po, this.cos_po);
+      this.qs1 = qsfnz(this.e3, this.sin_po, this.cos_po);
+
+      this.sin_po = Math.sin(this.lat2);
+      this.cos_po = Math.cos(this.lat2);
+      this.t2 = this.sin_po;
+      this.ms2 = msfnz(this.e3, this.sin_po, this.cos_po);
+      this.qs2 = qsfnz(this.e3, this.sin_po, this.cos_po);
+
+      this.sin_po = Math.sin(this.lat0);
+      this.cos_po = Math.cos(this.lat0);
+      this.t3 = this.sin_po;
+      this.qs0 = qsfnz(this.e3, this.sin_po, this.cos_po);
+
+      if (Math.abs(this.lat1 - this.lat2) > EPSLN) {
+        this.ns0 = (this.ms1 * this.ms1 - this.ms2 * this.ms2) / (this.qs2 - this.qs1);
+      }
+      else {
+        this.ns0 = this.con;
+      }
+      this.c = this.ms1 * this.ms1 + this.ns0 * this.qs1;
+      this.rh = this.a * Math.sqrt(this.c - this.ns0 * this.qs0) / this.ns0;
+    }
+
+    /* Albers Conical Equal Area forward equations--mapping lat,long to x,y
+      -------------------------------------------------------------------*/
+    function forward$13(p) {
+
+      var lon = p.x;
+      var lat = p.y;
+
+      this.sin_phi = Math.sin(lat);
+      this.cos_phi = Math.cos(lat);
+
+      var qs = qsfnz(this.e3, this.sin_phi, this.cos_phi);
+      var rh1 = this.a * Math.sqrt(this.c - this.ns0 * qs) / this.ns0;
+      var theta = this.ns0 * adjust_lon(lon - this.long0);
+      var x = rh1 * Math.sin(theta) + this.x0;
+      var y = this.rh - rh1 * Math.cos(theta) + this.y0;
+
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    function inverse$13(p) {
+      var rh1, qs, con, theta, lon, lat;
+
+      p.x -= this.x0;
+      p.y = this.rh - p.y + this.y0;
+      if (this.ns0 >= 0) {
+        rh1 = Math.sqrt(p.x * p.x + p.y * p.y);
+        con = 1;
+      }
+      else {
+        rh1 = -Math.sqrt(p.x * p.x + p.y * p.y);
+        con = -1;
+      }
+      theta = 0;
+      if (rh1 !== 0) {
+        theta = Math.atan2(con * p.x, con * p.y);
+      }
+      con = rh1 * this.ns0 / this.a;
+      if (this.sphere) {
+        lat = Math.asin((this.c - con * con) / (2 * this.ns0));
+      }
+      else {
+        qs = (this.c - con * con) / this.ns0;
+        lat = this.phi1z(this.e3, qs);
+      }
+
+      lon = adjust_lon(theta / this.ns0 + this.long0);
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    /* Function to compute phi1, the latitude for the inverse of the
+       Albers Conical Equal-Area projection.
+    -------------------------------------------*/
+    function phi1z(eccent, qs) {
+      var sinphi, cosphi, con, com, dphi;
+      var phi = asinz(0.5 * qs);
+      if (eccent < EPSLN) {
+        return phi;
+      }
+
+      var eccnts = eccent * eccent;
+      for (var i = 1; i <= 25; i++) {
+        sinphi = Math.sin(phi);
+        cosphi = Math.cos(phi);
+        con = eccent * sinphi;
+        com = 1 - con * con;
+        dphi = 0.5 * com * com / cosphi * (qs / (1 - eccnts) - sinphi / com + 0.5 / eccent * Math.log((1 - con) / (1 + con)));
+        phi = phi + dphi;
+        if (Math.abs(dphi) <= 1e-7) {
+          return phi;
+        }
+      }
+      return null;
+    }
+
+    var names$15 = ["Albers_Conic_Equal_Area", "Albers", "aea"];
+    var aea = {
+      init: init$14,
+      forward: forward$13,
+      inverse: inverse$13,
+      names: names$15,
+      phi1z: phi1z
+    };
+
+    /*
+      reference:
+        Wolfram Mathworld "Gnomonic Projection"
+        http://mathworld.wolfram.com/GnomonicProjection.html
+        Accessed: 12th November 2009
+      */
+    function init$15() {
+
+      /* Place parameters in static storage for common use
+          -------------------------------------------------*/
+      this.sin_p14 = Math.sin(this.lat0);
+      this.cos_p14 = Math.cos(this.lat0);
+      // Approximation for projecting points to the horizon (infinity)
+      this.infinity_dist = 1000 * this.a;
+      this.rc = 1;
+    }
+
+    /* Gnomonic forward equations--mapping lat,long to x,y
+        ---------------------------------------------------*/
+    function forward$14(p) {
+      var sinphi, cosphi; /* sin and cos value        */
+      var dlon; /* delta longitude value      */
+      var coslon; /* cos of longitude        */
+      var ksp; /* scale factor          */
+      var g;
+      var x, y;
+      var lon = p.x;
+      var lat = p.y;
+      /* Forward equations
+          -----------------*/
+      dlon = adjust_lon(lon - this.long0);
+
+      sinphi = Math.sin(lat);
+      cosphi = Math.cos(lat);
+
+      coslon = Math.cos(dlon);
+      g = this.sin_p14 * sinphi + this.cos_p14 * cosphi * coslon;
+      ksp = 1;
+      if ((g > 0) || (Math.abs(g) <= EPSLN)) {
+        x = this.x0 + this.a * ksp * cosphi * Math.sin(dlon) / g;
+        y = this.y0 + this.a * ksp * (this.cos_p14 * sinphi - this.sin_p14 * cosphi * coslon) / g;
+      }
+      else {
+
+        // Point is in the opposing hemisphere and is unprojectable
+        // We still need to return a reasonable point, so we project
+        // to infinity, on a bearing
+        // equivalent to the northern hemisphere equivalent
+        // This is a reasonable approximation for short shapes and lines that
+        // straddle the horizon.
+
+        x = this.x0 + this.infinity_dist * cosphi * Math.sin(dlon);
+        y = this.y0 + this.infinity_dist * (this.cos_p14 * sinphi - this.sin_p14 * cosphi * coslon);
+
+      }
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    function inverse$14(p) {
+      var rh; /* Rho */
+      var sinc, cosc;
+      var c;
+      var lon, lat;
+
+      /* Inverse equations
+          -----------------*/
+      p.x = (p.x - this.x0) / this.a;
+      p.y = (p.y - this.y0) / this.a;
+
+      p.x /= this.k0;
+      p.y /= this.k0;
+
+      if ((rh = Math.sqrt(p.x * p.x + p.y * p.y))) {
+        c = Math.atan2(rh, this.rc);
+        sinc = Math.sin(c);
+        cosc = Math.cos(c);
+
+        lat = asinz(cosc * this.sin_p14 + (p.y * sinc * this.cos_p14) / rh);
+        lon = Math.atan2(p.x * sinc, rh * this.cos_p14 * cosc - p.y * this.sin_p14 * sinc);
+        lon = adjust_lon(this.long0 + lon);
+      }
+      else {
+        lat = this.phic0;
+        lon = 0;
+      }
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$16 = ["gnom"];
+    var gnom = {
+      init: init$15,
+      forward: forward$14,
+      inverse: inverse$14,
+      names: names$16
+    };
+
+    var iqsfnz = function(eccent, q) {
+      var temp = 1 - (1 - eccent * eccent) / (2 * eccent) * Math.log((1 - eccent) / (1 + eccent));
+      if (Math.abs(Math.abs(q) - temp) < 1.0E-6) {
+        if (q < 0) {
+          return (-1 * HALF_PI);
+        }
+        else {
+          return HALF_PI;
+        }
+      }
+      //var phi = 0.5* q/(1-eccent*eccent);
+      var phi = Math.asin(0.5 * q);
+      var dphi;
+      var sin_phi;
+      var cos_phi;
+      var con;
+      for (var i = 0; i < 30; i++) {
+        sin_phi = Math.sin(phi);
+        cos_phi = Math.cos(phi);
+        con = eccent * sin_phi;
+        dphi = Math.pow(1 - con * con, 2) / (2 * cos_phi) * (q / (1 - eccent * eccent) - sin_phi / (1 - con * con) + 0.5 / eccent * Math.log((1 - con) / (1 + con)));
+        phi += dphi;
+        if (Math.abs(dphi) <= 0.0000000001) {
+          return phi;
+        }
+      }
+
+      //console.log("IQSFN-CONV:Latitude failed to converge after 30 iterations");
+      return NaN;
+    };
+
+    /*
+      reference:
+        "Cartographic Projection Procedures for the UNIX Environment-
+        A User's Manual" by Gerald I. Evenden,
+        USGS Open File Report 90-284and Release 4 Interim Reports (2003)
+    */
+    function init$16() {
+      //no-op
+      if (!this.sphere) {
+        this.k0 = msfnz(this.e, Math.sin(this.lat_ts), Math.cos(this.lat_ts));
+      }
+    }
+
+    /* Cylindrical Equal Area forward equations--mapping lat,long to x,y
+        ------------------------------------------------------------*/
+    function forward$15(p) {
+      var lon = p.x;
+      var lat = p.y;
+      var x, y;
+      /* Forward equations
+          -----------------*/
+      var dlon = adjust_lon(lon - this.long0);
+      if (this.sphere) {
+        x = this.x0 + this.a * dlon * Math.cos(this.lat_ts);
+        y = this.y0 + this.a * Math.sin(lat) / Math.cos(this.lat_ts);
+      }
+      else {
+        var qs = qsfnz(this.e, Math.sin(lat));
+        x = this.x0 + this.a * this.k0 * dlon;
+        y = this.y0 + this.a * qs * 0.5 / this.k0;
+      }
+
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    /* Cylindrical Equal Area inverse equations--mapping x,y to lat/long
+        ------------------------------------------------------------*/
+    function inverse$15(p) {
+      p.x -= this.x0;
+      p.y -= this.y0;
+      var lon, lat;
+
+      if (this.sphere) {
+        lon = adjust_lon(this.long0 + (p.x / this.a) / Math.cos(this.lat_ts));
+        lat = Math.asin((p.y / this.a) * Math.cos(this.lat_ts));
+      }
+      else {
+        lat = iqsfnz(this.e, 2 * p.y * this.k0 / this.a);
+        lon = adjust_lon(this.long0 + p.x / (this.a * this.k0));
+      }
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$17 = ["cea"];
+    var cea = {
+      init: init$16,
+      forward: forward$15,
+      inverse: inverse$15,
+      names: names$17
+    };
+
+    function init$17() {
+
+      this.x0 = this.x0 || 0;
+      this.y0 = this.y0 || 0;
+      this.lat0 = this.lat0 || 0;
+      this.long0 = this.long0 || 0;
+      this.lat_ts = this.lat_ts || 0;
+      this.title = this.title || "Equidistant Cylindrical (Plate Carre)";
+
+      this.rc = Math.cos(this.lat_ts);
+    }
+
+    // forward equations--mapping lat,long to x,y
+    // -----------------------------------------------------------------
+    function forward$16(p) {
+
+      var lon = p.x;
+      var lat = p.y;
+
+      var dlon = adjust_lon(lon - this.long0);
+      var dlat = adjust_lat(lat - this.lat0);
+      p.x = this.x0 + (this.a * dlon * this.rc);
+      p.y = this.y0 + (this.a * dlat);
+      return p;
+    }
+
+    // inverse equations--mapping x,y to lat/long
+    // -----------------------------------------------------------------
+    function inverse$16(p) {
+
+      var x = p.x;
+      var y = p.y;
+
+      p.x = adjust_lon(this.long0 + ((x - this.x0) / (this.a * this.rc)));
+      p.y = adjust_lat(this.lat0 + ((y - this.y0) / (this.a)));
+      return p;
+    }
+
+    var names$18 = ["Equirectangular", "Equidistant_Cylindrical", "eqc"];
+    var eqc = {
+      init: init$17,
+      forward: forward$16,
+      inverse: inverse$16,
+      names: names$18
+    };
+
+    var MAX_ITER$2 = 20;
+
+    function init$18() {
+      /* Place parameters in static storage for common use
+          -------------------------------------------------*/
+      this.temp = this.b / this.a;
+      this.es = 1 - Math.pow(this.temp, 2); // devait etre dans tmerc.js mais n y est pas donc je commente sinon retour de valeurs nulles
+      this.e = Math.sqrt(this.es);
+      this.e0 = e0fn(this.es);
+      this.e1 = e1fn(this.es);
+      this.e2 = e2fn(this.es);
+      this.e3 = e3fn(this.es);
+      this.ml0 = this.a * mlfn(this.e0, this.e1, this.e2, this.e3, this.lat0); //si que des zeros le calcul ne se fait pas
+    }
+
+    /* Polyconic forward equations--mapping lat,long to x,y
+        ---------------------------------------------------*/
+    function forward$17(p) {
+      var lon = p.x;
+      var lat = p.y;
+      var x, y, el;
+      var dlon = adjust_lon(lon - this.long0);
+      el = dlon * Math.sin(lat);
+      if (this.sphere) {
+        if (Math.abs(lat) <= EPSLN) {
+          x = this.a * dlon;
+          y = -1 * this.a * this.lat0;
+        }
+        else {
+          x = this.a * Math.sin(el) / Math.tan(lat);
+          y = this.a * (adjust_lat(lat - this.lat0) + (1 - Math.cos(el)) / Math.tan(lat));
+        }
+      }
+      else {
+        if (Math.abs(lat) <= EPSLN) {
+          x = this.a * dlon;
+          y = -1 * this.ml0;
+        }
+        else {
+          var nl = gN(this.a, this.e, Math.sin(lat)) / Math.tan(lat);
+          x = nl * Math.sin(el);
+          y = this.a * mlfn(this.e0, this.e1, this.e2, this.e3, lat) - this.ml0 + nl * (1 - Math.cos(el));
+        }
+
+      }
+      p.x = x + this.x0;
+      p.y = y + this.y0;
+      return p;
+    }
+
+    /* Inverse equations
+      -----------------*/
+    function inverse$17(p) {
+      var lon, lat, x, y, i;
+      var al, bl;
+      var phi, dphi;
+      x = p.x - this.x0;
+      y = p.y - this.y0;
+
+      if (this.sphere) {
+        if (Math.abs(y + this.a * this.lat0) <= EPSLN) {
+          lon = adjust_lon(x / this.a + this.long0);
+          lat = 0;
+        }
+        else {
+          al = this.lat0 + y / this.a;
+          bl = x * x / this.a / this.a + al * al;
+          phi = al;
+          var tanphi;
+          for (i = MAX_ITER$2; i; --i) {
+            tanphi = Math.tan(phi);
+            dphi = -1 * (al * (phi * tanphi + 1) - phi - 0.5 * (phi * phi + bl) * tanphi) / ((phi - al) / tanphi - 1);
+            phi += dphi;
+            if (Math.abs(dphi) <= EPSLN) {
+              lat = phi;
+              break;
+            }
+          }
+          lon = adjust_lon(this.long0 + (Math.asin(x * Math.tan(phi) / this.a)) / Math.sin(lat));
+        }
+      }
+      else {
+        if (Math.abs(y + this.ml0) <= EPSLN) {
+          lat = 0;
+          lon = adjust_lon(this.long0 + x / this.a);
+        }
+        else {
+
+          al = (this.ml0 + y) / this.a;
+          bl = x * x / this.a / this.a + al * al;
+          phi = al;
+          var cl, mln, mlnp, ma;
+          var con;
+          for (i = MAX_ITER$2; i; --i) {
+            con = this.e * Math.sin(phi);
+            cl = Math.sqrt(1 - con * con) * Math.tan(phi);
+            mln = this.a * mlfn(this.e0, this.e1, this.e2, this.e3, phi);
+            mlnp = this.e0 - 2 * this.e1 * Math.cos(2 * phi) + 4 * this.e2 * Math.cos(4 * phi) - 6 * this.e3 * Math.cos(6 * phi);
+            ma = mln / this.a;
+            dphi = (al * (cl * ma + 1) - ma - 0.5 * cl * (ma * ma + bl)) / (this.es * Math.sin(2 * phi) * (ma * ma + bl - 2 * al * ma) / (4 * cl) + (al - ma) * (cl * mlnp - 2 / Math.sin(2 * phi)) - mlnp);
+            phi -= dphi;
+            if (Math.abs(dphi) <= EPSLN) {
+              lat = phi;
+              break;
+            }
+          }
+
+          //lat=phi4z(this.e,this.e0,this.e1,this.e2,this.e3,al,bl,0,0);
+          cl = Math.sqrt(1 - this.es * Math.pow(Math.sin(lat), 2)) * Math.tan(lat);
+          lon = adjust_lon(this.long0 + Math.asin(x * cl / this.a) / Math.sin(lat));
+        }
+      }
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$19 = ["Polyconic", "poly"];
+    var poly = {
+      init: init$18,
+      forward: forward$17,
+      inverse: inverse$17,
+      names: names$19
+    };
+
+    /*
+      reference
+        Department of Land and Survey Technical Circular 1973/32
+          http://www.linz.govt.nz/docs/miscellaneous/nz-map-definition.pdf
+        OSG Technical Report 4.1
+          http://www.linz.govt.nz/docs/miscellaneous/nzmg.pdf
+      */
+
+    /**
+     * iterations: Number of iterations to refine inverse transform.
+     *     0 -> km accuracy
+     *     1 -> m accuracy -- suitable for most mapping applications
+     *     2 -> mm accuracy
+     */
+
+
+    function init$19() {
+      this.A = [];
+      this.A[1] = 0.6399175073;
+      this.A[2] = -0.1358797613;
+      this.A[3] = 0.063294409;
+      this.A[4] = -0.02526853;
+      this.A[5] = 0.0117879;
+      this.A[6] = -0.0055161;
+      this.A[7] = 0.0026906;
+      this.A[8] = -0.001333;
+      this.A[9] = 0.00067;
+      this.A[10] = -0.00034;
+
+      this.B_re = [];
+      this.B_im = [];
+      this.B_re[1] = 0.7557853228;
+      this.B_im[1] = 0;
+      this.B_re[2] = 0.249204646;
+      this.B_im[2] = 0.003371507;
+      this.B_re[3] = -0.001541739;
+      this.B_im[3] = 0.041058560;
+      this.B_re[4] = -0.10162907;
+      this.B_im[4] = 0.01727609;
+      this.B_re[5] = -0.26623489;
+      this.B_im[5] = -0.36249218;
+      this.B_re[6] = -0.6870983;
+      this.B_im[6] = -1.1651967;
+
+      this.C_re = [];
+      this.C_im = [];
+      this.C_re[1] = 1.3231270439;
+      this.C_im[1] = 0;
+      this.C_re[2] = -0.577245789;
+      this.C_im[2] = -0.007809598;
+      this.C_re[3] = 0.508307513;
+      this.C_im[3] = -0.112208952;
+      this.C_re[4] = -0.15094762;
+      this.C_im[4] = 0.18200602;
+      this.C_re[5] = 1.01418179;
+      this.C_im[5] = 1.64497696;
+      this.C_re[6] = 1.9660549;
+      this.C_im[6] = 2.5127645;
+
+      this.D = [];
+      this.D[1] = 1.5627014243;
+      this.D[2] = 0.5185406398;
+      this.D[3] = -0.03333098;
+      this.D[4] = -0.1052906;
+      this.D[5] = -0.0368594;
+      this.D[6] = 0.007317;
+      this.D[7] = 0.01220;
+      this.D[8] = 0.00394;
+      this.D[9] = -0.0013;
+    }
+
+    /**
+        New Zealand Map Grid Forward  - long/lat to x/y
+        long/lat in radians
+      */
+    function forward$18(p) {
+      var n;
+      var lon = p.x;
+      var lat = p.y;
+
+      var delta_lat = lat - this.lat0;
+      var delta_lon = lon - this.long0;
+
+      // 1. Calculate d_phi and d_psi    ...                          // and d_lambda
+      // For this algorithm, delta_latitude is in seconds of arc x 10-5, so we need to scale to those units. Longitude is radians.
+      var d_phi = delta_lat / SEC_TO_RAD * 1E-5;
+      var d_lambda = delta_lon;
+      var d_phi_n = 1; // d_phi^0
+
+      var d_psi = 0;
+      for (n = 1; n <= 10; n++) {
+        d_phi_n = d_phi_n * d_phi;
+        d_psi = d_psi + this.A[n] * d_phi_n;
+      }
+
+      // 2. Calculate theta
+      var th_re = d_psi;
+      var th_im = d_lambda;
+
+      // 3. Calculate z
+      var th_n_re = 1;
+      var th_n_im = 0; // theta^0
+      var th_n_re1;
+      var th_n_im1;
+
+      var z_re = 0;
+      var z_im = 0;
+      for (n = 1; n <= 6; n++) {
+        th_n_re1 = th_n_re * th_re - th_n_im * th_im;
+        th_n_im1 = th_n_im * th_re + th_n_re * th_im;
+        th_n_re = th_n_re1;
+        th_n_im = th_n_im1;
+        z_re = z_re + this.B_re[n] * th_n_re - this.B_im[n] * th_n_im;
+        z_im = z_im + this.B_im[n] * th_n_re + this.B_re[n] * th_n_im;
+      }
+
+      // 4. Calculate easting and northing
+      p.x = (z_im * this.a) + this.x0;
+      p.y = (z_re * this.a) + this.y0;
+
+      return p;
+    }
+
+    /**
+        New Zealand Map Grid Inverse  -  x/y to long/lat
+      */
+    function inverse$18(p) {
+      var n;
+      var x = p.x;
+      var y = p.y;
+
+      var delta_x = x - this.x0;
+      var delta_y = y - this.y0;
+
+      // 1. Calculate z
+      var z_re = delta_y / this.a;
+      var z_im = delta_x / this.a;
+
+      // 2a. Calculate theta - first approximation gives km accuracy
+      var z_n_re = 1;
+      var z_n_im = 0; // z^0
+      var z_n_re1;
+      var z_n_im1;
+
+      var th_re = 0;
+      var th_im = 0;
+      for (n = 1; n <= 6; n++) {
+        z_n_re1 = z_n_re * z_re - z_n_im * z_im;
+        z_n_im1 = z_n_im * z_re + z_n_re * z_im;
+        z_n_re = z_n_re1;
+        z_n_im = z_n_im1;
+        th_re = th_re + this.C_re[n] * z_n_re - this.C_im[n] * z_n_im;
+        th_im = th_im + this.C_im[n] * z_n_re + this.C_re[n] * z_n_im;
+      }
+
+      // 2b. Iterate to refine the accuracy of the calculation
+      //        0 iterations gives km accuracy
+      //        1 iteration gives m accuracy -- good enough for most mapping applications
+      //        2 iterations bives mm accuracy
+      for (var i = 0; i < this.iterations; i++) {
+        var th_n_re = th_re;
+        var th_n_im = th_im;
+        var th_n_re1;
+        var th_n_im1;
+
+        var num_re = z_re;
+        var num_im = z_im;
+        for (n = 2; n <= 6; n++) {
+          th_n_re1 = th_n_re * th_re - th_n_im * th_im;
+          th_n_im1 = th_n_im * th_re + th_n_re * th_im;
+          th_n_re = th_n_re1;
+          th_n_im = th_n_im1;
+          num_re = num_re + (n - 1) * (this.B_re[n] * th_n_re - this.B_im[n] * th_n_im);
+          num_im = num_im + (n - 1) * (this.B_im[n] * th_n_re + this.B_re[n] * th_n_im);
+        }
+
+        th_n_re = 1;
+        th_n_im = 0;
+        var den_re = this.B_re[1];
+        var den_im = this.B_im[1];
+        for (n = 2; n <= 6; n++) {
+          th_n_re1 = th_n_re * th_re - th_n_im * th_im;
+          th_n_im1 = th_n_im * th_re + th_n_re * th_im;
+          th_n_re = th_n_re1;
+          th_n_im = th_n_im1;
+          den_re = den_re + n * (this.B_re[n] * th_n_re - this.B_im[n] * th_n_im);
+          den_im = den_im + n * (this.B_im[n] * th_n_re + this.B_re[n] * th_n_im);
+        }
+
+        // Complex division
+        var den2 = den_re * den_re + den_im * den_im;
+        th_re = (num_re * den_re + num_im * den_im) / den2;
+        th_im = (num_im * den_re - num_re * den_im) / den2;
+      }
+
+      // 3. Calculate d_phi              ...                                    // and d_lambda
+      var d_psi = th_re;
+      var d_lambda = th_im;
+      var d_psi_n = 1; // d_psi^0
+
+      var d_phi = 0;
+      for (n = 1; n <= 9; n++) {
+        d_psi_n = d_psi_n * d_psi;
+        d_phi = d_phi + this.D[n] * d_psi_n;
+      }
+
+      // 4. Calculate latitude and longitude
+      // d_phi is calcuated in second of arc * 10^-5, so we need to scale back to radians. d_lambda is in radians.
+      var lat = this.lat0 + (d_phi * SEC_TO_RAD * 1E5);
+      var lon = this.long0 + d_lambda;
+
+      p.x = lon;
+      p.y = lat;
+
+      return p;
+    }
+
+    var names$20 = ["New_Zealand_Map_Grid", "nzmg"];
+    var nzmg = {
+      init: init$19,
+      forward: forward$18,
+      inverse: inverse$18,
+      names: names$20
+    };
+
+    /*
+      reference
+        "New Equal-Area Map Projections for Noncircular Regions", John P. Snyder,
+        The American Cartographer, Vol 15, No. 4, October 1988, pp. 341-355.
+      */
+
+
+    /* Initialize the Miller Cylindrical projection
+      -------------------------------------------*/
+    function init$20() {
+      //no-op
+    }
+
+    /* Miller Cylindrical forward equations--mapping lat,long to x,y
+        ------------------------------------------------------------*/
+    function forward$19(p) {
+      var lon = p.x;
+      var lat = p.y;
+      /* Forward equations
+          -----------------*/
+      var dlon = adjust_lon(lon - this.long0);
+      var x = this.x0 + this.a * dlon;
+      var y = this.y0 + this.a * Math.log(Math.tan((Math.PI / 4) + (lat / 2.5))) * 1.25;
+
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    /* Miller Cylindrical inverse equations--mapping x,y to lat/long
+        ------------------------------------------------------------*/
+    function inverse$19(p) {
+      p.x -= this.x0;
+      p.y -= this.y0;
+
+      var lon = adjust_lon(this.long0 + p.x / this.a);
+      var lat = 2.5 * (Math.atan(Math.exp(0.8 * p.y / this.a)) - Math.PI / 4);
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$21 = ["Miller_Cylindrical", "mill"];
+    var mill = {
+      init: init$20,
+      forward: forward$19,
+      inverse: inverse$19,
+      names: names$21
+    };
+
+    var MAX_ITER$3 = 20;
+    function init$21() {
+      /* Place parameters in static storage for common use
+        -------------------------------------------------*/
+
+
+      if (!this.sphere) {
+        this.en = pj_enfn(this.es);
+      }
+      else {
+        this.n = 1;
+        this.m = 0;
+        this.es = 0;
+        this.C_y = Math.sqrt((this.m + 1) / this.n);
+        this.C_x = this.C_y / (this.m + 1);
+      }
+
+    }
+
+    /* Sinusoidal forward equations--mapping lat,long to x,y
+      -----------------------------------------------------*/
+    function forward$20(p) {
+      var x, y;
+      var lon = p.x;
+      var lat = p.y;
+      /* Forward equations
+        -----------------*/
+      lon = adjust_lon(lon - this.long0);
+
+      if (this.sphere) {
+        if (!this.m) {
+          lat = this.n !== 1 ? Math.asin(this.n * Math.sin(lat)) : lat;
+        }
+        else {
+          var k = this.n * Math.sin(lat);
+          for (var i = MAX_ITER$3; i; --i) {
+            var V = (this.m * lat + Math.sin(lat) - k) / (this.m + Math.cos(lat));
+            lat -= V;
+            if (Math.abs(V) < EPSLN) {
+              break;
+            }
+          }
+        }
+        x = this.a * this.C_x * lon * (this.m + Math.cos(lat));
+        y = this.a * this.C_y * lat;
+
+      }
+      else {
+
+        var s = Math.sin(lat);
+        var c = Math.cos(lat);
+        y = this.a * pj_mlfn(lat, s, c, this.en);
+        x = this.a * lon * c / Math.sqrt(1 - this.es * s * s);
+      }
+
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    function inverse$20(p) {
+      var lat, temp, lon, s;
+
+      p.x -= this.x0;
+      lon = p.x / this.a;
+      p.y -= this.y0;
+      lat = p.y / this.a;
+
+      if (this.sphere) {
+        lat /= this.C_y;
+        lon = lon / (this.C_x * (this.m + Math.cos(lat)));
+        if (this.m) {
+          lat = asinz((this.m * lat + Math.sin(lat)) / this.n);
+        }
+        else if (this.n !== 1) {
+          lat = asinz(Math.sin(lat) / this.n);
+        }
+        lon = adjust_lon(lon + this.long0);
+        lat = adjust_lat(lat);
+      }
+      else {
+        lat = pj_inv_mlfn(p.y / this.a, this.es, this.en);
+        s = Math.abs(lat);
+        if (s < HALF_PI) {
+          s = Math.sin(lat);
+          temp = this.long0 + p.x * Math.sqrt(1 - this.es * s * s) / (this.a * Math.cos(lat));
+          //temp = this.long0 + p.x / (this.a * Math.cos(lat));
+          lon = adjust_lon(temp);
+        }
+        else if ((s - EPSLN) < HALF_PI) {
+          lon = this.long0;
+        }
+      }
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$22 = ["Sinusoidal", "sinu"];
+    var sinu = {
+      init: init$21,
+      forward: forward$20,
+      inverse: inverse$20,
+      names: names$22
+    };
+
+    function init$22() {}
+    /* Mollweide forward equations--mapping lat,long to x,y
+        ----------------------------------------------------*/
+    function forward$21(p) {
+
+      /* Forward equations
+          -----------------*/
+      var lon = p.x;
+      var lat = p.y;
+
+      var delta_lon = adjust_lon(lon - this.long0);
+      var theta = lat;
+      var con = Math.PI * Math.sin(lat);
+
+      /* Iterate using the Newton-Raphson method to find theta
+          -----------------------------------------------------*/
+      while (true) {
+        var delta_theta = -(theta + Math.sin(theta) - con) / (1 + Math.cos(theta));
+        theta += delta_theta;
+        if (Math.abs(delta_theta) < EPSLN) {
+          break;
+        }
+      }
+      theta /= 2;
+
+      /* If the latitude is 90 deg, force the x coordinate to be "0 + false easting"
+           this is done here because of precision problems with "cos(theta)"
+           --------------------------------------------------------------------------*/
+      if (Math.PI / 2 - Math.abs(lat) < EPSLN) {
+        delta_lon = 0;
+      }
+      var x = 0.900316316158 * this.a * delta_lon * Math.cos(theta) + this.x0;
+      var y = 1.4142135623731 * this.a * Math.sin(theta) + this.y0;
+
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    function inverse$21(p) {
+      var theta;
+      var arg;
+
+      /* Inverse equations
+          -----------------*/
+      p.x -= this.x0;
+      p.y -= this.y0;
+      arg = p.y / (1.4142135623731 * this.a);
+
+      /* Because of division by zero problems, 'arg' can not be 1.  Therefore
+           a number very close to one is used instead.
+           -------------------------------------------------------------------*/
+      if (Math.abs(arg) > 0.999999999999) {
+        arg = 0.999999999999;
+      }
+      theta = Math.asin(arg);
+      var lon = adjust_lon(this.long0 + (p.x / (0.900316316158 * this.a * Math.cos(theta))));
+      if (lon < (-Math.PI)) {
+        lon = -Math.PI;
+      }
+      if (lon > Math.PI) {
+        lon = Math.PI;
+      }
+      arg = (2 * theta + Math.sin(2 * theta)) / Math.PI;
+      if (Math.abs(arg) > 1) {
+        arg = 1;
+      }
+      var lat = Math.asin(arg);
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$23 = ["Mollweide", "moll"];
+    var moll = {
+      init: init$22,
+      forward: forward$21,
+      inverse: inverse$21,
+      names: names$23
+    };
+
+    function init$23() {
+
+      /* Place parameters in static storage for common use
+          -------------------------------------------------*/
+      // Standard Parallels cannot be equal and on opposite sides of the equator
+      if (Math.abs(this.lat1 + this.lat2) < EPSLN) {
+        return;
+      }
+      this.lat2 = this.lat2 || this.lat1;
+      this.temp = this.b / this.a;
+      this.es = 1 - Math.pow(this.temp, 2);
+      this.e = Math.sqrt(this.es);
+      this.e0 = e0fn(this.es);
+      this.e1 = e1fn(this.es);
+      this.e2 = e2fn(this.es);
+      this.e3 = e3fn(this.es);
+
+      this.sinphi = Math.sin(this.lat1);
+      this.cosphi = Math.cos(this.lat1);
+
+      this.ms1 = msfnz(this.e, this.sinphi, this.cosphi);
+      this.ml1 = mlfn(this.e0, this.e1, this.e2, this.e3, this.lat1);
+
+      if (Math.abs(this.lat1 - this.lat2) < EPSLN) {
+        this.ns = this.sinphi;
+      }
+      else {
+        this.sinphi = Math.sin(this.lat2);
+        this.cosphi = Math.cos(this.lat2);
+        this.ms2 = msfnz(this.e, this.sinphi, this.cosphi);
+        this.ml2 = mlfn(this.e0, this.e1, this.e2, this.e3, this.lat2);
+        this.ns = (this.ms1 - this.ms2) / (this.ml2 - this.ml1);
+      }
+      this.g = this.ml1 + this.ms1 / this.ns;
+      this.ml0 = mlfn(this.e0, this.e1, this.e2, this.e3, this.lat0);
+      this.rh = this.a * (this.g - this.ml0);
+    }
+
+    /* Equidistant Conic forward equations--mapping lat,long to x,y
+      -----------------------------------------------------------*/
+    function forward$22(p) {
+      var lon = p.x;
+      var lat = p.y;
+      var rh1;
+
+      /* Forward equations
+          -----------------*/
+      if (this.sphere) {
+        rh1 = this.a * (this.g - lat);
+      }
+      else {
+        var ml = mlfn(this.e0, this.e1, this.e2, this.e3, lat);
+        rh1 = this.a * (this.g - ml);
+      }
+      var theta = this.ns * adjust_lon(lon - this.long0);
+      var x = this.x0 + rh1 * Math.sin(theta);
+      var y = this.y0 + this.rh - rh1 * Math.cos(theta);
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    /* Inverse equations
+      -----------------*/
+    function inverse$22(p) {
+      p.x -= this.x0;
+      p.y = this.rh - p.y + this.y0;
+      var con, rh1, lat, lon;
+      if (this.ns >= 0) {
+        rh1 = Math.sqrt(p.x * p.x + p.y * p.y);
+        con = 1;
+      }
+      else {
+        rh1 = -Math.sqrt(p.x * p.x + p.y * p.y);
+        con = -1;
+      }
+      var theta = 0;
+      if (rh1 !== 0) {
+        theta = Math.atan2(con * p.x, con * p.y);
+      }
+
+      if (this.sphere) {
+        lon = adjust_lon(this.long0 + theta / this.ns);
+        lat = adjust_lat(this.g - rh1 / this.a);
+        p.x = lon;
+        p.y = lat;
+        return p;
+      }
+      else {
+        var ml = this.g - rh1 / this.a;
+        lat = imlfn(ml, this.e0, this.e1, this.e2, this.e3);
+        lon = adjust_lon(this.long0 + theta / this.ns);
+        p.x = lon;
+        p.y = lat;
+        return p;
+      }
+
+    }
+
+    var names$24 = ["Equidistant_Conic", "eqdc"];
+    var eqdc = {
+      init: init$23,
+      forward: forward$22,
+      inverse: inverse$22,
+      names: names$24
+    };
+
+    /* Initialize the Van Der Grinten projection
+      ----------------------------------------*/
+    function init$24() {
+      //this.R = 6370997; //Radius of earth
+      this.R = this.a;
+    }
+
+    function forward$23(p) {
+
+      var lon = p.x;
+      var lat = p.y;
+
+      /* Forward equations
+        -----------------*/
+      var dlon = adjust_lon(lon - this.long0);
+      var x, y;
+
+      if (Math.abs(lat) <= EPSLN) {
+        x = this.x0 + this.R * dlon;
+        y = this.y0;
+      }
+      var theta = asinz(2 * Math.abs(lat / Math.PI));
+      if ((Math.abs(dlon) <= EPSLN) || (Math.abs(Math.abs(lat) - HALF_PI) <= EPSLN)) {
+        x = this.x0;
+        if (lat >= 0) {
+          y = this.y0 + Math.PI * this.R * Math.tan(0.5 * theta);
+        }
+        else {
+          y = this.y0 + Math.PI * this.R * -Math.tan(0.5 * theta);
+        }
+        //  return(OK);
+      }
+      var al = 0.5 * Math.abs((Math.PI / dlon) - (dlon / Math.PI));
+      var asq = al * al;
+      var sinth = Math.sin(theta);
+      var costh = Math.cos(theta);
+
+      var g = costh / (sinth + costh - 1);
+      var gsq = g * g;
+      var m = g * (2 / sinth - 1);
+      var msq = m * m;
+      var con = Math.PI * this.R * (al * (g - msq) + Math.sqrt(asq * (g - msq) * (g - msq) - (msq + asq) * (gsq - msq))) / (msq + asq);
+      if (dlon < 0) {
+        con = -con;
+      }
+      x = this.x0 + con;
+      //con = Math.abs(con / (Math.PI * this.R));
+      var q = asq + g;
+      con = Math.PI * this.R * (m * q - al * Math.sqrt((msq + asq) * (asq + 1) - q * q)) / (msq + asq);
+      if (lat >= 0) {
+        //y = this.y0 + Math.PI * this.R * Math.sqrt(1 - con * con - 2 * al * con);
+        y = this.y0 + con;
+      }
+      else {
+        //y = this.y0 - Math.PI * this.R * Math.sqrt(1 - con * con - 2 * al * con);
+        y = this.y0 - con;
+      }
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    /* Van Der Grinten inverse equations--mapping x,y to lat/long
+      ---------------------------------------------------------*/
+    function inverse$23(p) {
+      var lon, lat;
+      var xx, yy, xys, c1, c2, c3;
+      var a1;
+      var m1;
+      var con;
+      var th1;
+      var d;
+
+      /* inverse equations
+        -----------------*/
+      p.x -= this.x0;
+      p.y -= this.y0;
+      con = Math.PI * this.R;
+      xx = p.x / con;
+      yy = p.y / con;
+      xys = xx * xx + yy * yy;
+      c1 = -Math.abs(yy) * (1 + xys);
+      c2 = c1 - 2 * yy * yy + xx * xx;
+      c3 = -2 * c1 + 1 + 2 * yy * yy + xys * xys;
+      d = yy * yy / c3 + (2 * c2 * c2 * c2 / c3 / c3 / c3 - 9 * c1 * c2 / c3 / c3) / 27;
+      a1 = (c1 - c2 * c2 / 3 / c3) / c3;
+      m1 = 2 * Math.sqrt(-a1 / 3);
+      con = ((3 * d) / a1) / m1;
+      if (Math.abs(con) > 1) {
+        if (con >= 0) {
+          con = 1;
+        }
+        else {
+          con = -1;
+        }
+      }
+      th1 = Math.acos(con) / 3;
+      if (p.y >= 0) {
+        lat = (-m1 * Math.cos(th1 + Math.PI / 3) - c2 / 3 / c3) * Math.PI;
+      }
+      else {
+        lat = -(-m1 * Math.cos(th1 + Math.PI / 3) - c2 / 3 / c3) * Math.PI;
+      }
+
+      if (Math.abs(xx) < EPSLN) {
+        lon = this.long0;
+      }
+      else {
+        lon = adjust_lon(this.long0 + Math.PI * (xys - 1 + Math.sqrt(1 + 2 * (xx * xx - yy * yy) + xys * xys)) / 2 / xx);
+      }
+
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$25 = ["Van_der_Grinten_I", "VanDerGrinten", "vandg"];
+    var vandg = {
+      init: init$24,
+      forward: forward$23,
+      inverse: inverse$23,
+      names: names$25
+    };
+
+    function init$25() {
+      this.sin_p12 = Math.sin(this.lat0);
+      this.cos_p12 = Math.cos(this.lat0);
+    }
+
+    function forward$24(p) {
+      var lon = p.x;
+      var lat = p.y;
+      var sinphi = Math.sin(p.y);
+      var cosphi = Math.cos(p.y);
+      var dlon = adjust_lon(lon - this.long0);
+      var e0, e1, e2, e3, Mlp, Ml, tanphi, Nl1, Nl, psi, Az, G, H, GH, Hs, c, kp, cos_c, s, s2, s3, s4, s5;
+      if (this.sphere) {
+        if (Math.abs(this.sin_p12 - 1) <= EPSLN) {
+          //North Pole case
+          p.x = this.x0 + this.a * (HALF_PI - lat) * Math.sin(dlon);
+          p.y = this.y0 - this.a * (HALF_PI - lat) * Math.cos(dlon);
+          return p;
+        }
+        else if (Math.abs(this.sin_p12 + 1) <= EPSLN) {
+          //South Pole case
+          p.x = this.x0 + this.a * (HALF_PI + lat) * Math.sin(dlon);
+          p.y = this.y0 + this.a * (HALF_PI + lat) * Math.cos(dlon);
+          return p;
+        }
+        else {
+          //default case
+          cos_c = this.sin_p12 * sinphi + this.cos_p12 * cosphi * Math.cos(dlon);
+          c = Math.acos(cos_c);
+          kp = c ? c / Math.sin(c) : 1;
+          p.x = this.x0 + this.a * kp * cosphi * Math.sin(dlon);
+          p.y = this.y0 + this.a * kp * (this.cos_p12 * sinphi - this.sin_p12 * cosphi * Math.cos(dlon));
+          return p;
+        }
+      }
+      else {
+        e0 = e0fn(this.es);
+        e1 = e1fn(this.es);
+        e2 = e2fn(this.es);
+        e3 = e3fn(this.es);
+        if (Math.abs(this.sin_p12 - 1) <= EPSLN) {
+          //North Pole case
+          Mlp = this.a * mlfn(e0, e1, e2, e3, HALF_PI);
+          Ml = this.a * mlfn(e0, e1, e2, e3, lat);
+          p.x = this.x0 + (Mlp - Ml) * Math.sin(dlon);
+          p.y = this.y0 - (Mlp - Ml) * Math.cos(dlon);
+          return p;
+        }
+        else if (Math.abs(this.sin_p12 + 1) <= EPSLN) {
+          //South Pole case
+          Mlp = this.a * mlfn(e0, e1, e2, e3, HALF_PI);
+          Ml = this.a * mlfn(e0, e1, e2, e3, lat);
+          p.x = this.x0 + (Mlp + Ml) * Math.sin(dlon);
+          p.y = this.y0 + (Mlp + Ml) * Math.cos(dlon);
+          return p;
+        }
+        else {
+          //Default case
+          tanphi = sinphi / cosphi;
+          Nl1 = gN(this.a, this.e, this.sin_p12);
+          Nl = gN(this.a, this.e, sinphi);
+          psi = Math.atan((1 - this.es) * tanphi + this.es * Nl1 * this.sin_p12 / (Nl * cosphi));
+          Az = Math.atan2(Math.sin(dlon), this.cos_p12 * Math.tan(psi) - this.sin_p12 * Math.cos(dlon));
+          if (Az === 0) {
+            s = Math.asin(this.cos_p12 * Math.sin(psi) - this.sin_p12 * Math.cos(psi));
+          }
+          else if (Math.abs(Math.abs(Az) - Math.PI) <= EPSLN) {
+            s = -Math.asin(this.cos_p12 * Math.sin(psi) - this.sin_p12 * Math.cos(psi));
+          }
+          else {
+            s = Math.asin(Math.sin(dlon) * Math.cos(psi) / Math.sin(Az));
+          }
+          G = this.e * this.sin_p12 / Math.sqrt(1 - this.es);
+          H = this.e * this.cos_p12 * Math.cos(Az) / Math.sqrt(1 - this.es);
+          GH = G * H;
+          Hs = H * H;
+          s2 = s * s;
+          s3 = s2 * s;
+          s4 = s3 * s;
+          s5 = s4 * s;
+          c = Nl1 * s * (1 - s2 * Hs * (1 - Hs) / 6 + s3 / 8 * GH * (1 - 2 * Hs) + s4 / 120 * (Hs * (4 - 7 * Hs) - 3 * G * G * (1 - 7 * Hs)) - s5 / 48 * GH);
+          p.x = this.x0 + c * Math.sin(Az);
+          p.y = this.y0 + c * Math.cos(Az);
+          return p;
+        }
+      }
+
+
+    }
+
+    function inverse$24(p) {
+      p.x -= this.x0;
+      p.y -= this.y0;
+      var rh, z, sinz, cosz, lon, lat, con, e0, e1, e2, e3, Mlp, M, N1, psi, Az, cosAz, tmp, A, B, D, Ee, F, sinpsi;
+      if (this.sphere) {
+        rh = Math.sqrt(p.x * p.x + p.y * p.y);
+        if (rh > (2 * HALF_PI * this.a)) {
+          return;
+        }
+        z = rh / this.a;
+
+        sinz = Math.sin(z);
+        cosz = Math.cos(z);
+
+        lon = this.long0;
+        if (Math.abs(rh) <= EPSLN) {
+          lat = this.lat0;
+        }
+        else {
+          lat = asinz(cosz * this.sin_p12 + (p.y * sinz * this.cos_p12) / rh);
+          con = Math.abs(this.lat0) - HALF_PI;
+          if (Math.abs(con) <= EPSLN) {
+            if (this.lat0 >= 0) {
+              lon = adjust_lon(this.long0 + Math.atan2(p.x, - p.y));
+            }
+            else {
+              lon = adjust_lon(this.long0 - Math.atan2(-p.x, p.y));
+            }
+          }
+          else {
+            /*con = cosz - this.sin_p12 * Math.sin(lat);
+            if ((Math.abs(con) < EPSLN) && (Math.abs(p.x) < EPSLN)) {
+              //no-op, just keep the lon value as is
+            } else {
+              var temp = Math.atan2((p.x * sinz * this.cos_p12), (con * rh));
+              lon = adjust_lon(this.long0 + Math.atan2((p.x * sinz * this.cos_p12), (con * rh)));
+            }*/
+            lon = adjust_lon(this.long0 + Math.atan2(p.x * sinz, rh * this.cos_p12 * cosz - p.y * this.sin_p12 * sinz));
+          }
+        }
+
+        p.x = lon;
+        p.y = lat;
+        return p;
+      }
+      else {
+        e0 = e0fn(this.es);
+        e1 = e1fn(this.es);
+        e2 = e2fn(this.es);
+        e3 = e3fn(this.es);
+        if (Math.abs(this.sin_p12 - 1) <= EPSLN) {
+          //North pole case
+          Mlp = this.a * mlfn(e0, e1, e2, e3, HALF_PI);
+          rh = Math.sqrt(p.x * p.x + p.y * p.y);
+          M = Mlp - rh;
+          lat = imlfn(M / this.a, e0, e1, e2, e3);
+          lon = adjust_lon(this.long0 + Math.atan2(p.x, - 1 * p.y));
+          p.x = lon;
+          p.y = lat;
+          return p;
+        }
+        else if (Math.abs(this.sin_p12 + 1) <= EPSLN) {
+          //South pole case
+          Mlp = this.a * mlfn(e0, e1, e2, e3, HALF_PI);
+          rh = Math.sqrt(p.x * p.x + p.y * p.y);
+          M = rh - Mlp;
+
+          lat = imlfn(M / this.a, e0, e1, e2, e3);
+          lon = adjust_lon(this.long0 + Math.atan2(p.x, p.y));
+          p.x = lon;
+          p.y = lat;
+          return p;
+        }
+        else {
+          //default case
+          rh = Math.sqrt(p.x * p.x + p.y * p.y);
+          Az = Math.atan2(p.x, p.y);
+          N1 = gN(this.a, this.e, this.sin_p12);
+          cosAz = Math.cos(Az);
+          tmp = this.e * this.cos_p12 * cosAz;
+          A = -tmp * tmp / (1 - this.es);
+          B = 3 * this.es * (1 - A) * this.sin_p12 * this.cos_p12 * cosAz / (1 - this.es);
+          D = rh / N1;
+          Ee = D - A * (1 + A) * Math.pow(D, 3) / 6 - B * (1 + 3 * A) * Math.pow(D, 4) / 24;
+          F = 1 - A * Ee * Ee / 2 - D * Ee * Ee * Ee / 6;
+          psi = Math.asin(this.sin_p12 * Math.cos(Ee) + this.cos_p12 * Math.sin(Ee) * cosAz);
+          lon = adjust_lon(this.long0 + Math.asin(Math.sin(Az) * Math.sin(Ee) / Math.cos(psi)));
+          sinpsi = Math.sin(psi);
+          lat = Math.atan2((sinpsi - this.es * F * this.sin_p12) * Math.tan(psi), sinpsi * (1 - this.es));
+          p.x = lon;
+          p.y = lat;
+          return p;
+        }
+      }
+
+    }
+
+    var names$26 = ["Azimuthal_Equidistant", "aeqd"];
+    var aeqd = {
+      init: init$25,
+      forward: forward$24,
+      inverse: inverse$24,
+      names: names$26
+    };
+
+    function init$26() {
+      //double temp;      /* temporary variable    */
+
+      /* Place parameters in static storage for common use
+          -------------------------------------------------*/
+      this.sin_p14 = Math.sin(this.lat0);
+      this.cos_p14 = Math.cos(this.lat0);
+    }
+
+    /* Orthographic forward equations--mapping lat,long to x,y
+        ---------------------------------------------------*/
+    function forward$25(p) {
+      var sinphi, cosphi; /* sin and cos value        */
+      var dlon; /* delta longitude value      */
+      var coslon; /* cos of longitude        */
+      var ksp; /* scale factor          */
+      var g, x, y;
+      var lon = p.x;
+      var lat = p.y;
+      /* Forward equations
+          -----------------*/
+      dlon = adjust_lon(lon - this.long0);
+
+      sinphi = Math.sin(lat);
+      cosphi = Math.cos(lat);
+
+      coslon = Math.cos(dlon);
+      g = this.sin_p14 * sinphi + this.cos_p14 * cosphi * coslon;
+      ksp = 1;
+      if ((g > 0) || (Math.abs(g) <= EPSLN)) {
+        x = this.a * ksp * cosphi * Math.sin(dlon);
+        y = this.y0 + this.a * ksp * (this.cos_p14 * sinphi - this.sin_p14 * cosphi * coslon);
+      }
+      p.x = x;
+      p.y = y;
+      return p;
+    }
+
+    function inverse$25(p) {
+      var rh; /* height above ellipsoid      */
+      var z; /* angle          */
+      var sinz, cosz; /* sin of z and cos of z      */
+      var con;
+      var lon, lat;
+      /* Inverse equations
+          -----------------*/
+      p.x -= this.x0;
+      p.y -= this.y0;
+      rh = Math.sqrt(p.x * p.x + p.y * p.y);
+      z = asinz(rh / this.a);
+
+      sinz = Math.sin(z);
+      cosz = Math.cos(z);
+
+      lon = this.long0;
+      if (Math.abs(rh) <= EPSLN) {
+        lat = this.lat0;
+        p.x = lon;
+        p.y = lat;
+        return p;
+      }
+      lat = asinz(cosz * this.sin_p14 + (p.y * sinz * this.cos_p14) / rh);
+      con = Math.abs(this.lat0) - HALF_PI;
+      if (Math.abs(con) <= EPSLN) {
+        if (this.lat0 >= 0) {
+          lon = adjust_lon(this.long0 + Math.atan2(p.x, - p.y));
+        }
+        else {
+          lon = adjust_lon(this.long0 - Math.atan2(-p.x, p.y));
+        }
+        p.x = lon;
+        p.y = lat;
+        return p;
+      }
+      lon = adjust_lon(this.long0 + Math.atan2((p.x * sinz), rh * this.cos_p14 * cosz - p.y * this.sin_p14 * sinz));
+      p.x = lon;
+      p.y = lat;
+      return p;
+    }
+
+    var names$27 = ["ortho"];
+    var ortho = {
+      init: init$26,
+      forward: forward$25,
+      inverse: inverse$25,
+      names: names$27
+    };
+
+    // QSC projection rewritten from the original PROJ4
+    // https://github.com/OSGeo/proj.4/blob/master/src/PJ_qsc.c
+
+    /* constants */
+    var FACE_ENUM = {
+        FRONT: 1,
+        RIGHT: 2,
+        BACK: 3,
+        LEFT: 4,
+        TOP: 5,
+        BOTTOM: 6
+    };
+
+    var AREA_ENUM = {
+        AREA_0: 1,
+        AREA_1: 2,
+        AREA_2: 3,
+        AREA_3: 4
+    };
+
+    function init$27() {
+
+      this.x0 = this.x0 || 0;
+      this.y0 = this.y0 || 0;
+      this.lat0 = this.lat0 || 0;
+      this.long0 = this.long0 || 0;
+      this.lat_ts = this.lat_ts || 0;
+      this.title = this.title || "Quadrilateralized Spherical Cube";
+
+      /* Determine the cube face from the center of projection. */
+      if (this.lat0 >= HALF_PI - FORTPI / 2.0) {
+        this.face = FACE_ENUM.TOP;
+      } else if (this.lat0 <= -(HALF_PI - FORTPI / 2.0)) {
+        this.face = FACE_ENUM.BOTTOM;
+      } else if (Math.abs(this.long0) <= FORTPI) {
+        this.face = FACE_ENUM.FRONT;
+      } else if (Math.abs(this.long0) <= HALF_PI + FORTPI) {
+        this.face = this.long0 > 0.0 ? FACE_ENUM.RIGHT : FACE_ENUM.LEFT;
+      } else {
+        this.face = FACE_ENUM.BACK;
+      }
+
+      /* Fill in useful values for the ellipsoid <-> sphere shift
+       * described in [LK12]. */
+      if (this.es !== 0) {
+        this.one_minus_f = 1 - (this.a - this.b) / this.a;
+        this.one_minus_f_squared = this.one_minus_f * this.one_minus_f;
+      }
+    }
+
+    // QSC forward equations--mapping lat,long to x,y
+    // -----------------------------------------------------------------
+    function forward$26(p) {
+      var xy = {x: 0, y: 0};
+      var lat, lon;
+      var theta, phi;
+      var t, mu;
+      /* nu; */
+      var area = {value: 0};
+
+      // move lon according to projection's lon
+      p.x -= this.long0;
+
+      /* Convert the geodetic latitude to a geocentric latitude.
+       * This corresponds to the shift from the ellipsoid to the sphere
+       * described in [LK12]. */
+      if (this.es !== 0) {//if (P->es != 0) {
+        lat = Math.atan(this.one_minus_f_squared * Math.tan(p.y));
+      } else {
+        lat = p.y;
+      }
+
+      /* Convert the input lat, lon into theta, phi as used by QSC.
+       * This depends on the cube face and the area on it.
+       * For the top and bottom face, we can compute theta and phi
+       * directly from phi, lam. For the other faces, we must use
+       * unit sphere cartesian coordinates as an intermediate step. */
+      lon = p.x; //lon = lp.lam;
+      if (this.face === FACE_ENUM.TOP) {
+        phi = HALF_PI - lat;
+        if (lon >= FORTPI && lon <= HALF_PI + FORTPI) {
+          area.value = AREA_ENUM.AREA_0;
+          theta = lon - HALF_PI;
+        } else if (lon > HALF_PI + FORTPI || lon <= -(HALF_PI + FORTPI)) {
+          area.value = AREA_ENUM.AREA_1;
+          theta = (lon > 0.0 ? lon - SPI : lon + SPI);
+        } else if (lon > -(HALF_PI + FORTPI) && lon <= -FORTPI) {
+          area.value = AREA_ENUM.AREA_2;
+          theta = lon + HALF_PI;
+        } else {
+          area.value = AREA_ENUM.AREA_3;
+          theta = lon;
+        }
+      } else if (this.face === FACE_ENUM.BOTTOM) {
+        phi = HALF_PI + lat;
+        if (lon >= FORTPI && lon <= HALF_PI + FORTPI) {
+          area.value = AREA_ENUM.AREA_0;
+          theta = -lon + HALF_PI;
+        } else if (lon < FORTPI && lon >= -FORTPI) {
+          area.value = AREA_ENUM.AREA_1;
+          theta = -lon;
+        } else if (lon < -FORTPI && lon >= -(HALF_PI + FORTPI)) {
+          area.value = AREA_ENUM.AREA_2;
+          theta = -lon - HALF_PI;
+        } else {
+          area.value = AREA_ENUM.AREA_3;
+          theta = (lon > 0.0 ? -lon + SPI : -lon - SPI);
+        }
+      } else {
+        var q, r, s;
+        var sinlat, coslat;
+        var sinlon, coslon;
+
+        if (this.face === FACE_ENUM.RIGHT) {
+          lon = qsc_shift_lon_origin(lon, +HALF_PI);
+        } else if (this.face === FACE_ENUM.BACK) {
+          lon = qsc_shift_lon_origin(lon, +SPI);
+        } else if (this.face === FACE_ENUM.LEFT) {
+          lon = qsc_shift_lon_origin(lon, -HALF_PI);
+        }
+        sinlat = Math.sin(lat);
+        coslat = Math.cos(lat);
+        sinlon = Math.sin(lon);
+        coslon = Math.cos(lon);
+        q = coslat * coslon;
+        r = coslat * sinlon;
+        s = sinlat;
+
+        if (this.face === FACE_ENUM.FRONT) {
+          phi = Math.acos(q);
+          theta = qsc_fwd_equat_face_theta(phi, s, r, area);
+        } else if (this.face === FACE_ENUM.RIGHT) {
+          phi = Math.acos(r);
+          theta = qsc_fwd_equat_face_theta(phi, s, -q, area);
+        } else if (this.face === FACE_ENUM.BACK) {
+          phi = Math.acos(-q);
+          theta = qsc_fwd_equat_face_theta(phi, s, -r, area);
+        } else if (this.face === FACE_ENUM.LEFT) {
+          phi = Math.acos(-r);
+          theta = qsc_fwd_equat_face_theta(phi, s, q, area);
+        } else {
+          /* Impossible */
+          phi = theta = 0;
+          area.value = AREA_ENUM.AREA_0;
+        }
+      }
+
+      /* Compute mu and nu for the area of definition.
+       * For mu, see Eq. (3-21) in [OL76], but note the typos:
+       * compare with Eq. (3-14). For nu, see Eq. (3-38). */
+      mu = Math.atan((12 / SPI) * (theta + Math.acos(Math.sin(theta) * Math.cos(FORTPI)) - HALF_PI));
+      t = Math.sqrt((1 - Math.cos(phi)) / (Math.cos(mu) * Math.cos(mu)) / (1 - Math.cos(Math.atan(1 / Math.cos(theta)))));
+
+      /* Apply the result to the real area. */
+      if (area.value === AREA_ENUM.AREA_1) {
+        mu += HALF_PI;
+      } else if (area.value === AREA_ENUM.AREA_2) {
+        mu += SPI;
+      } else if (area.value === AREA_ENUM.AREA_3) {
+        mu += 1.5 * SPI;
+      }
+
+      /* Now compute x, y from mu and nu */
+      xy.x = t * Math.cos(mu);
+      xy.y = t * Math.sin(mu);
+      xy.x = xy.x * this.a + this.x0;
+      xy.y = xy.y * this.a + this.y0;
+
+      p.x = xy.x;
+      p.y = xy.y;
+      return p;
+    }
+
+    // QSC inverse equations--mapping x,y to lat/long
+    // -----------------------------------------------------------------
+    function inverse$26(p) {
+      var lp = {lam: 0, phi: 0};
+      var mu, nu, cosmu, tannu;
+      var tantheta, theta, cosphi, phi;
+      var t;
+      var area = {value: 0};
+
+      /* de-offset */
+      p.x = (p.x - this.x0) / this.a;
+      p.y = (p.y - this.y0) / this.a;
+
+      /* Convert the input x, y to the mu and nu angles as used by QSC.
+       * This depends on the area of the cube face. */
+      nu = Math.atan(Math.sqrt(p.x * p.x + p.y * p.y));
+      mu = Math.atan2(p.y, p.x);
+      if (p.x >= 0.0 && p.x >= Math.abs(p.y)) {
+        area.value = AREA_ENUM.AREA_0;
+      } else if (p.y >= 0.0 && p.y >= Math.abs(p.x)) {
+        area.value = AREA_ENUM.AREA_1;
+        mu -= HALF_PI;
+      } else if (p.x < 0.0 && -p.x >= Math.abs(p.y)) {
+        area.value = AREA_ENUM.AREA_2;
+        mu = (mu < 0.0 ? mu + SPI : mu - SPI);
+      } else {
+        area.value = AREA_ENUM.AREA_3;
+        mu += HALF_PI;
+      }
+
+      /* Compute phi and theta for the area of definition.
+       * The inverse projection is not described in the original paper, but some
+       * good hints can be found here (as of 2011-12-14):
+       * http://fits.gsfc.nasa.gov/fitsbits/saf.93/saf.9302
+       * (search for "Message-Id: <9302181759.AA25477 at fits.cv.nrao.edu>") */
+      t = (SPI / 12) * Math.tan(mu);
+      tantheta = Math.sin(t) / (Math.cos(t) - (1 / Math.sqrt(2)));
+      theta = Math.atan(tantheta);
+      cosmu = Math.cos(mu);
+      tannu = Math.tan(nu);
+      cosphi = 1 - cosmu * cosmu * tannu * tannu * (1 - Math.cos(Math.atan(1 / Math.cos(theta))));
+      if (cosphi < -1) {
+        cosphi = -1;
+      } else if (cosphi > +1) {
+        cosphi = +1;
+      }
+
+      /* Apply the result to the real area on the cube face.
+       * For the top and bottom face, we can compute phi and lam directly.
+       * For the other faces, we must use unit sphere cartesian coordinates
+       * as an intermediate step. */
+      if (this.face === FACE_ENUM.TOP) {
+        phi = Math.acos(cosphi);
+        lp.phi = HALF_PI - phi;
+        if (area.value === AREA_ENUM.AREA_0) {
+          lp.lam = theta + HALF_PI;
+        } else if (area.value === AREA_ENUM.AREA_1) {
+          lp.lam = (theta < 0.0 ? theta + SPI : theta - SPI);
+        } else if (area.value === AREA_ENUM.AREA_2) {
+          lp.lam = theta - HALF_PI;
+        } else /* area.value == AREA_ENUM.AREA_3 */ {
+          lp.lam = theta;
+        }
+      } else if (this.face === FACE_ENUM.BOTTOM) {
+        phi = Math.acos(cosphi);
+        lp.phi = phi - HALF_PI;
+        if (area.value === AREA_ENUM.AREA_0) {
+          lp.lam = -theta + HALF_PI;
+        } else if (area.value === AREA_ENUM.AREA_1) {
+          lp.lam = -theta;
+        } else if (area.value === AREA_ENUM.AREA_2) {
+          lp.lam = -theta - HALF_PI;
+        } else /* area.value == AREA_ENUM.AREA_3 */ {
+          lp.lam = (theta < 0.0 ? -theta - SPI : -theta + SPI);
+        }
+      } else {
+        /* Compute phi and lam via cartesian unit sphere coordinates. */
+        var q, r, s;
+        q = cosphi;
+        t = q * q;
+        if (t >= 1) {
+          s = 0;
+        } else {
+          s = Math.sqrt(1 - t) * Math.sin(theta);
+        }
+        t += s * s;
+        if (t >= 1) {
+          r = 0;
+        } else {
+          r = Math.sqrt(1 - t);
+        }
+        /* Rotate q,r,s into the correct area. */
+        if (area.value === AREA_ENUM.AREA_1) {
+          t = r;
+          r = -s;
+          s = t;
+        } else if (area.value === AREA_ENUM.AREA_2) {
+          r = -r;
+          s = -s;
+        } else if (area.value === AREA_ENUM.AREA_3) {
+          t = r;
+          r = s;
+          s = -t;
+        }
+        /* Rotate q,r,s into the correct cube face. */
+        if (this.face === FACE_ENUM.RIGHT) {
+          t = q;
+          q = -r;
+          r = t;
+        } else if (this.face === FACE_ENUM.BACK) {
+          q = -q;
+          r = -r;
+        } else if (this.face === FACE_ENUM.LEFT) {
+          t = q;
+          q = r;
+          r = -t;
+        }
+        /* Now compute phi and lam from the unit sphere coordinates. */
+        lp.phi = Math.acos(-s) - HALF_PI;
+        lp.lam = Math.atan2(r, q);
+        if (this.face === FACE_ENUM.RIGHT) {
+          lp.lam = qsc_shift_lon_origin(lp.lam, -HALF_PI);
+        } else if (this.face === FACE_ENUM.BACK) {
+          lp.lam = qsc_shift_lon_origin(lp.lam, -SPI);
+        } else if (this.face === FACE_ENUM.LEFT) {
+          lp.lam = qsc_shift_lon_origin(lp.lam, +HALF_PI);
+        }
+      }
+
+      /* Apply the shift from the sphere to the ellipsoid as described
+       * in [LK12]. */
+      if (this.es !== 0) {
+        var invert_sign;
+        var tanphi, xa;
+        invert_sign = (lp.phi < 0 ? 1 : 0);
+        tanphi = Math.tan(lp.phi);
+        xa = this.b / Math.sqrt(tanphi * tanphi + this.one_minus_f_squared);
+        lp.phi = Math.atan(Math.sqrt(this.a * this.a - xa * xa) / (this.one_minus_f * xa));
+        if (invert_sign) {
+          lp.phi = -lp.phi;
+        }
+      }
+
+      lp.lam += this.long0;
+      p.x = lp.lam;
+      p.y = lp.phi;
+      return p;
+    }
+
+    /* Helper function for forward projection: compute the theta angle
+     * and determine the area number. */
+    function qsc_fwd_equat_face_theta(phi, y, x, area) {
+      var theta;
+      if (phi < EPSLN) {
+        area.value = AREA_ENUM.AREA_0;
+        theta = 0.0;
+      } else {
+        theta = Math.atan2(y, x);
+        if (Math.abs(theta) <= FORTPI) {
+          area.value = AREA_ENUM.AREA_0;
+        } else if (theta > FORTPI && theta <= HALF_PI + FORTPI) {
+          area.value = AREA_ENUM.AREA_1;
+          theta -= HALF_PI;
+        } else if (theta > HALF_PI + FORTPI || theta <= -(HALF_PI + FORTPI)) {
+          area.value = AREA_ENUM.AREA_2;
+          theta = (theta >= 0.0 ? theta - SPI : theta + SPI);
+        } else {
+          area.value = AREA_ENUM.AREA_3;
+          theta += HALF_PI;
+        }
+      }
+      return theta;
+    }
+
+    /* Helper function: shift the longitude. */
+    function qsc_shift_lon_origin(lon, offset) {
+      var slon = lon + offset;
+      if (slon < -SPI) {
+        slon += TWO_PI;
+      } else if (slon > +SPI) {
+        slon -= TWO_PI;
+      }
+      return slon;
+    }
+
+    var names$28 = ["Quadrilateralized Spherical Cube", "Quadrilateralized_Spherical_Cube", "qsc"];
+    var qsc = {
+      init: init$27,
+      forward: forward$26,
+      inverse: inverse$26,
+      names: names$28
+    };
+
+    // Robinson projection
+    // Based on https://github.com/OSGeo/proj.4/blob/master/src/PJ_robin.c
+    // Polynomial coeficients from http://article.gmane.org/gmane.comp.gis.proj-4.devel/6039
+
+    var COEFS_X = [
+        [1.0000, 2.2199e-17, -7.15515e-05, 3.1103e-06],
+        [0.9986, -0.000482243, -2.4897e-05, -1.3309e-06],
+        [0.9954, -0.00083103, -4.48605e-05, -9.86701e-07],
+        [0.9900, -0.00135364, -5.9661e-05, 3.6777e-06],
+        [0.9822, -0.00167442, -4.49547e-06, -5.72411e-06],
+        [0.9730, -0.00214868, -9.03571e-05, 1.8736e-08],
+        [0.9600, -0.00305085, -9.00761e-05, 1.64917e-06],
+        [0.9427, -0.00382792, -6.53386e-05, -2.6154e-06],
+        [0.9216, -0.00467746, -0.00010457, 4.81243e-06],
+        [0.8962, -0.00536223, -3.23831e-05, -5.43432e-06],
+        [0.8679, -0.00609363, -0.000113898, 3.32484e-06],
+        [0.8350, -0.00698325, -6.40253e-05, 9.34959e-07],
+        [0.7986, -0.00755338, -5.00009e-05, 9.35324e-07],
+        [0.7597, -0.00798324, -3.5971e-05, -2.27626e-06],
+        [0.7186, -0.00851367, -7.01149e-05, -8.6303e-06],
+        [0.6732, -0.00986209, -0.000199569, 1.91974e-05],
+        [0.6213, -0.010418, 8.83923e-05, 6.24051e-06],
+        [0.5722, -0.00906601, 0.000182, 6.24051e-06],
+        [0.5322, -0.00677797, 0.000275608, 6.24051e-06]
+    ];
+
+    var COEFS_Y = [
+        [-5.20417e-18, 0.0124, 1.21431e-18, -8.45284e-11],
+        [0.0620, 0.0124, -1.26793e-09, 4.22642e-10],
+        [0.1240, 0.0124, 5.07171e-09, -1.60604e-09],
+        [0.1860, 0.0123999, -1.90189e-08, 6.00152e-09],
+        [0.2480, 0.0124002, 7.10039e-08, -2.24e-08],
+        [0.3100, 0.0123992, -2.64997e-07, 8.35986e-08],
+        [0.3720, 0.0124029, 9.88983e-07, -3.11994e-07],
+        [0.4340, 0.0123893, -3.69093e-06, -4.35621e-07],
+        [0.4958, 0.0123198, -1.02252e-05, -3.45523e-07],
+        [0.5571, 0.0121916, -1.54081e-05, -5.82288e-07],
+        [0.6176, 0.0119938, -2.41424e-05, -5.25327e-07],
+        [0.6769, 0.011713, -3.20223e-05, -5.16405e-07],
+        [0.7346, 0.0113541, -3.97684e-05, -6.09052e-07],
+        [0.7903, 0.0109107, -4.89042e-05, -1.04739e-06],
+        [0.8435, 0.0103431, -6.4615e-05, -1.40374e-09],
+        [0.8936, 0.00969686, -6.4636e-05, -8.547e-06],
+        [0.9394, 0.00840947, -0.000192841, -4.2106e-06],
+        [0.9761, 0.00616527, -0.000256, -4.2106e-06],
+        [1.0000, 0.00328947, -0.000319159, -4.2106e-06]
+    ];
+
+    var FXC = 0.8487;
+    var FYC = 1.3523;
+    var C1 = R2D/5; // rad to 5-degree interval
+    var RC1 = 1/C1;
+    var NODES = 18;
+
+    var poly3_val = function(coefs, x) {
+        return coefs[0] + x * (coefs[1] + x * (coefs[2] + x * coefs[3]));
+    };
+
+    var poly3_der = function(coefs, x) {
+        return coefs[1] + x * (2 * coefs[2] + x * 3 * coefs[3]);
+    };
+
+    function newton_rapshon(f_df, start, max_err, iters) {
+        var x = start;
+        for (; iters; --iters) {
+            var upd = f_df(x);
+            x -= upd;
+            if (Math.abs(upd) < max_err) {
+                break;
+            }
+        }
+        return x;
+    }
+
+    function init$28() {
+        this.x0 = this.x0 || 0;
+        this.y0 = this.y0 || 0;
+        this.long0 = this.long0 || 0;
+        this.es = 0;
+        this.title = this.title || "Robinson";
+    }
+
+    function forward$27(ll) {
+        var lon = adjust_lon(ll.x - this.long0);
+
+        var dphi = Math.abs(ll.y);
+        var i = Math.floor(dphi * C1);
+        if (i < 0) {
+            i = 0;
+        } else if (i >= NODES) {
+            i = NODES - 1;
+        }
+        dphi = R2D * (dphi - RC1 * i);
+        var xy = {
+            x: poly3_val(COEFS_X[i], dphi) * lon,
+            y: poly3_val(COEFS_Y[i], dphi)
+        };
+        if (ll.y < 0) {
+            xy.y = -xy.y;
+        }
+
+        xy.x = xy.x * this.a * FXC + this.x0;
+        xy.y = xy.y * this.a * FYC + this.y0;
+        return xy;
+    }
+
+    function inverse$27(xy) {
+        var ll = {
+            x: (xy.x - this.x0) / (this.a * FXC),
+            y: Math.abs(xy.y - this.y0) / (this.a * FYC)
+        };
+
+        if (ll.y >= 1) { // pathologic case
+            ll.x /= COEFS_X[NODES][0];
+            ll.y = xy.y < 0 ? -HALF_PI : HALF_PI;
+        } else {
+            // find table interval
+            var i = Math.floor(ll.y * NODES);
+            if (i < 0) {
+                i = 0;
+            } else if (i >= NODES) {
+                i = NODES - 1;
+            }
+            for (;;) {
+                if (COEFS_Y[i][0] > ll.y) {
+                    --i;
+                } else if (COEFS_Y[i+1][0] <= ll.y) {
+                    ++i;
+                } else {
+                    break;
+                }
+            }
+            // linear interpolation in 5 degree interval
+            var coefs = COEFS_Y[i];
+            var t = 5 * (ll.y - coefs[0]) / (COEFS_Y[i+1][0] - coefs[0]);
+            // find t so that poly3_val(coefs, t) = ll.y
+            t = newton_rapshon(function(x) {
+                return (poly3_val(coefs, x) - ll.y) / poly3_der(coefs, x);
+            }, t, EPSLN, 100);
+
+            ll.x /= poly3_val(COEFS_X[i], t);
+            ll.y = (5 * i + t) * D2R;
+            if (xy.y < 0) {
+                ll.y = -ll.y;
+            }
+        }
+
+        ll.x = adjust_lon(ll.x + this.long0);
+        return ll;
+    }
+
+    var names$29 = ["Robinson", "robin"];
+    var robin = {
+      init: init$28,
+      forward: forward$27,
+      inverse: inverse$27,
+      names: names$29
+    };
+
+    function init$29() {
+        this.name = 'geocent';
+
+    }
+
+    function forward$28(p) {
+        var point = geodeticToGeocentric(p, this.es, this.a);
+        return point;
+    }
+
+    function inverse$28(p) {
+        var point = geocentricToGeodetic(p, this.es, this.a, this.b);
+        return point;
+    }
+
+    var names$30 = ["Geocentric", 'geocentric', "geocent", "Geocent"];
+    var geocent = {
+        init: init$29,
+        forward: forward$28,
+        inverse: inverse$28,
+        names: names$30
+    };
+
+    var mode = {
+      N_POLE: 0,
+      S_POLE: 1,
+      EQUIT: 2,
+      OBLIQ: 3
+    };
+
+    var params = {
+      h:     { def: 100000, num: true },           // default is Karman line, no default in PROJ.7
+      azi:   { def: 0, num: true, degrees: true }, // default is North
+      tilt:  { def: 0, num: true, degrees: true }, // default is Nadir
+      long0: { def: 0, num: true },                // default is Greenwich, conversion to rad is automatic
+      lat0:  { def: 0, num: true }                 // default is Equator, conversion to rad is automatic
+    };
+
+    function init$30() {
+      Object.keys(params).forEach(function (p) {
+        if (typeof this[p] === "undefined") {
+          this[p] = params[p].def;
+        } else if (params[p].num && isNaN(this[p])) {
+          throw new Error("Invalid parameter value, must be numeric " + p + " = " + this[p]);
+        } else if (params[p].num) {
+          this[p] = parseFloat(this[p]);
+        }
+        if (params[p].degrees) {
+          this[p] = this[p] * D2R;
+        }
+      }.bind(this));
+
+      if (Math.abs((Math.abs(this.lat0) - HALF_PI)) < EPSLN) {
+        this.mode = this.lat0 < 0 ? mode.S_POLE : mode.N_POLE;
+      } else if (Math.abs(this.lat0) < EPSLN) {
+        this.mode = mode.EQUIT;
+      } else {
+        this.mode = mode.OBLIQ;
+        this.sinph0 = Math.sin(this.lat0);
+        this.cosph0 = Math.cos(this.lat0);
+      }
+
+      this.pn1 = this.h / this.a;  // Normalize relative to the Earth's radius
+
+      if (this.pn1 <= 0 || this.pn1 > 1e10) {
+        throw new Error("Invalid height");
+      }
+      
+      this.p = 1 + this.pn1;
+      this.rp = 1 / this.p;
+      this.h1 = 1 / this.pn1;
+      this.pfact = (this.p + 1) * this.h1;
+      this.es = 0;
+
+      var omega = this.tilt;
+      var gamma = this.azi;
+      this.cg = Math.cos(gamma);
+      this.sg = Math.sin(gamma);
+      this.cw = Math.cos(omega);
+      this.sw = Math.sin(omega);
+    }
+
+    function forward$29(p) {
+      p.x -= this.long0;
+      var sinphi = Math.sin(p.y);
+      var cosphi = Math.cos(p.y);
+      var coslam = Math.cos(p.x);
+      var x, y;
+      switch (this.mode) {
+        case mode.OBLIQ:
+          y = this.sinph0 * sinphi + this.cosph0 * cosphi * coslam;
+          break;
+        case mode.EQUIT:
+          y = cosphi * coslam;
+          break;
+        case mode.S_POLE:
+          y = -sinphi;
+          break;
+        case mode.N_POLE:
+          y = sinphi;
+          break;
+      }
+      y = this.pn1 / (this.p - y);
+      x = y * cosphi * Math.sin(p.x);
+
+      switch (this.mode) {
+        case mode.OBLIQ:
+          y *= this.cosph0 * sinphi - this.sinph0 * cosphi * coslam;
+          break;
+        case mode.EQUIT:
+          y *= sinphi;
+          break;
+        case mode.N_POLE:
+          y *= -(cosphi * coslam);
+          break;
+        case mode.S_POLE:
+          y *= cosphi * coslam;
+          break;
+      }
+
+      // Tilt 
+      var yt, ba;
+      yt = y * this.cg + x * this.sg;
+      ba = 1 / (yt * this.sw * this.h1 + this.cw);
+      x = (x * this.cg - y * this.sg) * this.cw * ba;
+      y = yt * ba;
+
+      p.x = x * this.a;
+      p.y = y * this.a;
+      return p;
+    }
+
+    function inverse$29(p) {
+      p.x /= this.a;
+      p.y /= this.a;
+      var r = { x: p.x, y: p.y };
+
+      // Un-Tilt
+      var bm, bq, yt;
+      yt = 1 / (this.pn1 - p.y * this.sw);
+      bm = this.pn1 * p.x * yt;
+      bq = this.pn1 * p.y * this.cw * yt;
+      p.x = bm * this.cg + bq * this.sg;
+      p.y = bq * this.cg - bm * this.sg;
+
+      var rh = hypot(p.x, p.y);
+      if (Math.abs(rh) < EPSLN) {
+        r.x = 0;
+        r.y = p.y;
+      } else {
+        var cosz, sinz;
+        sinz = 1 - rh * rh * this.pfact;
+        sinz = (this.p - Math.sqrt(sinz)) / (this.pn1 / rh + rh / this.pn1);
+        cosz = Math.sqrt(1 - sinz * sinz);
+        switch (this.mode) {
+          case mode.OBLIQ:
+            r.y = Math.asin(cosz * this.sinph0 + p.y * sinz * this.cosph0 / rh);
+            p.y = (cosz - this.sinph0 * Math.sin(r.y)) * rh;
+            p.x *= sinz * this.cosph0;
+            break;
+          case mode.EQUIT:
+            r.y = Math.asin(p.y * sinz / rh);
+            p.y = cosz * rh;
+            p.x *= sinz;
+            break;
+          case mode.N_POLE:
+            r.y = Math.asin(cosz);
+            p.y = -p.y;
+            break;
+          case mode.S_POLE:
+            r.y = -Math.asin(cosz);
+            break;
+        }
+        r.x = Math.atan2(p.x, p.y);
+      }
+
+      p.x = r.x + this.long0;
+      p.y = r.y;
+      return p;
+    }
+
+    var names$31 = ["Tilted_Perspective", "tpers"];
+    var tpers = {
+      init: init$30,
+      forward: forward$29,
+      inverse: inverse$29,
+      names: names$31
+    };
+
+    function init$31() {
+        this.flip_axis = (this.sweep === 'x' ? 1 : 0);
+        this.h = Number(this.h);
+        this.radius_g_1 = this.h / this.a;
+
+        if (this.radius_g_1 <= 0 || this.radius_g_1 > 1e10) {
+            throw new Error();
+        }
+
+        this.radius_g = 1.0 + this.radius_g_1;
+        this.C = this.radius_g * this.radius_g - 1.0;
+
+        if (this.es !== 0.0) {
+            var one_es = 1.0 - this.es;
+            var rone_es = 1 / one_es;
+
+            this.radius_p = Math.sqrt(one_es);
+            this.radius_p2 = one_es;
+            this.radius_p_inv2 = rone_es;
+
+            this.shape = 'ellipse'; // Use as a condition in the forward and inverse functions.
+        } else {
+            this.radius_p = 1.0;
+            this.radius_p2 = 1.0;
+            this.radius_p_inv2 = 1.0;
+
+            this.shape = 'sphere';  // Use as a condition in the forward and inverse functions.
+        }
+
+        if (!this.title) {
+            this.title = "Geostationary Satellite View";
+        }
+    }
+
+    function forward$30(p) {
+        var lon = p.x;
+        var lat = p.y;
+        var tmp, v_x, v_y, v_z;
+        lon = lon - this.long0;
+
+        if (this.shape === 'ellipse') {
+            lat = Math.atan(this.radius_p2 * Math.tan(lat));
+            var r = this.radius_p / hypot(this.radius_p * Math.cos(lat), Math.sin(lat));
+
+            v_x = r * Math.cos(lon) * Math.cos(lat);
+            v_y = r * Math.sin(lon) * Math.cos(lat);
+            v_z = r * Math.sin(lat);
+
+            if (((this.radius_g - v_x) * v_x - v_y * v_y - v_z * v_z * this.radius_p_inv2) < 0.0) {
+                p.x = Number.NaN;
+                p.y = Number.NaN;
+                return p;
+            }
+
+            tmp = this.radius_g - v_x;
+            if (this.flip_axis) {
+                p.x = this.radius_g_1 * Math.atan(v_y / hypot(v_z, tmp));
+                p.y = this.radius_g_1 * Math.atan(v_z / tmp);
+            } else {
+                p.x = this.radius_g_1 * Math.atan(v_y / tmp);
+                p.y = this.radius_g_1 * Math.atan(v_z / hypot(v_y, tmp));
+            }
+        } else if (this.shape === 'sphere') {
+            tmp = Math.cos(lat);
+            v_x = Math.cos(lon) * tmp;
+            v_y = Math.sin(lon) * tmp;
+            v_z = Math.sin(lat);
+            tmp = this.radius_g - v_x;
+
+            if (this.flip_axis) {
+                p.x = this.radius_g_1 * Math.atan(v_y / hypot(v_z, tmp));
+                p.y = this.radius_g_1 * Math.atan(v_z / tmp);
+            } else {
+                p.x = this.radius_g_1 * Math.atan(v_y / tmp);
+                p.y = this.radius_g_1 * Math.atan(v_z / hypot(v_y, tmp));
+            }
+        }
+        p.x = p.x * this.a;
+        p.y = p.y * this.a;
+        return p;
+    }
+
+    function inverse$30(p) {
+        var v_x = -1.0;
+        var v_y = 0.0;
+        var v_z = 0.0;
+        var a, b, det, k;
+
+        p.x = p.x / this.a;
+        p.y = p.y / this.a;
+
+        if (this.shape === 'ellipse') {
+            if (this.flip_axis) {
+                v_z = Math.tan(p.y / this.radius_g_1);
+                v_y = Math.tan(p.x / this.radius_g_1) * hypot(1.0, v_z);
+            } else {
+                v_y = Math.tan(p.x / this.radius_g_1);
+                v_z = Math.tan(p.y / this.radius_g_1) * hypot(1.0, v_y);
+            }
+
+            var v_zp = v_z / this.radius_p;
+            a = v_y * v_y + v_zp * v_zp + v_x * v_x;
+            b = 2 * this.radius_g * v_x;
+            det = (b * b) - 4 * a * this.C;
+
+            if (det < 0.0) {
+                p.x = Number.NaN;
+                p.y = Number.NaN;
+                return p;
+            }
+
+            k = (-b - Math.sqrt(det)) / (2.0 * a);
+            v_x = this.radius_g + k * v_x;
+            v_y *= k;
+            v_z *= k;
+
+            p.x = Math.atan2(v_y, v_x);
+            p.y = Math.atan(v_z * Math.cos(p.x) / v_x);
+            p.y = Math.atan(this.radius_p_inv2 * Math.tan(p.y));
+        } else if (this.shape === 'sphere') {
+            if (this.flip_axis) {
+                v_z = Math.tan(p.y / this.radius_g_1);
+                v_y = Math.tan(p.x / this.radius_g_1) * Math.sqrt(1.0 + v_z * v_z);
+            } else {
+                v_y = Math.tan(p.x / this.radius_g_1);
+                v_z = Math.tan(p.y / this.radius_g_1) * Math.sqrt(1.0 + v_y * v_y);
+            }
+
+            a = v_y * v_y + v_z * v_z + v_x * v_x;
+            b = 2 * this.radius_g * v_x;
+            det = (b * b) - 4 * a * this.C;
+            if (det < 0.0) {
+                p.x = Number.NaN;
+                p.y = Number.NaN;
+                return p;
+            }
+
+            k = (-b - Math.sqrt(det)) / (2.0 * a);
+            v_x = this.radius_g + k * v_x;
+            v_y *= k;
+            v_z *= k;
+
+            p.x = Math.atan2(v_y, v_x);
+            p.y = Math.atan(v_z * Math.cos(p.x) / v_x);
+        }
+        p.x = p.x + this.long0;
+        return p;
+    }
+
+    var names$32 = ["Geostationary Satellite View", "Geostationary_Satellite", "geos"];
+    var geos = {
+        init: init$31,
+        forward: forward$30,
+        inverse: inverse$30,
+        names: names$32,
+    };
+
+    var includedProjections = function(proj4){
+      proj4.Proj.projections.add(tmerc);
+      proj4.Proj.projections.add(etmerc);
+      proj4.Proj.projections.add(utm);
+      proj4.Proj.projections.add(sterea);
+      proj4.Proj.projections.add(stere);
+      proj4.Proj.projections.add(somerc);
+      proj4.Proj.projections.add(omerc);
+      proj4.Proj.projections.add(lcc);
+      proj4.Proj.projections.add(krovak);
+      proj4.Proj.projections.add(cass);
+      proj4.Proj.projections.add(laea);
+      proj4.Proj.projections.add(aea);
+      proj4.Proj.projections.add(gnom);
+      proj4.Proj.projections.add(cea);
+      proj4.Proj.projections.add(eqc);
+      proj4.Proj.projections.add(poly);
+      proj4.Proj.projections.add(nzmg);
+      proj4.Proj.projections.add(mill);
+      proj4.Proj.projections.add(sinu);
+      proj4.Proj.projections.add(moll);
+      proj4.Proj.projections.add(eqdc);
+      proj4.Proj.projections.add(vandg);
+      proj4.Proj.projections.add(aeqd);
+      proj4.Proj.projections.add(ortho);
+      proj4.Proj.projections.add(qsc);
+      proj4.Proj.projections.add(robin);
+      proj4.Proj.projections.add(geocent);
+      proj4.Proj.projections.add(tpers);
+      proj4.Proj.projections.add(geos);
+    };
+
+    proj4$1.defaultDatum = 'WGS84'; //default datum
+    proj4$1.Proj = Projection;
+    proj4$1.WGS84 = new proj4$1.Proj('WGS84');
+    proj4$1.Point = Point;
+    proj4$1.toPoint = toPoint;
+    proj4$1.defs = defs;
+    proj4$1.nadgrid = nadgrid;
+    proj4$1.transform = transform;
+    proj4$1.mgrs = mgrs;
+    proj4$1.version = '2.8.0';
+    includedProjections(proj4$1);
+
+    return proj4$1;
+
+})));
+
+},{}],203:[function(require,module,exports){
 !function(t,i){"object"==typeof exports&&"undefined"!=typeof module?module.exports=i():"function"==typeof define&&define.amd?define(i):(t=t||self).RBush=i()}(this,function(){"use strict";function t(t,r,e,a,h){!function t(n,r,e,a,h){for(;a>e;){if(a-e>600){var o=a-e+1,s=r-e+1,l=Math.log(o),f=.5*Math.exp(2*l/3),u=.5*Math.sqrt(l*f*(o-f)/o)*(s-o/2<0?-1:1),m=Math.max(e,Math.floor(r-s*f/o+u)),c=Math.min(a,Math.floor(r+(o-s)*f/o+u));t(n,r,m,c,h)}var p=n[r],d=e,x=a;for(i(n,e,r),h(n[a],p)>0&&i(n,e,a);d<x;){for(i(n,d,x),d++,x--;h(n[d],p)<0;)d++;for(;h(n[x],p)>0;)x--}0===h(n[e],p)?i(n,e,x):i(n,++x,a),x<=r&&(e=x+1),r<=x&&(a=x-1)}}(t,r,e||0,a||t.length-1,h||n)}function i(t,i,n){var r=t[i];t[i]=t[n],t[n]=r}function n(t,i){return t<i?-1:t>i?1:0}var r=function(t){void 0===t&&(t=9),this._maxEntries=Math.max(4,t),this._minEntries=Math.max(2,Math.ceil(.4*this._maxEntries)),this.clear()};function e(t,i,n){if(!n)return i.indexOf(t);for(var r=0;r<i.length;r++)if(n(t,i[r]))return r;return-1}function a(t,i){h(t,0,t.children.length,i,t)}function h(t,i,n,r,e){e||(e=p(null)),e.minX=1/0,e.minY=1/0,e.maxX=-1/0,e.maxY=-1/0;for(var a=i;a<n;a++){var h=t.children[a];o(e,t.leaf?r(h):h)}return e}function o(t,i){return t.minX=Math.min(t.minX,i.minX),t.minY=Math.min(t.minY,i.minY),t.maxX=Math.max(t.maxX,i.maxX),t.maxY=Math.max(t.maxY,i.maxY),t}function s(t,i){return t.minX-i.minX}function l(t,i){return t.minY-i.minY}function f(t){return(t.maxX-t.minX)*(t.maxY-t.minY)}function u(t){return t.maxX-t.minX+(t.maxY-t.minY)}function m(t,i){return t.minX<=i.minX&&t.minY<=i.minY&&i.maxX<=t.maxX&&i.maxY<=t.maxY}function c(t,i){return i.minX<=t.maxX&&i.minY<=t.maxY&&i.maxX>=t.minX&&i.maxY>=t.minY}function p(t){return{children:t,height:1,leaf:!0,minX:1/0,minY:1/0,maxX:-1/0,maxY:-1/0}}function d(i,n,r,e,a){for(var h=[n,r];h.length;)if(!((r=h.pop())-(n=h.pop())<=e)){var o=n+Math.ceil((r-n)/e/2)*e;t(i,o,n,r,a),h.push(n,o,o,r)}}return r.prototype.all=function(){return this._all(this.data,[])},r.prototype.search=function(t){var i=this.data,n=[];if(!c(t,i))return n;for(var r=this.toBBox,e=[];i;){for(var a=0;a<i.children.length;a++){var h=i.children[a],o=i.leaf?r(h):h;c(t,o)&&(i.leaf?n.push(h):m(t,o)?this._all(h,n):e.push(h))}i=e.pop()}return n},r.prototype.collides=function(t){var i=this.data;if(!c(t,i))return!1;for(var n=[];i;){for(var r=0;r<i.children.length;r++){var e=i.children[r],a=i.leaf?this.toBBox(e):e;if(c(t,a)){if(i.leaf||m(t,a))return!0;n.push(e)}}i=n.pop()}return!1},r.prototype.load=function(t){if(!t||!t.length)return this;if(t.length<this._minEntries){for(var i=0;i<t.length;i++)this.insert(t[i]);return this}var n=this._build(t.slice(),0,t.length-1,0);if(this.data.children.length)if(this.data.height===n.height)this._splitRoot(this.data,n);else{if(this.data.height<n.height){var r=this.data;this.data=n,n=r}this._insert(n,this.data.height-n.height-1,!0)}else this.data=n;return this},r.prototype.insert=function(t){return t&&this._insert(t,this.data.height-1),this},r.prototype.clear=function(){return this.data=p([]),this},r.prototype.remove=function(t,i){if(!t)return this;for(var n,r,a,h=this.data,o=this.toBBox(t),s=[],l=[];h||s.length;){if(h||(h=s.pop(),r=s[s.length-1],n=l.pop(),a=!0),h.leaf){var f=e(t,h.children,i);if(-1!==f)return h.children.splice(f,1),s.push(h),this._condense(s),this}a||h.leaf||!m(h,o)?r?(n++,h=r.children[n],a=!1):h=null:(s.push(h),l.push(n),n=0,r=h,h=h.children[0])}return this},r.prototype.toBBox=function(t){return t},r.prototype.compareMinX=function(t,i){return t.minX-i.minX},r.prototype.compareMinY=function(t,i){return t.minY-i.minY},r.prototype.toJSON=function(){return this.data},r.prototype.fromJSON=function(t){return this.data=t,this},r.prototype._all=function(t,i){for(var n=[];t;)t.leaf?i.push.apply(i,t.children):n.push.apply(n,t.children),t=n.pop();return i},r.prototype._build=function(t,i,n,r){var e,h=n-i+1,o=this._maxEntries;if(h<=o)return a(e=p(t.slice(i,n+1)),this.toBBox),e;r||(r=Math.ceil(Math.log(h)/Math.log(o)),o=Math.ceil(h/Math.pow(o,r-1))),(e=p([])).leaf=!1,e.height=r;var s=Math.ceil(h/o),l=s*Math.ceil(Math.sqrt(o));d(t,i,n,l,this.compareMinX);for(var f=i;f<=n;f+=l){var u=Math.min(f+l-1,n);d(t,f,u,s,this.compareMinY);for(var m=f;m<=u;m+=s){var c=Math.min(m+s-1,u);e.children.push(this._build(t,m,c,r-1))}}return a(e,this.toBBox),e},r.prototype._chooseSubtree=function(t,i,n,r){for(;r.push(i),!i.leaf&&r.length-1!==n;){for(var e=1/0,a=1/0,h=void 0,o=0;o<i.children.length;o++){var s=i.children[o],l=f(s),u=(m=t,c=s,(Math.max(c.maxX,m.maxX)-Math.min(c.minX,m.minX))*(Math.max(c.maxY,m.maxY)-Math.min(c.minY,m.minY))-l);u<a?(a=u,e=l<e?l:e,h=s):u===a&&l<e&&(e=l,h=s)}i=h||i.children[0]}var m,c;return i},r.prototype._insert=function(t,i,n){var r=n?t:this.toBBox(t),e=[],a=this._chooseSubtree(r,this.data,i,e);for(a.children.push(t),o(a,r);i>=0&&e[i].children.length>this._maxEntries;)this._split(e,i),i--;this._adjustParentBBoxes(r,e,i)},r.prototype._split=function(t,i){var n=t[i],r=n.children.length,e=this._minEntries;this._chooseSplitAxis(n,e,r);var h=this._chooseSplitIndex(n,e,r),o=p(n.children.splice(h,n.children.length-h));o.height=n.height,o.leaf=n.leaf,a(n,this.toBBox),a(o,this.toBBox),i?t[i-1].children.push(o):this._splitRoot(n,o)},r.prototype._splitRoot=function(t,i){this.data=p([t,i]),this.data.height=t.height+1,this.data.leaf=!1,a(this.data,this.toBBox)},r.prototype._chooseSplitIndex=function(t,i,n){for(var r,e,a,o,s,l,u,m=1/0,c=1/0,p=i;p<=n-i;p++){var d=h(t,0,p,this.toBBox),x=h(t,p,n,this.toBBox),v=(e=d,a=x,o=void 0,s=void 0,l=void 0,u=void 0,o=Math.max(e.minX,a.minX),s=Math.max(e.minY,a.minY),l=Math.min(e.maxX,a.maxX),u=Math.min(e.maxY,a.maxY),Math.max(0,l-o)*Math.max(0,u-s)),M=f(d)+f(x);v<m?(m=v,r=p,c=M<c?M:c):v===m&&M<c&&(c=M,r=p)}return r||n-i},r.prototype._chooseSplitAxis=function(t,i,n){var r=t.leaf?this.compareMinX:s,e=t.leaf?this.compareMinY:l;this._allDistMargin(t,i,n,r)<this._allDistMargin(t,i,n,e)&&t.children.sort(r)},r.prototype._allDistMargin=function(t,i,n,r){t.children.sort(r);for(var e=this.toBBox,a=h(t,0,i,e),s=h(t,n-i,n,e),l=u(a)+u(s),f=i;f<n-i;f++){var m=t.children[f];o(a,t.leaf?e(m):m),l+=u(a)}for(var c=n-i-1;c>=i;c--){var p=t.children[c];o(s,t.leaf?e(p):p),l+=u(s)}return l},r.prototype._adjustParentBBoxes=function(t,i,n){for(var r=n;r>=0;r--)o(i[r],t)},r.prototype._condense=function(t){for(var i=t.length-1,n=void 0;i>=0;i--)0===t[i].children.length?i>0?(n=t[i-1].children).splice(n.indexOf(t[i]),1):this.clear():a(t[i],this.toBBox)},r});
 
-},{}],199:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
@@ -37571,7 +45357,7 @@ BitReader.prototype.pi = function() {
 module.exports = BitReader;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":219}],200:[function(require,module,exports){
+},{"buffer":224}],205:[function(require,module,exports){
 /* CRC32, used in Bzip2 implementation.
  * This is a port of CRC32.java from the jbzip2 implementation at
  *   https://code.google.com/p/jbzip2
@@ -37677,7 +45463,7 @@ module.exports = (function() {
   return CRC32;
 })();
 
-},{}],201:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
@@ -38286,7 +46072,7 @@ Bunzip.license = pjson.license;
 module.exports = Bunzip;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../package.json":203,"./bitreader":199,"./crc32":200,"./stream":202,"buffer":219}],202:[function(require,module,exports){
+},{"../package.json":208,"./bitreader":204,"./crc32":205,"./stream":207,"buffer":224}],207:[function(require,module,exports){
 /* very simple input/output stream interface */
 var Stream = function() {
 };
@@ -38330,7 +46116,7 @@ Stream.prototype.flush = function() {
 
 module.exports = Stream;
 
-},{}],203:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 module.exports={
   "name": "seek-bzip",
   "version": "2.0.0",
@@ -38366,7 +46152,7 @@ module.exports={
   }
 }
 
-},{}],204:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 var simplify = require('simplify-geometry')
 
 module.exports = function (geojson, tolerance, dontClone) {
@@ -38409,7 +46195,7 @@ function simplifyFeatureCollection (fc, tolerance) {
   return fc
 }
 
-},{"simplify-geometry":205}],205:[function(require,module,exports){
+},{"simplify-geometry":210}],210:[function(require,module,exports){
 var Line = require('./line');
 
 var simplifyGeometry = function(points, tolerance){
@@ -38452,7 +46238,7 @@ var simplifyGeometry = function(points, tolerance){
 
 module.exports = simplifyGeometry;
 
-},{"./line":206}],206:[function(require,module,exports){
+},{"./line":211}],211:[function(require,module,exports){
 var Line = function(p1, p2){
 
   this.p1 = p1;
@@ -38539,7 +46325,7 @@ Line.prototype.perpendicularDistance = function(point){
 
 module.exports = Line;
 
-},{}],207:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 (function (process){(function (){
 var Stream = require('stream')
 
@@ -38651,7 +46437,7 @@ function through (write, end, opts) {
 
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":251,"stream":253}],208:[function(require,module,exports){
+},{"_process":256,"stream":258}],213:[function(require,module,exports){
 const radarStations = {
 	"AWPA2": [
 		"99507",
@@ -39696,7 +47482,9 @@ const radarStations = {
 }
 
 module.exports = radarStations;
-},{}],209:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
+
+},{}],215:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -40206,7 +47994,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":238,"util/":212}],210:[function(require,module,exports){
+},{"object-assign":243,"util/":218}],216:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -40231,14 +48019,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],211:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],212:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -40828,7 +48616,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":211,"_process":251,"inherits":210}],213:[function(require,module,exports){
+},{"./support/isBuffer":217,"_process":256,"inherits":216}],219:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -40859,7 +48647,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],214:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -41011,9 +48799,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],215:[function(require,module,exports){
-
-},{}],216:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
+arguments[4][214][0].apply(exports,arguments)
+},{"dup":214}],222:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -41425,7 +49213,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":251,"assert":209,"buffer":219,"pako/lib/zlib/constants":241,"pako/lib/zlib/deflate.js":243,"pako/lib/zlib/inflate.js":245,"pako/lib/zlib/zstream":249}],217:[function(require,module,exports){
+},{"_process":256,"assert":215,"buffer":224,"pako/lib/zlib/constants":246,"pako/lib/zlib/deflate.js":248,"pako/lib/zlib/inflate.js":250,"pako/lib/zlib/zstream":254}],223:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -42037,9 +49825,7 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":216,"_process":251,"assert":209,"buffer":219,"stream":253,"util":272}],218:[function(require,module,exports){
-arguments[4][215][0].apply(exports,arguments)
-},{"dup":215}],219:[function(require,module,exports){
+},{"./binding":222,"_process":256,"assert":215,"buffer":224,"stream":258,"util":277}],224:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -43820,7 +51606,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":214,"buffer":219,"ieee754":232}],220:[function(require,module,exports){
+},{"base64-js":220,"buffer":224,"ieee754":237}],225:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -43837,7 +51623,7 @@ module.exports = function callBoundIntrinsic(name, allowMissing) {
 	return intrinsic;
 };
 
-},{"./":221,"get-intrinsic":227}],221:[function(require,module,exports){
+},{"./":226,"get-intrinsic":232}],226:[function(require,module,exports){
 'use strict';
 
 var bind = require('function-bind');
@@ -43886,7 +51672,7 @@ if ($defineProperty) {
 	module.exports.apply = applyBind;
 }
 
-},{"function-bind":226,"get-intrinsic":227}],222:[function(require,module,exports){
+},{"function-bind":231,"get-intrinsic":232}],227:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -43903,7 +51689,7 @@ if ($gOPD) {
 
 module.exports = $gOPD;
 
-},{"get-intrinsic":227}],223:[function(require,module,exports){
+},{"get-intrinsic":232}],228:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -44402,7 +52188,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
   }
 }
 
-},{}],224:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 'use strict';
 
 var isCallable = require('is-callable');
@@ -44466,7 +52252,7 @@ var forEach = function forEach(list, iterator, thisArg) {
 
 module.exports = forEach;
 
-},{"is-callable":235}],225:[function(require,module,exports){
+},{"is-callable":240}],230:[function(require,module,exports){
 'use strict';
 
 /* eslint no-invalid-this: 1 */
@@ -44520,14 +52306,14 @@ module.exports = function bind(that) {
     return bound;
 };
 
-},{}],226:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
 
 module.exports = Function.prototype.bind || implementation;
 
-},{"./implementation":225}],227:[function(require,module,exports){
+},{"./implementation":230}],232:[function(require,module,exports){
 'use strict';
 
 var undefined;
@@ -44863,7 +52649,7 @@ module.exports = function GetIntrinsic(name, allowMissing) {
 	return value;
 };
 
-},{"function-bind":226,"has":231,"has-symbols":228}],228:[function(require,module,exports){
+},{"function-bind":231,"has":236,"has-symbols":233}],233:[function(require,module,exports){
 'use strict';
 
 var origSymbol = typeof Symbol !== 'undefined' && Symbol;
@@ -44878,7 +52664,7 @@ module.exports = function hasNativeSymbols() {
 	return hasSymbolSham();
 };
 
-},{"./shams":229}],229:[function(require,module,exports){
+},{"./shams":234}],234:[function(require,module,exports){
 'use strict';
 
 /* eslint complexity: [2, 18], max-statements: [2, 33] */
@@ -44922,7 +52708,7 @@ module.exports = function hasSymbols() {
 	return true;
 };
 
-},{}],230:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 'use strict';
 
 var hasSymbols = require('has-symbols/shams');
@@ -44931,14 +52717,14 @@ module.exports = function hasToStringTagShams() {
 	return hasSymbols() && !!Symbol.toStringTag;
 };
 
-},{"has-symbols/shams":229}],231:[function(require,module,exports){
+},{"has-symbols/shams":234}],236:[function(require,module,exports){
 'use strict';
 
 var bind = require('function-bind');
 
 module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
 
-},{"function-bind":226}],232:[function(require,module,exports){
+},{"function-bind":231}],237:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -45025,7 +52811,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],233:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -45054,7 +52840,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],234:[function(require,module,exports){
+},{}],239:[function(require,module,exports){
 'use strict';
 
 var hasToStringTag = require('has-tostringtag/shams')();
@@ -45089,7 +52875,7 @@ isStandardArguments.isLegacyArguments = isLegacyArguments; // for tests
 
 module.exports = supportsStandardArguments ? isStandardArguments : isLegacyArguments;
 
-},{"call-bind/callBound":220,"has-tostringtag/shams":230}],235:[function(require,module,exports){
+},{"call-bind/callBound":225,"has-tostringtag/shams":235}],240:[function(require,module,exports){
 'use strict';
 
 var fnToStr = Function.prototype.toString;
@@ -45192,7 +52978,7 @@ module.exports = reflectApply
 		return tryFunctionObject(value);
 	};
 
-},{}],236:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 'use strict';
 
 var toStr = Object.prototype.toString;
@@ -45232,7 +53018,7 @@ module.exports = function isGeneratorFunction(fn) {
 	return getProto(fn) === GeneratorFunction;
 };
 
-},{"has-tostringtag/shams":230}],237:[function(require,module,exports){
+},{"has-tostringtag/shams":235}],242:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -45296,7 +53082,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":213,"call-bind/callBound":220,"es-abstract/helpers/getOwnPropertyDescriptor":222,"for-each":224,"has-tostringtag/shams":230}],238:[function(require,module,exports){
+},{"available-typed-arrays":219,"call-bind/callBound":225,"es-abstract/helpers/getOwnPropertyDescriptor":227,"for-each":229,"has-tostringtag/shams":235}],243:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -45388,7 +53174,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],239:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 'use strict';
 
 
@@ -45495,7 +53281,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],240:[function(require,module,exports){
+},{}],245:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -45548,7 +53334,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],241:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -45618,7 +53404,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],242:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -45679,7 +53465,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],243:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -47555,7 +55341,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":239,"./adler32":240,"./crc32":242,"./messages":247,"./trees":248}],244:[function(require,module,exports){
+},{"../utils/common":244,"./adler32":245,"./crc32":247,"./messages":252,"./trees":253}],249:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -47902,7 +55688,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],245:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -49460,7 +57246,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":239,"./adler32":240,"./crc32":242,"./inffast":244,"./inftrees":246}],246:[function(require,module,exports){
+},{"../utils/common":244,"./adler32":245,"./crc32":247,"./inffast":249,"./inftrees":251}],251:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -49805,9 +57591,9 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":239}],247:[function(require,module,exports){
-arguments[4][195][0].apply(exports,arguments)
-},{"dup":195}],248:[function(require,module,exports){
+},{"../utils/common":244}],252:[function(require,module,exports){
+arguments[4][199][0].apply(exports,arguments)
+},{"dup":199}],253:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -51031,9 +58817,9 @@ exports._tr_flush_block  = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":239}],249:[function(require,module,exports){
-arguments[4][197][0].apply(exports,arguments)
-},{"dup":197}],250:[function(require,module,exports){
+},{"../utils/common":244}],254:[function(require,module,exports){
+arguments[4][201][0].apply(exports,arguments)
+},{"dup":201}],255:[function(require,module,exports){
 (function (process){(function (){
 // 'path' module extracted from Node.js v8.11.1 (only the posix part)
 // transplited with Babel
@@ -51566,7 +59352,7 @@ posix.posix = posix;
 module.exports = posix;
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":251}],251:[function(require,module,exports){
+},{"_process":256}],256:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -51752,7 +59538,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],252:[function(require,module,exports){
+},{}],257:[function(require,module,exports){
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
 var buffer = require('buffer')
@@ -51819,7 +59605,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
   return buffer.SlowBuffer(size)
 }
 
-},{"buffer":219}],253:[function(require,module,exports){
+},{"buffer":224}],258:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -51950,7 +59736,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":223,"inherits":233,"readable-stream/lib/_stream_duplex.js":255,"readable-stream/lib/_stream_passthrough.js":256,"readable-stream/lib/_stream_readable.js":257,"readable-stream/lib/_stream_transform.js":258,"readable-stream/lib/_stream_writable.js":259,"readable-stream/lib/internal/streams/end-of-stream.js":263,"readable-stream/lib/internal/streams/pipeline.js":265}],254:[function(require,module,exports){
+},{"events":228,"inherits":238,"readable-stream/lib/_stream_duplex.js":260,"readable-stream/lib/_stream_passthrough.js":261,"readable-stream/lib/_stream_readable.js":262,"readable-stream/lib/_stream_transform.js":263,"readable-stream/lib/_stream_writable.js":264,"readable-stream/lib/internal/streams/end-of-stream.js":268,"readable-stream/lib/internal/streams/pipeline.js":270}],259:[function(require,module,exports){
 'use strict';
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
@@ -52079,7 +59865,7 @@ createErrorType('ERR_UNKNOWN_ENCODING', function (arg) {
 createErrorType('ERR_STREAM_UNSHIFT_AFTER_END_EVENT', 'stream.unshift() after end event');
 module.exports.codes = codes;
 
-},{}],255:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 (function (process){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -52221,7 +60007,7 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
   }
 });
 }).call(this)}).call(this,require('_process'))
-},{"./_stream_readable":257,"./_stream_writable":259,"_process":251,"inherits":233}],256:[function(require,module,exports){
+},{"./_stream_readable":262,"./_stream_writable":264,"_process":256,"inherits":238}],261:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -52261,7 +60047,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":258,"inherits":233}],257:[function(require,module,exports){
+},{"./_stream_transform":263,"inherits":238}],262:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -53388,7 +61174,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":254,"./_stream_duplex":255,"./internal/streams/async_iterator":260,"./internal/streams/buffer_list":261,"./internal/streams/destroy":262,"./internal/streams/from":264,"./internal/streams/state":266,"./internal/streams/stream":267,"_process":251,"buffer":219,"events":223,"inherits":233,"string_decoder/":268,"util":215}],258:[function(require,module,exports){
+},{"../errors":259,"./_stream_duplex":260,"./internal/streams/async_iterator":265,"./internal/streams/buffer_list":266,"./internal/streams/destroy":267,"./internal/streams/from":269,"./internal/streams/state":271,"./internal/streams/stream":272,"_process":256,"buffer":224,"events":228,"inherits":238,"string_decoder/":273,"util":221}],263:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -53590,7 +61376,7 @@ function done(stream, er, data) {
   if (stream._transformState.transforming) throw new ERR_TRANSFORM_ALREADY_TRANSFORMING();
   return stream.push(null);
 }
-},{"../errors":254,"./_stream_duplex":255,"inherits":233}],259:[function(require,module,exports){
+},{"../errors":259,"./_stream_duplex":260,"inherits":238}],264:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -54290,7 +62076,7 @@ Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":254,"./_stream_duplex":255,"./internal/streams/destroy":262,"./internal/streams/state":266,"./internal/streams/stream":267,"_process":251,"buffer":219,"inherits":233,"util-deprecate":269}],260:[function(require,module,exports){
+},{"../errors":259,"./_stream_duplex":260,"./internal/streams/destroy":267,"./internal/streams/state":271,"./internal/streams/stream":272,"_process":256,"buffer":224,"inherits":238,"util-deprecate":274}],265:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -54500,7 +62286,7 @@ var createReadableStreamAsyncIterator = function createReadableStreamAsyncIterat
 
 module.exports = createReadableStreamAsyncIterator;
 }).call(this)}).call(this,require('_process'))
-},{"./end-of-stream":263,"_process":251}],261:[function(require,module,exports){
+},{"./end-of-stream":268,"_process":256}],266:[function(require,module,exports){
 'use strict';
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -54711,7 +62497,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":219,"util":215}],262:[function(require,module,exports){
+},{"buffer":224,"util":221}],267:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -54819,7 +62605,7 @@ module.exports = {
   errorOrDestroy: errorOrDestroy
 };
 }).call(this)}).call(this,require('_process'))
-},{"_process":251}],263:[function(require,module,exports){
+},{"_process":256}],268:[function(require,module,exports){
 // Ported from https://github.com/mafintosh/end-of-stream with
 // permission from the author, Mathias Buus (@mafintosh).
 'use strict';
@@ -54924,12 +62710,12 @@ function eos(stream, opts, callback) {
 }
 
 module.exports = eos;
-},{"../../../errors":254}],264:[function(require,module,exports){
+},{"../../../errors":259}],269:[function(require,module,exports){
 module.exports = function () {
   throw new Error('Readable.from is not available in the browser')
 };
 
-},{}],265:[function(require,module,exports){
+},{}],270:[function(require,module,exports){
 // Ported from https://github.com/mafintosh/pump with
 // permission from the author, Mathias Buus (@mafintosh).
 'use strict';
@@ -55027,7 +62813,7 @@ function pipeline() {
 }
 
 module.exports = pipeline;
-},{"../../../errors":254,"./end-of-stream":263}],266:[function(require,module,exports){
+},{"../../../errors":259,"./end-of-stream":268}],271:[function(require,module,exports){
 'use strict';
 
 var ERR_INVALID_OPT_VALUE = require('../../../errors').codes.ERR_INVALID_OPT_VALUE;
@@ -55055,10 +62841,10 @@ function getHighWaterMark(state, options, duplexKey, isDuplex) {
 module.exports = {
   getHighWaterMark: getHighWaterMark
 };
-},{"../../../errors":254}],267:[function(require,module,exports){
+},{"../../../errors":259}],272:[function(require,module,exports){
 module.exports = require('events').EventEmitter;
 
-},{"events":223}],268:[function(require,module,exports){
+},{"events":228}],273:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -55355,7 +63141,7 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-},{"safe-buffer":252}],269:[function(require,module,exports){
+},{"safe-buffer":257}],274:[function(require,module,exports){
 (function (global){(function (){
 
 /**
@@ -55426,9 +63212,9 @@ function config (name) {
 }
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],270:[function(require,module,exports){
-arguments[4][211][0].apply(exports,arguments)
-},{"dup":211}],271:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
+arguments[4][217][0].apply(exports,arguments)
+},{"dup":217}],276:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -55764,7 +63550,7 @@ exports.isAnyArrayBuffer = isAnyArrayBuffer;
   });
 });
 
-},{"is-arguments":234,"is-generator-function":236,"is-typed-array":237,"which-typed-array":273}],272:[function(require,module,exports){
+},{"is-arguments":239,"is-generator-function":241,"is-typed-array":242,"which-typed-array":278}],277:[function(require,module,exports){
 (function (process){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -56178,7 +63964,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').substr(2);
+          }).join('\n').slice(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -56195,7 +63981,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
+      name = name.slice(1, -1);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
@@ -56483,7 +64269,7 @@ function callbackify(original) {
 exports.callbackify = callbackify;
 
 }).call(this)}).call(this,require('_process'))
-},{"./support/isBuffer":270,"./support/types":271,"_process":251,"inherits":233}],273:[function(require,module,exports){
+},{"./support/isBuffer":275,"./support/types":276,"_process":256,"inherits":238}],278:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -56542,4 +64328,4 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":213,"call-bind/callBound":220,"es-abstract/helpers/getOwnPropertyDescriptor":222,"for-each":224,"has-tostringtag/shams":230,"is-typed-array":237}]},{},[28]);
+},{"available-typed-arrays":219,"call-bind/callBound":225,"es-abstract/helpers/getOwnPropertyDescriptor":227,"for-each":229,"has-tostringtag/shams":235,"is-typed-array":242}]},{},[28]);
