@@ -116,7 +116,9 @@ function initSatImage() {
 
     $.ajax({
         type: 'POST',
-        url: 'http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php',
+        // https://attic-server.herokuapp.com/satellite/processData/index.php
+        // http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php
+        url: 'https://attic-server.herokuapp.com/satellite/processData/index.php',
         data: {
             'satNum': 16,
             'channel': 13,
