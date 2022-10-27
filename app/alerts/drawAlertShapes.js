@@ -146,20 +146,20 @@ createMenuOption({
 
                         var host = window.location.host;
                         var urlPart;
-                        if (host == 'steepatticstairs.github.io') {
-                            urlPart = '/AtticRadar/';
+                        if (!host.includes(':')) {
+                            urlPart = 'https://steepatticstairs.github.io/AtticRadar/';
                         } else {
-                            urlPart = '/';
+                            urlPart = '../';
                         }
                         console.log(host)
 
-                        addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
+                        addScriptTag(`${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
                         console.log('Loaded forecast zones.');
                         totalLoaded = totalLoaded + 14500000; // 14.5 MB
-                        addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
+                        addScriptTag(`${urlPart}app/alerts/alertZones/countyZones.js`, function() {
                         console.log('Loaded county zones.');
                         totalLoaded = totalLoaded + 7500000; // 7.5 MB
-                        addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
+                        addScriptTag(`${urlPart}app/alerts/alertZones/fireZones.js`, function() {
                         console.log('Loaded fire zones.');
                         totalLoaded = totalLoaded + 8900000; // 8.8 MB
 

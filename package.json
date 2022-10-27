@@ -1,7 +1,11 @@
 {
+  "name": "AtticRadar",
+  "main": "main.js",
   "scripts": {
     "build": "browserify -t brfs app/radar/entry/entry.js -o dist/bundle.js",
-    "serve": "watchify -t brfs app/radar/entry/entry.js -o dist/bundle.js -v"
+    "serve": "watchify -t brfs app/radar/entry/entry.js -o dist/bundle.js -v",
+    "start": "electron .",
+    "package": "npx electron-packager . --overwrite --icon ./icons/icon.icns"
   },
   "dependencies": {
     "@mapbox/geojson-merge": "^1.1.1",
@@ -22,6 +26,8 @@
   },
   "devDependencies": {
     "del": "^6.0.0",
+    "electron": "^21.2.0",
+    "electron-packager": "^17.0.0",
     "eslint": "^8.0.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.22.1",

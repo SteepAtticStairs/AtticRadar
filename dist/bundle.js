@@ -147,20 +147,20 @@ createMenuOption({
 
                         var host = window.location.host;
                         var urlPart;
-                        if (host == 'steepatticstairs.github.io') {
-                            urlPart = '/AtticRadar/';
+                        if (!host.includes(':')) {
+                            urlPart = 'https://steepatticstairs.github.io/AtticRadar/';
                         } else {
-                            urlPart = '/';
+                            urlPart = '../';
                         }
                         console.log(host)
 
-                        addScriptTag(`..${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
+                        addScriptTag(`${urlPart}app/alerts/alertZones/forecastZones.js`, function() {
                         console.log('Loaded forecast zones.');
                         totalLoaded = totalLoaded + 14500000; // 14.5 MB
-                        addScriptTag(`..${urlPart}app/alerts/alertZones/countyZones.js`, function() {
+                        addScriptTag(`${urlPart}app/alerts/alertZones/countyZones.js`, function() {
                         console.log('Loaded county zones.');
                         totalLoaded = totalLoaded + 7500000; // 7.5 MB
-                        addScriptTag(`..${urlPart}app/alerts/alertZones/fireZones.js`, function() {
+                        addScriptTag(`${urlPart}app/alerts/alertZones/fireZones.js`, function() {
                         console.log('Loaded fire zones.');
                         totalLoaded = totalLoaded + 8900000; // 8.8 MB
 
@@ -8136,34 +8136,34 @@ function setImageFromXML(auxXMLStr, imageUrl) {
 
             ctx.drawImage(img, 0, 0);
 
-            map.addSource('satelliteSource', {
-                type: 'canvas',
-                canvas: 'testCanv',
-                coordinates: coordArr,
-            });
-            map.addLayer({
-                id: 'satelliteLayer',
-                type: 'raster',
-                source: 'satelliteSource',
-                'paint': {
-                    'raster-fade-duration': 0,
-                    'raster-resampling': 'nearest'
-                }
-            });
-
+            // map.addSource('satelliteSource', {
+            //     type: 'canvas',
+            //     canvas: 'testCanv',
+            //     coordinates: coordArr,
+            // });
             // map.addLayer({
             //     id: 'satelliteLayer',
-            //     'type': 'raster',
-            //     'source': {
-            //         'type': 'image',
-            //         'url': imageUrl,
-            //         'coordinates': coordArr
-            //     },
+            //     type: 'raster',
+            //     source: 'satelliteSource',
             //     'paint': {
             //         'raster-fade-duration': 0,
             //         'raster-resampling': 'nearest'
             //     }
             // });
+
+            map.addLayer({
+                id: 'satelliteLayer',
+                'type': 'raster',
+                'source': {
+                    'type': 'image',
+                    'url': imageUrl,
+                    'coordinates': coordArr
+                },
+                'paint': {
+                    'raster-fade-duration': 0,
+                    'raster-resampling': 'nearest'
+                }
+            });
             function moveLayer(layerName) { if (map.getLayer(layerName)) { map.moveLayer(layerName) } }
             //map.moveLayer('stationSymbolLayer')
             var defaultLayers = [ "land", "landcover", "national-park", "landuse", "water-shadow", "waterway", "water", "hillshade", "land-structure-polygon", "land-structure-line", "aeroway-polygon", "aeroway-line", "building-outline", "building", "tunnel-street-minor-low", "tunnel-street-minor-case", "tunnel-primary-secondary-tertiary-case", "tunnel-major-link-case", "tunnel-motorway-trunk-case", "tunnel-construction", "tunnel-path", "tunnel-steps", "tunnel-major-link", "tunnel-pedestrian", "tunnel-street-minor", "tunnel-primary-secondary-tertiary", "tunnel-motorway-trunk", "road-pedestrian-case", "road-minor-low", "road-street-low", "road-minor-case", "road-street-case", "road-secondary-tertiary-case", "road-primary-case", "road-major-link-case", "road-motorway-trunk-case", "road-construction", "road-path", "road-steps", "road-major-link", "road-pedestrian", "road-minor", "road-street", "road-secondary-tertiary", "road-primary", "road-motorway-trunk", "road-rail", "bridge-pedestrian-case", "bridge-street-minor-low", "bridge-street-minor-case", "bridge-primary-secondary-tertiary-case", "bridge-major-link-case", "bridge-motorway-trunk-case", "bridge-construction", "bridge-path", "bridge-steps", "bridge-major-link", "bridge-pedestrian", "bridge-street-minor", "bridge-primary-secondary-tertiary", "bridge-motorway-trunk", "bridge-rail", "bridge-major-link-2-case", "bridge-motorway-trunk-2-case", "bridge-major-link-2", "bridge-motorway-trunk-2", "admin-1-boundary-bg", "admin-0-boundary-bg", "admin-1-boundary", "admin-0-boundary", "admin-0-boundary-disputed", "road-label", "waterway-label", "natural-line-label", "natural-point-label", "water-line-label", "water-point-label", "poi-label", "airport-label", "settlement-subdivision-label", "settlement-label", "state-label", "country-label" ]
@@ -8196,7 +8196,10 @@ function setImageFromXML(auxXMLStr, imageUrl) {
     })
 }
 
-function initSatImage() {
+function initSatImage(options) {
+    var satNum = options.satelliteNum;
+    var channel = options.channel;
+    var sector = options.sector;
     //map.on('load', function() {
         // var auxXMLFileUrl = '../app/satellite/processData/projectedImage.png.aux.xml';
         // var jsonFileUrl = '../app/satellite/processData/initialImage.json';
@@ -8237,9 +8240,9 @@ function initSatImage() {
         // http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php
         url: 'https://attic-server.herokuapp.com/satellite/processData/index.php',
         data: {
-            'satNum': '16',
-            'channel': '13',
-            'sector': 'conus'
+            'satNum': satNum,
+            'channel': channel,
+            'sector': sector
         },
         // satNum = '16'; // 16, 17, or 18
         // channel = '13'; // 01 - 16
@@ -8293,7 +8296,23 @@ createMenuOption({
             map.setLayoutProperty('satelliteLayer', 'visibility', 'visible');
         } else if (!map.getLayer('satelliteLayer')) {
             // layer doesn't exist - load it onto the map for the first time
-            loadImage();
+            loadImage({
+                'satelliteNum': '16',
+                'channel': '13',
+                'sector': 'conus'
+            });
+            // satNum = '16'; // 16, 17, or 18
+            // channel = '13'; // 01 - 16
+            // sector = 'conus'
+            /*
+            alaska (no goes 16)
+            conus
+            fulldisk
+            hawaii (no goes 16)
+            mesoscale-1
+            mesoscale-2
+            puertorico (only goes 16)
+            */
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
@@ -9664,7 +9683,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":85,"zlib":221}],90:[function(require,module,exports){
+},{"./classes/RandomAccessFile":85,"zlib":222}],90:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -11117,7 +11136,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":222}],105:[function(require,module,exports){
+},{"fs":213}],105:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -13963,7 +13982,7 @@ function mergeFeatureCollectionStream (inputs) {
 module.exports.merge = merge;
 module.exports.mergeFeatureCollectionStream = mergeFeatureCollectionStream;
 
-},{"@mapbox/geojson-normalize":165,"fs":222,"geojson-stream":181}],165:[function(require,module,exports){
+},{"@mapbox/geojson-normalize":165,"fs":213,"geojson-stream":181}],165:[function(require,module,exports){
 module.exports = normalize;
 
 var types = {
@@ -47277,6 +47296,8 @@ const radarStations = {
 
 module.exports = radarStations;
 },{}],213:[function(require,module,exports){
+
+},{}],214:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -47786,7 +47807,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":242,"util/":216}],214:[function(require,module,exports){
+},{"object-assign":242,"util/":217}],215:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -47811,14 +47832,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],215:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],216:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -48408,7 +48429,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":215,"_process":255,"inherits":214}],217:[function(require,module,exports){
+},{"./support/isBuffer":216,"_process":255,"inherits":215}],218:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -48439,7 +48460,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],218:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -48591,9 +48612,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],219:[function(require,module,exports){
-
 },{}],220:[function(require,module,exports){
+arguments[4][213][0].apply(exports,arguments)
+},{"dup":213}],221:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -49005,7 +49026,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":255,"assert":213,"buffer":223,"pako/lib/zlib/constants":245,"pako/lib/zlib/deflate.js":247,"pako/lib/zlib/inflate.js":249,"pako/lib/zlib/zstream":253}],221:[function(require,module,exports){
+},{"_process":255,"assert":214,"buffer":223,"pako/lib/zlib/constants":245,"pako/lib/zlib/deflate.js":247,"pako/lib/zlib/inflate.js":249,"pako/lib/zlib/zstream":253}],222:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -49617,9 +49638,7 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":220,"_process":255,"assert":213,"buffer":223,"stream":257,"util":276}],222:[function(require,module,exports){
-arguments[4][219][0].apply(exports,arguments)
-},{"dup":219}],223:[function(require,module,exports){
+},{"./binding":221,"_process":255,"assert":214,"buffer":223,"stream":257,"util":276}],223:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -51400,7 +51419,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":218,"buffer":223,"ieee754":236}],224:[function(require,module,exports){
+},{"base64-js":219,"buffer":223,"ieee754":236}],224:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -52876,7 +52895,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":217,"call-bind/callBound":224,"es-abstract/helpers/getOwnPropertyDescriptor":226,"for-each":228,"has-tostringtag/shams":234}],242:[function(require,module,exports){
+},{"available-typed-arrays":218,"call-bind/callBound":224,"es-abstract/helpers/getOwnPropertyDescriptor":226,"for-each":228,"has-tostringtag/shams":234}],242:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -60968,7 +60987,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":258,"./_stream_duplex":259,"./internal/streams/async_iterator":264,"./internal/streams/buffer_list":265,"./internal/streams/destroy":266,"./internal/streams/from":268,"./internal/streams/state":270,"./internal/streams/stream":271,"_process":255,"buffer":223,"events":227,"inherits":237,"string_decoder/":272,"util":219}],262:[function(require,module,exports){
+},{"../errors":258,"./_stream_duplex":259,"./internal/streams/async_iterator":264,"./internal/streams/buffer_list":265,"./internal/streams/destroy":266,"./internal/streams/from":268,"./internal/streams/state":270,"./internal/streams/stream":271,"_process":255,"buffer":223,"events":227,"inherits":237,"string_decoder/":272,"util":220}],262:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -62291,7 +62310,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":223,"util":219}],266:[function(require,module,exports){
+},{"buffer":223,"util":220}],266:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -63007,8 +63026,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],274:[function(require,module,exports){
-arguments[4][215][0].apply(exports,arguments)
-},{"dup":215}],275:[function(require,module,exports){
+arguments[4][216][0].apply(exports,arguments)
+},{"dup":216}],275:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -63758,7 +63777,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').substr(2);
+          }).join('\n').slice(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -63775,7 +63794,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
+      name = name.slice(1, -1);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
@@ -64122,4 +64141,4 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":217,"call-bind/callBound":224,"es-abstract/helpers/getOwnPropertyDescriptor":226,"for-each":228,"has-tostringtag/shams":234,"is-typed-array":241}]},{},[28]);
+},{"available-typed-arrays":218,"call-bind/callBound":224,"es-abstract/helpers/getOwnPropertyDescriptor":226,"for-each":228,"has-tostringtag/shams":234,"is-typed-array":241}]},{},[28]);
