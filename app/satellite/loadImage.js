@@ -169,7 +169,7 @@ function initSatImage(options) {
         type: 'POST',
         // https://attic-server.herokuapp.com/satellite/processData/index.php
         // http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php
-        url: 'http://127.0.0.1:3333/server/AtticServer/satellite/processData/index.php',
+        url: 'https://attic-server.herokuapp.com/satellite/processData/index.php',
         data: {
             'satNum': satNum,
             'channel': channel,
@@ -188,6 +188,7 @@ function initSatImage(options) {
         puertorico (only goes 16)
         */
         success: function(data) {
+            //console.log(data)
             var arr = data.split('STEEPATTICSTAIRS');
 
             const blob = b64toBlob(arr[1], 'image/png');
