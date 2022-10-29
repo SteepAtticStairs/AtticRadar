@@ -24,8 +24,8 @@ createMenuOption({
             // layer doesn't exist - load it onto the map for the first time
             loadImage({
                 'satelliteNum': '16',
-                'channel': '13',
-                'sector': 'conus'
+                'channel': 'veggie',
+                'sector': 'fulldisk'
             });
             // satNum = '16'; // 16, 17, or 18
             // channel = '13'; // 01 - 16
