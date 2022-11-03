@@ -525,7 +525,8 @@ var hurricaneTypesAbbvs = {
     'WV': 'Tropical Wave',
     'ET': 'Extrapolated',
     'MD': 'Monsoon Depression',
-    'XX': 'Unknown'
+    'XX': 'Unknown',
+    'EXPT': 'Extratropical / Post-Tropical'
 }
 
 function spawnModal(options) {

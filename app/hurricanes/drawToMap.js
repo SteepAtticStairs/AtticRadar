@@ -7,6 +7,8 @@ const stormTypeData = require('./stormTypeData');
 
 createCssClasses.createCssClasses();
 
+var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC'];
+
 function getTrackPointData(properties) {
     var trackPointDataObj = {};
     // parse the content of each point
@@ -141,17 +143,29 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
                     geojson.features[item].properties.sshwsValAbbv = sshwsLevel[2];
+                    geojson.features[item].properties.popupClass = sshwsLevel[2];
                     geojson.features[item].properties.sshwsColor = sshwsLevel[1];
                     var hurricaneType = hurricaneTypeData[trackPointData.forecastHour];
-                    var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC']
                     if (!normalTypes.includes(hurricaneType)) {
                         geojson.features[item].properties.sshwsColor = ut.sshwsValues[7][1];
+                        geojson.features[item].properties.popupClass = ut.sshwsValues[7][2];
                     }
+                    var isPostTropical;
                     if (trackPointData.styleUrl.replace('#', '').slice(0, 1) == 'x') {
                         // post-tropical or extratropical
+                        isPostTropical = true;
                         geojson.features[item].properties.sshwsColor = ut.sshwsValues[7][1];
+                        geojson.features[item].properties.popupClass = ut.sshwsValues[7][2];
                     } else {
                         // normal, set the value to the sshws color
+                        isPostTropical = false;
+                    }
+                    // if NHC says it's extra / post-tropical but ATCF says still tropical
+                    if (normalTypes.includes(hurricaneType) && isPostTropical) {
+                        // EXPT = extratropical / post tropical
+                        geojson.features[item].properties.hurricaneType = 'EXPT';
+                    } else {
+                        geojson.features[item].properties.hurricaneType = hurricaneType;
                     }
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
                 }
@@ -216,7 +230,8 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
             map.on('mouseenter', `trackLayerPoints${index}`, function (e) {
                 map.getCanvas().style.cursor = 'pointer';
 
-                var obj = getTrackPointData(e.features[0].properties);
+                var properties = e.features[0].properties;
+                var obj = getTrackPointData(properties);
                 //var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
                 //var fullHurricaneData = $('#dataDiv').data(`${hurricaneID}_hurricaneData`);
                 var time = obj.formattedTime;
@@ -232,7 +247,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     <!-- <div><b>Storm Type:</b> ${'hurricaneTypeData[obj.forecastHour]'}</div> -->
                 </div>`
 
-                var pop = new mapboxgl.Popup({ className: obj.sshwsLevel[2] })
+                var pop = new mapboxgl.Popup({ className: properties.popupClass })
                     .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
                     .setHTML(popupContent)
                     //.setHTML(e.features[0].properties.description)
@@ -252,7 +267,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
             var obj = getTrackPointData(e.features[0].properties);
-            var hurricaneType = hurricaneTypeData[obj.forecastHour];
+            var hurricaneType = e.features[0].properties.hurricaneType;//hurricaneTypeData[obj.forecastHour];
 
             var popupContent =
                 `<div>
@@ -263,7 +278,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
                 <div>${obj.trackpointWindGusts}</div>
-                <div><b>Storm Type:</b> ${ut.hurricaneTypesAbbvs[hurricaneType]} (${hurricaneType})</div>`
+                <div><b>${ut.hurricaneTypesAbbvs[hurricaneType]}</b> (${hurricaneType})</div>`
 
             if (obj.trackpointMotion != undefined && obj.trackpointPressure != undefined) {
                 popupContent += `<br>`

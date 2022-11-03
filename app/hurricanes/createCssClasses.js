@@ -78,14 +78,14 @@ function createCssClasses() {
     .Other.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip { border-top-color: ${ut.sshwsValues[7][1]}; }
     .Other.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip { border-top-color: ${ut.sshwsValues[7][1]}; }
 
-    .TD .mapboxgl-popup-content { background-color: ${ut.sshwsValues[0][1]}; color: black; border-radius: 10px; }
-    .TS .mapboxgl-popup-content { background-color: ${ut.sshwsValues[1][1]}; color: black; border-radius: 10px; }
-    .C1 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[2][1]}; color: black; border-radius: 10px; }
-    .C2 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[3][1]}; color: black; border-radius: 10px; }
-    .C3 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[4][1]}; color: white; border-radius: 10px; }
-    .C4 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[5][1]}; color: white; border-radius: 10px; }
-    .C5 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[6][1]}; color: white; border-radius: 10px; }
-    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: white; border-radius: 10px; }
+    .TD .mapboxgl-popup-content { background-color: ${ut.sshwsValues[0][1]}; color: black; border-radius: 10px; pointer-events: none; }
+    .TS .mapboxgl-popup-content { background-color: ${ut.sshwsValues[1][1]}; color: black; border-radius: 10px; pointer-events: none; }
+    .C1 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[2][1]}; color: black; border-radius: 10px; pointer-events: none; }
+    .C2 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[3][1]}; color: black; border-radius: 10px; pointer-events: none; }
+    .C3 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[4][1]}; color: white; border-radius: 10px; pointer-events: none; }
+    .C4 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[5][1]}; color: white; border-radius: 10px; pointer-events: none; }
+    .C5 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[6][1]}; color: white; border-radius: 10px; pointer-events: none; }
+    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: white; border-radius: 10px; pointer-events: none; }
     `)
     .appendTo("head");
 }
