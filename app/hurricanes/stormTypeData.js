@@ -12,13 +12,16 @@ function parseStormTypeForecast(csvJsonData) {
     return stormTypeObj;
 }
 function getForecastFile(stormID, cb) {
+    console.log(`Loading forecast file for ${stormID}...`);
     var fstFileURL = ut.preventFileCaching(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/fst/${stormID.toLowerCase()}.fst#`);
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4){   // if complete
             if (xhr.status === 200){  // check if "OK" (200)
+                console.log(`Recieved forecast file for ${stormID}.`);
                 cb(this.responseText);
             } else {
+                console.log(`Error in fetching forecast file for ${stormID}.`);
                 cb('fetchError');
             }
         } 

@@ -97,10 +97,7 @@ function getTrackPointData(properties) {
 function drawHurricanesToMap(geojson, type, index, hurricaneID) {
     console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
 
-    //stormTypeData(hurricaneID, function(hurricaneTypeData) {
-    //    console.log(hurricaneTypeData)
-    //    $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`, hurricaneTypeData);
-    //})
+    var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`);
 
     function doTheStuff() {
         if (type == 'cone') {
@@ -143,6 +140,11 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
                     geojson.features[item].properties.sshwsValAbbv = sshwsLevel[2];
                     geojson.features[item].properties.sshwsColor = sshwsLevel[1];
+                    var hurricaneType = hurricaneTypeData[trackPointData.forecastHour];
+                    var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC']
+                    if (!normalTypes.includes(hurricaneType)) {
+                        geojson.features[item].properties.sshwsColor = ut.sshwsValues[7][1];
+                    }
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
                 }
             }
@@ -242,7 +244,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
             var obj = getTrackPointData(e.features[0].properties);
-            //var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
+            var hurricaneType = hurricaneTypeData[obj.forecastHour];
 
             var popupContent =
                 `<div>
@@ -253,7 +255,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
                 <div>${obj.trackpointWindGusts}</div>
-                <!-- <div><b>Storm Type:</b> ${'hurricaneTypeData[obj.forecastHour]'}</div> -->`
+                <div><b>Storm Type:</b> ${ut.hurricaneTypesAbbvs[hurricaneType]} (${hurricaneType})</div>`
 
             if (obj.trackpointMotion != undefined && obj.trackpointPressure != undefined) {
                 popupContent += `<br>`

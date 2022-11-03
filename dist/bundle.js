@@ -1652,10 +1652,7 @@ function getTrackPointData(properties) {
 function drawHurricanesToMap(geojson, type, index, hurricaneID) {
     console.log(`${hurricaneID}/${type} - Drawing hurricane to map...`);
 
-    //stormTypeData(hurricaneID, function(hurricaneTypeData) {
-    //    console.log(hurricaneTypeData)
-    //    $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`, hurricaneTypeData);
-    //})
+    var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`);
 
     function doTheStuff() {
         if (type == 'cone') {
@@ -1698,6 +1695,11 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
                     geojson.features[item].properties.sshwsValAbbv = sshwsLevel[2];
                     geojson.features[item].properties.sshwsColor = sshwsLevel[1];
+                    var hurricaneType = hurricaneTypeData[trackPointData.forecastHour];
+                    var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC']
+                    if (!normalTypes.includes(hurricaneType)) {
+                        geojson.features[item].properties.sshwsColor = ut.sshwsValues[7][1];
+                    }
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
                 }
             }
@@ -1797,7 +1799,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
             var obj = getTrackPointData(e.features[0].properties);
-            //var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
+            var hurricaneType = hurricaneTypeData[obj.forecastHour];
 
             var popupContent =
                 `<div>
@@ -1808,7 +1810,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
                 <div>${obj.trackpointWindGusts}</div>
-                <!-- <div><b>Storm Type:</b> ${'hurricaneTypeData[obj.forecastHour]'}</div> -->`
+                <div><b>Storm Type:</b> ${ut.hurricaneTypesAbbvs[hurricaneType]} (${hurricaneType})</div>`
 
             if (obj.trackpointMotion != undefined && obj.trackpointPressure != undefined) {
                 popupContent += `<br>`
@@ -1875,6 +1877,7 @@ const ut = require('../radar/utils');
 const drawHurricanesToMap = require('./drawToMap');
 const loadOutlooks = require('./loadOutlooks');
 var map = require('../radar/map/map');
+const stormTypeData = require('./stormTypeData');
 
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_TRACK_latest.kmz
@@ -1953,14 +1956,25 @@ function exportFetchData() {
     //var checkingIters = 50;
     var activeStormsURL = ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/CurrentStorms.json#');
     $.getJSON(activeStormsURL, function(data) {
-        for (var item in data.activeStorms) {
-            var stormID = data.activeStorms[item].id;
-            stormID = stormID.toUpperCase();
-            console.log('Found hurricane ' + stormID);
-            namesArr.push(stormID);
+        var length = data.activeStorms.length;
+        function activeStormsLoop(n) {
+            if (n < length) {
+                var stormID = data.activeStorms[n].id;
+                stormID = stormID.toUpperCase();
+                console.log('Found hurricane ' + stormID);
+                namesArr.push(stormID);
+                stormTypeData(stormID, function(data) {
+                    console.log(stormID, data)
+                    $('#dataDiv').data(`${stormID}_hurricaneTypeData`, data);
+                    n++;
+                    activeStormsLoop(n);
+                })
+            } else {
+                $('#dataDiv').data('allHurricanesPlotted', namesArr);
+                loadHurricanesFromID(namesArr);
+            }
         }
-        $('#dataDiv').data('allHurricanesPlotted', namesArr);
-        loadHurricanesFromID(namesArr);
+        activeStormsLoop(0);
     })
     // $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
     //     var jsonData = ut.xmlToJson(data);
@@ -2000,7 +2014,7 @@ function exportFetchData() {
 }
 
 module.exports = exportFetchData;
-},{"../radar/map/map":53,"../radar/utils":70,"./drawToMap":9,"./loadOutlooks":15,"./unzip":18}],12:[function(require,module,exports){
+},{"../radar/map/map":53,"../radar/utils":70,"./drawToMap":9,"./loadOutlooks":15,"./stormTypeData":17,"./unzip":18}],12:[function(require,module,exports){
 const parseHurricaneFile = require('./plotIBTRACS');
 const ut = require('../../radar/utils');
 
@@ -2530,13 +2544,16 @@ function parseStormTypeForecast(csvJsonData) {
     return stormTypeObj;
 }
 function getForecastFile(stormID, cb) {
+    console.log(`Loading forecast file for ${stormID}...`);
     var fstFileURL = ut.preventFileCaching(ut.phpProxy + `https://ftp.nhc.noaa.gov/atcf/fst/${stormID.toLowerCase()}.fst#`);
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4){   // if complete
             if (xhr.status === 200){  // check if "OK" (200)
+                console.log(`Recieved forecast file for ${stormID}.`);
                 cb(this.responseText);
             } else {
+                console.log(`Error in fetching forecast file for ${stormID}.`);
                 cb('fetchError');
             }
         } 
@@ -7710,7 +7727,7 @@ var sshwsValues = [
     ['Category 3', '#eb642f', 'C3'],
     ['Category 4', '#eb3b2f', 'C4'],
     ['Category 5', '#eb2f87', 'C5'],
-    ['Other', 'rgb(140, 3, 252)', 'Other'],
+    ['Other', 'rgb(183, 94, 255)', 'Other'],
     ['Unknown', 'rgb(128, 128, 128)', '?']
 ]
 function getSSHWSVal(windSpeed) {
@@ -7733,6 +7750,45 @@ function getSSHWSVal(windSpeed) {
     } else if (windSpeed == 'Unknown') {
         return sshwsValues[8]
     }
+}
+// https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt
+// DB - disturbance, 
+// TD - tropical depression, 
+// TS - tropical storm, 
+// TY - typhoon, 
+// ST - super typhoon, 
+// TC - tropical cyclone, 
+// HU - hurricane, 
+// SD - subtropical depression,
+// SS - subtropical storm,
+// EX - extratropical systems,
+// PT - post tropical,
+// IN - inland,
+// DS - dissipating,
+// LO - low,
+// WV - tropical wave,
+// ET - extrapolated,
+// MD - monsoon depression,
+// XX - unknown.
+var hurricaneTypesAbbvs = {
+    'DB': 'Disturbance',
+    'TD': 'Tropical Depression',
+    'TS': 'Tropical Storm',
+    'TY': 'Typhoon',
+    'ST': 'Super Typhoon',
+    'TC': 'Tropical Cyclone',
+    'HU': 'Hurricane',
+    'SD': 'Subtropical Depression',
+    'SS': 'Subtropical Storm',
+    'EX': 'Extratropical System',
+    'PT': 'Post Tropical',
+    'IN': 'Inland',
+    'DS': 'Dissipating',
+    'LO': 'Low Pressure Area',
+    'WV': 'Tropical Wave',
+    'ET': 'Extrapolated',
+    'MD': 'Monsoon Depression',
+    'XX': 'Unknown'
 }
 
 function spawnModal(options) {
@@ -7948,6 +8004,7 @@ module.exports = {
     preventFileCaching,
     sshwsValues,
     getSSHWSVal,
+    hurricaneTypesAbbvs,
     spawnModal,
     betterProgressBar,
     CtoF,

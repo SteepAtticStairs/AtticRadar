@@ -464,7 +464,7 @@ var sshwsValues = [
     ['Category 3', '#eb642f', 'C3'],
     ['Category 4', '#eb3b2f', 'C4'],
     ['Category 5', '#eb2f87', 'C5'],
-    ['Other', 'rgb(140, 3, 252)', 'Other'],
+    ['Other', 'rgb(183, 94, 255)', 'Other'],
     ['Unknown', 'rgb(128, 128, 128)', '?']
 ]
 function getSSHWSVal(windSpeed) {
@@ -487,6 +487,45 @@ function getSSHWSVal(windSpeed) {
     } else if (windSpeed == 'Unknown') {
         return sshwsValues[8]
     }
+}
+// https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt
+// DB - disturbance, 
+// TD - tropical depression, 
+// TS - tropical storm, 
+// TY - typhoon, 
+// ST - super typhoon, 
+// TC - tropical cyclone, 
+// HU - hurricane, 
+// SD - subtropical depression,
+// SS - subtropical storm,
+// EX - extratropical systems,
+// PT - post tropical,
+// IN - inland,
+// DS - dissipating,
+// LO - low,
+// WV - tropical wave,
+// ET - extrapolated,
+// MD - monsoon depression,
+// XX - unknown.
+var hurricaneTypesAbbvs = {
+    'DB': 'Disturbance',
+    'TD': 'Tropical Depression',
+    'TS': 'Tropical Storm',
+    'TY': 'Typhoon',
+    'ST': 'Super Typhoon',
+    'TC': 'Tropical Cyclone',
+    'HU': 'Hurricane',
+    'SD': 'Subtropical Depression',
+    'SS': 'Subtropical Storm',
+    'EX': 'Extratropical System',
+    'PT': 'Post Tropical',
+    'IN': 'Inland',
+    'DS': 'Dissipating',
+    'LO': 'Low Pressure Area',
+    'WV': 'Tropical Wave',
+    'ET': 'Extrapolated',
+    'MD': 'Monsoon Depression',
+    'XX': 'Unknown'
 }
 
 function spawnModal(options) {
@@ -702,6 +741,7 @@ module.exports = {
     preventFileCaching,
     sshwsValues,
     getSSHWSVal,
+    hurricaneTypesAbbvs,
     spawnModal,
     betterProgressBar,
     CtoF,

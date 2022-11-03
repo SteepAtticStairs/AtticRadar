@@ -3,6 +3,7 @@ const ut = require('../radar/utils');
 const drawHurricanesToMap = require('./drawToMap');
 const loadOutlooks = require('./loadOutlooks');
 var map = require('../radar/map/map');
+const stormTypeData = require('./stormTypeData');
 
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_TRACK_latest.kmz
@@ -81,14 +82,25 @@ function exportFetchData() {
     //var checkingIters = 50;
     var activeStormsURL = ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/CurrentStorms.json#');
     $.getJSON(activeStormsURL, function(data) {
-        for (var item in data.activeStorms) {
-            var stormID = data.activeStorms[item].id;
-            stormID = stormID.toUpperCase();
-            console.log('Found hurricane ' + stormID);
-            namesArr.push(stormID);
+        var length = data.activeStorms.length;
+        function activeStormsLoop(n) {
+            if (n < length) {
+                var stormID = data.activeStorms[n].id;
+                stormID = stormID.toUpperCase();
+                console.log('Found hurricane ' + stormID);
+                namesArr.push(stormID);
+                stormTypeData(stormID, function(data) {
+                    console.log(stormID, data)
+                    $('#dataDiv').data(`${stormID}_hurricaneTypeData`, data);
+                    n++;
+                    activeStormsLoop(n);
+                })
+            } else {
+                $('#dataDiv').data('allHurricanesPlotted', namesArr);
+                loadHurricanesFromID(namesArr);
+            }
         }
-        $('#dataDiv').data('allHurricanesPlotted', namesArr);
-        loadHurricanesFromID(namesArr);
+        activeStormsLoop(0);
     })
     // $.get(ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/index-at.xml'), function (data) {
     //     var jsonData = ut.xmlToJson(data);
