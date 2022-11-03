@@ -96,7 +96,7 @@ function getTrackPointData(properties, hurricaneID) {
 
     var formattedDateObj = DateTime.fromISO(miscData.lastUpdate).setZone(luxonTz);
     formattedDateObj = formattedDateObj.plus({ hours: trackPointDataObj.forecastHour })
-    var dateString = formattedDateObj.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
+    var dateString = formattedDateObj.toFormat("LLL d yyyy, h:mm a ZZZZ");
 
     var finalDateObj = new Date(formattedDateObj.toUTC().ts);
 
