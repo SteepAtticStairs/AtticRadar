@@ -6,4 +6,4 @@
 require('./menuItem');
 
 // This is if you want to automatically load the hurricanes upon page load. Helpful when developing.
-$('#hurricanesMenuItemIcon').click();
+//$('#hurricanesMenuItemIcon').click();
