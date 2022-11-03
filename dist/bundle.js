@@ -1574,6 +1574,8 @@ function getTrackPointData(properties) {
     // #h_point = Hurricane
     // #s_point = Tropical Storm
     // #xd_point = Low Pressure Area OR Tropical Depression?
+    var styleUrl = properties.styleUrl;
+    trackPointDataObj.styleUrl = styleUrl;
 
     trackPointDataObj.trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
     trackPointDataObj.trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
@@ -1699,6 +1701,12 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                     var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC']
                     if (!normalTypes.includes(hurricaneType)) {
                         geojson.features[item].properties.sshwsColor = ut.sshwsValues[7][1];
+                    }
+                    if (trackPointData.styleUrl.replace('#', '').slice(0, 1) == 'x') {
+                        // post-tropical or extratropical
+                        geojson.features[item].properties.sshwsColor = ut.sshwsValues[7][1];
+                    } else {
+                        // normal, set the value to the sshws color
                     }
                     //geojson.features[item].properties.coords = trackPointData.formattedCoords;
                 }
