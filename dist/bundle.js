@@ -1910,7 +1910,7 @@ module.exports = drawHurricanesToMap;
 require('./menuItem');
 
 // This is if you want to automatically load the hurricanes upon page load. Helpful when developing.
-$('#hurricanesMenuItemIcon').click();
+//$('#hurricanesMenuItemIcon').click();
 },{"./menuItem":16}],11:[function(require,module,exports){
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
