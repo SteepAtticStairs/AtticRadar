@@ -96,7 +96,7 @@ function getTrackPointData(properties, hurricaneID) {
 
     var formattedDateObj = DateTime.fromISO(miscData.lastUpdate).setZone(luxonTz);
     formattedDateObj = formattedDateObj.plus({ hours: trackPointDataObj.forecastHour })
-    //var dateString = myDateTime.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
+    var dateString = formattedDateObj.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
 
     var finalDateObj = new Date(formattedDateObj.toUTC().ts);
 
@@ -107,6 +107,7 @@ function getTrackPointData(properties, hurricaneID) {
 
     // e.g. ["Tue", "3:00 PM", "MDT", vanilla js date obj]
     trackPointDataObj.formattedTime = [dayName, hourMin, tzAbbv, monthName, day, finalDateObj];
+    trackPointDataObj.dateString = dateString;
 
     return trackPointDataObj;
 }
@@ -288,7 +289,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div><u>SSHWS: ${obj.sshwsLevel[0]}</u></div>
                 <br>
                 <div>Advisory #${obj.trackpointAdvisoryNum}</div>
-                <div>${obj.trackpointTime}</div>
+                <div>${obj.dateString}</div>
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
                 <div>${obj.trackpointWindGusts}</div>
