@@ -89,6 +89,10 @@ function exportFetchData() {
                 stormID = stormID.toUpperCase();
                 console.log('Found hurricane ' + stormID);
                 namesArr.push(stormID);
+                $('#dataDiv').data(`${stormID}_miscData`, {
+                    'lastUpdate': data.activeStorms[n].lastUpdate,
+                    'advisoryNum': data.activeStorms[n].publicAdvisory.advNum
+                });
                 stormTypeData(stormID, function(data) {
                     console.log(stormID, data)
                     $('#dataDiv').data(`${stormID}_hurricaneTypeData`, data);

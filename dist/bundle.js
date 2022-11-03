@@ -1400,7 +1400,7 @@ function createCssClasses() {
     .C3 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[4][1]}; color: white; border-radius: 10px; pointer-events: none; }
     .C4 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[5][1]}; color: white; border-radius: 10px; pointer-events: none; }
     .C5 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[6][1]}; color: white; border-radius: 10px; pointer-events: none; }
-    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: white; border-radius: 10px; pointer-events: none; }
+    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: black; border-radius: 10px; pointer-events: none; }
     `)
     .appendTo("head");
 }
@@ -1564,7 +1564,9 @@ createCssClasses.createCssClasses();
 
 var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC'];
 
-function getTrackPointData(properties) {
+function getTrackPointData(properties, hurricaneID) {
+    var miscData = $('#dataDiv').data(`${hurricaneID}_miscData`);
+
     var trackPointDataObj = {};
     // parse the content of each point
     var div = document.createElement('div')
@@ -1581,6 +1583,7 @@ function getTrackPointData(properties) {
 
     trackPointDataObj.trackpointStormName = parsedDescription.children[0].children[0].children[0].textContent;
     trackPointDataObj.trackpointAdvisoryNum = parsedDescription.children[0].children[0].children[1].textContent;
+    trackPointDataObj.trackpointAdvisoryNum = trackPointDataObj.trackpointAdvisoryNum.split('#')[1];
     trackPointDataObj.trackpointForecastDesc = parsedDescription.children[0].children[0].children[3].textContent;
     trackPointDataObj.trackpointTime = parsedDescription.children[0].children[0].children[4].textContent;
     trackPointDataObj.trackpointLocation = parsedDescription.children[0].children[0].children[5].textContent;
@@ -1618,37 +1621,47 @@ function getTrackPointData(properties) {
     formattedCoords = formattedCoords.split(',');
     trackPointDataObj.formattedCoords = formattedCoords;
 
-    var formattedDateObj = DateTime.now().setZone("UTC");
-    // 12:00 PM GMT September 05, 2022 
-    // ["12:00", "AM", "GMT", "September", "09", "2022"]
-    //  3:00 AM GMT September 05, 2022 
-    // ["3:00", "AM", "GMT", "September", "09", "2022"]
-    var formattedDate = trackPointDataObj.trackpointTime.replace('Valid at: ', '');
-    if (formattedDate.charAt(0) == ' ') {
-        formattedDate = '0' + formattedDate.substring(1);
+    // var formattedDateObj = DateTime.now().setZone("UTC");
+    // // 12:00 PM GMT September 05, 2022 
+    // // ["12:00", "AM", "GMT", "September", "09", "2022"]
+    // //  3:00 AM GMT September 05, 2022 
+    // // ["3:00", "AM", "GMT", "September", "09", "2022"]
+    // var formattedDate = trackPointDataObj.trackpointTime.replace('Valid at: ', '');
+    // if (formattedDate.charAt(0) == ' ') {
+    //     formattedDate = '0' + formattedDate.substring(1);
+    // }
+    // if (formattedDate.charAt(formattedDate.length - 1) == ' ') {
+    //     formattedDate = formattedDate.slice(0, -1);
+    // }
+    // //console.log(formattedDate)
+    // var tz = formattedDate.substring(9, 12);
+    // formattedDate = formattedDate.substring(0, 9) + formattedDate.substring(13);
+    // formattedDateObj = DateTime.fromFormat(formattedDate, "hh:mm a LLLL dd, yyyy");
+
+    var localTime = true;
+    var tzAbbv;
+    var luxonTz;
+    if (localTime) {
+        tzAbbv = new Date().toLocaleTimeString('en-us', {timeZoneName:'short'}).split(' ')[2];
+        luxonTz = 'system'; // America/New_York
+    } else {
+        tzAbbv = 'UTC';
+        luxonTz = 'UTC';
     }
-    if (formattedDate.charAt(formattedDate.length - 1) == ' ') {
-        formattedDate = formattedDate.slice(0, -1);
-    }
-    //console.log(formattedDate)
-    var tz = formattedDate.substring(9, 12);
-    formattedDate = formattedDate.substring(0, 9) + formattedDate.substring(13);
-    formattedDateObj = DateTime.fromFormat(formattedDate, "hh:mm a LLLL dd, yyyy");
+
+    var formattedDateObj = DateTime.fromISO(miscData.lastUpdate).setZone(luxonTz);
+    formattedDateObj = formattedDateObj.plus({ hours: trackPointDataObj.forecastHour })
+    //var dateString = myDateTime.toFormat("LL/dd/yyyy hh:mm a ZZZZ");
 
     var finalDateObj = new Date(formattedDateObj.toUTC().ts);
-    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    //console.log(`${new Date(formattedDateObj.toUTC().ts).toLocaleString().replace(/,/g, '')} ${tz}`)
-    var dayName = days[finalDateObj.getDay()];
 
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var monthName = months[finalDateObj.getMonth()];
-
-    var day = finalDateObj.getDate();
-
-    var hourMin = ut.printHourMin(finalDateObj);
+    var dayName = formattedDateObj.toFormat('cccc');
+    var monthName = formattedDateObj.toFormat('LLLL');
+    var day = formattedDateObj.toFormat('d');
+    var hourMin = formattedDateObj.toFormat('h:mm a');
 
     // e.g. ["Tue", "3:00 PM", "MDT", vanilla js date obj]
-    trackPointDataObj.formattedTime = [dayName, hourMin, tz, monthName, day, finalDateObj];
+    trackPointDataObj.formattedTime = [dayName, hourMin, tzAbbv, monthName, day, finalDateObj];
 
     return trackPointDataObj;
 }
@@ -1693,7 +1706,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
         } else if (type == 'track') {
             for (var item in geojson.features) {
                 if (!geojson.features[item].properties.styleUrl.includes('line')) {
-                    var trackPointData = getTrackPointData(geojson.features[item].properties);
+                    var trackPointData = getTrackPointData(geojson.features[item].properties, hurricaneID);
                     var sshwsLevel = trackPointData.sshwsLevel;
 
                     geojson.features[item].properties.sshwsVal = sshwsLevel[0];
@@ -1786,7 +1799,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 map.getCanvas().style.cursor = 'pointer';
 
                 var properties = e.features[0].properties;
-                var obj = getTrackPointData(properties);
+                var obj = getTrackPointData(properties, hurricaneID);
                 //var hurricaneTypeData = $('#dataDiv').data(`${hurricaneID}_hurricaneTypeData`)
                 //var fullHurricaneData = $('#dataDiv').data(`${hurricaneID}_hurricaneData`);
                 var time = obj.formattedTime;
@@ -1821,7 +1834,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
         }
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
-            var obj = getTrackPointData(e.features[0].properties);
+            var obj = getTrackPointData(e.features[0].properties, hurricaneID);
             var hurricaneType = e.features[0].properties.hurricaneType;//hurricaneTypeData[obj.forecastHour];
 
             var popupContent =
@@ -1829,6 +1842,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div><b>${obj.trackpointStormName}</b></div>
                 <div><u>SSHWS: ${obj.sshwsLevel[0]}</u></div>
                 <br>
+                <div>Advisory #${obj.trackpointAdvisoryNum}</div>
                 <div>${obj.trackpointTime}</div>
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
@@ -1986,6 +2000,10 @@ function exportFetchData() {
                 stormID = stormID.toUpperCase();
                 console.log('Found hurricane ' + stormID);
                 namesArr.push(stormID);
+                $('#dataDiv').data(`${stormID}_miscData`, {
+                    'lastUpdate': data.activeStorms[n].lastUpdate,
+                    'advisoryNum': data.activeStorms[n].publicAdvisory.advNum
+                });
                 stormTypeData(stormID, function(data) {
                     console.log(stormID, data)
                     $('#dataDiv').data(`${stormID}_hurricaneTypeData`, data);

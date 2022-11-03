@@ -85,7 +85,7 @@ function createCssClasses() {
     .C3 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[4][1]}; color: white; border-radius: 10px; pointer-events: none; }
     .C4 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[5][1]}; color: white; border-radius: 10px; pointer-events: none; }
     .C5 .mapboxgl-popup-content { background-color: ${ut.sshwsValues[6][1]}; color: white; border-radius: 10px; pointer-events: none; }
-    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: white; border-radius: 10px; pointer-events: none; }
+    .Other .mapboxgl-popup-content { background-color: ${ut.sshwsValues[7][1]}; color: black; border-radius: 10px; pointer-events: none; }
     `)
     .appendTo("head");
 }
