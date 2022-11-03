@@ -434,8 +434,7 @@ https://tobiasahlin.com/spinkit/
     height: 250px;*/
     width: fit-content;
     height: fit-content;
-    max-height: 250px;
-    overflow: scroll;
+    overflow: hidden;
 
     border: 2px solid rgb(0, 0, 0);
     border-top-right-radius: 15px;
@@ -466,6 +465,11 @@ https://tobiasahlin.com/spinkit/
     align-items: center;
 
     cursor: pointer;
+}
+#haMapControlText {
+    height: fit-content;
+    max-height: 30vh;
+    overflow: scroll;
 }
 
 .alertPopup .mapboxgl-popup-content{

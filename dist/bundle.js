@@ -1835,6 +1835,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
         }
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
+            ut.haMapControlActions('show');
             var obj = getTrackPointData(e.features[0].properties, hurricaneID);
             var hurricaneType = e.features[0].properties.hurricaneType;//hurricaneTypeData[obj.forecastHour];
 
@@ -1862,11 +1863,12 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
             popupContent += '</div>';
 
-            new mapboxgl.Popup()
-                .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
-                .setHTML(popupContent)
-                //.setHTML(e.features[0].properties.description)
-                .addTo(map);
+            ut.haMapControlActions('text', popupContent);
+            // new mapboxgl.Popup()
+            //     .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
+            //     .setHTML(popupContent)
+            //     //.setHTML(e.features[0].properties.description)
+            //     .addTo(map);
         })
 
         var namesArr = $('#dataDiv').data('allHurricanesPlotted');
@@ -1908,7 +1910,7 @@ module.exports = drawHurricanesToMap;
 require('./menuItem');
 
 // This is if you want to automatically load the hurricanes upon page load. Helpful when developing.
-//$('#hurricanesMenuItemIcon').click();
+$('#hurricanesMenuItemIcon').click();
 },{"./menuItem":16}],11:[function(require,module,exports){
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
@@ -7992,9 +7994,14 @@ function animateBrightness(startVal, stopVal, duration, div) {
 function haMapControlActions(mode, value) {
     if (mode == 'show') {
         $('#hurricaneArchiveMapControl').show();
+        if ($('#dataDiv').data('isHaControlMinimized')) { $('#haMapControlMinimize').click() }
     } else if (mode == 'hide') {
+        //if (!$('#dataDiv').data('isHaControlMinimized')) { $('#haMapControlMinimize').click() }
         $('#hurricaneArchiveMapControl').hide();
         $('#haMapControlText').hide();
+    } else if (mode == 'text') {
+        $('#haMapControlText').show();
+        document.getElementById('haMapControlText').innerHTML = value;
     }
 }
 

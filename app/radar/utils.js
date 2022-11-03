@@ -687,9 +687,14 @@ function animateBrightness(startVal, stopVal, duration, div) {
 function haMapControlActions(mode, value) {
     if (mode == 'show') {
         $('#hurricaneArchiveMapControl').show();
+        if ($('#dataDiv').data('isHaControlMinimized')) { $('#haMapControlMinimize').click() }
     } else if (mode == 'hide') {
+        //if (!$('#dataDiv').data('isHaControlMinimized')) { $('#haMapControlMinimize').click() }
         $('#hurricaneArchiveMapControl').hide();
         $('#haMapControlText').hide();
+    } else if (mode == 'text') {
+        $('#haMapControlText').show();
+        document.getElementById('haMapControlText').innerHTML = value;
     }
 }
 
