@@ -280,7 +280,7 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
         }
 
         map.on('click', `trackLayerPoints${index}`, function (e) {
-            ut.haMapControlActions('show');
+            //ut.haMapControlActions('show');
             var obj = getTrackPointData(e.features[0].properties, hurricaneID);
             var hurricaneType = e.features[0].properties.hurricaneType;//hurricaneTypeData[obj.forecastHour];
 
@@ -308,12 +308,12 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
 
             popupContent += '</div>';
 
-            ut.haMapControlActions('text', popupContent);
-            // new mapboxgl.Popup()
-            //     .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
-            //     .setHTML(popupContent)
-            //     //.setHTML(e.features[0].properties.description)
-            //     .addTo(map);
+            // ut.haMapControlActions('text', popupContent);
+            new mapboxgl.Popup()
+                .setLngLat([obj.formattedCoords[1], obj.formattedCoords[0]])
+                .setHTML(popupContent)
+                //.setHTML(e.features[0].properties.description)
+                .addTo(map);
         })
 
         var namesArr = $('#dataDiv').data('allHurricanesPlotted');
