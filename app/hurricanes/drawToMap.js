@@ -9,6 +9,8 @@ createCssClasses.createCssClasses();
 
 var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC'];
 
+var firstDate;
+
 function getTrackPointData(properties, hurricaneID) {
     var miscData = $('#dataDiv').data(`${hurricaneID}_miscData`);
 
@@ -83,6 +85,35 @@ function getTrackPointData(properties, hurricaneID) {
     // formattedDate = formattedDate.substring(0, 9) + formattedDate.substring(13);
     // formattedDateObj = DateTime.fromFormat(formattedDate, "hh:mm a LLLL dd, yyyy");
 
+    // Valid at: 4:00 PM EST November 07, 2022
+    var formattedDate = trackPointDataObj.trackpointTime
+        .replace('Valid at: ', '')
+        .replace(',', '')
+        .replace(':', ' ')
+        .split(' ');
+    for (var i in formattedDate) { formattedDate[i] = formattedDate[i].trim() } // removes spaces from array items
+    formattedDate = formattedDate.filter(n => n); // removes empty items
+    // ['1', '00', 'PM', 'EST', 'November', '12', '2022']
+    var pdp = {}; // pdp = provided date parts
+    pdp.hour = formattedDate[0];
+    pdp.minutes = formattedDate[1];
+    pdp.meridiem = formattedDate[2];
+    pdp.tzAbbv = formattedDate[3];
+    pdp.month = formattedDate[4];
+    pdp.day = formattedDate[5];
+    pdp.year = formattedDate[6];
+    var combinedParts = `${ut.zeroPad(pdp.hour)}:${ut.zeroPad(pdp.minutes)} ${pdp.meridiem} ${pdp.month} ${ut.zeroPad(pdp.day)} ${pdp.year} UTC`;
+    var utcDateTime = DateTime.fromFormat(combinedParts, 'hh:mm a LLLL dd yyyy z').setZone('UTC');
+    // console.log(formattedDate)
+    // console.log(utcDateTime.toString())
+    if (firstDate == undefined) {
+        firstDate = utcDateTime;
+        trackPointDataObj.elapsedHours = 0;
+    } else {
+        var diff = utcDateTime.diff(firstDate, ['hours']);
+        trackPointDataObj.elapsedHours = diff.hours;
+    }
+
     var localTime = true;
     var tzAbbv;
     var luxonTz;
@@ -95,7 +126,7 @@ function getTrackPointData(properties, hurricaneID) {
     }
 
     var formattedDateObj = DateTime.fromISO(miscData.lastUpdate).setZone(luxonTz);
-    formattedDateObj = formattedDateObj.plus({ hours: trackPointDataObj.forecastHour })
+    formattedDateObj = formattedDateObj.plus({ hours: trackPointDataObj.elapsedHours })
     var dateString = formattedDateObj.toFormat("LLL d yyyy, h:mm a ZZZZ");
 
     var finalDateObj = new Date(formattedDateObj.toUTC().ts);
@@ -290,7 +321,15 @@ function drawHurricanesToMap(geojson, type, index, hurricaneID) {
                 <div><u>SSHWS: ${obj.sshwsLevel[0]}</u></div>
                 <br>
                 <div>Advisory #${obj.trackpointAdvisoryNum}</div>
-                <div>${obj.dateString}</div>
+                <div style="cursor: pointer" onclick="
+                    if (this.innerHTML == '${obj.dateString}') {
+                        this.innerHTML = '${obj.trackpointTime}';
+                    } else {
+                        this.innerHTML = '${obj.dateString}';
+                    }
+                ">${obj.dateString}</div>
+                <!-- <div>${obj.trackpointTime}</div>
+                <div>${obj.forecastHour}</div> -->
                 <div>${obj.trackpointLocation}</div>
                 <div>${obj.trackpointMaxWind}</div>
                 <div>${obj.trackpointWindGusts}</div>
