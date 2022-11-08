@@ -411,6 +411,9 @@ https://tobiasahlin.com/spinkit/
 .old-file {
     color: rgb(229, 78, 78);
 }
+.uploaded-file {
+    color: rgb(78, 181, 229);
+}
 
 #radarStationParent {
     text-align: center;

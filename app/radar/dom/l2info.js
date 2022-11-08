@@ -1,6 +1,7 @@
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel2FileTime = require('../level2/l2FileTime');
+const getTimeDiff = require('../misc/getTimeDiff');
 
 function showL2Info(l2rad) {
     $('#fileUploadSpan').hide();
@@ -27,7 +28,11 @@ function showL2Info(l2rad) {
 
     document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 
+    getTimeDiff(fileDateObj);
+
     if ($('#dataDiv').data('fromFileUpload')) {
+        document.getElementById('top-right').innerHTML += ' ago';
+        $('#top-right').addClass('uploaded-file');
         // shrink the map header because the file upload box is no longer there
         $('#radarHeader').css('height', '-=25px');
         $('.progressBar').css('top', '-=25px');
