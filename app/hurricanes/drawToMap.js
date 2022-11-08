@@ -7,7 +7,7 @@ const stormTypeData = require('./stormTypeData');
 
 createCssClasses.createCssClasses();
 
-var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC'];
+var normalTypes = ['TD', 'TS', 'HU', 'TY', 'ST', 'TC', 'SS'];
 
 var firstDate;
 
