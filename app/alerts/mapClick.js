@@ -51,7 +51,7 @@ function addMarker(e) {
         if (!alreadyAddedWmoIDs.includes(wmoId)) {
         alreadyAddedWmoIDs.push(wmoId);
 
-        var initColor = getPolygonColors(properties.event);
+        var initColor = getPolygonColors(properties.event).color;
         var backgroundColor = initColor;
         var borderColor = chroma(initColor).darken(1.5);
         var textColor = chroma(initColor).luminance() > 0.4 ? 'black' : 'white';

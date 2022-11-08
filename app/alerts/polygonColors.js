@@ -58,12 +58,19 @@ function getPolygonColors(alertEvent) {
     // console.log(noaaColors)
 
     if (Object.keys(noaaColors).includes(alertEvent)) {
+        var c = noaaColors[alertEvent].rgb;
         if (Object.keys(noaaColors[alertEvent]).includes('originalColor')) {
-            return noaaColors[alertEvent].originalColor;
+            c = noaaColors[alertEvent].rgb;
         }
-        return noaaColors[alertEvent].rgb;
+        return {
+            'color': c,
+            'priority': noaaColors[alertEvent].priority
+        }
     } else {
-        return 'rgb(128, 128, 128)';
+        return {
+            'color': 'rgb(128, 128, 128)',
+            'priority': '999'
+        }
     }
 }
 

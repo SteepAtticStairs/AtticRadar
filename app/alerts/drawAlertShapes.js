@@ -95,6 +95,22 @@ function addAlertGeojsonLayer(layerName, geojson) {
     map.on('click', `${layerName}LayerFill`, mapClick)
 }
 
+function sortByPriority(data) {
+    var origData = structuredClone(data);
+
+    var indexArr = [];
+    for (var i in data.features) {
+        indexArr.push([data.features[i].properties.priority, i])
+    }
+    indexArr.sort(function(a, b) { return a[0] - b[0] })
+    data.features = [];
+    for (var i in indexArr) {
+        data.features.push(origData.features[indexArr[i][1]]);
+    }
+    // for (var i in data.features) { console.log(data.features[i].properties.priority) }
+    return data;
+}
+
 var newAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 var swsAlertsURL = `${ut.phpProxy}https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
 // https://realearth.ssec.wisc.edu/products/?app=_ALL_
@@ -133,9 +149,12 @@ createMenuOption({
             // noaaAlertsURL
             fetchPolygonData([noaaAlertsURL], function(data) {
                 for (var item in data.features) {
-                    data.features[item].properties.color = getPolygonColors(data.features[item].properties.event);
+                    var gpc = getPolygonColors(data.features[item].properties.event); // gpc = get polygon colors
+                    data.features[item].properties.color = gpc.color;
+                    data.features[item].properties.priority = parseInt(gpc.priority);
                 }
-                console.log(data)
+                data = sortByPriority(data);
+                console.log(data);
 
                 addAlertGeojsonLayer('mainAlerts', data);
 
