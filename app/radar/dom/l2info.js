@@ -1,5 +1,6 @@
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
+const getLevel2FileTime = require('../level2/l2FileTime');
 
 function showL2Info(l2rad) {
     $('#fileUploadSpan').hide();
@@ -21,16 +22,8 @@ function showL2Info(l2rad) {
     }
     document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
-    var theFileDate = l2rad.header.modified_julian_date;
-    var theFileTime = l2rad.header.milliseconds;
-    var fileDateObj = addDays(new Date(0), theFileDate);
-    var fileHours = ut.msToTime(theFileTime).hours;
-    var fileMinutes = ut.msToTime(theFileTime).minutes;
-    var fileSeconds = ut.msToTime(theFileTime).seconds;
-    fileDateObj.setUTCHours(fileHours);
-    fileDateObj.setUTCMinutes(fileMinutes);
-    fileDateObj.setUTCSeconds(fileSeconds);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, "UTC");
+    var fileDateObj = getLevel2FileTime(l2rad);
+    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
     document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 
