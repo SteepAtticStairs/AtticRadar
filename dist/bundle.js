@@ -3425,8 +3425,14 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         if ($('#mapColorScale').is(":hidden")) {
             ut.setMapMargin('bottom', '+=15px');
         }
+        var offset;
+        if (require('../misc/detectmobilebrowser')) {
+            offset = $(window).height() * (5 / 100);
+        } else {
+            offset = 0;
+        }
         $('#mapColorScale').css({
-            'bottom': $('#mapFooter').height(),
+            'bottom': offset + $('#mapFooter').height(),
             'height': '15px'
         }).show();
 
@@ -3697,7 +3703,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 }
 
 module.exports = drawRadarShape;
-},{"../inspector/generateGeoJSON":31,"../level3/stormTracking/stormTrackingMain":42,"../map/controls/visibility":53,"../map/map":54,"../map/mapFunctions":55,"../misc/baseMapLayers":63,"../misc/paletteTooltip":67,"../utils":72,"./calculatePolygons":26}],28:[function(require,module,exports){
+},{"../inspector/generateGeoJSON":31,"../level3/stormTracking/stormTrackingMain":42,"../map/controls/visibility":53,"../map/map":54,"../map/mapFunctions":55,"../misc/baseMapLayers":63,"../misc/detectmobilebrowser":64,"../misc/paletteTooltip":67,"../utils":72,"./calculatePolygons":26}],28:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.
 */

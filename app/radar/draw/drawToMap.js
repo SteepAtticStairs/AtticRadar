@@ -27,8 +27,14 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         if ($('#mapColorScale').is(":hidden")) {
             ut.setMapMargin('bottom', '+=15px');
         }
+        var offset;
+        if (require('../misc/detectmobilebrowser')) {
+            offset = $(window).height() * (5 / 100);
+        } else {
+            offset = 0;
+        }
         $('#mapColorScale').css({
-            'bottom': $('#mapFooter').height(),
+            'bottom': offset + $('#mapFooter').height(),
             'height': '15px'
         }).show();
 
