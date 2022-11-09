@@ -24,26 +24,51 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var values;
     var minMax;
     function createTexture(gl) {
+        if ($('#mapColorScale').is(":hidden")) {
+            ut.setMapMargin('bottom', '+=15px');
+        }
+        $('#mapColorScale').css({
+            'bottom': $('#mapFooter').height(),
+            'height': '15px'
+        }).show();
+
         $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
             //console.log(data);
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
-            var colortcanvas = document.getElementById("texturecolorbar");
-            colortcanvas.width = 300;
-            colortcanvas.height = 30;
-            var ctxt = colortcanvas.getContext('2d');
-            ctxt.clearRect(0, 0, colortcanvas.width, colortcanvas.height);
-            var grdt = ctxt.createLinearGradient(0, 0, colortcanvas.width, 0);
+
+            var actualCanvas = document.getElementById('texturecolorbar');
+            var visualCanvas = document.getElementById('mapColorScale');
+
+            actualCanvas.width = 300;
+            actualCanvas.height = 30;
+            visualCanvas.width = $('#mapColorScale').width();
+            visualCanvas.height = $('#mapColorScale').height();
+
+            var actualCTX = actualCanvas.getContext('2d');
+            var visualCTX = visualCanvas.getContext('2d');
+
+            actualCTX.clearRect(0, 0, actualCanvas.width, actualCanvas.height);
+            visualCTX.clearRect(0, 0, visualCanvas.width, visualCanvas.height);
+
+            var actualGradient = actualCTX.createLinearGradient(0, 0, actualCanvas.width, 0);
+            var visualGradient = visualCTX.createLinearGradient(0, 0, visualCanvas.width, 0);
+
             var cmax = levs[levs.length - 1];
             var cmin = levs[0];
             var clen = colors.length;
 
             for (var i = 0; i < clen; ++i) {
-                grdt.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
+                actualGradient.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
+                visualGradient.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
             }
-            ctxt.fillStyle = grdt;
-            ctxt.fillRect(0, 0, colortcanvas.width, colortcanvas.height);
-            imagedata = ctxt.getImageData(0, 0, colortcanvas.width, colortcanvas.height);
+            actualCTX.fillStyle = actualGradient;
+            visualCTX.fillStyle = visualGradient;
+
+            actualCTX.fillRect(0, 0, actualCanvas.width, actualCanvas.height);
+            visualCTX.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
+
+            imagedata = actualCTX.getImageData(0, 0, actualCanvas.width, actualCanvas.height);
             imagetexture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
             pageState.imagedata = imagedata;
@@ -53,7 +78,23 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-            tt.initPaletteTooltip(produc, colortcanvas);
+            // $('#texturecolorbar').clone().appendTo('#mapColorScaleContainer').attr('id', 'mapColorScale');
+            // $('#mapColorScale').removeClass('texturecolorbar');
+            // $('#mapColorScale').css({
+            //     'position': 'absolute',
+            //     'z-index': 115,
+            //     'bottom': '50px',
+            //     'height': '10px',
+            //     'width': '100%',
+            //     'display': 'block'
+            // })
+            // // position: absolute;
+            // // z-index: 115;
+            // // bottom: 50px;
+            // // height: 10px;
+            // // width: 100%;
+            // console.log($('#mapColorScale'))
+            //tt.initPaletteTooltip(produc, colortcanvas);
         });
     }
 

@@ -59,9 +59,11 @@ function draw(data) {
 			var offset;
 			// page 46 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
 			if (product == 'N0C') {
+				// correlation coefficient
 				scale = 300;
 				offset = -60.5;
 			} else if (product == 'N0X') {
+				// differential reflectivity
 				scale = 16;
 				offset = 128;
 			} else {

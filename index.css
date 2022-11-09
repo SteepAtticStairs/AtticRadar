@@ -293,7 +293,7 @@ https://tobiasahlin.com/spinkit/
 
 .mapFooter {
     position: absolute;
-    z-index: 115;
+    z-index: 120;
     bottom: 0%;
     height: 45px;
     width: 100%;
@@ -347,6 +347,14 @@ https://tobiasahlin.com/spinkit/
     height: 10px;
     width: 100%;
     background-color: rgb(20, 103, 204);
+}
+#mapColorScale {
+    position: absolute;
+    z-index: 115;
+    width: 100%;
+    display: none;
+    /* bottom: 50px;
+    height: 10px; */
 }
 
 #productsDropdownTrigger, #productsDropdown {
