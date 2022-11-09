@@ -3427,7 +3427,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         }
         var offset;
         if (require('../misc/detectmobilebrowser')) {
-            offset = $(window).height() * (5 / 100);
+            offset = Math.round($(window).height() * (5 / 100));
         } else {
             offset = 0;
         }
