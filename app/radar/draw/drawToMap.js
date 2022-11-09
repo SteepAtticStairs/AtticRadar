@@ -21,6 +21,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
 
     var divider;
+    var values;
+    var minMax;
     function createTexture(gl) {
         $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
             //console.log(data);
@@ -128,9 +130,9 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
     $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
         divider = data.divider;
+        values = data.values;
+        minMax = [values[0], values[values.length - 1]];
     }).then(function() {
-        //console.log('NEW!!!!')
-        //console.log(divider)
         //compile shaders
         var vertexSource = `
             //x: azimuth
@@ -140,27 +142,25 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             attribute float aColor;
             uniform mat4 u_matrix;
             varying float color;
-    
+
             void main() {
                 color = aColor;
-                gl_Position = u_matrix * vec4(aPosition.x,aPosition.y,0.0,1.0);
+                gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
             }`;
         var fragmentSource = `
-            precision mediump float;
-            varying float color;
+            precision highp float;
+            uniform vec2 minmax;
             uniform sampler2D u_texture;
+            varying float color;
+
             void main() {
-                //gl_FragColor = vec4(0.0,color/60.0,0.0,1.0);
-                float calcolor = (color)${divider};
-                gl_FragColor = texture2D(u_texture,vec2(min(max(calcolor,0.0),1.0),0.0));
-                //gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+                float calcolor = (color - minmax.x) / (minmax.y - minmax.x);
+                gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
             }`
         var masterGl;
         var layer = {
             id: "baseReflectivity",
             type: "custom",
-            minzoom: 0,
-            maxzoom: 18,
 
             onAdd: function (map, gl) {
                 masterGl = gl;
@@ -183,6 +183,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 this.positionLocation = gl.getAttribLocation(this.program, "aPosition");
                 this.colorLocation = gl.getAttribLocation(this.program, "aColor");
                 this.textureLocation = gl.getUniformLocation(this.program, "u_texture");
+                this.minmaxLocation = gl.getUniformLocation(this.program, "minmax");
 
                 //data buffers
                 this.positionBuffer = gl.createBuffer();
@@ -202,6 +203,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 var offset = 0;
                 //calculate matrices
                 gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+                gl.uniform2fv(this.minmaxLocation, minMax)
                 gl.uniform1i(this.textureLocation, 0);
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, pageState.positions, gl.STATIC_DRAW);

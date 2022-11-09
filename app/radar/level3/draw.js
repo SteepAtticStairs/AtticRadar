@@ -21,9 +21,9 @@ function draw(data) {
 	var adder = 0;
 	var divider = 1;
 	if (product == "N0U" || product == "N0G" || product == "TVX") {
-		adder = 65;
+		adder = 0;
 	} else if (product == "N0B" || product == "NXQ" || product == "TZX" || product == "TZL") {
-		adder = 30;
+		adder = 0;
 	}
 	// generate a palette
 	//const palette = Palette.generate(product.palette);
