@@ -34,6 +34,7 @@ function draw(data) {
 	if (product == "N0C" || product == "N0X") {
 		radialLoop = data.radialPackets[0].radialsRaw;
 	}
+	var c = [];
 	radialLoop.forEach((radial) => {
 		arr = [];
 		valArr = [];
@@ -54,9 +55,20 @@ function draw(data) {
 			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
 			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
 
+			var correctedValue;
+			if (product == 'N0C') {
+				var scale = 300;
+				var offset = -60.5;
+				// page 45 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
+				correctedValue = (bin - offset) / scale;
+			} else {
+				correctedValue = bin;
+			}
+
 			arr.push(idx + data.radialPackets[0].firstBin)
-			valArr.push((bin + adder) / divider)
+			valArr.push(correctedValue)
 			rawValArr.push(bin)
+			//c.push(bin);
 
 			//ctx.stroke();
 		});
@@ -84,6 +96,7 @@ function draw(data) {
 			json.values[value] = json.values[value].map(scaleArray([arrMin, arrMax], [0.1, 75]))
 		}
 	}
+	console.log(json)
 
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log([...new Set(c)])
@@ -91,6 +104,7 @@ function draw(data) {
 	if (product == "NXQ" || product == "N0S" || product == "DVL" || product == "NSW" || product == "TZX" || product == "TVX" || product == "TZL") {
 		json.version = product;
 	}
+	console.log(json)
 	//console.log(json)
 	var blob = new Blob([JSON.stringify(json)], {type: "text/plain"});
     var url = window.URL.createObjectURL(blob);
