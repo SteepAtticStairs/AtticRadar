@@ -31,9 +31,9 @@ function draw(data) {
 	//const paletteScale = (data?.productDescription?.plot?.maxDataValue ?? 255) / (product.palette.baseScale ?? data?.productDescription?.plot?.maxDataValue ?? 1);
 	// use the raw values to avoid scaling and un-scaling
 	var radialLoop = data.radialPackets[0].radials;
-	if (product == "N0C" || product == "N0X") {
-		radialLoop = data.radialPackets[0].radialsRaw;
-	}
+	// if (product == "N0C" || product == "N0X") {
+	// 	radialLoop = data.radialPackets[0].radialsRaw;
+	// }
 	var c = [];
 	radialLoop.forEach((radial) => {
 		arr = [];
@@ -55,28 +55,28 @@ function draw(data) {
 			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
 			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
 
-			var scale;
-			var offset;
-			// page 46 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
-			if (product == 'N0C') {
-				// correlation coefficient
-				scale = 300;
-				offset = -60.5;
-			} else if (product == 'N0X') {
-				// differential reflectivity
-				scale = 16;
-				offset = 128;
-			} else {
-				scale = 1;
-				offset = 0;
-			}
-			// page 45 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
-			var correctedValue = (bin - offset) / scale;
+			// var scale;
+			// var offset;
+			// // page 46 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
+			// if (product == 'N0C') {
+			// 	// correlation coefficient
+			// 	scale = 300;
+			// 	offset = -60.5;
+			// } else if (product == 'N0X') {
+			// 	// differential reflectivity
+			// 	scale = 16;
+			// 	offset = 128;
+			// } else {
+			// 	scale = 1;
+			// 	offset = 0;
+			// // page 45 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
+			// var correctedValue = (bin - offset) / scale;
+			var correctedValue = bin;
 
 			arr.push(idx + data.radialPackets[0].firstBin)
 			valArr.push(correctedValue)
 			rawValArr.push(bin)
-			//c.push(bin);
+			//c.push(correctedValue);
 
 			//ctx.stroke();
 		});

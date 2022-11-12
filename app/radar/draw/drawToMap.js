@@ -6,6 +6,19 @@ const mapFuncs = require('../map/mapFunctions');
 const generateGeoJSON = require('../inspector/generateGeoJSON');
 var map = require('../map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
+const PNG = require('pngjs').PNG;
+const chroma = require('chroma-js');
+
+function rgbValToArray(rgbString) {
+    return rgbString
+            .replace('rgb(', '')
+            .replace('rgba(', '')
+            .replace(')', '')
+            .split(', ')
+}
+function chromaScaleToRgbString(scaleOutput) {
+    return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
+}
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var settings = {};
@@ -43,11 +56,19 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
 
+            if (produc == 'N0G' || produc == 'N0U') {
+                // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
+                for (var i in levs) { levs[i] = levs[i] * 1.944 }
+            }
+
             var actualCanvas = document.getElementById('texturecolorbar');
             var visualCanvas = document.getElementById('mapColorScale');
 
-            actualCanvas.width = 300;
-            actualCanvas.height = 30;
+            var width = 1500;
+            var height = 1;
+
+            actualCanvas.width = width;
+            actualCanvas.height = height;
             visualCanvas.width = $('#mapColorScale').width();
             visualCanvas.height = $('#mapColorScale').height();
 
@@ -74,15 +95,62 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             actualCTX.fillRect(0, 0, actualCanvas.width, actualCanvas.height);
             visualCTX.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
 
-            imagedata = actualCTX.getImageData(0, 0, actualCanvas.width, actualCanvas.height);
+            const png = new PNG({
+                colorType: 2,
+                filterType: 4,
+                width: width,
+                height: height
+            });
+
+            var colorsArr = [];
+            for (var i in values) {
+                var colArr = rgbValToArray(colors[i]);
+                colorsArr.push(colArr)
+            }
+            var chromaScale = chroma.scale(colors).domain(values).mode('lab');
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const i = (y * width + x) * 4;
+
+                    //console.log((values[x] - cmin) / (cmax - cmin))
+                    var scaledVal = ut.scale(x, 0, width - 1, cmin, cmax);
+                    var colorAtVal = chromaScaleToRgbString(chromaScale(scaledVal));
+                    var arrayColorAtVal = rgbValToArray(colorAtVal);
+
+                    png.data[i + 0] = arrayColorAtVal[0]; //getRandomInt(0, 255);
+                    png.data[i + 1] = arrayColorAtVal[1]; //getRandomInt(0, 255);
+                    png.data[i + 2] = arrayColorAtVal[2]; //getRandomInt(0, 255);
+                    png.data[i + 3] = 255;
+                }
+            }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.canvas.width = png.width;
+            ctx.canvas.height = png.height;
+
+            // https://stackoverflow.com/a/16404317
+            var imgData = ctx.createImageData(png.width, png.height);
+
+            var ubuf = new Uint8Array(png.data);
+            for (var i = 0; i < ubuf.length; i += 4) {
+                imgData.data[i] = ubuf[i];   // red
+                imgData.data[i + 1] = ubuf[i + 1]; // green
+                imgData.data[i + 2] = ubuf[i + 2]; // blue
+                imgData.data[i + 3] = ubuf[i + 3]; // alpha
+            }
+
+            for (var i = 0; i < imgData.data.length; i = i + 4) {
+                var rgb = `rgba(${imgData.data[i]}, ${imgData.data[i + 1]}, ${imgData.data[i + 2]}, ${imgData.data[i + 3]})`;
+                //ut.colorLog(rgb, rgb)
+            }
+
+            imagedata = imgData;
             imagetexture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
             pageState.imagedata = imagedata;
             pageState.imagetexture = imagetexture;
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
             // $('#texturecolorbar').clone().appendTo('#mapColorScaleContainer').attr('id', 'mapColorScale');
             // $('#mapColorScale').removeClass('texturecolorbar');

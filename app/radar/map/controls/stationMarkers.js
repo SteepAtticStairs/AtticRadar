@@ -215,8 +215,8 @@ function showStations() {
                 $('#wsr88dMenu').show();
                 $('#tdwrMenu').hide();
 
-                productToLoad = 'N0B';
-                abbvProductToLoad = 'ref';
+                productToLoad = 'N0C';
+                abbvProductToLoad = 'rho';
 
                 var menuElem = $('#wsr88dRefBtn');
                 if (menuElem.find('.selectedProductMenuItem').length == 0) {
