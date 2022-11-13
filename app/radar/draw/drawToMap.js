@@ -60,8 +60,11 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                 // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
                 for (var i in levs) { levs[i] = levs[i] * 1.944 }
             } else if (produc == 'N0S') {
-                // storm relative velocity tweaks
+                // storm relative velocity
                 for (var i in levs) { levs[i] = levs[i] + 0.5 }
+            } else if (produc == 'N0H' || produc == 'HHC') {
+                // hydrometer classification || hybrid hydrometer classification
+                for (var i in levs) { levs[i] = levs[i] - 0.5 }
             }
 
             var actualCanvas = document.getElementById('texturecolorbar');

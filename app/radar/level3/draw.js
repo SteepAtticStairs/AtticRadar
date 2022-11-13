@@ -62,6 +62,27 @@ function draw(data) {
 			} else if (product == 'N0C' || product == 'N0X' || product == 'DVL') {
 				// correlation coefficient || differential reflectivity || vertically integrated liquid
 				inspectorVal = bin.toFixed(2);
+			} else if (product == 'N0H' || product == 'HHC') {
+				// hydrometer classification || hybrid hydrometer classification
+				var hycValues = {
+					0: 'Below Threshold', // ND
+					10: 'Biological', // BI
+					20: 'Ground Clutter', // GC
+					30: 'Ice Crystals', // IC
+					40: 'Dry Snow', // DS
+					50: 'Wet Snow', // WS
+					60: 'Light-Mod. Rain', // RA
+					70: 'Heavy Rain', // HR
+					80: 'Big Drops', // BD
+					90: 'Graupel', // GR
+					100: 'Hail / Rain', // HA
+					110: 'Large Hail', // LH
+					120: 'Giant Hail', // GH,
+					130: '130', // ??
+					140: 'Unknown', // UK
+					150: 'Range Folded' // RF
+				}
+				inspectorVal = hycValues[bin];
 			} else {
 				inspectorVal = bin;
 			}
