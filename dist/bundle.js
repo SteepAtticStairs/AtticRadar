@@ -4601,7 +4601,7 @@ function draw(data) {
 			arr.push(idx + data.radialPackets[0].firstBin)
 			valArr.push(bin)
 			rawValArr.push(correctedValue)
-			c.push(correctedValue);
+			//c.push(correctedValue);
 
 			//ctx.stroke();
 		});
@@ -4621,14 +4621,6 @@ function draw(data) {
 	}
 	// sort each azimuth value from lowest to highest
 	json.azimuths.sort(function(a, b){return a - b});
-
-	if (product == "DVL") {
-		var arrMin = Math.min(...[...new Set(c)]);
-		var arrMax = Math.max(...[...new Set(c)]);
-		for (value in json.values) {
-			json.values[value] = json.values[value].map(scaleArray([arrMin, arrMax], [0.1, 75]))
-		}
-	}
 	//console.log(json)
 
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
@@ -11674,6 +11666,28 @@ module.exports = {
 const code = 16;
 const description = 'Digital Radial Data Array Packet';
 
+// https://github.com/Unidata/MetPy/blob/main/src/metpy/io/nexrad.py#L702
+function float16(val) {
+    //Convert a 16-bit floating point value to a standard Javascript float.
+    // Fraction is 10 LSB, Exponent middle 5, and Sign the MSB
+    var frac = val & 0x03ff
+    var exp = (val >> 10) & 0x1F
+    var sign = val >> 15
+
+    var value;
+    if (exp) {
+        value = 2 ** (exp - 16) * (1 + parseFloat(frac) / 2**10)
+    } else {
+        value = parseFloat(frac) / 2**9
+    }
+
+    if (sign) {
+        value *= -1
+    }
+
+    return value
+}
+
 const parser = (raf, productDescription) => {
 	// packet header
 	const packetCode = raf.readUShort();
@@ -11719,6 +11733,25 @@ const parser = (raf, productDescription) => {
 		scaled[1] = null;
 		for (let i = 2; i <= productDescription.plot.dataLevels; i += 1) {
 			scaled[i] = productDescription.plot.minimumDataValue + (i * productDescription.plot.dataIncrement);
+		}
+	} else if (productDescription?.plot?.logStart !== undefined) {
+		// scaling for vertically integrated liquid
+		var linScale = float16(productDescription.plot.linScale); // hw31
+		var linOffset = float16(productDescription.plot.linOffset); // hw32
+		var logStart = productDescription.plot.logStart; // hw33
+		var logScale = float16(productDescription.plot.logScale); // hw34
+		var logOffset = float16(productDescription.plot.logOffset); // hw35
+
+		// VIL is allowed to use 2 through 254 inclusive. 0 is thresholded,
+        // 1 is flagged, and 255 is reserved
+		scaled[0] = null;
+		scaled[1] = 0.0;
+		for (let i = 2; i <= 254; i += 1) {
+			if (i < logStart) {
+				scaled[i] = (i - linOffset) / linScale;
+			} else if (i >= logStart) {
+				scaled[i] = Math.exp((i - logOffset) / logScale)
+			}
 		}
 	}
 
@@ -12507,7 +12540,7 @@ module.exports = {
 },{}],135:[function(require,module,exports){
 const code = 134;
 const abbreviation = ['DVL'];
-const description = 'Digital Vertically Integrated Liquid';
+const description = 'Vertically Integrated Liquid';
 const { RandomAccessFile } = require('../../randomaccessfile');
 
 // eslint-disable-next-line camelcase
@@ -12521,21 +12554,21 @@ const halfwords30_53 = (data) => {
 	const raf = new RandomAccessFile(data);
 	return {
 		elevationAngle: raf.readShort() / 10,
-		dependent31_49: raf.read(38),
-		...deltaTime(raf.readShort()),
+		plot: {
+			linScale: raf.readShort(),
+			linOffset: raf.readShort(),
+			logStart: raf.readShort(),
+			logScale: raf.readShort(),
+			logOffset: raf.readShort(),
+		},
+		dependent36_46: raf.read(22),
+		maxDigitalVIL: raf.readShort(),
+		numArtifactEditedRadials: raf.readShort(),
+		dependent49_50: raf.read(4),
 		compressionMethod: raf.readShort(),
-		uncompressedSize: (raf.readUShort() << 16) + raf.readUShort(),
-		plot: { maxDataValue: 500 },
+		uncompressedProductSize: (raf.readUShort() << 16) + raf.readUShort(),
 	};
 };
-
-// delta and time are compressed into one field
-const deltaTime = (value) => ({
-	deltaTime: (value & 0xFFE0) >> 5,
-	nonSupplementalScan: (value & 0x001F) === 0,
-	sailsScan: (value & 0x001F) === 1,
-	mrleScan: (value & 0x001F) === 2,
-});
 
 module.exports = {
 	code,

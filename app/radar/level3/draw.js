@@ -65,7 +65,7 @@ function draw(data) {
 			arr.push(idx + data.radialPackets[0].firstBin)
 			valArr.push(bin)
 			rawValArr.push(correctedValue)
-			c.push(correctedValue);
+			//c.push(correctedValue);
 
 			//ctx.stroke();
 		});
@@ -85,14 +85,6 @@ function draw(data) {
 	}
 	// sort each azimuth value from lowest to highest
 	json.azimuths.sort(function(a, b){return a - b});
-
-	if (product == "DVL") {
-		var arrMin = Math.min(...[...new Set(c)]);
-		var arrMax = Math.max(...[...new Set(c)]);
-		for (value in json.values) {
-			json.values[value] = json.values[value].map(scaleArray([arrMin, arrMax], [0.1, 75]))
-		}
-	}
 	//console.log(json)
 
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
