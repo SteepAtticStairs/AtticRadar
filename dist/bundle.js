@@ -3454,9 +3454,12 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
 
-            if (produc == 'N0G' || produc == 'N0U') {
+            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX') {
                 // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
                 for (var i in levs) { levs[i] = levs[i] * 1.944 }
+            } else if (produc == 'N0S') {
+                // storm relative velocity tweaks
+                for (var i in levs) { levs[i] = levs[i] + 0.5 }
             }
 
             var actualCanvas = document.getElementById('texturecolorbar');
@@ -4548,9 +4551,7 @@ function draw(data) {
 	//const paletteScale = (data?.productDescription?.plot?.maxDataValue ?? 255) / (product.palette.baseScale ?? data?.productDescription?.plot?.maxDataValue ?? 1);
 	// use the raw values to avoid scaling and un-scaling
 	var radialLoop = data.radialPackets[0].radials;
-	// if (product == "N0C" || product == "N0X") {
-	// 	radialLoop = data.radialPackets[0].radialsRaw;
-	// }
+
 	var c = [];
 	radialLoop.forEach((radial) => {
 		arr = [];
@@ -4572,28 +4573,19 @@ function draw(data) {
 			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
 			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
 
-			// var scale;
-			// var offset;
-			// // page 46 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
-			// if (product == 'N0C') {
-			// 	// correlation coefficient
-			// 	scale = 300;
-			// 	offset = -60.5;
-			// } else if (product == 'N0X') {
-			// 	// differential reflectivity
-			// 	scale = 16;
-			// 	offset = 128;
-			// } else {
-			// 	scale = 1;
-			// 	offset = 0;
-			// // page 45 - https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001Y.pdf
-			// var correctedValue = (bin - offset) / scale;
 			var correctedValue = bin;
+			if (product == 'N0S') {
+                // storm relative velocity tweaks
+				var stormRelativeVelocityArr = [-50, -36, -26, -20, -10, -1, 0, 10, 20, 26, 36, 50, 64, 999];
+				correctedValue = stormRelativeVelocityArr[bin - 2];
+			} else {
+				correctedValue = bin;
+			}
 
 			arr.push(idx + data.radialPackets[0].firstBin)
-			valArr.push(correctedValue)
-			rawValArr.push(bin)
-			//c.push(correctedValue);
+			valArr.push(bin)
+			rawValArr.push(correctedValue)
+			c.push(correctedValue);
 
 			//ctx.stroke();
 		});
@@ -13192,8 +13184,9 @@ const halfwords30_53 = (data) => {
 			dataLevels: raf.readShort(),
 		},
 		dependent34_46: raf.read(26),
-		maxReflectivity: raf.readShort(),	// dBZ
-		dependent48_49: raf.read(4),
+		maxNegVelocity: raf.readShort(), // knots
+		maxPosVelocity: raf.readShort(), // knots
+		dependent49: raf.read(2),
 		...deltaTime(raf.readShort()),
 		compressionMethod: raf.readShort(),
 		uncompressedProductSize: (raf.readUShort() << 16) + raf.readUShort(),
