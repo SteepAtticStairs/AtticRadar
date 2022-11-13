@@ -1,4 +1,5 @@
 const drawRadarShape = require('../draw/drawToMap');
+const ut = require('../utils.js')
 
 const scaleArray = (fromRange, toRange) => {
 	const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
@@ -85,6 +86,10 @@ function draw(data) {
 				inspectorVal = hycValues[bin];
 			} else {
 				inspectorVal = bin;
+			}
+			if (product != 'N0H' && product != 'HHC') {
+				// hydrometer classification || hybrid hydrometer classification
+				inspectorVal = `${inspectorVal} ${ut.productUnits[product]}`;
 			}
 
 			arr.push(idx + data.radialPackets[0].firstBin)

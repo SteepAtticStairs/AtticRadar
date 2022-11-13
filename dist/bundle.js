@@ -4538,6 +4538,7 @@ function mainL2Loading(thisObj) {
 module.exports = mainL2Loading;
 },{"../../../lib/nexrad-level-2-data/src":90,"../../../lib/nexrad-level-2-plot/src":103,"../dom/l2info":24,"../level2/eventListeners":34,"../utils":72,"./loadL2Menu":36}],38:[function(require,module,exports){
 const drawRadarShape = require('../draw/drawToMap');
+const ut = require('../utils.js')
 
 const scaleArray = (fromRange, toRange) => {
 	const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
@@ -4625,6 +4626,10 @@ function draw(data) {
 			} else {
 				inspectorVal = bin;
 			}
+			if (product != 'N0H' && product != 'HHC') {
+				// hydrometer classification || hybrid hydrometer classification
+				inspectorVal = `${inspectorVal} ${ut.productUnits[product]}`;
+			}
 
 			arr.push(idx + data.radialPackets[0].firstBin)
 			valArr.push(val)
@@ -4689,7 +4694,7 @@ function draw(data) {
 }
 
 module.exports = draw
-},{"../draw/drawToMap":27}],39:[function(require,module,exports){
+},{"../draw/drawToMap":27,"../utils.js":72}],39:[function(require,module,exports){
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const { DateTime } = require('luxon');
@@ -7894,6 +7899,22 @@ var vcpObj = {
     '90': 'Precip Mode',
 }
 
+var productUnits = {
+    'N0B': 'dBZ', // super-res reflectivity
+    'N0G': 'm/s', // super-res velocity
+    'N0C': '%', // correlation coefficient
+    'N0X': 'dB', // differential reflectivity
+    'NSW': 'mph', // spectrum width
+    'NXQ': 'dBZ', // digital reflectivity
+    'N0U': 'm/s', // digital base velocity
+    'DVL': 'kg/m²', // vertically integrated liquid
+    'N0S': 'knots', // storm relative velocity
+
+    'TZX': 'dBZ', // tdwr short-range reflectivity
+    'TZL': 'dBZ', // tdwr long-range reflectivity
+    'TVX': 'm/s', // tdwr base velocity
+}
+
 function blobToString(b) {
     var u, x;
     u = URL.createObjectURL(b);
@@ -8321,6 +8342,7 @@ module.exports = {
     numOfTiltsObj,
     allL2Btns,
     vcpObj,
+    productUnits,
     blobToString,
     addDays,
     progressBarVal,

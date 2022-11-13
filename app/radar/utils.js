@@ -305,6 +305,22 @@ var vcpObj = {
     '90': 'Precip Mode',
 }
 
+var productUnits = {
+    'N0B': 'dBZ', // super-res reflectivity
+    'N0G': 'm/s', // super-res velocity
+    'N0C': '%', // correlation coefficient
+    'N0X': 'dB', // differential reflectivity
+    'NSW': 'mph', // spectrum width
+    'NXQ': 'dBZ', // digital reflectivity
+    'N0U': 'm/s', // digital base velocity
+    'DVL': 'kg/m²', // vertically integrated liquid
+    'N0S': 'knots', // storm relative velocity
+
+    'TZX': 'dBZ', // tdwr short-range reflectivity
+    'TZL': 'dBZ', // tdwr long-range reflectivity
+    'TVX': 'm/s', // tdwr base velocity
+}
+
 function blobToString(b) {
     var u, x;
     u = URL.createObjectURL(b);
@@ -732,6 +748,7 @@ module.exports = {
     numOfTiltsObj,
     allL2Btns,
     vcpObj,
+    productUnits,
     blobToString,
     addDays,
     progressBarVal,
