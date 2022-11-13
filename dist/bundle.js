@@ -4037,7 +4037,7 @@ function generateGeoJSON(url, phi, radarLat, radarLon, radVersion) {
                     var br = calculatePosition(rightAz, bottomR);
                     var tr = calculatePosition(rightAz, topR);
 
-                    pushPoint(bl.lat, bl.lon, tl.lat, tl.lon, tr.lat, tr.lon, br.lat, br.lon, json.rawValues[key][i])
+                    pushPoint(bl.lat, bl.lon, tl.lat, tl.lon, tr.lat, tr.lon, br.lat, br.lon, json.inspectorValues[key][i])
                 }
             }
         }
@@ -4550,7 +4550,7 @@ function draw(data) {
 	var json = {
 		'radials': [],
 		'values': [],
-		'rawValues': [],
+		'inspectorValues': [],
 		'azimuths': [],
 		'version': [],
 	};
@@ -4572,7 +4572,7 @@ function draw(data) {
 	radialLoop.forEach((radial) => {
 		arr = [];
 		valArr = [];
-		rawValArr = [];
+		inspectorValArr = [];
 		const startAngle = radial.startAngle * (Math.PI / 180);
 		const endAngle = startAngle + radial.angleDelta * (Math.PI / 180);
 		json.azimuths.push(radial.startAngle)
@@ -4589,25 +4589,29 @@ function draw(data) {
 			//ctx.strokeStyle = palette[Math.round(thisSample * paletteScale)];
 			//ctx.arc(0, 0, (idx + data.radialPackets[0].firstBin) / scale, startAngle, endAngle);
 
-			var correctedValue = bin;
+			var val = bin;
+			var inspectorVal;
 			if (product == 'N0S') {
                 // storm relative velocity tweaks
 				var stormRelativeVelocityArr = [-50, -36, -26, -20, -10, -1, 0, 10, 20, 26, 36, 50, 64, 999];
-				correctedValue = stormRelativeVelocityArr[bin - 2];
+				inspectorVal = stormRelativeVelocityArr[bin - 2];
+			} else if (product == 'N0C' || product == 'N0X' || product == 'DVL') {
+				// correlation coefficient || differential reflectivity || vertically integrated liquid
+				inspectorVal = bin.toFixed(2);
 			} else {
-				correctedValue = bin;
+				inspectorVal = bin;
 			}
 
 			arr.push(idx + data.radialPackets[0].firstBin)
-			valArr.push(bin)
-			rawValArr.push(correctedValue)
+			valArr.push(val)
+			inspectorValArr.push(inspectorVal)
 			//c.push(correctedValue);
 
 			//ctx.stroke();
 		});
 		json.radials.push(arr)
 		json.values.push(valArr)
-		json.rawValues.push(rawValArr);
+		json.inspectorValues.push(inspectorValArr);
 	});
 
 	// if the first azimuth isn't zero (e.g. azimuths going 0-360) then we need to do some re-arrangement
@@ -10455,7 +10459,7 @@ const draw = (data, _options) => {
 	var json = {
 		'radials': [],
 		'values': [],
-		'rawValues': [],
+		'inspectorValues': [],
 		'azimuths': [],
 		'version': [],
 	};
@@ -10481,7 +10485,7 @@ const draw = (data, _options) => {
 	rrlEncoded.forEach((radial) => {
 		arr = [];
 		valArr = [];
-		rawValArr = [];
+		inspectorValArr = [];
 		json.azimuths.push(radial.azimuth)
 		// calculate plotting parameters
 
@@ -10505,24 +10509,30 @@ const draw = (data, _options) => {
 				// rrle encoded
 				//ctx.strokeStyle = palette.lookupRgba[bin.value];
 				//ctx.arc(0, 0, (idx + deadZone) * gateSizeScaling, startAngle, endAngle + resolution * (bin.count - 1));
+				var val = bin.value;
+				var inspectorVal = bin;
+
 				arr.push((idx + deadZone) * gateSizeScaling)
-				valArr.push(bin.value + adder)
-				rawValArr.push(bin)
+				valArr.push(val + adder)
+				inspectorValArr.push(inspectorVal)
 				//c.push(bin.value + adder)
 			} else {
 				// plain data
 				//ctx.strokeStyle = palette.lookupRgba[bin];
 				//ctx.arc(0, 0, (idx + deadZone) * gateSizeScaling, startAngle, endAngle);
+				var val = bin;
+				var inspectorVal = bin;
+
 				arr.push((idx + deadZone) * gateSizeScaling)
-				valArr.push(bin + adder)
-				rawValArr.push(bin)
+				valArr.push(val + adder)
+				inspectorValArr.push(inspectorVal)
 				//c.push(bin + adder)
 			}
 			//ctx.stroke();
 		});
 		json.radials.push(arr)
 		json.values.push(valArr)
-		json.rawValues.push(rawValArr);
+		json.inspectorValues.push(inspectorValArr);
 	});
 	//console.log(Math.min(...[...new Set(c)]), Math.max(...[...new Set(c)]))
 	//console.log(valueArr)

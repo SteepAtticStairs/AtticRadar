@@ -116,7 +116,7 @@ function generateGeoJSON(url, phi, radarLat, radarLon, radVersion) {
                     var br = calculatePosition(rightAz, bottomR);
                     var tr = calculatePosition(rightAz, topR);
 
-                    pushPoint(bl.lat, bl.lon, tl.lat, tl.lon, tr.lat, tr.lon, br.lat, br.lon, json.rawValues[key][i])
+                    pushPoint(bl.lat, bl.lon, tl.lat, tl.lon, tr.lat, tr.lon, br.lat, br.lon, json.inspectorValues[key][i])
                 }
             }
         }
