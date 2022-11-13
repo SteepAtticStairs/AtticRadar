@@ -88,15 +88,31 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var cmin = levs[0];
             var clen = colors.length;
 
+            var gradColors = '';
             for (var i = 0; i < clen; ++i) {
                 actualGradient.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
                 visualGradient.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
+
+                var curPercent = (((levs[i] - cmin) / (cmax - cmin)) * 100);
+                gradColors += `${colors[i]} ${curPercent}%`;
+                if (!(i == clen - 1)) { gradColors += ',\n' }
             }
             actualCTX.fillStyle = actualGradient;
-            visualCTX.fillStyle = visualGradient;
+            //visualCTX.fillStyle = visualGradient;
 
             actualCTX.fillRect(0, 0, actualCanvas.width, actualCanvas.height);
-            visualCTX.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
+            //visualCTX.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
+
+            $('<style>')
+                .prop('type', 'text/css')
+                .html(`
+                #mapColorScale {
+                    background: linear-gradient(
+                        to right,
+                        ${gradColors}
+                    );
+                }`)
+                .appendTo('head');
 
             const png = new PNG({
                 colorType: 2,
