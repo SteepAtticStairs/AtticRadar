@@ -1,6 +1,5 @@
 const createOffCanvasItem = require('../menu/createOffCanvasItem');
 const distanceMeasure = require('./distanceMeasure');
-var map = require('../map/map');
 
 createOffCanvasItem({
     'id': 'distanceMeasureMenuItem',
@@ -21,6 +20,3 @@ createOffCanvasItem({
         distanceMeasure.disableDistanceMeasure();
     }
 })
-
-$('#helpMenuItem_outer').insertAfter('#tideStationMenuItem_outer');
-$(document.createElement('br')).insertAfter('#helpMenuItem_outer');

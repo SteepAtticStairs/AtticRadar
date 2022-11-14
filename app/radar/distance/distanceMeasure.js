@@ -127,10 +127,11 @@ function mouseMove(e) {
     map.getSource('distanceMeasureLine').setData(line);
     map.getSource('distanceMeasureCircle').setData(circle);
 
-    map.on('mouseup', function(e) {
-        map.off('mousemove', mouseMove);
+    function mouseUp() {
+        map.off('mousemove', mouseMove).off('touchmove', mouseMove);
         map._fadeDuration = initFadeDuration;
-    })
+    }
+    map.on('mouseup', mouseUp).on('touchend', mouseUp);
 }
 
 function mouseDown(e) {
@@ -151,17 +152,19 @@ function mouseDown(e) {
     }
 
     e.preventDefault();
-    map.on('mousemove', mouseMove);
+    map.on('mousemove', mouseMove).on('touchmove', mouseMove);
 }
 
 function initDistanceMeasureListeners() {
-    map.on('mousedown', mouseDown);
+    map.on('mousedown', mouseDown).on('touchstart', mouseDown);
 }
 function disableDistanceMeasure() {
     for (var i in mapLayersAdded) { if (map.getLayer(mapLayersAdded[i])) { map.removeLayer(mapLayersAdded[i]) } }
     for (var i in mapLayersAdded) { if (map.getSource(mapLayersAdded[i])) { map.removeSource(mapLayersAdded[i]) } }
-    map.off('mousedown', mouseDown);
+    map.off('mousedown', mouseDown).off('touchstart', mouseDown);
 }
+
+//initDistanceMeasureListeners();
 
 module.exports = {
     initDistanceMeasureListeners,

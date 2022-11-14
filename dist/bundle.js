@@ -3200,10 +3200,11 @@ function mouseMove(e) {
     map.getSource('distanceMeasureLine').setData(line);
     map.getSource('distanceMeasureCircle').setData(circle);
 
-    map.on('mouseup', function(e) {
-        map.off('mousemove', mouseMove);
+    function mouseUp() {
+        map.off('mousemove', mouseMove).off('touchmove', mouseMove);
         map._fadeDuration = initFadeDuration;
-    })
+    }
+    map.on('mouseup', mouseUp).on('touchend', mouseUp);
 }
 
 function mouseDown(e) {
@@ -3224,17 +3225,19 @@ function mouseDown(e) {
     }
 
     e.preventDefault();
-    map.on('mousemove', mouseMove);
+    map.on('mousemove', mouseMove).on('touchmove', mouseMove);
 }
 
 function initDistanceMeasureListeners() {
-    map.on('mousedown', mouseDown);
+    map.on('mousedown', mouseDown).on('touchstart', mouseDown);
 }
 function disableDistanceMeasure() {
     for (var i in mapLayersAdded) { if (map.getLayer(mapLayersAdded[i])) { map.removeLayer(mapLayersAdded[i]) } }
     for (var i in mapLayersAdded) { if (map.getSource(mapLayersAdded[i])) { map.removeSource(mapLayersAdded[i]) } }
-    map.off('mousedown', mouseDown);
+    map.off('mousedown', mouseDown).off('touchstart', mouseDown);
 }
+
+//initDistanceMeasureListeners();
 
 module.exports = {
     initDistanceMeasureListeners,
@@ -3243,7 +3246,6 @@ module.exports = {
 },{"../map/map":56,"@turf/turf":175}],24:[function(require,module,exports){
 const createOffCanvasItem = require('../menu/createOffCanvasItem');
 const distanceMeasure = require('./distanceMeasure');
-var map = require('../map/map');
 
 createOffCanvasItem({
     'id': 'distanceMeasureMenuItem',
@@ -3264,10 +3266,7 @@ createOffCanvasItem({
         distanceMeasure.disableDistanceMeasure();
     }
 })
-
-$('#helpMenuItem_outer').insertAfter('#tideStationMenuItem_outer');
-$(document.createElement('br')).insertAfter('#helpMenuItem_outer');
-},{"../map/map":56,"../menu/createOffCanvasItem":60,"./distanceMeasure":23}],25:[function(require,module,exports){
+},{"../menu/createOffCanvasItem":60,"./distanceMeasure":23}],25:[function(require,module,exports){
 const ut = require('../utils');
 
 /*
