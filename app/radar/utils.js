@@ -727,6 +727,28 @@ function setMapMargin(topOrBottom, value) {
     }
 }
 
+function displayAtticDialog(options) {
+    var title = options.title;
+    var body = options.body;
+    var color = options.color;
+    var textColor = options.textColor;
+
+    $('#atticDialog').show();
+
+    $('#atticDialogHeader').html(title)
+    $('#atticDialogHeader').css('background-color', color);
+    $('#atticDialogHeaderContainer').css('background-color', color);
+    $('#atticDialogHeader').css('color', textColor);
+    $('#atticDialogClose').css('color', textColor);
+
+    $('#atticDialogBody').scrollTop(0);
+    $('#atticDialogBody').html(body);
+
+    // var bodyHeight = $('#atticDialogBody').outerHeight();
+    // console.log(bodyHeight)
+    // $('#atticDialogContainer').height(bodyHeight);
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -774,5 +796,6 @@ module.exports = {
     animateBrightness,
     haMapControlActions,
     zeroPad,
-    setMapMargin
+    setMapMargin,
+    displayAtticDialog
 }

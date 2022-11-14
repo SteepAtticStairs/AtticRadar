@@ -502,7 +502,7 @@ https://tobiasahlin.com/spinkit/
 .alertPopup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip { border-top-color: black; }
 .alertPopup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip { border-top-color: black; }
 
-#alertsDialog {
+#atticDialog {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -511,7 +511,7 @@ https://tobiasahlin.com/spinkit/
 
     background-color: rgba(0, 0, 0, 0.4);
 }
-#alertsDialogContainer {
+#atticDialogContainer {
     position: absolute;
     z-index: 1001;
     left: 0;
@@ -534,7 +534,7 @@ https://tobiasahlin.com/spinkit/
     background-color: rgb(19, 19, 19);
     color: rgb(172, 172, 172);
 }
-#alertsDialogHeaderContainer {
+#atticDialogHeaderContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -548,7 +548,7 @@ https://tobiasahlin.com/spinkit/
     justify-content: center;
     align-items: center;
 }
-#alertsDialogClose {
+#atticDialogClose {
     position: absolute;
     z-index: 1002;
     margin: 0 auto;
@@ -556,7 +556,7 @@ https://tobiasahlin.com/spinkit/
     transform: scale(1.5);
     cursor: pointer;
 }
-#alertsDialogBody {
+#atticDialogBody {
     position: absolute;
     bottom: 0;
     top: 50px;

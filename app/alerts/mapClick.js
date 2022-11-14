@@ -4,30 +4,12 @@ const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
-$('#alertsDialog').on('click', function(e) {
+$('#atticDialog').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
-    if (clickedTarget == 'alertsDialog' || clickedTarget == 'alertsDialogClose') {
+    if (clickedTarget == 'atticDialog' || clickedTarget == 'atticDialogClose') {
         $(this).hide();
     }
 })
-
-function displayAlertDialog(options) {
-    var title = options.title;
-    var body = options.body;
-    var color = options.color;
-    var textColor = options.textColor;
-
-    $('#alertsDialog').show();
-
-    $('#alertsDialogHeader').html(title)
-    $('#alertsDialogHeader').css('background-color', color);
-    $('#alertsDialogHeaderContainer').css('background-color', color);
-    $('#alertsDialogHeader').css('color', textColor);
-    $('#alertsDialogClose').css('color', textColor);
-
-    $('#alertsDialogBody').scrollTop(0);
-    $('#alertsDialogBody').html(body);
-}
 
 function rgbToRGBA(rgb, opacity) {
     var str = rgb.slice(0, -1)
@@ -153,7 +135,7 @@ function addMarker(e) {
         //     'body': alertContentObj[id].body
         // })
         console.log(alertContentObj[id])
-        displayAlertDialog({
+        ut.displayAtticDialog({
             'title': alertContentObj[id].title,
             'body': alertContentObj[id].body,
             'color': alertContentObj[id].color,

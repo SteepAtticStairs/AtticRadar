@@ -308,30 +308,12 @@ const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
-$('#alertsDialog').on('click', function(e) {
+$('#atticDialog').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
-    if (clickedTarget == 'alertsDialog' || clickedTarget == 'alertsDialogClose') {
+    if (clickedTarget == 'atticDialog' || clickedTarget == 'atticDialogClose') {
         $(this).hide();
     }
 })
-
-function displayAlertDialog(options) {
-    var title = options.title;
-    var body = options.body;
-    var color = options.color;
-    var textColor = options.textColor;
-
-    $('#alertsDialog').show();
-
-    $('#alertsDialogHeader').html(title)
-    $('#alertsDialogHeader').css('background-color', color);
-    $('#alertsDialogHeaderContainer').css('background-color', color);
-    $('#alertsDialogHeader').css('color', textColor);
-    $('#alertsDialogClose').css('color', textColor);
-
-    $('#alertsDialogBody').scrollTop(0);
-    $('#alertsDialogBody').html(body);
-}
 
 function rgbToRGBA(rgb, opacity) {
     var str = rgb.slice(0, -1)
@@ -457,7 +439,7 @@ function addMarker(e) {
         //     'body': alertContentObj[id].body
         // })
         console.log(alertContentObj[id])
-        displayAlertDialog({
+        ut.displayAtticDialog({
             'title': alertContentObj[id].title,
             'body': alertContentObj[id].body,
             'color': alertContentObj[id].color,
@@ -1981,8 +1963,10 @@ const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
 const drawHurricanesToMap = require('./drawToMap');
 const loadOutlooks = require('./loadOutlooks');
-var map = require('../radar/map/map');
 const stormTypeData = require('./stormTypeData');
+const chroma = require('chroma-js');
+const { DateTime } = require('luxon');
+var map = require('../radar/map/map');
 
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_TRACK_latest.kmz
@@ -2057,11 +2041,37 @@ function exportFetchData() {
 
     loadOutlooks();
 
+    var fetchTime = new Date();
+    fetchTime.setSeconds(0);
+    //fetchTime.setSeconds(fetchTime.getSeconds() - Math.round(Math.random() * 10))
     var namesArr = [];
     //var checkingIters = 50;
     var activeStormsURL = ut.preventFileCaching(ut.phpProxy + 'https://www.nhc.noaa.gov/CurrentStorms.json#');
     $.getJSON(activeStormsURL, function(data) {
         var length = data.activeStorms.length;
+        if (length == 0) {
+            $('#hurricanesMenuItemIcon').removeClass('icon-blue');
+            $('#hurricanesMenuItemIcon').addClass('icon-grey');
+
+            var nowTime = new Date();
+            if (nowTime.getSeconds() == 0) { nowTime.setSeconds(1) }
+            const dateDiff = ut.getDateDiff(fetchTime, nowTime);
+            var formattedDateDiff;
+            if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
+            if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
+
+            var headerColor = '#ba3043';
+            var body = `\
+            <h5 style='text-align: center'>There are <b class='alertTextDescriber'>no active Tropical Cyclones</b> in the Atlantic, East Pacific, or West Pacific basins.</h5>
+            <div style='text-align: center'>Updated: ${DateTime.now().toFormat('L/d/yyyy h:mm a ZZZZ')} <b>(${formattedDateDiff} ago)</b></div>`
+
+            ut.displayAtticDialog({
+                'title': 'No Active Systems',
+                'body': body,
+                'color': headerColor,
+                'textColor': chroma(headerColor).luminance() > 0.4 ? 'black' : 'white',
+            })
+        }
         function activeStormsLoop(n) {
             if (n < length) {
                 var stormID = data.activeStorms[n].id;
@@ -2123,7 +2133,7 @@ function exportFetchData() {
 }
 
 module.exports = exportFetchData;
-},{"../radar/map/map":56,"../radar/utils":74,"./drawToMap":9,"./loadOutlooks":15,"./stormTypeData":17,"./unzip":18}],12:[function(require,module,exports){
+},{"../radar/map/map":56,"../radar/utils":74,"./drawToMap":9,"./loadOutlooks":15,"./stormTypeData":17,"./unzip":18,"chroma-js":181,"luxon":186}],12:[function(require,module,exports){
 const parseHurricaneFile = require('./plotIBTRACS');
 const ut = require('../../radar/utils');
 
@@ -8659,6 +8669,28 @@ function setMapMargin(topOrBottom, value) {
     }
 }
 
+function displayAtticDialog(options) {
+    var title = options.title;
+    var body = options.body;
+    var color = options.color;
+    var textColor = options.textColor;
+
+    $('#atticDialog').show();
+
+    $('#atticDialogHeader').html(title)
+    $('#atticDialogHeader').css('background-color', color);
+    $('#atticDialogHeaderContainer').css('background-color', color);
+    $('#atticDialogHeader').css('color', textColor);
+    $('#atticDialogClose').css('color', textColor);
+
+    $('#atticDialogBody').scrollTop(0);
+    $('#atticDialogBody').html(body);
+
+    // var bodyHeight = $('#atticDialogBody').outerHeight();
+    // console.log(bodyHeight)
+    // $('#atticDialogContainer').height(bodyHeight);
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -8706,7 +8738,8 @@ module.exports = {
     animateBrightness,
     haMapControlActions,
     zeroPad,
-    setMapMargin
+    setMapMargin,
+    displayAtticDialog
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":56,"buffer":248}],75:[function(require,module,exports){
