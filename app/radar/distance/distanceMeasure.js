@@ -99,6 +99,60 @@ function initMapLayers(geojson) {
         }
     });
     mapLayersAdded.push('distanceMeasureText');
+
+    map.addLayer({
+        'id': 'beamHeightText',
+        'type': 'symbol',
+        'source': 'initDistanceMeasurePoint',
+        'layout': {
+            'text-field': ['get', 'distance'],
+            'text-font': [
+                'Arial Unicode MS Bold'
+            ],
+            'text-offset': [0, -1.8],
+            'text-size': 15,
+            //'text-allow-overlap': true,
+            'text-ignore-placement': true,
+        },
+        'paint': {
+            'text-color': 'white'
+        }
+    });
+    mapLayersAdded.push('distanceMeasureText');
+}
+
+function kmToMiles(km) { return km * 1.609 }
+
+function calculateBeamHeight(distance) {
+    var elevation = $('#dataDiv').data('radarElev'); // m
+    var height = elevation / 1000; // km
+    var range = distance; // km
+    var elevAngle = 0.5;
+    var earthRadius = 6374; // km
+
+    // https://stackoverflow.com/a/9705160/18758797
+    function toRadians(angle) {
+        return angle * (Math.PI / 180);
+    }
+
+    /*
+    * Calculates the beam height MSL (mean sea level (this means above sea level)) in km.
+    * Formula taken from https://wx.erau.edu/faculty/mullerb/Wx365/Doppler_formulas/doppler_formulas.pdf
+    */
+    var beamHeightMSL = Math.sqrt(
+        Math.pow(range, 2)
+        +
+        Math.pow((4/3) * earthRadius + height, 2)
+        +
+        (2*range)*((4/3) * earthRadius + height)
+        *
+        Math.sin(toRadians(elevAngle))
+    ) - (4/3) * earthRadius;
+
+    var beamHeightKFT = beamHeightMSL * 3.28084;
+    var beamHeightMI = kmToMiles(beamHeightMSL);
+
+    return beamHeightMI;
 }
 
 var circleUnits = 'miles';
@@ -116,7 +170,13 @@ function mouseMove(e) {
     var initPointCoords = map.getSource('initDistanceMeasurePoint')._data.geometry.coordinates;
 
     var distance = turf.distance(initPointCoords, pointArr, {units: circleUnits});
-    var formattedDistance = `${distance.toFixed(1)} ${unitsAbbv}`
+    var formattedDistance = `${distance.toFixed(1)} ${unitsAbbv}`;
+
+    if ($('#dataDiv').data('radarElev') != undefined) {
+        var beamHeightMI = calculateBeamHeight(turf.distance(initPointCoords, pointArr, {units: 'kilometers'}));
+        var formattedBeamHeight = `Beam Height\n${beamHeightMI.toFixed(1)} mi`;
+        map.getSource('initDistanceMeasurePoint').setData(turf.point(initPointCoords, {'distance': formattedBeamHeight}));
+    }
 
     var point = turf.point(pointArr, {'distance': formattedDistance});
     var line = turf.lineString([initPointCoords, pointArr]);

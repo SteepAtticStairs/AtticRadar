@@ -19,6 +19,7 @@ function mainL3Loading(thisObj) {
         ut.betterProgressBar('set', 70);
         var l3rad = l3parse(ut.toBuffer(result));
         console.log(l3rad);
+        $('#dataDiv').data('radarElev', l3rad.productDescription.height);
         ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
         // completed parsing
         ut.progressBarVal('label', 'File parsing complete');
