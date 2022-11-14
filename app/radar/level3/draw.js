@@ -1,4 +1,6 @@
 const drawRadarShape = require('../draw/drawToMap');
+const radarStations = require('../../../resources/radarStations');
+const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const ut = require('../utils.js')
 
 const scaleArray = (fromRange, toRange) => {
@@ -135,23 +137,19 @@ function draw(data) {
     document.body.appendChild(a);
     a.click();*/
 
-	$.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
-		var currentStation = abrvData[data.textHeader.id3];
-		if (document.getElementById('fileStation').innerHTML != currentStation) {
-			document.getElementById('fileStation').innerHTML = currentStation;
-		}
-		$.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
-			var statLat = data[currentStation][1];
-			var statLng = data[currentStation][2];
-			// ../../../data/json/KLWX20220623_014344_V06.json
-			// product.abbreviation
-			drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
+	var currentStation = stationAbbreviations[data.textHeader.id3];
+	if (document.getElementById('fileStation').innerHTML != currentStation) {
+		document.getElementById('fileStation').innerHTML = currentStation;
+	}
+	var statLat = radarStations[currentStation][1];
+	var statLng = radarStations[currentStation][2];
+	// ../../../data/json/KLWX20220623_014344_V06.json
+	// product.abbreviation
+	drawRadarShape(url, statLat, statLng, product, !$('#shouldLowFilter').prop("checked"));
 
-			//new mapboxgl.Marker()
-			//    .setLngLat([stationLng, stationLat])
-			//    .addTo(map);
-		});
-	});
+	//new mapboxgl.Marker()
+	//    .setLngLat([stationLng, stationLat])
+	//    .addTo(map);
 }
 
 module.exports = draw

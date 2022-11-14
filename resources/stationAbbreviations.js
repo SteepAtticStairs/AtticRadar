@@ -1,4 +1,4 @@
-{
+const stationAbbreviations = {
     "WPA2": "HWPA2",
     "ABR": "KABR",
     "ABX": "KABX",
@@ -207,3 +207,5 @@
     "TPA": "TTPA",
     "TUL": "TTUL"
 }
+
+module.exports = stationAbbreviations;

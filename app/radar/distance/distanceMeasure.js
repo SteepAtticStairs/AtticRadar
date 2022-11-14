@@ -1,7 +1,10 @@
 const map = require('../map/map');
 const turf = require('@turf/turf');
+const radarStations = require('../../../resources/radarStations');
 
 var mapLayersAdded = [];
+var stationPointCoordsArr;
+var clickedStationPoint = false;
 
 function initMapLayers(geojson) {
     map.addLayer({
@@ -118,13 +121,15 @@ function initMapLayers(geojson) {
             'text-color': 'white'
         }
     });
-    mapLayersAdded.push('distanceMeasureText');
+    mapLayersAdded.push('beamHeightText');
+
+    $('#dataDiv').data('distanceMeasureMapLayers', mapLayersAdded);
 }
 
 function kmToMiles(km) { return km * 1.609 }
 
 function calculateBeamHeight(distance) {
-    var elevation = $('#dataDiv').data('radarElev'); // m
+    var elevation = $('#dataDiv').data('radarGeoData').height; // m
     var height = elevation / 1000; // km
     var range = distance; // km
     var elevAngle = 0.5;
@@ -172,7 +177,7 @@ function mouseMove(e) {
     var distance = turf.distance(initPointCoords, pointArr, {units: circleUnits});
     var formattedDistance = `${distance.toFixed(1)} ${unitsAbbv}`;
 
-    if ($('#dataDiv').data('radarElev') != undefined) {
+    if (clickedStationPoint) {
         var beamHeightMI = calculateBeamHeight(turf.distance(initPointCoords, pointArr, {units: 'kilometers'}));
         var formattedBeamHeight = `Beam Height\n${beamHeightMI.toFixed(1)} mi`;
         map.getSource('initDistanceMeasurePoint').setData(turf.point(initPointCoords, {'distance': formattedBeamHeight}));
@@ -190,13 +195,20 @@ function mouseMove(e) {
     function mouseUp() {
         map.off('mousemove', mouseMove).off('touchmove', mouseMove);
         map._fadeDuration = initFadeDuration;
+        clickedStationPoint = false;
     }
     map.on('mouseup', mouseUp).on('touchend', mouseUp);
 }
 
 function mouseDown(e) {
-    var lnglat = e.lngLat;
-    var pointArr = [lnglat.lng, lnglat.lat];
+    var lnglat;
+    var pointArr;
+    if (clickedStationPoint) {
+        pointArr = stationPointCoordsArr;
+    } else {
+        lnglat = e.lngLat;
+        pointArr = [lnglat.lng, lnglat.lat];
+    }
     var point = turf.point(pointArr);
     var line = turf.lineString([pointArr, pointArr]);
 
@@ -215,16 +227,65 @@ function mouseDown(e) {
     map.on('mousemove', mouseMove).on('touchmove', mouseMove);
 }
 
+function initStationCircle(station) {
+    //var point = turf.point([rgd.lon, rgd.lat]);
+    var stationInfo = radarStations[station];
+    stationPointCoordsArr = [stationInfo[2], stationInfo[1]];
+    var point = turf.point(stationPointCoordsArr);
+    if (map.getLayer('radarStationPoint')) {
+        map.removeLayer('radarStationPoint');
+        map.removeSource('radarStationPoint');
+    }
+    map.addLayer({
+        'id': 'radarStationPoint',
+        'type': 'circle',
+        'source': {
+            'type': 'geojson',
+            'data': point,
+        },
+        'paint': {
+            'circle-radius': 8,
+            'circle-stroke-width': 3,
+            'circle-color': 'green',
+            'circle-stroke-color': 'darkGreen',
+        }
+    })
+    mapLayersAdded.push('radarStationPoint');
+}
+
 function initDistanceMeasureListeners() {
+    $('#dataDiv').data('distanceMeasureActive', true);
+
+    // if the user enables distance measurement with a station already selected
+    var rgd = $('#dataDiv').data('radarGeoData');
+    if (rgd != undefined) {
+        initStationCircle(rgd.station);
+    }
+
+    $(document).on('newStation', function(e, msg) {
+        if ($('#dataDiv').data('distanceMeasureActive')) {
+            initStationCircle(msg);
+        }
+    })
+
+    function clickStationPointFunc() { clickedStationPoint = true }
+    map.on('mousedown', 'radarStationPoint', clickStationPointFunc).on('touchstart', 'radarStationPoint', clickStationPointFunc)
     map.on('mousedown', mouseDown).on('touchstart', mouseDown);
 }
 function disableDistanceMeasure() {
+    $('#dataDiv').data('distanceMeasureActive', false);
     for (var i in mapLayersAdded) { if (map.getLayer(mapLayersAdded[i])) { map.removeLayer(mapLayersAdded[i]) } }
     for (var i in mapLayersAdded) { if (map.getSource(mapLayersAdded[i])) { map.removeSource(mapLayersAdded[i]) } }
     map.off('mousedown', mouseDown).off('touchstart', mouseDown);
 }
 
-//initDistanceMeasureListeners();
+// if (!map.loaded()) {
+//     map.on('load', function() {
+//         initDistanceMeasureListeners();
+//     })
+// } else {
+//     initDistanceMeasureListeners();
+// }
 
 module.exports = {
     initDistanceMeasureListeners,

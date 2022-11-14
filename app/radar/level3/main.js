@@ -1,6 +1,12 @@
 const l3parse = require('../../../lib/nexrad-level-3-data/src');
 const l3plot = require('../level3/draw');
 const l3info = require('../dom/l3info');
+const distanceMeasure = require('../distance/distanceMeasure');
+const stationAbbreviations = require('../../../resources/stationAbbreviations');
+const radarStations = require('../../../resources/radarStations');
+const turf = require('@turf/turf');
+
+var map = require('../map/map');
 
 const parsePlotTornado = require('../level3/stormTracking/tornadoVortexSignature');
 const parsePlotMesocyclone = require('../level3/stormTracking/mesocycloneDetection');
@@ -19,7 +25,14 @@ function mainL3Loading(thisObj) {
         ut.betterProgressBar('set', 70);
         var l3rad = l3parse(ut.toBuffer(result));
         console.log(l3rad);
-        $('#dataDiv').data('radarElev', l3rad.productDescription.height);
+
+        $('#dataDiv').data('radarGeoData', {
+            'height': l3rad.productDescription.height,
+            'station': stationAbbreviations[l3rad.textHeader.id3],
+            'lat': l3rad.productDescription.latitude,
+            'lon': l3rad.productDescription.longitude
+        });
+
         ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
         // completed parsing
         ut.progressBarVal('label', 'File parsing complete');

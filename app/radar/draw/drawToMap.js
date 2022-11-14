@@ -257,6 +257,13 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         if ($('#colorPickerItemClass').hasClass('icon-blue')) {
             $('#colorPickerItemClass').click();
         }
+
+        var distanceMeasureMapLayers = $('#dataDiv').data('distanceMeasureMapLayers');
+        for (var i in distanceMeasureMapLayers) {
+            if (map.getLayer(distanceMeasureMapLayers[i])) {
+                map.moveLayer(distanceMeasureMapLayers[i]);
+            }
+        }
         // setTimeout(function() {
         //     //$("#dataDiv").trigger("loadGeoJSON");
         //     //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);

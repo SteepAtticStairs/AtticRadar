@@ -2,6 +2,7 @@ const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel3FileTime = require('../level3/l3fileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
+const stationAbbreviations = require('../../../resources/stationAbbreviations');
 
 function showL3Info(l3rad) {// //showPlotBtn();
     $('#fileUploadSpan').hide();
@@ -11,39 +12,37 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     // document.getElementById('radFileName').innerHTML = uploadedFile.name;
 
-    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/stationAbbreviations.json', function(abrvData) {
-		var theFileStation = abrvData[l3rad.textHeader.id3];
-        $('#radarStationIcon').show();
-        document.getElementById('radarStation').innerHTML = theFileStation;
+    var theFileStation = stationAbbreviations[l3rad.textHeader.id3];
+    $('#radarStationIcon').show();
+    document.getElementById('radarStation').innerHTML = theFileStation;
 
-        $('#productsDropdownTrigger').show();
+    $('#productsDropdownTrigger').show();
 
-        var theFileVCP = l3rad.productDescription.vcp;
-        document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
+    var theFileVCP = l3rad.productDescription.vcp;
+    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
-        var fileDateObj = getLevel3FileTime(l3rad);
-        var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    var fileDateObj = getLevel3FileTime(l3rad);
+    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
 
-        document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 
-        function showTimeDiff() { getTimeDiff(fileDateObj) }
-        if (window.countInterval && !$('#dataDiv').data('fromFileUpload')) {
-            clearInterval(window.countInterval)
-        }
-        showTimeDiff();
-        // update the time difference every 10 seconds
-        if (!$('#dataDiv').data('fromFileUpload')) { window.countInterval = setInterval(showTimeDiff, 10000) }
+    function showTimeDiff() { getTimeDiff(fileDateObj) }
+    if (window.countInterval && !$('#dataDiv').data('fromFileUpload')) {
+        clearInterval(window.countInterval)
+    }
+    showTimeDiff();
+    // update the time difference every 10 seconds
+    if (!$('#dataDiv').data('fromFileUpload')) { window.countInterval = setInterval(showTimeDiff, 10000) }
 
-        if ($('#dataDiv').data('fromFileUpload')) {
-            document.getElementById('top-right').innerHTML += ' ago';
-            $('#top-right').addClass('uploaded-file');
-            // shrink the map header because the file upload box is no longer there
-            $('#radarHeader').css('height', '-=25px');
-            $('.progressBar').css('top', '-=25px');
-            ut.setMapMargin('top', '-=25px');
-            $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
-        }
-    })
+    if ($('#dataDiv').data('fromFileUpload')) {
+        document.getElementById('top-right').innerHTML += ' ago';
+        $('#top-right').addClass('uploaded-file');
+        // shrink the map header because the file upload box is no longer there
+        $('#radarHeader').css('height', '-=25px');
+        $('.progressBar').css('top', '-=25px');
+        ut.setMapMargin('top', '-=25px');
+        $('#productsSelectionMenu').html('<b>No product selections avaliable for a Level 3 file.</b>')
+    }
 }
 
 module.exports = showL3Info;

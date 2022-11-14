@@ -207,6 +207,8 @@ function showStations() {
             var stationType = e.features[0].properties.type;
             var id = e.features[0].id;
 
+            $(document).trigger('newStation', clickedStation);
+
             $('#productsDropdownTrigger').show();
 
             var productToLoad;
