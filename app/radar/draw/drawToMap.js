@@ -56,7 +56,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
 
-            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX') {
+            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
                 // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
                 for (var i in levs) { levs[i] = levs[i] * 1.944 }
             } else if (produc == 'N0S') {
@@ -375,7 +375,15 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var vers = JSON.parse(this.responseText).version;
+                var respTxt = this.responseText;
+                //respTxt = respTxt.replaceAll('--', '0')
+                var json = JSON.parse(respTxt);
+                var vers = json.version;
+                // for (var i in json.values) {
+                //     for (var n in i) {
+                //         console.log(n)
+                //     }
+                // }
 
                 calcPolys.calcPolygons(
                     settings["base"],

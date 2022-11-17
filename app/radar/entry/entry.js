@@ -23,6 +23,10 @@ function load() {
 
     // add the reload control
     require('../map/controls/reload');
+
+    // set the menu order
+    const setMenuOrder = require('../dom/setMenuOrder');
+    setMenuOrder.setFooterMenuOrder();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {

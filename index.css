@@ -571,3 +571,24 @@ https://tobiasahlin.com/spinkit/
 .alertTextDescriber {
     color: rgba(0, 132, 255, 1);
 }
+
+#tooltipDiv {
+    position: absolute;
+    z-index: 5000000;
+    pointer-events: none;
+    width: 100px;
+    height: 50px;
+}
+.toolsTooltip .tooltipContent {
+    font-size: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.toolsTooltip .tooltipContent div {
+    display: table-cell;
+    text-align: center;
+}
+.toolsTooltip .tooltipContent span {
+    font-size: 20px;
+}

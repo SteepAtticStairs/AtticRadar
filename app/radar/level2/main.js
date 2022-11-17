@@ -13,8 +13,8 @@ function mainL2Loading(thisObj) {
 
         l2info(l2rad);
 
-        plot(l2rad, 'REF', {
-            elevations: 1,
+        plot(l2rad, 'VEL', {
+            elevations: 2,
         });
 
         l2listeners(l2rad);

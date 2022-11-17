@@ -7,6 +7,7 @@ function createMenuOption(options, clickFunc) {
 
     var location = options.location;
     var size = options.size;
+    var returnHTML = options.returnHTML;
 
     var contents = options.contents;
     var icon = options.icon;
@@ -32,12 +33,16 @@ function createMenuOption(options, clickFunc) {
     nbspElem.className = 'noselect';
     nbspElem.appendChild(document.createTextNode('\u00A0\u00A0\u00A0'));
 
-    if (location == 'bottom-center' || location == undefined) {
-        document.getElementById('mapFooter').appendChild(div);
-        document.getElementById('mapFooter').appendChild(nbspElem);
-    } else if (location == 'top-left') {
-        document.getElementById('top-left').appendChild(div);
-        document.getElementById('top-left').appendChild(nbspElem);
+    if (returnHTML == undefined || returnHTML == false) {
+        if (location == 'bottom-center' || location == undefined) {
+            document.getElementById('mapFooter').appendChild(div);
+            document.getElementById('mapFooter').appendChild(nbspElem);
+        } else if (location == 'top-left') {
+            document.getElementById('top-left').appendChild(div);
+            document.getElementById('top-left').appendChild(nbspElem);
+        }
+    } else if (returnHTML) {
+        return [div, nbspElem, divId, iconId];
     }
 
     // var outerDiv = document.createElement('div');
