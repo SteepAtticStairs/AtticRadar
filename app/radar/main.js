@@ -27,9 +27,6 @@ require('./menu/tools');
 // load the data inspector tool
 require('./inspector/entry');
 
-// load the distance measurement tool
-require('./distance/menuItem');
-
 // load the offcanvas menu control
 require('./map/controls/offCanvasMenu');
 

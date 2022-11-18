@@ -20,7 +20,8 @@ function nodeToString(node) {
 function addAllToolsItems() {
     var n = 0;
     require('../distance/menuItem').distanceToolsOption(n = n + 1);
-    require('../map/controls/reload').distanceReloadOption(n = n + 1);
+    require('../menu/settings').settingsOption(n = n + 1);
+    require('../map/controls/reload').reloadOption(n = n + 1);
 }
 
 function updateTooltipPosition(divElem) {

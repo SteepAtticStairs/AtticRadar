@@ -4192,9 +4192,6 @@ function load() {
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
 
-    // add the reload control
-    require('../map/controls/reload');
-
     // set the menu order
     const setMenuOrder = require('../dom/setMenuOrder');
     setMenuOrder.setFooterMenuOrder();
@@ -4207,7 +4204,7 @@ if (document.readyState == 'complete' || document.readyState == 'interactive') {
         load();
     }
 }
-},{"../../alerts/entry":2,"../../hurricanes/entry":10,"../../metars/entry":19,"../../satellite/entry":78,"../../tides/main":82,"../dom/setMenuOrder":28,"../main":49,"../map/controls/reload":53}],32:[function(require,module,exports){
+},{"../../alerts/entry":2,"../../hurricanes/entry":10,"../../metars/entry":19,"../../satellite/entry":78,"../../tides/main":82,"../dom/setMenuOrder":28,"../main":49}],32:[function(require,module,exports){
 var map = require('../map/map');
 const createOffCanvasItem = require('../menu/createOffCanvasItem');
 const getValFromColor = require('./getGradientValue');
@@ -5846,9 +5843,6 @@ require('./menu/tools');
 // load the data inspector tool
 require('./inspector/entry');
 
-// load the distance measurement tool
-require('./distance/menuItem');
-
 // load the offcanvas menu control
 require('./map/controls/offCanvasMenu');
 
@@ -6003,7 +5997,7 @@ document.addEventListener('loadFile', function(event) {
 //             .addTo(map);
 //     }
 // });
-},{"../hurricanes/historical/menuItem":13,"./distance/menuItem":24,"./dom/fileUpload":25,"./inspector/entry":33,"./level2/main":40,"./level3/main":43,"./loaders":48,"./map/controls/help/helpControl":51,"./map/controls/offCanvasMenu":52,"./map/map":57,"./menu/mode":63,"./menu/settings":64,"./menu/stationMarkerMenu":65,"./menu/tilts":66,"./menu/tools":67,"./misc/detectmobilebrowser":69,"./radarMessage/radarMessage":75,"./utils":77}],50:[function(require,module,exports){
+},{"../hurricanes/historical/menuItem":13,"./dom/fileUpload":25,"./inspector/entry":33,"./level2/main":40,"./level3/main":43,"./loaders":48,"./map/controls/help/helpControl":51,"./map/controls/offCanvasMenu":52,"./map/map":57,"./menu/mode":63,"./menu/settings":64,"./menu/stationMarkerMenu":65,"./menu/tilts":66,"./menu/tools":67,"./misc/detectmobilebrowser":69,"./radarMessage/radarMessage":75,"./utils":77}],50:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -6109,7 +6103,7 @@ const createToolsOption = require('../../menu/createToolsOption');
 //     window.location.reload();
 // })
 
-function distanceReloadOption(index) {
+function reloadOption(index) {
     createToolsOption({
         'divId': 'reloadItemDiv',
         'iconId': 'reloadItemClass',
@@ -6128,7 +6122,7 @@ function distanceReloadOption(index) {
 }
 
 module.exports = {
-    distanceReloadOption
+    reloadOption
 };
 },{"../../menu/createToolsOption":62}],54:[function(require,module,exports){
 var map = require('../map');
@@ -7195,75 +7189,87 @@ createOffCanvasItem({
     }
 })
 },{"../utils":77,"./createMenuOption":60,"./createOffCanvasItem":61}],64:[function(require,module,exports){
-const createOffCanvasItem = require('./createOffCanvasItem');
+const createToolsOption = require('./createToolsOption');
 const ut = require('../utils');
 const map = require('../map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
 const terminator = require('../map/terminator/terminator');
 
-createOffCanvasItem({
-    'id': 'settingsMenuItem',
-    'class': 'alert alert-secondary offCanvasMenuItem',
-    'contents': 'Settings',
-    'icon': 'fa fa-gear',
-    'css': ''
-}, function(thisObj, innerDiv, iconElem) {
-    $('#settingsModalTrigger').click();
+function settingsOption(index) {
+    createToolsOption({
+        'divId': 'settingsItemDiv',
+        'iconId': 'settingsItemClass',
 
-    $('#stormTracksCheckbox').on('click', function() {
-        var isChecked = $('#stormTracksCheckBtn').is(":checked");
-        $('#dataDiv').data('stormTracksVisibility', isChecked);
+        'index': index,
 
-        var stLayers = $('#dataDiv').data('stormTrackMapLayers')
-        if (!isChecked) {
-            for (var item in stLayers) {
-                map.setLayoutProperty(stLayers[item], 'visibility', 'none');
+        'divClass': 'mapFooterMenuItem',
+        'iconClass': 'icon-grey',
+
+        'contents': 'Settings',
+        'icon': 'fa fa-gear',
+        'css': ''
+    }, function(divElem, iconElem) {
+        $('#settingsModalTrigger').click();
+
+        $('#stormTracksCheckbox').on('click', function() {
+            var isChecked = $('#stormTracksCheckBtn').is(":checked");
+            $('#dataDiv').data('stormTracksVisibility', isChecked);
+
+            var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+            if (!isChecked) {
+                for (var item in stLayers) {
+                    map.setLayoutProperty(stLayers[item], 'visibility', 'none');
+                }
+            } else if (isChecked) {
+                for (var item in stLayers) {
+                    map.setLayoutProperty(stLayers[item], 'visibility', 'visible');
+                }
             }
-        } else if (isChecked) {
-            for (var item in stLayers) {
-                map.setLayoutProperty(stLayers[item], 'visibility', 'visible');
+        })
+
+        $('#radarVisibilityCheckbox').on('click', function() {
+            var isChecked = $('#radarVisibilityCheckBtn').is(":checked");
+
+            if (!isChecked) {
+                if (map.getLayer('baseReflectivity')) {
+                    map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+                }
+            } else if (isChecked) {
+                if (map.getLayer('baseReflectivity')) {
+                    map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+                }
             }
-        }
-    })
+        })
 
-    $('#radarVisibilityCheckbox').on('click', function() {
-        var isChecked = $('#radarVisibilityCheckBtn').is(":checked");
+        $('#showExtraMapLayersCheckbox').on('click', function() {
+            var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
 
-        if (!isChecked) {
-            if (map.getLayer('baseReflectivity')) {
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+            if (!isChecked) {
+                setBaseMapLayers('cities');
+            } else if (isChecked) {
+                setBaseMapLayers('both');
             }
-        } else if (isChecked) {
-            if (map.getLayer('baseReflectivity')) {
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+        })
+
+        $('#showDayNightLineLayersCheckbox').on('click', function() {
+            var isChecked = $('#showDayNightLineCheckBtn').is(":checked");
+
+            if (!isChecked) {
+                terminator.toggleVisibility('hide');
+            } else if (isChecked) {
+                terminator.toggleVisibility('show');
             }
-        }
+        })
+
+        // this is in app/alerts/drawAlertShapes.js
+        //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})
     })
+}
 
-    $('#showExtraMapLayersCheckbox').on('click', function() {
-        var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
-
-        if (!isChecked) {
-            setBaseMapLayers('cities');
-        } else if (isChecked) {
-            setBaseMapLayers('both');
-        }
-    })
-
-    $('#showDayNightLineLayersCheckbox').on('click', function() {
-        var isChecked = $('#showDayNightLineCheckBtn').is(":checked");
-
-        if (!isChecked) {
-            terminator.toggleVisibility('hide');
-        } else if (isChecked) {
-            terminator.toggleVisibility('show');
-        }
-    })
-
-    // this is in app/alerts/drawAlertShapes.js
-    //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})
-})
-},{"../map/map":57,"../map/terminator/terminator":59,"../misc/baseMapLayers":68,"../utils":77,"./createOffCanvasItem":61}],65:[function(require,module,exports){
+module.exports = {
+    settingsOption
+};
+},{"../map/map":57,"../map/terminator/terminator":59,"../misc/baseMapLayers":68,"../utils":77,"./createToolsOption":62}],65:[function(require,module,exports){
 const createMenuOption = require('./createMenuOption');
 const showStations = require('../map/controls/stationMarkers');
 const ut = require('../utils');
@@ -7401,7 +7407,8 @@ function nodeToString(node) {
 function addAllToolsItems() {
     var n = 0;
     require('../distance/menuItem').distanceToolsOption(n = n + 1);
-    require('../map/controls/reload').distanceReloadOption(n = n + 1);
+    require('../menu/settings').settingsOption(n = n + 1);
+    require('../map/controls/reload').reloadOption(n = n + 1);
 }
 
 function updateTooltipPosition(divElem) {
@@ -7476,7 +7483,7 @@ createMenuOption({
         tooltipElem.hide();
     }
 })
-},{"../distance/menuItem":24,"../map/controls/reload":53,"../utils":77,"./createMenuOption":60,"./createToolsOption":62}],68:[function(require,module,exports){
+},{"../distance/menuItem":24,"../map/controls/reload":53,"../menu/settings":64,"../utils":77,"./createMenuOption":60,"./createToolsOption":62}],68:[function(require,module,exports){
 var map = require('../map/map');
 const mapFuncs = require('../map/mapFunctions');
 

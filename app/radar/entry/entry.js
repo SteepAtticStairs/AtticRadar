@@ -21,9 +21,6 @@ function load() {
     // load the tides chart
     require('../../tides/main').tideChartInit('container');
 
-    // add the reload control
-    require('../map/controls/reload');
-
     // set the menu order
     const setMenuOrder = require('../dom/setMenuOrder');
     setMenuOrder.setFooterMenuOrder();

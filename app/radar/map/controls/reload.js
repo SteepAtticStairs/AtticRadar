@@ -14,7 +14,7 @@ const createToolsOption = require('../../menu/createToolsOption');
 //     window.location.reload();
 // })
 
-function distanceReloadOption(index) {
+function reloadOption(index) {
     createToolsOption({
         'divId': 'reloadItemDiv',
         'iconId': 'reloadItemClass',
@@ -33,5 +33,5 @@ function distanceReloadOption(index) {
 }
 
 module.exports = {
-    distanceReloadOption
+    reloadOption
 };
