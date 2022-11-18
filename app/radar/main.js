@@ -21,6 +21,9 @@ require('./dom/fileUpload');
 require('./menu/mode');
 //require('./map/controls/mode');
 
+// load the tools menu
+require('./menu/tools');
+
 // load the data inspector tool
 require('./inspector/entry');
 

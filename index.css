@@ -571,3 +571,33 @@ https://tobiasahlin.com/spinkit/
 .alertTextDescriber {
     color: rgba(0, 132, 255, 1);
 }
+
+#toolsMenuTooltip {
+    position: absolute;
+    z-index: 500;
+    /* top right bottom left */
+    padding: 0px 10px 0px 10px;
+    width: fit-content;
+    height: 50px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#toolsMenuTooltip:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-width: 10px;
+    margin-left: -10px;
+}

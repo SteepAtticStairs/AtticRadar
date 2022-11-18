@@ -37,5 +37,3 @@ createMenuOption({
         useData.toggleMETARStationMarkers('hide');
     }
 })
-$('#colorPickerItemDiv').insertAfter('#metarStationMenuItemDiv');
-$(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#metarStationMenuItemDiv');
