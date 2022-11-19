@@ -201,6 +201,7 @@ function showStations() {
         enableMouseListeners();
     }
 
+    var alreadyClicked = false;
     map.on('click', 'stationSymbolLayer', function (e) {
         if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
@@ -209,7 +210,15 @@ function showStations() {
 
             $(document).trigger('newStation', clickedStation);
 
-            $('#productsDropdownTrigger').show();
+            if (!alreadyClicked) {
+                alreadyClicked = true;
+                $('#productMapFooter').show();
+                //$('#productMapFooter').height('30px');
+                var productFooterBottomMargin = parseInt($('#map').css('bottom'));
+                var productFooterHeight = parseInt($('#productMapFooter').height());
+                $('#productMapFooter').css('bottom', productFooterBottomMargin);
+                ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
+            }
 
             var productToLoad;
             var abbvProductToLoad;
@@ -219,6 +228,8 @@ function showStations() {
 
                 productToLoad = 'N0B';
                 abbvProductToLoad = 'ref';
+                // $(`.productOption[value="${abbvProductToLoad}"]`).html()
+                $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
 
                 var menuElem = $('#wsr88dRefBtn');
                 if (menuElem.find('.selectedProductMenuItem').length == 0) {
@@ -229,9 +240,12 @@ function showStations() {
             } else if (stationType == 'TDWR') {
                 $('#wsr88dMenu').hide();
                 $('#tdwrMenu').show();
+                $('#productsDropdownTriggerText').html($(`.productOption[value="${abbvProductToLoad}"]`).html());
 
                 productToLoad = 'TZ0';
                 abbvProductToLoad = 'sr-ref';
+                // $(`.productOption[value="${abbvProductToLoad}"]`).html()
+                $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
 
                 var menuElem = $('#tdwrRefBtn');
                 if (menuElem.find('.selectedProductMenuItem').length == 0) {

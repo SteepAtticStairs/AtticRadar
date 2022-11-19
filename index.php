@@ -12,7 +12,7 @@ header("Pragma: no-cache");
 
 // https://stackoverflow.com/a/11424665
 $milliseconds = floor(microtime(true) * 1000);
-$page = file_get_contents('https://attic-radar.herokuapp.com/index.html'); // ./index.html
+$page = file_get_contents('index.html'); // ./index.html
 echo $page;
 
 /*

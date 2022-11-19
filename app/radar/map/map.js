@@ -43,6 +43,8 @@ map.touchZoomRotate.disableRotation();
 
 // https://github.com/mapbox/mapbox-gl-js/issues/3265#issuecomment-660400481
 setTimeout(() => map.resize(), 0);
+window.onresize = () => { map.resize() }
+window.onclick = () => { map.resize() }
 
 // const getMouseColor = require('../misc/colorPicker');
 // map.on("mousemove", e => getMouseColor(e, map));

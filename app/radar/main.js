@@ -88,6 +88,8 @@ if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("align-items", "start");
 }
 
+//$('#productMapFooter').hide();
+
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
     var endTimer = Date.now();
@@ -102,7 +104,7 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
 
 //$('#productsDropdownBtn').click();
 $('#productsDropdownTrigger').on('click', function(e) {
-    $('#productsDropdown').css("bottom", "40px");
+    $('#productsDropdown').css('bottom', parseInt($('#map').css('bottom')) + 5);
     var bsDropdownClass = new bootstrap.Dropdown($('#productsDropdown'));
 
     if (!bsDropdownClass._isShown()) {
@@ -122,6 +124,7 @@ $('#wsr88dMenu').show();
 $('#tdwrMenu').hide();
 
 $(".productOption").on('click', function() {
+    document.getElementById('productsDropdownTriggerText').innerHTML = this.innerHTML;
     //$('.selectedProduct').removeClass('selectedProduct');
     //$(this).addClass('selectedProduct')
     var thisInnerHTML = $(this).html();
@@ -129,8 +132,7 @@ $(".productOption").on('click', function() {
     $(this).html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${thisInnerHTML}`);
 
     var thisValue = $(this).attr('value');
-
-    //document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
+    $('#productsDropdownTriggerText').html(window.longProductNames[thisValue]);
 
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);

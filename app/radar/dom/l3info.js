@@ -3,6 +3,7 @@ const ut = require('../utils');
 const getLevel3FileTime = require('../level3/l3fileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
+const { DateTime } = require('luxon');
 
 function showL3Info(l3rad) {// //showPlotBtn();
     $('#fileUploadSpan').hide();
@@ -22,9 +23,12 @@ function showL3Info(l3rad) {// //showPlotBtn();
     document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var fileDateObj = getLevel3FileTime(l3rad);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    //var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);
+    var formattedRadarDate = formattedDateObj.toFormat('L/d/yyyy');
+    var formattedRadarTime = formattedDateObj.toFormat('h:mm a ZZZZ');
 
-    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+    $('#radarDateTime').show().html(`${formattedRadarDate}<br>${formattedRadarTime}`);
 
     function showTimeDiff() { getTimeDiff(fileDateObj) }
     if (window.countInterval && !$('#dataDiv').data('fromFileUpload')) {

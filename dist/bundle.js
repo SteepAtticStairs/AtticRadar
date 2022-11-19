@@ -3567,6 +3567,7 @@ const ut = require('../utils');
 const getLevel3FileTime = require('../level3/l3fileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
+const { DateTime } = require('luxon');
 
 function showL3Info(l3rad) {// //showPlotBtn();
     $('#fileUploadSpan').hide();
@@ -3586,9 +3587,12 @@ function showL3Info(l3rad) {// //showPlotBtn();
     document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var fileDateObj = getLevel3FileTime(l3rad);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    //var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);
+    var formattedRadarDate = formattedDateObj.toFormat('L/d/yyyy');
+    var formattedRadarTime = formattedDateObj.toFormat('h:mm a ZZZZ');
 
-    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+    $('#radarDateTime').show().html(`${formattedRadarDate}<br>${formattedRadarTime}`);
 
     function showTimeDiff() { getTimeDiff(fileDateObj) }
     if (window.countInterval && !$('#dataDiv').data('fromFileUpload')) {
@@ -3610,7 +3614,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 }
 
 module.exports = showL3Info;
-},{"../../../resources/stationAbbreviations":240,"../level3/l3fileTime":42,"../misc/getTimeDiff":71,"../utils":77}],28:[function(require,module,exports){
+},{"../../../resources/stationAbbreviations":240,"../level3/l3fileTime":42,"../misc/getTimeDiff":71,"../utils":77,"luxon":189}],28:[function(require,module,exports){
 function setFooterMenuOrder() {
     $('#colorPickerItemDiv').insertAfter('#metarStationMenuItemDiv');
     $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#metarStationMenuItemDiv');
@@ -3816,6 +3820,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             'bottom': offset + $('#mapFooter').height(),
             'height': '15px'
         }).show();
+        $('#productMapFooter').css('bottom', offset + $('#mapFooter').height() + $('#mapColorScale').height());
 
         $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
             //console.log(data);
@@ -5150,6 +5155,13 @@ function mainL3Loading(thisObj) {
         } else if (l3rad.textHeader.type == "NST") {
             parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
         } else {
+            var fileElevation = l3rad.productDescription.elevationAngle;
+            console.log(fileElevation)
+            if (fileElevation == undefined) {
+                fileElevation = l3rad.productDescription.elevationNumber;
+            }
+            $('#extraProductInfo').show().html(`Elevation: ${fileElevation}°`);
+
             l3plot(l3rad);
         }
 
@@ -5904,6 +5916,8 @@ if (require('./misc/detectmobilebrowser')) {
     //$('#mapFooter').css("align-items", "start");
 }
 
+//$('#productMapFooter').hide();
+
 var startTimer = Date.now();
 $.get(ut.phpProxy + "https://google.com", function(data) {
     var endTimer = Date.now();
@@ -5918,7 +5932,7 @@ $.get(ut.phpProxy + "https://google.com", function(data) {
 
 //$('#productsDropdownBtn').click();
 $('#productsDropdownTrigger').on('click', function(e) {
-    $('#productsDropdown').css("bottom", "40px");
+    $('#productsDropdown').css('bottom', parseInt($('#map').css('bottom')) + 5);
     var bsDropdownClass = new bootstrap.Dropdown($('#productsDropdown'));
 
     if (!bsDropdownClass._isShown()) {
@@ -5938,6 +5952,7 @@ $('#wsr88dMenu').show();
 $('#tdwrMenu').hide();
 
 $(".productOption").on('click', function() {
+    document.getElementById('productsDropdownTriggerText').innerHTML = this.innerHTML;
     //$('.selectedProduct').removeClass('selectedProduct');
     //$(this).addClass('selectedProduct')
     var thisInnerHTML = $(this).html();
@@ -5945,8 +5960,7 @@ $(".productOption").on('click', function() {
     $(this).html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${thisInnerHTML}`);
 
     var thisValue = $(this).attr('value');
-
-    //document.getElementById('productsDropdownTrigger').innerHTML = this.innerHTML;
+    $('#productsDropdownTriggerText').html(window.longProductNames[thisValue]);
 
     ut.disableModeBtn();
     ut.progressBarVal('set', 0);
@@ -6328,6 +6342,7 @@ function showStations() {
         enableMouseListeners();
     }
 
+    var alreadyClicked = false;
     map.on('click', 'stationSymbolLayer', function (e) {
         if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
@@ -6336,7 +6351,15 @@ function showStations() {
 
             $(document).trigger('newStation', clickedStation);
 
-            $('#productsDropdownTrigger').show();
+            if (!alreadyClicked) {
+                alreadyClicked = true;
+                $('#productMapFooter').show();
+                //$('#productMapFooter').height('30px');
+                var productFooterBottomMargin = parseInt($('#map').css('bottom'));
+                var productFooterHeight = parseInt($('#productMapFooter').height());
+                $('#productMapFooter').css('bottom', productFooterBottomMargin);
+                ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
+            }
 
             var productToLoad;
             var abbvProductToLoad;
@@ -6346,6 +6369,8 @@ function showStations() {
 
                 productToLoad = 'N0B';
                 abbvProductToLoad = 'ref';
+                // $(`.productOption[value="${abbvProductToLoad}"]`).html()
+                $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
 
                 var menuElem = $('#wsr88dRefBtn');
                 if (menuElem.find('.selectedProductMenuItem').length == 0) {
@@ -6356,9 +6381,12 @@ function showStations() {
             } else if (stationType == 'TDWR') {
                 $('#wsr88dMenu').hide();
                 $('#tdwrMenu').show();
+                $('#productsDropdownTriggerText').html($(`.productOption[value="${abbvProductToLoad}"]`).html());
 
                 productToLoad = 'TZ0';
                 abbvProductToLoad = 'sr-ref';
+                // $(`.productOption[value="${abbvProductToLoad}"]`).html()
+                $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
 
                 var menuElem = $('#tdwrRefBtn');
                 if (menuElem.find('.selectedProductMenuItem').length == 0) {
@@ -6620,6 +6648,8 @@ map.touchZoomRotate.disableRotation();
 
 // https://github.com/mapbox/mapbox-gl-js/issues/3265#issuecomment-660400481
 setTimeout(() => map.resize(), 0);
+window.onresize = () => { map.resize() }
+window.onclick = () => { map.resize() }
 
 // const getMouseColor = require('../misc/colorPicker');
 // map.on("mousemove", e => getMouseColor(e, map));
