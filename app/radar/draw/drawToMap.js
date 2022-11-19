@@ -50,7 +50,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             'bottom': offset + $('#mapFooter').height(),
             'height': '15px'
         }).show();
-        $('#productMapFooter').css('bottom', offset + $('#mapFooter').height() + $('#mapColorScale').height());
+        $('#productMapFooter').css('bottom', 0 + $('#mapFooter').height() + $('#mapColorScale').height());
 
         $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
             //console.log(data);
