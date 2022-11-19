@@ -201,30 +201,13 @@ function showStations() {
         enableMouseListeners();
     }
 
-    var alreadyClicked = false;
     map.on('click', 'stationSymbolLayer', function (e) {
         if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
             var stationType = e.features[0].properties.type;
             var id = e.features[0].id;
 
-            $(document).trigger('newStation', clickedStation);
-
-            if (!alreadyClicked) {
-                alreadyClicked = true;
-                var offset;
-                if (require('../../misc/detectmobilebrowser')) {
-                    offset = $(window).height() * (5 / 100);
-                } else {
-                    offset = 0;
-                }
-                $('#productMapFooter').show();
-                //$('#productMapFooter').height('30px');
-                var productFooterBottomMargin = parseInt($('#map').css('bottom'));
-                var productFooterHeight = parseInt($('#productMapFooter').height());
-                $('#productMapFooter').css('bottom', productFooterBottomMargin - offset);
-                ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
-            }
+            $(document).trigger('newStation', clickedStation);var alreadyClicked = false;
 
             var productToLoad;
             var abbvProductToLoad;

@@ -3522,8 +3522,26 @@ const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel2FileTime = require('../level2/l2FileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
+const { DateTime } = require('luxon');
 
+var alreadyClicked = false;
 function showL2Info(l2rad) {
+    if (!alreadyClicked) {
+        alreadyClicked = true;
+        var offset;
+        if (require('../misc/detectmobilebrowser')) {
+            offset = $(window).height() * (5 / 100);
+        } else {
+            offset = 0;
+        }
+        $('#productMapFooter').show();
+        //$('#productMapFooter').height('30px');
+        var productFooterBottomMargin = parseInt($('#map').css('bottom'));
+        var productFooterHeight = parseInt($('#productMapFooter').height());
+        $('#productMapFooter').css('bottom', productFooterBottomMargin - offset);
+        ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
+    }
+
     $('#fileUploadSpan').hide();
     $('#radarInfoSpan').show();
 
@@ -3544,9 +3562,13 @@ function showL2Info(l2rad) {
     document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var fileDateObj = getLevel2FileTime(l2rad);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);
+    var formattedRadarDate = formattedDateObj.toFormat('L/d/yyyy');
+    var formattedRadarTime = formattedDateObj.toFormat('h:mm a ZZZZ');
 
-    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+    $('#radarDateTime').show().html(`${formattedRadarDate}<br>${formattedRadarTime}`);
+    // var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    // document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 
     getTimeDiff(fileDateObj);
 
@@ -3561,7 +3583,7 @@ function showL2Info(l2rad) {
 }
 
 module.exports = showL2Info;
-},{"../level2/l2FileTime":38,"../misc/getTimeDiff":71,"../utils":77}],27:[function(require,module,exports){
+},{"../level2/l2FileTime":38,"../misc/detectmobilebrowser":69,"../misc/getTimeDiff":71,"../utils":77,"luxon":189}],27:[function(require,module,exports){
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel3FileTime = require('../level3/l3fileTime');
@@ -3569,7 +3591,24 @@ const getTimeDiff = require('../misc/getTimeDiff');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const { DateTime } = require('luxon');
 
+var alreadyClicked = false;
 function showL3Info(l3rad) {// //showPlotBtn();
+    if (!alreadyClicked) {
+        alreadyClicked = true;
+        var offset;
+        if (require('../misc/detectmobilebrowser')) {
+            offset = $(window).height() * (5 / 100);
+        } else {
+            offset = 0;
+        }
+        $('#productMapFooter').show();
+        //$('#productMapFooter').height('30px');
+        var productFooterBottomMargin = parseInt($('#map').css('bottom'));
+        var productFooterHeight = parseInt($('#productMapFooter').height());
+        $('#productMapFooter').css('bottom', productFooterBottomMargin - offset);
+        ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
+    }
+
     $('#fileUploadSpan').hide();
     $('#radarInfoSpan').show();
     // document.getElementById('fileInput').style.display = 'none';
@@ -3594,6 +3633,13 @@ function showL3Info(l3rad) {// //showPlotBtn();
 
     $('#radarDateTime').show().html(`${formattedRadarDate}<br>${formattedRadarTime}`);
 
+    var fileElevation = l3rad.productDescription.elevationAngle;
+    console.log(fileElevation)
+    if (fileElevation == undefined) {
+        fileElevation = l3rad.productDescription.elevationNumber;
+    }
+    $('#extraProductInfo').show().html(`Elevation: ${fileElevation}°`);
+
     function showTimeDiff() { getTimeDiff(fileDateObj) }
     if (window.countInterval && !$('#dataDiv').data('fromFileUpload')) {
         clearInterval(window.countInterval)
@@ -3614,7 +3660,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
 }
 
 module.exports = showL3Info;
-},{"../../../resources/stationAbbreviations":240,"../level3/l3fileTime":42,"../misc/getTimeDiff":71,"../utils":77,"luxon":189}],28:[function(require,module,exports){
+},{"../../../resources/stationAbbreviations":240,"../level3/l3fileTime":42,"../misc/detectmobilebrowser":69,"../misc/getTimeDiff":71,"../utils":77,"luxon":189}],28:[function(require,module,exports){
 function setFooterMenuOrder() {
     $('#colorPickerItemDiv').insertAfter('#metarStationMenuItemDiv');
     $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#metarStationMenuItemDiv');
@@ -5155,13 +5201,6 @@ function mainL3Loading(thisObj) {
         } else if (l3rad.textHeader.type == "NST") {
             parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
         } else {
-            var fileElevation = l3rad.productDescription.elevationAngle;
-            console.log(fileElevation)
-            if (fileElevation == undefined) {
-                fileElevation = l3rad.productDescription.elevationNumber;
-            }
-            $('#extraProductInfo').show().html(`Elevation: ${fileElevation}°`);
-
             l3plot(l3rad);
         }
 
@@ -6342,30 +6381,13 @@ function showStations() {
         enableMouseListeners();
     }
 
-    var alreadyClicked = false;
     map.on('click', 'stationSymbolLayer', function (e) {
         if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
             var clickedStation = e.features[0].properties.station;
             var stationType = e.features[0].properties.type;
             var id = e.features[0].id;
 
-            $(document).trigger('newStation', clickedStation);
-
-            if (!alreadyClicked) {
-                alreadyClicked = true;
-                var offset;
-                if (require('../../misc/detectmobilebrowser')) {
-                    offset = $(window).height() * (5 / 100);
-                } else {
-                    offset = 0;
-                }
-                $('#productMapFooter').show();
-                //$('#productMapFooter').height('30px');
-                var productFooterBottomMargin = parseInt($('#map').css('bottom'));
-                var productFooterHeight = parseInt($('#productMapFooter').height());
-                $('#productMapFooter').css('bottom', productFooterBottomMargin - offset);
-                ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
-            }
+            $(document).trigger('newStation', clickedStation);var alreadyClicked = false;
 
             var productToLoad;
             var abbvProductToLoad;

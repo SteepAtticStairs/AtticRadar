@@ -53,13 +53,6 @@ function mainL3Loading(thisObj) {
         } else if (l3rad.textHeader.type == "NST") {
             parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
         } else {
-            var fileElevation = l3rad.productDescription.elevationAngle;
-            console.log(fileElevation)
-            if (fileElevation == undefined) {
-                fileElevation = l3rad.productDescription.elevationNumber;
-            }
-            $('#extraProductInfo').show().html(`Elevation: ${fileElevation}°`);
-
             l3plot(l3rad);
         }
 

@@ -2,8 +2,26 @@ const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel2FileTime = require('../level2/l2FileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
+const { DateTime } = require('luxon');
 
+var alreadyClicked = false;
 function showL2Info(l2rad) {
+    if (!alreadyClicked) {
+        alreadyClicked = true;
+        var offset;
+        if (require('../misc/detectmobilebrowser')) {
+            offset = $(window).height() * (5 / 100);
+        } else {
+            offset = 0;
+        }
+        $('#productMapFooter').show();
+        //$('#productMapFooter').height('30px');
+        var productFooterBottomMargin = parseInt($('#map').css('bottom'));
+        var productFooterHeight = parseInt($('#productMapFooter').height());
+        $('#productMapFooter').css('bottom', productFooterBottomMargin - offset);
+        ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
+    }
+
     $('#fileUploadSpan').hide();
     $('#radarInfoSpan').show();
 
@@ -24,9 +42,13 @@ function showL2Info(l2rad) {
     document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var fileDateObj = getLevel2FileTime(l2rad);
-    var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);
+    var formattedRadarDate = formattedDateObj.toFormat('L/d/yyyy');
+    var formattedRadarTime = formattedDateObj.toFormat('h:mm a ZZZZ');
 
-    document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
+    $('#radarDateTime').show().html(`${formattedRadarDate}<br>${formattedRadarTime}`);
+    // var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);
+    // document.getElementById('radarTime').innerHTML = `&nbsp;&nbsp;${finalRadarDateTime}`;
 
     getTimeDiff(fileDateObj);
 
