@@ -3812,7 +3812,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         }
         var offset;
         if (require('../misc/detectmobilebrowser')) {
-            offset = Math.round($(window).height() * (5 / 100));
+            offset = $(window).height() * (5 / 100);
         } else {
             offset = 0;
         }
@@ -6353,11 +6353,17 @@ function showStations() {
 
             if (!alreadyClicked) {
                 alreadyClicked = true;
+                var offset;
+                if (require('../../misc/detectmobilebrowser')) {
+                    offset = $(window).height() * (5 / 100);
+                } else {
+                    offset = 0;
+                }
                 $('#productMapFooter').show();
                 //$('#productMapFooter').height('30px');
                 var productFooterBottomMargin = parseInt($('#map').css('bottom'));
                 var productFooterHeight = parseInt($('#productMapFooter').height());
-                $('#productMapFooter').css('bottom', productFooterBottomMargin);
+                $('#productMapFooter').css('bottom', productFooterBottomMargin - offset);
                 ut.setMapMargin('bottom', productFooterBottomMargin + productFooterHeight);
             }
 
