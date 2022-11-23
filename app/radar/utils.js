@@ -722,9 +722,18 @@ function zeroPad(num, length) {
 function setMapMargin(topOrBottom, value) {
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
+        $('#colorPicker').css('top', value);
     } else if (topOrBottom == 'bottom') {
         $('#map').css('bottom', value);
+        $('#colorPicker').css('bottom', value);
+        $('#colorPickerText').css('bottom', value - 40);
     }
+
+    // $('#colorPicker #colorPickerText').position({
+    //     my: 'center',
+    //     at: 'center',
+    //     of: $('#map')
+    // })
 }
 
 function displayAtticDialog(options) {

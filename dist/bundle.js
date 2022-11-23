@@ -6148,8 +6148,8 @@ if (require('./misc/detectmobilebrowser')) {
     $('#mapFooter').css('bottom', '5%');
     var offset = $(window).height() * (5 / 100);
     ut.setMapMargin('bottom', offset + $('#mapFooter').height());
-    $('#colorPicker').css('bottom', offset);
-    $('#colorPickerText').css('bottom', offset);
+    // $('#colorPicker').css('bottom', offset);
+    // $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
 }
 
@@ -9195,9 +9195,18 @@ function zeroPad(num, length) {
 function setMapMargin(topOrBottom, value) {
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
+        $('#colorPicker').css('top', value);
     } else if (topOrBottom == 'bottom') {
         $('#map').css('bottom', value);
+        $('#colorPicker').css('bottom', value);
+        $('#colorPickerText').css('bottom', value - 40);
     }
+
+    // $('#colorPicker #colorPickerText').position({
+    //     my: 'center',
+    //     at: 'center',
+    //     of: $('#map')
+    // })
 }
 
 function displayAtticDialog(options) {
