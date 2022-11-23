@@ -616,3 +616,51 @@ https://tobiasahlin.com/spinkit/
     border-width: 10px;
     margin-left: -10px;
 }
+
+#l2ElevButtons {
+    margin: auto;
+    width: 90%;
+}
+.l2ElevBtn {
+    /* width: fit-content;
+    height: fit-content; */
+    padding: 2px;
+    background-color: #e2e3e5;
+    cursor: pointer;
+
+    border: 1px solid #d3d6d8;
+    border-radius: 7px;
+
+    text-align: center;
+
+    /* border-top: 2px solid rgb(230, 230, 230);
+    border-left: 2px solid rgb(230, 230, 230);
+    border-bottom: 2px solid rgb(100, 100, 100);
+    border-right: 2px solid rgb(100, 100, 100); */
+}
+
+#l2ElevButtonsExpander {
+    /* width: fit-content;
+    height: fit-content; */
+    height: auto;
+    margin: auto;
+    width: 90%;
+    padding: 5px;
+    background-color: #e2e3e5;
+    cursor: pointer;
+
+    border: 1px solid #d3d6d8;
+    border-radius: 7px;
+
+    /* text-align: center; */
+}
+#l2ElevButtonsExpander:hover {
+    filter: brightness(80%);
+    -webkit-filter: brightness(80%);
+    -moz-filter: brightness(80%);
+}
+.l2ElevButtonsExpanderSelected {
+    color: #084298 !important;
+    background-color: #cfe2ff !important;
+    border-color: #b6d4fe !important;
+}

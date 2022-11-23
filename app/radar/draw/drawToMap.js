@@ -57,7 +57,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
 
-            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX') {
+            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
                 // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
                 for (var i in levs) { levs[i] = levs[i] * 1.944 }
             } else if (produc == 'N0S') {

@@ -9,14 +9,6 @@ tooltipElem.hide();
 // const tooltip = bootstrap.Tooltip.getInstance('#tooltipDiv');
 // tooltip.enable();
 
-function nodeToString(node) {
-    var tmpNode = document.createElement('div');
-    tmpNode.appendChild(node.cloneNode(true));
-    var str = tmpNode.innerHTML;
-    tmpNode = node = null; // prevent memory leaks in IE
-    return str;
-}
-
 function addAllToolsItems() {
     var n = 0;
     require('../distance/menuItem').distanceToolsOption(n = n + 1);

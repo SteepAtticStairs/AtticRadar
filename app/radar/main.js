@@ -165,6 +165,18 @@ document.addEventListener('loadFile', function(event) {
     reader.readAsArrayBuffer(uploadedFile);
 })
 
+// setTimeout(function() {
+//     if (map.loaded()) {
+//         //$('#stationMenuItemIcon').click();
+//         loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//     } else {
+//         map.on('load', function() {
+//             //$('#stationMenuItemIcon').click();
+//             loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//         })
+//     }
+// }, 0)
+
 
 // const aeris = new AerisWeather('AcxJ7pqDEeRA8kcDUOTPS', '7tOA7yRcLFb40YCCoXq0ccUMtD4ZZJarCgNjOrtL');
 

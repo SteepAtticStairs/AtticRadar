@@ -3873,7 +3873,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var colors = data.colors; //colors["ref"];
             var levs = data.values; //values["ref"];
 
-            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX') {
+            if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
                 // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
                 for (var i in levs) { levs[i] = levs[i] * 1.944 }
             } else if (produc == 'N0S') {
@@ -4609,16 +4609,147 @@ const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const loaders = require('../loaders');
 const mapFuncs = require('../map/mapFunctions');
 
+// https://stackoverflow.com/a/15191130/18758797
+$.fn.animateRotate = function (angle, duration, easing, complete) {
+    var args = $.speed(duration, easing, complete);
+    var step = args.step;
+    return this.each(function (i, e) {
+        args.complete = $.proxy(args.complete, e);
+        args.step = function (now) {
+            $.style(e, 'transform', 'rotate(' + now + 'deg)');
+            if (step) return step.apply(e, arguments);
+        };
+
+        $({ deg: 0 }).animate({ deg: angle }, args);
+    });
+};
+
+function flipIcon(icon, minimizeOrMaximize) {
+    function rotateThing(deg) {
+        $(icon).animateRotate(deg, {
+            duration: 200,
+            easing: 'swing',
+            complete: function () {},
+            step: function () {}
+        });
+    }
+    if (minimizeOrMaximize == 'minimize') {
+        $(icon).removeClass('fa-chevron-right');
+        $(icon).addClass('fa-chevron-down');
+        rotateThing(-90);
+    } else if (minimizeOrMaximize == 'maximize') {
+        $(icon).removeClass('fa-chevron-down');
+        $(icon).addClass('fa-chevron-right');
+        rotateThing(90);
+    }
+}
+
+window.valueProductLookup = {
+    'l2-ref': 'REF',
+    'l2-vel': 'VEL',
+    'l2-rho': 'RHO',
+    'l2-zdr': 'ZDR',
+    'l2-sw ': 'SW ',
+    'l2-phi': 'PHI'
+}
+
+function returnDropdownItem(value) {
+    var dropdownItem = `<li><a class='dropdown-item' href='#' value='${value}'>${value}</a></li>`;
+    return dropdownItem;
+}
+
+function nodeToString(node) {
+    var tmpNode = document.createElement('div');
+    tmpNode.appendChild(node.cloneNode(true));
+    var str = tmpNode.innerHTML;
+    tmpNode = node = null; // prevent memory leaks in IE
+    return str;
+}
+
+function hoverClickBtnsListeners(l2rad) {
+    function getBrightnessCss(val) {
+        return {
+            'filter': `brightness(${val}%)`,
+            '-webkit-filter': `brightness(${val}%)`,
+            '-moz-filter': `brightness(${val}%)`,
+        }
+    }
+
+    // mousedown touchstart
+    $('.l2ElevBtn')
+        .on('mouseenter', function() { $(this).css(getBrightnessCss(90)) })
+        .on('mouseleave', function() { $(this).css(getBrightnessCss(100)) })
+        .on('mousedown', function() { $(this).css(getBrightnessCss(80)) })
+        .on('mouseup', function() { $(this).css(getBrightnessCss(90)) })
+    // $('.l2ElevBtn').on('mouseup touchend', function() {
+    //     $(this).removeClass('l2ElevBtnClicked');
+    // })
+
+    $('.l2ElevBtn').on('click', function() {
+        var clickedElevNum = $(this).attr('value');
+        var clickedElevAngle = $(this).text();
+
+        curElevNum = parseInt(clickedElevNum);
+        plot(l2rad, curProduct, {
+            elevations: curElevNum,
+        });
+    })
+}
+
+var minOrMax = 'min';
+var heightModifier = 10;
+var curElevNum = 1;
+var curProduct = 'REF';
+
 function loadL2Listeners(l2rad) {
     $('#currentModeSpan').hide();
     $('#uploadModeSpan').show();
+
+    $('#l2ElevButtonsExpander').on('click', function() {
+        if (minOrMax == 'min') {
+            $('.l2ElevButtons').slideDown(200);
+            minOrMax = 'max';
+            $(this).addClass('l2ElevButtonsExpanderSelected').animate({
+                //'padding': '1.5px',
+                'height': `-=${heightModifier}`
+            }, {duration: 200, queue: false});
+            $('#l2ElevButtonsExpanderIcon').animate({
+                'font-size': '12px'
+            }, {duration: 200, queue: false});
+            flipIcon($('#l2ElevButtonsExpanderIcon'), 'maximize');
+        } else if (minOrMax == 'max') {
+            $('.l2ElevButtons').slideUp(200);
+            minOrMax = 'min';
+            $(this).removeClass('l2ElevButtonsExpanderSelected').animate({
+                //'padding': '5px',
+                'height': `+=${heightModifier}`
+            }, {duration: 200, queue: false});
+            $('#l2ElevButtonsExpanderIcon').animate({
+                'font-size': '18px'
+            }, {duration: 200, queue: false});
+            flipIcon($('#l2ElevButtonsExpanderIcon'), 'minimize');
+        }
+    })
+
+    $('.l2ProductOption').on('click', function() {
+        var thisInnerHTML = $(this).html();
+        var thisValue = $(this).attr('value');
+
+        curProduct = valueProductLookup[thisValue];
+        //$('#dataDiv').data('curL2Product', curProduct);
+        plot(l2rad, curProduct, {
+            elevations: curElevNum,
+        });
+    })
+
+
     // var btnsArr = [
-    //     "level2-ref",
-    //     "level2-vel",
-    //     "level2-rho",
-    //     "level2-phi",
-    //     "level2-zdr",
-    //     "level2-sw "
+    //     'level2-ref',
+    //     'level2-vel',
+    //     'level2-rho',
+    //     'level2-phi',
+    //     'level2-zdr',
+    //     'level2-sw '
     // ]
     // for (key in btnsArr) {
     //     var curElemIter = document.getElementById(btnsArr[key]);
@@ -4654,149 +4785,152 @@ function loadL2Listeners(l2rad) {
     // })
 
 
-    function hideShowArrows(val) {
-        console.log(val)
-        var dupElevObj = $('#dataDiv').data('duplicateElevs');
-        for (const key in dupElevObj) {
-            if (dupElevObj[key].includes(val.toString())) {
-                if (dupElevObj[key].length > 1) {
-                    $('.elevNavBtns').show();
-                    var max = dupElevObj[$('#dataDiv').data('firstElev')].length - 1;
-                    var min = 0;
-                    document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
-                } else {
-                    $('.elevNavBtns').hide();
-                    document.getElementById('numOfElevsForArrows').innerHTML = '';
-                    $('#dataDiv').data('curArrowElev', 0);
-                }
-            }
-        }
-    }
+    // function hideShowArrows(val) {
+    //     console.log(val)
+    //     var dupElevObj = $('#dataDiv').data('duplicateElevs');
+    //     for (const key in dupElevObj) {
+    //         if (dupElevObj[key].includes(val.toString())) {
+    //             if (dupElevObj[key].length > 1) {
+    //                 $('.elevNavBtns').show();
+    //                 var max = dupElevObj[$('#dataDiv').data('firstElev')].length - 1;
+    //                 var min = 0;
+    //                 document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
+    //             } else {
+    //                 $('.elevNavBtns').hide();
+    //                 document.getElementById('numOfElevsForArrows').innerHTML = '';
+    //                 $('#dataDiv').data('curArrowElev', 0);
+    //             }
+    //         }
+    //     }
+    // }
 
-    // <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-    function returnDropdownItem(value) {
-        var dropdownItem = `<li><a class="dropdown-item" href="#" value="${value}">${value}</a></li>`;
-        return dropdownItem;
-    }
+    // // <li><a class='dropdown-item' href='#' value='tilt1'>Tilt 1</a></li>
+    // function returnDropdownItem(value) {
+    //     var dropdownItem = `<li><a class='dropdown-item' href='#' value='${value}'>${value}</a></li>`;
+    //     return dropdownItem;
+    // }
 
-    var dropdownBtn = document.getElementById('l2ProductBtn');
-    var allProds = ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW '];
-    for (key in allProds) {
-        document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProds[key])
-    }
-    dropdownBtn.innerHTML = 'REF';
-    $(dropdownBtn).attr('value', 'REF');
-    $('#dataDiv').data('currentL2Product', 'REF');
-    $('#dataDiv').data('currentElevation', 1);
+    // var dropdownBtn = document.getElementById('l2ProductBtn');
+    // var allProds = ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW '];
+    // for (key in allProds) {
+    //     document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProds[key])
+    // }
+    // dropdownBtn.innerHTML = 'REF';
+    // $(dropdownBtn).attr('value', 'REF');
+    // $('#dataDiv').data('currentL2Product', 'REF');
+    // $('#dataDiv').data('currentElevation', 1);
 
-    $('#l2ProductBtn').attr('value', 'REF');
-    $('#l2ElevBtns').on('click', function(e) {
-        var clickedValue = $(e.target).attr('value');
-        $('#dataDiv').data('currentElevation', clickedValue);
-        var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
+    // $('#l2ProductBtn').attr('value', 'REF');
+    // $('#l2ElevBtns').on('click', function(e) {
+    //     var clickedValue = $(e.target).attr('value');
+    //     $('#dataDiv').data('currentElevation', clickedValue);
+    //     var allProdsForElev = $('#dataDiv').data('elevsAndProds')[clickedValue - 1][2];
 
-        hideShowArrows(clickedValue);
+    //     hideShowArrows(clickedValue);
 
-        // document.getElementById('l2ProductMenu').innerHTML = '';
-        // for (key in allProdsForElev) {
-        //     document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProdsForElev[key])
-        // }
+    //     // document.getElementById('l2ProductMenu').innerHTML = '';
+    //     // for (key in allProdsForElev) {
+    //     //     document.getElementById('l2ProductMenu').innerHTML += returnDropdownItem(allProdsForElev[key])
+    //     // }
 
-        if (!(allProdsForElev.includes(dropdownBtn.innerHTML))) {
-            dropdownBtn.innerHTML = 'REF';
-            $(dropdownBtn).attr('value', 'REF');
-            $('#dataDiv').data('currentL2Product', 'REF');
-        }
+    //     if (!(allProdsForElev.includes(dropdownBtn.innerHTML))) {
+    //         dropdownBtn.innerHTML = 'REF';
+    //         $(dropdownBtn).attr('value', 'REF');
+    //         $('#dataDiv').data('currentL2Product', 'REF');
+    //     }
 
-        plot(l2rad, $('#l2ProductBtn').attr('value'), {
-            elevations: parseInt(clickedValue),
-        });
-    })
+    //     plot(l2rad, $('#l2ProductBtn').attr('value'), {
+    //         elevations: parseInt(clickedValue),
+    //     });
+    // })
 
-    function showSpecificElevs(val) {
-        $("[valTag]").hide();
-        var elevsAndProds = $('#dataDiv').data('elevsAndProds');
-        for (key in elevsAndProds) {
-            var elevNum = elevsAndProds[key][1];
-            if (elevsAndProds[key][2].includes(val)) {
-                $(`[valTag=${parseInt(key) + 1}]`).show();
-            }
-        }
-    }
+    // function showSpecificElevs(val) {
+    //     $('[valTag]').hide();
+    //     var elevsAndProds = $('#dataDiv').data('elevsAndProds');
+    //     for (key in elevsAndProds) {
+    //         var elevNum = elevsAndProds[key][1];
+    //         if (elevsAndProds[key][2].includes(val)) {
+    //             $(`[valTag=${parseInt(key) + 1}]`).show();
+    //         }
+    //     }
+    // }
 
-    $('#dataDiv').data('currentL2Product', 'REF');
-    $('#l2ProductMenu').on('click', function(e) {
-        var clickedVal = $(e.target).attr('value');
-        $('#dataDiv').data('currentL2Product', clickedVal);
+    // $('#dataDiv').data('currentL2Product', 'REF');
+    // $('#l2ProductMenu').on('click', function(e) {
+    //     var clickedVal = $(e.target).attr('value');
+    //     $('#dataDiv').data('currentL2Product', clickedVal);
 
-        document.getElementById('l2ProductBtn').innerHTML = clickedVal;
-        $('#l2ProductBtn').attr('value', clickedVal);
+    //     document.getElementById('l2ProductBtn').innerHTML = clickedVal;
+    //     $('#l2ProductBtn').attr('value', clickedVal);
 
-        if (!$('#elevOptionsSwitch').is(':checked')) {
-            showSpecificElevs(clickedVal);
-        }
+    //     if (!$('#elevOptionsSwitch').is(':checked')) {
+    //         showSpecificElevs(clickedVal);
+    //     }
 
-        // plot(l2rad, clickedVal, {
-        //     elevations: parseInt($('#dataDiv').data('currentElevation')),
-        // });
-    })
+    //     // plot(l2rad, clickedVal, {
+    //     //     elevations: parseInt($('#dataDiv').data('currentElevation')),
+    //     // });
+    // })
 
-    $('#elevOptionsSwitch').on('input', function() {
-        // https://stackoverflow.com/a/68162025
-        var isChecked = $(this).is(':checked');
+    // $('#elevOptionsSwitch').on('input', function() {
+    //     // https://stackoverflow.com/a/68162025
+    //     var isChecked = $(this).is(':checked');
 
-        // if it is checked, show all elevations regardless of the products avaliable.
-        // if it is not checked, only show elevations that have the selected product.
+    //     // if it is checked, show all elevations regardless of the products avaliable.
+    //     // if it is not checked, only show elevations that have the selected product.
 
-        if (isChecked) {
-            $("[valTag]").show();
-        } else if (!isChecked) {
-            showSpecificElevs($('#dataDiv').data('currentL2Product'));
-        }
-    })
+    //     if (isChecked) {
+    //         $('[valTag]').show();
+    //     } else if (!isChecked) {
+    //         showSpecificElevs($('#dataDiv').data('currentL2Product'));
+    //     }
+    // })
 
-    $('#dataDiv').data('curArrowElev', 0);
-    $('#elevNavBtns button').on('click', function() {
-        var leftOrRight = $(this).attr('value');
-        var curElevNum = $('#dataDiv').data('currentElevation');
-        var dupElevObj = $('#dataDiv').data('duplicateElevs');
+    // $('#dataDiv').data('curArrowElev', 0);
+    // $('#elevNavBtns button').on('click', function() {
+    //     var leftOrRight = $(this).attr('value');
+    //     var curElevNum = $('#dataDiv').data('currentElevation');
+    //     var dupElevObj = $('#dataDiv').data('duplicateElevs');
 
-        for (const key in dupElevObj) {
-            if (dupElevObj[key].includes(curElevNum.toString())) {
-                if (dupElevObj[key].length > 1) {
-                    var elevToGoTo;
-                    var max = dupElevObj[key].length - 1;
-                    var min = 0;
+    //     for (const key in dupElevObj) {
+    //         if (dupElevObj[key].includes(curElevNum.toString())) {
+    //             if (dupElevObj[key].length > 1) {
+    //                 var elevToGoTo;
+    //                 var max = dupElevObj[key].length - 1;
+    //                 var min = 0;
 
-                    if (leftOrRight == 'left') {
-                        var subtractor = 0;
-                        if (!($('#dataDiv').data('curArrowElev') == min)) {
-                            subtractor = 1;
-                        }
-                        $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') - subtractor);
-                        elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')])
-                    } else if (leftOrRight == 'right') {
-                        var adder = 0;
-                        if (!($('#dataDiv').data('curArrowElev') == max)) {
-                            adder = 1;
-                        }
-                        $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') + adder);
-                        elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')]);
-                    }
+    //                 if (leftOrRight == 'left') {
+    //                     var subtractor = 0;
+    //                     if (!($('#dataDiv').data('curArrowElev') == min)) {
+    //                         subtractor = 1;
+    //                     }
+    //                     $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') - subtractor);
+    //                     elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')])
+    //                 } else if (leftOrRight == 'right') {
+    //                     var adder = 0;
+    //                     if (!($('#dataDiv').data('curArrowElev') == max)) {
+    //                         adder = 1;
+    //                     }
+    //                     $('#dataDiv').data('curArrowElev', $('#dataDiv').data('curArrowElev') + adder);
+    //                     elevToGoTo = parseInt(dupElevObj[key][$('#dataDiv').data('curArrowElev')]);
+    //                 }
 
-                    var curOverMax = `${$('#dataDiv').data('curArrowElev')} / ${max}`
-                    document.getElementById('numOfElevsForArrows').innerHTML = curOverMax;
+    //                 var curOverMax = `${$('#dataDiv').data('curArrowElev')} / ${max}`
+    //                 document.getElementById('numOfElevsForArrows').innerHTML = curOverMax;
 
-                    plot(l2rad, $('#dataDiv').data('currentL2Product'), {
-                        elevations: elevToGoTo,
-                    });
-                }
-            }
-        }
-    })
+    //                 plot(l2rad, $('#dataDiv').data('currentL2Product'), {
+    //                     elevations: elevToGoTo,
+    //                 });
+    //             }
+    //         }
+    //     }
+    // })
 }
 
-module.exports = loadL2Listeners;
+module.exports = {
+    loadL2Listeners,
+    hoverClickBtnsListeners
+};
 },{"../../../lib/nexrad-level-2-plot/src":108,"../loaders":48,"../map/mapFunctions":58}],38:[function(require,module,exports){
 const addDays = require('../utils').addDays;
 const ut = require('../utils');
@@ -4837,6 +4971,7 @@ module.exports = getLevel2FileTime;
 },{"../utils":77,"luxon":189}],39:[function(require,module,exports){
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
+const hoverClickBtnsListeners = require('./eventListeners').hoverClickBtnsListeners;
 
 function createModal(title, headerColor, body) {
     var modalContent = 
@@ -4854,9 +4989,30 @@ function createModal(title, headerColor, body) {
     return modalContent;
 }
 
-function loadL2Menu(elevsAndProds) {
+var elevsForEachProduct = {
+    'REF': [],
+    'VEL': [],
+    'RHO': [],
+    'ZDR': [],
+    'SW ': [],
+    'PHI': []
+}
+function generateElevsForEachProduct(elevsAndProds) {
+    for (var i in elevsAndProds) {
+        var curIterElevNum = parseInt(elevsAndProds[i][1]);
+        var allProdsForCurElev = elevsAndProds[i][2];
+        for (var n in allProdsForCurElev) {
+            elevsForEachProduct[allProdsForCurElev[n]].push(curIterElevNum);
+        }
+    }
+    console.log(elevsForEachProduct)
+}
+
+function loadL2Menu(elevsAndProds, l2rad) {
     $('#dataDiv').data('elevsAndProds', elevsAndProds);
     console.log(elevsAndProds)
+    generateElevsForEachProduct(elevsAndProds);
+
     function returnBtnTemplate(elevAngle, elevNum) {
         // var btnTemplate = `
         //     <button type="button"
@@ -4865,10 +5021,15 @@ function loadL2Menu(elevsAndProds) {
         //     class="btn btn-secondary btn-sm">
         //         ${elevAngle}
         //     </button>`
+
+        // var btnTemplate = `
+        // <div class="col-sm">
+        //     <input class="form-check-input radio-inline" type="radio" name="radios" id="elev${elevNum}" value="${elevNum}" valTag="${elevNum}"><label class="form-check-label" valTag="${elevNum}">${elevAngle}
+        // </div>`
         var btnTemplate = `
-            <input class="form-check-input radio-inline" type="radio" name="radios" id="elev${elevNum}" value="${elevNum}" valTag="${elevNum}">
-            <label class="form-check-label" valTag="${elevNum}">${elevAngle}
-            &nbsp;&nbsp;&nbsp;&nbsp;`
+        <div class="col">
+            <div class="l2ElevBtn" value="${elevNum}">${elevAngle}°</div>
+        </div>`
         return btnTemplate;
     }
 
@@ -4882,64 +5043,101 @@ function loadL2Menu(elevsAndProds) {
 
     var duplicateElevs = {};
 
-    var l2btnsElem = document.getElementById('l2ElevBtns');
-    var iters = 0;
-    var firstElev;
-    for (key in elevsAndProds) {
-        if (iters % 2 == 0 && iters != 0) {
-            l2btnsElem.innerHTML += '<br>'
-        }
-        var curElevAngle = elevsAndProds[key][0];
-        // round to one decimal place
-        // curElevAngle = Math.round(curElevAngle * 10) / 10;
-        curElevAngle = curElevAngle.toFixed(1);
-        var curElevNum = elevsAndProds[key][1];
-        var curElevWaveformType = elevsAndProds[key][3];
 
-        // WVT = waveform type
-        var curElevCurWVT = `${curElevAngle}_${curElevWaveformType}`;
-        if (iters == 0) {
-            $('#dataDiv').data('firstElev', curElevCurWVT);
-            firstElev = curElevCurWVT;
-        }
+    var l2btnsElem = document.getElementById('l2ElevButtons');
+    var currentProduct;
+    var allBtnsArr = [];
 
-        if (duplicateElevs.hasOwnProperty(curElevCurWVT)) {
-            duplicateElevs[curElevCurWVT].push(curElevNum);
-            // // if (the current elevation's waveform type == the current iteration elevation's waveform type)
-            // console.log(elevsAndProds[curElevNum - 1][3], curElevWaveformType)
-            // if (elevsAndProds[curElevNum - 1][3] == curElevWaveformType) {
-            //     duplicateElevs[curElevAngle].push(curElevNum);
+    function generateElevBtns(product) {
+        $('#l2ElevButtons').empty();
+        var base = elevsForEachProduct[product];
+        var iters = 1;
+        var allBtns = '';
+        for (key in elevsAndProds) {
+            // if (iters % 2 == 0 && iters != 0) {
+            //     l2btnsElem.innerHTML += '<br>'
             // }
-        } else {
-            duplicateElevs[curElevCurWVT] = [curElevNum];
-            l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
-            iters++;
+            var curElevAngle = elevsAndProds[key][0];
+            // round to one decimal place
+            // curElevAngle = Math.round(curElevAngle * 10) / 10;
+            curElevAngle = curElevAngle.toFixed(1);
+            var curElevNum = elevsAndProds[key][1];
+            var curElevWaveformType = elevsAndProds[key][3];
+
+            allBtnsArr.push(returnBtnTemplate(curElevAngle, curElevNum));
+
+            if (base.includes(parseInt(curElevNum))) {
+                function pushRow() {
+                    l2btnsElem.innerHTML += `<div class="row gx-1" style="margin-top: 0.25rem">${allBtns}</div>`
+                    allBtns = '';
+                }
+                allBtns += returnBtnTemplate(curElevAngle, curElevNum);
+                // do every three buttons (3 per row),
+                // but not the first iteration, because we haven't generated a full row of 3 yet
+                if (iters % 3 == 0 && iters != 1) { pushRow() }
+                // if the loop has finished and we haven't reached a row a 3 yet, append the remaining buttons
+                if (iters == elevsAndProds.length) { pushRow() }
+                iters++;
+            }
+
+            // // WVT = waveform type
+            // var curElevCurWVT = `${curElevAngle}_${curElevWaveformType}`;
+            // if (iters == 0) {
+            //     $('#dataDiv').data('firstElev', curElevCurWVT);
+            //     firstElev = curElevCurWVT;
+            // }
+
+            // if (duplicateElevs.hasOwnProperty(curElevCurWVT)) {
+            //     duplicateElevs[curElevCurWVT].push(curElevNum);
+            //     // // if (the current elevation's waveform type == the current iteration elevation's waveform type)
+            //     // console.log(elevsAndProds[curElevNum - 1][3], curElevWaveformType)
+            //     // if (elevsAndProds[curElevNum - 1][3] == curElevWaveformType) {
+            //     //     duplicateElevs[curElevAngle].push(curElevNum);
+            //     // }
+            // } else {
+            //     duplicateElevs[curElevCurWVT] = [curElevNum];
+            //     l2btnsElem.innerHTML += returnBtnTemplate(curElevAngle, curElevNum);
+            //     iters++;
+            // }
         }
+        $('#dataDiv').data('allButtonsArr', allBtnsArr);
+        $('#dataDiv').data('elevsForEachProduct', elevsForEachProduct);
+        hoverClickBtnsListeners(l2rad);
     }
-    console.log(duplicateElevs)
-    $('#dataDiv').data('duplicateElevs', duplicateElevs);
+    //$('#dataDiv').data('curL2Product', 'REF')
+    generateElevBtns('REF');
+    $('.l2ProductOption').on('click', function() {
+        var thisInnerHTML = $(this).html();
+        var thisValue = $(this).attr('value');
 
-    var max = duplicateElevs[firstElev].length - 1;
-    var min = 0;
-    document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
-    if (duplicateElevs[firstElev].length == 1) {
-        $('.elevNavBtns').hide();
-        //$('#extraBreaks').hide();
-        document.getElementById('numOfElevsForArrows').innerHTML = '';
-        $('#dataDiv').data('curArrowElev', 0);
-    }
+        curProduct = window.valueProductLookup[thisValue];
+        generateElevBtns(curProduct);
+    })
 
-    // add some space at the bottom to allow the user to see the entire dropdown menu
-    l2btnsElem.innerHTML += '<br><br><br><br>'
+    // console.log(duplicateElevs)
+    // $('#dataDiv').data('duplicateElevs', duplicateElevs);
 
-    $("[valTag=1]").prop("checked", true);
+    // var max = duplicateElevs[firstElev].length - 1;
+    // var min = 0;
+    // document.getElementById('numOfElevsForArrows').innerHTML = `${min} / ${max}`;
+    // if (duplicateElevs[firstElev].length == 1) {
+    //     $('.elevNavBtns').hide();
+    //     //$('#extraBreaks').hide();
+    //     document.getElementById('numOfElevsForArrows').innerHTML = '';
+    //     $('#dataDiv').data('curArrowElev', 0);
+    // }
+
+    // // add some space at the bottom to allow the user to see the entire dropdown menu
+    // l2btnsElem.innerHTML += '<br><br><br><br>'
+
+    // $("[valTag=1]").prop("checked", true);
 }
 
 module.exports = loadL2Menu;
-},{"../misc/detectmobilebrowser":69,"../utils":77}],40:[function(require,module,exports){
+},{"../misc/detectmobilebrowser":69,"../utils":77,"./eventListeners":37}],40:[function(require,module,exports){
 const { Level2Radar } = require('../../../lib/nexrad-level-2-data/src');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
-const l2listeners = require('../level2/eventListeners');
+const l2listeners = require('../level2/eventListeners').loadL2Listeners;
 const l2info = require('../dom/l2info');
 
 const loadL2Menu = require('./loadL2Menu');
@@ -4956,9 +5154,9 @@ function mainL2Loading(thisObj) {
             elevations: 1,
         });
 
-        l2listeners(l2rad);
+        loadL2Menu(l2rad.listElevationsAndProducts(), l2rad);
 
-        loadL2Menu(l2rad.listElevationsAndProducts());
+        l2listeners(l2rad);
     });
 }
 
@@ -6031,6 +6229,18 @@ document.addEventListener('loadFile', function(event) {
     }, false);
     reader.readAsArrayBuffer(uploadedFile);
 })
+
+// setTimeout(function() {
+//     if (map.loaded()) {
+//         //$('#stationMenuItemIcon').click();
+//         loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//     } else {
+//         map.on('load', function() {
+//             //$('#stationMenuItemIcon').click();
+//             loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//         })
+//     }
+// }, 0)
 
 
 // const aeris = new AerisWeather('AcxJ7pqDEeRA8kcDUOTPS', '7tOA7yRcLFb40YCCoXq0ccUMtD4ZZJarCgNjOrtL');
@@ -7453,14 +7663,6 @@ tooltipElem.hide();
 
 // const tooltip = bootstrap.Tooltip.getInstance('#tooltipDiv');
 // tooltip.enable();
-
-function nodeToString(node) {
-    var tmpNode = document.createElement('div');
-    tmpNode.appendChild(node.cloneNode(true));
-    var str = tmpNode.innerHTML;
-    tmpNode = node = null; // prevent memory leaks in IE
-    return str;
-}
 
 function addAllToolsItems() {
     var n = 0;
@@ -11223,7 +11425,7 @@ const draw = (data, _options) => {
 	} else if (options.product == "PHI") {
 		adder = 0;
 	} else if (options.product == "ZDR") {
-		adder = 10;
+		adder = 0;
 	} else if (options.product == "SW ") {
 		adder = 0;
 	}

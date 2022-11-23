@@ -161,31 +161,22 @@
             </sus>
 
             <sus id="uploadModeSpan" style="display: none">
-                <div class="form-check form-switch" style="display: none">
-                    <input class="form-check-input" type="checkbox" role="switch" id="elevOptionsSwitch">
+                <div id="l2ElevButtonsExpander" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Elevations</span>
+                    <span id="l2ElevButtonsExpanderIcon" class="fa fa-chevron-right" style="font-size: 18px"></span>
                 </div>
-                <div class="dropdown-center" id="l2ProductDropdown">
-                    <button class="btn btn-outline-primary btn-sm dropdown-toggle" id="l2ProductBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Products</button>
-                    <ul class="dropdown-menu" id="l2ProductMenu">
-                        <!-- <li><a class="dropdown-item" href="#" value="tilt1">Tilt 1</a></li>
-                        <li><a class="dropdown-item" href="#" value="tilt2">Tilt 2</a></li>
-                        <li><a class="dropdown-item" href="#" value="tilt3">Tilt 3</a></li>
-                        <li><a class="dropdown-item" href="#" value="tilt4">Tilt 4</a></li> -->
-                    </ul>
-                </div>
-                <br><br>
-                <div id="numOfElevsForArrows" class="elevNavBtns"></div>
-                <br>
-                <div class="btn-group elevNavBtns" id="elevNavBtns" role="group" aria-label="buttons">
-                    <button type="button" class="btn btn-secondary btn-sm" value="left"><--</button>
-                    <button type="button" class="btn btn-secondary btn-sm" value="right">--></button>
-                </div>
-                <sus class="elevNavBtns">
-                    <br><br>
-                </sus>
-                <div id="l2ElevBtns">
-                </div>
+                <div id="l2ElevButtons" class="l2ElevButtons" class="container" style="display: none"></div>
+                <!-- <span class="l2ElevBtn">0.5</span>
+                <span class="l2ElevBtn">1.5</span>
+                <span class="l2ElevBtn">2.5</span> -->
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Level II Products</h6></li>
+                <li><a class="dropdown-item l2ProductOption" value="l2-ref">Reflectivity</a></li>
+                <li><a class="dropdown-item l2ProductOption" value="l2-vel">Velocity</a></li>
+                <li><a class="dropdown-item l2ProductOption" value="l2-rho">Correlation Coefficient</a></li>
+                <li><a class="dropdown-item l2ProductOption" value="l2-zdr">Differential Reflectivity</a></li>
+                <li><a class="dropdown-item l2ProductOption" value="l2-sw ">Spectrum Width</a></li>
+                <li><a class="dropdown-item l2ProductOption" value="l2-phi">Differential Phase Shift</a></li>
             </sus>
         </ul>
     </div>
