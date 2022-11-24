@@ -4687,7 +4687,11 @@ function hoverClickBtnsListeners(l2rad) {
 
     $('.l2ElevBtn').on('click', function() {
         var clickedElevNum = $(this).attr('value');
+        window.clickedElevNum = clickedElevNum;
         var clickedElevAngle = $(this).text();
+
+        $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
+        $(this).addClass('l2ElevBtnSelected');
 
         curElevNum = parseInt(clickedElevNum);
         plot(l2rad, curProduct, {
@@ -5104,6 +5108,7 @@ function loadL2Menu(elevsAndProds, l2rad) {
         $('#dataDiv').data('elevsForEachProduct', elevsForEachProduct);
         hoverClickBtnsListeners(l2rad);
     }
+
     //$('#dataDiv').data('curL2Product', 'REF')
     generateElevBtns('REF');
     $('.l2ProductOption').on('click', function() {
@@ -5112,6 +5117,8 @@ function loadL2Menu(elevsAndProds, l2rad) {
 
         curProduct = window.valueProductLookup[thisValue];
         generateElevBtns(curProduct);
+        $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
+        $(`.l2ElevBtn[value='${window.clickedElevNum}']`).addClass('l2ElevBtnSelected');
     })
 
     // console.log(duplicateElevs)
@@ -6230,6 +6237,8 @@ document.addEventListener('loadFile', function(event) {
     reader.readAsArrayBuffer(uploadedFile);
 })
 
+// ../data/KLIX20050829_061516.gz
+// ../data/KTLX20130520_201643_V06.gz#
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();

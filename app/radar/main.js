@@ -165,6 +165,8 @@ document.addEventListener('loadFile', function(event) {
     reader.readAsArrayBuffer(uploadedFile);
 })
 
+// ../data/KLIX20050829_061516.gz
+// ../data/KTLX20130520_201643_V06.gz#
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();

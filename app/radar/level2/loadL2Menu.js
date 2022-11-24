@@ -133,6 +133,7 @@ function loadL2Menu(elevsAndProds, l2rad) {
         $('#dataDiv').data('elevsForEachProduct', elevsForEachProduct);
         hoverClickBtnsListeners(l2rad);
     }
+
     //$('#dataDiv').data('curL2Product', 'REF')
     generateElevBtns('REF');
     $('.l2ProductOption').on('click', function() {
@@ -141,6 +142,8 @@ function loadL2Menu(elevsAndProds, l2rad) {
 
         curProduct = window.valueProductLookup[thisValue];
         generateElevBtns(curProduct);
+        $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
+        $(`.l2ElevBtn[value='${window.clickedElevNum}']`).addClass('l2ElevBtnSelected');
     })
 
     // console.log(duplicateElevs)

@@ -80,7 +80,11 @@ function hoverClickBtnsListeners(l2rad) {
 
     $('.l2ElevBtn').on('click', function() {
         var clickedElevNum = $(this).attr('value');
+        window.clickedElevNum = clickedElevNum;
         var clickedElevAngle = $(this).text();
+
+        $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
+        $(this).addClass('l2ElevBtnSelected');
 
         curElevNum = parseInt(clickedElevNum);
         plot(l2rad, curProduct, {
