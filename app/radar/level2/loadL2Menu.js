@@ -82,6 +82,10 @@ function loadL2Menu(elevsAndProds, l2rad) {
         var base = elevsForEachProduct[product];
         var iters = 1;
         var allBtns = '';
+        function pushRow() {
+            l2btnsElem.innerHTML += `<div class="row gx-1" style="margin-top: 0.25rem">${allBtns}</div>`
+            allBtns = '';
+        }
         for (key in elevsAndProds) {
             // if (iters % 2 == 0 && iters != 0) {
             //     l2btnsElem.innerHTML += '<br>'
@@ -96,16 +100,10 @@ function loadL2Menu(elevsAndProds, l2rad) {
             allBtnsArr.push(returnBtnTemplate(curElevAngle, curElevNum));
 
             if (base.includes(parseInt(curElevNum))) {
-                function pushRow() {
-                    l2btnsElem.innerHTML += `<div class="row gx-1" style="margin-top: 0.25rem">${allBtns}</div>`
-                    allBtns = '';
-                }
                 allBtns += returnBtnTemplate(curElevAngle, curElevNum);
                 // do every three buttons (3 per row),
                 // but not the first iteration, because we haven't generated a full row of 3 yet
                 if (iters % 3 == 0 && iters != 1) { pushRow() }
-                // if the loop has finished and we haven't reached a row a 3 yet, append the remaining buttons
-                if (iters == elevsAndProds.length) { pushRow() }
                 iters++;
             }
 
@@ -129,6 +127,9 @@ function loadL2Menu(elevsAndProds, l2rad) {
             //     iters++;
             // }
         }
+        // if the loop has finished and we haven't reached a row a 3 yet, append the remaining buttons
+        if (allBtns != '') { pushRow() }
+
         $('#dataDiv').data('allButtonsArr', allBtnsArr);
         $('#dataDiv').data('elevsForEachProduct', elevsForEachProduct);
         hoverClickBtnsListeners(l2rad);
