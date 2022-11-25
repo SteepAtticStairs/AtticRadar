@@ -5115,6 +5115,13 @@ function loadL2Menu(elevsAndProds, l2rad) {
     console.log(elevsAndProds)
     generateElevsForEachProduct(elevsAndProds);
 
+    var keys = Object.keys(elevsForEachProduct);
+    for (var i in keys) {
+        if (elevsForEachProduct[keys[i]] == '') {
+            $(`.l2ProductOption[value='l2-${keys[i].toLowerCase()}']`).hide();
+        }
+    }
+
     function returnBtnTemplate(elevAngle, elevNum) {
         // var btnTemplate = `
         //     <button type="button"
@@ -6391,6 +6398,7 @@ document.addEventListener('loadFile', function(event) {
 // ../data/KLIX20050829_061516.gz
 // ../data/KTLX20130520_201643_V06.gz
 // ../data/KAMA20190506_021539_V06
+// ../data/KMLB19920824_134828.gz
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();
@@ -11160,40 +11168,48 @@ class Level2Radar {
 	// PHI: 'differential phase phift'
 	// RHO: 'correlation coefficient'
 	listElevationsAndProducts() {
-		if (this.header.version != "01" && this.header.version != "E2") {
-			var elevAngleArr = [];
+		//console.log(this.header.version)
+		var elevAngleArr = [];
+		if (this.header.version != '01' && this.header.version != 'E2') {
 			for (var key in this.vcp.record.elevations) {
 				try {
 					var elevationsBase = this.vcp.record.elevations[key]
 					var productBase = this.data[key][0].record;
 
 					var allProductsArr = [];
-					if (productBase.hasOwnProperty('reflect')) {
-						allProductsArr.push('REF')
-					}
-					if (productBase.hasOwnProperty('velocity')) {
-						allProductsArr.push('VEL')
-					}
-					if (productBase.hasOwnProperty('rho')) {
-						allProductsArr.push('RHO')
-					}
-					if (productBase.hasOwnProperty('phi')) {
-						allProductsArr.push('PHI')
-					}
-					if (productBase.hasOwnProperty('zdr')) {
-						allProductsArr.push('ZDR')
-					}
-					if (productBase.hasOwnProperty('spectrum')) {
-						allProductsArr.push('SW ')
-					}
+					if (productBase.hasOwnProperty('reflect')) { allProductsArr.push('REF') }
+					if (productBase.hasOwnProperty('velocity')) { allProductsArr.push('VEL') }
+					if (productBase.hasOwnProperty('rho')) { allProductsArr.push('RHO') }
+					if (productBase.hasOwnProperty('phi')) { allProductsArr.push('PHI') }
+					if (productBase.hasOwnProperty('zdr')) { allProductsArr.push('ZDR') }
+					if (productBase.hasOwnProperty('spectrum')) { allProductsArr.push('SW ') }
 
 					elevAngleArr.push([elevationsBase.elevation_angle, key, allProductsArr, elevationsBase.waveform_type]);
 				} catch (e) {
 					console.warn(`Warning on elevation ${this.vcp.record.elevations[key].elevation_angle}: ${e}`);
 				}
 			}
-			return elevAngleArr;
+		} else if (this.header.version == '01') {
+			for (var key in this.data) {
+				try {
+					var elevationsBase = this.data[key][0].record;
+					var productBase = elevationsBase;
+
+					var allProductsArr = [];
+					if (productBase.hasOwnProperty('reflect')) { allProductsArr.push('REF') }
+					if (productBase.hasOwnProperty('velocity')) { allProductsArr.push('VEL') }
+					if (productBase.hasOwnProperty('rho')) { allProductsArr.push('RHO') }
+					if (productBase.hasOwnProperty('phi')) { allProductsArr.push('PHI') }
+					if (productBase.hasOwnProperty('zdr')) { allProductsArr.push('ZDR') }
+					if (productBase.hasOwnProperty('spectrum')) { allProductsArr.push('SW ') }
+
+					elevAngleArr.push([elevationsBase.elevation_angle, key, allProductsArr, null]);
+				} catch (e) {
+					console.warn(`Warning on elevation ${this.data[key][0].record.elevation_angle}: ${e}`);
+				}
+			}
 		}
+		return elevAngleArr;
 	}
 
 	_checkData() {

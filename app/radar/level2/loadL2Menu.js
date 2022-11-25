@@ -139,6 +139,13 @@ function loadL2Menu(elevsAndProds, l2rad) {
     console.log(elevsAndProds)
     generateElevsForEachProduct(elevsAndProds);
 
+    var keys = Object.keys(elevsForEachProduct);
+    for (var i in keys) {
+        if (elevsForEachProduct[keys[i]] == '') {
+            $(`.l2ProductOption[value='l2-${keys[i].toLowerCase()}']`).hide();
+        }
+    }
+
     function returnBtnTemplate(elevAngle, elevNum) {
         // var btnTemplate = `
         //     <button type="button"
