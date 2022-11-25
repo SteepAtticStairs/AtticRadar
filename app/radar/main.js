@@ -166,7 +166,8 @@ document.addEventListener('loadFile', function(event) {
 })
 
 // ../data/KLIX20050829_061516.gz
-// ../data/KTLX20130520_201643_V06.gz#
+// ../data/KTLX20130520_201643_V06.gz
+// ../data/KAMA20190506_021539_V06
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();

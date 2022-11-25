@@ -4687,8 +4687,9 @@ function hoverClickBtnsListeners(l2rad) {
 
     $('.l2ElevBtn').on('click', function() {
         var clickedElevNum = $(this).attr('value');
-        window.clickedElevNum = clickedElevNum;
         var clickedElevAngle = $(this).text();
+        window.clickedElevNum = clickedElevNum;
+        window.clickedElevAngle = clickedElevAngle;
 
         $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
         $(this).addClass('l2ElevBtnSelected');
@@ -4975,7 +4976,7 @@ module.exports = getLevel2FileTime;
 },{"../utils":77,"luxon":189}],39:[function(require,module,exports){
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
-const hoverClickBtnsListeners = require('./eventListeners').hoverClickBtnsListeners;
+const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 
 function createModal(title, headerColor, body) {
     var modalContent = 
@@ -5001,6 +5002,11 @@ var elevsForEachProduct = {
     'SW ': [],
     'PHI': []
 }
+var minOrMax = 'min';
+var heightModifier = 10;
+var curElevNum = 1;
+var curProduct = 'REF';
+
 function generateElevsForEachProduct(elevsAndProds) {
     for (var i in elevsAndProds) {
         var curIterElevNum = parseInt(elevsAndProds[i][1]);
@@ -5010,6 +5016,98 @@ function generateElevsForEachProduct(elevsAndProds) {
         }
     }
     console.log(elevsForEachProduct)
+}
+
+// https://stackoverflow.com/a/15191130/18758797
+$.fn.animateRotate = function (angle, duration, easing, complete) {
+    var args = $.speed(duration, easing, complete);
+    var step = args.step;
+    return this.each(function (i, e) {
+        args.complete = $.proxy(args.complete, e);
+        args.step = function (now) {
+            $.style(e, 'transform', 'rotate(' + now + 'deg)');
+            if (step) return step.apply(e, arguments);
+        };
+
+        $({ deg: 0 }).animate({ deg: angle }, args);
+    });
+};
+
+function flipIcon(icon, minimizeOrMaximize) {
+    function rotateThing(deg) {
+        $(icon).animateRotate(deg, {
+            duration: 200,
+            easing: 'swing',
+            complete: function () {},
+            step: function () {}
+        });
+    }
+    if (minimizeOrMaximize == 'minimize') {
+        $(icon).removeClass('fa-chevron-right');
+        $(icon).addClass('fa-chevron-down');
+        rotateThing(-90);
+    } else if (minimizeOrMaximize == 'maximize') {
+        $(icon).removeClass('fa-chevron-down');
+        $(icon).addClass('fa-chevron-right');
+        rotateThing(90);
+    }
+}
+
+window.valueProductLookup = {
+    'l2-ref': 'REF',
+    'l2-vel': 'VEL',
+    'l2-rho': 'RHO',
+    'l2-zdr': 'ZDR',
+    'l2-sw ': 'SW ',
+    'l2-phi': 'PHI'
+}
+
+function returnDropdownItem(value) {
+    var dropdownItem = `<li><a class='dropdown-item' href='#' value='${value}'>${value}</a></li>`;
+    return dropdownItem;
+}
+
+function nodeToString(node) {
+    var tmpNode = document.createElement('div');
+    tmpNode.appendChild(node.cloneNode(true));
+    var str = tmpNode.innerHTML;
+    tmpNode = node = null; // prevent memory leaks in IE
+    return str;
+}
+
+function hoverClickBtnsListeners(l2rad) {
+    function getBrightnessCss(val) {
+        return {
+            'filter': `brightness(${val}%)`,
+            '-webkit-filter': `brightness(${val}%)`,
+            '-moz-filter': `brightness(${val}%)`,
+        }
+    }
+
+    // mousedown touchstart
+    $('.l2ElevBtn')
+        .on('mouseenter', function() { $(this).css(getBrightnessCss(90)) })
+        .on('mouseleave', function() { $(this).css(getBrightnessCss(100)) })
+        .on('mousedown', function() { $(this).css(getBrightnessCss(80)) })
+        .on('mouseup', function() { $(this).css(getBrightnessCss(90)) })
+    // $('.l2ElevBtn').on('mouseup touchend', function() {
+    //     $(this).removeClass('l2ElevBtnClicked');
+    // })
+
+    $('.l2ElevBtn').on('click', function() {
+        var clickedElevNum = $(this).attr('value');
+        var clickedElevAngle = $(this).text();
+        window.clickedElevNum = clickedElevNum;
+        window.clickedElevAngle = clickedElevAngle;
+
+        $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
+        $(this).addClass('l2ElevBtnSelected');
+
+        curElevNum = parseInt(clickedElevNum);
+        plot(l2rad, curProduct, {
+            elevations: curElevNum,
+        });
+    })
 }
 
 function loadL2Menu(elevsAndProds, l2rad) {
@@ -5112,14 +5210,66 @@ function loadL2Menu(elevsAndProds, l2rad) {
 
     //$('#dataDiv').data('curL2Product', 'REF')
     generateElevBtns('REF');
+    $(`.l2ElevBtn[value='1']`).addClass('l2ElevBtnSelected');
+    var firstElevAngle = $(`.l2ElevBtn[value='1']`).text();
+    var firstElevNum = $(`.l2ElevBtn[value='1']`).attr('value');
+    window.clickedElevAngle = firstElevAngle;
+    window.clickedElevNum = firstElevNum;
+
     $('.l2ProductOption').on('click', function() {
         var thisInnerHTML = $(this).html();
         var thisValue = $(this).attr('value');
 
         curProduct = window.valueProductLookup[thisValue];
         generateElevBtns(curProduct);
+
+        // if the new product selection does not have the currently selected elevation,
+        // use the same elevation angle but a different elevation number
+        if (!elevsForEachProduct[curProduct].includes(parseInt(window.clickedElevNum))) {
+            $('.l2ElevBtn').each(function() {
+                if ($(this).text() == window.clickedElevAngle) {
+                    window.clickedElevNum = $(this).attr('value');
+                }
+            })
+        }
+
         $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
         $(`.l2ElevBtn[value='${window.clickedElevNum}']`).addClass('l2ElevBtnSelected');
+
+        curProduct = valueProductLookup[thisValue];
+        //$('#dataDiv').data('curL2Product', curProduct);
+        plot(l2rad, curProduct, {
+            elevations: parseInt(window.clickedElevNum),
+        });
+    })
+
+    $('#currentModeSpan').hide();
+    $('#uploadModeSpan').show();
+
+    $('#l2ElevButtonsExpander').on('click', function() {
+        if (minOrMax == 'min') {
+            $('.l2ElevButtons').slideDown(200);
+            minOrMax = 'max';
+            $(this).addClass('l2ElevButtonsExpanderSelected').animate({
+                //'padding': '1.5px',
+                'height': `-=${heightModifier}`
+            }, {duration: 200, queue: false});
+            $('#l2ElevButtonsExpanderIcon').animate({
+                'font-size': '12px'
+            }, {duration: 200, queue: false});
+            flipIcon($('#l2ElevButtonsExpanderIcon'), 'maximize');
+        } else if (minOrMax == 'max') {
+            $('.l2ElevButtons').slideUp(200);
+            minOrMax = 'min';
+            $(this).removeClass('l2ElevButtonsExpanderSelected').animate({
+                //'padding': '5px',
+                'height': `+=${heightModifier}`
+            }, {duration: 200, queue: false});
+            $('#l2ElevButtonsExpanderIcon').animate({
+                'font-size': '18px'
+            }, {duration: 200, queue: false});
+            flipIcon($('#l2ElevButtonsExpanderIcon'), 'minimize');
+        }
     })
 
     // console.log(duplicateElevs)
@@ -5142,7 +5292,7 @@ function loadL2Menu(elevsAndProds, l2rad) {
 }
 
 module.exports = loadL2Menu;
-},{"../misc/detectmobilebrowser":69,"../utils":77,"./eventListeners":37}],40:[function(require,module,exports){
+},{"../../../lib/nexrad-level-2-plot/src":108,"../misc/detectmobilebrowser":69,"../utils":77}],40:[function(require,module,exports){
 const { Level2Radar } = require('../../../lib/nexrad-level-2-data/src');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const l2listeners = require('../level2/eventListeners').loadL2Listeners;
@@ -5164,7 +5314,7 @@ function mainL2Loading(thisObj) {
 
         loadL2Menu(l2rad.listElevationsAndProducts(), l2rad);
 
-        l2listeners(l2rad);
+        //l2listeners(l2rad);
     });
 }
 
@@ -6239,7 +6389,8 @@ document.addEventListener('loadFile', function(event) {
 })
 
 // ../data/KLIX20050829_061516.gz
-// ../data/KTLX20130520_201643_V06.gz#
+// ../data/KTLX20130520_201643_V06.gz
+// ../data/KAMA20190506_021539_V06
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();
@@ -11012,30 +11163,34 @@ class Level2Radar {
 		if (this.header.version != "01" && this.header.version != "E2") {
 			var elevAngleArr = [];
 			for (var key in this.vcp.record.elevations) {
-				var elevationsBase = this.vcp.record.elevations[key]
-				var productBase = this.data[key][0].record;
+				try {
+					var elevationsBase = this.vcp.record.elevations[key]
+					var productBase = this.data[key][0].record;
 
-				var allProductsArr = [];
-				if (productBase.hasOwnProperty('reflect')) {
-					allProductsArr.push('REF')
-				}
-				if (productBase.hasOwnProperty('velocity')) {
-					allProductsArr.push('VEL')
-				}
-				if (productBase.hasOwnProperty('rho')) {
-					allProductsArr.push('RHO')
-				}
-				if (productBase.hasOwnProperty('phi')) {
-					allProductsArr.push('PHI')
-				}
-				if (productBase.hasOwnProperty('zdr')) {
-					allProductsArr.push('ZDR')
-				}
-				if (productBase.hasOwnProperty('spectrum')) {
-					allProductsArr.push('SW ')
-				}
+					var allProductsArr = [];
+					if (productBase.hasOwnProperty('reflect')) {
+						allProductsArr.push('REF')
+					}
+					if (productBase.hasOwnProperty('velocity')) {
+						allProductsArr.push('VEL')
+					}
+					if (productBase.hasOwnProperty('rho')) {
+						allProductsArr.push('RHO')
+					}
+					if (productBase.hasOwnProperty('phi')) {
+						allProductsArr.push('PHI')
+					}
+					if (productBase.hasOwnProperty('zdr')) {
+						allProductsArr.push('ZDR')
+					}
+					if (productBase.hasOwnProperty('spectrum')) {
+						allProductsArr.push('SW ')
+					}
 
-				elevAngleArr.push([elevationsBase.elevation_angle, key, allProductsArr, elevationsBase.waveform_type]);
+					elevAngleArr.push([elevationsBase.elevation_angle, key, allProductsArr, elevationsBase.waveform_type]);
+				} catch (e) {
+					console.warn(`Warning on elevation ${this.vcp.record.elevations[key].elevation_angle}: ${e}`);
+				}
 			}
 			return elevAngleArr;
 		}

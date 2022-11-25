@@ -1,6 +1,6 @@
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
-const hoverClickBtnsListeners = require('./eventListeners').hoverClickBtnsListeners;
+const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 
 function createModal(title, headerColor, body) {
     var modalContent = 
@@ -26,6 +26,11 @@ var elevsForEachProduct = {
     'SW ': [],
     'PHI': []
 }
+var minOrMax = 'min';
+var heightModifier = 10;
+var curElevNum = 1;
+var curProduct = 'REF';
+
 function generateElevsForEachProduct(elevsAndProds) {
     for (var i in elevsAndProds) {
         var curIterElevNum = parseInt(elevsAndProds[i][1]);
@@ -35,6 +40,98 @@ function generateElevsForEachProduct(elevsAndProds) {
         }
     }
     console.log(elevsForEachProduct)
+}
+
+// https://stackoverflow.com/a/15191130/18758797
+$.fn.animateRotate = function (angle, duration, easing, complete) {
+    var args = $.speed(duration, easing, complete);
+    var step = args.step;
+    return this.each(function (i, e) {
+        args.complete = $.proxy(args.complete, e);
+        args.step = function (now) {
+            $.style(e, 'transform', 'rotate(' + now + 'deg)');
+            if (step) return step.apply(e, arguments);
+        };
+
+        $({ deg: 0 }).animate({ deg: angle }, args);
+    });
+};
+
+function flipIcon(icon, minimizeOrMaximize) {
+    function rotateThing(deg) {
+        $(icon).animateRotate(deg, {
+            duration: 200,
+            easing: 'swing',
+            complete: function () {},
+            step: function () {}
+        });
+    }
+    if (minimizeOrMaximize == 'minimize') {
+        $(icon).removeClass('fa-chevron-right');
+        $(icon).addClass('fa-chevron-down');
+        rotateThing(-90);
+    } else if (minimizeOrMaximize == 'maximize') {
+        $(icon).removeClass('fa-chevron-down');
+        $(icon).addClass('fa-chevron-right');
+        rotateThing(90);
+    }
+}
+
+window.valueProductLookup = {
+    'l2-ref': 'REF',
+    'l2-vel': 'VEL',
+    'l2-rho': 'RHO',
+    'l2-zdr': 'ZDR',
+    'l2-sw ': 'SW ',
+    'l2-phi': 'PHI'
+}
+
+function returnDropdownItem(value) {
+    var dropdownItem = `<li><a class='dropdown-item' href='#' value='${value}'>${value}</a></li>`;
+    return dropdownItem;
+}
+
+function nodeToString(node) {
+    var tmpNode = document.createElement('div');
+    tmpNode.appendChild(node.cloneNode(true));
+    var str = tmpNode.innerHTML;
+    tmpNode = node = null; // prevent memory leaks in IE
+    return str;
+}
+
+function hoverClickBtnsListeners(l2rad) {
+    function getBrightnessCss(val) {
+        return {
+            'filter': `brightness(${val}%)`,
+            '-webkit-filter': `brightness(${val}%)`,
+            '-moz-filter': `brightness(${val}%)`,
+        }
+    }
+
+    // mousedown touchstart
+    $('.l2ElevBtn')
+        .on('mouseenter', function() { $(this).css(getBrightnessCss(90)) })
+        .on('mouseleave', function() { $(this).css(getBrightnessCss(100)) })
+        .on('mousedown', function() { $(this).css(getBrightnessCss(80)) })
+        .on('mouseup', function() { $(this).css(getBrightnessCss(90)) })
+    // $('.l2ElevBtn').on('mouseup touchend', function() {
+    //     $(this).removeClass('l2ElevBtnClicked');
+    // })
+
+    $('.l2ElevBtn').on('click', function() {
+        var clickedElevNum = $(this).attr('value');
+        var clickedElevAngle = $(this).text();
+        window.clickedElevNum = clickedElevNum;
+        window.clickedElevAngle = clickedElevAngle;
+
+        $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
+        $(this).addClass('l2ElevBtnSelected');
+
+        curElevNum = parseInt(clickedElevNum);
+        plot(l2rad, curProduct, {
+            elevations: curElevNum,
+        });
+    })
 }
 
 function loadL2Menu(elevsAndProds, l2rad) {
@@ -137,14 +234,66 @@ function loadL2Menu(elevsAndProds, l2rad) {
 
     //$('#dataDiv').data('curL2Product', 'REF')
     generateElevBtns('REF');
+    $(`.l2ElevBtn[value='1']`).addClass('l2ElevBtnSelected');
+    var firstElevAngle = $(`.l2ElevBtn[value='1']`).text();
+    var firstElevNum = $(`.l2ElevBtn[value='1']`).attr('value');
+    window.clickedElevAngle = firstElevAngle;
+    window.clickedElevNum = firstElevNum;
+
     $('.l2ProductOption').on('click', function() {
         var thisInnerHTML = $(this).html();
         var thisValue = $(this).attr('value');
 
         curProduct = window.valueProductLookup[thisValue];
         generateElevBtns(curProduct);
+
+        // if the new product selection does not have the currently selected elevation,
+        // use the same elevation angle but a different elevation number
+        if (!elevsForEachProduct[curProduct].includes(parseInt(window.clickedElevNum))) {
+            $('.l2ElevBtn').each(function() {
+                if ($(this).text() == window.clickedElevAngle) {
+                    window.clickedElevNum = $(this).attr('value');
+                }
+            })
+        }
+
         $('.l2ElevBtnSelected').removeClass('l2ElevBtnSelected');
         $(`.l2ElevBtn[value='${window.clickedElevNum}']`).addClass('l2ElevBtnSelected');
+
+        curProduct = valueProductLookup[thisValue];
+        //$('#dataDiv').data('curL2Product', curProduct);
+        plot(l2rad, curProduct, {
+            elevations: parseInt(window.clickedElevNum),
+        });
+    })
+
+    $('#currentModeSpan').hide();
+    $('#uploadModeSpan').show();
+
+    $('#l2ElevButtonsExpander').on('click', function() {
+        if (minOrMax == 'min') {
+            $('.l2ElevButtons').slideDown(200);
+            minOrMax = 'max';
+            $(this).addClass('l2ElevButtonsExpanderSelected').animate({
+                //'padding': '1.5px',
+                'height': `-=${heightModifier}`
+            }, {duration: 200, queue: false});
+            $('#l2ElevButtonsExpanderIcon').animate({
+                'font-size': '12px'
+            }, {duration: 200, queue: false});
+            flipIcon($('#l2ElevButtonsExpanderIcon'), 'maximize');
+        } else if (minOrMax == 'max') {
+            $('.l2ElevButtons').slideUp(200);
+            minOrMax = 'min';
+            $(this).removeClass('l2ElevButtonsExpanderSelected').animate({
+                //'padding': '5px',
+                'height': `+=${heightModifier}`
+            }, {duration: 200, queue: false});
+            $('#l2ElevButtonsExpanderIcon').animate({
+                'font-size': '18px'
+            }, {duration: 200, queue: false});
+            flipIcon($('#l2ElevButtonsExpanderIcon'), 'minimize');
+        }
     })
 
     // console.log(duplicateElevs)

@@ -19,7 +19,7 @@ function mainL2Loading(thisObj) {
 
         loadL2Menu(l2rad.listElevationsAndProducts(), l2rad);
 
-        l2listeners(l2rad);
+        //l2listeners(l2rad);
     });
 }
 
