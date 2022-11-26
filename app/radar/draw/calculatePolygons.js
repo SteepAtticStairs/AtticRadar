@@ -15,6 +15,23 @@ function scaleForWebGL(num) {
     return ut.scale(num, 0, 255, 0, 1);
 }
 
+// this just makes it so that color scales with hard stops will be plotted accurately
+function editValuesArr(values) {
+    var modifier = 0.000000001;
+    for (var i in values) {
+        if (values[i] == values[i - 1]) {
+            if (values[i - 1] < 0) {
+                values[i - 1] = values[i - 1] + modifier;
+            } else {
+                values[i - 1] = values[i - 1] - modifier;
+            }
+        }
+    }
+
+    // console.log(values);
+    return values;
+}
+
 //onmessage=function(oEvent) {
 function calcPolygons(url, phi, radarLat, radarLon, radVersion, valuesArr, colorsArr, callback) {
     $('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
@@ -43,6 +60,7 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, valuesArr, color
     var phi = radians(phi)//radians(oEvent.data[1]);
     var h0 = 0.0;
 
+    valuesArr = editValuesArr(valuesArr);
     var chromaScale = chroma.scale(colorsArr).domain(valuesArr).mode('lab');
 
     // for (var i = valuesArr[0]; i < valuesArr[valuesArr.length - 1]; i++) {
