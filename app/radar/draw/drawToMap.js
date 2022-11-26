@@ -9,16 +9,20 @@ const setBaseMapLayers = require('../misc/baseMapLayers');
 const PNG = require('pngjs').PNG;
 const chroma = require('chroma-js');
 const productColors = require('../products/productColors');
+const createAndShowColorbar = require('./mapColorbar');
 
-function rgbValToArray(rgbString) {
-    return rgbString
-            .replace('rgb(', '')
-            .replace('rgba(', '')
-            .replace(')', '')
-            .split(', ')
-}
-function chromaScaleToRgbString(scaleOutput) {
-    return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
+function scaleValues(values, product) {
+    if (product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL') {
+        // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
+        for (var i in values) { values[i] = values[i] / 1.944 }
+    } else if (product == 'N0S') {
+        // storm relative velocity
+        for (var i in values) { values[i] = values[i] + 0.5 }
+    } else if (product == 'N0H' || product == 'HHC') {
+        // hydrometer classification || hybrid hydrometer classification
+        for (var i in values) { values[i] = values[i] - 0.5 }
+    }
+    return values;
 }
 
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
@@ -38,163 +42,6 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     var values;
     var colors;
     var minMax;
-    function createTexture(gl) {
-        if ($('#mapColorScale').is(":hidden")) {
-            ut.setMapMargin('bottom', '+=15px');
-        }
-        var offset;
-        if (require('../misc/detectmobilebrowser')) {
-            offset = $(window).height() * (5 / 100);
-        } else {
-            offset = 0;
-        }
-        $('#mapColorScale').css({
-            'bottom': offset + $('#mapFooter').height(),
-            'height': '15px'
-        }).show();
-        $('#productMapFooter').css('bottom', 0 + $('#mapFooter').height() + $('#mapColorScale').height());
-
-        var data = productColors[produc.replaceAll(' ', '')];
-        var colors = data.colors; //colors["ref"];
-        var levs = data.values; //values["ref"];
-
-        if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
-            // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
-            for (var i in levs) { levs[i] = levs[i] / 1.944 }
-        } else if (produc == 'N0S') {
-            // storm relative velocity
-            for (var i in levs) { levs[i] = levs[i] + 0.5 }
-        } else if (produc == 'N0H' || produc == 'HHC') {
-            // hydrometer classification || hybrid hydrometer classification
-            for (var i in levs) { levs[i] = levs[i] - 0.5 }
-        }
-
-        var actualCanvas = document.getElementById('texturecolorbar');
-        var visualCanvas = document.getElementById('mapColorScale');
-
-        var width = 1500;
-        var height = 1;
-
-        actualCanvas.width = width;
-        actualCanvas.height = height;
-        visualCanvas.width = $('#mapColorScale').width();
-        visualCanvas.height = $('#mapColorScale').height();
-
-        var actualCTX = actualCanvas.getContext('2d');
-        var visualCTX = visualCanvas.getContext('2d');
-
-        actualCTX.clearRect(0, 0, actualCanvas.width, actualCanvas.height);
-        visualCTX.clearRect(0, 0, visualCanvas.width, visualCanvas.height);
-
-        var actualGradient = actualCTX.createLinearGradient(0, 0, actualCanvas.width, 0);
-        var visualGradient = visualCTX.createLinearGradient(0, 0, visualCanvas.width, 0);
-
-        var cmax = levs[levs.length - 1];
-        var cmin = levs[0];
-        var clen = colors.length;
-
-        var gradColors = '';
-        for (var i = 0; i < clen; ++i) {
-            actualGradient.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
-            visualGradient.addColorStop((levs[i] - cmin) / (cmax - cmin), colors[i]);
-
-            var curPercent = (((levs[i] - cmin) / (cmax - cmin)) * 100);
-            gradColors += `${colors[i]} ${curPercent}%`;
-            if (!(i == clen - 1)) { gradColors += ',\n' }
-        }
-        actualCTX.fillStyle = actualGradient;
-        //visualCTX.fillStyle = visualGradient;
-
-        actualCTX.fillRect(0, 0, actualCanvas.width, actualCanvas.height);
-        //visualCTX.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
-
-        $('<style>')
-            .prop('type', 'text/css')
-            .html(`
-            #mapColorScale {
-                background: linear-gradient(
-                    to right,
-                    ${gradColors}
-                );
-            }`)
-            .appendTo('head');
-
-        const png = new PNG({
-            colorType: 2,
-            filterType: 4,
-            width: width,
-            height: height
-        });
-
-        var colorsArr = [];
-        for (var i in values) {
-            var colArr = rgbValToArray(colors[i]);
-            colorsArr.push(colArr)
-        }
-        var chromaScale = chroma.scale(colors).domain(values).mode('lab');
-
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const i = (y * width + x) * 4;
-
-                //console.log((values[x] - cmin) / (cmax - cmin))
-                var scaledVal = ut.scale(x, 0, width - 1, cmin, cmax);
-                var colorAtVal = chromaScaleToRgbString(chromaScale(scaledVal));
-                var arrayColorAtVal = rgbValToArray(colorAtVal);
-
-                png.data[i + 0] = arrayColorAtVal[0]; //getRandomInt(0, 255);
-                png.data[i + 1] = arrayColorAtVal[1]; //getRandomInt(0, 255);
-                png.data[i + 2] = arrayColorAtVal[2]; //getRandomInt(0, 255);
-                png.data[i + 3] = 255;
-            }
-        }
-
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.canvas.width = png.width;
-        ctx.canvas.height = png.height;
-
-        // https://stackoverflow.com/a/16404317
-        var imgData = ctx.createImageData(png.width, png.height);
-
-        var ubuf = new Uint8Array(png.data);
-        for (var i = 0; i < ubuf.length; i += 4) {
-            imgData.data[i] = ubuf[i];   // red
-            imgData.data[i + 1] = ubuf[i + 1]; // green
-            imgData.data[i + 2] = ubuf[i + 2]; // blue
-            imgData.data[i + 3] = ubuf[i + 3]; // alpha
-        }
-
-        for (var i = 0; i < imgData.data.length; i = i + 4) {
-            var rgb = `rgba(${imgData.data[i]}, ${imgData.data[i + 1]}, ${imgData.data[i + 2]}, ${imgData.data[i + 3]})`;
-            //ut.colorLog(rgb, rgb)
-        }
-
-        imagedata = imgData;
-        imagetexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, imagetexture);
-        pageState.imagedata = imagedata;
-        pageState.imagetexture = imagetexture;
-
-        // $('#texturecolorbar').clone().appendTo('#mapColorScaleContainer').attr('id', 'mapColorScale');
-        // $('#mapColorScale').removeClass('texturecolorbar');
-        // $('#mapColorScale').css({
-        //     'position': 'absolute',
-        //     'z-index': 115,
-        //     'bottom': '50px',
-        //     'height': '10px',
-        //     'width': '100%',
-        //     'display': 'block'
-        // })
-        // // position: absolute;
-        // // z-index: 115;
-        // // bottom: 50px;
-        // // height: 10px;
-        // // width: 100%;
-        // console.log($('#mapColorScale'))
-        //tt.initPaletteTooltip(produc, colortcanvas);
-    }
-
     function dataStore() {
         return {
             positions: null,
@@ -278,42 +125,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     values = data.values;
     colors = data.colors;
     minMax = [values[0], values[values.length - 1]];
+    values = scaleValues(values, produc);
 
-    if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
-        // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
-        for (var i in values) { values[i] = values[i] / 1.944 }
-    } else if (produc == 'N0S') {
-        // storm relative velocity
-        for (var i in values) { values[i] = values[i] + 0.5 }
-    } else if (produc == 'N0H' || produc == 'HHC') {
-        // hydrometer classification || hybrid hydrometer classification
-        for (var i in values) { values[i] = values[i] - 0.5 }
-    }
-    //compile shaders
-    // var vertexSource = `
-    //     //x: azimuth
-    //     //y: range
-    //     //z: value
-    //     attribute vec2 aPosition;
-    //     attribute float aColor;
-    //     uniform mat4 u_matrix;
-    //     varying float color;
-
-    //     void main() {
-    //         color = aColor;
-    //         gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
-    //     }`;
-    // var fragmentSource = `
-    //     precision highp float;
-    //     uniform vec2 minmax;
-    //     uniform sampler2D u_texture;
-    //     varying float color;
-
-    //     void main() {
-    //         float calcolor = (color - minmax.x) / (minmax.y - minmax.x);
-    //         gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
-    //     }`
-    var masterGl;
     var layer = {
         id: "baseReflectivity",
         type: "custom",
@@ -321,7 +134,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         // method called when the layer is added to the map
         // https://docs.mapbox.com/mapbox-gl-js/api/#styleimageinterface#onadd
         onAdd: function (map, gl) {
-            createTexture(gl);
+            createAndShowColorbar(colors, values);
             // create GLSL source for vertex shader
             const vertexSource = `
                 uniform mat4 u_matrix;
