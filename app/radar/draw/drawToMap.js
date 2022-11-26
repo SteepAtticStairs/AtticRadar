@@ -25,46 +25,28 @@ function scaleValues(values, product) {
     return values;
 }
 
+var vertex_buffer;
+var color_buffer;
+
+var values;
+var colors;
+
+var settings = {};
+
 function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
-    var settings = {};
-    settings["rlat"] = lati;
-    settings["rlon"] = lngi;
+    settings.rlat = lati;
+    settings.rlon = lngi;
     // phi is elevation
-    settings["phi"] = 0.483395;
-    settings["base"] = jsonObj;
+    settings.phi = 0.483395;
+    settings.base = jsonObj;
 
     if (Array.isArray(produc)) {
         produc = produc[0];
     }
 
-
-    var divider;
-    var values;
-    var colors;
-    var minMax;
-    function dataStore() {
-        return {
-            positions: null,
-            indices: null,
-            colors: null
-        }
-    }
-
-    var pageState = dataStore();
-
-    //var myWorker = new Worker('./polygonTest/generateVerticesRadarDemo.js');
-    //myWorker.onmessage = function (oEvent) {
-    function finishItUp(data, indices, colors, layer, geojson) {
-        //var data = new Float32Array(oEvent.data.data);
-        //var indices = new Int32Array(oEvent.data.indices);
-        //var colors = new Float32Array(oEvent.data.colors);
-        var data = new Float32Array(data);
-        var indices = new Int32Array(indices);
-        var colors = new Float32Array(colors);
-        var returnedGeojson = geojson;//oEvent.data.geojson;
-        pageState.positions = data;
-        pageState.indices = indices;
-        pageState.colors = colors;
+    function finishItUp(data, colors, layer, geojson) {
+        vertex_buffer = new Float32Array(data);
+        color_buffer = new Float32Array(colors);
         //console.log(Math.max(...[...new Set(colors)]))
         mapFuncs.removeMapLayer('baseReflectivity');
 
@@ -178,7 +160,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.bufferData(
                 gl.ARRAY_BUFFER,
-                pageState.positions,
+                vertex_buffer,
                 gl.STATIC_DRAW
             );
 
@@ -186,7 +168,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
             gl.bufferData(
                 gl.ARRAY_BUFFER,
-                pageState.colors,
+                color_buffer,
                 gl.STATIC_DRAW
             );
         },
@@ -210,7 +192,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
             gl.enable(gl.BLEND);
             gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            gl.drawArrays(gl.TRIANGLES, 0, pageState.positions.length / 2);
+            gl.drawArrays(gl.TRIANGLES, 0, vertex_buffer.length / 2);
         }
     }
 
@@ -220,24 +202,17 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
             var vers = JSON.parse(this.responseText).version;
 
             calcPolys.calcPolygons(
-                settings["base"],
-                settings["phi"],
-                settings["rlat"],
-                settings["rlon"],
+                settings.base,
+                settings.phi,
+                settings.rlat,
+                settings.rlon,
                 vers,
                 values,
                 colors,
                 function(dat) {
-                    finishItUp(dat.data, dat.indices, dat.colors, layer)
+                    finishItUp(dat.verticies, dat.colors, layer)
                 }
             )
-            //myWorker.postMessage([
-            //    settings["base"],
-            //    settings["phi"],
-            //    settings["rlat"],
-            //    settings["rlon"],
-            //    vers
-            //]);
         }
     };
     xhttp.open("GET", jsonObj, true);

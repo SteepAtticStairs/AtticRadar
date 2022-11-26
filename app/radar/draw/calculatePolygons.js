@@ -150,10 +150,10 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, valuesArr, color
                 //colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
             }
         }
-        var typedOutput = new Float32Array(output);
-        var colorOutput = new Float32Array(colors);
-        var indexOutput = new Int32Array(indices);
-        callback({"data":typedOutput.buffer,"indices":indexOutput.buffer,"colors":colorOutput.buffer},[typedOutput.buffer,indexOutput.buffer,colorOutput.buffer]);
+        callback({
+            'verticies': output,
+            'colors': colors
+        });
         //postMessage({"data":typedOutput.buffer,"indices":indexOutput.buffer,"colors":colorOutput.buffer},[typedOutput.buffer,indexOutput.buffer,colorOutput.buffer]);
     }
 
