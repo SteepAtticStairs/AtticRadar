@@ -3674,9 +3674,24 @@ module.exports = {
 };
 },{}],29:[function(require,module,exports){
 const ut = require('../utils');
+const chroma = require('chroma-js');
+
+function rgbValToArray(rgbString) {
+    return rgbString
+            .replace('rgb(', '')
+            .replace('rgba(', '')
+            .replace(')', '')
+            .split(', ')
+}
+function chromaScaleToRgbString(scaleOutput) {
+    return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
+}
+function scaleForWebGL(num) {
+    return ut.scale(num, 0, 255, 0, 1);
+}
 
 //onmessage=function(oEvent) {
-function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
+function calcPolygons(url, phi, radarLat, radarLon, radVersion, valuesArr, colorsArr, callback) {
     $('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
     //var url = oEvent.data[0];
 
@@ -3702,6 +3717,13 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     var re = 6371000.0;
     var phi = radians(phi)//radians(oEvent.data[1]);
     var h0 = 0.0;
+
+    var chromaScale = chroma.scale(colorsArr).domain(valuesArr).mode('lab');
+
+    // for (var i = valuesArr[0]; i < valuesArr[valuesArr.length - 1]; i++) {
+    //     var rgba = chromaScaleToRgbString(chromaScale(i));
+    //     ut.colorLog(i, rgba);
+    // }
 
     function calculatePosition(az, range) {
         var mathaz = radians(90.0 - az);
@@ -3784,8 +3806,23 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
                     tr.x,//rightAz,
                     tr.y//topR
                 )
+
                 var colorVal = json.values[key][i];
-                colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
+                var colorAtVal = chromaScaleToRgbString(chromaScale(colorVal));
+                var arrayColorAtVal = rgbValToArray(colorAtVal);
+                var r = scaleForWebGL(arrayColorAtVal[0]);
+                var g = scaleForWebGL(arrayColorAtVal[1]);
+                var b = scaleForWebGL(arrayColorAtVal[2]);
+                var a = 1;
+                colors.push(
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                )
+                //colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
             }
         }
         var typedOutput = new Float32Array(output);
@@ -3813,7 +3850,7 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
 module.exports = {
     calcPolygons
 }
-},{"../utils":77}],30:[function(require,module,exports){
+},{"../utils":77,"chroma-js":184}],30:[function(require,module,exports){
 const calcPolys = require('./calculatePolygons');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
@@ -3851,6 +3888,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
     var divider;
     var values;
+    var colors;
     var minMax;
     function createTexture(gl) {
         if ($('#mapColorScale').is(":hidden")) {
@@ -3875,7 +3913,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
             if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
                 // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
-                for (var i in levs) { levs[i] = levs[i] * 1.944 }
+                for (var i in levs) { levs[i] = levs[i] / 1.944 }
             } else if (produc == 'N0S') {
                 // storm relative velocity
                 for (var i in levs) { levs[i] = levs[i] + 0.5 }
@@ -4029,7 +4067,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         //var colors = new Float32Array(oEvent.data.colors);
         var data = new Float32Array(data);
         var indices = new Int32Array(indices);
-        var colors = new Int32Array(colors);
+        var colors = new Float32Array(colors);
         var returnedGeojson = geojson;//oEvent.data.geojson;
         pageState.positions = data;
         pageState.indices = indices;
@@ -4092,101 +4130,130 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
     $.getJSON(`./app/radar/products/${produc}.json`, function(data) {
         divider = data.divider;
         values = data.values;
+        colors = data.colors;
         minMax = [values[0], values[values.length - 1]];
+
+        if (produc == 'N0G' || produc == 'N0U' || produc == 'TVX' || produc == 'VEL') {
+            // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
+            for (var i in values) { values[i] = values[i] / 1.944 }
+        } else if (produc == 'N0S') {
+            // storm relative velocity
+            for (var i in values) { values[i] = values[i] + 0.5 }
+        } else if (produc == 'N0H' || produc == 'HHC') {
+            // hydrometer classification || hybrid hydrometer classification
+            for (var i in values) { values[i] = values[i] - 0.5 }
+        }
     }).then(function() {
         //compile shaders
-        var vertexSource = `
-            //x: azimuth
-            //y: range
-            //z: value
-            attribute vec2 aPosition;
-            attribute float aColor;
-            uniform mat4 u_matrix;
-            varying float color;
+        // var vertexSource = `
+        //     //x: azimuth
+        //     //y: range
+        //     //z: value
+        //     attribute vec2 aPosition;
+        //     attribute float aColor;
+        //     uniform mat4 u_matrix;
+        //     varying float color;
 
-            void main() {
-                color = aColor;
-                gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
-            }`;
-        var fragmentSource = `
-            precision highp float;
-            uniform vec2 minmax;
-            uniform sampler2D u_texture;
-            varying float color;
+        //     void main() {
+        //         color = aColor;
+        //         gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
+        //     }`;
+        // var fragmentSource = `
+        //     precision highp float;
+        //     uniform vec2 minmax;
+        //     uniform sampler2D u_texture;
+        //     varying float color;
 
-            void main() {
-                float calcolor = (color - minmax.x) / (minmax.y - minmax.x);
-                gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
-            }`
+        //     void main() {
+        //         float calcolor = (color - minmax.x) / (minmax.y - minmax.x);
+        //         gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
+        //     }`
         var masterGl;
         var layer = {
             id: "baseReflectivity",
             type: "custom",
 
+            // method called when the layer is added to the map
+            // https://docs.mapbox.com/mapbox-gl-js/api/#styleimageinterface#onadd
             onAdd: function (map, gl) {
-                masterGl = gl;
                 createTexture(gl);
+                // create GLSL source for vertex shader
+                const vertexSource = `
+                    uniform mat4 u_matrix;
+                    attribute vec2 a_pos;
+                    attribute vec4 color;
+                    varying vec4 vColor;
+                    void main() {
+                        gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);
+                        vColor = color;
+                    }`;
 
-                var ext = gl.getExtension('OES_element_index_uint');
-                var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+                // create GLSL source for fragment shader
+                const fragmentSource = `
+                    precision lowp float;
+                    varying vec4 vColor;
+                    void main() {
+                        gl_FragColor = vec4(vColor);
+                    }`;
+
+                // create a vertex shader
+                const vertexShader = gl.createShader(gl.VERTEX_SHADER);
                 gl.shaderSource(vertexShader, vertexSource);
                 gl.compileShader(vertexShader);
-                var compilationLog = gl.getShaderInfoLog(vertexShader);
-                var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+                // create a fragment shader
+                const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
                 gl.shaderSource(fragmentShader, fragmentSource);
                 gl.compileShader(fragmentShader);
-                var compilationLog = gl.getShaderInfoLog(fragmentShader);
+
+                // link the two shaders into a WebGL program
                 this.program = gl.createProgram();
                 gl.attachShader(this.program, vertexShader);
                 gl.attachShader(this.program, fragmentShader);
                 gl.linkProgram(this.program);
-                this.matrixLocation = gl.getUniformLocation(this.program, "u_matrix");
-                this.positionLocation = gl.getAttribLocation(this.program, "aPosition");
-                this.colorLocation = gl.getAttribLocation(this.program, "aColor");
-                this.textureLocation = gl.getUniformLocation(this.program, "u_texture");
-                this.minmaxLocation = gl.getUniformLocation(this.program, "minmax");
 
-                //data buffers
-                this.positionBuffer = gl.createBuffer();
-                this.indexBuffer = gl.createBuffer();
+                this.aPos = gl.getAttribLocation(this.program, 'a_pos');
+                this.color = gl.getAttribLocation(this.program, 'color');
+
+                // create and initialize a WebGLBuffer to store vertex and color data
+                this.vertexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+                gl.bufferData(
+                    gl.ARRAY_BUFFER,
+                    pageState.positions,
+                    gl.STATIC_DRAW
+                );
+
                 this.colorBuffer = gl.createBuffer();
-            },//end onAdd
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+                gl.bufferData(
+                    gl.ARRAY_BUFFER,
+                    pageState.colors,
+                    gl.STATIC_DRAW
+                );
+            },
+
+            // method fired on each animation frame
+            // https://docs.mapbox.com/mapbox-gl-js/api/#map.event:render
             render: function (gl, matrix) {
-                //console.log("render base");
-                var ext = gl.getExtension('OES_element_index_uint');
-                //use program
                 gl.useProgram(this.program);
-                //how to remove vertices from position buffer
-                var size = 2;
-                var type = gl.FLOAT;
-                var normalize = false;
-                var stride = 0;
-                var offset = 0;
-                //calculate matrices
-                gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
-                gl.uniform2fv(this.minmaxLocation, minMax)
-                gl.uniform1i(this.textureLocation, 0);
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-                gl.bufferData(gl.ARRAY_BUFFER, pageState.positions, gl.STATIC_DRAW);
-                gl.enableVertexAttribArray(this.positionLocation);
-                gl.vertexAttribPointer(this.positionLocation, size, type, normalize, stride, offset);
+                gl.uniformMatrix4fv(
+                    gl.getUniformLocation(this.program, 'u_matrix'),
+                    false,
+                    matrix
+                );
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+                gl.enableVertexAttribArray(this.aPos);
+                gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-                gl.bufferData(gl.ARRAY_BUFFER, pageState.colors, gl.STATIC_DRAW);
-                gl.enableVertexAttribArray(this.colorLocation);
-                gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
+                gl.enableVertexAttribArray(this.color);
+                gl.vertexAttribPointer(this.color, 4, gl.FLOAT, false, 0, 0);
 
-                gl.bindTexture(gl.TEXTURE_2D, pageState.imagetexture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pageState.imagedata)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-                var primitiveType = gl.TRIANGLES;
-                var count = pageState.indices.length;
-                gl.drawArrays(primitiveType, offset, pageState.positions.length / 2);
-
-            }//end render
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                gl.drawArrays(gl.TRIANGLES, 0, pageState.positions.length / 2);
+            }
         }
 
         var xhttp = new XMLHttpRequest();
@@ -4200,6 +4267,8 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
                     settings["rlat"],
                     settings["rlon"],
                     vers,
+                    values,
+                    colors,
                     function(dat) {
                         finishItUp(dat.data, dat.indices, dat.colors, layer)
                     }

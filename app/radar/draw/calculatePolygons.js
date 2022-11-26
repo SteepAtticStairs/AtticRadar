@@ -1,7 +1,22 @@
 const ut = require('../utils');
+const chroma = require('chroma-js');
+
+function rgbValToArray(rgbString) {
+    return rgbString
+            .replace('rgb(', '')
+            .replace('rgba(', '')
+            .replace(')', '')
+            .split(', ')
+}
+function chromaScaleToRgbString(scaleOutput) {
+    return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
+}
+function scaleForWebGL(num) {
+    return ut.scale(num, 0, 255, 0, 1);
+}
 
 //onmessage=function(oEvent) {
-function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
+function calcPolygons(url, phi, radarLat, radarLon, radVersion, valuesArr, colorsArr, callback) {
     $('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
     //var url = oEvent.data[0];
 
@@ -27,6 +42,13 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
     var re = 6371000.0;
     var phi = radians(phi)//radians(oEvent.data[1]);
     var h0 = 0.0;
+
+    var chromaScale = chroma.scale(colorsArr).domain(valuesArr).mode('lab');
+
+    // for (var i = valuesArr[0]; i < valuesArr[valuesArr.length - 1]; i++) {
+    //     var rgba = chromaScaleToRgbString(chromaScale(i));
+    //     ut.colorLog(i, rgba);
+    // }
 
     function calculatePosition(az, range) {
         var mathaz = radians(90.0 - az);
@@ -109,8 +131,23 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, callback) {
                     tr.x,//rightAz,
                     tr.y//topR
                 )
+
                 var colorVal = json.values[key][i];
-                colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
+                var colorAtVal = chromaScaleToRgbString(chromaScale(colorVal));
+                var arrayColorAtVal = rgbValToArray(colorAtVal);
+                var r = scaleForWebGL(arrayColorAtVal[0]);
+                var g = scaleForWebGL(arrayColorAtVal[1]);
+                var b = scaleForWebGL(arrayColorAtVal[2]);
+                var a = 1;
+                colors.push(
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                    r, g, b, a,
+                )
+                //colors.push(colorVal, colorVal, colorVal, colorVal, colorVal, colorVal);
             }
         }
         var typedOutput = new Float32Array(output);
