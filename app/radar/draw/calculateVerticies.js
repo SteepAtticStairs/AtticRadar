@@ -5,6 +5,7 @@ const plotRadarToMap = require('./plotRadarToMap');
 const radarStations = require('../../../resources/radarStations');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
+var work = require('webworkify');
 
 function rgbValToArray(rgbString) {
     return rgbString
@@ -216,72 +217,20 @@ function calculateVerticies(radarObj, level, options) {
     // lon = (radarLon + Math.atan((xcart*Math.sin(c))/(rho*Math.cos(radarLat)*Math.cos(c)-ycart*Math.sin(radarLat)*Math.sin(c))))*inv;
 
     var radarLatLng = getRadarLatLng(radarObj, level);
-    function calcLngLat(x, y) {
-        var inv = 180.0 / Math.PI;
-        var re = 6371;
-        var radarLat = deg2rad(radarLatLng.lat); // 35.33305740356445
-        var radarLon = deg2rad(radarLatLng.lng); // -97.27748107910156
 
-        var rho = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0));
-        var c = rho / re;
-        var lat = Math.asin(Math.cos(c) * Math.sin(radarLat) + (y * Math.sin(c) * Math.cos(radarLat)) / (rho)) * inv;
-        var lon = (radarLon + Math.atan((x * Math.sin(c)) / (rho * Math.cos(radarLat) * Math.cos(c) - y * Math.sin(radarLat) * Math.sin(c)))) * inv;
+    /*
+    * We are using a web worker for this because the heavy calculations
+    * that need to run will crash the website on a mobile browser.
+    */
+    var w = work(require('./calculateLngLat.js'));
+    w.addEventListener('message', function(ev) {
+        var points = ev.data[0];
+        var colors = ev.data[1];
+        plotRadarToMap(points, colors, product);
+    });
+    w.postMessage([xlocs, ylocs, prodValues, radarLatLng, colorData.colors, values]); // send the worker a message
 
-        //return proj4('EPSG:3857', [lon, lat]);
-        return [lon, lat];
-    }
-
-    var points = [];
-    var colors = [];
-    for (var i in xlocs) {
-        //for (var i = 0; i < 1; i++) {
-        //i = parseInt(i);
-        for (var n in xlocs[i]) {
-            //for (var n = 0; n < 500; n++) {
-            if (prodValues[i][n] != null) {
-                try {
-                    var base = mc(calcLngLat(xlocs[i][n], ylocs[i][n]));
-                    var oneUp = mc(calcLngLat(xlocs[i][parseInt(n) + 1], ylocs[i][parseInt(n) + 1]));
-                    var oneSideways = mc(calcLngLat(xlocs[parseInt(i) + 1][n], ylocs[parseInt(i) + 1][n]));
-                    var otherCorner = mc(calcLngLat(xlocs[parseInt(i) + 1][parseInt(n) + 1], ylocs[parseInt(i) + 1][parseInt(n) + 1]));
-                    points.push(
-                        base[0],
-                        base[1],
-
-                        oneUp[0],
-                        oneUp[1],
-
-                        oneSideways[0],
-                        oneSideways[1],
-                        oneSideways[0],
-                        oneSideways[1],
-
-                        oneUp[0],
-                        oneUp[1],
-
-                        otherCorner[0],
-                        otherCorner[1],
-                    );
-
-                    var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
-                    var arrayColorAtVal = rgbValToArray(colorAtVal);
-                    var r = scaleForWebGL(arrayColorAtVal[0]);
-                    var g = scaleForWebGL(arrayColorAtVal[1]);
-                    var b = scaleForWebGL(arrayColorAtVal[2]);
-                    var a = 1;
-                    colors.push(
-                        r, g, b, a,
-                        r, g, b, a,
-                        r, g, b, a,
-                        r, g, b, a,
-                        r, g, b, a,
-                        r, g, b, a,
-                    )
-                } catch (e) { }
-            }
-        }
-    }
-    plotRadarToMap(points, colors, product);
+    //plotRadarToMap(points, colors, product);
     // var vertexF32 = new Float32Array(points);
     // var colorF32 = new Float32Array(colors);
 

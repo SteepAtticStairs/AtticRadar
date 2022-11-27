@@ -12,8 +12,10 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
     var values = [...colorScaleData.values];
     values = ut.scaleValues(values, product);
 
-    var vertexF32 = new Float32Array(verticiesArr);
-    var colorF32 = new Float32Array(colorsArr);
+    //var vertexF32 = new Float32Array(verticiesArr);
+    //var colorF32 = new Float32Array(colorsArr);
+    var vertexF32 = verticiesArr;
+    var colorF32 = colorsArr;
 
     var layer = {
         id: "baseReflectivity",
