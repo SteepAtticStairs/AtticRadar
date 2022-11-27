@@ -165,18 +165,57 @@ document.addEventListener('loadFile', function(event) {
     reader.readAsArrayBuffer(uploadedFile);
 })
 
+// function addRadarGeojson() {
+//     map.addSource('earthquakes', {
+//         type: 'geojson',
+//         // Use a URL for the value for the `data` property.
+//         data: '../data/KTLX_V06_20130520_201643.geojson#'
+//     });
+
+//     map.addLayer({
+//         'id': 'earthquakes-layer',
+//         'type': 'line',
+//         'source': 'earthquakes',
+//         'paint': {
+//             'line-color': 'rgb(255, 0, 0)',
+//             'line-width': 1
+//         }
+//     });
+
+//     var isShown = true;
+//     $(document).keyup(function(event) {
+//         if (event.which === 13) {
+//             if (isShown) {
+//                 isShown = false;
+//                 map.moveLayer('earthquakes-layer');
+//                 map.setLayoutProperty('earthquakes-layer', 'visibility', 'none');
+//             } else {
+//                 isShown = true;
+//                 map.moveLayer('earthquakes-layer');
+//                 map.setLayoutProperty('earthquakes-layer', 'visibility', 'visible');
+//             }
+//         }
+//     });
+// }
+
 // ../data/KLIX20050829_061516.gz
 // ../data/KTLX20130520_201643_V06.gz
 // ../data/KAMA20190506_021539_V06
 // ../data/KMLB19920824_134828.gz
+// ../data/level3/MHX_N0B_2022_08_02_01_57_08
+// ../data/level3/KOUN_SDUS54_N0QTLX_201305202016
+// ../data/level3/KOUN_SDUS54_N0UTLX_201305202016
+
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();
-//         loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//         loaders.loadFileObject('../data/KMLB19920824_134828.gz#', 2);
+//         //addRadarGeojson();
 //     } else {
 //         map.on('load', function() {
 //             //$('#stationMenuItemIcon').click();
-//             loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//             loaders.loadFileObject('../data/KMLB19920824_134828.gz#', 2);
+//             //addRadarGeojson();
 //         })
 //     }
 // }, 0)

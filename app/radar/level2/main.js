@@ -2,6 +2,7 @@ const { Level2Radar } = require('../../../lib/nexrad-level-2-data/src');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const l2listeners = require('../level2/eventListeners').loadL2Listeners;
 const l2info = require('../dom/l2info');
+const l2plot = require('./l2plot');
 
 const loadL2Menu = require('./loadL2Menu');
 
@@ -13,9 +14,10 @@ function mainL2Loading(thisObj) {
 
         l2info(l2rad);
 
-        plot(l2rad, 'REF', {
-            elevations: 1,
-        });
+        l2plot(l2rad, 'REF', 1);
+        // plot(l2rad, 'REF', {
+        //     elevations: 1,
+        // });
 
         loadL2Menu(l2rad.listElevationsAndProducts(), l2rad);
 

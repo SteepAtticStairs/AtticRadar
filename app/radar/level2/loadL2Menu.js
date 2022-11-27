@@ -1,6 +1,7 @@
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
+const l2plot = require('./l2plot');
 
 function createModal(title, headerColor, body) {
     var modalContent = 
@@ -128,9 +129,10 @@ function hoverClickBtnsListeners(l2rad) {
         $(this).addClass('l2ElevBtnSelected');
 
         curElevNum = parseInt(clickedElevNum);
-        plot(l2rad, curProduct, {
-            elevations: curElevNum,
-        });
+        // plot(l2rad, curProduct, {
+        //     elevations: curElevNum,
+        // });
+        l2plot(l2rad, curProduct, curElevNum);
     })
 }
 
@@ -269,9 +271,10 @@ function loadL2Menu(elevsAndProds, l2rad) {
 
         curProduct = valueProductLookup[thisValue];
         //$('#dataDiv').data('curL2Product', curProduct);
-        plot(l2rad, curProduct, {
-            elevations: parseInt(window.clickedElevNum),
-        });
+        // plot(l2rad, curProduct, {
+        //     elevations: parseInt(window.clickedElevNum),
+        // });
+        l2plot(l2rad, curProduct, parseInt(window.clickedElevNum));
     })
 
     $('#currentModeSpan').hide();
