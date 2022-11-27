@@ -48,7 +48,6 @@ function showL3Info(l3rad) {// //showPlotBtn();
     $('#radarDateTime').show().html(`${formattedRadarDate}<br>${formattedRadarTime}`);
 
     var fileElevation = l3rad.productDescription.elevationAngle;
-    console.log(fileElevation)
     if (fileElevation == undefined) {
         fileElevation = l3rad.productDescription.elevationNumber;
     }

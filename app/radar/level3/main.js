@@ -1,5 +1,6 @@
 const l3parse = require('../../../lib/nexrad-level-3-data/src');
-const l3plot = require('../level3/draw');
+//const l3plot = require('../level3/draw');
+const l3plot = require('./l3plot');
 const l3info = require('../dom/l3info');
 const distanceMeasure = require('../distance/distanceMeasure');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
@@ -33,7 +34,7 @@ function mainL3Loading(thisObj) {
             'lon': l3rad.productDescription.longitude
         });
 
-        ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
+        //ut.colorLog(new Date(l3rad.messageHeader.seconds * 1000).toLocaleString('en-US', { timeZone: 'America/New_York' }).slice(10), 'green')
         // completed parsing
         ut.progressBarVal('label', 'File parsing complete');
         ut.progressBarVal('set', dividedArr[0] * 2);

@@ -209,12 +209,12 @@ document.addEventListener('loadFile', function(event) {
 // setTimeout(function() {
 //     if (map.loaded()) {
 //         //$('#stationMenuItemIcon').click();
-//         loaders.loadFileObject('../data/KMLB19920824_134828.gz#', 2);
+//         loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
 //         //addRadarGeojson();
 //     } else {
 //         map.on('load', function() {
 //             //$('#stationMenuItemIcon').click();
-//             loaders.loadFileObject('../data/KMLB19920824_134828.gz#', 2);
+//             loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
 //             //addRadarGeojson();
 //         })
 //     }
