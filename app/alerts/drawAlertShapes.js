@@ -6,6 +6,7 @@ const getPolygonColors = require('./polygonColors');
 const simplify = require('simplify-geojson')
 var geojsonMerge = require('@mapbox/geojson-merge');
 var map = require('../radar/map/map');
+const setLayerOrder = require('../radar/map/setLayerOrder');
 
 // https://stackoverflow.com/a/1431113/18758797
 function replaceAt(str, index, replacement) {
@@ -141,6 +142,8 @@ createMenuOption({
             map.setLayoutProperty('mainAlertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('mainAlertsLayerFill', 'visibility', 'visible');
             map.setLayoutProperty('mainAlertsLayerOutline', 'visibility', 'visible');
+
+            setLayerOrder();
         } else {
             ut.betterProgressBar('show');
             ut.betterProgressBar('set', 0);

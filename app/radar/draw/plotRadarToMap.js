@@ -5,6 +5,7 @@ const mapFuncs = require('../map/mapFunctions');
 const setBaseMapLayers = require('../misc/baseMapLayers');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 var map = require('../map/map');
+const setLayerOrder = require('../map/setLayerOrder');
 
 function plotRadarToMap(verticiesArr, colorsArr, product) {
     var colorScaleData = productColors[product];
@@ -131,8 +132,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
     }
 
     // make sure the alerts are always on top
-    mapFuncs.moveMapLayer('newAlertsLayer');
-    mapFuncs.moveMapLayer('newAlertsLayerOutline');
+    setLayerOrder();
 
     var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
