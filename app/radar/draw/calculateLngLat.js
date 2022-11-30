@@ -1,6 +1,33 @@
 const chroma = require('chroma-js');
 const ut = require('../utils');
 
+// https://stackoverflow.com/a/8188682/18758797
+function splitUp(arr, n) {
+    var rest = arr.length % n, // how much to divide
+        restUsed = rest, // to keep track of the division over the elements
+        partLength = Math.floor(arr.length / n),
+        result = [];
+
+    for (var i = 0; i < arr.length; i += partLength) {
+        var end = partLength + i,
+            add = false;
+
+        if (rest !== 0 && restUsed) { // should add one element for the division
+            end++;
+            restUsed--; // we've used one division element now
+            add = true;
+        }
+
+        result.push(arr.slice(i, end)); // part of the array
+
+        if (add) {
+            i++; // also increment i in the case we added an extra element for division
+        }
+    }
+
+    return result;
+}
+
 function rgbValToArray(rgbString) {
     return rgbString
             .replace('rgb(', '')
@@ -18,6 +45,7 @@ function scaleForWebGL(num) {
 function deg2rad(angle) { return angle * (Math.PI / 180) }
 
 var radarLatLng;
+const decimalPlaceTrim = 5;
 
 function calcLngLat(x, y) {
     var inv = 180.0 / Math.PI;
@@ -31,7 +59,10 @@ function calcLngLat(x, y) {
     var lon = (radarLon + Math.atan((x * Math.sin(c)) / (rho * Math.cos(radarLat) * Math.cos(c) - y * Math.sin(radarLat) * Math.sin(c)))) * inv;
 
     //return proj4('EPSG:3857', [lon, lat]);
-    return [lon, lat];
+    return [
+        parseFloat(lon.toFixed(decimalPlaceTrim)),
+        parseFloat(lat.toFixed(decimalPlaceTrim))
+    ]
 }
 
 module.exports = function (self) {
@@ -63,10 +94,10 @@ module.exports = function (self) {
                 //for (var n = 0; n < 500; n++) {
                 if (prodValues[i][n] != null) {
                     try {
-                        var base = mc(calcLngLat(xlocs[i][n], ylocs[i][n]));
-                        var oneUp = mc(calcLngLat(xlocs[i][parseInt(n) + 1], ylocs[i][parseInt(n) + 1]));
-                        var oneSideways = mc(calcLngLat(xlocs[parseInt(i) + 1][n], ylocs[parseInt(i) + 1][n]));
-                        var otherCorner = mc(calcLngLat(xlocs[parseInt(i) + 1][parseInt(n) + 1], ylocs[parseInt(i) + 1][parseInt(n) + 1]));
+                        var base = calcLngLat(xlocs[i][n], ylocs[i][n]);
+                        var oneUp = calcLngLat(xlocs[i][parseInt(n) + 1], ylocs[i][parseInt(n) + 1]);
+                        var oneSideways = calcLngLat(xlocs[parseInt(i) + 1][n], ylocs[parseInt(i) + 1][n]);
+                        var otherCorner = calcLngLat(xlocs[parseInt(i) + 1][parseInt(n) + 1], ylocs[parseInt(i) + 1][parseInt(n) + 1]);
                         points.push(
                             base[0],
                             base[1],
@@ -108,5 +139,29 @@ module.exports = function (self) {
             new Float32Array(points),
             new Float32Array(colors)
         ]);
+
+        // var pointsChunks = [];
+        // var colorsChunks = [];
+        // //console.log(points.length, colors.length)
+
+        // const numOfChunks = 10;
+        // pointsChunks = splitUp(points, numOfChunks);
+        // colorsChunks = splitUp(colors, numOfChunks);
+        // //for (let i = 0; i < points.length; i += points.length / numOfChunks) { pointsChunks.push(points.slice(i, i + colors.length / numOfChunks)) }
+        // //for (let i = 0; i < colors.length; i += colors.length / numOfChunks) { colorsChunks.push(colors.slice(i, i + colors.length / numOfChunks)) }
+
+        // var i = 0;
+        // function myLoop() {
+        //     setTimeout(function () {
+        //         self.postMessage([pointsChunks[i], colorsChunks[i], numOfChunks])
+        //         i++;
+        //         if (i < numOfChunks) { myLoop() }
+        //     }, 5)
+        // }
+        // myLoop();
+        // // self.postMessage([
+        // //     new Float32Array(points),
+        // //     new Float32Array(colors)
+        // // ]);
     })
 };

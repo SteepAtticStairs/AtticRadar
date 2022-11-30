@@ -218,14 +218,35 @@ function calculateVerticies(radarObj, level, options) {
 
     var radarLatLng = getRadarLatLng(radarObj, level);
 
+    // var chunksReturned = 0;
+    // var verticiesArr = [];
+    // var colorsArr = [];
+
     /*
     * We are using a web worker for this because the heavy calculations
     * that need to run will crash the website on a mobile browser.
     */
     var w = work(require('./calculateLngLat.js'));
     w.addEventListener('message', function(ev) {
+        // var currentPointsChunkIter = ev.data[0];
+        // var currentColorsChunkIter = ev.data[1];
+        // var totalChunks = ev.data[2];
+        // verticiesArr = verticiesArr.concat(currentPointsChunkIter);
+        // //console.log(vertices.length)
+        // colorsArr = colorsArr.concat(currentColorsChunkIter);
+        // chunksReturned++;
+        // if (totalChunks == chunksReturned) {
+        //     var points = new Float32Array(verticiesArr);
+        //     var colors = new Float32Array(colorsArr);
+        //     plotRadarToMap(points, colors, product);
+        // }
         var points = ev.data[0];
         var colors = ev.data[1];
+        for (var i = 0; i < points.length - 1; i += 2) {
+            var mercCoords = mc([points[i], points[i + 1]])
+            points[i] = mercCoords[0];
+            points[i + 1] = mercCoords[1];
+        }
         plotRadarToMap(points, colors, product);
     });
     w.postMessage([xlocs, ylocs, prodValues, radarLatLng, colorData.colors, values]); // send the worker a message

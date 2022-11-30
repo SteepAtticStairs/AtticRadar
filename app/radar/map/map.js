@@ -4,7 +4,7 @@ const map = new mapboxgl.Map({
     style: 'mapbox://styles/mapbox/dark-v10',
     zoom: 3,
     center: [-98.5606744, 36.8281576],
-    maxZoom: 15,
+    maxZoom: 20,
     preserveDrawingBuffer: true,
     bearingSnap: 360,
 
