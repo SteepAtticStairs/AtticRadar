@@ -4227,9 +4227,18 @@ function calculateVerticies(radarObj, level, options) {
     var xlocs = getXlocs(prod_range, az);
     var ylocs = getYlocs(prod_range, az);
 
+    // function mc(coords) {
+    //     var mercatorCoords = mapboxgl.MercatorCoordinate.fromLngLat({ lng: coords[0], lat: coords[1] });
+    //     return [mercatorCoords.x, mercatorCoords.y];
+    // }
     function mc(coords) {
-        var mercatorCoords = mapboxgl.MercatorCoordinate.fromLngLat({ lng: coords[0], lat: coords[1] });
-        return [mercatorCoords.x, mercatorCoords.y];
+        function mercatorXfromLng(lng) {
+            return (180 + lng) / 360;
+        }
+        function mercatorYfromLat(lat) {
+            return (180 - (180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360)))) / 360;
+        }
+        return [mercatorXfromLng(coords[0]), mercatorYfromLat(coords[1])];
     }
 
     var colorData = productColors[product];
