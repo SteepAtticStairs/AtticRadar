@@ -6,6 +6,7 @@ const distanceMeasure = require('../distance/distanceMeasure');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const radarStations = require('../../../resources/radarStations');
 const turf = require('@turf/turf');
+const autoUpdate = require('../misc/autoUpdate');
 
 var map = require('../map/map');
 
@@ -27,9 +28,10 @@ function mainL3Loading(thisObj) {
         var l3rad = l3parse(ut.toBuffer(result));
         console.log(l3rad);
 
+        var station = stationAbbreviations[l3rad.textHeader.id3];
         $('#dataDiv').data('radarGeoData', {
             'height': l3rad.productDescription.height,
-            'station': stationAbbreviations[l3rad.textHeader.id3],
+            'station': station,
             'lat': l3rad.productDescription.latitude,
             'lon': l3rad.productDescription.longitude
         });
@@ -39,10 +41,17 @@ function mainL3Loading(thisObj) {
         ut.progressBarVal('label', 'File parsing complete');
         ut.progressBarVal('set', dividedArr[0] * 2);
 
-        var product = l3rad.textHeader.type;
+        //var product = l3rad.textHeader.type;
+        var product = l3rad.productDescription.abbreviation;
+        if (Array.isArray(product)) { product = product[0] }
+
         if (product != 'NTV' && product != 'NMD' && product != 'NST') {
             // display file info, but not if it is storm tracks
             l3info(l3rad);
+            // automatically check for new radar scans if not a file upload
+            if (!$('#dataDiv').data('fromFileUpload')) {
+                autoUpdate({ 'station': station, 'product': product });
+            }
         }
         // plot the file
         ut.betterProgressBar('set', 90);
