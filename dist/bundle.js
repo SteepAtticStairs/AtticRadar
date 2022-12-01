@@ -6117,9 +6117,9 @@ function mainL3Loading(thisObj) {
         ut.progressBarVal('label', 'File parsing complete');
         ut.progressBarVal('set', dividedArr[0] * 2);
 
-        //var product = l3rad.textHeader.type;
-        var product = l3rad.productDescription.abbreviation;
-        if (Array.isArray(product)) { product = product[0] }
+        var product = l3rad.textHeader.type;
+        // var product = l3rad.productDescription.abbreviation;
+        // if (Array.isArray(product)) { product = product[0] }
 
         if (product != 'NTV' && product != 'NMD' && product != 'NST') {
             // display file info, but not if it is storm tracks
