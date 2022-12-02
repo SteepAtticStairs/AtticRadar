@@ -123,6 +123,8 @@ const dataNames = {
 };
 
 function calculateVerticies(radarObj, level, options) {
+    var start = Date.now();
+
     var product;
     var elevation;
     if (level == 2) {
@@ -183,8 +185,9 @@ function calculateVerticies(radarObj, level, options) {
 
     // xlocs = prod_range * np.sin(np.deg2rad(az[:, np.newaxis]))
     // ylocs = prod_range * np.cos(np.deg2rad(az[:, np.newaxis]))
-    var xlocs = getXlocs(prod_range, az);
-    var ylocs = getYlocs(prod_range, az);
+    //var xlocs = getXlocs(prod_range, az);
+    //var ylocs = getYlocs(prod_range, az);
+    console.log(`Calculated locs in ${Date.now() - start} ms`);
 
     // function mc(coords) {
     //     var mercatorCoords = mapboxgl.MercatorCoordinate.fromLngLat({ lng: coords[0], lat: coords[1] });
@@ -258,7 +261,7 @@ function calculateVerticies(radarObj, level, options) {
         }
         plotRadarToMap(points, colors, product);
     });
-    w.postMessage([xlocs, ylocs, prodValues, radarLatLng, colorData.colors, values]); // send the worker a message
+    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values]); // send the worker a message
 
     //plotRadarToMap(points, colors, product);
     // var vertexF32 = new Float32Array(points);

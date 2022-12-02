@@ -67,8 +67,10 @@ function calcLngLat(x, y) {
 
 module.exports = function (self) {
     self.addEventListener('message', function(ev) {
-        var xlocs = ev.data[0];
-        var ylocs = ev.data[1];
+        var start = Date.now();
+
+        var prod_range = ev.data[0];
+        var az = ev.data[1];
         var prodValues = ev.data[2];
         radarLatLng = ev.data[3];
         var scaleColors = ev.data[4];
@@ -85,19 +87,33 @@ module.exports = function (self) {
             return [mercatorXfromLng(coords[0]), mercatorYfromLat(coords[1])];
         }
 
+        function calcLocs(i, n) {
+            var xloc = prod_range[n] * Math.sin(deg2rad(az[i]));
+            var yloc = prod_range[n] * Math.cos(deg2rad(az[i]));
+            return {
+                'xloc': xloc,
+                'yloc': yloc
+            }
+        }
+
         var points = [];
         var colors = [];
-        for (var i in xlocs) {
-            //for (var i = 0; i < 1; i++) {
-            //i = parseInt(i);
-            for (var n in xlocs[i]) {
-                //for (var n = 0; n < 500; n++) {
+        for (var i in az) {
+            for (var n in prod_range) {
                 if (prodValues[i][n] != null) {
                     try {
-                        var base = calcLngLat(xlocs[i][n], ylocs[i][n]);
-                        var oneUp = calcLngLat(xlocs[i][parseInt(n) + 1], ylocs[i][parseInt(n) + 1]);
-                        var oneSideways = calcLngLat(xlocs[parseInt(i) + 1][n], ylocs[parseInt(i) + 1][n]);
-                        var otherCorner = calcLngLat(xlocs[parseInt(i) + 1][parseInt(n) + 1], ylocs[parseInt(i) + 1][parseInt(n) + 1]);
+                        var baseLocs = calcLocs(i, n);
+                        var base = calcLngLat(baseLocs.xloc, baseLocs.yloc);
+
+                        var oneUpLocs = calcLocs(i, parseInt(n) + 1);
+                        var oneUp = calcLngLat(oneUpLocs.xloc, oneUpLocs.yloc);
+
+                        var oneSidewaysLocs = calcLocs(parseInt(i) + 1, n);
+                        var oneSideways = calcLngLat(oneSidewaysLocs.xloc, oneSidewaysLocs.yloc);
+
+                        var otherCornerLocs = calcLocs(parseInt(i) + 1, parseInt(n) + 1);
+                        var otherCorner = calcLngLat(otherCornerLocs.xloc, otherCornerLocs.yloc);
+
                         points.push(
                             base[0],
                             base[1],
@@ -135,6 +151,7 @@ module.exports = function (self) {
                 }
             }
         }
+        console.log(`Calculated vertices in ${Date.now() - start} ms`);
         self.postMessage([
             new Float32Array(points),
             new Float32Array(colors)
