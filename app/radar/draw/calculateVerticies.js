@@ -187,7 +187,7 @@ function calculateVerticies(radarObj, level, options) {
     // ylocs = prod_range * np.cos(np.deg2rad(az[:, np.newaxis]))
     //var xlocs = getXlocs(prod_range, az);
     //var ylocs = getYlocs(prod_range, az);
-    console.log(`Calculated locs in ${Date.now() - start} ms`);
+    //console.log(`Calculated locs in ${Date.now() - start} ms`);
 
     // function mc(coords) {
     //     var mercatorCoords = mapboxgl.MercatorCoordinate.fromLngLat({ lng: coords[0], lat: coords[1] });

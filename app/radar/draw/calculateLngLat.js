@@ -39,7 +39,7 @@ function chromaScaleToRgbString(scaleOutput) {
     return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
 }
 function scaleForWebGL(num) {
-    return ut.scale(num, 0, 255, 0, 1);
+    return parseFloat(ut.scale(num, 0, 255, 0, 1).toFixed(3));
 }
 
 function deg2rad(angle) { return angle * (Math.PI / 180) }
@@ -96,22 +96,35 @@ module.exports = function (self) {
             }
         }
 
+        var goodIndexes = [];
+        for (var i in prodValues) {
+            var goodIndexesArr = [];
+            var n = 0;
+            for (var el in prodValues[i]) {
+                if (prodValues[i][el] != null) { goodIndexesArr.push(n) }
+                n++;
+            }
+            goodIndexes.push(goodIndexesArr);
+        }
+        for (var i in prodValues) { prodValues[i] = prodValues[i].filter(function (el) { return el != null }) }
+
         var points = [];
         var colors = [];
         for (var i in az) {
-            for (var n in prod_range) {
-                if (prodValues[i][n] != null) {
+            for (var n in prodValues[i]) {
+                //if (prodValues[i][n] != null) {
                     try {
-                        var baseLocs = calcLocs(i, n);
+                        var theN = goodIndexes[i][n];
+                        var baseLocs = calcLocs(i, theN);
                         var base = calcLngLat(baseLocs.xloc, baseLocs.yloc);
 
-                        var oneUpLocs = calcLocs(i, parseInt(n) + 1);
+                        var oneUpLocs = calcLocs(i, parseInt(theN) + 1);
                         var oneUp = calcLngLat(oneUpLocs.xloc, oneUpLocs.yloc);
 
-                        var oneSidewaysLocs = calcLocs(parseInt(i) + 1, n);
+                        var oneSidewaysLocs = calcLocs(parseInt(i) + 1, theN);
                         var oneSideways = calcLngLat(oneSidewaysLocs.xloc, oneSidewaysLocs.yloc);
 
-                        var otherCornerLocs = calcLocs(parseInt(i) + 1, parseInt(n) + 1);
+                        var otherCornerLocs = calcLocs(parseInt(i) + 1, parseInt(theN) + 1);
                         var otherCorner = calcLngLat(otherCornerLocs.xloc, otherCornerLocs.yloc);
 
                         points.push(
@@ -133,22 +146,30 @@ module.exports = function (self) {
                             otherCorner[1],
                         );
 
-                        var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
-                        var arrayColorAtVal = rgbValToArray(colorAtVal);
-                        var r = scaleForWebGL(arrayColorAtVal[0]);
-                        var g = scaleForWebGL(arrayColorAtVal[1]);
-                        var b = scaleForWebGL(arrayColorAtVal[2]);
-                        var a = 1;
                         colors.push(
-                            r, g, b, a,
-                            r, g, b, a,
-                            r, g, b, a,
-                            r, g, b, a,
-                            r, g, b, a,
-                            r, g, b, a,
+                            prodValues[i][n],
+                            prodValues[i][n],
+                            prodValues[i][n],
+                            prodValues[i][n],
+                            prodValues[i][n],
+                            prodValues[i][n]
                         )
+                        // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
+                        // var arrayColorAtVal = rgbValToArray(colorAtVal);
+                        // var r = scaleForWebGL(arrayColorAtVal[0]);
+                        // var g = scaleForWebGL(arrayColorAtVal[1]);
+                        // var b = scaleForWebGL(arrayColorAtVal[2]);
+                        // var a = 1;
+                        // colors.push(
+                        //     r, g, b, a,
+                        //     r, g, b, a,
+                        //     r, g, b, a,
+                        //     r, g, b, a,
+                        //     r, g, b, a,
+                        //     r, g, b, a,
+                        // )
                     } catch (e) { }
-                }
+                //}
             }
         }
         console.log(`Calculated vertices in ${Date.now() - start} ms`);

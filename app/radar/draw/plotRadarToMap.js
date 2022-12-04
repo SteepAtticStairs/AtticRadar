@@ -6,103 +6,115 @@ const setBaseMapLayers = require('../misc/baseMapLayers');
 const STstuff = require('../level3/stormTracking/stormTrackingMain');
 var map = require('../map/map');
 const setLayerOrder = require('../map/setLayerOrder');
+const createWebGLTexture = require('./createWebGLTexture');
 
 function plotRadarToMap(verticiesArr, colorsArr, product) {
     var colorScaleData = productColors[product];
     var colors = colorScaleData.colors;
     var values = [...colorScaleData.values];
     values = ut.scaleValues(values, product);
+    const cmin = values[0];
+    const cmax = values[values.length - 1];
 
     //var vertexF32 = new Float32Array(verticiesArr);
     //var colorF32 = new Float32Array(colorsArr);
     var vertexF32 = verticiesArr;
     var colorF32 = colorsArr;
 
+    var imagedata;
+    var imagetexture;
+
+    var vertexSource = `
+        //x: azimuth
+        //y: range
+        //z: value
+        attribute vec2 aPosition;
+        attribute float aColor;
+        uniform mat4 u_matrix;
+        varying float color;
+        void main() {
+            color = aColor;
+            gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
+        }`;
+    var fragmentSource = `
+        precision highp float;
+        uniform vec2 minmax;
+        uniform sampler2D u_texture;
+        varying float color;
+        void main() {
+            float calcolor = (color - minmax.x) / (minmax.y - minmax.x);
+            gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
+        }`
     var layer = {
         id: "baseReflectivity",
         type: "custom",
 
-        // method called when the layer is added to the map
-        // https://docs.mapbox.com/mapbox-gl-js/api/#styleimageinterface#onadd
         onAdd: function (map, gl) {
             createAndShowColorbar(colors, values);
-            // create GLSL source for vertex shader
-            const vertexSource = `
-                uniform mat4 u_matrix;
-                attribute vec2 a_pos;
-                attribute vec4 color;
-                varying vec4 vColor;
-                void main() {
-                    gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);
-                    vColor = color;
-                }`;
+            imagedata = createWebGLTexture(colors, values);
+            imagetexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, imagetexture);
 
-            // create GLSL source for fragment shader
-            const fragmentSource = `
-                precision lowp float;
-                varying vec4 vColor;
-                void main() {
-                    gl_FragColor = vec4(vColor);
-                }`;
-
-            // create a vertex shader
-            const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            var ext = gl.getExtension('OES_element_index_uint');
+            var vertexShader = gl.createShader(gl.VERTEX_SHADER);
             gl.shaderSource(vertexShader, vertexSource);
             gl.compileShader(vertexShader);
-
-            // create a fragment shader
-            const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            var compilationLog = gl.getShaderInfoLog(vertexShader);
+            var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
             gl.shaderSource(fragmentShader, fragmentSource);
             gl.compileShader(fragmentShader);
-
-            // link the two shaders into a WebGL program
+            var compilationLog = gl.getShaderInfoLog(fragmentShader);
             this.program = gl.createProgram();
             gl.attachShader(this.program, vertexShader);
             gl.attachShader(this.program, fragmentShader);
             gl.linkProgram(this.program);
+            this.matrixLocation = gl.getUniformLocation(this.program, "u_matrix");
+            this.positionLocation = gl.getAttribLocation(this.program, "aPosition");
+            this.colorLocation = gl.getAttribLocation(this.program, "aColor");
+            this.textureLocation = gl.getUniformLocation(this.program, "u_texture");
+            this.minmaxLocation = gl.getUniformLocation(this.program, "minmax");
 
-            this.aPos = gl.getAttribLocation(this.program, 'a_pos');
-            this.color = gl.getAttribLocation(this.program, 'color');
-
-            // create and initialize a WebGLBuffer to store vertex and color data
-            this.vertexBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-            gl.bufferData(
-                gl.ARRAY_BUFFER,
-                vertexF32,
-                gl.STATIC_DRAW
-            );
-
+            //data buffers
+            this.positionBuffer = gl.createBuffer();
+            this.indexBuffer = gl.createBuffer();
             this.colorBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.bufferData(
-                gl.ARRAY_BUFFER,
-                colorF32,
-                gl.STATIC_DRAW
-            );
-        },
-
-        // method fired on each animation frame
-        // https://docs.mapbox.com/mapbox-gl-js/api/#map.event:render
+        },//end onAdd
         render: function (gl, matrix) {
+            //console.log("render base");
+            var ext = gl.getExtension('OES_element_index_uint');
+            //use program
             gl.useProgram(this.program);
-            gl.uniformMatrix4fv(
-                gl.getUniformLocation(this.program, 'u_matrix'),
-                false,
-                matrix
-            );
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-            gl.enableVertexAttribArray(this.aPos);
-            gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
+            //how to remove vertices from position buffer
+            var size = 2;
+            var type = gl.FLOAT;
+            var normalize = false;
+            var stride = 0;
+            var offset = 0;
+            //calculate matrices
+            gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+            gl.uniform2fv(this.minmaxLocation, [cmin, cmax])
+            gl.uniform1i(this.textureLocation, 0);
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertexF32, gl.STATIC_DRAW);
+            gl.enableVertexAttribArray(this.positionLocation);
+            gl.vertexAttribPointer(this.positionLocation, size, type, normalize, stride, offset);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.enableVertexAttribArray(this.color);
-            gl.vertexAttribPointer(this.color, 4, gl.FLOAT, false, 0, 0);
+            gl.bufferData(gl.ARRAY_BUFFER, colorF32, gl.STATIC_DRAW);
+            gl.enableVertexAttribArray(this.colorLocation);
+            gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
 
-            gl.enable(gl.BLEND);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            gl.drawArrays(gl.TRIANGLES, 0, vertexF32.length / 2);
-        }
+            gl.bindTexture(gl.TEXTURE_2D, imagetexture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+            var primitiveType = gl.TRIANGLES;
+            gl.drawArrays(primitiveType, offset, vertexF32.length / 2);
+
+        }//end render
     }
 
     mapFuncs.removeMapLayer('baseReflectivity');
