@@ -4835,19 +4835,16 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
     var imagedata;
     var imagetexture;
 
-    var vertexSource = `
-        //x: azimuth
-        //y: range
-        //z: value
+    const vertexSource = `
+        uniform mat4 u_matrix;
         attribute vec2 aPosition;
         attribute float aColor;
-        uniform mat4 u_matrix;
         varying float color;
         void main() {
-            color = aColor;
             gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
+            color = aColor;
         }`;
-    var fragmentSource = `
+    const fragmentSource = `
         precision highp float;
         uniform vec2 minmax;
         uniform sampler2D u_texture;
@@ -4857,8 +4854,8 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
             gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
         }`
     var layer = {
-        id: "baseReflectivity",
-        type: "custom",
+        id: 'baseReflectivity',
+        type: 'custom',
 
         onAdd: function (map, gl) {
             createAndShowColorbar(colors, values);
@@ -4866,72 +4863,75 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
             imagetexture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
 
-            var ext = gl.getExtension('OES_element_index_uint');
             var vertexShader = gl.createShader(gl.VERTEX_SHADER);
             gl.shaderSource(vertexShader, vertexSource);
             gl.compileShader(vertexShader);
-            var compilationLog = gl.getShaderInfoLog(vertexShader);
+
             var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
             gl.shaderSource(fragmentShader, fragmentSource);
             gl.compileShader(fragmentShader);
-            var compilationLog = gl.getShaderInfoLog(fragmentShader);
+
             this.program = gl.createProgram();
             gl.attachShader(this.program, vertexShader);
             gl.attachShader(this.program, fragmentShader);
             gl.linkProgram(this.program);
-            this.matrixLocation = gl.getUniformLocation(this.program, "u_matrix");
-            this.positionLocation = gl.getAttribLocation(this.program, "aPosition");
-            this.colorLocation = gl.getAttribLocation(this.program, "aColor");
-            this.textureLocation = gl.getUniformLocation(this.program, "u_texture");
-            this.minmaxLocation = gl.getUniformLocation(this.program, "minmax");
 
-            //data buffers
-            this.positionBuffer = gl.createBuffer();
-            this.indexBuffer = gl.createBuffer();
+            this.positionLocation = gl.getAttribLocation(this.program, 'aPosition');
+            this.colorLocation = gl.getAttribLocation(this.program, 'aColor');
+            this.textureLocation = gl.getUniformLocation(this.program, 'u_texture');
+            this.minmaxLocation = gl.getUniformLocation(this.program, 'minmax');
+
+            this.vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+            gl.bufferData(
+                gl.ARRAY_BUFFER,
+                vertexF32,
+                gl.STATIC_DRAW
+            );
+
             this.colorBuffer = gl.createBuffer();
-        },//end onAdd
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+            gl.bufferData(
+                gl.ARRAY_BUFFER,
+                colorF32,
+                gl.STATIC_DRAW
+            );
+        },
         render: function (gl, matrix) {
-            //console.log("render base");
-            var ext = gl.getExtension('OES_element_index_uint');
-            //use program
             gl.useProgram(this.program);
-            //how to remove vertices from position buffer
-            var size = 2;
-            var type = gl.FLOAT;
-            var normalize = false;
-            var stride = 0;
-            var offset = 0;
-            //calculate matrices
-            gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
-            gl.uniform2fv(this.minmaxLocation, [cmin, cmax])
+            gl.uniformMatrix4fv(
+                gl.getUniformLocation(this.program, 'u_matrix'),
+                false,
+                matrix
+            );
+            gl.uniform2fv(this.minmaxLocation, [cmin, cmax]);
             gl.uniform1i(this.textureLocation, 0);
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, vertexF32, gl.STATIC_DRAW);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.enableVertexAttribArray(this.positionLocation);
-            gl.vertexAttribPointer(this.positionLocation, size, type, normalize, stride, offset);
+            gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, colorF32, gl.STATIC_DRAW);
             gl.enableVertexAttribArray(this.colorLocation);
-            gl.vertexAttribPointer(this.colorLocation, 1, type, normalize, stride, offset);
+            gl.vertexAttribPointer(this.colorLocation, 1, gl.FLOAT, false, 0, 0);
 
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata)
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-            var primitiveType = gl.TRIANGLES;
-            gl.drawArrays(primitiveType, offset, vertexF32.length / 2);
-
-        }//end render
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.drawArrays(gl.TRIANGLES, 0, vertexF32.length / 2);
+        }
     }
 
     mapFuncs.removeMapLayer('baseReflectivity');
 
     map.addLayer(layer);
-    var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
+    var isChecked = $('#showExtraMapLayersCheckBtn').is(':checked');
     if (!isChecked) {
         setBaseMapLayers('cities');
     } else if (isChecked) {
@@ -4974,7 +4974,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
         }
     }
     // setTimeout(function() {
-    //     //$("#dataDiv").trigger("loadGeoJSON");
+    //     //$('#dataDiv').trigger('loadGeoJSON');
     //     //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
     //     var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
     //     generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
