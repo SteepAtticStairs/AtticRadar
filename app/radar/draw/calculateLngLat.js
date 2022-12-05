@@ -75,6 +75,7 @@ module.exports = function (self) {
         radarLatLng = ev.data[3];
         var scaleColors = ev.data[4];
         var scaleValues = ev.data[5];
+        var mode = ev.data[6];
         var chromaScale = chroma.scale(scaleColors).domain(scaleValues).mode('lab');
 
         function mc(coords) {
@@ -110,6 +111,7 @@ module.exports = function (self) {
 
         var points = [];
         var colors = [];
+        var geojsonValues = [];
         for (var i in az) {
             for (var n in prodValues[i]) {
                 //if (prodValues[i][n] != null) {
@@ -127,56 +129,64 @@ module.exports = function (self) {
                         var otherCornerLocs = calcLocs(parseInt(i) + 1, parseInt(theN) + 1);
                         var otherCorner = calcLngLat(otherCornerLocs.xloc, otherCornerLocs.yloc);
 
-                        points.push(
-                            base[0],
-                            base[1],
+                        if (mode == 'mapPlot') {
+                            points.push(
+                                base[0],
+                                base[1],
 
-                            oneUp[0],
-                            oneUp[1],
+                                oneUp[0],
+                                oneUp[1],
 
-                            oneSideways[0],
-                            oneSideways[1],
-                            oneSideways[0],
-                            oneSideways[1],
+                                oneSideways[0],
+                                oneSideways[1],
+                                oneSideways[0],
+                                oneSideways[1],
 
-                            oneUp[0],
-                            oneUp[1],
+                                oneUp[0],
+                                oneUp[1],
 
-                            otherCorner[0],
-                            otherCorner[1],
-                        );
+                                otherCorner[0],
+                                otherCorner[1],
+                            );
 
-                        colors.push(
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n]
-                        )
-                        // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
-                        // var arrayColorAtVal = rgbValToArray(colorAtVal);
-                        // var r = scaleForWebGL(arrayColorAtVal[0]);
-                        // var g = scaleForWebGL(arrayColorAtVal[1]);
-                        // var b = scaleForWebGL(arrayColorAtVal[2]);
-                        // var a = 1;
-                        // colors.push(
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        // )
+                            colors.push(
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n]
+                            )
+                            // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
+                            // var arrayColorAtVal = rgbValToArray(colorAtVal);
+                            // var r = scaleForWebGL(arrayColorAtVal[0]);
+                            // var g = scaleForWebGL(arrayColorAtVal[1]);
+                            // var b = scaleForWebGL(arrayColorAtVal[2]);
+                            // var a = 1;
+                            // colors.push(
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            // )
+                        } else if (mode == 'geojson') {
+                            geojsonValues.push(base[0], base[1], oneUp[0], oneUp[1], otherCorner[0], otherCorner[1], oneSideways[0], oneSideways[1], prodValues[i][n]);
+                        }
                     } catch (e) { }
                 //}
             }
         }
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
-        self.postMessage([
-            new Float32Array(points),
-            new Float32Array(colors)
-        ]);
+        if (mode == 'mapPlot') {
+            self.postMessage([
+                new Float32Array(points),
+                new Float32Array(colors)
+            ]);
+        } else if (mode == 'geojson') {
+            self.postMessage(geojsonValues);
+        }
 
         // var pointsChunks = [];
         // var colorsChunks = [];

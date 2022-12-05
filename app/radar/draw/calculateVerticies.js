@@ -5,6 +5,7 @@ const plotRadarToMap = require('./plotRadarToMap');
 const radarStations = require('../../../resources/radarStations');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
+const setTextField = require('../inspector/setTextField');
 var work = require('webworkify');
 
 function rgbValToArray(rgbString) {
@@ -125,6 +126,7 @@ const dataNames = {
 function calculateVerticies(radarObj, level, options) {
     var start = Date.now();
 
+    var mode = options.mode;
     var product;
     var elevation;
     if (level == 2) {
@@ -240,28 +242,103 @@ function calculateVerticies(radarObj, level, options) {
     */
     var w = work(require('./calculateLngLat.js'));
     w.addEventListener('message', function(ev) {
-        // var currentPointsChunkIter = ev.data[0];
-        // var currentColorsChunkIter = ev.data[1];
-        // var totalChunks = ev.data[2];
-        // verticiesArr = verticiesArr.concat(currentPointsChunkIter);
-        // //console.log(vertices.length)
-        // colorsArr = colorsArr.concat(currentColorsChunkIter);
-        // chunksReturned++;
-        // if (totalChunks == chunksReturned) {
-        //     var points = new Float32Array(verticiesArr);
-        //     var colors = new Float32Array(colorsArr);
-        //     plotRadarToMap(points, colors, product);
-        // }
-        var points = ev.data[0];
-        var colors = ev.data[1];
-        for (var i = 0; i < points.length - 1; i += 2) {
-            var mercCoords = mc([points[i], points[i + 1]])
-            points[i] = mercCoords[0];
-            points[i + 1] = mercCoords[1];
+        if (mode == 'mapPlot') {
+            // var currentPointsChunkIter = ev.data[0];
+            // var currentColorsChunkIter = ev.data[1];
+            // var totalChunks = ev.data[2];
+            // verticiesArr = verticiesArr.concat(currentPointsChunkIter);
+            // //console.log(vertices.length)
+            // colorsArr = colorsArr.concat(currentColorsChunkIter);
+            // chunksReturned++;
+            // if (totalChunks == chunksReturned) {
+            //     var points = new Float32Array(verticiesArr);
+            //     var colors = new Float32Array(colorsArr);
+            //     plotRadarToMap(points, colors, product);
+            // }
+            var points = ev.data[0];
+            var colors = ev.data[1];
+            for (var i = 0; i < points.length - 1; i += 2) {
+                var mercCoords = mc([points[i], points[i + 1]])
+                points[i] = mercCoords[0];
+                points[i + 1] = mercCoords[1];
+            }
+            plotRadarToMap(points, colors, product);
+        } else if (mode == 'geojson') {
+            var returnedDataArr = ev.data;
+
+            var featuresArr = [];
+            function pushPoint(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, value) {
+                featuresArr.push({
+                    "type": "Feature",
+                    "geometry": { "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [lng1, lat1],
+                                [lng2, lat2],
+                                [lng3, lat3],
+                                [lng4, lat4]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "value": value,
+                    }
+                },);
+            }
+
+            for (var i = 0; i < returnedDataArr.length; i += 9) {
+                function x(n) { return returnedDataArr[n] }
+
+                var inspectorVal;
+                var bin = x(i+8);
+                if (product == 'N0S') {
+                    // storm relative velocity tweaks
+                    var stormRelativeVelocityArr = [-50, -36, -26, -20, -10, -1, 0, 10, 20, 26, 36, 50, 64, 999];
+                    inspectorVal = stormRelativeVelocityArr[bin - 2];
+                } else if (product == 'N0C' || product == 'N0X' || product == 'DVL') {
+                    // correlation coefficient || differential reflectivity || vertically integrated liquid
+                    inspectorVal = bin.toFixed(2);
+                } else if (product == 'N0H' || product == 'HHC') {
+                    // hydrometer classification || hybrid hydrometer classification
+                    var hycValues = {
+                        0: 'Below Threshold', // ND
+                        10: 'Biological', // BI
+                        20: 'Ground Clutter', // GC
+                        30: 'Ice Crystals', // IC
+                        40: 'Dry Snow', // DS
+                        50: 'Wet Snow', // WS
+                        60: 'Light-Mod. Rain', // RA
+                        70: 'Heavy Rain', // HR
+                        80: 'Big Drops', // BD
+                        90: 'Graupel', // GR
+                        100: 'Hail / Rain', // HA
+                        110: 'Large Hail', // LH
+                        120: 'Giant Hail', // GH,
+                        130: '130', // ??
+                        140: 'Unknown', // UK
+                        150: 'Range Folded' // RF
+                    }
+                    inspectorVal = hycValues[bin];
+                } else {
+                    inspectorVal = bin;
+                }
+                if (product != 'N0H' && product != 'HHC') {
+                    // hydrometer classification || hybrid hydrometer classification
+                    inspectorVal = `${inspectorVal} ${ut.productUnits[product]}`;
+                }
+
+                pushPoint(x(i), x(i+1), x(i+2), x(i+3), x(i+4), x(i+5), x(i+6), x(i+7), inspectorVal);
+            }
+
+            var geojsonParentTemplate = {
+                "type": "FeatureCollection",
+                "features": featuresArr
+            }
+            //console.log(geojsonParentTemplate);
+            setTextField(geojsonParentTemplate);
         }
-        plotRadarToMap(points, colors, product);
     });
-    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values]); // send the worker a message
+    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
 
     //plotRadarToMap(points, colors, product);
     // var vertexF32 = new Float32Array(points);

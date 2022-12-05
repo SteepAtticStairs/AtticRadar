@@ -3752,6 +3752,7 @@ module.exports = function (self) {
         radarLatLng = ev.data[3];
         var scaleColors = ev.data[4];
         var scaleValues = ev.data[5];
+        var mode = ev.data[6];
         var chromaScale = chroma.scale(scaleColors).domain(scaleValues).mode('lab');
 
         function mc(coords) {
@@ -3787,6 +3788,7 @@ module.exports = function (self) {
 
         var points = [];
         var colors = [];
+        var geojsonValues = [];
         for (var i in az) {
             for (var n in prodValues[i]) {
                 //if (prodValues[i][n] != null) {
@@ -3804,56 +3806,64 @@ module.exports = function (self) {
                         var otherCornerLocs = calcLocs(parseInt(i) + 1, parseInt(theN) + 1);
                         var otherCorner = calcLngLat(otherCornerLocs.xloc, otherCornerLocs.yloc);
 
-                        points.push(
-                            base[0],
-                            base[1],
+                        if (mode == 'mapPlot') {
+                            points.push(
+                                base[0],
+                                base[1],
 
-                            oneUp[0],
-                            oneUp[1],
+                                oneUp[0],
+                                oneUp[1],
 
-                            oneSideways[0],
-                            oneSideways[1],
-                            oneSideways[0],
-                            oneSideways[1],
+                                oneSideways[0],
+                                oneSideways[1],
+                                oneSideways[0],
+                                oneSideways[1],
 
-                            oneUp[0],
-                            oneUp[1],
+                                oneUp[0],
+                                oneUp[1],
 
-                            otherCorner[0],
-                            otherCorner[1],
-                        );
+                                otherCorner[0],
+                                otherCorner[1],
+                            );
 
-                        colors.push(
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n],
-                            prodValues[i][n]
-                        )
-                        // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
-                        // var arrayColorAtVal = rgbValToArray(colorAtVal);
-                        // var r = scaleForWebGL(arrayColorAtVal[0]);
-                        // var g = scaleForWebGL(arrayColorAtVal[1]);
-                        // var b = scaleForWebGL(arrayColorAtVal[2]);
-                        // var a = 1;
-                        // colors.push(
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        //     r, g, b, a,
-                        // )
+                            colors.push(
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n],
+                                prodValues[i][n]
+                            )
+                            // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
+                            // var arrayColorAtVal = rgbValToArray(colorAtVal);
+                            // var r = scaleForWebGL(arrayColorAtVal[0]);
+                            // var g = scaleForWebGL(arrayColorAtVal[1]);
+                            // var b = scaleForWebGL(arrayColorAtVal[2]);
+                            // var a = 1;
+                            // colors.push(
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            //     r, g, b, a,
+                            // )
+                        } else if (mode == 'geojson') {
+                            geojsonValues.push(base[0], base[1], oneUp[0], oneUp[1], otherCorner[0], otherCorner[1], oneSideways[0], oneSideways[1], prodValues[i][n]);
+                        }
                     } catch (e) { }
                 //}
             }
         }
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
-        self.postMessage([
-            new Float32Array(points),
-            new Float32Array(colors)
-        ]);
+        if (mode == 'mapPlot') {
+            self.postMessage([
+                new Float32Array(points),
+                new Float32Array(colors)
+            ]);
+        } else if (mode == 'geojson') {
+            self.postMessage(geojsonValues);
+        }
 
         // var pointsChunks = [];
         // var colorsChunks = [];
@@ -4084,6 +4094,7 @@ const plotRadarToMap = require('./plotRadarToMap');
 const radarStations = require('../../../resources/radarStations');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
+const setTextField = require('../inspector/setTextField');
 var work = require('webworkify');
 
 function rgbValToArray(rgbString) {
@@ -4204,6 +4215,7 @@ const dataNames = {
 function calculateVerticies(radarObj, level, options) {
     var start = Date.now();
 
+    var mode = options.mode;
     var product;
     var elevation;
     if (level == 2) {
@@ -4319,28 +4331,103 @@ function calculateVerticies(radarObj, level, options) {
     */
     var w = work(require('./calculateLngLat.js'));
     w.addEventListener('message', function(ev) {
-        // var currentPointsChunkIter = ev.data[0];
-        // var currentColorsChunkIter = ev.data[1];
-        // var totalChunks = ev.data[2];
-        // verticiesArr = verticiesArr.concat(currentPointsChunkIter);
-        // //console.log(vertices.length)
-        // colorsArr = colorsArr.concat(currentColorsChunkIter);
-        // chunksReturned++;
-        // if (totalChunks == chunksReturned) {
-        //     var points = new Float32Array(verticiesArr);
-        //     var colors = new Float32Array(colorsArr);
-        //     plotRadarToMap(points, colors, product);
-        // }
-        var points = ev.data[0];
-        var colors = ev.data[1];
-        for (var i = 0; i < points.length - 1; i += 2) {
-            var mercCoords = mc([points[i], points[i + 1]])
-            points[i] = mercCoords[0];
-            points[i + 1] = mercCoords[1];
+        if (mode == 'mapPlot') {
+            // var currentPointsChunkIter = ev.data[0];
+            // var currentColorsChunkIter = ev.data[1];
+            // var totalChunks = ev.data[2];
+            // verticiesArr = verticiesArr.concat(currentPointsChunkIter);
+            // //console.log(vertices.length)
+            // colorsArr = colorsArr.concat(currentColorsChunkIter);
+            // chunksReturned++;
+            // if (totalChunks == chunksReturned) {
+            //     var points = new Float32Array(verticiesArr);
+            //     var colors = new Float32Array(colorsArr);
+            //     plotRadarToMap(points, colors, product);
+            // }
+            var points = ev.data[0];
+            var colors = ev.data[1];
+            for (var i = 0; i < points.length - 1; i += 2) {
+                var mercCoords = mc([points[i], points[i + 1]])
+                points[i] = mercCoords[0];
+                points[i + 1] = mercCoords[1];
+            }
+            plotRadarToMap(points, colors, product);
+        } else if (mode == 'geojson') {
+            var returnedDataArr = ev.data;
+
+            var featuresArr = [];
+            function pushPoint(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, value) {
+                featuresArr.push({
+                    "type": "Feature",
+                    "geometry": { "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [lng1, lat1],
+                                [lng2, lat2],
+                                [lng3, lat3],
+                                [lng4, lat4]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "value": value,
+                    }
+                },);
+            }
+
+            for (var i = 0; i < returnedDataArr.length; i += 9) {
+                function x(n) { return returnedDataArr[n] }
+
+                var inspectorVal;
+                var bin = x(i+8);
+                if (product == 'N0S') {
+                    // storm relative velocity tweaks
+                    var stormRelativeVelocityArr = [-50, -36, -26, -20, -10, -1, 0, 10, 20, 26, 36, 50, 64, 999];
+                    inspectorVal = stormRelativeVelocityArr[bin - 2];
+                } else if (product == 'N0C' || product == 'N0X' || product == 'DVL') {
+                    // correlation coefficient || differential reflectivity || vertically integrated liquid
+                    inspectorVal = bin.toFixed(2);
+                } else if (product == 'N0H' || product == 'HHC') {
+                    // hydrometer classification || hybrid hydrometer classification
+                    var hycValues = {
+                        0: 'Below Threshold', // ND
+                        10: 'Biological', // BI
+                        20: 'Ground Clutter', // GC
+                        30: 'Ice Crystals', // IC
+                        40: 'Dry Snow', // DS
+                        50: 'Wet Snow', // WS
+                        60: 'Light-Mod. Rain', // RA
+                        70: 'Heavy Rain', // HR
+                        80: 'Big Drops', // BD
+                        90: 'Graupel', // GR
+                        100: 'Hail / Rain', // HA
+                        110: 'Large Hail', // LH
+                        120: 'Giant Hail', // GH,
+                        130: '130', // ??
+                        140: 'Unknown', // UK
+                        150: 'Range Folded' // RF
+                    }
+                    inspectorVal = hycValues[bin];
+                } else {
+                    inspectorVal = bin;
+                }
+                if (product != 'N0H' && product != 'HHC') {
+                    // hydrometer classification || hybrid hydrometer classification
+                    inspectorVal = `${inspectorVal} ${ut.productUnits[product]}`;
+                }
+
+                pushPoint(x(i), x(i+1), x(i+2), x(i+3), x(i+4), x(i+5), x(i+6), x(i+7), inspectorVal);
+            }
+
+            var geojsonParentTemplate = {
+                "type": "FeatureCollection",
+                "features": featuresArr
+            }
+            //console.log(geojsonParentTemplate);
+            setTextField(geojsonParentTemplate);
         }
-        plotRadarToMap(points, colors, product);
     });
-    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values]); // send the worker a message
+    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
 
     //plotRadarToMap(points, colors, product);
     // var vertexF32 = new Float32Array(points);
@@ -4351,7 +4438,7 @@ function calculateVerticies(radarObj, level, options) {
 }
 
 module.exports = calculateVerticies;
-},{"../../../resources/radarStations":250,"../../../resources/stationAbbreviations":251,"../level3/maxRanges":50,"../products/productColors":84,"../utils":87,"./calculateLngLat.js":29,"./plotRadarToMap":35,"chroma-js":194,"webworkify":249}],32:[function(require,module,exports){
+},{"../../../resources/radarStations":250,"../../../resources/stationAbbreviations":251,"../inspector/setTextField":41,"../level3/maxRanges":50,"../products/productColors":84,"../utils":87,"./calculateLngLat.js":29,"./plotRadarToMap":35,"chroma-js":194,"webworkify":249}],32:[function(require,module,exports){
 const ut = require('../utils');
 const PNG = require('pngjs').PNG;
 const chroma = require('chroma-js');
@@ -5025,6 +5112,7 @@ const getValFromColor = require('./getGradientValue');
 const ut = require('../utils');
 const createMenuOption = require('../menu/createMenuOption');
 const generateGeoJSON = require('./generateGeoJSON');
+const calculateVerticies = require('../draw/calculateVerticies');
 
 // https://stackoverflow.com/a/73854666/18758797
 function getMouseColor(e) {
@@ -5088,12 +5176,15 @@ createMenuOption({
         map.on("move", getMouseColor);
         $('.colorPicker').show();
 
-        var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
-        var previousCalcPolygonsData = $('#dataDiv').data('previousCalcPolygonsData');
-        if (previousCalcPolygonsData != calcPolygonsData) {
-            $('#dataDiv').data('previousCalcPolygonsData', calcPolygonsData);
-            generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
-        }
+        calculateVerticies(window.l3rad, 3, {
+            'mode': 'geojson'
+        });
+        // var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
+        // var previousCalcPolygonsData = $('#dataDiv').data('previousCalcPolygonsData');
+        // if (previousCalcPolygonsData != calcPolygonsData) {
+        //     $('#dataDiv').data('previousCalcPolygonsData', calcPolygonsData);
+        //     generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
+        // }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
@@ -5104,7 +5195,7 @@ createMenuOption({
 })
 
 module.exports = getMouseColor;
-},{"../map/map":64,"../menu/createMenuOption":68,"../menu/createOffCanvasItem":69,"../utils":87,"./generateGeoJSON":39,"./getGradientValue":40}],38:[function(require,module,exports){
+},{"../draw/calculateVerticies":31,"../map/map":64,"../menu/createMenuOption":68,"../menu/createOffCanvasItem":69,"../utils":87,"./generateGeoJSON":39,"./getGradientValue":40}],38:[function(require,module,exports){
 /*
 * This file is the entry point for the data inspector tool.
 */
@@ -5806,7 +5897,8 @@ function l2plot(l2rad, product, elevation) {
 
     calculateVerticies(l2rad, 2, {
         'product': product,
-        'elevation': elevation
+        'elevation': elevation,
+        'mode': 'mapPlot'
     });
 }
 
@@ -6199,7 +6291,10 @@ module.exports = getLevel3FileTime;
 const calculateVerticies = require('../draw/calculateVerticies');
 
 function l3plot(l3rad) {
-    calculateVerticies(l3rad, 3, {});
+    window.l3rad = l3rad;
+    calculateVerticies(l3rad, 3, {
+        'mode': 'mapPlot'
+    });
 }
 
 module.exports = l3plot;

@@ -67,7 +67,8 @@ function l2plot(l2rad, product, elevation) {
 
     calculateVerticies(l2rad, 2, {
         'product': product,
-        'elevation': elevation
+        'elevation': elevation,
+        'mode': 'mapPlot'
     });
 }
 
