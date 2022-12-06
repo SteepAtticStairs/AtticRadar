@@ -695,7 +695,7 @@ const productColors = {
         ],
         "divider": ""
     },
-    SW: {
+    'SW ': {
         "colors-testing": [
             0
         ],

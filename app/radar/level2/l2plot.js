@@ -64,6 +64,8 @@ function correctRadarObject(l2rad) {
 function l2plot(l2rad, product, elevation) {
     l2rad = correctRadarObject(l2rad);
     //l2rad.header.ICAO = 'KMLB';
+    window.l2rad = l2rad;
+    window.l2radOptions = [product, elevation];
 
     calculateVerticies(l2rad, 2, {
         'product': product,

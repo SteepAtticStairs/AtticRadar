@@ -68,9 +68,25 @@ createMenuOption({
         map.on("move", getMouseColor);
         $('.colorPicker').show();
 
-        calculateVerticies(window.l3rad, 3, {
-            'mode': 'geojson'
-        });
+        if (window.l3rad != undefined) {
+            if (window.prevl3rad != window.l3rad) {
+                window.prevl3rad = window.l3rad;
+                calculateVerticies(window.l3rad, 3, {
+                    'mode': 'geojson'
+                });
+            }
+        } else if (window.l2rad != undefined) {
+            if (window.prevl2radOpt != window.l2radOptions) {
+                window.prevl2radOpt = window.l2radOptions;
+
+                var opt = window.l2radOptions;
+                calculateVerticies(window.l2rad, 2, {
+                    'product': opt[0],
+                    'elevation': opt[1],
+                    'mode': 'geojson'
+                });
+            }
+        }
         // var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
         // var previousCalcPolygonsData = $('#dataDiv').data('previousCalcPolygonsData');
         // if (previousCalcPolygonsData != calcPolygonsData) {
