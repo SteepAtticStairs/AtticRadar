@@ -3742,6 +3742,38 @@ function calcLngLat(x, y) {
     ]
 }
 
+// this formula was provided by ChatGPT. crazy.
+function fwdAzimuthProj(az, distance) {
+    // convert distance from meters to kilometers
+    distance = distance * 1000;
+
+    // Define the starting latitude and longitude
+    const lat1 = radarLatLng.lat; // 45.0
+    const lon1 = radarLatLng.lng; // -75.0
+
+    // Convert the azimuth and starting coordinates to radians
+    const azRad = az * (Math.PI / 180);
+    const lat1Rad = lat1 * (Math.PI / 180);
+    const lon1Rad = lon1 * (Math.PI / 180);
+
+    // the earth radius in meters
+    const earthRadius = 6378137.0;
+
+    // Calculate the destination latitude and longitude in radians
+    const lat2Rad = Math.asin(Math.sin(lat1Rad) * Math.cos(distance / earthRadius) + Math.cos(lat1Rad) * Math.sin(distance / earthRadius) * Math.cos(azRad));
+    const lon2Rad = lon1Rad + Math.atan2(Math.sin(azRad) * Math.sin(distance / earthRadius) * Math.cos(lat1Rad), Math.cos(distance / earthRadius) - Math.sin(lat1Rad) * Math.sin(lat2Rad));
+
+    // Convert the destination latitude and longitude from radians to degrees
+    const lat2 = lat2Rad * (180 / Math.PI);
+    const lon2 = lon2Rad * (180 / Math.PI);
+
+    //return [lon2, lat2]
+    return [
+        parseFloat(lon2.toFixed(decimalPlaceTrim)),
+        parseFloat(lat2.toFixed(decimalPlaceTrim))
+    ]
+}
+
 module.exports = function (self) {
     self.addEventListener('message', function(ev) {
         var start = Date.now();
@@ -3778,6 +3810,13 @@ module.exports = function (self) {
             }
         }
 
+        function getAzDistance(i, n) {
+            return {
+                'azimuth': az[i],
+                'distance': prod_range[n]
+            }
+        }
+
         var goodIndexes = [];
         for (var i in prodValues) {
             var goodIndexesArr = [];
@@ -3798,17 +3837,17 @@ module.exports = function (self) {
                 //if (prodValues[i][n] != null) {
                     try {
                         var theN = goodIndexes[i][n];
-                        var baseLocs = calcLocs(i, theN);
-                        var base = calcLngLat(baseLocs.xloc, baseLocs.yloc);
+                        var baseLocs = getAzDistance(i, theN);
+                        var base = fwdAzimuthProj(baseLocs.azimuth, baseLocs.distance);
 
-                        var oneUpLocs = calcLocs(i, parseInt(theN) + 1);
-                        var oneUp = calcLngLat(oneUpLocs.xloc, oneUpLocs.yloc);
+                        var oneUpLocs = getAzDistance(i, parseInt(theN) + 1);
+                        var oneUp = fwdAzimuthProj(oneUpLocs.azimuth, oneUpLocs.distance);
 
-                        var oneSidewaysLocs = calcLocs(parseInt(i) + 1, theN);
-                        var oneSideways = calcLngLat(oneSidewaysLocs.xloc, oneSidewaysLocs.yloc);
+                        var oneSidewaysLocs = getAzDistance(parseInt(i) + 1, theN);
+                        var oneSideways = fwdAzimuthProj(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
 
-                        var otherCornerLocs = calcLocs(parseInt(i) + 1, parseInt(theN) + 1);
-                        var otherCorner = calcLngLat(otherCornerLocs.xloc, otherCornerLocs.yloc);
+                        var otherCornerLocs = getAzDistance(parseInt(i) + 1, parseInt(theN) + 1);
+                        var otherCorner = fwdAzimuthProj(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
                             points.push(
