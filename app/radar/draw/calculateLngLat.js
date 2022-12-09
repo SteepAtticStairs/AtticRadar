@@ -47,13 +47,13 @@ function deg2rad(angle) { return angle * (Math.PI / 180) }
 var radarLatLng;
 const decimalPlaceTrim = 5;
 
-function calcLngLat(x, y) {
-    var inv = 180.0 / Math.PI;
-    var re = 6371;
-    var radarLat = deg2rad(radarLatLng.lat); // 35.33305740356445
-    var radarLon = deg2rad(radarLatLng.lng); // -97.27748107910156
+var inv = 180 / Math.PI;
+var re = 6371;
+var radarLat;
+var radarLon;
 
-    var rho = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0));
+function calcLngLat(x, y) {
+    var rho = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var c = rho / re;
     var lat = Math.asin(Math.cos(c) * Math.sin(radarLat) + (y * Math.sin(c) * Math.cos(radarLat)) / (rho)) * inv;
     var lon = (radarLon + Math.atan((x * Math.sin(c)) / (rho * Math.cos(radarLat) * Math.cos(c) - y * Math.sin(radarLat) * Math.sin(c)))) * inv;
@@ -72,7 +72,11 @@ module.exports = function (self) {
         var prod_range = ev.data[0];
         var az = ev.data[1];
         var prodValues = ev.data[2];
+
         radarLatLng = ev.data[3];
+        radarLat = deg2rad(radarLatLng.lat); // 35.33305740356445
+        radarLon = deg2rad(radarLatLng.lng); // -97.27748107910156
+
         var scaleColors = ev.data[4];
         var scaleValues = ev.data[5];
         var mode = ev.data[6];
