@@ -6,6 +6,7 @@ const radarStations = require('../../../resources/radarStations');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
 const setTextField = require('../inspector/setTextField');
+const calculateLngLat = require('./calculateLngLat');
 var work = require('webworkify');
 
 function rgbValToArray(rgbString) {
@@ -240,8 +241,9 @@ function calculateVerticies(radarObj, level, options) {
     * We are using a web worker for this because the heavy calculations
     * that need to run will crash the website on a mobile browser.
     */
-    var w = work(require('./calculateLngLat.js'));
-    w.addEventListener('message', function(ev) {
+    // var w = work(require('./calculateLngLat.js'));
+    // w.addEventListener('message', function(ev) {
+    calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]}, function (ev) {
         if (mode == 'mapPlot') {
             // var currentPointsChunkIter = ev.data[0];
             // var currentColorsChunkIter = ev.data[1];
@@ -338,7 +340,7 @@ function calculateVerticies(radarObj, level, options) {
             setTextField(geojsonParentTemplate);
         }
     });
-    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
+    // w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
 
     //plotRadarToMap(points, colors, product);
     // var vertexF32 = new Float32Array(points);

@@ -3829,8 +3829,9 @@ function destVincenty(az, distance) {
     return result;
 }
 
-module.exports = function (self) {
-    self.addEventListener('message', function(ev) {
+// module.exports = function (self) {
+//     self.addEventListener('message', function(ev) {
+    function calculateLngLat(ev, cb) {
         var start = Date.now();
 
         var prod_range = ev.data[0];
@@ -3957,12 +3958,14 @@ module.exports = function (self) {
         }
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
         if (mode == 'mapPlot') {
-            self.postMessage([
+            // self.postMessage
+            cb({'data': [
                 new Float32Array(points),
                 new Float32Array(colors)
-            ]);
+            ]});
         } else if (mode == 'geojson') {
-            self.postMessage(geojsonValues);
+            // self.postMessage
+            cb({'data': geojsonValues});
         }
 
         // var pointsChunks = [];
@@ -3988,8 +3991,11 @@ module.exports = function (self) {
         // //     new Float32Array(points),
         // //     new Float32Array(colors)
         // // ]);
-    })
-};
+    }
+//     })
+// };
+
+module.exports = calculateLngLat;
 },{"../utils":87,"chroma-js":194}],30:[function(require,module,exports){
 const ut = require('../utils');
 const chroma = require('chroma-js');
@@ -4195,6 +4201,7 @@ const radarStations = require('../../../resources/radarStations');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
 const setTextField = require('../inspector/setTextField');
+const calculateLngLat = require('./calculateLngLat');
 var work = require('webworkify');
 
 function rgbValToArray(rgbString) {
@@ -4429,8 +4436,9 @@ function calculateVerticies(radarObj, level, options) {
     * We are using a web worker for this because the heavy calculations
     * that need to run will crash the website on a mobile browser.
     */
-    var w = work(require('./calculateLngLat.js'));
-    w.addEventListener('message', function(ev) {
+    // var w = work(require('./calculateLngLat.js'));
+    // w.addEventListener('message', function(ev) {
+    calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]}, function (ev) {
         if (mode == 'mapPlot') {
             // var currentPointsChunkIter = ev.data[0];
             // var currentColorsChunkIter = ev.data[1];
@@ -4527,7 +4535,7 @@ function calculateVerticies(radarObj, level, options) {
             setTextField(geojsonParentTemplate);
         }
     });
-    w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
+    // w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
 
     //plotRadarToMap(points, colors, product);
     // var vertexF32 = new Float32Array(points);
@@ -4538,7 +4546,7 @@ function calculateVerticies(radarObj, level, options) {
 }
 
 module.exports = calculateVerticies;
-},{"../../../resources/radarStations":250,"../../../resources/stationAbbreviations":251,"../inspector/setTextField":41,"../level3/maxRanges":50,"../products/productColors":84,"../utils":87,"./calculateLngLat.js":29,"./plotRadarToMap":35,"chroma-js":194,"webworkify":249}],32:[function(require,module,exports){
+},{"../../../resources/radarStations":250,"../../../resources/stationAbbreviations":251,"../inspector/setTextField":41,"../level3/maxRanges":50,"../products/productColors":84,"../utils":87,"./calculateLngLat":29,"./plotRadarToMap":35,"chroma-js":194,"webworkify":249}],32:[function(require,module,exports){
 const ut = require('../utils');
 const PNG = require('pngjs').PNG;
 const chroma = require('chroma-js');

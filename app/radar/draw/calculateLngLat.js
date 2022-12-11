@@ -152,8 +152,9 @@ function destVincenty(az, distance) {
     return result;
 }
 
-module.exports = function (self) {
-    self.addEventListener('message', function(ev) {
+// module.exports = function (self) {
+//     self.addEventListener('message', function(ev) {
+    function calculateLngLat(ev, cb) {
         var start = Date.now();
 
         var prod_range = ev.data[0];
@@ -280,12 +281,14 @@ module.exports = function (self) {
         }
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
         if (mode == 'mapPlot') {
-            self.postMessage([
+            // self.postMessage
+            cb({'data': [
                 new Float32Array(points),
                 new Float32Array(colors)
-            ]);
+            ]});
         } else if (mode == 'geojson') {
-            self.postMessage(geojsonValues);
+            // self.postMessage
+            cb({'data': geojsonValues});
         }
 
         // var pointsChunks = [];
@@ -311,5 +314,8 @@ module.exports = function (self) {
         // //     new Float32Array(points),
         // //     new Float32Array(colors)
         // // ]);
-    })
-};
+    }
+//     })
+// };
+
+module.exports = calculateLngLat;
