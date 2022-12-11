@@ -3774,6 +3774,61 @@ function fwdAzimuthProj(az, distance) {
     ]
 }
 
+// https://github.com/TankofVines/node-vincenty
+function destVincenty(az, distance) {
+    function toRad(degree) { return degree * (Math.PI / 180) }
+    function toDeg(radian) { return radian * (180 / Math.PI) }
+
+    // convert azimuth to bearing
+    var brng = az;
+    // convert distance from meters to kilometers
+    var dist = distance * 1000;
+    var lat1 = radarLatLng.lat;
+    var lon1 = radarLatLng.lng;
+
+    var a = 6378137, b = 6356752.3142, f = 1 / 298.257223563;  // WGS-84 ellipsiod
+    var s = dist;
+    var alpha1 = toRad(brng);
+    var sinAlpha1 = Math.sin(alpha1);
+    var cosAlpha1 = Math.cos(alpha1);
+
+    var tanU1 = (1 - f) * Math.tan(toRad(lat1));
+    var cosU1 = 1 / Math.sqrt((1 + tanU1 * tanU1)), sinU1 = tanU1 * cosU1;
+    var sigma1 = Math.atan2(tanU1, cosAlpha1);
+    var sinAlpha = cosU1 * sinAlpha1;
+    var cosSqAlpha = 1 - sinAlpha * sinAlpha;
+    var uSq = cosSqAlpha * (a * a - b * b) / (b * b);
+    var A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
+    var B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
+
+    var sigma = s / (b * A), sigmaP = 2 * Math.PI;
+    while (Math.abs(sigma - sigmaP) > 1e-12) {
+        var cos2SigmaM = Math.cos(2 * sigma1 + sigma);
+        var sinSigma = Math.sin(sigma);
+        var cosSigma = Math.cos(sigma);
+        var deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
+            B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
+        sigmaP = sigma;
+        sigma = s / (b * A) + deltaSigma;
+    }
+
+    var tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;
+    var lat2 = Math.atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,
+        (1 - f) * Math.sqrt(sinAlpha * sinAlpha + tmp * tmp));
+    var lambda = Math.atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);
+    var C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
+    var L = lambda - (1 - C) * f * sinAlpha *
+        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+    var lon2 = (toRad(lon1) + L + 3 * Math.PI) % (2 * Math.PI) - Math.PI;  // normalise to -180...+180
+
+    var revAz = Math.atan2(sinAlpha, -tmp);  // final bearing, if required
+
+    //var result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };
+    var result = [toDeg(lon2), toDeg(lat2)];
+
+    return result;
+}
+
 module.exports = function (self) {
     self.addEventListener('message', function(ev) {
         var start = Date.now();
@@ -3838,16 +3893,16 @@ module.exports = function (self) {
                     try {
                         var theN = goodIndexes[i][n];
                         var baseLocs = getAzDistance(i, theN);
-                        var base = fwdAzimuthProj(baseLocs.azimuth, baseLocs.distance);
+                        var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
 
                         var oneUpLocs = getAzDistance(i, parseInt(theN) + 1);
-                        var oneUp = fwdAzimuthProj(oneUpLocs.azimuth, oneUpLocs.distance);
+                        var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
 
                         var oneSidewaysLocs = getAzDistance(parseInt(i) + 1, theN);
-                        var oneSideways = fwdAzimuthProj(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
+                        var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
 
                         var otherCornerLocs = getAzDistance(parseInt(i) + 1, parseInt(theN) + 1);
-                        var otherCorner = fwdAzimuthProj(otherCornerLocs.azimuth, otherCornerLocs.distance);
+                        var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
                             points.push(
@@ -3894,7 +3949,9 @@ module.exports = function (self) {
                         } else if (mode == 'geojson') {
                             geojsonValues.push(base[0], base[1], oneUp[0], oneUp[1], otherCorner[0], otherCorner[1], oneSideways[0], oneSideways[1], prodValues[i][n]);
                         }
-                    } catch (e) { }
+                    } catch (e) {
+                        // console.warn(e)
+                    }
                 //}
             }
         }
