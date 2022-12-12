@@ -3,6 +3,9 @@
 * https://allorigins.win/
 */
 // https://attic-server.herokuapp.com/proxy/index.php/?
+
+const map = require('./map/map');
+
 // https://php-cors-proxy.herokuapp.com/?
 const phpProxy = 'https://attic-server.herokuapp.com/proxy/index.php/?'; //https://api.allorigins.win/raw?url=';
 const phpProxy2 = 'https://attic-server.herokuapp.com/proxy/index.php/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
@@ -728,6 +731,7 @@ function setMapMargin(topOrBottom, value) {
         $('#colorPicker').css('bottom', value);
         $('#colorPickerText').css('bottom', value - 40);
     }
+    map.resize();
 
     // $('#colorPicker #colorPickerText').position({
     //     my: 'center',

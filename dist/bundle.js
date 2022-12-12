@@ -7092,7 +7092,9 @@ function getLatestL3(station, product, index, callback, date) {
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
         fullURL = ut.preventFileCaching(fullURL);
         console.log(fullURL)
-        $.get(ut.phpProxy + fullURL, function (data) {
+        fetch(ut.phpProxy + fullURL, {cache: 'no-store'}).then(response => response.text())
+        .then(function(data) {
+        //$.get(ut.phpProxy + fullURL, function (data) {
             try {
                 var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
                 dataToWorkWith = JSON.parse(dataToWorkWith)
@@ -10837,6 +10839,9 @@ module.exports = radarStationInfo;
 * https://allorigins.win/
 */
 // https://attic-server.herokuapp.com/proxy/index.php/?
+
+const map = require('./map/map');
+
 // https://php-cors-proxy.herokuapp.com/?
 const phpProxy = 'https://attic-server.herokuapp.com/proxy/index.php/?'; //https://api.allorigins.win/raw?url=';
 const phpProxy2 = 'https://attic-server.herokuapp.com/proxy/index.php/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
@@ -11562,6 +11567,7 @@ function setMapMargin(topOrBottom, value) {
         $('#colorPicker').css('bottom', value);
         $('#colorPickerText').css('bottom', value - 40);
     }
+    map.resize();
 
     // $('#colorPicker #colorPickerText').position({
     //     my: 'center',

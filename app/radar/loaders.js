@@ -151,7 +151,9 @@ function getLatestL3(station, product, index, callback, date) {
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
         fullURL = ut.preventFileCaching(fullURL);
         console.log(fullURL)
-        $.get(ut.phpProxy + fullURL, function (data) {
+        fetch(ut.phpProxy + fullURL, {cache: 'no-store'}).then(response => response.text())
+        .then(function(data) {
+        //$.get(ut.phpProxy + fullURL, function (data) {
             try {
                 var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
                 dataToWorkWith = JSON.parse(dataToWorkWith)
