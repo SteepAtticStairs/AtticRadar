@@ -1,4 +1,4 @@
-const calculateVerticies = require('../draw/calculateVerticies');
+const calculateVerticies = require('../draw/calculateVertices');
 
 function l3plot(l3rad) {
     window.l3rad = l3rad;

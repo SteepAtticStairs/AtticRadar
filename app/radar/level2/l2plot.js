@@ -1,4 +1,4 @@
-const calculateVerticies = require('../draw/calculateVerticies');
+const calculateVerticies = require('../draw/calculateVertices');
 
 const filterProduct = (data, product) => data.map((header) => {
 	// get correct data

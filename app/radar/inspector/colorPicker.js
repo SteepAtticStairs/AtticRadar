@@ -4,7 +4,7 @@ const getValFromColor = require('./getGradientValue');
 const ut = require('../utils');
 const createMenuOption = require('../menu/createMenuOption');
 const generateGeoJSON = require('./generateGeoJSON');
-const calculateVerticies = require('../draw/calculateVerticies');
+const calculateVerticies = require('../draw/calculateVertices');
 
 // https://stackoverflow.com/a/73854666/18758797
 function getMouseColor(e) {

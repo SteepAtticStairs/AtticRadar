@@ -4224,8 +4224,8 @@ function npDiff(arr) {
         i = parseInt(i);
         var theDiff = arr[i + 1] - arr[i];
         if (!Number.isNaN(theDiff)) {
-            if (theDiff > 180) { theDiff -= 360 }
-            if (theDiff < -180) { theDiff += 360 }
+            // if (theDiff > 180) { theDiff -= 360 }
+            // if (theDiff < -180) { theDiff += 360 }
             returnArr.push(theDiff);
         }
     }
@@ -4334,33 +4334,51 @@ function calculateVerticies(radarObj, level, options) {
         if (Array.isArray(product)) { product = product[0] }
     }
 
+    /*
+    * Create an array holding all of the azimuth values
+    */
     var az = [];
     if (level == 2) {
         for (var i in radarObj.data[elevation]) { az.push(radarObj.data[elevation][i].record.azimuth) }
     } else if (level == 3) {
         for (var i in radarObj.radialPackets[0].radials) { az.push(radarObj.radialPackets[0].radials[i].startAngle) }
     }
-    az.push(az[0]);
+    if (level == 3) { az.push(az[0]) }
 
+    /*
+    * Create an array holding all of the gate values
+    */
     var prodValues = [];
     if (level == 2) {
         for (var i in radarObj.data[elevation]) { prodValues.push(radarObj.data[elevation][i].record[dataNames[product]].moment_data) }
     } else if (level == 3) {
         for (var i in radarObj.radialPackets[0].radials) { prodValues.push(radarObj.radialPackets[0].radials[i].bins) }
     }
-    prodValues.push(prodValues[0]);
+    if (level == 3) { prodValues.push(prodValues[0]) }
 
-    // var diff = npDiff(az);
-    // var avg_spacing = mean(diff);
+    /*
+    * Perform some adjustments on the azimuth values
+    */
+    if (level == 2) {
+        var diff = npDiff(az);
+        var crossed;
+        for (var i in diff) { if (diff[i] < -180) { crossed = parseInt(i) } }
+        diff[crossed] += 360;
+        var avg_spacing = mean(diff);
 
-    // var rL = removeLast(az);
-    // var rF = removeFirst(az);
+        var rL = removeLast(az);
+        var rF = removeFirst(az);
 
-    // az = [];
-    // for (var i in rL) { az.push((rL[i] + rF[i]) / 2) }
-    // az.unshift(az[0] - avg_spacing);
-    // az.push(az[az.length - 1] + avg_spacing);
+        az = [];
+        for (var i in rL) { az.push((rL[i] + rF[i]) / 2) }
+        az[crossed] += 180;
+        az.unshift(az[0] - avg_spacing);
+        az.push(az[az.length - 1] + avg_spacing);
+    }
 
+    /*
+    * Calculate the ranges (distances from radar) for each gate
+    */
     var prod_range;
     if (level == 2) {
         var prod_hdr = radarObj.data[elevation][0].record[dataNames[product]];
@@ -4404,27 +4422,6 @@ function calculateVerticies(radarObj, level, options) {
     var colorData = productColors[product];
     var values = [...colorData.values];
     values = ut.scaleValues(values, product);
-    var chromaScale = chroma.scale(colorData.colors).domain(values).mode('lab');
-    //console.log(chromaScaleToRgbString(chromaScale(10)))
-    // console.log(values)
-
-    // var radarLat = radians(radarLat); // radians(oEvent.data[2]);
-    // var radarLon = radians(radarLon); // radians(oEvent.data[3]);
-    // var inv = 180.0/3.141592654;
-    // var re = 6371000.0;
-    // var phi = radians(phi)//radians(oEvent.data[1]);
-    // var h0 = 0.0;
-
-    // var mathaz = radians(90.0 - az);
-    // var h = Math.sqrt(Math.pow(range,2.0)+Math.pow(((4./3.)*re+h0),2.0)+2.*range*((4./3.)*re+h0)*Math.sin(phi))-(4./3.)*re;
-    // var ca = Math.acos((Math.pow(range,2.0)-Math.pow(re,2.0)-Math.pow(re+h,2.0))/(-2.0*re*(re+h)));
-    // var xcart = (ca*re)*Math.cos(mathaz);
-    // var ycart = (ca*re)*Math.sin(mathaz);
-    // //convert to latitude longitude
-    // var rho = Math.sqrt(Math.pow(xcart,2.0)+Math.pow(ycart,2.0));
-    // var c = rho/re;
-    // var lat = Math.asin(Math.cos(c)*Math.sin(radarLat)+(ycart*Math.sin(c)*Math.cos(radarLat))/(rho))*inv;
-    // lon = (radarLon + Math.atan((xcart*Math.sin(c))/(rho*Math.cos(radarLat)*Math.cos(c)-ycart*Math.sin(radarLat)*Math.sin(c))))*inv;
 
     var radarLatLng = getRadarLatLng(radarObj, level);
 
@@ -5220,7 +5217,7 @@ const getValFromColor = require('./getGradientValue');
 const ut = require('../utils');
 const createMenuOption = require('../menu/createMenuOption');
 const generateGeoJSON = require('./generateGeoJSON');
-const calculateVerticies = require('../draw/calculateVerticies');
+const calculateVerticies = require('../draw/calculateVertices');
 
 // https://stackoverflow.com/a/73854666/18758797
 function getMouseColor(e) {
@@ -5319,7 +5316,7 @@ createMenuOption({
 })
 
 module.exports = getMouseColor;
-},{"../draw/calculateVerticies":31,"../map/map":64,"../menu/createMenuOption":68,"../menu/createOffCanvasItem":69,"../utils":87,"./generateGeoJSON":39,"./getGradientValue":40}],38:[function(require,module,exports){
+},{"../draw/calculateVertices":31,"../map/map":64,"../menu/createMenuOption":68,"../menu/createOffCanvasItem":69,"../utils":87,"./generateGeoJSON":39,"./getGradientValue":40}],38:[function(require,module,exports){
 /*
 * This file is the entry point for the data inspector tool.
 */
@@ -5952,7 +5949,7 @@ function getLevel2FileTime(l2rad) {
 
 module.exports = getLevel2FileTime;
 },{"../utils":87,"luxon":199}],44:[function(require,module,exports){
-const calculateVerticies = require('../draw/calculateVerticies');
+const calculateVerticies = require('../draw/calculateVertices');
 
 const filterProduct = (data, product) => data.map((header) => {
 	// get correct data
@@ -6029,7 +6026,7 @@ function l2plot(l2rad, product, elevation) {
 }
 
 module.exports = l2plot;
-},{"../draw/calculateVerticies":31}],45:[function(require,module,exports){
+},{"../draw/calculateVertices":31}],45:[function(require,module,exports){
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
@@ -6414,7 +6411,7 @@ function getLevel3FileTime(l3rad) {
 
 module.exports = getLevel3FileTime;
 },{"../utils":87,"luxon":199}],48:[function(require,module,exports){
-const calculateVerticies = require('../draw/calculateVerticies');
+const calculateVerticies = require('../draw/calculateVertices');
 
 function l3plot(l3rad) {
     window.l3rad = l3rad;
@@ -6424,7 +6421,7 @@ function l3plot(l3rad) {
 }
 
 module.exports = l3plot;
-},{"../draw/calculateVerticies":31}],49:[function(require,module,exports){
+},{"../draw/calculateVertices":31}],49:[function(require,module,exports){
 const l3parse = require('../../../lib/nexrad-level-3-data/src');
 //const l3plot = require('../level3/draw');
 const l3plot = require('./l3plot');
