@@ -3786,7 +3786,16 @@ function destVincenty(az, distance) {
     var lat1 = radarLatLng.lat;
     var lon1 = radarLatLng.lng;
 
-    var a = 6378137, b = 6356752.3142, f = 1 / 298.257223563;  // WGS-84 ellipsiod
+    /*
+    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)
+    */
+    // length of semi-major axis of the ellipsoid (radius at equator) - meters
+    var a = 6378137;
+    // flattening of the ellipsoid
+    var f = 1 / 298.257223563; // (a − b) / a
+    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters
+    var b = 6356752.3142; // (1 − ƒ) * a
+
     var s = dist;
     var alpha1 = toRad(brng);
     var sinAlpha1 = Math.sin(alpha1);
