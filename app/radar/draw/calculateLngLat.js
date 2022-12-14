@@ -217,8 +217,23 @@ function destVincenty(az, distance) {
         }
         for (var i in prodValues) { prodValues[i] = prodValues[i].filter(function (el) { return el != null }) }
 
-        var points = [];
-        var colors = [];
+        var total = 0;
+        for (var i in prodValues) { total += prodValues[i].length }
+
+        var points = new Float32Array(total * 12);
+        var pointsIndex = 0;
+        function pushPoint(value) {
+            points[pointsIndex] = value;
+            pointsIndex++;
+        }
+
+        var colors = new Float32Array(total * 6);
+        var colorsIndex = 0;
+        function pushColor(value) {
+            colors[colorsIndex] = value;
+            colorsIndex++;
+        }
+
         var geojsonValues = [];
         for (var i in az) {
             for (var n in prodValues[i]) {
@@ -238,33 +253,30 @@ function destVincenty(az, distance) {
                         var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
-                            points.push(
-                                base[0],
-                                base[1],
+                            pushPoint(base[0]);
+                            pushPoint(base[1]);
 
-                                oneUp[0],
-                                oneUp[1],
+                            pushPoint(oneUp[0]);
+                            pushPoint(oneUp[1]);
 
-                                oneSideways[0],
-                                oneSideways[1],
-                                oneSideways[0],
-                                oneSideways[1],
+                            pushPoint(oneSideways[0]);
+                            pushPoint(oneSideways[1]);
+                            pushPoint(oneSideways[0]);
+                            pushPoint(oneSideways[1]);
 
-                                oneUp[0],
-                                oneUp[1],
+                            pushPoint(oneUp[0]);
+                            pushPoint(oneUp[1]);
 
-                                otherCorner[0],
-                                otherCorner[1],
-                            );
+                            pushPoint(otherCorner[0]);
+                            pushPoint(otherCorner[1]);
 
-                            colors.push(
-                                prodValues[i][n],
-                                prodValues[i][n],
-                                prodValues[i][n],
-                                prodValues[i][n],
-                                prodValues[i][n],
-                                prodValues[i][n]
-                            )
+
+                            pushColor(prodValues[i][n]);
+                            pushColor(prodValues[i][n]);
+                            pushColor(prodValues[i][n]);
+                            pushColor(prodValues[i][n]);
+                            pushColor(prodValues[i][n]);
+                            pushColor(prodValues[i][n]);
                             // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
                             // var arrayColorAtVal = rgbValToArray(colorAtVal);
                             // var r = scaleForWebGL(arrayColorAtVal[0]);
@@ -291,10 +303,7 @@ function destVincenty(az, distance) {
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
         if (mode == 'mapPlot') {
             // self.postMessage
-            cb({'data': [
-                new Float32Array(points),
-                new Float32Array(colors)
-            ]});
+            cb({'data': [points, colors]});
         } else if (mode == 'geojson') {
             // self.postMessage
             cb({'data': geojsonValues});
