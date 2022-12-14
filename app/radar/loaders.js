@@ -151,7 +151,9 @@ function getLatestL3(station, product, index, callback, date) {
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
         fullURL = ut.preventFileCaching(fullURL);
         console.log(fullURL)
-        fetch(ut.phpProxy + fullURL, {cache: 'no-store'}).then(response => response.text())
+
+        const headers = new Headers().append('Cache-Control', 'no-cache');
+        fetch(ut.phpProxy + fullURL, {cache: 'no-store', headers: headers}).then(response => response.text())
         .then(function(data) {
         //$.get(ut.phpProxy + fullURL, function (data) {
             try {
