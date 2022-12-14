@@ -7,8 +7,11 @@ const STstuff = require('../level3/stormTracking/stormTrackingMain');
 var map = require('../map/map');
 const setLayerOrder = require('../map/setLayerOrder');
 const createWebGLTexture = require('./createWebGLTexture');
+const vertexSource = require('./vertex.glsl');
+const fragmentSource = require('./fragment.glsl');
 
-function plotRadarToMap(verticiesArr, colorsArr, product) {
+
+function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     var colorScaleData = productColors[product];
     var colors = colorScaleData.colors;
     var values = [...colorScaleData.values];
@@ -24,24 +27,6 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
     var imagedata;
     var imagetexture;
 
-    const vertexSource = `
-        uniform mat4 u_matrix;
-        attribute vec2 aPosition;
-        attribute float aColor;
-        varying float color;
-        void main() {
-            gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
-            color = aColor;
-        }`;
-    const fragmentSource = `
-        precision highp float;
-        uniform vec2 minmax;
-        uniform sampler2D u_texture;
-        varying float color;
-        void main() {
-            float calcolor = (color - minmax.x) / (minmax.y - minmax.x);
-            gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));
-        }`
     var layer = {
         id: 'baseReflectivity',
         type: 'custom',
@@ -69,6 +54,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
             this.colorLocation = gl.getAttribLocation(this.program, 'aColor');
             this.textureLocation = gl.getUniformLocation(this.program, 'u_texture');
             this.minmaxLocation = gl.getUniformLocation(this.program, 'minmax');
+            this.radarLngLatLocation = gl.getUniformLocation(this.program, 'radarLatLng');
 
             this.vertexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
@@ -93,6 +79,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
                 false,
                 matrix
             );
+            gl.uniform2fv(this.radarLngLatLocation, [radarLatLng.lat, radarLatLng.lng]);
             gl.uniform2fv(this.minmaxLocation, [cmin, cmax]);
             gl.uniform1i(this.textureLocation, 0);
 

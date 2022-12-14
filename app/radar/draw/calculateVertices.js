@@ -256,12 +256,12 @@ function calculateVerticies(radarObj, level, options) {
             // }
             var points = ev.data[0];
             var colors = ev.data[1];
-            for (var i = 0; i < points.length - 1; i += 2) {
-                var mercCoords = mc([points[i], points[i + 1]])
-                points[i] = mercCoords[0];
-                points[i + 1] = mercCoords[1];
-            }
-            plotRadarToMap(points, colors, product);
+            // for (var i = 0; i < points.length - 1; i += 2) {
+            //     var mercCoords = mc([points[i], points[i + 1]])
+            //     points[i] = mercCoords[0];
+            //     points[i + 1] = mercCoords[1];
+            // }
+            plotRadarToMap(points, colors, product, radarLatLng);
         } else if (mode == 'geojson') {
             var returnedDataArr = ev.data;
 

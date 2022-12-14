@@ -241,34 +241,34 @@ function destVincenty(az, distance) {
                     try {
                         var theN = goodIndexes[i][n];
                         var baseLocs = getAzDistance(i, theN);
-                        var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
+                        //var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
 
                         var oneUpLocs = getAzDistance(i, parseInt(theN) + 1);
-                        var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
+                        //var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
 
                         var oneSidewaysLocs = getAzDistance(parseInt(i) + 1, theN);
-                        var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
+                        //var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
 
                         var otherCornerLocs = getAzDistance(parseInt(i) + 1, parseInt(theN) + 1);
-                        var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
+                        //var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
-                            pushPoint(base[0]);
-                            pushPoint(base[1]);
+                            pushPoint(baseLocs.azimuth);
+                            pushPoint(baseLocs.distance);
 
-                            pushPoint(oneUp[0]);
-                            pushPoint(oneUp[1]);
+                            pushPoint(oneUpLocs.azimuth);
+                            pushPoint(oneUpLocs.distance);
 
-                            pushPoint(oneSideways[0]);
-                            pushPoint(oneSideways[1]);
-                            pushPoint(oneSideways[0]);
-                            pushPoint(oneSideways[1]);
+                            pushPoint(oneSidewaysLocs.azimuth);
+                            pushPoint(oneSidewaysLocs.distance);
+                            pushPoint(oneSidewaysLocs.azimuth);
+                            pushPoint(oneSidewaysLocs.distance);
 
-                            pushPoint(oneUp[0]);
-                            pushPoint(oneUp[1]);
+                            pushPoint(oneUpLocs.azimuth);
+                            pushPoint(oneUpLocs.distance);
 
-                            pushPoint(otherCorner[0]);
-                            pushPoint(otherCorner[1]);
+                            pushPoint(otherCornerLocs.azimuth);
+                            pushPoint(otherCornerLocs.distance);
 
 
                             pushColor(prodValues[i][n]);
