@@ -3969,6 +3969,11 @@ function destVincenty(az, distance) {
                             //     r, g, b, a,
                             // )
                         } else if (mode == 'geojson') {
+                            var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
+                            var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
+                            var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
+                            var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
+
                             geojsonValues.push(base[0], base[1], oneUp[0], oneUp[1], otherCorner[0], otherCorner[1], oneSideways[0], oneSideways[1], prodValues[i][n]);
                         }
                     } catch (e) {
