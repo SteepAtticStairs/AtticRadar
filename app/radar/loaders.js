@@ -129,6 +129,7 @@ function getLatestL2(station, callback) {
 * @param {any} callback - The function to run after the retrieval. Use a single variable
 in this function, this will be a string with the latest file's URL.
 */
+var timesGoneBack = 0;
 function getLatestL3(station, product, index, callback, date) {
     if (!(product.length > 3)) {
         //document.getElementById('spinnerParent').style.display = 'block';
@@ -168,10 +169,11 @@ function getLatestL3(station, product, index, callback, date) {
             } catch(e) {
                 // we don't want to go back days for storm tracking - most of the time an empty directory
                 // of storm track files means there are no storm tracks avaliable at the time (e.g. clear skies / no storms)
-                if (product != 'NTV' && product != 'NMD' && product != 'NST') {
+                if ((product != 'NTV' && product != 'NMD' && product != 'NST') && timesGoneBack < 15) {
                     // error checking - if nothing exists for this date, fetch the directory listing for the previous day
                     var d = curTime;
                     d.setDate(d.getDate() - 1);
+                    timesGoneBack++;
                     getLatestL3(station, product, index, callback, d);
                 }
             }

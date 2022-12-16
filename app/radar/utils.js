@@ -768,10 +768,10 @@ function scaleValues(values, product) {
         for (var i in values) { values[i] = values[i] / 1.944 }
     } else if (product == 'N0S') {
         // storm relative velocity
-        for (var i in values) { values[i] = values[i] + 0.5 }
+        for (var i in values) { values[i] = values[i] - 0.5 }
     } else if (product == 'N0H' || product == 'HHC') {
         // hydrometer classification || hybrid hydrometer classification
-        for (var i in values) { values[i] = values[i] - 0.5 }
+        for (var i in values) { values[i] = values[i] + 0.5 }
     }
     return values;
 }
