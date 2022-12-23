@@ -1,10 +1,60 @@
 uniform mat4 u_matrix;
+uniform vec4 u_eye_high;
+uniform vec4 u_eye_low;
 attribute vec2 aPosition;
 uniform vec2 radarLatLng;
 attribute float aColor;
 varying float color;
 
 float PI = 3.141592654;
+
+vec2 ds_set(float a) {
+    vec2 z;
+    z.x = a;
+    z.y = 0.0;
+    return z;
+}
+vec2 ds_add(vec2 dsa, vec2 dsb) {
+    vec2 dsc;
+    float t1, t2, e;
+
+    t1 = dsa.x + dsb.x;
+    e = t1 - dsa.x;
+    t2 = ((dsb.x - e) + (dsa.x - (t1 - e))) + dsa.y + dsb.y;
+
+    dsc.x = t1 + t2;
+    dsc.y = t2 - (dsc.x - t1);
+    return dsc;
+}
+vec2 ds_sub(vec2 dsa, vec2 dsb) {
+    return ds_add(dsa, vec2(-dsb.x, dsb.y));
+}
+vec2 ds_mul(vec2 dsa, vec2 dsb) {
+    vec2 dsc;
+    float c11, c21, c2, e, t1, t2;
+    float a1, a2, b1, b2, cona, conb, split = 8193.;
+
+    cona = dsa.x * split;
+    conb = dsb.x * split;
+    a1 = cona - (cona - dsa.x);
+    b1 = conb - (conb - dsb.x);
+    a2 = dsa.x - a1;
+    b2 = dsb.x - b1;
+
+    c11 = dsa.x * dsb.x;
+    c21 = a2 * b2 + (a2 * b1 + (a1 * b2 + (a1 * b1 - c11)));
+
+    c2 = dsa.x * dsb.y + dsa.y * dsb.x;
+
+    t1 = c11 + c2;
+    e = t1 - c11;
+    t2 = dsa.y * dsb.y + ((c2 - e) + (c11 - (t1 - e))) + c21;
+
+    dsc.x = t1 + t2;
+    dsc.y = t2 - (dsc.x - t1);
+
+    return dsc;
+}
 
 float atan2(float x, float y) {
     return atan(x / y);
@@ -133,7 +183,17 @@ void main() {
     float azimuth = float(aPosition.x);
     float distance = float(aPosition.y);
     vec2 mercatorCoords = destVincenty(azimuth, distance);
+    vec4 coords = vec4(
+        mercatorCoords.x,
+        mercatorCoords.y,
+        ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,
+        ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x
+    );
 
-    gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);
+    //gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);
+    gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);
+    gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);
+    gl_Position = u_matrix * gl_Position;
+    gl_Position.w += u_eye_high.w;
     color = aColor;
 }

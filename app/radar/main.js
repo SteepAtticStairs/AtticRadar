@@ -220,6 +220,21 @@ document.addEventListener('loadFile', function(event) {
 //     }
 // }, 0)
 
+// function doWhenLoad() {
+//     (function loadFileIndex(i, max) {
+//         console.log(i)
+//         loaders.getLatestFile('KAKQ', [3, 'N0B', i], function(url) {
+//             //console.log(`${i}: ${url}`);
+//             loaders.loadFileObject(ut.phpProxy + url + '#', 3);
+//             if (i < max) { loadFileIndex(i + 1, max) }
+//         })
+//     })(0, 2)
+// }
+
+// setTimeout(function() {
+//     if (map.loaded()) { doWhenLoad() }
+//     else { doWhenLoad() }
+// }, 0)
 
 // const aeris = new AerisWeather('AcxJ7pqDEeRA8kcDUOTPS', '7tOA7yRcLFb40YCCoXq0ccUMtD4ZZJarCgNjOrtL');
 
