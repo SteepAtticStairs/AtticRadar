@@ -5029,6 +5029,8 @@ var map = require('../map/map');
 const setLayerOrder = require('../map/setLayerOrder');
 const createWebGLTexture = require('./createWebGLTexture');
 
+const mathjs = math;
+
 function plotRadarToMap(verticiesArr, colorsArr, product) {
     var colorScaleData = productColors[product];
     var colors = colorScaleData.colors;
@@ -5047,11 +5049,16 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
 
     const vertexSource = `
         uniform mat4 u_matrix;
-        attribute vec2 aPosition;
+        uniform vec4 u_eye_high;
+        uniform vec4 u_eye_low;
+        attribute vec4 aPosition;
         attribute float aColor;
         varying float color;
         void main() {
-            gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
+            gl_Position = vec4(vec3(aPosition.rg, 0.0) - u_eye_high.xyz, 0.0);
+            gl_Position += vec4(vec3(aPosition.ba, 0.0) - u_eye_low.xyz, 0.0);
+            gl_Position = u_matrix * gl_Position;
+            gl_Position.w += u_eye_high.w;
             color = aColor;
         }`;
     const fragmentSource = `
@@ -5091,11 +5098,28 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
             this.textureLocation = gl.getUniformLocation(this.program, 'u_texture');
             this.minmaxLocation = gl.getUniformLocation(this.program, 'minmax');
 
+            var newVertexF32 = new Float32Array(vertexF32.length * 2);
+            var offset = 0;
+            for (var i = 0; i < vertexF32.length; i += 2) {
+                var x = vertexF32[i];
+                var y = vertexF32[i + 1];
+                var f32x = x - Math.fround(x);
+                var f32y = y - Math.fround(y);
+                // if (f32x != 0) { console.log(x) }
+                // if (f32y != 0) { console.log(y) }
+
+                newVertexF32[offset] = x;
+                newVertexF32[offset + 1] = y;
+                newVertexF32[offset + 2] = f32x;
+                newVertexF32[offset + 3] = f32y;
+                offset += 4;
+            }
+
             this.vertexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.bufferData(
                 gl.ARRAY_BUFFER,
-                vertexF32,
+                newVertexF32,
                 gl.STATIC_DRAW
             );
 
@@ -5109,6 +5133,21 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
         },
         render: function (gl, matrix) {
             gl.useProgram(this.program);
+
+            //get xyz camera coordinates and w_clip value for the camera position. (expose camera coord in mapbox so this becomes unnecessary?)
+			function _get_eye(mat) {
+				mat = [[mat[0],mat[4],mat[8],mat[12]],[mat[1],mat[5],mat[9],mat[13]],[mat[2],mat[6],mat[10],mat[14]],[mat[3],mat[7],mat[11],mat[15]]];
+				var eye = mathjs.lusolve(mat, [[0],[0],[0],[1]]);
+				var clip_w = 1.0/eye[3][0];
+				eye = mathjs.divide(eye, eye[3][0]);
+				eye[3][0] = clip_w;
+				return mathjs.flatten(eye);
+			}
+			var eye_high = _get_eye(matrix);
+			var eye_low = eye_high.map(function(e) { return e - Math.fround(e) });
+			gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_high'), eye_high);
+			gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_low'), eye_low);
+
             gl.uniformMatrix4fv(
                 gl.getUniformLocation(this.program, 'u_matrix'),
                 false,
@@ -5119,7 +5158,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product) {
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.enableVertexAttribArray(this.positionLocation);
-            gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(this.positionLocation, 4, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
             gl.enableVertexAttribArray(this.colorLocation);
