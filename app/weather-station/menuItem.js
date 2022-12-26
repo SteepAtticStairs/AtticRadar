@@ -1,5 +1,6 @@
 const createToolsOption = require('../radar/menu/createToolsOption');
 const fetchData = require('./fetchData');
+const ut = require('../radar/utils');
 
 function weatherstationToolsOption(index) {
     createToolsOption({
@@ -19,6 +20,7 @@ function weatherstationToolsOption(index) {
             $(iconElem).addClass('icon-blue');
             $(iconElem).removeClass('icon-grey');
         }
+        ut.loadingSpinner(true);
         fetchData(iconElem);
         // if (!$(iconElem).hasClass('icon-blue')) {
         //     $(iconElem).addClass('icon-blue');

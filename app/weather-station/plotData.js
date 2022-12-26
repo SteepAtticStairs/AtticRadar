@@ -1,6 +1,8 @@
 const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 const chroma = require('chroma-js');
+var map = require('../radar/map/map');
+window.map = map;
 
 function getFormattedDateDiff(dateDiff) {
     var formattedDateDiff;
@@ -54,7 +56,7 @@ ${windDirection}° (${ut.degToCompass(windDirection)})
     var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
     var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';
     ut.displayAtticDialog({
-        'title': 'AtticStation',
+        'title': `AtticStation (<u style="cursor: pointer" class="icon-selected" onclick="$('#atticDialogClose').click(); window.map.flyTo({ center: [-77.0369, 38.9072], zoom: 8, speed: 2, essential: true })">DC Metro Area</u>)`,
         'body': dialogContent, //JSON.stringify(data, null, 4),
         'color': 'rgb(19, 19, 19)',
         'textColor': 'white'

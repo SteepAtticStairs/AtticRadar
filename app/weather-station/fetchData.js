@@ -1,4 +1,5 @@
 const plotData = require('./plotData');
+const ut = require('../radar/utils');
 
 function fetchData(iconElem) {
     // class valueWithUnits {
@@ -61,6 +62,7 @@ function fetchData(iconElem) {
             $(iconElem).removeClass('icon-blue');
             $(iconElem).addClass('icon-grey');
         }
+        ut.loadingSpinner(false);
         plotData(data, data.observations);
     })
 

@@ -11693,6 +11693,38 @@ function scaleValues(values, product) {
     return values;
 }
 
+function loadingSpinner(truefalse) {
+    var opts = {
+        lines: 10, // The number of lines to draw
+        length: 38, // The length of each line
+        width: 17, // The line thickness
+        radius: 45, // The radius of the inner circle
+        scale: 0.5, // Scales overall size of the spinner
+        corners: 1, // Corner roundness (0..1)
+        speed: 1, // Rounds per second
+        rotate: 0, // The rotation offset
+        animation: 'spinner-line-fade-quick', // The CSS animation name for the lines
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#ffffff', // CSS color or array of colors
+        fadeColor: 'transparent', // CSS color or array of colors
+        top: '50%', // Top position relative to parent
+        left: '50%', // Left position relative to parent
+        shadow: '0 0 1px transparent', // Box-shadow for the lines
+        zIndex: 2000000000, // The z-index (defaults to 2e9)
+        className: 'spinner', // The CSS class to assign to the spinner
+        position: 'absolute', // Element positioning
+    }
+    var target = document.body;
+    if (window.theLoadingSpinner == undefined) {
+        window.theLoadingSpinner = new Spin.Spinner(opts).spin(target);
+    }
+
+    if (!truefalse) {
+        window.theLoadingSpinner.stop();
+        window.theLoadingSpinner = undefined;
+    }
+}
+
 module.exports = {
     phpProxy,
     phpProxy2,
@@ -11743,7 +11775,8 @@ module.exports = {
     zeroPad,
     setMapMargin,
     displayAtticDialog,
-    scaleValues
+    scaleValues,
+    loadingSpinner
 }
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"./map/map":66,"buffer":268}],90:[function(require,module,exports){
@@ -12069,6 +12102,7 @@ module.exports = {
 //require('./fetchData')();
 },{}],97:[function(require,module,exports){
 const plotData = require('./plotData');
+const ut = require('../radar/utils');
 
 function fetchData(iconElem) {
     // class valueWithUnits {
@@ -12131,6 +12165,7 @@ function fetchData(iconElem) {
             $(iconElem).removeClass('icon-blue');
             $(iconElem).addClass('icon-grey');
         }
+        ut.loadingSpinner(false);
         plotData(data, data.observations);
     })
 
@@ -12156,9 +12191,10 @@ function fetchData(iconElem) {
 }
 
 module.exports = fetchData;
-},{"./plotData":99}],98:[function(require,module,exports){
+},{"../radar/utils":89,"./plotData":99}],98:[function(require,module,exports){
 const createToolsOption = require('../radar/menu/createToolsOption');
 const fetchData = require('./fetchData');
+const ut = require('../radar/utils');
 
 function weatherstationToolsOption(index) {
     createToolsOption({
@@ -12178,6 +12214,7 @@ function weatherstationToolsOption(index) {
             $(iconElem).addClass('icon-blue');
             $(iconElem).removeClass('icon-grey');
         }
+        ut.loadingSpinner(true);
         fetchData(iconElem);
         // if (!$(iconElem).hasClass('icon-blue')) {
         //     $(iconElem).addClass('icon-blue');
@@ -12196,10 +12233,12 @@ function weatherstationToolsOption(index) {
 module.exports = {
     weatherstationToolsOption
 }
-},{"../radar/menu/createToolsOption":72,"./fetchData":97}],99:[function(require,module,exports){
+},{"../radar/menu/createToolsOption":72,"../radar/utils":89,"./fetchData":97}],99:[function(require,module,exports){
 const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 const chroma = require('chroma-js');
+var map = require('../radar/map/map');
+window.map = map;
 
 function getFormattedDateDiff(dateDiff) {
     var formattedDateDiff;
@@ -12253,7 +12292,7 @@ ${windDirection}° (${ut.degToCompass(windDirection)})
     var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
     var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';
     ut.displayAtticDialog({
-        'title': 'AtticStation',
+        'title': `AtticStation (<u style="cursor: pointer" class="icon-selected" onclick="$('#atticDialogClose').click(); window.map.flyTo({ center: [-77.0369, 38.9072], zoom: 8, speed: 2, essential: true })">DC Metro Area</u>)`,
         'body': dialogContent, //JSON.stringify(data, null, 4),
         'color': 'rgb(19, 19, 19)',
         'textColor': 'white'
@@ -12261,7 +12300,7 @@ ${windDirection}° (${ut.degToCompass(windDirection)})
 }
 
 module.exports = plotData;
-},{"../radar/misc/tempColors":84,"../radar/utils":89,"chroma-js":200}],100:[function(require,module,exports){
+},{"../radar/map/map":66,"../radar/misc/tempColors":84,"../radar/utils":89,"chroma-js":200}],100:[function(require,module,exports){
 // parse message type 1
 module.exports = (raf, message, options) => {
 	// record starting offset
