@@ -598,6 +598,9 @@ function betterProgressBar(whatToDo, value) {
 function CtoF(val) {
     return (val * 1.8) + 32;
 }
+function MBtoINHG(val) {
+    return val / 33.864;
+}
 
 function getRadialConstants(radVersion) {
     var gateRes;
@@ -817,6 +820,7 @@ module.exports = {
     spawnModal,
     betterProgressBar,
     CtoF,
+    MBtoINHG,
     getRadialConstants,
     getDateDiff,
     csvToJson,

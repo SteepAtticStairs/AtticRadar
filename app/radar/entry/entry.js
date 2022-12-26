@@ -6,6 +6,9 @@ function load() {
     // load the main file
     require('../main');
 
+    // initialize the weather station module
+    require('../../weather-station/entry');
+
     // initialize the alerts
     require('../../alerts/entry');
 
