@@ -57,8 +57,9 @@ function colorLightOrDark(R, G, B) {
 
 function returnFullColorArray() {
     var allKeys = Object.keys(tempColorObj);
-    const minTemp = parseInt(allKeys[0]);
-    const maxTemp = parseInt(allKeys[allKeys.length - 3]);
+    allKeys = allKeys.map(element => Number(element)).filter(number => !Number.isNaN(number));
+    const minTemp = Math.min(...allKeys);
+    const maxTemp = Math.max(...allKeys);
 
     var allTempColorVals = {};
 
