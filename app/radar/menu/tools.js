@@ -28,6 +28,12 @@ function updateTooltipPosition(divElem) {
     tooltipElem.offset({ top: bottom - parseInt($('#map').css('bottom')) - 20 });
 }
 
+window.onresize = () => {
+    if (tooltipElem.is(':visible')) {
+        updateTooltipPosition($('#toolsItemDiv'));
+    }
+}
+
 // https://stackoverflow.com/a/15191130/18758797
 $.fn.animateRotate = function (angle, duration, easing, complete) {
     var args = $.speed(duration, easing, complete);
