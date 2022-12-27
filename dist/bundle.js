@@ -2834,6 +2834,7 @@ createMenuOption({
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
+const chroma = require('chroma-js');
 
 const parseMETAR = require('metar');
 const metarParser = require('aewx-metar-parser');
@@ -2983,47 +2984,77 @@ function useData(data, action) {
 
                 var tempColor = getTempColor(parsedMetarTemp);
 
-                var metarHTMLBody =
-                `<div>
-                    <div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> ℉</div>
-                    <br>
-                    <div><i><b>VALID: </b>${metarFancyTime}</i></div>
-                    <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
-                    <div><b>Barometer: </b>${metarBarometer} inHG</div>
-                    <div><b>Visibility: </b>${metarVisibility} miles</div>
-                    <br>
-                    <div><b>Wind:</b></div>
-                    <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
-                    <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
-                    <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
-                    <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
-                    <!-- <br>
-                    <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
-                    <div>{svgStr}</div> -->
-                    <br>
-                    <div><b>Raw Text: </b><u>${rawText}</u></div>
+                // var metarHTMLBody =
+                // `<div>
+                //     <div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> ℉</div>
+                //     <br>
+                //     <div><i><b>VALID: </b>${metarFancyTime}</i></div>
+                //     <div><b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} ℉</div>
+                //     <div><b>Barometer: </b>${metarBarometer} inHG</div>
+                //     <div><b>Visibility: </b>${metarVisibility} miles</div>
+                //     <br>
+                //     <div><b>Wind:</b></div>
+                //     <div>${ut.knotsToMph(metarWindSpeed, 0)} mph</div>
+                //     <div>${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts</div>
+                //     <div>${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})</div>
+                //     <img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+                //     <!-- <br>
+                //     <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
+                //     <div>{svgStr}</div> -->
+                //     <br>
+                //     <div><b>Raw Text: </b><u>${rawText}</u></div>
 
-                    <!--<br>
-                    <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->
-                </div>`
+                //     <!--<br>
+                //     <pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->
+                // </div>`
 
-                ut.spawnModal({
+                // ut.spawnModal({
+                //     'title': `Station ${id}`,
+                //     'headerColor': 'alert-success',
+                //     'body': metarHTMLBody
+                // })
+
+                var metarHTMLBody = 
+`<div style="text-align: center; font-size: 30px; color: ${tempColor[1]}; background-color: ${tempColor[0]}"><b>${parsedMetarTemp}</b> °F</div>
+<i><b>VALID: </b>${metarFancyTime}</i>
+<b>Dew Point: </b>${parseInt(ut.CtoF(metarDewPoint))} °F
+<b>Barometer: </b>${metarBarometer} inHG
+<b>Visibility: </b>${metarVisibility} miles
+
+<b>Wind:</b>
+${ut.knotsToMph(metarWindSpeed, 0)} mph
+${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts
+${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})
+<img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+<!-- <br>
+<div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
+<div>{svgStr}</div> -->
+<b>Raw Text: </b><u>${rawText}</u>
+<!--<br>
+<pre>${JSON.stringify(parsedMetarData, undefined, 2)}</pre> -->`
+
+                // var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
+                // var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';
+                ut.displayAtticDialog({
                     'title': `Station ${id}`,
-                    'headerColor': 'alert-success',
-                    'body': metarHTMLBody
-                })
+                    'body': metarHTMLBody, //JSON.stringify(data, null, 4),
+                    'color': 'rgb(19, 19, 19)',
+                    'textColor': 'white'
+                });
             } catch(err) {
-                ut.spawnModal({
+                var headerColor = '#ba3043';
+                ut.displayAtticDialog({
                     'title': `Station ${id}: Error`,
-                    'headerColor': 'alert-danger',
+                    'color': headerColor,
+                    'textColor': chroma(headerColor).luminance() > 0.4 ? 'black' : 'white',
                     'body': 
-                    `<div><b>There was an error parsing the ${id} station's METAR data.</b></div>
-                    <br>
-                    <div><b>Raw Text:</b></div>
-                    <div><i>${rawText}</i></div>
-                    <br>
-                    <div><b>Error message:</b></div>
-                    <div>${err.message}</div>`
+`There was an error parsing the ${id} station's METAR data.
+
+<b>Raw Text:</b>
+<i>${rawText}</i>
+
+<b>Error message:</b>
+${err.message}`
                 })
                 console.warn(err.message);
             }
@@ -3081,7 +3112,7 @@ module.exports = {
     useData,
     toggleMETARStationMarkers
 }
-},{"../radar/map/map":66,"../radar/misc/tempColors":84,"../radar/utils":89,"aewx-metar-parser":197,"metar":206}],23:[function(require,module,exports){
+},{"../radar/map/map":66,"../radar/misc/tempColors":84,"../radar/utils":89,"aewx-metar-parser":197,"chroma-js":200,"metar":206}],23:[function(require,module,exports){
 const map = require('../map/map');
 const turf = require('@turf/turf');
 const radarStations = require('../../../resources/radarStations');
