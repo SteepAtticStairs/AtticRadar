@@ -2861,6 +2861,10 @@ function useData(data, action) {
             var stationId = data.response.data.METAR[item].station_id['#text'];
             var rawMetarText = data.response.data.METAR[item].raw_text['#text'];
 
+            if (stationId == 'CWRU') {
+                console.log(data.response.data.METAR[item])
+            }
+
             try {
                 var parsedMetarData = metarParser(rawMetarText);
                 var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
