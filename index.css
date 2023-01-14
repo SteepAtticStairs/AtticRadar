@@ -500,6 +500,10 @@ https://tobiasahlin.com/spinkit/
 
 .alertPopup .mapboxgl-popup-content{
     background-color: black;
+    /* background-color: rgba(0, 0, 0, .3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); */
+
     border-radius: 10px;
     color: white;
 }

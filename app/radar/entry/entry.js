@@ -9,6 +9,9 @@ function load() {
     // initialize the weather station module
     require('../../weather-station/entry');
 
+    // initialize the weather radio module
+    require('../../radio/entry');
+
     // initialize the alerts
     require('../../alerts/entry');
 
