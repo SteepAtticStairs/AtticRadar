@@ -1,5 +1,6 @@
 const nwrStations = require('./data/nwrStations');
 const turf = require('@turf/turf');
+const setLayerOrder = require('../radar/map/setLayerOrder');
 var map = require('../radar/map/map');
 
 function plotToMap() {
@@ -45,9 +46,7 @@ function plotToMap() {
                 ],
             }
         });
-
-        // we want the radar station layer to be on top of the weather radio layer
-        if (map.getLayer('stationSymbolLayer')) { map.moveLayer('stationSymbolLayer') }
+        setLayerOrder();
 
         map.on('click', 'radioStationLayer', (e) => {
             // console.log(`${e.features[0].properties.LAT}, ${e.features[0].properties.LON}`);

@@ -7,9 +7,14 @@ function moveLayerToTop(layerName) {
 }
 
 function setLayerOrder() {
+    moveLayerToTop('baseReflectivity');
+    moveLayerToTop('radioStationLayer');
+
     moveLayerToTop('mainAlertsLayerOutline');
     moveLayerToTop('mainAlertsLayer');
     moveLayerToTop('mainAlertsLayerFill');
+
+    moveLayerToTop('stationSymbolLayer');
 }
 
 module.exports = setLayerOrder;

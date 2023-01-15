@@ -8362,9 +8362,14 @@ function moveLayerToTop(layerName) {
 }
 
 function setLayerOrder() {
+    moveLayerToTop('baseReflectivity');
+    moveLayerToTop('radioStationLayer');
+
     moveLayerToTop('mainAlertsLayerOutline');
     moveLayerToTop('mainAlertsLayer');
     moveLayerToTop('mainAlertsLayerFill');
+
+    moveLayerToTop('stationSymbolLayer');
 }
 
 module.exports = setLayerOrder;
@@ -11883,6 +11888,7 @@ module.exports = {
 },{"../radar/map/map":66,"../radar/menu/createToolsOption":72,"./plotToMap":93}],93:[function(require,module,exports){
 const nwrStations = require('./data/nwrStations');
 const turf = require('@turf/turf');
+const setLayerOrder = require('../radar/map/setLayerOrder');
 var map = require('../radar/map/map');
 
 function plotToMap() {
@@ -11928,9 +11934,7 @@ function plotToMap() {
                 ],
             }
         });
-
-        // we want the radar station layer to be on top of the weather radio layer
-        if (map.getLayer('stationSymbolLayer')) { map.moveLayer('stationSymbolLayer') }
+        setLayerOrder();
 
         map.on('click', 'radioStationLayer', (e) => {
             // console.log(`${e.features[0].properties.LAT}, ${e.features[0].properties.LON}`);
@@ -11969,7 +11973,7 @@ function plotToMap() {
 }
 
 module.exports = plotToMap;
-},{"../radar/map/map":66,"./data/nwrStations":90,"@turf/turf":198}],94:[function(require,module,exports){
+},{"../radar/map/map":66,"../radar/map/setLayerOrder":68,"./data/nwrStations":90,"@turf/turf":198}],94:[function(require,module,exports){
 /*
 * This file is the entry point for the satellite module.
 */
