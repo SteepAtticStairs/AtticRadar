@@ -673,3 +673,12 @@ https://tobiasahlin.com/spinkit/
     background-color: #d1e7dd !important;
     border-color: #badbcc !important;
 }
+
+.radioPausePlayBtn {
+    padding: 2px;
+    background-color: #3d3d3d;
+    cursor: pointer;
+    border: 1px solid #6d6d6d;
+    border-radius: 7px;
+    text-align: center;
+}
