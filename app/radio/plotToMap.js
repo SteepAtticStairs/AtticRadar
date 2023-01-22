@@ -156,14 +156,23 @@ ${radioPlayBtn}`
                 var radioAudioElem = document.getElementById('radioAudio');
 
                 if (btnColor == radioBtnGreen) {
-                    radioPlayBtn.style.color = radioBtnRed;
-                    $('#radioPlayBtnIcon').removeClass('fa-play').addClass('fa-pause');
+                    $('#radioPlayBtnIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
 
                     if (streamURL != 'false') {
                         window.currentStreamURL = streamURL;
                         radioAudioElem.src = streamURL;
                         radioAudioElem.play();
                     }
+
+                    /* audio started loading */
+                    // $('#radioAudio').on('loadstart', (e) => {})
+
+                    /* audio will now start playing */
+                    // $('#radioAudio').on('loadeddata', (e) => {})
+                    $('#radioAudio').on('loadeddata', (e) => {
+                        radioPlayBtn.style.color = radioBtnRed;
+                        $('#radioPlayBtnIcon').removeClass('fa-spinner fa-spin').addClass('fa-pause');
+                    })
                 } else {
                     radioPlayBtn.style.color = radioBtnGreen
                     $('#radioPlayBtnIcon').removeClass('fa-pause').addClass('fa-play');
