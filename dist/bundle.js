@@ -170,9 +170,9 @@ createMenuOption({
                         var host = window.location.host;
                         var urlPart;
                         if (!host.includes(':')) {
-                            urlPart = '../';
+                            urlPart = './';
                         } else {
-                            urlPart = '../';
+                            urlPart = './';
                         }
                         console.log(host)
 
