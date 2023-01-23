@@ -1,5 +1,6 @@
 const chroma = require('chroma-js');
 const ut = require('../utils');
+const calcGPU = require('./calcGPU');
 
 // https://stackoverflow.com/a/8188682/18758797
 function splitUp(arr, n) {
@@ -305,6 +306,9 @@ function destVincenty(az, distance) {
                 //}
             }
         }
+
+        // points = calcGPU(points, radarLatLng);
+
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
         if (mode == 'mapPlot') {
             // self.postMessage
