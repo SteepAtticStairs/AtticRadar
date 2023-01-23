@@ -170,7 +170,7 @@ createMenuOption({
                         var host = window.location.host;
                         var urlPart;
                         if (!host.includes(':')) {
-                            urlPart = 'https://steepatticstairs.github.io/AtticRadar/';
+                            urlPart = '../';
                         } else {
                             urlPart = '../';
                         }
@@ -2913,7 +2913,7 @@ function useData(data, action) {
         //     }
         // });
         map.loadImage(
-            'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+            './resources/roundedRectangle.png',
             (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker-metar', image, {
@@ -3029,7 +3029,7 @@ function useData(data, action) {
 ${ut.knotsToMph(metarWindSpeed, 0)} mph
 ${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts
 ${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})
-<img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+<img src="./resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
 <!-- <br>
 <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
 <div>{svgStr}</div> -->
@@ -6631,7 +6631,7 @@ function parsePlotMesocyclone(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
+    $.getJSON('./resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -6996,7 +6996,7 @@ function parsePlotTornado(l3rad, theFileStation) {
             'coordinates': 'he'
         }
     }
-    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
+    $.getJSON('./resources/radarStations.json', function(data) {
         var staLat = data[theFileStation][1];
         var staLng = data[theFileStation][2];
 
@@ -7797,7 +7797,7 @@ function showStations() {
     var fHover = null;
     map.on('load', function (e) {
         map.loadImage(
-            'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+            './resources/roundedRectangle.png',
             (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker', image, {
@@ -11382,7 +11382,7 @@ function flyToStation() {
     var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('https://steepatticstairs.github.io/AtticRadar/resources/radarStations.json', function(data) {
+    $.getJSON('./resources/radarStations.json', function(data) {
 		var statLat;
 		var statLng;
 		if (data.hasOwnProperty(shtation)) {
@@ -17035,7 +17035,7 @@ function plotData(data, base) {
 ${windSpeed} mph
 ${windGusts} mph gusts
 ${windDirection}° (${ut.degToCompass(windDirection)})
-<img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${windDirection}deg)">`
+<img src="./resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${windDirection}deg)">`
 
     var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
     var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';

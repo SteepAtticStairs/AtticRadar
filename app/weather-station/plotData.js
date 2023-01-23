@@ -51,7 +51,7 @@ function plotData(data, base) {
 ${windSpeed} mph
 ${windGusts} mph gusts
 ${windDirection}° (${ut.degToCompass(windDirection)})
-<img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${windDirection}deg)">`
+<img src="./resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${windDirection}deg)">`
 
     var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
     var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';

@@ -137,7 +137,7 @@ function showStations() {
     var fHover = null;
     map.on('load', function (e) {
         map.loadImage(
-            'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+            './resources/roundedRectangle.png',
             (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker', image, {

@@ -169,7 +169,7 @@ createMenuOption({
                         var host = window.location.host;
                         var urlPart;
                         if (!host.includes(':')) {
-                            urlPart = 'https://steepatticstairs.github.io/AtticRadar/';
+                            urlPart = '../';
                         } else {
                             urlPart = '../';
                         }

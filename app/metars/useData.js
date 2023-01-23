@@ -80,7 +80,7 @@ function useData(data, action) {
         //     }
         // });
         map.loadImage(
-            'https://steepatticstairs.github.io/AtticRadar/resources/roundedRectangle.png',
+            './resources/roundedRectangle.png',
             (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker-metar', image, {
@@ -196,7 +196,7 @@ function useData(data, action) {
 ${ut.knotsToMph(metarWindSpeed, 0)} mph
 ${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts
 ${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})
-<img src="https://steepatticstairs.github.io/AtticRadar/resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+<img src="./resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
 <!-- <br>
 <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
 <div>{svgStr}</div> -->
