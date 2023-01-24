@@ -147,26 +147,10 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
         setBaseMapLayers('both');
     }
 
-    document.getElementById('spinnerParent').style.display = 'none';
-
-    // load the visibility button
-    require('../map/controls/visibility');
-
-    // load the refresh button
-    // require('./refresh');
-
-    if ($('#dataDiv').data('fromFileUpload')) {
-        ut.flyToStation();
-    } else {
-        if ($('#dataDiv').data('stormTracksVisibility')) {
-            STstuff.loadAllStormTrackingStuff();
-        }
-    }
+    // STstuff.loadAllStormTrackingStuff();
 
     // make sure the alerts are always on top
     setLayerOrder();
-
-    var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
 
     console.log('File plotting complete');
     ut.betterProgressBar('set', 100);

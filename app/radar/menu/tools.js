@@ -11,7 +11,7 @@ tooltipElem.hide();
 
 function addAllToolsItems() {
     var n = 0;
-    require('../distance/menuItem').distanceToolsOption(n = n + 1);
+    // require('../distance/menuItem').distanceToolsOption(n = n + 1);
     require('../menu/settings').settingsOption(n = n + 1);
     require('../../weather-station/menuItem').weatherstationToolsOption(n = n + 1);
     require('../../radio/menuItem').weatherRadioToolsOption(n = n + 1);
