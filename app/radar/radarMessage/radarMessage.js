@@ -13,10 +13,16 @@ function resetStationDiv(station) {
 
 function showRadarStatus(station) {
     if (station == 'No Station Selected') {
-        ut.spawnModal({
+        // ut.spawnModal({
+        //     'title': 'Error',
+        //     'headerColor': 'alert-danger',
+        //     'body': '<div>Please <b>select a radar station</b> before attempting to view station info.</div>'
+        // })
+        ut.displayAtticDialog({
             'title': 'Error',
-            'headerColor': 'alert-danger',
-            'body': '<div>Please <b>select a radar station</b> before attempting to view station info.</div>'
+            'body': '<div>Please <b>select a radar station</b> before attempting to view station info.</div',
+            'color': 'rgb(186, 48, 67)',
+            'textColor': '#f8d7da',
         })
         return;
     }
@@ -98,17 +104,23 @@ function showRadarStatus(station) {
         }
 
         var htmlContent = 
-        `<div><b>Radar Station: </b>${station}</div>
-        <div><b>Radar Name: </b>${stationName}</div>
-        <div><b>Radar Type: </b>${radarType}</div>
-        <div><b>Station Status: ${stationStatusDiv}</b></div>
-        <br>
-        <div><b>Message Send Time: </b>${messageTime}</div>
-        <div style="white-space: pre-wrap;"><b>Message (${messageAge}):</b><div class="code">${messageText}</div></div>`
-        ut.spawnModal({
+`<b>Radar Station: </b>${station}
+<b>Radar Name: </b>${stationName}
+<b>Radar Type: </b>${radarType}
+<b>Station Status: ${stationStatusDiv}</b>
+
+<b>Message Send Time: </b>${messageTime}
+<div style="white-space: pre-wrap;"><b>Message (${messageAge}):</b><div class="code">${messageText}</div></div>`
+        // ut.spawnModal({
+        //     'title': `${station} Info`,
+        //     'headerColor': 'alert-warning',
+        //     'body': htmlContent
+        // })
+        ut.displayAtticDialog({
             'title': `${station} Info`,
-            'headerColor': 'alert-warning',
-            'body': htmlContent
+            'body': htmlContent,
+            'color': 'rgb(37 94 151)',
+            'textColor': 'rgb(182 218 255)',
         })
         resetStationDiv(station);
 
