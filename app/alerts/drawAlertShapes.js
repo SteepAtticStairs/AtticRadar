@@ -145,8 +145,8 @@ createMenuOption({
 
             setLayerOrder();
         } else {
-            ut.betterProgressBar('show');
-            ut.betterProgressBar('set', 0);
+            // ut.betterProgressBar('show');
+            // ut.betterProgressBar('set', 0);
 
             // '../data/active.json'
             // noaaAlertsURL
@@ -243,7 +243,7 @@ createMenuOption({
                         });});});
                     }, 50)
                 }
-                loadExtraAlerts();
+                // loadExtraAlerts();
             })
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
