@@ -682,3 +682,125 @@ https://tobiasahlin.com/spinkit/
     border-radius: 7px;
     text-align: center;
 }
+
+#atcDlg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+
+    background-color: rgba(0, 0, 0, 0.4);
+}
+#atcDlgContainer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
+    margin: auto;
+
+    width: 550px;
+    max-width: 90vw;
+    height: auto;
+    max-height: 100%;
+}
+#atcDlgHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+
+    text-align: center;
+
+    background-color: rgb(175, 175, 175);
+    color: rgb(71, 71, 71);
+}
+#atcDlgClose {
+    position: absolute;
+    right: 20px;
+    transform: scale(1.5);
+    cursor: pointer;
+}
+#atcDlgBody {
+    position: absolute;
+    overflow: scroll;
+
+    width: 100%;
+    height: auto;
+    /* 85vh - top padding - header height */
+    max-height: calc(85vh - 10px - 50px);
+    padding: 5px;
+    white-space: pre-wrap;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+
+    background-color: rgb(51, 51, 51);
+    color: rgb(255, 255, 255);
+}
+/* #atcDlgContainer {
+    position: absolute;
+    z-index: 1001;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    width: 550px;
+    max-width: 90vw;
+    height: 85vh;
+    top: 10px;
+
+    background-color: white;
+    overflow: hidden;
+    white-space: pre-wrap;
+    display: flex;
+    flex-flow: column;
+
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: rgb(19, 19, 19);
+    color: rgb(172, 172, 172);
+}
+#atcDlgHeaderContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    background-color: rgb(128, 128, 128);
+    z-index: 1002;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#atcDlgClose {
+    position: absolute;
+    z-index: 1002;
+    margin: 0 auto;
+    right: 20px;
+    transform: scale(1.5);
+    cursor: pointer;
+}
+#atcDlgBody {
+    position: absolute;
+    bottom: 0;
+    top: 50px;
+    left: 0;
+    right: 0;
+    overflow: scroll;
+    margin: 5px 5px 5px 5px;
+} */

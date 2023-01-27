@@ -4,13 +4,6 @@ const getPolygonColors = require('./polygonColors');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
-$('#atticDialog').on('click', function(e) {
-    var clickedTarget = $(e.target).attr('id');
-    if (clickedTarget == 'atticDialog' || clickedTarget == 'atticDialogClose') {
-        $(this).hide();
-    }
-})
-
 function rgbToRGBA(rgb, opacity) {
     var str = rgb.slice(0, -1)
     str += `, ${opacity})`;

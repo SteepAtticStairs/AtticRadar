@@ -749,17 +749,21 @@ function displayAtticDialog(options) {
     var color = options.color;
     var textColor = options.textColor;
 
-    $('#atticDialog').show();
+    $('#atcDlg').show();
 
-    $('#atticDialogHeader').html(title)
-    $('#atticDialogHeader').css('background-color', color);
-    $('#atticDialogHeaderContainer').css('background-color', color);
-    $('#atticDialogHeader').css('color', textColor);
-    $('#atticDialogClose').css('color', textColor);
+    $('#atcDlgHeaderText').html(title);
+    $('#atcDlgHeader').css('background-color', color);
+    //$('#atticDialogHeaderContainer').css('background-color', color);
+    $('#atcDlgHeader').css('color', textColor);
+    $('#atcDlgClose').css('color', textColor);
 
-    $('#atticDialogBody').scrollTop(0);
-    $('#atticDialogBody').html(body);
+    $('#atcDlgBody').scrollTop(0);
+    $('#atcDlgBody').html(body);
 
+    // const headerHeight = $('#atticDialogHeaderContainer').height();
+    // var contentHeight = 0;
+    // $('#atticDialogBody').children().each(function() { contentHeight = contentHeight + $(this).height() })
+    //$('#atticDialogContainer').height(headerHeight + contentHeight);
     // var bodyHeight = $('#atticDialogBody').outerHeight();
     // console.log(bodyHeight)
     // $('#atticDialogContainer').height(bodyHeight);

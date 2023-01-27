@@ -49,6 +49,13 @@ require('./map/controls/help/helpControl');
 // add the menu control
 //require('./map/controls/offCanvasMenu');
 
+$('#atcDlg').on('click', function(e) {
+    var clickedTarget = $(e.target).attr('id');
+    if (clickedTarget == 'atcDlg' || clickedTarget == 'atcDlgClose') {
+        $(this).hide();
+    }
+})
+
 $('#dataDiv').data('currentStation', 'KLWX');
 
 $('#haClearMap').on('mouseenter', function() {
