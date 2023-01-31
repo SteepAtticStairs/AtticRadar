@@ -3725,6 +3725,58 @@ function calcGPU(azDists) {
 }
 
 module.exports = calcGPU;
+
+/*
+* GPU.js precision tests
+* https://github.com/munrocket/double.js/blob/master/webgl/double.glsl
+*/
+
+// const earthRadius = 6378137.0;
+// const distance = 132.5 * 1000;
+
+// // GPU is a constructor and namespace for browser
+// const gpu = new GPU();
+// const multiplyMatrix = gpu.createKernel(function (aa, bb) {
+//     function add(a, b) { return (b != 0) ? a + b : a; }
+//     function sub(a, b) { return (b != 0) ? a - b : a; }
+//     function mul(a, b) { return (b != 1) ? a * b : a; }
+//     function div(a, b) { return (b != 1) ? a / b : a; }
+//     function fma(a, b, c) { return a * b + c; }
+
+
+//     function fastTwoSum(a, b) {
+//         return [add(a, b), sub(b, sub(add(a, b), a))];
+//     }
+
+//     function twoSum(a, b) {
+//         return [add(a, b), add(sub(b, sub(add(a, b), a)), sub(a, sub(add(a, b), sub(add(a, b), a))))];
+//     }
+
+//     function twoProd(a, b) {
+//         return [mul(a, b), a * b + -mul(a, b)];
+//     }
+
+//     function div22(X, Y) {
+//         return fastTwoSum(div(X[0], Y[0]), div(sub(add(sub(sub(X[0], twoProd(div(X[0], Y[0]), Y[0])[0]), twoProd(div(X[0], Y[0]), Y[0])[1]), X[1]), mul(div(X[0], Y[0]), Y[1])), Y[0]));
+//     }
+
+//     return div22([aa, 0], [bb, 0]);
+//     //return aa / bb;
+// }).setOutput([1]);
+
+// const c = multiplyMatrix(distance, earthRadius);
+
+// //console.log(c[0][0] + c[0][1])
+// console.log(c[0])
+// console.log(distance / earthRadius)
+
+// // const correct = 0.020774091243258023;
+// // const normalGL = 0.02077409252524376;
+// // const precGL = 0.02077409066259861;
+
+// // console.log(Math.abs(correct - normalGL))
+// // console.log(Math.abs(correct - precGL))
+// // console.log(Math.abs(correct - normalGL) > Math.abs(correct - precGL))
 },{}],31:[function(require,module,exports){
 const chroma = require('chroma-js');
 const ut = require('../utils');
