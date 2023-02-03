@@ -102,7 +102,7 @@ function exportFetchData() {
             var headerColor = '#ba3043';
             var body = `\
             <h5 style='text-align: center'>There are <b class='alertTextDescriber'>no active Tropical Cyclones</b> in the Atlantic, East Pacific, or West Pacific basins.</h5>
-            <div style='text-align: center'>Updated: ${DateTime.now().toFormat('L/d/yyyy h:mm a ZZZZ')} <b>(${formattedDateDiff} ago)</b></div>`
+            <div style='text-align: center'>Updated: ${DateTime.now().toFormat('L/d/yyyy h:mm a ZZZZ')} <b>(${formattedDateDiff} ago)</b></div><br>`
 
             ut.displayAtticDialog({
                 'title': 'No Active Systems',

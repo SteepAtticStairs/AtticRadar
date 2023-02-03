@@ -750,3 +750,190 @@ https://tobiasahlin.com/spinkit/
     background-color: rgb(51, 51, 51);
     color: rgb(255, 255, 255);
 }
+
+#atticRadarMenu {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+
+    background-color: rgba(0, 0, 0, 0.4);
+}
+#atticRadarMenuContainer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    overflow: scroll;
+
+    width: 90vw;
+    max-width: 550px;
+    height: 95vh;
+    max-height: 95vh;
+
+    background-color: rgb(28, 28, 28);
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+#atticRadarMenuBody {
+    color: #aeaeae;
+    padding: 15px;
+}
+.atticRadarMenuRow {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    background-color: rgb(50, 50, 50);
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+.atticRadarMenuRow:hover {
+    background-color: rgb(44, 44, 44);
+    cursor: pointer;
+}
+.atticRadarMenuRow:active {
+    /* border: 1px solid rgba(97, 178, 203, 0.542); */
+    background-color: rgb(40, 40, 40);
+}
+.armrSlideDown {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    /* border-top: 0.25px solid rgb(70, 70, 70); */
+    background-color: rgb(60, 60, 60);
+}
+/* armr = atticRadarMenuRow */
+.armrTop {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom: 0.25px solid rgb(70, 70, 70);
+}
+.armrMiddle {
+    border-radius: 0px;
+    border-top: 0.25px solid rgb(70, 70, 70);
+    border-bottom: 0.25px solid rgb(70, 70, 70);
+}
+.armrBottom {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top: 0.25px solid rgb(70, 70, 70);
+}
+.armrWide {
+    border-radius: 0px;
+    /* 15px is the padding for #atticRadarMenuContainer */
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 15px;
+}
+
+.armrIcon {
+    color: rgb(130, 130, 130);
+    margin-left: 5px;
+    margin-right: 10px;
+}
+.armrIcon-Red {
+    color: rgb(235, 85, 70);
+}
+.armrText-Red {
+    color: rgb(187, 64, 53);
+}
+.armrIcon-Blue {
+    color: rgb(70, 143, 235);
+}
+.armrIcon-Green {
+    color: rgb(79, 183, 94);
+}
+.armrText-Green {
+    color: rgb(25, 133, 57);
+}
+
+.armrIconArrowRight {
+    position: absolute;
+    right: 30px;
+    color: rgb(111, 111, 111);
+}
+
+/* arms = atticRadarMenuScreen */
+.armsHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: rgb(200, 200, 200);
+    font-size: 18px;
+}
+.armsHeaderBackBtn {
+    position: absolute;
+    left: 15px;
+    color: rgb(56, 144, 218);
+    cursor: pointer;
+
+    font-size: 16px;
+    /* font-weight: bold; */
+    /* text-decoration: underline; */
+}
+.armsHeaderBackBtn:hover {
+    color: rgb(44, 110, 164);
+}
+
+.armrHeader {
+    margin-left: calc(10px + 5px); /* atticRadarMenuRow padding + armrIcon margin-left */
+    margin-bottom: 3px;
+    font-size: 15px;
+}
+.armrHeaderWide {
+    margin-left: 0px;
+}
+
+.toggleSwitch[type=checkbox] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+.toggleSwitchCircle {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: calc(180px / 5);
+    height: calc(100px / 5);
+    background: grey;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+}
+.toggleSwitchCircle:after {
+    content: "";
+    position: absolute;
+    top: calc(5px / 5);
+    left: calc(5px / 5);
+    width: calc(90px / 5);
+    height: calc(90px / 5);
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+.toggleSwitch:checked+.toggleSwitchCircle {
+    background: #4BD763;
+}
+.toggleSwitch:checked+.toggleSwitchCircle:after {
+    left: calc(100% - calc(5px / 5));
+    transform: translateX(-100%);
+}
+.toggleSwitchCircle:active:after {
+    width: calc(110px / 5);
+}
+.toggleSwitchContainter {
+    display: flex;
+    position: absolute;
+    right: 30px;
+}
+/* tsc = toggleSwitchContainter */
+.tscWide {
+    right: 15px;
+}

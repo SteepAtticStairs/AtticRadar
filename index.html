@@ -447,6 +447,77 @@
         </div>
     </div>
 
+    <div id="atticRadarMenu" style="display: none">
+        <div id="atticRadarMenuContainer">
+            <div id="atticRadarMenuBody">
+                <div id="atticRadarMenuMainScreen">
+                    <div class="armrHeader">SETTINGS</div>
+                    <div class="atticRadarMenuRow" id="armrSettingsBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-gear"></i>
+                        Settings
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+
+                    <br>
+
+                    <div class="armrHeader">MODE</div>
+                    <div class="atticRadarMenuRow" id="armrModeBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-sliders"></i>
+                        Change Mode
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrSlideDown armrText-Green" id="armrModeBtnSlideDown" style="display: none">
+                        <i class="armrIcon armrIcon-Green fa-solid fa-clock"></i>
+                        <span>Current File Mode</span>
+                        <i class="toggleSwitchContainter" id="armrModeBtnSwitch"><input type="checkbox" id="armrModeBtnSwitchElem" class="toggleSwitch" /><label for="armrModeBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+
+                    <br>
+
+                    <div class="armrHeader">MARINE</div>
+                    <div class="atticRadarMenuRow" id="armrTideStationsBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-water"></i>
+                        Tide Stations
+                        <i class="toggleSwitchContainter" id="armrTideStationsBtnSwitch"><input type="checkbox" id="armrTideStationsBtnSwitchElem" class="toggleSwitch" /><label for="armrTideStationsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+
+                    <!-- <div class="armrHeader">HURRICANES</div>
+                    <div class="atticRadarMenuRow" id="armrHurricaneArchiveBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-hurricane"></i>
+                        Hurricane Archive
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div> -->
+                    <!-- <div class="atticRadarMenuRow armrTop">Contents Top</div>
+                    <div class="atticRadarMenuRow armrMiddle">Contents Middle</div>
+                    <div class="atticRadarMenuRow armrBottom">Contents Bottom</div>
+                    <br>
+                    <div class="atticRadarMenuRow">Contents Top</div> -->
+                </div>
+                <div id="atticRadarMenuSettingsScreen" style="display: none">
+                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSettingsBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Settings</div>
+                    <br>
+                    <div class="armrHeader armrHeaderWide">MAP LAYERS</div>
+                    <div class="atticRadarMenuRow armrTop armrWide" id="armrRadarVisBtn">
+                        Radar
+                        <i class="toggleSwitchContainter tscWide" id="armrRadarVisBtnSwitch"><input type="checkbox" id="armrRadarVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrRadarVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSTVisBtn">
+                        Storm Tracks
+                        <i class="toggleSwitchContainter tscWide" id="armrSTVisBtnSwitch"><input type="checkbox" id="armrSTVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrSTVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div> -->
+                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrRoadsStreetsVisBtn">
+                        Roads & Streets
+                        <i class="toggleSwitchContainter tscWide" id="armrRoadsStreetsVisBtnSwitch"><input type="checkbox" id="armrRoadsStreetsVisBtnSwitchElem" class="toggleSwitch" /><label for="armrRoadsStreetsVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrBottom armrWide" id="armrDayNightLineVisBtn">
+                        Day / Night Line
+                        <i class="toggleSwitchContainter tscWide" id="armrDayNightLineVisBtnSwitch"><input type="checkbox" id="armrDayNightLineVisBtnSwitchElem" class="toggleSwitch" /><label for="armrDayNightLineVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- <script>
         $('#haDatePicker').datepicker({
             format: "yyyy",

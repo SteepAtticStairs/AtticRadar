@@ -108,7 +108,7 @@ $('#optionsBox').on('click', function(e) {
     // if the user clicks on one of the dropdown menu items
     if ($(e.target).parents().eq(1).attr('id') == 'tiltsMenu') return;
     // if the user clicks on one of the product buttons
-    if ($(e.target).parents().eq(1).attr('id') == 'mainInfo' && $('#modeThing').hasClass('fa-clock')) return;
+    if ($(e.target).parents().eq(1).attr('id') == 'mainInfo' && $('#armrModeBtnSlideDown').find('.armrIcon').hasClass('fa-clock')) return;
     // if the user clicks on one of the elevation buttons in upload mode
     if ($(e.target).parents().eq(0).attr('id') == 'l2ElevBtns') return;
     // if the user clicks on the product dropdown in upload mode

@@ -21,17 +21,23 @@ require('./dom/fileUpload');
 require('./menu/mode');
 //require('./map/controls/mode');
 
+// load the atticRadarMenu helper file
+require('./menu/atticRadarMenu');
+
+// load the settings menu
+require('./menu/settings').settingsOption();
+
 // load the tools menu
 require('./menu/tools');
 
 // load the data inspector tool
 require('./inspector/entry');
 
-// load the offcanvas menu control
-require('./map/controls/offCanvasMenu');
+// // load the offcanvas menu control
+// require('./map/controls/offCanvasMenu');
 
 // load the offcanvas settings control
-require('./menu/settings');
+// require('./menu/settings');
 $('#dataDiv').data('stormTracksVisibility', true);
 
 // load the station marker menu item
@@ -43,8 +49,8 @@ require('./radarMessage/radarMessage');
 // load the historical hurricanes module
 require('../hurricanes/historical/menuItem');
 
-// add the help control
-require('./map/controls/help/helpControl');
+// // add the help control
+// require('./map/controls/help/helpControl');
 
 // add the menu control
 //require('./map/controls/offCanvasMenu');
@@ -52,6 +58,12 @@ require('./map/controls/help/helpControl');
 $('#atcDlg').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
     if (clickedTarget == 'atcDlg' || clickedTarget == 'atcDlgClose') {
+        $(this).hide();
+    }
+})
+$('#atticRadarMenu').on('click', function(e) {
+    var clickedTarget = $(e.target).attr('id');
+    if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
         $(this).hide();
     }
 })
