@@ -7256,12 +7256,6 @@ $('#atcDlg').on('click', function(e) {
         $(this).hide();
     }
 })
-$('#atticRadarMenu').on('click', function(e) {
-    var clickedTarget = $(e.target).attr('id');
-    if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
-        $(this).hide();
-    }
-})
 
 $('#dataDiv').data('currentStation', 'KLWX');
 
@@ -8369,6 +8363,16 @@ function getRotationDegrees(el) {
     var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
     return (angle < 0 ? angle + 360 : angle);
 }
+
+$('#atticRadarMenu').on('click', function(e) {
+    var clickedTarget = $(e.target).attr('id');
+    if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
+        $(this).hide();
+    }
+})
+$('#armsMainMenuExitBtn').click(function() {
+    $('#atticRadarMenu').hide();
+})
 
 function slideDownToggle(armrElem, armrSlideDownElem) {
     const duration = 150;

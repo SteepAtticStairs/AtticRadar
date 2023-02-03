@@ -54,6 +54,16 @@ function getRotationDegrees(el) {
     return (angle < 0 ? angle + 360 : angle);
 }
 
+$('#atticRadarMenu').on('click', function(e) {
+    var clickedTarget = $(e.target).attr('id');
+    if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
+        $(this).hide();
+    }
+})
+$('#armsMainMenuExitBtn').click(function() {
+    $('#atticRadarMenu').hide();
+})
+
 function slideDownToggle(armrElem, armrSlideDownElem) {
     const duration = 150;
     const easing = 'swing';

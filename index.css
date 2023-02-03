@@ -882,6 +882,14 @@ https://tobiasahlin.com/spinkit/
 .armsHeaderBackBtn:hover {
     color: rgb(44, 110, 164);
 }
+.armsHeaderExitBtn {
+    position: absolute;
+    right: 15px;
+    color: rgb(200, 200, 200);
+    cursor: pointer;
+
+    font-size: 30px;
+}
 
 .armrHeader {
     margin-left: calc(10px + 5px); /* atticRadarMenuRow padding + armrIcon margin-left */

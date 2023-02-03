@@ -61,12 +61,6 @@ $('#atcDlg').on('click', function(e) {
         $(this).hide();
     }
 })
-$('#atticRadarMenu').on('click', function(e) {
-    var clickedTarget = $(e.target).attr('id');
-    if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
-        $(this).hide();
-    }
-})
 
 $('#dataDiv').data('currentStation', 'KLWX');
 
