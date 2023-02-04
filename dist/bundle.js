@@ -8370,7 +8370,7 @@ $('#atticRadarMenu').on('click', function(e) {
         $(this).hide();
     }
 })
-$('#armsMainMenuExitBtn').click(function() {
+$('.armsHeaderExitBtn').click(function() {
     $('#atticRadarMenu').hide();
 })
 
