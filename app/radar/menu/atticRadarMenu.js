@@ -1,6 +1,18 @@
 const ut = require('../utils');
 const createMenuOption = require('./createMenuOption');
 
+const showHideDuration = 250;
+function showARMwindow() {
+    $('#atticRadarMenu').fadeIn(showHideDuration);
+    $('#atticRadarMenuContainer').hide().show('slide', { direction: 'down' }, showHideDuration);
+}
+function hideARMwindow() {
+    $('#atticRadarMenu').fadeOut(showHideDuration);
+    $('#atticRadarMenuContainer').hide('slide', { direction: 'down' }, showHideDuration, function() {
+        $('#atticRadarMenu').hide();
+    });
+}
+
 createMenuOption({
     'divId': 'offcanvasMenuItemDiv',
     'iconId': 'offcanvasMenuItemIcon',
@@ -15,7 +27,8 @@ createMenuOption({
     'icon': 'fa fa-bars',
     'css': ''
 }, function(divElem, iconElem) {
-    $('#atticRadarMenu').show();
+    showARMwindow();
+
     $('#atticRadarMenuSettingsScreen').hide();
     $('#atticRadarMenuMainScreen').show();
 })
@@ -57,11 +70,13 @@ function getRotationDegrees(el) {
 $('#atticRadarMenu').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
     if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
-        $(this).hide();
+        hideARMwindow();
+        //$(this).hide();
     }
 })
 $('.armsHeaderExitBtn').click(function() {
-    $('#atticRadarMenu').hide();
+    hideARMwindow();
+    //$('#atticRadarMenu').hide();
 })
 
 function slideDownToggle(armrElem, armrSlideDownElem) {
@@ -130,5 +145,7 @@ $('#armsSettingsBackBtn').click(function() {
 
 module.exports = {
     slideDownToggle,
-    toggleswitchFunctions
+    toggleswitchFunctions,
+    showARMwindow,
+    hideARMwindow
 }

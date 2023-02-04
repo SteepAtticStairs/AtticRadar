@@ -2609,42 +2609,59 @@ module.exports = loadOutlooks;
 },{"../radar/map/map":64,"../radar/utils":88,"./drawOutlooks":8,"./unzip":18}],16:[function(require,module,exports){
 const ut = require('../radar/utils');
 const createMenuOption = require('../radar/menu/createMenuOption');
+const armFunctions = require('../radar/menu/atticRadarMenu');
 const fetchData = require('./fetchData');
 var map = require('../radar/map/map');
 
-createMenuOption({
-    'divId': 'hurricanesMenuItemDiv',
-    'iconId': 'hurricanesMenuItemIcon',
+var layerArray = $('#dataDiv').data('hurricaneMapLayers');
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Hurricane Tracker',
-    'icon': 'fa fa-hurricane',
-    'css': ''
-}, function(divElem, iconElem) {
-    var layerArray = $('#dataDiv').data('hurricaneMapLayers');
-    if (!$(iconElem).hasClass('icon-blue')) {
-        $(iconElem).removeClass('icon-grey');
-        $(iconElem).addClass('icon-blue');
-
-        if (map.getLayer(layerArray[0])) {
-            for (var i = 0; i < layerArray.length; i++) {
-                map.setLayoutProperty(layerArray[i], 'visibility', 'visible');
-            }
-        } else {
-            fetchData();
-        }
-    } else if ($(iconElem).hasClass('icon-blue')) {
-        $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-grey');
-
+armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitch'), function() {
+    if (map.getLayer(layerArray[0])) {
         for (var i = 0; i < layerArray.length; i++) {
-            map.setLayoutProperty(layerArray[i], 'visibility', 'none');
+            map.setLayoutProperty(layerArray[i], 'visibility', 'visible');
         }
+    } else {
+        fetchData();
+    }
+}, function() {
+    for (var i = 0; i < layerArray.length; i++) {
+        map.setLayoutProperty(layerArray[i], 'visibility', 'none');
     }
 })
-},{"../radar/map/map":64,"../radar/menu/createMenuOption":69,"../radar/utils":88,"./fetchData":11}],17:[function(require,module,exports){
+
+// createMenuOption({
+//     'divId': 'hurricanesMenuItemDiv',
+//     'iconId': 'hurricanesMenuItemIcon',
+
+//     'divClass': 'mapFooterMenuItem',
+//     'iconClass': 'icon-grey',
+
+//     'contents': 'Hurricane Tracker',
+//     'icon': 'fa fa-hurricane',
+//     'css': ''
+// }, function(divElem, iconElem) {
+//     var layerArray = $('#dataDiv').data('hurricaneMapLayers');
+//     if (!$(iconElem).hasClass('icon-blue')) {
+//         $(iconElem).removeClass('icon-grey');
+//         $(iconElem).addClass('icon-blue');
+
+//         if (map.getLayer(layerArray[0])) {
+//             for (var i = 0; i < layerArray.length; i++) {
+//                 map.setLayoutProperty(layerArray[i], 'visibility', 'visible');
+//             }
+//         } else {
+//             fetchData();
+//         }
+//     } else if ($(iconElem).hasClass('icon-blue')) {
+//         $(iconElem).removeClass('icon-blue');
+//         $(iconElem).addClass('icon-grey');
+
+//         for (var i = 0; i < layerArray.length; i++) {
+//             map.setLayoutProperty(layerArray[i], 'visibility', 'none');
+//         }
+//     }
+// })
+},{"../radar/map/map":64,"../radar/menu/atticRadarMenu":68,"../radar/menu/createMenuOption":69,"../radar/utils":88,"./fetchData":11}],17:[function(require,module,exports){
 const ut = require('../radar/utils');
 
 function parseStormTypeForecast(csvJsonData) {
@@ -8334,6 +8351,18 @@ module.exports = {
 const ut = require('../utils');
 const createMenuOption = require('./createMenuOption');
 
+const showHideDuration = 250;
+function showARMwindow() {
+    $('#atticRadarMenu').fadeIn(showHideDuration);
+    $('#atticRadarMenuContainer').hide().show('slide', { direction: 'down' }, showHideDuration);
+}
+function hideARMwindow() {
+    $('#atticRadarMenu').fadeOut(showHideDuration);
+    $('#atticRadarMenuContainer').hide('slide', { direction: 'down' }, showHideDuration, function() {
+        $('#atticRadarMenu').hide();
+    });
+}
+
 createMenuOption({
     'divId': 'offcanvasMenuItemDiv',
     'iconId': 'offcanvasMenuItemIcon',
@@ -8348,7 +8377,8 @@ createMenuOption({
     'icon': 'fa fa-bars',
     'css': ''
 }, function(divElem, iconElem) {
-    $('#atticRadarMenu').show();
+    showARMwindow();
+
     $('#atticRadarMenuSettingsScreen').hide();
     $('#atticRadarMenuMainScreen').show();
 })
@@ -8390,11 +8420,13 @@ function getRotationDegrees(el) {
 $('#atticRadarMenu').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
     if (clickedTarget == 'atticRadarMenu'/* || clickedTarget == 'atcDlgClose'*/) {
-        $(this).hide();
+        hideARMwindow();
+        //$(this).hide();
     }
 })
 $('.armsHeaderExitBtn').click(function() {
-    $('#atticRadarMenu').hide();
+    hideARMwindow();
+    //$('#atticRadarMenu').hide();
 })
 
 function slideDownToggle(armrElem, armrSlideDownElem) {
@@ -8463,7 +8495,9 @@ $('#armsSettingsBackBtn').click(function() {
 
 module.exports = {
     slideDownToggle,
-    toggleswitchFunctions
+    toggleswitchFunctions,
+    showARMwindow,
+    hideARMwindow
 }
 },{"../utils":88,"./createMenuOption":69}],69:[function(require,module,exports){
 function createMenuOption(options, clickFunc) {
@@ -8831,6 +8865,7 @@ const ut = require('../utils');
 const map = require('../map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
 const terminator = require('../map/terminator/terminator');
+const armFunctions = require('./atticRadarMenu');
 
 function settingsOption(index) {
     createMenuOption({
@@ -8845,7 +8880,8 @@ function settingsOption(index) {
         'css': ''
     }, function(divElem, iconElem) {
         //$('#settingsModalTrigger').click();
-        $('#atticRadarMenu').show();
+        armFunctions.showARMwindow();
+
         $('#atticRadarMenuMainScreen').hide();
         $('#atticRadarMenuSettingsScreen').show();
     })
@@ -8907,7 +8943,7 @@ function settingsOption(index) {
 module.exports = {
     settingsOption
 };
-},{"../map/map":64,"../map/terminator/terminator":67,"../misc/baseMapLayers":78,"../utils":88,"./createMenuOption":69,"./createToolsOption":71}],74:[function(require,module,exports){
+},{"../map/map":64,"../map/terminator/terminator":67,"../misc/baseMapLayers":78,"../utils":88,"./atticRadarMenu":68,"./createMenuOption":69,"./createToolsOption":71}],74:[function(require,module,exports){
 const createMenuOption = require('./createMenuOption');
 const showStations = require('../map/controls/stationMarkers');
 const ut = require('../utils');

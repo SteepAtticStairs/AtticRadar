@@ -4,6 +4,7 @@ const ut = require('../utils');
 const map = require('../map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
 const terminator = require('../map/terminator/terminator');
+const armFunctions = require('./atticRadarMenu');
 
 function settingsOption(index) {
     createMenuOption({
@@ -18,7 +19,8 @@ function settingsOption(index) {
         'css': ''
     }, function(divElem, iconElem) {
         //$('#settingsModalTrigger').click();
-        $('#atticRadarMenu').show();
+        armFunctions.showARMwindow();
+
         $('#atticRadarMenuMainScreen').hide();
         $('#atticRadarMenuSettingsScreen').show();
     })
