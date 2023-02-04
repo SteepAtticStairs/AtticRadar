@@ -6,7 +6,7 @@ var map = require('../radar/map/map');
 
 var layerArray = $('#dataDiv').data('hurricaneMapLayers');
 
-armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitch'), function() {
+armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function() {
     if (map.getLayer(layerArray[0])) {
         for (var i = 0; i < layerArray.length; i++) {
             map.setLayoutProperty(layerArray[i], 'visibility', 'visible');

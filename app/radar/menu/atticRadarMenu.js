@@ -103,9 +103,9 @@ function slideDownToggle(armrElem, armrSlideDownElem) {
 
 function toggleswitchFunctions(switchElem, onFunction, offFunction) {
     // you can't use .click() because it fires twice for some reason
-    switchElem.on('mouseup touchend', function() {
-        var checkbox = $(this).find('input');
-        var isChecked = !checkbox.is(':checked'); // true if the switch just turned on
+    switchElem.on('click', function(e) {
+        var checkbox = $(this); //.find('input');
+        var isChecked = checkbox.is(':checked'); // true if the switch just turned on
         if (isChecked) { onFunction() }
         else { offFunction() }
     })

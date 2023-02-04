@@ -38,7 +38,7 @@ $('#armrModeBtn').click(function() {
     armFunctions.slideDownToggle(armrModeBtn, armrModeBtnSlideDown);
 })
 
-armFunctions.toggleswitchFunctions($('#armrModeBtnSwitch'), function() {
+armFunctions.toggleswitchFunctions($('#armrModeBtnSwitchElem'), function() {
     if (!$('#dataDiv').data('noMoreClicks')) {
         $('#armrModeBtnSlideDown')
             // change text to red
@@ -49,7 +49,7 @@ armFunctions.toggleswitchFunctions($('#armrModeBtnSwitch'), function() {
             .removeClass('armrIcon-Green fa-clock')
             .addClass('armrIcon-Red fa-upload');
         // change the text
-        $('#armrModeBtnSlideDown').find('span').text('File Upload Mode');
+        $('#armrModeBtnSlideDown').find('.slideDownText').text('File Upload Mode');
         showHideFileBox('show');
     }
 }, function() {
@@ -63,7 +63,7 @@ armFunctions.toggleswitchFunctions($('#armrModeBtnSwitch'), function() {
             .removeClass('armrIcon-Red fa-upload')
             .addClass('armrIcon-Green fa-clock');
         // change the text
-        $('#armrModeBtnSlideDown').find('span').text('Current File Mode');
+        $('#armrModeBtnSlideDown').find('.slideDownText').text('Current File Mode');
         showHideFileBox('hide');
     }
 })

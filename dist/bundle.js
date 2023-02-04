@@ -2615,7 +2615,7 @@ var map = require('../radar/map/map');
 
 var layerArray = $('#dataDiv').data('hurricaneMapLayers');
 
-armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitch'), function() {
+armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function() {
     if (map.getLayer(layerArray[0])) {
         for (var i = 0; i < layerArray.length; i++) {
             map.setLayoutProperty(layerArray[i], 'visibility', 'visible');
@@ -8454,9 +8454,9 @@ function slideDownToggle(armrElem, armrSlideDownElem) {
 
 function toggleswitchFunctions(switchElem, onFunction, offFunction) {
     // you can't use .click() because it fires twice for some reason
-    switchElem.on('mouseup touchend', function() {
-        var checkbox = $(this).find('input');
-        var isChecked = !checkbox.is(':checked'); // true if the switch just turned on
+    switchElem.on('click', function(e) {
+        var checkbox = $(this); //.find('input');
+        var isChecked = checkbox.is(':checked'); // true if the switch just turned on
         if (isChecked) { onFunction() }
         else { offFunction() }
     })
@@ -8793,7 +8793,7 @@ $('#armrModeBtn').click(function() {
     armFunctions.slideDownToggle(armrModeBtn, armrModeBtnSlideDown);
 })
 
-armFunctions.toggleswitchFunctions($('#armrModeBtnSwitch'), function() {
+armFunctions.toggleswitchFunctions($('#armrModeBtnSwitchElem'), function() {
     if (!$('#dataDiv').data('noMoreClicks')) {
         $('#armrModeBtnSlideDown')
             // change text to red
@@ -8804,7 +8804,7 @@ armFunctions.toggleswitchFunctions($('#armrModeBtnSwitch'), function() {
             .removeClass('armrIcon-Green fa-clock')
             .addClass('armrIcon-Red fa-upload');
         // change the text
-        $('#armrModeBtnSlideDown').find('span').text('File Upload Mode');
+        $('#armrModeBtnSlideDown').find('.slideDownText').text('File Upload Mode');
         showHideFileBox('show');
     }
 }, function() {
@@ -8818,7 +8818,7 @@ armFunctions.toggleswitchFunctions($('#armrModeBtnSwitch'), function() {
             .removeClass('armrIcon-Red fa-upload')
             .addClass('armrIcon-Green fa-clock');
         // change the text
-        $('#armrModeBtnSlideDown').find('span').text('Current File Mode');
+        $('#armrModeBtnSlideDown').find('.slideDownText').text('Current File Mode');
         showHideFileBox('hide');
     }
 })
@@ -8887,8 +8887,8 @@ function settingsOption(index) {
         $('#atticRadarMenuSettingsScreen').show();
     })
 
-    $('#armrSTVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrSTVisBtnSwitchElem').is(':checked');
+    $('#armrSTVisBtnSwitchElem').on('click', function() {
+        var isChecked = $(this).is(':checked');
         $('#dataDiv').data('stormTracksVisibility', isChecked);
 
         var stLayers = $('#dataDiv').data('stormTrackMapLayers')
@@ -8903,38 +8903,26 @@ function settingsOption(index) {
         }
     })
 
-    $('#armrRadarVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrRadarVisBtnSwitchElem').is(':checked');
-
-        if (!isChecked) {
-            if (map.getLayer('baseReflectivity')) {
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
-            }
-        } else if (isChecked) {
-            if (map.getLayer('baseReflectivity')) {
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
-            }
+    armFunctions.toggleswitchFunctions($('#armrRadarVisBtnSwitchElem'), function() {
+        if (map.getLayer('baseReflectivity')) {
+            map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+        }
+    }, function() {
+        if (map.getLayer('baseReflectivity')) {
+            map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
         }
     })
 
-    $('#armrRoadsStreetsVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
-
-        if (!isChecked) {
-            setBaseMapLayers('cities');
-        } else if (isChecked) {
-            setBaseMapLayers('both');
-        }
+    armFunctions.toggleswitchFunctions($('#armrRoadsStreetsVisBtnSwitchElem'), function() {
+        setBaseMapLayers('both');
+    }, function() {
+        setBaseMapLayers('cities');
     })
 
-    $('#armrDayNightLineVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrDayNightLineVisBtnSwitchElem').is(':checked');
-
-        if (!isChecked) {
-            terminator.toggleVisibility('hide');
-        } else if (isChecked) {
-            terminator.toggleVisibility('show');
-        }
+    armFunctions.toggleswitchFunctions($('#armrDayNightLineVisBtnSwitchElem'), function() {
+        terminator.toggleVisibility('show');
+    }, function() {
+        terminator.toggleVisibility('hide');
     })
 
     // this is in app/alerts/drawAlertShapes.js
@@ -16941,7 +16929,7 @@ const loadMarkers = require('./loadMarkers');
 var map = require('../radar/map/map');
 
 function addTideStationsControl(divName) {
-    armFunctions.toggleswitchFunctions($('#armrTideStationsBtnSwitch'), function() {
+    armFunctions.toggleswitchFunctions($('#armrTideStationsBtnSwitchElem'), function() {
         if (map.getLayer('tideStationDots')) {
             // layer does exist - toggle the visibility to on
             loadMarkers.toggleTideStationMarkers('show');

@@ -935,9 +935,9 @@ https://tobiasahlin.com/spinkit/
     left: calc(100% - calc(5px / 5));
     transform: translateX(-100%);
 }
-.toggleSwitchCircle:active:after {
-    /* width: calc(110px / 5); */
-}
+/* .toggleSwitchCircle:active:after {
+    width: calc(110px / 5);
+} */
 .toggleSwitchContainter {
     display: flex;
     position: absolute;

@@ -5,7 +5,7 @@ const loadMarkers = require('./loadMarkers');
 var map = require('../radar/map/map');
 
 function addTideStationsControl(divName) {
-    armFunctions.toggleswitchFunctions($('#armrTideStationsBtnSwitch'), function() {
+    armFunctions.toggleswitchFunctions($('#armrTideStationsBtnSwitchElem'), function() {
         if (map.getLayer('tideStationDots')) {
             // layer does exist - toggle the visibility to on
             loadMarkers.toggleTideStationMarkers('show');

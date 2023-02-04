@@ -25,8 +25,8 @@ function settingsOption(index) {
         $('#atticRadarMenuSettingsScreen').show();
     })
 
-    $('#armrSTVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrSTVisBtnSwitchElem').is(':checked');
+    $('#armrSTVisBtnSwitchElem').on('click', function() {
+        var isChecked = $(this).is(':checked');
         $('#dataDiv').data('stormTracksVisibility', isChecked);
 
         var stLayers = $('#dataDiv').data('stormTrackMapLayers')
@@ -41,38 +41,26 @@ function settingsOption(index) {
         }
     })
 
-    $('#armrRadarVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrRadarVisBtnSwitchElem').is(':checked');
-
-        if (!isChecked) {
-            if (map.getLayer('baseReflectivity')) {
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
-            }
-        } else if (isChecked) {
-            if (map.getLayer('baseReflectivity')) {
-                map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
-            }
+    armFunctions.toggleswitchFunctions($('#armrRadarVisBtnSwitchElem'), function() {
+        if (map.getLayer('baseReflectivity')) {
+            map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
+        }
+    }, function() {
+        if (map.getLayer('baseReflectivity')) {
+            map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
         }
     })
 
-    $('#armrRoadsStreetsVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
-
-        if (!isChecked) {
-            setBaseMapLayers('cities');
-        } else if (isChecked) {
-            setBaseMapLayers('both');
-        }
+    armFunctions.toggleswitchFunctions($('#armrRoadsStreetsVisBtnSwitchElem'), function() {
+        setBaseMapLayers('both');
+    }, function() {
+        setBaseMapLayers('cities');
     })
 
-    $('#armrDayNightLineVisBtnSwitch').on('mouseup touchend', function() {
-        var isChecked = !$('#armrDayNightLineVisBtnSwitchElem').is(':checked');
-
-        if (!isChecked) {
-            terminator.toggleVisibility('hide');
-        } else if (isChecked) {
-            terminator.toggleVisibility('show');
-        }
+    armFunctions.toggleswitchFunctions($('#armrDayNightLineVisBtnSwitchElem'), function() {
+        terminator.toggleVisibility('show');
+    }, function() {
+        terminator.toggleVisibility('hide');
     })
 
     // this is in app/alerts/drawAlertShapes.js
