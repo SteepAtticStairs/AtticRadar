@@ -31,6 +31,12 @@ require('./menu/atticRadarMenu');
 // load the settings menu
 require('./menu/settings').settingsOption();
 
+// load the weather-station menu item
+require('../weather-station/menuItem').weatherstationToolsOption();
+
+// load the radio menu item
+require('../radio/menuItem').weatherRadioToolsOption();
+
 // load the tools menu
 require('./menu/tools');
 

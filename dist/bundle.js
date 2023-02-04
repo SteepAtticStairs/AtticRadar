@@ -7263,6 +7263,12 @@ require('./menu/atticRadarMenu');
 // load the settings menu
 require('./menu/settings').settingsOption();
 
+// load the weather-station menu item
+require('../weather-station/menuItem').weatherstationToolsOption();
+
+// load the radio menu item
+require('../radio/menuItem').weatherRadioToolsOption();
+
 // load the tools menu
 require('./menu/tools');
 
@@ -7502,7 +7508,7 @@ document.addEventListener('loadFile', function(event) {
 //             .addTo(map);
 //     }
 // });
-},{"../hurricanes/historical/menuItem":13,"./dom/fileUpload":26,"./inspector/entry":41,"./level2/main":48,"./level3/main":51,"./loaders":57,"./map/map":64,"./menu/atticRadarMenu":68,"./menu/mode":72,"./menu/settings":73,"./menu/stationMarkerMenu":74,"./menu/tilts":75,"./menu/tools":76,"./misc/detectmobilebrowser":79,"./radarMessage/radarMessage":86,"./utils":88}],59:[function(require,module,exports){
+},{"../hurricanes/historical/menuItem":13,"../radio/menuItem":92,"../weather-station/menuItem":102,"./dom/fileUpload":26,"./inspector/entry":41,"./level2/main":48,"./level3/main":51,"./loaders":57,"./map/map":64,"./menu/atticRadarMenu":68,"./menu/mode":72,"./menu/settings":73,"./menu/stationMarkerMenu":74,"./menu/tilts":75,"./menu/tools":76,"./misc/detectmobilebrowser":79,"./radarMessage/radarMessage":86,"./utils":88}],59:[function(require,module,exports){
 var map = require('../map');
 
 function createControl(options, clickFunc) {
@@ -9063,8 +9069,8 @@ function addAllToolsItems() {
     var n = 0;
     // require('../distance/menuItem').distanceToolsOption(n = n + 1);
     // require('../menu/settings').settingsOption(n = n + 1);
-    require('../../weather-station/menuItem').weatherstationToolsOption(n = n + 1);
-    require('../../radio/menuItem').weatherRadioToolsOption(n = n + 1);
+    // require('../../weather-station/menuItem').weatherstationToolsOption(n = n + 1);
+    // require('../../radio/menuItem').weatherRadioToolsOption(n = n + 1);
     require('../map/controls/reload').reloadOption(n = n + 1);
 }
 
@@ -9146,7 +9152,7 @@ createMenuOption({
         tooltipElem.hide();
     }
 })
-},{"../../radio/menuItem":92,"../../weather-station/menuItem":102,"../map/controls/reload":60,"../utils":88,"./createMenuOption":69,"./createToolsOption":71}],77:[function(require,module,exports){
+},{"../map/controls/reload":60,"../utils":88,"./createMenuOption":69,"./createToolsOption":71}],77:[function(require,module,exports){
 const ut = require('../utils');
 const loaders = require('../loaders');
 const { DateTime } = require('luxon');
@@ -16401,47 +16407,60 @@ module.exports = radioStreams;
 },{}],92:[function(require,module,exports){
 const createToolsOption = require('../radar/menu/createToolsOption');
 const plotToMap = require('./plotToMap');
+const armFunctions = require('../radar/menu/atticRadarMenu');
 var map = require('../radar/map/map');
 
 function weatherRadioToolsOption(index) {
-    createToolsOption({
-        'divId': 'weatherstationItemDiv',
-        'iconId': 'weatherstationItemClass',
-
-        'index': index,
-
-        'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-grey',
-
-        'contents': 'Weather Radio Tool',
-        'icon': 'fa fa-radio',
-        'css': ''
-    }, function(divElem, iconElem) {
-        if (!$(iconElem).hasClass('icon-blue')) {
-            $(iconElem).addClass('icon-blue');
-            $(iconElem).removeClass('icon-grey');
-
-            if (map.getLayer('radioStationLayer')) {
-                // layer does exist - toggle the visibility to on
-                map.setLayoutProperty('radioStationLayer', 'visibility', 'visible');
-            } else {
-                // layer doesn't exist - load it onto the map for the first time
-                plotToMap();
-            }
-        } else if ($(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-grey');
-
-            // layer does exist - toggle the visibility to off
-            map.setLayoutProperty('radioStationLayer', 'visibility', 'none');
+    armFunctions.toggleswitchFunctions($('#armrWeatherRadioBtnSwitchElem'), function() {
+        if (map.getLayer('radioStationLayer')) {
+            // layer does exist - toggle the visibility to on
+            map.setLayoutProperty('radioStationLayer', 'visibility', 'visible');
+        } else {
+            // layer doesn't exist - load it onto the map for the first time
+            plotToMap();
         }
+    }, function() {
+        // layer does exist - toggle the visibility to off
+        map.setLayoutProperty('radioStationLayer', 'visibility', 'none');
     })
+    // createToolsOption({
+    //     'divId': 'weatherstationItemDiv',
+    //     'iconId': 'weatherstationItemClass',
+
+    //     'index': index,
+
+    //     'divClass': 'mapFooterMenuItem',
+    //     'iconClass': 'icon-grey',
+
+    //     'contents': 'Weather Radio Tool',
+    //     'icon': 'fa fa-radio',
+    //     'css': ''
+    // }, function(divElem, iconElem) {
+    //     if (!$(iconElem).hasClass('icon-blue')) {
+    //         $(iconElem).addClass('icon-blue');
+    //         $(iconElem).removeClass('icon-grey');
+
+    //         if (map.getLayer('radioStationLayer')) {
+    //             // layer does exist - toggle the visibility to on
+    //             map.setLayoutProperty('radioStationLayer', 'visibility', 'visible');
+    //         } else {
+    //             // layer doesn't exist - load it onto the map for the first time
+    //             plotToMap();
+    //         }
+    //     } else if ($(iconElem).hasClass('icon-blue')) {
+    //         $(iconElem).removeClass('icon-blue');
+    //         $(iconElem).addClass('icon-grey');
+
+    //         // layer does exist - toggle the visibility to off
+    //         map.setLayoutProperty('radioStationLayer', 'visibility', 'none');
+    //     }
+    // })
 }
 
 module.exports = {
     weatherRadioToolsOption
 }
-},{"../radar/map/map":64,"../radar/menu/createToolsOption":71,"./plotToMap":93}],93:[function(require,module,exports){
+},{"../radar/map/map":64,"../radar/menu/atticRadarMenu":68,"../radar/menu/createToolsOption":71,"./plotToMap":93}],93:[function(require,module,exports){
 const nwrStations = require('./data/nwrStations');
 const radioStreams = require('./data/radioStreams');
 const turf = require('@turf/turf');
@@ -16986,7 +17005,7 @@ module.exports = {
 const plotData = require('./plotData');
 const ut = require('../radar/utils');
 
-function fetchData(iconElem) {
+function fetchData() {
     // class valueWithUnits {
     //     constructor (value, units) {
     //         this.value = value;
@@ -17043,10 +17062,10 @@ function fetchData(iconElem) {
     // })
 
     $.getJSON('https://attic-server.herokuapp.com/weather-station/index.php', function(data) {
-        if ($(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-grey');
-        }
+        // if ($(iconElem).hasClass('icon-blue')) {
+        //     $(iconElem).removeClass('icon-blue');
+        //     $(iconElem).addClass('icon-grey');
+        // }
         ut.loadingSpinner(false);
         plotData(data, data.observations);
     })
@@ -17077,45 +17096,51 @@ module.exports = fetchData;
 const createToolsOption = require('../radar/menu/createToolsOption');
 const fetchData = require('./fetchData');
 const ut = require('../radar/utils');
+const armFunctions = require('../radar/menu/atticRadarMenu');
 
 function weatherstationToolsOption(index) {
-    createToolsOption({
-        'divId': 'weatherstationItemDiv',
-        'iconId': 'weatherstationItemClass',
-
-        'index': index,
-
-        'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-grey',
-
-        'contents': 'Weather Station Tool',
-        'icon': 'fa fa-tower-broadcast',
-        'css': ''
-    }, function(divElem, iconElem) {
-        if (!$(iconElem).hasClass('icon-blue')) {
-            $(iconElem).addClass('icon-blue');
-            $(iconElem).removeClass('icon-grey');
-        }
+    $('#armrAtticStationBtn').click(function() {
         ut.loadingSpinner(true);
-        fetchData(iconElem);
-        // if (!$(iconElem).hasClass('icon-blue')) {
-        //     $(iconElem).addClass('icon-blue');
-        //     $(iconElem).removeClass('icon-grey');
-
-        //     fetchData();
-        // } else if ($(iconElem).hasClass('icon-blue')) {
-        //     $(iconElem).removeClass('icon-blue');
-        //     $(iconElem).addClass('icon-grey');
-
-        //     distanceMeasure.disableDistanceMeasure();
-        // }
+        fetchData();
+        armFunctions.hideARMwindow();
     })
+    // createToolsOption({
+    //     'divId': 'weatherstationItemDiv',
+    //     'iconId': 'weatherstationItemClass',
+
+    //     'index': index,
+
+    //     'divClass': 'mapFooterMenuItem',
+    //     'iconClass': 'icon-grey',
+
+    //     'contents': 'Weather Station Tool',
+    //     'icon': 'fa fa-tower-broadcast',
+    //     'css': ''
+    // }, function(divElem, iconElem) {
+    //     if (!$(iconElem).hasClass('icon-blue')) {
+    //         $(iconElem).addClass('icon-blue');
+    //         $(iconElem).removeClass('icon-grey');
+    //     }
+    //     ut.loadingSpinner(true);
+    //     fetchData(iconElem);
+    //     // if (!$(iconElem).hasClass('icon-blue')) {
+    //     //     $(iconElem).addClass('icon-blue');
+    //     //     $(iconElem).removeClass('icon-grey');
+
+    //     //     fetchData();
+    //     // } else if ($(iconElem).hasClass('icon-blue')) {
+    //     //     $(iconElem).removeClass('icon-blue');
+    //     //     $(iconElem).addClass('icon-grey');
+
+    //     //     distanceMeasure.disableDistanceMeasure();
+    //     // }
+    // })
 }
 
 module.exports = {
     weatherstationToolsOption
 }
-},{"../radar/menu/createToolsOption":71,"../radar/utils":88,"./fetchData":101}],103:[function(require,module,exports){
+},{"../radar/menu/atticRadarMenu":68,"../radar/menu/createToolsOption":71,"../radar/utils":88,"./fetchData":101}],103:[function(require,module,exports){
 const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 const chroma = require('chroma-js');

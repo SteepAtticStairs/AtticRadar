@@ -1,7 +1,7 @@
 const plotData = require('./plotData');
 const ut = require('../radar/utils');
 
-function fetchData(iconElem) {
+function fetchData() {
     // class valueWithUnits {
     //     constructor (value, units) {
     //         this.value = value;
@@ -58,10 +58,10 @@ function fetchData(iconElem) {
     // })
 
     $.getJSON('https://attic-server.herokuapp.com/weather-station/index.php', function(data) {
-        if ($(iconElem).hasClass('icon-blue')) {
-            $(iconElem).removeClass('icon-blue');
-            $(iconElem).addClass('icon-grey');
-        }
+        // if ($(iconElem).hasClass('icon-blue')) {
+        //     $(iconElem).removeClass('icon-blue');
+        //     $(iconElem).addClass('icon-grey');
+        // }
         ut.loadingSpinner(false);
         plotData(data, data.observations);
     })
