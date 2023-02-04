@@ -11,6 +11,10 @@ tilts.listTilts([1, 2, 3, 4], function() {
     tilts.tiltEventListeners();
 });
 
+// initialize the "atticData" global variable,
+// which will store data that can be accessed globally
+window.atticData = {};
+
 // initially hide the progress bar
 ut.progressBarVal('hide');
 

@@ -914,6 +914,7 @@ https://tobiasahlin.com/spinkit/
     display: block;
     border-radius: 100px;
     position: relative;
+    transition: 0.3s;
 }
 .toggleSwitchCircle:after {
     content: "";
@@ -928,13 +929,14 @@ https://tobiasahlin.com/spinkit/
 }
 .toggleSwitch:checked+.toggleSwitchCircle {
     background: #4BD763;
+    transition: 0.3s;
 }
 .toggleSwitch:checked+.toggleSwitchCircle:after {
     left: calc(100% - calc(5px / 5));
     transform: translateX(-100%);
 }
 .toggleSwitchCircle:active:after {
-    width: calc(110px / 5);
+    /* width: calc(110px / 5); */
 }
 .toggleSwitchContainter {
     display: flex;

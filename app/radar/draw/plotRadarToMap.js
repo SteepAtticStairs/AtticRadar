@@ -140,17 +140,23 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     mapFuncs.removeMapLayer('baseReflectivity');
 
     map.addLayer(layer);
-    var isChecked = $('#showExtraMapLayersCheckBtn').is(':checked');
-    if (!isChecked) {
-        setBaseMapLayers('cities');
-    } else if (isChecked) {
-        setBaseMapLayers('both');
-    }
 
     // STstuff.loadAllStormTrackingStuff();
 
     // make sure the alerts are always on top
     setLayerOrder();
+
+    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
+    if (!isRoadsStreetsVisChecked) {
+        setBaseMapLayers('cities');
+    } else if (isRoadsStreetsVisChecked) {
+        setBaseMapLayers('both');
+    }
+
+    var isRadarVisChecked = $('#armrRadarVisBtnSwitchElem').is(':checked');
+    if (!isRadarVisChecked) {
+        map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+    }
 
     console.log('File plotting complete');
     ut.betterProgressBar('set', 100);

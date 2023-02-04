@@ -5291,17 +5291,23 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     mapFuncs.removeMapLayer('baseReflectivity');
 
     map.addLayer(layer);
-    var isChecked = $('#showExtraMapLayersCheckBtn').is(':checked');
-    if (!isChecked) {
-        setBaseMapLayers('cities');
-    } else if (isChecked) {
-        setBaseMapLayers('both');
-    }
 
     // STstuff.loadAllStormTrackingStuff();
 
     // make sure the alerts are always on top
     setLayerOrder();
+
+    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
+    if (!isRoadsStreetsVisChecked) {
+        setBaseMapLayers('cities');
+    } else if (isRoadsStreetsVisChecked) {
+        setBaseMapLayers('both');
+    }
+
+    var isRadarVisChecked = $('#armrRadarVisBtnSwitchElem').is(':checked');
+    if (!isRadarVisChecked) {
+        map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+    }
 
     console.log('File plotting complete');
     ut.betterProgressBar('set', 100);
@@ -7218,6 +7224,10 @@ const mainL2Loading = require('./level2/main');
 tilts.listTilts([1, 2, 3, 4], function() {
     tilts.tiltEventListeners();
 });
+
+// initialize the "atticData" global variable,
+// which will store data that can be accessed globally
+window.atticData = {};
 
 // initially hide the progress bar
 ut.progressBarVal('hide');
