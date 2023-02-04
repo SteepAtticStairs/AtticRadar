@@ -51,10 +51,10 @@ require('./inspector/entry');
 $('#dataDiv').data('stormTracksVisibility', true);
 
 // load the station marker menu item
-require('./menu/stationMarkerMenu');
+require('./station-markers/stationMarkerMenu');
 
 // load the radar message listener
-require('./radarMessage/radarMessage');
+require('./radar-message/radarMessage');
 
 // load the historical hurricanes module
 require('../hurricanes/historical/menuItem');

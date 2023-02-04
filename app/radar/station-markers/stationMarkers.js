@@ -1,15 +1,14 @@
-var map = require('../map');
-const loaders = require('../../loaders');
-const ut = require('../../utils');
-const createControl = require('./createControl');
-const tilts = require('../../menu/tilts');
-const getStationStatus = require('../../misc/getStationStatus');
-const isMobile = require('../../misc/detectmobilebrowser');
+var map = require('../map/map');
+const loaders = require('../loaders');
+const ut = require('../utils');
+const tilts = require('../menu/tilts');
+const getStationStatus = require('../misc/getStationStatus');
+const isMobile = require('../misc/detectmobilebrowser');
 
-const radarStations = require('../../../../resources/radarStations');
-const radarStationInfo = require('../../radarMessage/radarStationInfo');
+const radarStations = require('../../../resources/radarStations');
+const radarStationInfo = require('../radar-message/radarStationInfo');
 
-const fetchMETARData = require('../../../metars/fetchData');
+const fetchMETARData = require('../../metars/fetchData');
 
 const blueColor = 'rgb(0, 157, 255)';
 const redColor = 'rgb(255, 78, 78)';

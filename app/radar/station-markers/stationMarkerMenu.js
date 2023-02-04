@@ -1,5 +1,5 @@
-const createMenuOption = require('./createMenuOption');
-const showStations = require('../map/controls/stationMarkers');
+const createMenuOption = require('../menu/createMenuOption');
+const showStations = require('./stationMarkers');
 const ut = require('../utils');
 const map = require('../map/map');
 
