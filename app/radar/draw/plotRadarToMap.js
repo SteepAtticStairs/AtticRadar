@@ -93,19 +93,19 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
         render: function (gl, matrix) {
             gl.useProgram(this.program);
 
-            //get xyz camera coordinates and w_clip value for the camera position. (expose camera coord in mapbox so this becomes unnecessary?)
-			function _get_eye(mat) {
-				mat = [[mat[0],mat[4],mat[8],mat[12]],[mat[1],mat[5],mat[9],mat[13]],[mat[2],mat[6],mat[10],mat[14]],[mat[3],mat[7],mat[11],mat[15]]];
-				var eye = mathjs.lusolve(mat, [[0],[0],[0],[1]]);
-				var clip_w = 1.0/eye[3][0];
-				eye = mathjs.divide(eye, eye[3][0]);
-				eye[3][0] = clip_w;
-				return mathjs.flatten(eye);
-			}
-			var eye_high = _get_eye(matrix);
-			var eye_low = eye_high.map(function(e) { return e - Math.fround(e) });
-			gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_high'), eye_high);
-			gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_low'), eye_low);
+            // //get xyz camera coordinates and w_clip value for the camera position. (expose camera coord in mapbox so this becomes unnecessary?)
+			// function _get_eye(mat) {
+			// 	mat = [[mat[0],mat[4],mat[8],mat[12]],[mat[1],mat[5],mat[9],mat[13]],[mat[2],mat[6],mat[10],mat[14]],[mat[3],mat[7],mat[11],mat[15]]];
+			// 	var eye = mathjs.lusolve(mat, [[0],[0],[0],[1]]);
+			// 	var clip_w = 1.0/eye[3][0];
+			// 	eye = mathjs.divide(eye, eye[3][0]);
+			// 	eye[3][0] = clip_w;
+			// 	return mathjs.flatten(eye);
+			// }
+			// var eye_high = _get_eye(matrix);
+			// var eye_low = eye_high.map(function(e) { return e - Math.fround(e) });
+			// gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_high'), eye_high);
+			// gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_low'), eye_low);
 
             gl.uniformMatrix4fv(
                 gl.getUniformLocation(this.program, 'u_matrix'),

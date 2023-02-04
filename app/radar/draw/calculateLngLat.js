@@ -235,22 +235,25 @@ function destVincenty(az, distance) {
             colorsIndex++;
         }
 
+        // var a = [];
         var geojsonValues = [];
         for (var i in az) {
             for (var n in prodValues[i]) {
                 //if (prodValues[i][n] != null) {
                     try {
-                        var theN = goodIndexes[i][n];
+                        var theN = parseInt(goodIndexes[i][n]);
+                        i = parseInt(i);
+                        n = parseInt(n);
                         var baseLocs = getAzDistance(i, theN);
                         //var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
 
-                        var oneUpLocs = getAzDistance(i, parseInt(theN) + 1);
+                        var oneUpLocs = getAzDistance(i, theN + 1);
                         //var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
 
-                        var oneSidewaysLocs = getAzDistance(parseInt(i) + 1, theN);
+                        var oneSidewaysLocs = getAzDistance(i + 1, theN);
                         //var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
 
-                        var otherCornerLocs = getAzDistance(parseInt(i) + 1, parseInt(theN) + 1);
+                        var otherCornerLocs = getAzDistance(i + 1, theN + 1);
                         //var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
@@ -278,6 +281,15 @@ function destVincenty(az, distance) {
                             pushColor(prodValues[i][n]);
                             pushColor(prodValues[i][n]);
                             pushColor(prodValues[i][n]);
+
+                            // // a.push(prodValues[i + 1][n])
+                            // pushColor(prodValues[i][n]);
+                            // pushColor(prodValues[i][n + 1]);
+                            // pushColor(prodValues[i + 1][n]);
+                            // pushColor(prodValues[i + 1][n]);
+                            // pushColor(prodValues[i][n + 1]);
+                            // pushColor(prodValues[i + 1][n + 1]);
+
                             // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
                             // var arrayColorAtVal = rgbValToArray(colorAtVal);
                             // var r = scaleForWebGL(arrayColorAtVal[0]);
@@ -306,6 +318,7 @@ function destVincenty(az, distance) {
                 //}
             }
         }
+        // console.log(a)
 
         // points = calcGPU(points, radarLatLng);
 

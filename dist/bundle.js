@@ -4018,22 +4018,25 @@ function destVincenty(az, distance) {
             colorsIndex++;
         }
 
+        // var a = [];
         var geojsonValues = [];
         for (var i in az) {
             for (var n in prodValues[i]) {
                 //if (prodValues[i][n] != null) {
                     try {
-                        var theN = goodIndexes[i][n];
+                        var theN = parseInt(goodIndexes[i][n]);
+                        i = parseInt(i);
+                        n = parseInt(n);
                         var baseLocs = getAzDistance(i, theN);
                         //var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
 
-                        var oneUpLocs = getAzDistance(i, parseInt(theN) + 1);
+                        var oneUpLocs = getAzDistance(i, theN + 1);
                         //var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
 
-                        var oneSidewaysLocs = getAzDistance(parseInt(i) + 1, theN);
+                        var oneSidewaysLocs = getAzDistance(i + 1, theN);
                         //var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
 
-                        var otherCornerLocs = getAzDistance(parseInt(i) + 1, parseInt(theN) + 1);
+                        var otherCornerLocs = getAzDistance(i + 1, theN + 1);
                         //var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
@@ -4061,6 +4064,15 @@ function destVincenty(az, distance) {
                             pushColor(prodValues[i][n]);
                             pushColor(prodValues[i][n]);
                             pushColor(prodValues[i][n]);
+
+                            // // a.push(prodValues[i + 1][n])
+                            // pushColor(prodValues[i][n]);
+                            // pushColor(prodValues[i][n + 1]);
+                            // pushColor(prodValues[i + 1][n]);
+                            // pushColor(prodValues[i + 1][n]);
+                            // pushColor(prodValues[i][n + 1]);
+                            // pushColor(prodValues[i + 1][n + 1]);
+
                             // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
                             // var arrayColorAtVal = rgbValToArray(colorAtVal);
                             // var r = scaleForWebGL(arrayColorAtVal[0]);
@@ -4089,6 +4101,7 @@ function destVincenty(az, distance) {
                 //}
             }
         }
+        // console.log(a)
 
         // points = calcGPU(points, radarLatLng);
 
@@ -4977,7 +4990,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
 
 module.exports = drawRadarShape;
 },{"../inspector/generateGeoJSON":42,"../level3/stormTracking/stormTrackingMain":54,"../map/controls/visibility":63,"../map/map":64,"../map/mapFunctions":65,"../misc/baseMapLayers":78,"../misc/paletteTooltip":82,"../products/productColors":85,"../utils":88,"./calculatePolygons":32,"./mapColorbar":37,"chroma-js":204,"pngjs":246}],36:[function(require,module,exports){
-module.exports = "precision highp float;\n#define GLSLIFY 1\nuniform vec2 minmax;\nuniform sampler2D u_texture;\nvarying float color;\nvoid main() {\n    float calcolor = (color - minmax.x) / (minmax.y - minmax.x);\n    gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));\n}";
+module.exports = "precision highp float;\n#define GLSLIFY 1\nuniform vec2 minmax;\nuniform sampler2D u_texture;\nvarying float color;\n\nvoid main() {\n    float calcolor = (color - minmax.x) / (minmax.y - minmax.x);\n    gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));\n}";
 },{}],37:[function(require,module,exports){
 const ut = require('../utils');
 
@@ -5231,19 +5244,19 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
         render: function (gl, matrix) {
             gl.useProgram(this.program);
 
-            //get xyz camera coordinates and w_clip value for the camera position. (expose camera coord in mapbox so this becomes unnecessary?)
-			function _get_eye(mat) {
-				mat = [[mat[0],mat[4],mat[8],mat[12]],[mat[1],mat[5],mat[9],mat[13]],[mat[2],mat[6],mat[10],mat[14]],[mat[3],mat[7],mat[11],mat[15]]];
-				var eye = mathjs.lusolve(mat, [[0],[0],[0],[1]]);
-				var clip_w = 1.0/eye[3][0];
-				eye = mathjs.divide(eye, eye[3][0]);
-				eye[3][0] = clip_w;
-				return mathjs.flatten(eye);
-			}
-			var eye_high = _get_eye(matrix);
-			var eye_low = eye_high.map(function(e) { return e - Math.fround(e) });
-			gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_high'), eye_high);
-			gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_low'), eye_low);
+            // //get xyz camera coordinates and w_clip value for the camera position. (expose camera coord in mapbox so this becomes unnecessary?)
+			// function _get_eye(mat) {
+			// 	mat = [[mat[0],mat[4],mat[8],mat[12]],[mat[1],mat[5],mat[9],mat[13]],[mat[2],mat[6],mat[10],mat[14]],[mat[3],mat[7],mat[11],mat[15]]];
+			// 	var eye = mathjs.lusolve(mat, [[0],[0],[0],[1]]);
+			// 	var clip_w = 1.0/eye[3][0];
+			// 	eye = mathjs.divide(eye, eye[3][0]);
+			// 	eye[3][0] = clip_w;
+			// 	return mathjs.flatten(eye);
+			// }
+			// var eye_high = _get_eye(matrix);
+			// var eye_low = eye_high.map(function(e) { return e - Math.fround(e) });
+			// gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_high'), eye_high);
+			// gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_low'), eye_low);
 
             gl.uniformMatrix4fv(
                 gl.getUniformLocation(this.program, 'u_matrix'),
@@ -5314,7 +5327,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
 
 module.exports = plotRadarToMap;
 },{"../level3/stormTracking/stormTrackingMain":54,"../map/map":64,"../map/mapFunctions":65,"../map/setLayerOrder":66,"../misc/baseMapLayers":78,"../products/productColors":85,"../utils":88,"./createWebGLTexture":34,"./fragment.glsl":36,"./mapColorbar":37,"./vertex.glsl":39}],39:[function(require,module,exports){
-module.exports = "#define GLSLIFY 1\nuniform mat4 u_matrix;\nuniform vec4 u_eye_high;\nuniform vec4 u_eye_low;\nattribute vec2 aPosition;\nuniform vec2 radarLatLng;\nattribute float aColor;\nvarying float color;\n\nfloat PI = 3.141592654;\n\nvec2 ds_set(float a) {\n    vec2 z;\n    z.x = a;\n    z.y = 0.0;\n    return z;\n}\nvec2 ds_add(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float t1, t2, e;\n\n    t1 = dsa.x + dsb.x;\n    e = t1 - dsa.x;\n    t2 = ((dsb.x - e) + (dsa.x - (t1 - e))) + dsa.y + dsb.y;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n    return dsc;\n}\nvec2 ds_sub(vec2 dsa, vec2 dsb) {\n    return ds_add(dsa, vec2(-dsb.x, dsb.y));\n}\nvec2 ds_mul(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float c11, c21, c2, e, t1, t2;\n    float a1, a2, b1, b2, cona, conb, split = 8193.;\n\n    cona = dsa.x * split;\n    conb = dsb.x * split;\n    a1 = cona - (cona - dsa.x);\n    b1 = conb - (conb - dsb.x);\n    a2 = dsa.x - a1;\n    b2 = dsb.x - b1;\n\n    c11 = dsa.x * dsb.x;\n    c21 = a2 * b2 + (a2 * b1 + (a1 * b2 + (a1 * b1 - c11)));\n\n    c2 = dsa.x * dsb.y + dsa.y * dsb.x;\n\n    t1 = c11 + c2;\n    e = t1 - c11;\n    t2 = dsa.y * dsb.y + ((c2 - e) + (c11 - (t1 - e))) + c21;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n\n    return dsc;\n}\n\nfloat atan2(float x, float y) {\n    return atan(x / y);\n}\n\nfloat toRad(float degree) {\n    return degree * (PI / 180.0);\n}\nfloat toDeg(float radian) {\n    return radian * (180.0 / PI);\n}\n\nvec2 calcLngLat(float az, float distance) {\n    // convert distance from meters to kilometers\n    distance = distance * 1000.0;\n\n    // Define the starting latitude and longitude\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    // Convert the azimuth and starting coordinates to radians\n    float azRad = az * (PI / 180.0);\n    float lat1Rad = lat1 * (PI / 180.0);\n    float lon1Rad = lon1 * (PI / 180.0);\n\n    // the earth radius in meters\n    float earthRadius = 6378137.0;\n\n    // Calculate the destination latitude and longitude in radians\n    float lat2Rad = asin(sin(lat1Rad) * cos(distance / earthRadius) + cos(lat1Rad) * sin(distance / earthRadius) * cos(azRad));\n    float lon2Rad = lon1Rad + atan2(sin(azRad) * sin(distance / earthRadius) * cos(lat1Rad), cos(distance / earthRadius) - sin(lat1Rad) * sin(lat2Rad));\n\n    // Convert the destination latitude and longitude from radians to degrees\n    float lat2 = lat2Rad * (180.0 / PI);\n    float lon2 = lon2Rad * (180.0 / PI);\n\n    float x = (180.0 + lon2) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + lat2 * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\n// https://github.com/TankofVines/node-vincenty\nvec2 destVincenty(float az, float distance) {\n    // convert azimuth to bearing\n    float brng = az;\n    // convert distance from meters to kilometers\n    float dist = distance * 1000.0;\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    /*\n    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)\n    */\n    // length of semi-major axis of the ellipsoid (radius at equator) - meters\n    float a = 6378137.0;\n    // flattening of the ellipsoid\n    float f = 1.0 / 298.257223563; // (a − b) / a\n    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters\n    float b = 6356752.3142; // (1 − ƒ) * a\n\n    float s = dist;\n    float alpha1 = toRad(brng);\n    float sinAlpha1 = sin(alpha1);\n    float cosAlpha1 = cos(alpha1);\n\n    float tanU1 = (1.0 - f) * tan(toRad(lat1));\n    float cosU1 = 1.0 / sqrt((1.0 + tanU1 * tanU1));\n    float sinU1 = tanU1 * cosU1;\n    float sigma1 = atan2(tanU1, cosAlpha1);\n    float sinAlpha = cosU1 * sinAlpha1;\n    float cosSqAlpha = 1.0 - sinAlpha * sinAlpha;\n    float uSq = cosSqAlpha * (a * a - b * b) / (b * b);\n    float A = 1.0 + uSq / 16384.0 * (4096.0 + uSq * (-768.0 + uSq * (320.0 - 175.0 * uSq)));\n    float B = uSq / 1024.0 * (256.0 + uSq * (-128.0 + uSq * (74.0 - 47.0 * uSq)));\n\n    // float x = 0.0;\n    // for (int i = 0; i < 100; i++) {\n    //     x = x + 1.0;\n    //     if (x == 10.0) {\n    //         break;\n    //     }\n    // }\n\n    float sigma = s / (b * A);\n    float sigmaP = 2.0 * PI;\n\n    float cos2SigmaM;\n    float sinSigma;\n    float cosSigma;\n    float deltaSigma;\n    // 100 checks should be enough\n    for (int i = 0; i < 100; i++) {\n        cos2SigmaM = cos(2.0 * sigma1 + sigma);\n        sinSigma = sin(sigma);\n        cosSigma = cos(sigma);\n        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM) -\n            B / 6.0 * cos2SigmaM * (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SigmaM * cos2SigmaM)));\n        sigmaP = sigma;\n        sigma = s / (b * A) + deltaSigma;\n\n        if (abs(sigma - sigmaP) > 1e-12) {\n            break;\n        }\n    }\n\n    float tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;\n    float lat2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,\n        (1.0 - f) * sqrt(sinAlpha * sinAlpha + tmp * tmp));\n    float lambda = atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);\n    float C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha));\n    float L = lambda - (1.0 - C) * f * sinAlpha *\n        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM)));\n    float lon2 = mod((toRad(lon1) + L + 3.0 * PI), (2.0 * PI) - PI);  // normalise to -180...+180\n\n    // float revAz = atan2(sinAlpha, -tmp);  // final bearing, if required\n    //float result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };\n\n    float x = (toDeg(lon2)) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + toDeg(lat2) * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\nvoid main() {\n    float azimuth = float(aPosition.x);\n    float distance = float(aPosition.y);\n    vec2 mercatorCoords = destVincenty(azimuth, distance);\n    vec4 coords = vec4(\n        mercatorCoords.x,\n        mercatorCoords.y,\n        ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,\n        ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x\n    );\n\n    //gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);\n    gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);\n    gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);\n    gl_Position = u_matrix * gl_Position;\n    gl_Position.w += u_eye_high.w;\n    color = aColor;\n}";
+module.exports = "#define GLSLIFY 1\nuniform mat4 u_matrix;\n// uniform vec4 u_eye_high;\n// uniform vec4 u_eye_low;\nattribute vec2 aPosition;\nuniform vec2 radarLatLng;\nattribute float aColor;\nvarying float color;\n\nfloat PI = 3.141592654;\n\nvec2 ds_set(float a) {\n    vec2 z;\n    z.x = a;\n    z.y = 0.0;\n    return z;\n}\nvec2 ds_add(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float t1, t2, e;\n\n    t1 = dsa.x + dsb.x;\n    e = t1 - dsa.x;\n    t2 = ((dsb.x - e) + (dsa.x - (t1 - e))) + dsa.y + dsb.y;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n    return dsc;\n}\nvec2 ds_sub(vec2 dsa, vec2 dsb) {\n    return ds_add(dsa, vec2(-dsb.x, dsb.y));\n}\nvec2 ds_mul(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float c11, c21, c2, e, t1, t2;\n    float a1, a2, b1, b2, cona, conb, split = 8193.;\n\n    cona = dsa.x * split;\n    conb = dsb.x * split;\n    a1 = cona - (cona - dsa.x);\n    b1 = conb - (conb - dsb.x);\n    a2 = dsa.x - a1;\n    b2 = dsb.x - b1;\n\n    c11 = dsa.x * dsb.x;\n    c21 = a2 * b2 + (a2 * b1 + (a1 * b2 + (a1 * b1 - c11)));\n\n    c2 = dsa.x * dsb.y + dsa.y * dsb.x;\n\n    t1 = c11 + c2;\n    e = t1 - c11;\n    t2 = dsa.y * dsb.y + ((c2 - e) + (c11 - (t1 - e))) + c21;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n\n    return dsc;\n}\n\nfloat atan2(float x, float y) {\n    return atan(x / y);\n}\n\nfloat toRad(float degree) {\n    return degree * (PI / 180.0);\n}\nfloat toDeg(float radian) {\n    return radian * (180.0 / PI);\n}\n\nvec2 calcLngLat(float az, float distance) {\n    // convert distance from meters to kilometers\n    distance = distance * 1000.0;\n\n    // Define the starting latitude and longitude\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    // Convert the azimuth and starting coordinates to radians\n    float azRad = az * (PI / 180.0);\n    float lat1Rad = lat1 * (PI / 180.0);\n    float lon1Rad = lon1 * (PI / 180.0);\n\n    // the earth radius in meters\n    float earthRadius = 6378137.0;\n\n    // Calculate the destination latitude and longitude in radians\n    float lat2Rad = asin(sin(lat1Rad) * cos(distance / earthRadius) + cos(lat1Rad) * sin(distance / earthRadius) * cos(azRad));\n    float lon2Rad = lon1Rad + atan2(sin(azRad) * sin(distance / earthRadius) * cos(lat1Rad), cos(distance / earthRadius) - sin(lat1Rad) * sin(lat2Rad));\n\n    // Convert the destination latitude and longitude from radians to degrees\n    float lat2 = lat2Rad * (180.0 / PI);\n    float lon2 = lon2Rad * (180.0 / PI);\n\n    float x = (180.0 + lon2) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + lat2 * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\n// https://github.com/TankofVines/node-vincenty\nvec2 destVincenty(float az, float distance) {\n    // convert azimuth to bearing\n    float brng = az;\n    // convert distance from meters to kilometers\n    float dist = distance * 1000.0;\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    /*\n    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)\n    */\n    // length of semi-major axis of the ellipsoid (radius at equator) - meters\n    float a = 6378137.0;\n    // flattening of the ellipsoid\n    float f = 1.0 / 298.257223563; // (a − b) / a\n    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters\n    float b = 6356752.3142; // (1 − ƒ) * a\n\n    float s = dist;\n    float alpha1 = toRad(brng);\n    float sinAlpha1 = sin(alpha1);\n    float cosAlpha1 = cos(alpha1);\n\n    float tanU1 = (1.0 - f) * tan(toRad(lat1));\n    float cosU1 = 1.0 / sqrt((1.0 + tanU1 * tanU1));\n    float sinU1 = tanU1 * cosU1;\n    float sigma1 = atan2(tanU1, cosAlpha1);\n    float sinAlpha = cosU1 * sinAlpha1;\n    float cosSqAlpha = 1.0 - sinAlpha * sinAlpha;\n    float uSq = cosSqAlpha * (a * a - b * b) / (b * b);\n    float A = 1.0 + uSq / 16384.0 * (4096.0 + uSq * (-768.0 + uSq * (320.0 - 175.0 * uSq)));\n    float B = uSq / 1024.0 * (256.0 + uSq * (-128.0 + uSq * (74.0 - 47.0 * uSq)));\n\n    // float x = 0.0;\n    // for (int i = 0; i < 100; i++) {\n    //     x = x + 1.0;\n    //     if (x == 10.0) {\n    //         break;\n    //     }\n    // }\n\n    float sigma = s / (b * A);\n    float sigmaP = 2.0 * PI;\n\n    float cos2SigmaM;\n    float sinSigma;\n    float cosSigma;\n    float deltaSigma;\n    // 100 checks should be enough\n    for (int i = 0; i < 100; i++) {\n        cos2SigmaM = cos(2.0 * sigma1 + sigma);\n        sinSigma = sin(sigma);\n        cosSigma = cos(sigma);\n        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM) -\n            B / 6.0 * cos2SigmaM * (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SigmaM * cos2SigmaM)));\n        sigmaP = sigma;\n        sigma = s / (b * A) + deltaSigma;\n\n        if (abs(sigma - sigmaP) > 1e-12) {\n            break;\n        }\n    }\n\n    float tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;\n    float lat2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,\n        (1.0 - f) * sqrt(sinAlpha * sinAlpha + tmp * tmp));\n    float lambda = atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);\n    float C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha));\n    float L = lambda - (1.0 - C) * f * sinAlpha *\n        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM)));\n    float lon2 = mod((toRad(lon1) + L + 3.0 * PI), (2.0 * PI) - PI);  // normalise to -180...+180\n\n    // float revAz = atan2(sinAlpha, -tmp);  // final bearing, if required\n    //float result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };\n\n    float x = (toDeg(lon2)) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + toDeg(lat2) * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\nvoid main() {\n    float azimuth = float(aPosition.x);\n    float distance = float(aPosition.y);\n    vec2 mercatorCoords = destVincenty(azimuth, distance);\n    // vec4 coords = vec4(\n    //     mercatorCoords.x,\n    //     mercatorCoords.y,\n    //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,\n    //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x\n    // );\n\n    gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);\n    // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);\n    // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);\n    // gl_Position = u_matrix * gl_Position;\n    // gl_Position.w += u_eye_high.w;\n    color = aColor;\n}";
 },{}],40:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.

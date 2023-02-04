@@ -1,6 +1,6 @@
 uniform mat4 u_matrix;
-uniform vec4 u_eye_high;
-uniform vec4 u_eye_low;
+// uniform vec4 u_eye_high;
+// uniform vec4 u_eye_low;
 attribute vec2 aPosition;
 uniform vec2 radarLatLng;
 attribute float aColor;
@@ -183,17 +183,17 @@ void main() {
     float azimuth = float(aPosition.x);
     float distance = float(aPosition.y);
     vec2 mercatorCoords = destVincenty(azimuth, distance);
-    vec4 coords = vec4(
-        mercatorCoords.x,
-        mercatorCoords.y,
-        ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,
-        ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x
-    );
+    // vec4 coords = vec4(
+    //     mercatorCoords.x,
+    //     mercatorCoords.y,
+    //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,
+    //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x
+    // );
 
-    //gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);
-    gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);
-    gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);
-    gl_Position = u_matrix * gl_Position;
-    gl_Position.w += u_eye_high.w;
+    gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);
+    // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);
+    // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);
+    // gl_Position = u_matrix * gl_Position;
+    // gl_Position.w += u_eye_high.w;
     color = aColor;
 }
