@@ -4006,20 +4006,24 @@ function destVincenty(az, distance) {
             }
         }
 
-        var goodIndexes = [];
-        for (var i in prodValues) {
-            var goodIndexesArr = [];
-            var n = 0;
-            for (var el in prodValues[i]) {
-                if (prodValues[i][el] != null) { goodIndexesArr.push(n) }
-                n++;
-            }
-            goodIndexes.push(goodIndexesArr);
-        }
-        for (var i in prodValues) { prodValues[i] = prodValues[i].filter(function (el) { return el != null }) }
+        // var goodIndexes = [];
+        // for (var i in prodValues) {
+        //     var goodIndexesArr = [];
+        //     var n = 0;
+        //     for (var el in prodValues[i]) {
+        //         if (prodValues[i][el] != null) { goodIndexesArr.push(n) }
+        //         n++;
+        //     }
+        //     goodIndexes.push(goodIndexesArr);
+        // }
+        // for (var i in prodValues) { prodValues[i] = prodValues[i].filter(function (el) { return el != null }) }
 
         var total = 0;
-        for (var i in prodValues) { total += prodValues[i].length }
+        var pv = [...prodValues];
+        for (var i in pv) {
+            pv[i] = pv[i].filter(function (el) { return el != null });
+            total += pv[i].length;
+        }
 
         var points = new Float32Array(total * 12);
         var pointsIndex = 0;
@@ -4035,25 +4039,24 @@ function destVincenty(az, distance) {
             colorsIndex++;
         }
 
-        // var a = [];
         var geojsonValues = [];
         for (var i in az) {
-            for (var n in prodValues[i]) {
-                //if (prodValues[i][n] != null) {
+            for (var n in prod_range) {
+                if (prodValues[i][n] != null) {
                     try {
-                        var theN = parseInt(goodIndexes[i][n]);
+                        //var theN = parseInt(goodIndexes[i][n]);
                         i = parseInt(i);
                         n = parseInt(n);
-                        var baseLocs = getAzDistance(i, theN);
+                        var baseLocs = getAzDistance(i, n);
                         //var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
 
-                        var oneUpLocs = getAzDistance(i, theN + 1);
+                        var oneUpLocs = getAzDistance(i, n + 1);
                         //var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
 
-                        var oneSidewaysLocs = getAzDistance(i + 1, theN);
+                        var oneSidewaysLocs = getAzDistance(i + 1, n);
                         //var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
 
-                        var otherCornerLocs = getAzDistance(i + 1, theN + 1);
+                        var otherCornerLocs = getAzDistance(i + 1, n + 1);
                         //var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
 
                         if (mode == 'mapPlot') {
@@ -4082,7 +4085,6 @@ function destVincenty(az, distance) {
                             pushColor(prodValues[i][n]);
                             pushColor(prodValues[i][n]);
 
-                            // // a.push(prodValues[i + 1][n])
                             // pushColor(prodValues[i][n]);
                             // pushColor(prodValues[i][n + 1]);
                             // pushColor(prodValues[i + 1][n]);
@@ -4115,10 +4117,9 @@ function destVincenty(az, distance) {
                     } catch (e) {
                         // console.warn(e)
                     }
-                //}
+                }
             }
         }
-        // console.log(a)
 
         // points = calcGPU(points, radarLatLng);
 
