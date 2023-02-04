@@ -242,8 +242,8 @@ function destVincenty(az, distance) {
         var geojsonValues = [];
         for (var i in az) {
             for (var n in prod_range) {
-                if (prodValues[i][n] != null) {
-                    try {
+                try {
+                    if (prodValues[i][n] != null) {
                         //var theN = parseInt(goodIndexes[i][n]);
                         i = parseInt(i);
                         n = parseInt(n);
@@ -314,9 +314,9 @@ function destVincenty(az, distance) {
 
                             geojsonValues.push(base[0], base[1], oneUp[0], oneUp[1], otherCorner[0], otherCorner[1], oneSideways[0], oneSideways[1], prodValues[i][n]);
                         }
-                    } catch (e) {
-                        // console.warn(e)
                     }
+                } catch (e) {
+                    // console.warn(e)
                 }
             }
         }
