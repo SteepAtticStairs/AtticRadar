@@ -765,13 +765,14 @@ https://tobiasahlin.com/spinkit/
     left: 0;
     right: 0;
     bottom: 0;
+    top: 7vh;
     margin: auto;
     overflow: scroll;
 
     width: 90vw;
     max-width: 550px;
-    height: 95vh;
-    max-height: 95vh;
+    /* height: 85vh;
+    max-height: 85vh; */
 
     background-color: rgb(28, 28, 28);
 
