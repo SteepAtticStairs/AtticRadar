@@ -15,7 +15,7 @@ function addAllToolsItems() {
     // require('../menu/settings').settingsOption(n = n + 1);
     // require('../../weather-station/menuItem').weatherstationToolsOption(n = n + 1);
     // require('../../radio/menuItem').weatherRadioToolsOption(n = n + 1);
-    require('../map/controls/reload').reloadOption(n = n + 1);
+    require('./reload').reloadOption(n = n + 1);
 }
 
 function updateTooltipPosition(divElem) {

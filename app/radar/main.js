@@ -19,7 +19,7 @@ window.atticData = {};
 ut.progressBarVal('hide');
 
 // add file upload listeners
-require('./dom/fileUpload');
+require('./misc/fileUpload');
 
 // load the mode control
 require('./menu/mode');

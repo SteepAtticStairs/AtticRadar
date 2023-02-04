@@ -31,7 +31,7 @@ function load() {
     require('../../tides/main').tideChartInit('container');
 
     // set the menu order
-    const setMenuOrder = require('../dom/setMenuOrder');
+    const setMenuOrder = require('../menu/setMenuOrder');
     setMenuOrder.setFooterMenuOrder();
 }
 

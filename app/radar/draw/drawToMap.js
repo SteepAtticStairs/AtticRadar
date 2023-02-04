@@ -61,7 +61,7 @@ function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
         document.getElementById('spinnerParent').style.display = 'none';
 
         // load the visibility button
-        require('../map/controls/visibility');
+        // require('../map/controls/visibility');
 
         // load the refresh button
         // require('./refresh');

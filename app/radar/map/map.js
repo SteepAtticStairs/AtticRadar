@@ -156,6 +156,3 @@ $('#optionsBox').on('mouseleave', function(e) {
 $('.optionsBoxControl').trigger('click');
 
 module.exports = map;
-
-// load some controls
-require('./controls/testFileControls');
