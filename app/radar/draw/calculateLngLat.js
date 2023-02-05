@@ -220,6 +220,37 @@ function destVincenty(az, distance) {
 
         var total = 0;
         var pv = [...prodValues];
+        /*
+        * This is code to fill in all neigboring radar pixels for color interpolation.
+        */
+        // for (var i in pv) {
+        //     for (var n in pv[i]) {
+        //         try {
+        //             i = parseInt(i);
+        //             n = parseInt(n);
+
+        //             var pixelTrackerArray = [];
+        //             var curPixel = pv[i][n];
+        //             var top = pv[i][n + 1];
+        //             var right = pv[i + 1][n];
+        //             var bottom = pv[i][n - 1];
+        //             var left = pv[i - 1][n];
+        //             pixelTrackerArray.push(top, right, bottom, left);
+        //             var directionLookup = ['top', 'right', 'bottom', 'left'];
+
+        //             for (var x = 0; x < pixelTrackerArray.length; x++) {
+        //                 if (pixelTrackerArray[x] == null && curPixel != null && curPixel != 999) {
+        //                     var nullPixelDirection = directionLookup[x];
+
+        //                     if (nullPixelDirection == 'top') { pv[i][n + 1] = 999 }
+        //                     else if (nullPixelDirection == 'right') { pv[i + 1][n] = 999 }
+        //                     else if (nullPixelDirection == 'bottom') { pv[i][n - 1] = 999 }
+        //                     else if (nullPixelDirection == 'left') { pv[i - 1][n] = 999 }
+        //                 }
+        //             }
+        //         } catch (e) {}
+        //     }
+        // }
         for (var i in pv) {
             pv[i] = pv[i].filter(function (el) { return el != null });
             total += pv[i].length;
