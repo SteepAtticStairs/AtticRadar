@@ -11,7 +11,7 @@ function autoUpdate(options) {
     var product = options.product;
 
     function checkLatestFile() {
-        initStormTracks.initStormTracks();
+        //initStormTracks.initStormTracks();
         loaders.getLatestFile(station, [3, product, 0], function(url) {
             var formattedNow = DateTime.now().toFormat('h:mm.ss a ZZZZ');
 

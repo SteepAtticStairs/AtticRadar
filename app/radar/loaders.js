@@ -214,6 +214,8 @@ function getLatestL3(station, product, index, callback, date) {
                     d.setDate(d.getDate() - 1);
                     timesGoneBack++;
                     getLatestL3(station, product, index, callback, d);
+                } else {
+                    callback(null);
                 }
             }
         })

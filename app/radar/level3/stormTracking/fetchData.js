@@ -20,7 +20,10 @@ function initStormTracks() {
 
     loaders.getLatestFile(currentStation, [3, 'NST', 0], function(url) {
         setLayerOrder();
-        if (window.atticData.curStormTrackURL != url) {
+        if (url == null) {
+            ut.betterProgressBar('hide');
+            dealWithStormTrackLayers();
+        } else if (window.atticData.curStormTrackURL != url) {
             window.atticData.curStormTrackURL = url;
 
             loaders.returnArrayBuffer(ut.phpProxy + url + '#', 3, function(ab) {
@@ -28,6 +31,7 @@ function initStormTracks() {
                 dealWithStormTrackLayers();
 
                 var l3rad = l3parse(ab);
+                console.log(l3rad);
                 plotStormTracks(l3rad);
             });
         }

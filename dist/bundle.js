@@ -6935,7 +6935,10 @@ function initStormTracks() {
 
     loaders.getLatestFile(currentStation, [3, 'NST', 0], function(url) {
         setLayerOrder();
-        if (window.atticData.curStormTrackURL != url) {
+        if (url == null) {
+            ut.betterProgressBar('hide');
+            dealWithStormTrackLayers();
+        } else if (window.atticData.curStormTrackURL != url) {
             window.atticData.curStormTrackURL = url;
 
             loaders.returnArrayBuffer(ut.phpProxy + url + '#', 3, function(ab) {
@@ -6943,6 +6946,7 @@ function initStormTracks() {
                 dealWithStormTrackLayers();
 
                 var l3rad = l3parse(ab);
+                console.log(l3rad);
                 plotStormTracks(l3rad);
             });
         }
@@ -6954,9 +6958,12 @@ module.exports = {
 }
 },{"../../../../lib/nexrad-level-3-data/src":137,"../../loaders":57,"../../map/map":59,"../../map/setLayerOrder":61,"../../utils":86,"./stormTracks":56}],56:[function(require,module,exports){
 const radarStations = require('../../../../resources/radarStations');
+const stationAbbreviations = require('../../../../resources/stationAbbreviations');
 const turf = require('@turf/turf');
 var map = require('../../map/map');
 const setLayerOrder = require('../../map/setLayerOrder');
+const getLevel3FileTime = require('../l3fileTime');
+const ut = require('../../utils');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var metersInNauticalMiles = 1852;
@@ -6973,15 +6980,15 @@ function getCoords(degNmObj) {
     const currentStationCoords = { 'lat': radarStations[currentStation][1], 'lng': radarStations[currentStation][2] }
 
     var coords = findTerminalCoordinates(currentStationCoords.lat, currentStationCoords.lng, degNmObj.nm, degNmObj.deg);
-    return coords.geometry.coordinates;
+    return turf.getCoords(coords);
 }
 
 function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
     function addToBearing(bearing, angle) { return (bearing + angle) % 360 }
     function subtractFromBearing(bearing, angle) { return (bearing - angle + 360) % 360 }
 
-    basePoint = turf.point(basePoint);
-    destPoint = turf.point(destPoint);
+    // basePoint = turf.point(turf.getCoords(basePoint));
+    // destPoint = turf.point(turf.getCoords(destPoint));
 
     var bearing = turf.bearing(basePoint, destPoint);
 
@@ -6995,7 +7002,7 @@ function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
     var rightBearing = addToBearing(bearing, 90);
     var rightPoint = turf.destination(destPoint, distanceForLine, rightBearing, {units: 'miles'});
 
-    return turf.lineString([leftPoint.geometry.coordinates, rightPoint.geometry.coordinates]);
+    return turf.lineString([turf.getCoords(leftPoint), turf.getCoords(rightPoint)]);
 }
 
 function plotStormTracks(l3rad) {
@@ -7010,7 +7017,7 @@ function plotStormTracks(l3rad) {
 
         coords = getCoords(curCell.current);
         points.push(coords);
-        initialPoint = [...coords];
+        initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
         for (var i in curCell.forecast) {
             var curPoint = curCell.forecast[i];
             if (curPoint != null) {
@@ -7034,7 +7041,7 @@ function plotStormTracks(l3rad) {
         featureCollectionObjects.push(icResult[2]);
     }
     var multiLineGeoJSON = turf.multiLineString(multiLineStringCoords);
-    var multiPointGeoJSON = turf.multiPoint(multiPointCoords);
+    var multiPointGeoJSON = turf.featureCollection(multiPointCoords);
     var featureCollectionGeoJSON = turf.featureCollection(featureCollectionObjects.flat());
 
     var stormTrackLayers = [];
@@ -7090,6 +7097,41 @@ function plotStormTracks(l3rad) {
     })
     window.atticData.stormTrackLayers = stormTrackLayers;
 
+    function cellClick(e) {
+        if (window.atticData.currentStation == stationAbbreviations[l3rad.textHeader.id3]) {
+            const properties = e.features[0].properties;
+            const cellID = properties.cellID;
+            const cellProperties = JSON.parse(properties.cellProperties);
+            // console.log(allTracks)
+
+            var fileTime = getLevel3FileTime(l3rad);
+            var hourMin = ut.printHourMin(fileTime, ut.userTimeZone);
+
+            var popupHTML =
+                `<div>Cell <b>${cellID}</b> at <b>${hourMin}</b></div>`
+
+            function flip(num) {
+                if (num >= 180) {
+                    return num - 180;
+                } else if (num < 180) {
+                    return num + 180;
+                }
+            }
+
+            if (cellProperties.movement != 'new') {
+                popupHTML += `<div><b>${ut.degToCompass(flip(cellProperties.movement.deg))}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
+            }
+
+            new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+                .setLngLat(JSON.parse(properties.coords))
+                .setHTML(popupHTML)
+                .addTo(map);
+        }
+    }
+    map.on('click', 'stormTrackInitialPoint', cellClick);
+    map.on('mouseenter', 'stormTrackInitialPoint', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'stormTrackInitialPoint', () => { map.getCanvas().style.cursor = ''; });
+
     setLayerOrder();
 
     var isSTVisChecked = $('#armrSTVisBtnSwitchElem').is(':checked');
@@ -7103,7 +7145,7 @@ function plotStormTracks(l3rad) {
 }
 
 module.exports = plotStormTracks;
-},{"../../../../resources/radarStations":258,"../../map/map":59,"../../map/setLayerOrder":61,"@turf/turf":196}],57:[function(require,module,exports){
+},{"../../../../resources/radarStations":258,"../../../../resources/stationAbbreviations":259,"../../map/map":59,"../../map/setLayerOrder":61,"../../utils":86,"../l3fileTime":46,"@turf/turf":196}],57:[function(require,module,exports){
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
@@ -7320,6 +7362,8 @@ function getLatestL3(station, product, index, callback, date) {
                     d.setDate(d.getDate() - 1);
                     timesGoneBack++;
                     getLatestL3(station, product, index, callback, d);
+                } else {
+                    callback(null);
                 }
             }
         })
@@ -8830,7 +8874,7 @@ function autoUpdate(options) {
     var product = options.product;
 
     function checkLatestFile() {
-        initStormTracks.initStormTracks();
+        //initStormTracks.initStormTracks();
         loaders.getLatestFile(station, [3, product, 0], function(url) {
             var formattedNow = DateTime.now().toFormat('h:mm.ss a ZZZZ');
 
