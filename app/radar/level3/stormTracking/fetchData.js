@@ -2,6 +2,7 @@ const ut = require('../../utils');
 const loaders = require('../../loaders');
 const l3parse = require('../../../../lib/nexrad-level-3-data/src');
 const plotStormTracks = require('./stormTracks');
+const setLayerOrder = require('../../map/setLayerOrder');
 var map = require('../../map/map');
 
 function dealWithStormTrackLayers() {
@@ -17,15 +18,19 @@ function dealWithStormTrackLayers() {
 function initStormTracks() {
     const currentStation = window.atticData.currentStation;
 
-    dealWithStormTrackLayers();
-
     loaders.getLatestFile(currentStation, [3, 'NST', 0], function(url) {
-        loaders.returnArrayBuffer(ut.phpProxy + url + '#', 3, function(ab) {
-            ut.betterProgressBar('hide');
+        setLayerOrder();
+        if (window.atticData.curStormTrackURL != url) {
+            window.atticData.curStormTrackURL = url;
 
-            var l3rad = l3parse(ab);
-            plotStormTracks(l3rad);
-        });
+            loaders.returnArrayBuffer(ut.phpProxy + url + '#', 3, function(ab) {
+                ut.betterProgressBar('hide');
+                dealWithStormTrackLayers();
+
+                var l3rad = l3parse(ab);
+                plotStormTracks(l3rad);
+            });
+        }
     })
 }
 

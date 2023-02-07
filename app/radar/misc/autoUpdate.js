@@ -1,6 +1,7 @@
 const ut = require('../utils');
 const loaders = require('../loaders');
 const { DateTime } = require('luxon');
+const initStormTracks = require('../level3/stormTracking/fetchData');
 
 var oldURL = '';
 var oldOptions = '';
@@ -10,6 +11,7 @@ function autoUpdate(options) {
     var product = options.product;
 
     function checkLatestFile() {
+        initStormTracks.initStormTracks();
         loaders.getLatestFile(station, [3, product, 0], function(url) {
             var formattedNow = DateTime.now().toFormat('h:mm.ss a ZZZZ');
 

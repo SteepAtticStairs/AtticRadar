@@ -6917,6 +6917,7 @@ const ut = require('../../utils');
 const loaders = require('../../loaders');
 const l3parse = require('../../../../lib/nexrad-level-3-data/src');
 const plotStormTracks = require('./stormTracks');
+const setLayerOrder = require('../../map/setLayerOrder');
 var map = require('../../map/map');
 
 function dealWithStormTrackLayers() {
@@ -6932,22 +6933,26 @@ function dealWithStormTrackLayers() {
 function initStormTracks() {
     const currentStation = window.atticData.currentStation;
 
-    dealWithStormTrackLayers();
-
     loaders.getLatestFile(currentStation, [3, 'NST', 0], function(url) {
-        loaders.returnArrayBuffer(ut.phpProxy + url + '#', 3, function(ab) {
-            ut.betterProgressBar('hide');
+        setLayerOrder();
+        if (window.atticData.curStormTrackURL != url) {
+            window.atticData.curStormTrackURL = url;
 
-            var l3rad = l3parse(ab);
-            plotStormTracks(l3rad);
-        });
+            loaders.returnArrayBuffer(ut.phpProxy + url + '#', 3, function(ab) {
+                ut.betterProgressBar('hide');
+                dealWithStormTrackLayers();
+
+                var l3rad = l3parse(ab);
+                plotStormTracks(l3rad);
+            });
+        }
     })
 }
 
 module.exports = {
     initStormTracks
 }
-},{"../../../../lib/nexrad-level-3-data/src":137,"../../loaders":57,"../../map/map":59,"../../utils":86,"./stormTracks":56}],56:[function(require,module,exports){
+},{"../../../../lib/nexrad-level-3-data/src":137,"../../loaders":57,"../../map/map":59,"../../map/setLayerOrder":61,"../../utils":86,"./stormTracks":56}],56:[function(require,module,exports){
 const radarStations = require('../../../../resources/radarStations');
 const turf = require('@turf/turf');
 var map = require('../../map/map');
@@ -8815,6 +8820,7 @@ createMenuOption({
 const ut = require('../utils');
 const loaders = require('../loaders');
 const { DateTime } = require('luxon');
+const initStormTracks = require('../level3/stormTracking/fetchData');
 
 var oldURL = '';
 var oldOptions = '';
@@ -8824,6 +8830,7 @@ function autoUpdate(options) {
     var product = options.product;
 
     function checkLatestFile() {
+        initStormTracks.initStormTracks();
         loaders.getLatestFile(station, [3, product, 0], function(url) {
             var formattedNow = DateTime.now().toFormat('h:mm.ss a ZZZZ');
 
@@ -8854,7 +8861,7 @@ function autoUpdate(options) {
 }
 
 module.exports = autoUpdate;
-},{"../loaders":57,"../utils":86,"luxon":207}],74:[function(require,module,exports){
+},{"../level3/stormTracking/fetchData":55,"../loaders":57,"../utils":86,"luxon":207}],74:[function(require,module,exports){
 var map = require('../map/map');
 const mapFuncs = require('../map/mapFunctions');
 
