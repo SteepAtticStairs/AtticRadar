@@ -1,19 +1,7 @@
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 
-/**
-* Function to load a radar plot onto the map from a URL.
-*
-* @param {any} url - The location to the file. This can be a relative path, or a URL
-to a file hosted on a server.
-* @param {any} level - What level file this is. This is a temporary parameter, it will be
-removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 for a level 2
-file where you only want to load the first chunk of the file (reflectivity data) for a quicker
-loading speed.
-*/
-function loadFileObject(url, level) {
-    url = ut.preventFileCaching(url);
-
+function _generateBlob(url, level, callback) {
     ut.betterProgressBar('set', 0);
     ut.betterProgressBar('show');
     var radLevel;
@@ -58,16 +46,8 @@ function loadFileObject(url, level) {
 
         blob.lastModifiedDate = new Date();
         blob.name = url;
-        // Create the event
-        var event = new CustomEvent("loadFile", {
-            "detail": [
-                blob,
-                radLevel,
-                wholeOrPart
-            ]
-        });
-        // Dispatch/Trigger/Fire the event
-        document.dispatchEvent(event);
+
+        callback(blob);
     });
     xhr.onprogress = (event) => {
         // event.loaded returns how many bytes are downloaded
@@ -80,6 +60,65 @@ function loadFileObject(url, level) {
         ut.betterProgressBar('set', parseInt(ut.formatBytes(event.loaded)) / 10);
     }
     xhr.send();
+}
+
+/**
+* Function to return a radar file as an array buffer from a URL.
+*
+* @param {any} url - The location to the file. This can be a relative path, or a URL
+to a file hosted on a server.
+* @param {any} level - What level file this is. This is a temporary parameter, it will be
+removed when level detection is added. Use 2 for level 2 or 3 for level 3.
+* @param {any} callback - The function to run after the retrieval. Use a single variable
+in this function, this will be the returned arrayBuffer.
+*/
+function returnArrayBuffer(url, level, callback) {
+    url = ut.preventFileCaching(url);
+
+    _generateBlob(url, level, function(blob) {
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+            callback(ut.toBuffer(this.result));
+        }, false);
+        reader.readAsArrayBuffer(blob);
+    })
+}
+
+/**
+* Function to load a radar plot onto the map from a URL.
+*
+* @param {any} url - The location to the file. This can be a relative path, or a URL
+to a file hosted on a server.
+* @param {any} level - What level file this is. This is a temporary parameter, it will be
+removed when level detection is added. Use 2 for level 2, 3 for level 3, OR 22 for a level 2
+file where you only want to load the first chunk of the file (reflectivity data) for a quicker
+loading speed.
+*/
+function loadFileObject(url, level) {
+    url = ut.preventFileCaching(url);
+
+    var radLevel;
+    var wholeOrPart = 'whole';
+    if (level == 2) {
+        radLevel = 2;
+    } if (level == 22) {
+        radLevel = 2;
+        wholeOrPart = 'part';
+    } else if (level == 3) {
+        radLevel = 3;
+    }
+    _generateBlob(url, level, function(blob) {
+        // Create the event
+        var event = new CustomEvent("loadFile", {
+            "detail": [
+                blob,
+                radLevel,
+                wholeOrPart
+            ]
+        });
+        // Dispatch/Trigger/Fire the event
+        document.dispatchEvent(event);
+    })
 }
 
 /**
@@ -243,5 +282,6 @@ function getLatestFile(station, levelProduct, callback) {
 
 module.exports = {
     loadFileObject,
-    getLatestFile
+    getLatestFile,
+    returnArrayBuffer
 }

@@ -3,7 +3,8 @@ const productColors = require('../products/productColors');
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');
 const setBaseMapLayers = require('../misc/baseMapLayers');
-const STstuff = require('../level3/stormTracking/stormTrackingMain');
+// const STstuff = require('../level3/stormTracking/archive/stormTrackingMain');
+const initStormTracks = require('../level3/stormTracking/fetchData');
 var map = require('../map/map');
 const setLayerOrder = require('../map/setLayerOrder');
 const createWebGLTexture = require('./createWebGLTexture');
@@ -141,6 +142,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
 
     map.addLayer(layer);
 
+    initStormTracks.initStormTracks();
     // STstuff.loadAllStormTrackingStuff();
 
     // make sure the alerts are always on top

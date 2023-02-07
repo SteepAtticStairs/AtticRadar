@@ -1,5 +1,5 @@
 const calcPolys = require('./calculatePolygons');
-const STstuff = require('../level3/stormTracking/stormTrackingMain');
+const STstuff = require('../level3/stormTracking/archive/stormTrackingMain');
 const tt = require('../misc/paletteTooltip');
 const ut = require('../utils');
 const mapFuncs = require('../map/mapFunctions');

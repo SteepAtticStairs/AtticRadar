@@ -10,9 +10,9 @@ const autoUpdate = require('../misc/autoUpdate');
 
 var map = require('../map/map');
 
-const parsePlotTornado = require('../level3/stormTracking/tornadoVortexSignature');
-const parsePlotMesocyclone = require('../level3/stormTracking/mesocycloneDetection');
-const parsePlotStormTracks = require('../level3/stormTracking/stormTracks');
+const parsePlotTornado = require('./stormTracking/archive/tornadoVortexSignature');
+const parsePlotMesocyclone = require('./stormTracking/archive/mesocycloneDetection');
+const parsePlotStormTracks = require('./stormTracking/archive/stormTracks');
 
 const ut = require('../utils');
 
@@ -56,15 +56,18 @@ function mainL3Loading(thisObj) {
         // plot the file
         ut.betterProgressBar('set', 90);
 
-        if (l3rad.textHeader.type == "NTV") {
-            parsePlotTornado(l3rad, document.getElementById('radarStation').innerHTML);
-        } else if (l3rad.textHeader.type == "NMD") {
-            parsePlotMesocyclone(l3rad, document.getElementById('radarStation').innerHTML);
-        } else if (l3rad.textHeader.type == "NST") {
-            parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
-        } else {
+        if (product != 'NTV' && product != 'NMD' && product != 'NST') {
             l3plot(l3rad);
         }
+        // if (l3rad.textHeader.type == "NTV") {
+        //     parsePlotTornado(l3rad, document.getElementById('radarStation').innerHTML);
+        // } else if (l3rad.textHeader.type == "NMD") {
+        //     parsePlotMesocyclone(l3rad, document.getElementById('radarStation').innerHTML);
+        // } else if (l3rad.textHeader.type == "NST") {
+        //     parsePlotStormTracks(l3rad, document.getElementById('radarStation').innerHTML);
+        // } else {
+        //     l3plot(l3rad);
+        // }
 
         // $(document).keyup(function(event) {
         //     if (event.which === 13) {

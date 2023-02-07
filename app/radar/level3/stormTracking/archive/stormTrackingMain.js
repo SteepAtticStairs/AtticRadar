@@ -1,6 +1,6 @@
-var map = require('../../map/map');
-const loaders = require('../../loaders');
-const ut = require('../../utils');
+var map = require('../../../map/map');
+const loaders = require('../../../loaders');
+const ut = require('../../../utils');
 const phpProxy = ut.phpProxy;
 
 function loadAllStormTrackingStuff() {

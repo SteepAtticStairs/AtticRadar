@@ -279,6 +279,7 @@ function showStations() {
 
                     $('#stationInp').val(clickedStation);
                     $('#dataDiv').data('currentStation', clickedStation);
+                    window.atticData.currentStation = clickedStation;
 
                     $('#radarStationIcon').show();
                     document.getElementById('radarStation').innerHTML = clickedStation;

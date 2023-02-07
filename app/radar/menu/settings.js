@@ -51,6 +51,26 @@ function settingsOption(index) {
         }
     })
 
+    armFunctions.toggleswitchFunctions($('#armrSTVisBtnSwitchElem'), function() {
+        var stormTrackLayers = window.atticData.stormTrackLayers;
+        if (stormTrackLayers != undefined) {
+            for (var i in stormTrackLayers) {
+                if (map.getLayer(stormTrackLayers[i])) {
+                    map.setLayoutProperty(stormTrackLayers[i], 'visibility', 'visible');
+                }
+            }
+        }
+    }, function() {
+        var stormTrackLayers = window.atticData.stormTrackLayers;
+        if (stormTrackLayers != undefined) {
+            for (var i in stormTrackLayers) {
+                if (map.getLayer(stormTrackLayers[i])) {
+                    map.setLayoutProperty(stormTrackLayers[i], 'visibility', 'none');
+                }
+            }
+        }
+    })
+
     armFunctions.toggleswitchFunctions($('#armrRoadsStreetsVisBtnSwitchElem'), function() {
         setBaseMapLayers('both');
     }, function() {
