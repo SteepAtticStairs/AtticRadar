@@ -3436,516 +3436,7 @@ module.exports = {
     disableDistanceMeasure
 }
 },{"../../../resources/radarStations":262,"../map/map":63,"@turf/turf":200}],26:[function(require,module,exports){
-function calcGPU(azDists) {
-    console.time('GPU');
-    const gpu = new GPU();
-
-    // const array = [1, 2, 3, 4];
-
-    const multiplyMatrix = gpu.createKernel(function (a) {
-        function forwardAzimuthProj(az, distance, iter) {
-            // convert distance from meters to kilometers
-            distance = distance * 1000;
-            az = az * (Math.PI / 180);
-
-            // Define the starting latitude and longitude
-            const lat1 = 45.0;
-            const lon1 = -75.0;
-
-            // Convert the azimuth and starting coordinates to radians
-            //const azRad = az * (Math.PI / 180);
-            const lat1Rad = lat1 * (Math.PI / 180);
-            const lon1Rad = lon1 * (Math.PI / 180);
-
-            // the earth radius in meters
-            const earthRadius = 6378137.0;
-
-            // Calculate the destination latitude and longitude in radians
-            const lat2Rad = Math.asin(Math.sin(lat1Rad) * Math.cos(distance / earthRadius) + Math.cos(lat1Rad) * Math.sin(distance / earthRadius) * Math.cos(az));
-            const lon2Rad = lon1Rad + Math.atan2(Math.sin(az) * Math.sin(distance / earthRadius) * Math.cos(lat1Rad), Math.cos(distance / earthRadius) - Math.sin(lat1Rad) * Math.sin(lat2Rad));
-
-            // Convert the destination latitude and longitude from radians to degrees
-            const lat2 = lat2Rad * (180 / Math.PI);
-            const lon2 = lon2Rad * (180 / Math.PI);
-
-            const x = (180 + lon2) / 360;
-            const y = (180 - (180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + lat2 * Math.PI / 360)))) / 360;
-
-            if (iter % 2 == 0) {
-                return x;
-            } else {
-                return y;
-            }
-        }
-
-        const iter = this.thread.x;
-        if (iter % 2 == 0) {
-            var az = a[iter];
-            var distance = a[iter + 1];
-            return forwardAzimuthProj(az, distance, iter);
-        } else {
-            var az = a[iter - 1];
-            var distance = a[iter];
-            return forwardAzimuthProj(az, distance, iter);
-        }
-    }).setOutput([azDists.length]);
-
-    var output = multiplyMatrix(azDists);
-    //console.timeEnd('GPU');
-    //output = [...output].filter(x => x !== 0);
-    //console.log(output);
-    return output;
-}
-
-module.exports = calcGPU;
-
-/*
-* GPU.js precision tests
-* https://github.com/munrocket/double.js/blob/master/webgl/double.glsl
-*/
-
-// const earthRadius = 6378137.0;
-// const distance = 132.5 * 1000;
-
-// // GPU is a constructor and namespace for browser
-// const gpu = new GPU();
-// const multiplyMatrix = gpu.createKernel(function (aa, bb) {
-//     function add(a, b) { return (b != 0) ? a + b : a; }
-//     function sub(a, b) { return (b != 0) ? a - b : a; }
-//     function mul(a, b) { return (b != 1) ? a * b : a; }
-//     function div(a, b) { return (b != 1) ? a / b : a; }
-//     function fma(a, b, c) { return a * b + c; }
-
-
-//     function fastTwoSum(a, b) {
-//         return [add(a, b), sub(b, sub(add(a, b), a))];
-//     }
-
-//     function twoSum(a, b) {
-//         return [add(a, b), add(sub(b, sub(add(a, b), a)), sub(a, sub(add(a, b), sub(add(a, b), a))))];
-//     }
-
-//     function twoProd(a, b) {
-//         return [mul(a, b), a * b + -mul(a, b)];
-//     }
-
-//     function div22(X, Y) {
-//         return fastTwoSum(div(X[0], Y[0]), div(sub(add(sub(sub(X[0], twoProd(div(X[0], Y[0]), Y[0])[0]), twoProd(div(X[0], Y[0]), Y[0])[1]), X[1]), mul(div(X[0], Y[0]), Y[1])), Y[0]));
-//     }
-
-//     return div22([aa, 0], [bb, 0]);
-//     //return aa / bb;
-// }).setOutput([1]);
-
-// const c = multiplyMatrix(distance, earthRadius);
-
-// //console.log(c[0][0] + c[0][1])
-// console.log(c[0])
-// console.log(distance / earthRadius)
-
-// // const correct = 0.020774091243258023;
-// // const normalGL = 0.02077409252524376;
-// // const precGL = 0.02077409066259861;
-
-// // console.log(Math.abs(correct - normalGL))
-// // console.log(Math.abs(correct - precGL))
-// // console.log(Math.abs(correct - normalGL) > Math.abs(correct - precGL))
-},{}],27:[function(require,module,exports){
-const chroma = require('chroma-js');
-const ut = require('../utils');
-const calcGPU = require('./calcGPU');
-
-// https://stackoverflow.com/a/8188682/18758797
-function splitUp(arr, n) {
-    var rest = arr.length % n, // how much to divide
-        restUsed = rest, // to keep track of the division over the elements
-        partLength = Math.floor(arr.length / n),
-        result = [];
-
-    for (var i = 0; i < arr.length; i += partLength) {
-        var end = partLength + i,
-            add = false;
-
-        if (rest !== 0 && restUsed) { // should add one element for the division
-            end++;
-            restUsed--; // we've used one division element now
-            add = true;
-        }
-
-        result.push(arr.slice(i, end)); // part of the array
-
-        if (add) {
-            i++; // also increment i in the case we added an extra element for division
-        }
-    }
-
-    return result;
-}
-
-function rgbValToArray(rgbString) {
-    return rgbString
-            .replace('rgb(', '')
-            .replace('rgba(', '')
-            .replace(')', '')
-            .split(', ')
-}
-function chromaScaleToRgbString(scaleOutput) {
-    return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
-}
-function scaleForWebGL(num) {
-    return parseFloat(ut.scale(num, 0, 255, 0, 1).toFixed(3));
-}
-
-function deg2rad(angle) { return angle * (Math.PI / 180) }
-
-var radarLatLng;
-const decimalPlaceTrim = 5;
-
-var inv = 180 / Math.PI;
-var re = 6371;
-var radarLat;
-var radarLon;
-
-function calcLngLat(x, y) {
-    var rho = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    var c = rho / re;
-    var lat = Math.asin(Math.cos(c) * Math.sin(radarLat) + (y * Math.sin(c) * Math.cos(radarLat)) / (rho)) * inv;
-    var lon = (radarLon + Math.atan((x * Math.sin(c)) / (rho * Math.cos(radarLat) * Math.cos(c) - y * Math.sin(radarLat) * Math.sin(c)))) * inv;
-
-    //return proj4('EPSG:3857', [lon, lat]);
-    return [
-        parseFloat(lon.toFixed(decimalPlaceTrim)),
-        parseFloat(lat.toFixed(decimalPlaceTrim))
-    ]
-}
-
-// this formula was provided by ChatGPT. crazy.
-function fwdAzimuthProj(az, distance) {
-    // convert distance from meters to kilometers
-    distance = distance * 1000;
-
-    // Define the starting latitude and longitude
-    const lat1 = radarLatLng.lat; // 45.0
-    const lon1 = radarLatLng.lng; // -75.0
-
-    // Convert the azimuth and starting coordinates to radians
-    const azRad = az * (Math.PI / 180);
-    const lat1Rad = lat1 * (Math.PI / 180);
-    const lon1Rad = lon1 * (Math.PI / 180);
-
-    // the earth radius in meters
-    const earthRadius = 6378137.0;
-
-    // Calculate the destination latitude and longitude in radians
-    const lat2Rad = Math.asin(Math.sin(lat1Rad) * Math.cos(distance / earthRadius) + Math.cos(lat1Rad) * Math.sin(distance / earthRadius) * Math.cos(azRad));
-    const lon2Rad = lon1Rad + Math.atan2(Math.sin(azRad) * Math.sin(distance / earthRadius) * Math.cos(lat1Rad), Math.cos(distance / earthRadius) - Math.sin(lat1Rad) * Math.sin(lat2Rad));
-
-    // Convert the destination latitude and longitude from radians to degrees
-    const lat2 = lat2Rad * (180 / Math.PI);
-    const lon2 = lon2Rad * (180 / Math.PI);
-
-    //return [lon2, lat2]
-    return [
-        parseFloat(lon2.toFixed(decimalPlaceTrim)),
-        parseFloat(lat2.toFixed(decimalPlaceTrim))
-    ]
-}
-
-// https://github.com/TankofVines/node-vincenty
-function destVincenty(az, distance) {
-    function toRad(degree) { return degree * (Math.PI / 180) }
-    function toDeg(radian) { return radian * (180 / Math.PI) }
-
-    // convert azimuth to bearing
-    var brng = az;
-    // convert distance from meters to kilometers
-    var dist = distance * 1000;
-    var lat1 = radarLatLng.lat;
-    var lon1 = radarLatLng.lng;
-
-    /*
-    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)
-    */
-    // length of semi-major axis of the ellipsoid (radius at equator) - meters
-    var a = 6378137;
-    // flattening of the ellipsoid
-    var f = 1 / 298.257223563; // (a − b) / a
-    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters
-    var b = 6356752.3142; // (1 − ƒ) * a
-
-    var s = dist;
-    var alpha1 = toRad(brng);
-    var sinAlpha1 = Math.sin(alpha1);
-    var cosAlpha1 = Math.cos(alpha1);
-
-    var tanU1 = (1 - f) * Math.tan(toRad(lat1));
-    var cosU1 = 1 / Math.sqrt((1 + tanU1 * tanU1)), sinU1 = tanU1 * cosU1;
-    var sigma1 = Math.atan2(tanU1, cosAlpha1);
-    var sinAlpha = cosU1 * sinAlpha1;
-    var cosSqAlpha = 1 - sinAlpha * sinAlpha;
-    var uSq = cosSqAlpha * (a * a - b * b) / (b * b);
-    var A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
-    var B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
-
-    var sigma = s / (b * A), sigmaP = 2 * Math.PI;
-    while (Math.abs(sigma - sigmaP) > 1e-12) {
-        var cos2SigmaM = Math.cos(2 * sigma1 + sigma);
-        var sinSigma = Math.sin(sigma);
-        var cosSigma = Math.cos(sigma);
-        var deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
-            B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
-        sigmaP = sigma;
-        sigma = s / (b * A) + deltaSigma;
-    }
-
-    var tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;
-    var lat2 = Math.atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,
-        (1 - f) * Math.sqrt(sinAlpha * sinAlpha + tmp * tmp));
-    var lambda = Math.atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);
-    var C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
-    var L = lambda - (1 - C) * f * sinAlpha *
-        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
-    var lon2 = (toRad(lon1) + L + 3 * Math.PI) % (2 * Math.PI) - Math.PI;  // normalise to -180...+180
-
-    var revAz = Math.atan2(sinAlpha, -tmp);  // final bearing, if required
-
-    //var result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };
-    var result = [toDeg(lon2), toDeg(lat2)];
-
-    return result;
-}
-
-// module.exports = function (self) {
-//     self.addEventListener('message', function(ev) {
-    function calculateLngLat(ev, cb) {
-        var start = Date.now();
-
-        var prod_range = ev.data[0];
-        var az = ev.data[1];
-        var prodValues = ev.data[2];
-
-        radarLatLng = ev.data[3];
-        radarLat = deg2rad(radarLatLng.lat); // 35.33305740356445
-        radarLon = deg2rad(radarLatLng.lng); // -97.27748107910156
-
-        var scaleColors = ev.data[4];
-        var scaleValues = ev.data[5];
-        var mode = ev.data[6];
-        var chromaScale = chroma.scale(scaleColors).domain(scaleValues).mode('lab');
-
-        function mc(coords) {
-            function mercatorXfromLng(lng) {
-                return (180 + lng) / 360;
-            }
-            function mercatorYfromLat(lat) {
-                return (180 - (180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360)))) / 360;
-            }
-            return [mercatorXfromLng(coords[0]), mercatorYfromLat(coords[1])];
-        }
-
-        function calcLocs(i, n) {
-            var xloc = prod_range[n] * Math.sin(deg2rad(az[i]));
-            var yloc = prod_range[n] * Math.cos(deg2rad(az[i]));
-            return {
-                'xloc': xloc,
-                'yloc': yloc
-            }
-        }
-
-        function getAzDistance(i, n) {
-            return {
-                'azimuth': az[i],
-                'distance': prod_range[n]
-            }
-        }
-
-        // var goodIndexes = [];
-        // for (var i in prodValues) {
-        //     var goodIndexesArr = [];
-        //     var n = 0;
-        //     for (var el in prodValues[i]) {
-        //         if (prodValues[i][el] != null) { goodIndexesArr.push(n) }
-        //         n++;
-        //     }
-        //     goodIndexes.push(goodIndexesArr);
-        // }
-        // for (var i in prodValues) { prodValues[i] = prodValues[i].filter(function (el) { return el != null }) }
-
-        var total = 0;
-        var pv = [...prodValues];
-        /*
-        * This is code to fill in all neigboring radar pixels for color interpolation.
-        */
-        // for (var i in pv) {
-        //     for (var n in pv[i]) {
-        //         try {
-        //             i = parseInt(i);
-        //             n = parseInt(n);
-
-        //             var pixelTrackerArray = [];
-        //             var curPixel = pv[i][n];
-        //             var top = pv[i][n + 1];
-        //             var right = pv[i + 1][n];
-        //             var bottom = pv[i][n - 1];
-        //             var left = pv[i - 1][n];
-        //             pixelTrackerArray.push(top, right, bottom, left);
-        //             var directionLookup = ['top', 'right', 'bottom', 'left'];
-
-        //             for (var x = 0; x < pixelTrackerArray.length; x++) {
-        //                 if (pixelTrackerArray[x] == null && curPixel != null && curPixel != 999) {
-        //                     var nullPixelDirection = directionLookup[x];
-
-        //                     if (nullPixelDirection == 'top') { pv[i][n + 1] = 999 }
-        //                     else if (nullPixelDirection == 'right') { pv[i + 1][n] = 999 }
-        //                     else if (nullPixelDirection == 'bottom') { pv[i][n - 1] = 999 }
-        //                     else if (nullPixelDirection == 'left') { pv[i - 1][n] = 999 }
-        //                 }
-        //             }
-        //         } catch (e) {}
-        //     }
-        // }
-        for (var i in pv) {
-            pv[i] = pv[i].filter(function (el) { return el != null });
-            total += pv[i].length;
-        }
-
-        var points = new Float32Array(total * 12);
-        var pointsIndex = 0;
-        function pushPoint(value) {
-            points[pointsIndex] = value;
-            pointsIndex++;
-        }
-
-        var colors = new Float32Array(total * 6);
-        var colorsIndex = 0;
-        function pushColor(value) {
-            colors[colorsIndex] = value;
-            colorsIndex++;
-        }
-
-        var geojsonValues = [];
-        for (var i in az) {
-            for (var n in prod_range) {
-                try {
-                    if (prodValues[i][n] != null) {
-                        //var theN = parseInt(goodIndexes[i][n]);
-                        i = parseInt(i);
-                        n = parseInt(n);
-                        var baseLocs = getAzDistance(i, n);
-                        //var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
-
-                        var oneUpLocs = getAzDistance(i, n + 1);
-                        //var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
-
-                        var oneSidewaysLocs = getAzDistance(i + 1, n);
-                        //var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
-
-                        var otherCornerLocs = getAzDistance(i + 1, n + 1);
-                        //var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
-
-                        if (mode == 'mapPlot') {
-                            pushPoint(baseLocs.azimuth);
-                            pushPoint(baseLocs.distance);
-
-                            pushPoint(oneUpLocs.azimuth);
-                            pushPoint(oneUpLocs.distance);
-
-                            pushPoint(oneSidewaysLocs.azimuth);
-                            pushPoint(oneSidewaysLocs.distance);
-                            pushPoint(oneSidewaysLocs.azimuth);
-                            pushPoint(oneSidewaysLocs.distance);
-
-                            pushPoint(oneUpLocs.azimuth);
-                            pushPoint(oneUpLocs.distance);
-
-                            pushPoint(otherCornerLocs.azimuth);
-                            pushPoint(otherCornerLocs.distance);
-
-
-                            pushColor(prodValues[i][n]);
-                            pushColor(prodValues[i][n]);
-                            pushColor(prodValues[i][n]);
-                            pushColor(prodValues[i][n]);
-                            pushColor(prodValues[i][n]);
-                            pushColor(prodValues[i][n]);
-
-                            // pushColor(prodValues[i][n]);
-                            // pushColor(prodValues[i][n + 1]);
-                            // pushColor(prodValues[i + 1][n]);
-                            // pushColor(prodValues[i + 1][n]);
-                            // pushColor(prodValues[i][n + 1]);
-                            // pushColor(prodValues[i + 1][n + 1]);
-
-                            // var colorAtVal = chromaScaleToRgbString(chromaScale(prodValues[i][n]));
-                            // var arrayColorAtVal = rgbValToArray(colorAtVal);
-                            // var r = scaleForWebGL(arrayColorAtVal[0]);
-                            // var g = scaleForWebGL(arrayColorAtVal[1]);
-                            // var b = scaleForWebGL(arrayColorAtVal[2]);
-                            // var a = 1;
-                            // colors.push(
-                            //     r, g, b, a,
-                            //     r, g, b, a,
-                            //     r, g, b, a,
-                            //     r, g, b, a,
-                            //     r, g, b, a,
-                            //     r, g, b, a,
-                            // )
-                        } else if (mode == 'geojson') {
-                            var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
-                            var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
-                            var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
-                            var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
-
-                            geojsonValues.push(base[0], base[1], oneUp[0], oneUp[1], otherCorner[0], otherCorner[1], oneSideways[0], oneSideways[1], prodValues[i][n]);
-                        }
-                    }
-                } catch (e) {
-                    // console.warn(e)
-                }
-            }
-        }
-
-        // points = calcGPU(points, radarLatLng);
-
-        console.log(`Calculated vertices in ${Date.now() - start} ms`);
-        if (mode == 'mapPlot') {
-            // self.postMessage
-            cb({'data': [points, colors]});
-        } else if (mode == 'geojson') {
-            // self.postMessage
-            cb({'data': geojsonValues});
-        }
-
-        // var pointsChunks = [];
-        // var colorsChunks = [];
-        // //console.log(points.length, colors.length)
-
-        // const numOfChunks = 10;
-        // pointsChunks = splitUp(points, numOfChunks);
-        // colorsChunks = splitUp(colors, numOfChunks);
-        // //for (let i = 0; i < points.length; i += points.length / numOfChunks) { pointsChunks.push(points.slice(i, i + colors.length / numOfChunks)) }
-        // //for (let i = 0; i < colors.length; i += colors.length / numOfChunks) { colorsChunks.push(colors.slice(i, i + colors.length / numOfChunks)) }
-
-        // var i = 0;
-        // function myLoop() {
-        //     setTimeout(function () {
-        //         self.postMessage([pointsChunks[i], colorsChunks[i], numOfChunks])
-        //         i++;
-        //         if (i < numOfChunks) { myLoop() }
-        //     }, 5)
-        // }
-        // myLoop();
-        // // self.postMessage([
-        // //     new Float32Array(points),
-        // //     new Float32Array(colors)
-        // // ]);
-    }
-//     })
-// };
-
-module.exports = calculateLngLat;
-},{"../utils":90,"./calcGPU":26,"chroma-js":206}],28:[function(require,module,exports){
-const ut = require('../utils');
+const ut = require('../../utils');
 const chroma = require('chroma-js');
 
 function rgbValToArray(rgbString) {
@@ -4140,7 +3631,620 @@ function calcPolygons(url, phi, radarLat, radarLon, radVersion, valuesArr, color
 module.exports = {
     calcPolygons
 }
-},{"../utils":90,"chroma-js":206}],29:[function(require,module,exports){
+},{"../../utils":90,"chroma-js":206}],27:[function(require,module,exports){
+const calcPolys = require('./calculatePolygons');
+const STstuff = require('../../level3/stormTracking/archive/stormTrackingMain');
+const tt = require('../../misc/paletteTooltip');
+const ut = require('../../utils');
+const mapFuncs = require('../../map/mapFunctions');
+const generateGeoJSON = require('../../inspector/archive/generateGeoJSON');
+var map = require('../../map/map');
+const setBaseMapLayers = require('../../misc/baseMapLayers');
+const PNG = require('pngjs').PNG;
+const chroma = require('chroma-js');
+const productColors = require('../../products/productColors');
+const createAndShowColorbar = require('../mapColorbar');
+
+function scaleValues(values, product) {
+    if (product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL') {
+        // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
+        for (var i in values) { values[i] = values[i] / 1.944 }
+    } else if (product == 'N0S') {
+        // storm relative velocity
+        for (var i in values) { values[i] = values[i] + 0.5 }
+    } else if (product == 'N0H' || product == 'HHC') {
+        // hydrometer classification || hybrid hydrometer classification
+        for (var i in values) { values[i] = values[i] - 0.5 }
+    }
+    return values;
+}
+
+var vertex_buffer;
+var color_buffer;
+
+var values;
+var colors;
+
+var settings = {};
+
+function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
+    settings.rlat = lati;
+    settings.rlon = lngi;
+    // phi is elevation
+    settings.phi = 0.483395;
+    settings.base = jsonObj;
+
+    if (Array.isArray(produc)) {
+        produc = produc[0];
+    }
+
+    function finishItUp(data, colors, layer, geojson) {
+        vertex_buffer = new Float32Array(data);
+        color_buffer = new Float32Array(colors);
+        //console.log(Math.max(...[...new Set(colors)]))
+        mapFuncs.removeMapLayer('baseReflectivity');
+
+        map.addLayer(layer);
+        var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
+        if (!isChecked) {
+            setBaseMapLayers('cities');
+        } else if (isChecked) {
+            setBaseMapLayers('both');
+        }
+
+        document.getElementById('spinnerParent').style.display = 'none';
+
+        // load the visibility button
+        // require('../map/controls/visibility');
+
+        // load the refresh button
+        // require('./refresh');
+
+        if ($('#dataDiv').data('fromFileUpload')) {
+            ut.flyToStation();
+        } else {
+            if ($('#dataDiv').data('stormTracksVisibility')) {
+                STstuff.loadAllStormTrackingStuff();
+            }
+        }
+
+        // make sure the alerts are always on top
+        mapFuncs.moveMapLayer('newAlertsLayer');
+        mapFuncs.moveMapLayer('newAlertsLayerOutline');
+
+        var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
+
+        console.log('File plotting complete');
+        ut.betterProgressBar('set', 100);
+        ut.betterProgressBar('hide');
+
+        if ($('#colorPickerItemClass').hasClass('icon-blue')) {
+            $('#colorPickerItemClass').click();
+        }
+
+        var distanceMeasureMapLayers = $('#dataDiv').data('distanceMeasureMapLayers');
+        for (var i in distanceMeasureMapLayers) {
+            if (map.getLayer(distanceMeasureMapLayers[i])) {
+                map.moveLayer(distanceMeasureMapLayers[i]);
+            }
+        }
+        // setTimeout(function() {
+        //     //$("#dataDiv").trigger("loadGeoJSON");
+        //     //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
+        //     var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
+        //     generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
+        // }, 500)
+    }
+
+    var data = productColors[produc.replaceAll(' ', '')];
+    divider = data.divider;
+    values = data.values;
+    colors = data.colors;
+    minMax = [values[0], values[values.length - 1]];
+    values = scaleValues(values, produc);
+
+    var layer = {
+        id: "baseReflectivity",
+        type: "custom",
+
+        // method called when the layer is added to the map
+        // https://docs.mapbox.com/mapbox-gl-js/api/#styleimageinterface#onadd
+        onAdd: function (map, gl) {
+            createAndShowColorbar(colors, values);
+            // create GLSL source for vertex shader
+            const vertexSource = `
+                uniform mat4 u_matrix;
+                attribute vec2 a_pos;
+                attribute vec4 color;
+                varying vec4 vColor;
+                void main() {
+                    gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);
+                    vColor = color;
+                }`;
+
+            // create GLSL source for fragment shader
+            const fragmentSource = `
+                precision lowp float;
+                varying vec4 vColor;
+                void main() {
+                    gl_FragColor = vec4(vColor);
+                }`;
+
+            // create a vertex shader
+            const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vertexShader, vertexSource);
+            gl.compileShader(vertexShader);
+
+            // create a fragment shader
+            const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fragmentShader, fragmentSource);
+            gl.compileShader(fragmentShader);
+
+            // link the two shaders into a WebGL program
+            this.program = gl.createProgram();
+            gl.attachShader(this.program, vertexShader);
+            gl.attachShader(this.program, fragmentShader);
+            gl.linkProgram(this.program);
+
+            this.aPos = gl.getAttribLocation(this.program, 'a_pos');
+            this.color = gl.getAttribLocation(this.program, 'color');
+
+            // create and initialize a WebGLBuffer to store vertex and color data
+            this.vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+            gl.bufferData(
+                gl.ARRAY_BUFFER,
+                vertex_buffer,
+                gl.STATIC_DRAW
+            );
+
+            this.colorBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+            gl.bufferData(
+                gl.ARRAY_BUFFER,
+                color_buffer,
+                gl.STATIC_DRAW
+            );
+        },
+
+        // method fired on each animation frame
+        // https://docs.mapbox.com/mapbox-gl-js/api/#map.event:render
+        render: function (gl, matrix) {
+            gl.useProgram(this.program);
+            gl.uniformMatrix4fv(
+                gl.getUniformLocation(this.program, 'u_matrix'),
+                false,
+                matrix
+            );
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+            gl.enableVertexAttribArray(this.aPos);
+            gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+            gl.enableVertexAttribArray(this.color);
+            gl.vertexAttribPointer(this.color, 4, gl.FLOAT, false, 0, 0);
+
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.drawArrays(gl.TRIANGLES, 0, vertex_buffer.length / 2);
+        }
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var vers = JSON.parse(this.responseText).version;
+
+            calcPolys.calcPolygons(
+                settings.base,
+                settings.phi,
+                settings.rlat,
+                settings.rlon,
+                vers,
+                values,
+                colors,
+                function(dat) {
+                    finishItUp(dat.verticies, dat.colors, layer)
+                }
+            )
+        }
+    };
+    xhttp.open("GET", jsonObj, true);
+    xhttp.send();
+}
+
+module.exports = drawRadarShape;
+},{"../../inspector/archive/generateGeoJSON":38,"../../level3/stormTracking/archive/stormTrackingMain":56,"../../map/map":63,"../../map/mapFunctions":64,"../../misc/baseMapLayers":78,"../../misc/paletteTooltip":83,"../../products/productColors":85,"../../utils":90,"../mapColorbar":35,"./calculatePolygons":26,"chroma-js":206,"pngjs":248}],28:[function(require,module,exports){
+function calcGPU(azDists) {
+    console.time('GPU');
+    const gpu = new GPU();
+
+    // const array = [1, 2, 3, 4];
+
+    const multiplyMatrix = gpu.createKernel(function (a) {
+        function forwardAzimuthProj(az, distance, iter) {
+            // convert distance from meters to kilometers
+            distance = distance * 1000;
+            az = az * (Math.PI / 180);
+
+            // Define the starting latitude and longitude
+            const lat1 = 45.0;
+            const lon1 = -75.0;
+
+            // Convert the azimuth and starting coordinates to radians
+            //const azRad = az * (Math.PI / 180);
+            const lat1Rad = lat1 * (Math.PI / 180);
+            const lon1Rad = lon1 * (Math.PI / 180);
+
+            // the earth radius in meters
+            const earthRadius = 6378137.0;
+
+            // Calculate the destination latitude and longitude in radians
+            const lat2Rad = Math.asin(Math.sin(lat1Rad) * Math.cos(distance / earthRadius) + Math.cos(lat1Rad) * Math.sin(distance / earthRadius) * Math.cos(az));
+            const lon2Rad = lon1Rad + Math.atan2(Math.sin(az) * Math.sin(distance / earthRadius) * Math.cos(lat1Rad), Math.cos(distance / earthRadius) - Math.sin(lat1Rad) * Math.sin(lat2Rad));
+
+            // Convert the destination latitude and longitude from radians to degrees
+            const lat2 = lat2Rad * (180 / Math.PI);
+            const lon2 = lon2Rad * (180 / Math.PI);
+
+            const x = (180 + lon2) / 360;
+            const y = (180 - (180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + lat2 * Math.PI / 360)))) / 360;
+
+            if (iter % 2 == 0) {
+                return x;
+            } else {
+                return y;
+            }
+        }
+
+        const iter = this.thread.x;
+        if (iter % 2 == 0) {
+            var az = a[iter];
+            var distance = a[iter + 1];
+            return forwardAzimuthProj(az, distance, iter);
+        } else {
+            var az = a[iter - 1];
+            var distance = a[iter];
+            return forwardAzimuthProj(az, distance, iter);
+        }
+    }).setOutput([azDists.length]);
+
+    var output = multiplyMatrix(azDists);
+    //console.timeEnd('GPU');
+    //output = [...output].filter(x => x !== 0);
+    //console.log(output);
+    return output;
+}
+
+module.exports = calcGPU;
+
+/*
+* GPU.js precision tests
+* https://github.com/munrocket/double.js/blob/master/webgl/double.glsl
+*/
+
+// const earthRadius = 6378137.0;
+// const distance = 132.5 * 1000;
+
+// // GPU is a constructor and namespace for browser
+// const gpu = new GPU();
+// const multiplyMatrix = gpu.createKernel(function (aa, bb) {
+//     function add(a, b) { return (b != 0) ? a + b : a; }
+//     function sub(a, b) { return (b != 0) ? a - b : a; }
+//     function mul(a, b) { return (b != 1) ? a * b : a; }
+//     function div(a, b) { return (b != 1) ? a / b : a; }
+//     function fma(a, b, c) { return a * b + c; }
+
+
+//     function fastTwoSum(a, b) {
+//         return [add(a, b), sub(b, sub(add(a, b), a))];
+//     }
+
+//     function twoSum(a, b) {
+//         return [add(a, b), add(sub(b, sub(add(a, b), a)), sub(a, sub(add(a, b), sub(add(a, b), a))))];
+//     }
+
+//     function twoProd(a, b) {
+//         return [mul(a, b), a * b + -mul(a, b)];
+//     }
+
+//     function div22(X, Y) {
+//         return fastTwoSum(div(X[0], Y[0]), div(sub(add(sub(sub(X[0], twoProd(div(X[0], Y[0]), Y[0])[0]), twoProd(div(X[0], Y[0]), Y[0])[1]), X[1]), mul(div(X[0], Y[0]), Y[1])), Y[0]));
+//     }
+
+//     return div22([aa, 0], [bb, 0]);
+//     //return aa / bb;
+// }).setOutput([1]);
+
+// const c = multiplyMatrix(distance, earthRadius);
+
+// //console.log(c[0][0] + c[0][1])
+// console.log(c[0])
+// console.log(distance / earthRadius)
+
+// // const correct = 0.020774091243258023;
+// // const normalGL = 0.02077409252524376;
+// // const precGL = 0.02077409066259861;
+
+// // console.log(Math.abs(correct - normalGL))
+// // console.log(Math.abs(correct - precGL))
+// // console.log(Math.abs(correct - normalGL) > Math.abs(correct - precGL))
+},{}],29:[function(require,module,exports){
+const chroma = require('chroma-js');
+const ut = require('../utils');
+const calcGPU = require('./calcGPU');
+
+function deg2rad(angle) { return angle * (Math.PI / 180) }
+
+var radarLatLng;
+const decimalPlaceTrim = 5;
+
+var inv = 180 / Math.PI;
+var re = 6371;
+var radarLat;
+var radarLon;
+
+function calcLngLat(x, y) {
+    var rho = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    var c = rho / re;
+    var lat = Math.asin(Math.cos(c) * Math.sin(radarLat) + (y * Math.sin(c) * Math.cos(radarLat)) / (rho)) * inv;
+    var lon = (radarLon + Math.atan((x * Math.sin(c)) / (rho * Math.cos(radarLat) * Math.cos(c) - y * Math.sin(radarLat) * Math.sin(c)))) * inv;
+
+    //return proj4('EPSG:3857', [lon, lat]);
+    return [
+        parseFloat(lon.toFixed(decimalPlaceTrim)),
+        parseFloat(lat.toFixed(decimalPlaceTrim))
+    ]
+}
+
+// this formula was provided by ChatGPT. crazy.
+function fwdAzimuthProj(az, distance) {
+    // convert distance from meters to kilometers
+    distance = distance * 1000;
+
+    // Define the starting latitude and longitude
+    const lat1 = radarLatLng.lat; // 45.0
+    const lon1 = radarLatLng.lng; // -75.0
+
+    // Convert the azimuth and starting coordinates to radians
+    const azRad = az * (Math.PI / 180);
+    const lat1Rad = lat1 * (Math.PI / 180);
+    const lon1Rad = lon1 * (Math.PI / 180);
+
+    // the earth radius in meters
+    const earthRadius = 6378137.0;
+
+    // Calculate the destination latitude and longitude in radians
+    const lat2Rad = Math.asin(Math.sin(lat1Rad) * Math.cos(distance / earthRadius) + Math.cos(lat1Rad) * Math.sin(distance / earthRadius) * Math.cos(azRad));
+    const lon2Rad = lon1Rad + Math.atan2(Math.sin(azRad) * Math.sin(distance / earthRadius) * Math.cos(lat1Rad), Math.cos(distance / earthRadius) - Math.sin(lat1Rad) * Math.sin(lat2Rad));
+
+    // Convert the destination latitude and longitude from radians to degrees
+    const lat2 = lat2Rad * (180 / Math.PI);
+    const lon2 = lon2Rad * (180 / Math.PI);
+
+    //return [lon2, lat2]
+    return [
+        parseFloat(lon2.toFixed(decimalPlaceTrim)),
+        parseFloat(lat2.toFixed(decimalPlaceTrim))
+    ]
+}
+
+// https://github.com/TankofVines/node-vincenty
+function destVincenty(az, distance) {
+    function toRad(degree) { return degree * (Math.PI / 180) }
+    function toDeg(radian) { return radian * (180 / Math.PI) }
+
+    // convert azimuth to bearing
+    var brng = az;
+    // convert distance from meters to kilometers
+    var dist = distance * 1000;
+    var lat1 = radarLatLng.lat;
+    var lon1 = radarLatLng.lng;
+
+    /*
+    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)
+    */
+    // length of semi-major axis of the ellipsoid (radius at equator) - meters
+    var a = 6378137;
+    // flattening of the ellipsoid
+    var f = 1 / 298.257223563; // (a − b) / a
+    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters
+    var b = 6356752.3142; // (1 − ƒ) * a
+
+    var s = dist;
+    var alpha1 = toRad(brng);
+    var sinAlpha1 = Math.sin(alpha1);
+    var cosAlpha1 = Math.cos(alpha1);
+
+    var tanU1 = (1 - f) * Math.tan(toRad(lat1));
+    var cosU1 = 1 / Math.sqrt((1 + tanU1 * tanU1)), sinU1 = tanU1 * cosU1;
+    var sigma1 = Math.atan2(tanU1, cosAlpha1);
+    var sinAlpha = cosU1 * sinAlpha1;
+    var cosSqAlpha = 1 - sinAlpha * sinAlpha;
+    var uSq = cosSqAlpha * (a * a - b * b) / (b * b);
+    var A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
+    var B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
+
+    var sigma = s / (b * A), sigmaP = 2 * Math.PI;
+    while (Math.abs(sigma - sigmaP) > 1e-12) {
+        var cos2SigmaM = Math.cos(2 * sigma1 + sigma);
+        var sinSigma = Math.sin(sigma);
+        var cosSigma = Math.cos(sigma);
+        var deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
+            B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
+        sigmaP = sigma;
+        sigma = s / (b * A) + deltaSigma;
+    }
+
+    var tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;
+    var lat2 = Math.atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,
+        (1 - f) * Math.sqrt(sinAlpha * sinAlpha + tmp * tmp));
+    var lambda = Math.atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);
+    var C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
+    var L = lambda - (1 - C) * f * sinAlpha *
+        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+    var lon2 = (toRad(lon1) + L + 3 * Math.PI) % (2 * Math.PI) - Math.PI;  // normalise to -180...+180
+
+    var revAz = Math.atan2(sinAlpha, -tmp);  // final bearing, if required
+
+    //var result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };
+    var result = [toDeg(lon2), toDeg(lat2)];
+
+    return result;
+}
+
+function calculateLngLat(ev, cb) {
+    var start = Date.now();
+
+    var prod_range = ev.data[0];
+    var az = ev.data[1];
+    var prodValues = ev.data[2];
+
+    radarLatLng = ev.data[3];
+    radarLat = deg2rad(radarLatLng.lat); // 35.33305740356445
+    radarLon = deg2rad(radarLatLng.lng); // -97.27748107910156
+
+    var scaleColors = ev.data[4];
+    var scaleValues = ev.data[5];
+    var mode = ev.data[6];
+    var chromaScale = chroma.scale(scaleColors).domain(scaleValues).mode('lab');
+
+    function getAzDistance(i, n) {
+        return {
+            'azimuth': az[i],
+            'distance': prod_range[n]
+        }
+    }
+
+    // var goodIndexes = [];
+    // for (var i in prodValues) {
+    //     var goodIndexesArr = [];
+    //     var n = 0;
+    //     for (var el in prodValues[i]) {
+    //         if (prodValues[i][el] != null) { goodIndexesArr.push(n) }
+    //         n++;
+    //     }
+    //     goodIndexes.push(goodIndexesArr);
+    // }
+    // for (var i in prodValues) { prodValues[i] = prodValues[i].filter(function (el) { return el != null }) }
+
+    var total = 0;
+    var pv = [...prodValues];
+    /*
+    * This is code to fill in all neigboring radar pixels for color interpolation.
+    */
+    // for (var i in pv) {
+    //     for (var n in pv[i]) {
+    //         try {
+    //             i = parseInt(i);
+    //             n = parseInt(n);
+
+    //             var pixelTrackerArray = [];
+    //             var curPixel = pv[i][n];
+    //             var top = pv[i][n + 1];
+    //             var right = pv[i + 1][n];
+    //             var bottom = pv[i][n - 1];
+    //             var left = pv[i - 1][n];
+    //             pixelTrackerArray.push(top, right, bottom, left);
+    //             var directionLookup = ['top', 'right', 'bottom', 'left'];
+
+    //             for (var x = 0; x < pixelTrackerArray.length; x++) {
+    //                 if (pixelTrackerArray[x] == null && curPixel != null && curPixel != 999) {
+    //                     var nullPixelDirection = directionLookup[x];
+
+    //                     if (nullPixelDirection == 'top') { pv[i][n + 1] = 999 }
+    //                     else if (nullPixelDirection == 'right') { pv[i + 1][n] = 999 }
+    //                     else if (nullPixelDirection == 'bottom') { pv[i][n - 1] = 999 }
+    //                     else if (nullPixelDirection == 'left') { pv[i - 1][n] = 999 }
+    //                 }
+    //             }
+    //         } catch (e) {}
+    //     }
+    // }
+    for (var i in pv) {
+        pv[i] = pv[i].filter(function (el) { return el != null });
+        total += pv[i].length;
+    }
+
+    var points = new Float32Array(total * 12);
+    var pointsIndex = 0;
+    function pushPoint(value) {
+        points[pointsIndex] = value;
+        pointsIndex++;
+    }
+
+    var colors = new Float32Array(total * 6);
+    var colorsIndex = 0;
+    function pushColor(value) {
+        colors[colorsIndex] = value;
+        colorsIndex++;
+    }
+
+    for (var i in az) {
+        for (var n in prod_range) {
+            try {
+                if (prodValues[i][n] != null) {
+                    //var theN = parseInt(goodIndexes[i][n]);
+                    i = parseInt(i);
+                    n = parseInt(n);
+                    var baseLocs = getAzDistance(i, n);
+                    //var base = destVincenty(baseLocs.azimuth, baseLocs.distance);
+
+                    var oneUpLocs = getAzDistance(i, n + 1);
+                    //var oneUp = destVincenty(oneUpLocs.azimuth, oneUpLocs.distance);
+
+                    var oneSidewaysLocs = getAzDistance(i + 1, n);
+                    //var oneSideways = destVincenty(oneSidewaysLocs.azimuth, oneSidewaysLocs.distance);
+
+                    var otherCornerLocs = getAzDistance(i + 1, n + 1);
+                    //var otherCorner = destVincenty(otherCornerLocs.azimuth, otherCornerLocs.distance);
+
+                    pushPoint(baseLocs.azimuth);
+                    pushPoint(baseLocs.distance);
+
+                    pushPoint(oneUpLocs.azimuth);
+                    pushPoint(oneUpLocs.distance);
+
+                    pushPoint(oneSidewaysLocs.azimuth);
+                    pushPoint(oneSidewaysLocs.distance);
+                    pushPoint(oneSidewaysLocs.azimuth);
+                    pushPoint(oneSidewaysLocs.distance);
+
+                    pushPoint(oneUpLocs.azimuth);
+                    pushPoint(oneUpLocs.distance);
+
+                    pushPoint(otherCornerLocs.azimuth);
+                    pushPoint(otherCornerLocs.distance);
+
+
+                    pushColor(prodValues[i][n]);
+                    pushColor(prodValues[i][n]);
+                    pushColor(prodValues[i][n]);
+                    pushColor(prodValues[i][n]);
+                    pushColor(prodValues[i][n]);
+                    pushColor(prodValues[i][n]);
+
+                    // pushColor(prodValues[i][n]);
+                    // pushColor(prodValues[i][n + 1]);
+                    // pushColor(prodValues[i + 1][n]);
+                    // pushColor(prodValues[i + 1][n]);
+                    // pushColor(prodValues[i][n + 1]);
+                    // pushColor(prodValues[i + 1][n + 1]);
+                }
+            } catch (e) {
+                // console.warn(e)
+            }
+        }
+    }
+
+    // points = calcGPU(points, radarLatLng);
+
+    console.log(`Calculated vertices in ${Date.now() - start} ms`);
+    cb({'data': [points, colors]});
+}
+
+module.exports = calculateLngLat;
+},{"../utils":90,"./calcGPU":28,"chroma-js":206}],30:[function(require,module,exports){
 const ut = require('../utils');
 const productColors = require('../products/productColors');
 const chroma = require('chroma-js');
@@ -4384,102 +4488,15 @@ function calculateVerticies(radarObj, level, options) {
     */
     // var w = work(require('./calculateLngLat.js'));
     // w.addEventListener('message', function(ev) {
-    calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]}, function (ev) {
-        if (mode == 'mapPlot') {
-            // var currentPointsChunkIter = ev.data[0];
-            // var currentColorsChunkIter = ev.data[1];
-            // var totalChunks = ev.data[2];
-            // verticiesArr = verticiesArr.concat(currentPointsChunkIter);
-            // //console.log(vertices.length)
-            // colorsArr = colorsArr.concat(currentColorsChunkIter);
-            // chunksReturned++;
-            // if (totalChunks == chunksReturned) {
-            //     var points = new Float32Array(verticiesArr);
-            //     var colors = new Float32Array(colorsArr);
-            //     plotRadarToMap(points, colors, product);
-            // }
-            var points = ev.data[0];
-            var colors = ev.data[1];
-            // for (var i = 0; i < points.length - 1; i += 2) {
-            //     var mercCoords = mc([points[i], points[i + 1]])
-            //     points[i] = mercCoords[0];
-            //     points[i + 1] = mercCoords[1];
-            // }
-            plotRadarToMap(points, colors, product, radarLatLng);
-        } else if (mode == 'geojson') {
-            var returnedDataArr = ev.data;
-
-            var featuresArr = [];
-            function pushPoint(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, value) {
-                featuresArr.push({
-                    "type": "Feature",
-                    "geometry": { "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [lng1, lat1],
-                                [lng2, lat2],
-                                [lng3, lat3],
-                                [lng4, lat4]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "value": value,
-                    }
-                },);
-            }
-
-            for (var i = 0; i < returnedDataArr.length; i += 9) {
-                function x(n) { return returnedDataArr[n] }
-
-                var inspectorVal;
-                var bin = x(i+8);
-                if (product == 'N0S') {
-                    // storm relative velocity tweaks
-                    var stormRelativeVelocityArr = [-50, -36, -26, -20, -10, -1, 0, 10, 20, 26, 36, 50, 64, 999];
-                    inspectorVal = stormRelativeVelocityArr[bin - 2];
-                } else if (product == 'N0C' || product == 'N0X' || product == 'DVL') {
-                    // correlation coefficient || differential reflectivity || vertically integrated liquid
-                    inspectorVal = bin.toFixed(2);
-                } else if (product == 'N0H' || product == 'HHC') {
-                    // hydrometer classification || hybrid hydrometer classification
-                    var hycValues = {
-                        0: 'Below Threshold', // ND
-                        10: 'Biological', // BI
-                        20: 'Ground Clutter', // GC
-                        30: 'Ice Crystals', // IC
-                        40: 'Dry Snow', // DS
-                        50: 'Wet Snow', // WS
-                        60: 'Light-Mod. Rain', // RA
-                        70: 'Heavy Rain', // HR
-                        80: 'Big Drops', // BD
-                        90: 'Graupel', // GR
-                        100: 'Hail / Rain', // HA
-                        110: 'Large Hail', // LH
-                        120: 'Giant Hail', // GH,
-                        130: '130', // ??
-                        140: 'Unknown', // UK
-                        150: 'Range Folded' // RF
-                    }
-                    inspectorVal = hycValues[bin];
-                } else {
-                    inspectorVal = bin;
-                }
-                if (product != 'N0H' && product != 'HHC') {
-                    // hydrometer classification || hybrid hydrometer classification
-                    inspectorVal = `${inspectorVal} ${ut.productUnits[product]}`;
-                }
-
-                pushPoint(x(i), x(i+1), x(i+2), x(i+3), x(i+4), x(i+5), x(i+6), x(i+7), inspectorVal);
-            }
-
-            var geojsonParentTemplate = {
-                "type": "FeatureCollection",
-                "features": featuresArr
-            }
-            //console.log(geojsonParentTemplate);
-            setTextField(geojsonParentTemplate);
-        }
+    calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+        var points = ev.data[0];
+        var colors = ev.data[1];
+        // for (var i = 0; i < points.length - 1; i += 2) {
+        //     var mercCoords = mc([points[i], points[i + 1]])
+        //     points[i] = mercCoords[0];
+        //     points[i + 1] = mercCoords[1];
+        // }
+        plotRadarToMap(points, colors, product, radarLatLng);
     });
     // w.postMessage([prod_range, az, prodValues, radarLatLng, colorData.colors, values, mode]); // send the worker a message
 
@@ -4492,7 +4509,7 @@ function calculateVerticies(radarObj, level, options) {
 }
 
 module.exports = calculateVerticies;
-},{"../../../resources/radarStations":262,"../../../resources/stationAbbreviations":263,"../inspector/archive/setTextField":39,"../level3/maxRanges":54,"../products/productColors":85,"../utils":90,"./calculateLngLat":27,"./plotRadarToMap":35,"chroma-js":206,"webworkify":261}],30:[function(require,module,exports){
+},{"../../../resources/radarStations":262,"../../../resources/stationAbbreviations":263,"../inspector/archive/setTextField":39,"../level3/maxRanges":54,"../products/productColors":85,"../utils":90,"./calculateLngLat":29,"./plotRadarToMap":36,"chroma-js":206,"webworkify":261}],31:[function(require,module,exports){
 const ut = require('../utils');
 const PNG = require('pngjs').PNG;
 const chroma = require('chroma-js');
@@ -4569,234 +4586,13 @@ function createWebGLTexture(colors, values) {
 }
 
 module.exports = createWebGLTexture;
-},{"../utils":90,"chroma-js":206,"pngjs":248}],31:[function(require,module,exports){
-const calcPolys = require('./calculatePolygons');
-const STstuff = require('../level3/stormTracking/archive/stormTrackingMain');
-const tt = require('../misc/paletteTooltip');
-const ut = require('../utils');
-const mapFuncs = require('../map/mapFunctions');
-const generateGeoJSON = require('../inspector/archive/generateGeoJSON');
-var map = require('../map/map');
-const setBaseMapLayers = require('../misc/baseMapLayers');
-const PNG = require('pngjs').PNG;
-const chroma = require('chroma-js');
-const productColors = require('../products/productColors');
-const createAndShowColorbar = require('./mapColorbar');
-
-function scaleValues(values, product) {
-    if (product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL') {
-        // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
-        for (var i in values) { values[i] = values[i] / 1.944 }
-    } else if (product == 'N0S') {
-        // storm relative velocity
-        for (var i in values) { values[i] = values[i] + 0.5 }
-    } else if (product == 'N0H' || product == 'HHC') {
-        // hydrometer classification || hybrid hydrometer classification
-        for (var i in values) { values[i] = values[i] - 0.5 }
-    }
-    return values;
-}
-
-var vertex_buffer;
-var color_buffer;
-
-var values;
-var colors;
-
-var settings = {};
-
-function drawRadarShape(jsonObj, lati, lngi, produc, shouldFilter) {
-    settings.rlat = lati;
-    settings.rlon = lngi;
-    // phi is elevation
-    settings.phi = 0.483395;
-    settings.base = jsonObj;
-
-    if (Array.isArray(produc)) {
-        produc = produc[0];
-    }
-
-    function finishItUp(data, colors, layer, geojson) {
-        vertex_buffer = new Float32Array(data);
-        color_buffer = new Float32Array(colors);
-        //console.log(Math.max(...[...new Set(colors)]))
-        mapFuncs.removeMapLayer('baseReflectivity');
-
-        map.addLayer(layer);
-        var isChecked = $('#showExtraMapLayersCheckBtn').is(":checked");
-        if (!isChecked) {
-            setBaseMapLayers('cities');
-        } else if (isChecked) {
-            setBaseMapLayers('both');
-        }
-
-        document.getElementById('spinnerParent').style.display = 'none';
-
-        // load the visibility button
-        // require('../map/controls/visibility');
-
-        // load the refresh button
-        // require('./refresh');
-
-        if ($('#dataDiv').data('fromFileUpload')) {
-            ut.flyToStation();
-        } else {
-            if ($('#dataDiv').data('stormTracksVisibility')) {
-                STstuff.loadAllStormTrackingStuff();
-            }
-        }
-
-        // make sure the alerts are always on top
-        mapFuncs.moveMapLayer('newAlertsLayer');
-        mapFuncs.moveMapLayer('newAlertsLayerOutline');
-
-        var dividedArr = ut.getDividedArray(ut.progressBarVal('getRemaining'));
-
-        console.log('File plotting complete');
-        ut.betterProgressBar('set', 100);
-        ut.betterProgressBar('hide');
-
-        if ($('#colorPickerItemClass').hasClass('icon-blue')) {
-            $('#colorPickerItemClass').click();
-        }
-
-        var distanceMeasureMapLayers = $('#dataDiv').data('distanceMeasureMapLayers');
-        for (var i in distanceMeasureMapLayers) {
-            if (map.getLayer(distanceMeasureMapLayers[i])) {
-                map.moveLayer(distanceMeasureMapLayers[i]);
-            }
-        }
-        // setTimeout(function() {
-        //     //$("#dataDiv").trigger("loadGeoJSON");
-        //     //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
-        //     var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
-        //     generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
-        // }, 500)
-    }
-
-    var data = productColors[produc.replaceAll(' ', '')];
-    divider = data.divider;
-    values = data.values;
-    colors = data.colors;
-    minMax = [values[0], values[values.length - 1]];
-    values = scaleValues(values, produc);
-
-    var layer = {
-        id: "baseReflectivity",
-        type: "custom",
-
-        // method called when the layer is added to the map
-        // https://docs.mapbox.com/mapbox-gl-js/api/#styleimageinterface#onadd
-        onAdd: function (map, gl) {
-            createAndShowColorbar(colors, values);
-            // create GLSL source for vertex shader
-            const vertexSource = `
-                uniform mat4 u_matrix;
-                attribute vec2 a_pos;
-                attribute vec4 color;
-                varying vec4 vColor;
-                void main() {
-                    gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);
-                    vColor = color;
-                }`;
-
-            // create GLSL source for fragment shader
-            const fragmentSource = `
-                precision lowp float;
-                varying vec4 vColor;
-                void main() {
-                    gl_FragColor = vec4(vColor);
-                }`;
-
-            // create a vertex shader
-            const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-            gl.shaderSource(vertexShader, vertexSource);
-            gl.compileShader(vertexShader);
-
-            // create a fragment shader
-            const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-            gl.shaderSource(fragmentShader, fragmentSource);
-            gl.compileShader(fragmentShader);
-
-            // link the two shaders into a WebGL program
-            this.program = gl.createProgram();
-            gl.attachShader(this.program, vertexShader);
-            gl.attachShader(this.program, fragmentShader);
-            gl.linkProgram(this.program);
-
-            this.aPos = gl.getAttribLocation(this.program, 'a_pos');
-            this.color = gl.getAttribLocation(this.program, 'color');
-
-            // create and initialize a WebGLBuffer to store vertex and color data
-            this.vertexBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-            gl.bufferData(
-                gl.ARRAY_BUFFER,
-                vertex_buffer,
-                gl.STATIC_DRAW
-            );
-
-            this.colorBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.bufferData(
-                gl.ARRAY_BUFFER,
-                color_buffer,
-                gl.STATIC_DRAW
-            );
-        },
-
-        // method fired on each animation frame
-        // https://docs.mapbox.com/mapbox-gl-js/api/#map.event:render
-        render: function (gl, matrix) {
-            gl.useProgram(this.program);
-            gl.uniformMatrix4fv(
-                gl.getUniformLocation(this.program, 'u_matrix'),
-                false,
-                matrix
-            );
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-            gl.enableVertexAttribArray(this.aPos);
-            gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.enableVertexAttribArray(this.color);
-            gl.vertexAttribPointer(this.color, 4, gl.FLOAT, false, 0, 0);
-
-            gl.enable(gl.BLEND);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            gl.drawArrays(gl.TRIANGLES, 0, vertex_buffer.length / 2);
-        }
-    }
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var vers = JSON.parse(this.responseText).version;
-
-            calcPolys.calcPolygons(
-                settings.base,
-                settings.phi,
-                settings.rlat,
-                settings.rlon,
-                vers,
-                values,
-                colors,
-                function(dat) {
-                    finishItUp(dat.verticies, dat.colors, layer)
-                }
-            )
-        }
-    };
-    xhttp.open("GET", jsonObj, true);
-    xhttp.send();
-}
-
-module.exports = drawRadarShape;
-},{"../inspector/archive/generateGeoJSON":38,"../level3/stormTracking/archive/stormTrackingMain":56,"../map/map":63,"../map/mapFunctions":64,"../misc/baseMapLayers":78,"../misc/paletteTooltip":83,"../products/productColors":85,"../utils":90,"./calculatePolygons":28,"./mapColorbar":34,"chroma-js":206,"pngjs":248}],32:[function(require,module,exports){
+},{"../utils":90,"chroma-js":206,"pngjs":248}],32:[function(require,module,exports){
 module.exports = "precision highp float;\n#define GLSLIFY 1\nuniform vec2 minmax;\nuniform sampler2D u_texture;\nvarying float color;\n\nvoid main() {\n    float calcolor = (color - minmax.x) / (minmax.y - minmax.x);\n    gl_FragColor = texture2D(u_texture, vec2(min(max(calcolor, 0.0), 1.0), 0.0));\n}";
 },{}],33:[function(require,module,exports){
 module.exports = "precision highp float;\n#define GLSLIFY 1\nuniform vec2 minmax;\nvarying float color;\n\nvec4 EncodeFloatRGBA(float v) {\n    vec4 enc = vec4(1.0, 255.0, 65025.0, 16581375.0) * v;\n    enc = fract(enc);\n    enc -= enc.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n    return enc;\n}\n\nvoid main() {\n    vec4 encoded;\n\n    // get on 0-1 scale\n    float calcolor = min(1.0, max((color - minmax.x) / (minmax.y - minmax.x), 0.0));\n\n    // if upper end, need this check because [0,1)\n    if (abs(calcolor - 1.0) < 0.00001) {\n        encoded = vec4(1.0, 0.0, 0.0, 1.0);\n    } else {\n        encoded = EncodeFloatRGBA(calcolor);\n        encoded.a = 1.0;\n    }\n\n    gl_FragColor = encoded;\n}";
 },{}],34:[function(require,module,exports){
+module.exports = "#define GLSLIFY 1\nuniform mat4 u_matrix;\n// uniform vec4 u_eye_high;\n// uniform vec4 u_eye_low;\nattribute vec2 aPosition;\nuniform vec2 radarLatLng;\nattribute float aColor;\nvarying float color;\n\nfloat PI = 3.141592654;\n\nvec2 ds_set(float a) {\n    vec2 z;\n    z.x = a;\n    z.y = 0.0;\n    return z;\n}\nvec2 ds_add(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float t1, t2, e;\n\n    t1 = dsa.x + dsb.x;\n    e = t1 - dsa.x;\n    t2 = ((dsb.x - e) + (dsa.x - (t1 - e))) + dsa.y + dsb.y;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n    return dsc;\n}\nvec2 ds_sub(vec2 dsa, vec2 dsb) {\n    return ds_add(dsa, vec2(-dsb.x, dsb.y));\n}\nvec2 ds_mul(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float c11, c21, c2, e, t1, t2;\n    float a1, a2, b1, b2, cona, conb, split = 8193.;\n\n    cona = dsa.x * split;\n    conb = dsb.x * split;\n    a1 = cona - (cona - dsa.x);\n    b1 = conb - (conb - dsb.x);\n    a2 = dsa.x - a1;\n    b2 = dsb.x - b1;\n\n    c11 = dsa.x * dsb.x;\n    c21 = a2 * b2 + (a2 * b1 + (a1 * b2 + (a1 * b1 - c11)));\n\n    c2 = dsa.x * dsb.y + dsa.y * dsb.x;\n\n    t1 = c11 + c2;\n    e = t1 - c11;\n    t2 = dsa.y * dsb.y + ((c2 - e) + (c11 - (t1 - e))) + c21;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n\n    return dsc;\n}\n\nfloat atan2(float x, float y) {\n    return atan(x / y);\n}\n\nfloat toRad(float degree) {\n    return degree * (PI / 180.0);\n}\nfloat toDeg(float radian) {\n    return radian * (180.0 / PI);\n}\n\nvec2 calcLngLat(float az, float distance) {\n    // convert distance from meters to kilometers\n    distance = distance * 1000.0;\n\n    // Define the starting latitude and longitude\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    // Convert the azimuth and starting coordinates to radians\n    float azRad = az * (PI / 180.0);\n    float lat1Rad = lat1 * (PI / 180.0);\n    float lon1Rad = lon1 * (PI / 180.0);\n\n    // the earth radius in meters\n    float earthRadius = 6378137.0;\n\n    // Calculate the destination latitude and longitude in radians\n    float lat2Rad = asin(sin(lat1Rad) * cos(distance / earthRadius) + cos(lat1Rad) * sin(distance / earthRadius) * cos(azRad));\n    float lon2Rad = lon1Rad + atan2(sin(azRad) * sin(distance / earthRadius) * cos(lat1Rad), cos(distance / earthRadius) - sin(lat1Rad) * sin(lat2Rad));\n\n    // Convert the destination latitude and longitude from radians to degrees\n    float lat2 = lat2Rad * (180.0 / PI);\n    float lon2 = lon2Rad * (180.0 / PI);\n\n    float x = (180.0 + lon2) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + lat2 * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\n// https://github.com/TankofVines/node-vincenty\nvec2 destVincenty(float az, float distance) {\n    // convert azimuth to bearing\n    float brng = az;\n    // convert distance from meters to kilometers\n    float dist = distance * 1000.0;\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    /*\n    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)\n    */\n    // length of semi-major axis of the ellipsoid (radius at equator) - meters\n    float a = 6378137.0;\n    // flattening of the ellipsoid\n    float f = 1.0 / 298.257223563; // (a − b) / a\n    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters\n    float b = 6356752.3142; // (1 − ƒ) * a\n\n    float s = dist;\n    float alpha1 = toRad(brng);\n    float sinAlpha1 = sin(alpha1);\n    float cosAlpha1 = cos(alpha1);\n\n    float tanU1 = (1.0 - f) * tan(toRad(lat1));\n    float cosU1 = 1.0 / sqrt((1.0 + tanU1 * tanU1));\n    float sinU1 = tanU1 * cosU1;\n    float sigma1 = atan2(tanU1, cosAlpha1);\n    float sinAlpha = cosU1 * sinAlpha1;\n    float cosSqAlpha = 1.0 - sinAlpha * sinAlpha;\n    float uSq = cosSqAlpha * (a * a - b * b) / (b * b);\n    float A = 1.0 + uSq / 16384.0 * (4096.0 + uSq * (-768.0 + uSq * (320.0 - 175.0 * uSq)));\n    float B = uSq / 1024.0 * (256.0 + uSq * (-128.0 + uSq * (74.0 - 47.0 * uSq)));\n\n    // float x = 0.0;\n    // for (int i = 0; i < 100; i++) {\n    //     x = x + 1.0;\n    //     if (x == 10.0) {\n    //         break;\n    //     }\n    // }\n\n    float sigma = s / (b * A);\n    float sigmaP = 2.0 * PI;\n\n    float cos2SigmaM;\n    float sinSigma;\n    float cosSigma;\n    float deltaSigma;\n    // 100 checks should be enough\n    for (int i = 0; i < 100; i++) {\n        cos2SigmaM = cos(2.0 * sigma1 + sigma);\n        sinSigma = sin(sigma);\n        cosSigma = cos(sigma);\n        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM) -\n            B / 6.0 * cos2SigmaM * (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SigmaM * cos2SigmaM)));\n        sigmaP = sigma;\n        sigma = s / (b * A) + deltaSigma;\n\n        if (abs(sigma - sigmaP) > 1e-12) {\n            break;\n        }\n    }\n\n    float tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;\n    float lat2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,\n        (1.0 - f) * sqrt(sinAlpha * sinAlpha + tmp * tmp));\n    float lambda = atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);\n    float C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha));\n    float L = lambda - (1.0 - C) * f * sinAlpha *\n        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM)));\n    float lon2 = mod((toRad(lon1) + L + 3.0 * PI), (2.0 * PI) - PI);  // normalise to -180...+180\n\n    // float revAz = atan2(sinAlpha, -tmp);  // final bearing, if required\n    //float result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };\n\n    float x = (toDeg(lon2)) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + toDeg(lat2) * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\nvoid main() {\n    float azimuth = float(aPosition.x);\n    float distance = float(aPosition.y);\n    vec2 mercatorCoords = destVincenty(azimuth, distance);\n    // vec4 coords = vec4(\n    //     mercatorCoords.x,\n    //     mercatorCoords.y,\n    //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,\n    //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x\n    // );\n\n    gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);\n    // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);\n    // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);\n    // gl_Position = u_matrix * gl_Position;\n    // gl_Position.w += u_eye_high.w;\n    color = aColor;\n}";
+},{}],35:[function(require,module,exports){
 const ut = require('../utils');
 
 function rgbValToArray(rgbString) {
@@ -4953,7 +4749,7 @@ function createAndShowColorbar(colors, values) {
 }
 
 module.exports = createAndShowColorbar;
-},{"../misc/detectmobilebrowser":79,"../utils":90}],35:[function(require,module,exports){
+},{"../misc/detectmobilebrowser":79,"../utils":90}],36:[function(require,module,exports){
 const createAndShowColorbar = require('./mapColorbar');
 const productColors = require('../products/productColors');
 const ut = require('../utils');
@@ -4964,9 +4760,9 @@ const initStormTracks = require('../level3/stormTracking/fetchData');
 var map = require('../map/map');
 const setLayerOrder = require('../map/setLayerOrder');
 const createWebGLTexture = require('./createWebGLTexture');
-const vertexSource = require('./vertex.glsl');
-const fragmentSource = require('./fragment.glsl');
-const fragmentFramebufferSource = require('./fragmentFramebuffer.glsl');
+const vertexSource = require('./glsl/vertex.glsl');
+const fragmentSource = require('./glsl/fragment.glsl');
+const fragmentFramebufferSource = require('./glsl/fragmentFramebuffer.glsl');
 
 const mathjs = math;
 
@@ -5198,9 +4994,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
 }
 
 module.exports = plotRadarToMap;
-},{"../level3/stormTracking/fetchData":59,"../map/map":63,"../map/mapFunctions":64,"../map/setLayerOrder":65,"../misc/baseMapLayers":78,"../products/productColors":85,"../utils":90,"./createWebGLTexture":30,"./fragment.glsl":32,"./fragmentFramebuffer.glsl":33,"./mapColorbar":34,"./vertex.glsl":36}],36:[function(require,module,exports){
-module.exports = "#define GLSLIFY 1\nuniform mat4 u_matrix;\n// uniform vec4 u_eye_high;\n// uniform vec4 u_eye_low;\nattribute vec2 aPosition;\nuniform vec2 radarLatLng;\nattribute float aColor;\nvarying float color;\n\nfloat PI = 3.141592654;\n\nvec2 ds_set(float a) {\n    vec2 z;\n    z.x = a;\n    z.y = 0.0;\n    return z;\n}\nvec2 ds_add(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float t1, t2, e;\n\n    t1 = dsa.x + dsb.x;\n    e = t1 - dsa.x;\n    t2 = ((dsb.x - e) + (dsa.x - (t1 - e))) + dsa.y + dsb.y;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n    return dsc;\n}\nvec2 ds_sub(vec2 dsa, vec2 dsb) {\n    return ds_add(dsa, vec2(-dsb.x, dsb.y));\n}\nvec2 ds_mul(vec2 dsa, vec2 dsb) {\n    vec2 dsc;\n    float c11, c21, c2, e, t1, t2;\n    float a1, a2, b1, b2, cona, conb, split = 8193.;\n\n    cona = dsa.x * split;\n    conb = dsb.x * split;\n    a1 = cona - (cona - dsa.x);\n    b1 = conb - (conb - dsb.x);\n    a2 = dsa.x - a1;\n    b2 = dsb.x - b1;\n\n    c11 = dsa.x * dsb.x;\n    c21 = a2 * b2 + (a2 * b1 + (a1 * b2 + (a1 * b1 - c11)));\n\n    c2 = dsa.x * dsb.y + dsa.y * dsb.x;\n\n    t1 = c11 + c2;\n    e = t1 - c11;\n    t2 = dsa.y * dsb.y + ((c2 - e) + (c11 - (t1 - e))) + c21;\n\n    dsc.x = t1 + t2;\n    dsc.y = t2 - (dsc.x - t1);\n\n    return dsc;\n}\n\nfloat atan2(float x, float y) {\n    return atan(x / y);\n}\n\nfloat toRad(float degree) {\n    return degree * (PI / 180.0);\n}\nfloat toDeg(float radian) {\n    return radian * (180.0 / PI);\n}\n\nvec2 calcLngLat(float az, float distance) {\n    // convert distance from meters to kilometers\n    distance = distance * 1000.0;\n\n    // Define the starting latitude and longitude\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    // Convert the azimuth and starting coordinates to radians\n    float azRad = az * (PI / 180.0);\n    float lat1Rad = lat1 * (PI / 180.0);\n    float lon1Rad = lon1 * (PI / 180.0);\n\n    // the earth radius in meters\n    float earthRadius = 6378137.0;\n\n    // Calculate the destination latitude and longitude in radians\n    float lat2Rad = asin(sin(lat1Rad) * cos(distance / earthRadius) + cos(lat1Rad) * sin(distance / earthRadius) * cos(azRad));\n    float lon2Rad = lon1Rad + atan2(sin(azRad) * sin(distance / earthRadius) * cos(lat1Rad), cos(distance / earthRadius) - sin(lat1Rad) * sin(lat2Rad));\n\n    // Convert the destination latitude and longitude from radians to degrees\n    float lat2 = lat2Rad * (180.0 / PI);\n    float lon2 = lon2Rad * (180.0 / PI);\n\n    float x = (180.0 + lon2) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + lat2 * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\n// https://github.com/TankofVines/node-vincenty\nvec2 destVincenty(float az, float distance) {\n    // convert azimuth to bearing\n    float brng = az;\n    // convert distance from meters to kilometers\n    float dist = distance * 1000.0;\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    /*\n    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)\n    */\n    // length of semi-major axis of the ellipsoid (radius at equator) - meters\n    float a = 6378137.0;\n    // flattening of the ellipsoid\n    float f = 1.0 / 298.257223563; // (a − b) / a\n    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters\n    float b = 6356752.3142; // (1 − ƒ) * a\n\n    float s = dist;\n    float alpha1 = toRad(brng);\n    float sinAlpha1 = sin(alpha1);\n    float cosAlpha1 = cos(alpha1);\n\n    float tanU1 = (1.0 - f) * tan(toRad(lat1));\n    float cosU1 = 1.0 / sqrt((1.0 + tanU1 * tanU1));\n    float sinU1 = tanU1 * cosU1;\n    float sigma1 = atan2(tanU1, cosAlpha1);\n    float sinAlpha = cosU1 * sinAlpha1;\n    float cosSqAlpha = 1.0 - sinAlpha * sinAlpha;\n    float uSq = cosSqAlpha * (a * a - b * b) / (b * b);\n    float A = 1.0 + uSq / 16384.0 * (4096.0 + uSq * (-768.0 + uSq * (320.0 - 175.0 * uSq)));\n    float B = uSq / 1024.0 * (256.0 + uSq * (-128.0 + uSq * (74.0 - 47.0 * uSq)));\n\n    // float x = 0.0;\n    // for (int i = 0; i < 100; i++) {\n    //     x = x + 1.0;\n    //     if (x == 10.0) {\n    //         break;\n    //     }\n    // }\n\n    float sigma = s / (b * A);\n    float sigmaP = 2.0 * PI;\n\n    float cos2SigmaM;\n    float sinSigma;\n    float cosSigma;\n    float deltaSigma;\n    // 100 checks should be enough\n    for (int i = 0; i < 100; i++) {\n        cos2SigmaM = cos(2.0 * sigma1 + sigma);\n        sinSigma = sin(sigma);\n        cosSigma = cos(sigma);\n        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM) -\n            B / 6.0 * cos2SigmaM * (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SigmaM * cos2SigmaM)));\n        sigmaP = sigma;\n        sigma = s / (b * A) + deltaSigma;\n\n        if (abs(sigma - sigmaP) > 1e-12) {\n            break;\n        }\n    }\n\n    float tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;\n    float lat2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,\n        (1.0 - f) * sqrt(sinAlpha * sinAlpha + tmp * tmp));\n    float lambda = atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);\n    float C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha));\n    float L = lambda - (1.0 - C) * f * sinAlpha *\n        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM)));\n    float lon2 = mod((toRad(lon1) + L + 3.0 * PI), (2.0 * PI) - PI);  // normalise to -180...+180\n\n    // float revAz = atan2(sinAlpha, -tmp);  // final bearing, if required\n    //float result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };\n\n    float x = (toDeg(lon2)) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + toDeg(lat2) * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\nvoid main() {\n    float azimuth = float(aPosition.x);\n    float distance = float(aPosition.y);\n    vec2 mercatorCoords = destVincenty(azimuth, distance);\n    // vec4 coords = vec4(\n    //     mercatorCoords.x,\n    //     mercatorCoords.y,\n    //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,\n    //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x\n    // );\n\n    gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);\n    // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);\n    // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);\n    // gl_Position = u_matrix * gl_Position;\n    // gl_Position.w += u_eye_high.w;\n    color = aColor;\n}";
-},{}],37:[function(require,module,exports){
+},{"../level3/stormTracking/fetchData":59,"../map/map":63,"../map/mapFunctions":64,"../map/setLayerOrder":65,"../misc/baseMapLayers":78,"../products/productColors":85,"../utils":90,"./createWebGLTexture":31,"./glsl/fragment.glsl":32,"./glsl/fragmentFramebuffer.glsl":33,"./glsl/vertex.glsl":34,"./mapColorbar":35}],37:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.
 */
@@ -6113,7 +5907,7 @@ function l2plot(l2rad, product, elevation) {
 }
 
 module.exports = l2plot;
-},{"../draw/calculateVertices":29}],48:[function(require,module,exports){
+},{"../draw/calculateVertices":30}],48:[function(require,module,exports){
 const ut = require('../utils');
 const isMobile = require('../misc/detectmobilebrowser');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
@@ -6622,7 +6416,7 @@ function l3plot(l3rad) {
 }
 
 module.exports = l3plot;
-},{"../draw/calculateVertices":29}],53:[function(require,module,exports){
+},{"../draw/calculateVertices":30}],53:[function(require,module,exports){
 const l3parse = require('../../../lib/nexrad-level-3-data/src');
 //const l3plot = require('../level3/draw');
 const l3plot = require('./l3plot');
@@ -19261,7 +19055,7 @@ const downSample = require('./preprocess/downsample');
 const indexProduct = require('./preprocess/indexproduct');
 const rrle = require('./preprocess/rrle');
 
-const drawRadarShape = require('../../../../app/radar/draw/drawToMap');
+const drawRadarShape = require('../../../../app/radar/draw/archive/drawToMap');
 
 // names of data structures keyed to product name
 const dataNames = {
@@ -19569,7 +19363,7 @@ module.exports = {
 	canvas: canvasObj,
 };
 
-},{"../../../../app/radar/draw/drawToMap":31,"./palettes":122,"./palettes/ref":123,"./palettes/vel":124,"./palettize":125,"./preprocess/downsample":126,"./preprocess/filterproduct":127,"./preprocess/indexproduct":128,"./preprocess/rrle":129,"canvas":204}],121:[function(require,module,exports){
+},{"../../../../app/radar/draw/archive/drawToMap":27,"./palettes":122,"./palettes/ref":123,"./palettes/vel":124,"./palettize":125,"./preprocess/downsample":126,"./preprocess/filterproduct":127,"./preprocess/indexproduct":128,"./preprocess/rrle":129,"canvas":204}],121:[function(require,module,exports){
 module.exports = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff'];
 
 },{}],122:[function(require,module,exports){

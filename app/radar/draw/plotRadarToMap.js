@@ -8,9 +8,9 @@ const initStormTracks = require('../level3/stormTracking/fetchData');
 var map = require('../map/map');
 const setLayerOrder = require('../map/setLayerOrder');
 const createWebGLTexture = require('./createWebGLTexture');
-const vertexSource = require('./vertex.glsl');
-const fragmentSource = require('./fragment.glsl');
-const fragmentFramebufferSource = require('./fragmentFramebuffer.glsl');
+const vertexSource = require('./glsl/vertex.glsl');
+const fragmentSource = require('./glsl/fragment.glsl');
+const fragmentFramebufferSource = require('./glsl/fragmentFramebuffer.glsl');
 
 const mathjs = math;
 

@@ -1,15 +1,15 @@
 const calcPolys = require('./calculatePolygons');
-const STstuff = require('../level3/stormTracking/archive/stormTrackingMain');
-const tt = require('../misc/paletteTooltip');
-const ut = require('../utils');
-const mapFuncs = require('../map/mapFunctions');
-const generateGeoJSON = require('../inspector/archive/generateGeoJSON');
-var map = require('../map/map');
-const setBaseMapLayers = require('../misc/baseMapLayers');
+const STstuff = require('../../level3/stormTracking/archive/stormTrackingMain');
+const tt = require('../../misc/paletteTooltip');
+const ut = require('../../utils');
+const mapFuncs = require('../../map/mapFunctions');
+const generateGeoJSON = require('../../inspector/archive/generateGeoJSON');
+var map = require('../../map/map');
+const setBaseMapLayers = require('../../misc/baseMapLayers');
 const PNG = require('pngjs').PNG;
 const chroma = require('chroma-js');
-const productColors = require('../products/productColors');
-const createAndShowColorbar = require('./mapColorbar');
+const productColors = require('../../products/productColors');
+const createAndShowColorbar = require('../mapColorbar');
 
 function scaleValues(values, product) {
     if (product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL') {

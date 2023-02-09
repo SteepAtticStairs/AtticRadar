@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../utils');
 const chroma = require('chroma-js');
 
 function rgbValToArray(rgbString) {
