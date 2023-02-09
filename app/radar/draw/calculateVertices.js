@@ -5,7 +5,7 @@ const plotRadarToMap = require('./plotRadarToMap');
 const radarStations = require('../../../resources/radarStations');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
-const setTextField = require('../inspector/setTextField');
+const setTextField = require('../inspector/archive/setTextField');
 const calculateLngLat = require('./calculateLngLat');
 var work = require('webworkify');
 
@@ -138,6 +138,7 @@ function calculateVerticies(radarObj, level, options) {
         product = radarObj.productDescription.abbreviation;
         if (Array.isArray(product)) { product = product[0] }
     }
+    window.atticData.product = product;
 
     /*
     * Create an array holding all of the azimuth values

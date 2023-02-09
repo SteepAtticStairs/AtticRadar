@@ -309,6 +309,13 @@ var vcpObj = {
 }
 
 var productUnits = {
+    'REF': 'dBZ', // level 2 reflectivity
+    'VEL': 'm/s', // level 2 velocity
+    'SW ': 'mph', // level 2 spectrum width
+    'ZDR': 'dB', // level 2 differential reflectivity
+    'RHO': '%', // level 2 correlation coefficient
+    'PHI': 'deg', // level 2 differential phase shift
+
     'N0B': 'dBZ', // super-res reflectivity
     'N0G': 'm/s', // super-res velocity
     'N0C': '%', // correlation coefficient

@@ -1,5 +1,5 @@
 const chroma = require('chroma-js');
-const ut = require('../utils');
+const ut = require('../../utils');
 
 function rgbValToArray(rgbString) {
     return rgbString

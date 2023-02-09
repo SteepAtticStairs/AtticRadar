@@ -1,5 +1,5 @@
 const setTextField = require('./setTextField');
-const ut = require('../utils');
+const ut = require('../../utils');
 
 //onmessage=function(oEvent) {
 function generateGeoJSON(url, phi, radarLat, radarLon, radVersion) {

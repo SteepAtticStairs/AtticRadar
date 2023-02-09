@@ -10,6 +10,7 @@ const setLayerOrder = require('../map/setLayerOrder');
 const createWebGLTexture = require('./createWebGLTexture');
 const vertexSource = require('./vertex.glsl');
 const fragmentSource = require('./fragment.glsl');
+const fragmentFramebufferSource = require('./fragmentFramebuffer.glsl');
 
 const mathjs = math;
 
@@ -19,7 +20,9 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     var values = [...colorScaleData.values];
     values = ut.scaleValues(values, product);
     const cmin = values[0];
+    window.atticData.cmin = cmin;
     const cmax = values[values.length - 1];
+    window.atticData.cmax = cmax;
 
     //var vertexF32 = new Float32Array(verticiesArr);
     //var colorF32 = new Float32Array(colorsArr);
@@ -29,34 +32,73 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     var imagedata;
     var imagetexture;
 
+    var fb;
+    function createFramebuffer(gl) {
+        const targetTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.drawingBufferWidth, gl.drawingBufferHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        window.atticData.fb = gl.createFramebuffer();
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, window.atticData.fb);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, targetTexture, 0);
+    }
+
     var layer = {
         id: 'baseReflectivity',
         type: 'custom',
 
         onAdd: function (map, gl) {
             createAndShowColorbar(colors, values);
+            // create the color scale texture
             imagedata = createWebGLTexture(colors, values);
             imagetexture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, imagetexture);
 
+            // compile the vertex shader
             var vertexShader = gl.createShader(gl.VERTEX_SHADER);
             gl.shaderSource(vertexShader, vertexSource);
             gl.compileShader(vertexShader);
 
+            // compile the main fragment shader
             var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
             gl.shaderSource(fragmentShader, fragmentSource);
             gl.compileShader(fragmentShader);
 
+            // compile the framebuffer fragment shader
+            var fragmentShaderFramebuffer = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fragmentShaderFramebuffer, fragmentFramebufferSource);
+            gl.compileShader(fragmentShaderFramebuffer);
+
+            // create the main program
             this.program = gl.createProgram();
             gl.attachShader(this.program, vertexShader);
             gl.attachShader(this.program, fragmentShader);
             gl.linkProgram(this.program);
 
+            // create the framebuffer program
+            this.programFramebuffer = gl.createProgram();
+            gl.attachShader(this.programFramebuffer, vertexShader);
+            gl.attachShader(this.programFramebuffer, fragmentShaderFramebuffer);
+            gl.linkProgram(this.programFramebuffer);
+
+            // retrieve the main program's uniforms
+            this.matrixLocation = gl.getUniformLocation(this.program, 'u_matrix')
             this.positionLocation = gl.getAttribLocation(this.program, 'aPosition');
             this.colorLocation = gl.getAttribLocation(this.program, 'aColor');
             this.textureLocation = gl.getUniformLocation(this.program, 'u_texture');
             this.minmaxLocation = gl.getUniformLocation(this.program, 'minmax');
             this.radarLngLatLocation = gl.getUniformLocation(this.program, 'radarLatLng');
+
+            // retrieve the framebuffer program's uniforms
+            this.matrixLocationFramebuffer = gl.getUniformLocation(this.programFramebuffer, 'u_matrix');
+            this.minmaxLocationFramebuffer = gl.getUniformLocation(this.programFramebuffer, 'minmax');
+            this.radarLngLatLocationFramebuffer = gl.getUniformLocation(this.programFramebuffer, 'radarLatLng');
 
             // var newVertexF32 = new Float32Array(vertexF32.length * 2);
             // var offset = 0;
@@ -75,6 +117,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
             //     offset += 4;
             // }
 
+            // create and bind the buffer for the vertex data
             this.vertexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.bufferData(
@@ -83,6 +126,7 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
                 gl.STATIC_DRAW
             );
 
+            // create and bind the buffer for the color data
             this.colorBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
             gl.bufferData(
@@ -90,33 +134,12 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
                 colorF32,
                 gl.STATIC_DRAW
             );
+
+            // initialize the framebuffer
+            createFramebuffer(gl);
         },
         render: function (gl, matrix) {
-            gl.useProgram(this.program);
-
-            // //get xyz camera coordinates and w_clip value for the camera position. (expose camera coord in mapbox so this becomes unnecessary?)
-			// function _get_eye(mat) {
-			// 	mat = [[mat[0],mat[4],mat[8],mat[12]],[mat[1],mat[5],mat[9],mat[13]],[mat[2],mat[6],mat[10],mat[14]],[mat[3],mat[7],mat[11],mat[15]]];
-			// 	var eye = mathjs.lusolve(mat, [[0],[0],[0],[1]]);
-			// 	var clip_w = 1.0/eye[3][0];
-			// 	eye = mathjs.divide(eye, eye[3][0]);
-			// 	eye[3][0] = clip_w;
-			// 	return mathjs.flatten(eye);
-			// }
-			// var eye_high = _get_eye(matrix);
-			// var eye_low = eye_high.map(function(e) { return e - Math.fround(e) });
-			// gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_high'), eye_high);
-			// gl.uniform4fv(gl.getUniformLocation(this.program, 'u_eye_low'), eye_low);
-
-            gl.uniformMatrix4fv(
-                gl.getUniformLocation(this.program, 'u_matrix'),
-                false,
-                matrix
-            );
-            gl.uniform2fv(this.radarLngLatLocation, [radarLatLng.lat, radarLatLng.lng]);
-            gl.uniform2fv(this.minmaxLocation, [cmin, cmax]);
-            gl.uniform1i(this.textureLocation, 0);
-
+            // bind the buffers for the vertices, colors, and the texture
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.enableVertexAttribArray(this.positionLocation);
             gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -132,6 +155,39 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
+            /*
+            * use the program to render to the framebuffer
+            */
+            gl.useProgram(this.programFramebuffer);
+
+            // set uniforms for the framebuffer shaders
+            gl.uniformMatrix4fv(this.matrixLocationFramebuffer, false, matrix);
+            gl.uniform2fv(this.radarLngLatLocationFramebuffer, [radarLatLng.lat, radarLatLng.lng]);
+            gl.uniform2fv(this.minmaxLocationFramebuffer, [cmin, cmax]);
+
+            // render to the framebuffer
+            gl.bindFramebuffer(gl.FRAMEBUFFER, window.atticData.fb);
+
+            // transparent black is no radar data
+            gl.clearColor(0, 0, 0, 0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.drawArrays(gl.TRIANGLES, 0, vertexF32.length / 2);
+
+            // disable framebuffer, render to the map
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+            /*
+            * use the main program to render to the map
+            */
+            gl.useProgram(this.program);
+
+            // set uniforms for the main shaders
+            gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+            gl.uniform2fv(this.radarLngLatLocation, [radarLatLng.lat, radarLatLng.lng]);
+            gl.uniform2fv(this.minmaxLocation, [cmin, cmax]);
+            gl.uniform1i(this.textureLocation, 0);
+
+            // draw vertices
             gl.enable(gl.BLEND);
             gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
             gl.drawArrays(gl.TRIANGLES, 0, vertexF32.length / 2);
@@ -142,8 +198,11 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
 
     map.addLayer(layer);
 
-    initStormTracks.initStormTracks();
-    // STstuff.loadAllStormTrackingStuff();
+    var isInFileUploadMode = $('#armrModeBtnSwitchElem').is(':checked');
+    if (!isInFileUploadMode) {
+        initStormTracks.initStormTracks();
+        // STstuff.loadAllStormTrackingStuff();
+    }
 
     // make sure the alerts are always on top
     setLayerOrder();
@@ -164,9 +223,9 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     ut.betterProgressBar('set', 100);
     ut.betterProgressBar('hide');
 
-    if ($('#colorPickerItemClass').hasClass('icon-blue')) {
-        $('#colorPickerItemClass').click();
-    }
+    // if ($('#colorPickerItemClass').hasClass('icon-blue')) {
+    //     $('#colorPickerItemClass').click();
+    // }
 
     var distanceMeasureMapLayers = $('#dataDiv').data('distanceMeasureMapLayers');
     for (var i in distanceMeasureMapLayers) {

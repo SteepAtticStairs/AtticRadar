@@ -201,7 +201,12 @@ function getLatestL3(station, product, index, callback, date) {
                 dataToWorkWith = JSON.parse(dataToWorkWith)
                 //console.log(dataToWorkWith)
                 var contentsBase = dataToWorkWith.ListBucketResult.Contents;
-                var filenameKey = contentsBase[contentsBase.length - (index + 1)].Key.HASHtext;
+                var filenameKey;
+                if (Array.isArray(contentsBase)) {
+                    filenameKey = contentsBase[contentsBase.length - (index + 1)].Key.HASHtext;
+                } else {
+                    filenameKey = contentsBase.Key.HASHtext;
+                }
 
                 var finishedURL = `${urlBase}${filenameKey}`;
                 callback(finishedURL);

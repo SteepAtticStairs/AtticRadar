@@ -1,4 +1,4 @@
-var map = require('../map/map');
+var map = require('../../map/map');
 const GeoJsonGeometriesLookup = require('geojson-geometries-lookup');
 
 function setTextField(geojson) {
