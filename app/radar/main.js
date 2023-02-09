@@ -109,6 +109,8 @@ if (require('./misc/detectmobilebrowser')) {
     // $('#colorPicker').css('bottom', offset);
     // $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
+
+    // $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
 //$('#productMapFooter').hide();

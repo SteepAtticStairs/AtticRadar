@@ -4800,6 +4800,25 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, window.atticData.fb);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, targetTexture, 0);
     }
+    function renderToFramebuffer(gl, matrix) {
+        gl.useProgram(this.programFramebuffer);
+
+        // set uniforms for the framebuffer shaders
+        gl.uniformMatrix4fv(this.matrixLocationFramebuffer, false, matrix);
+        gl.uniform2fv(this.radarLngLatLocationFramebuffer, [radarLatLng.lat, radarLatLng.lng]);
+        gl.uniform2fv(this.minmaxLocationFramebuffer, [cmin, cmax]);
+
+        // render to the framebuffer
+        gl.bindFramebuffer(gl.FRAMEBUFFER, window.atticData.fb);
+
+        // transparent black is no radar data
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, vertexF32.length / 2);
+
+        // disable framebuffer, render to the map
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
 
     var layer = {
         id: 'baseReflectivity',
@@ -4910,23 +4929,11 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
             /*
             * use the program to render to the framebuffer
             */
-            gl.useProgram(this.programFramebuffer);
-
-            // set uniforms for the framebuffer shaders
-            gl.uniformMatrix4fv(this.matrixLocationFramebuffer, false, matrix);
-            gl.uniform2fv(this.radarLngLatLocationFramebuffer, [radarLatLng.lat, radarLatLng.lng]);
-            gl.uniform2fv(this.minmaxLocationFramebuffer, [cmin, cmax]);
-
-            // render to the framebuffer
-            gl.bindFramebuffer(gl.FRAMEBUFFER, window.atticData.fb);
-
-            // transparent black is no radar data
-            gl.clearColor(0, 0, 0, 0);
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-            gl.drawArrays(gl.TRIANGLES, 0, vertexF32.length / 2);
-
-            // disable framebuffer, render to the map
-            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            // only render to the framebuffer if the color picker is active,
+            // this helps with performance
+            if ($('#colorPickerItemClass').hasClass('icon-blue')) {
+                renderToFramebuffer.apply(this, [gl, matrix]);
+            }
 
             /*
             * use the main program to render to the map
@@ -7576,6 +7583,8 @@ if (require('./misc/detectmobilebrowser')) {
     // $('#colorPicker').css('bottom', offset);
     // $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
+
+    // $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
 //$('#productMapFooter').hide();
