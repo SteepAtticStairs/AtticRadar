@@ -14,46 +14,55 @@ vec2 ds_set(float a) {
     z.y = 0.0;
     return z;
 }
-vec2 ds_add(vec2 dsa, vec2 dsb) {
-    vec2 dsc;
-    float t1, t2, e;
 
-    t1 = dsa.x + dsb.x;
-    e = t1 - dsa.x;
-    t2 = ((dsb.x - e) + (dsa.x - (t1 - e))) + dsa.y + dsb.y;
+float add(float a, float b) { return (b != 0.) ? a + b : a; }
+float sub(float a, float b) { return (b != 0.) ? a - b : a; }
+float mul(float a, float b) { return (b != 1.) ? a * b : a; }
+float div(float a, float b) { return (b != 1.) ? a / b : a; }
+float fma(float a, float b, float c) { return a * b + c; }
 
-    dsc.x = t1 + t2;
-    dsc.y = t2 - (dsc.x - t1);
-    return dsc;
+vec2 fastTwoSum(float a, float b) {
+    float s = add(a, b);
+    return vec2(s, sub(b, sub(s, a)));
 }
-vec2 ds_sub(vec2 dsa, vec2 dsb) {
-    return ds_add(dsa, vec2(-dsb.x, dsb.y));
+
+vec2 twoSum(float a, float b) {
+    float s = add(a, b);
+    float b1 = sub(s, a);
+    return vec2(s, add(sub(b, b1), sub(a, sub(s, b1))));
 }
-vec2 ds_mul(vec2 dsa, vec2 dsb) {
-    vec2 dsc;
-    float c11, c21, c2, e, t1, t2;
-    float a1, a2, b1, b2, cona, conb, split = 8193.;
 
-    cona = dsa.x * split;
-    conb = dsb.x * split;
-    a1 = cona - (cona - dsa.x);
-    b1 = conb - (conb - dsb.x);
-    a2 = dsa.x - a1;
-    b2 = dsb.x - b1;
+vec2 twoProd(float a, float b) {
+    float ab = mul(a, b);
+    return vec2(ab, fma(a, b, -ab));
+}
 
-    c11 = dsa.x * dsb.x;
-    c21 = a2 * b2 + (a2 * b1 + (a1 * b2 + (a1 * b1 - c11)));
+vec2 add22(vec2 X, vec2 Y) {
+    vec2 S = twoSum(X[0], Y[0]);
+    vec2 T = twoSum(X[1], Y[1]);
+    vec2 V = fastTwoSum(S[0], add(S[1], T[0]));
+    return fastTwoSum(V[0], add(T[1], V[1]));
+}
 
-    c2 = dsa.x * dsb.y + dsa.y * dsb.x;
+vec2 sub22(vec2 X, vec2 Y) {
+    vec2 S = twoSum(X[0], -Y[0]);
+    vec2 T = twoSum(X[1], -Y[1]);
+    vec2 V = fastTwoSum(S[0], add(S[1], T[0]));
+    return fastTwoSum(V[0], add(T[1], V[1]));
+}
 
-    t1 = c11 + c2;
-    e = t1 - c11;
-    t2 = dsa.y * dsb.y + ((c2 - e) + (c11 - (t1 - e))) + c21;
+vec2 mul22(vec2 X, vec2 Y) {
+    vec2 S = twoProd(X[0], Y[0]);
+    float t = mul(X[0], Y[1]);
+    float c = fma(X[1], Y[0], mul(X[0], Y[1]));
+    return fastTwoSum(S[0], add(S[1], c));
+}
 
-    dsc.x = t1 + t2;
-    dsc.y = t2 - (dsc.x - t1);
-
-    return dsc;
+vec2 div22(vec2 X, vec2 Y) {
+    float s = div(X[0], Y[0]);
+    vec2 T = twoProd(s, Y[0]);
+    float c = add(sub(sub(X[0], T[0]), T[1]), X[1]);
+    return fastTwoSum(s, div(sub(c, mul(s, Y[1])), Y[0]));
 }
 
 float atan2(float x, float y) {
@@ -189,6 +198,29 @@ void main() {
     //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,
     //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x
     // );
+
+    // float x = div22((
+    //     add22(add22(
+    //     mul22(twoSum(u_high_matrix[0][0], u_low_matrix[0][0]), ds_set(mercatorCoords.x)),
+    //     mul22(twoSum(u_high_matrix[1][0], u_low_matrix[1][0]), ds_set(mercatorCoords.y))),
+    //     mul22(twoSum(u_high_matrix[3][0], u_low_matrix[3][0]), ds_set(1.0)))
+    // ), (
+    //     add22(add22(
+    //     mul22(twoSum(u_high_matrix[0][3], u_low_matrix[0][3]), ds_set(mercatorCoords.x)),
+    //     mul22(twoSum(u_high_matrix[1][3], u_low_matrix[1][3]), ds_set(mercatorCoords.y))),
+    //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))
+    // )).x;
+    // float y = div22((
+    //     add22(add22(
+    //     mul22(twoSum(u_high_matrix[0][1], u_low_matrix[0][1]), ds_set(mercatorCoords.x)),
+    //     mul22(twoSum(u_high_matrix[1][1], u_low_matrix[1][1]), ds_set(mercatorCoords.y))),
+    //     mul22(twoSum(u_high_matrix[3][1], u_low_matrix[3][1]), ds_set(1.0)))
+    // ), (
+    //     add22(add22(
+    //     mul22(twoSum(u_high_matrix[0][3], u_low_matrix[0][3]), ds_set(mercatorCoords.x)),
+    //     mul22(twoSum(u_high_matrix[1][3], u_low_matrix[1][3]), ds_set(mercatorCoords.y))),
+    //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))
+    // )).x;
 
     gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);
     // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);

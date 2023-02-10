@@ -158,6 +158,21 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
             createFramebuffer(gl);
         },
         render: function (gl, matrix) {
+            // function splitDouble(dbl) {
+            //     function doubleToFloat(d) { return new Float32Array([d])[0] }
+            //     var arr = new Float32Array(2);
+            //     arr[0] = doubleToFloat(dbl);
+            //     arr[1] = doubleToFloat(dbl - arr[0]);
+            //     return arr;
+            // }
+            // var highMatrix = [];
+            // var lowMatrix = [];
+            // for (var i in matrix) {
+            //     var split = splitDouble(matrix[i]);
+            //     highMatrix.push(split[0]);
+            //     lowMatrix.push(split[1]);
+            // }
+
             // bind the buffers for the vertices, colors, and the texture
             gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
             gl.enableVertexAttribArray(this.positionLocation);
