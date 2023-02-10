@@ -61,7 +61,7 @@ function setBaseMapLayers(roadsOrCitiesOrBoth) {
             mapFuncs.moveMapLayer(allCityLayers[item]);
         }
     }
-    mapFuncs.moveMapLayer('baseReflectivity');
+    // mapFuncs.moveMapLayer('baseReflectivity');
     if (roadsOrCitiesOrBoth == 'roads') {
         loadRoads();
     } else if (roadsOrCitiesOrBoth == 'cities') {
@@ -70,10 +70,10 @@ function setBaseMapLayers(roadsOrCitiesOrBoth) {
         loadRoads();
         loadCities();
     }
-    var stLayers = $('#dataDiv').data('stormTrackMapLayers')
-    for (var item in stLayers) {
-        mapFuncs.moveMapLayer(stLayers[item]);
-    }
+    // var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+    // for (var item in stLayers) {
+    //     mapFuncs.moveMapLayer(stLayers[item]);
+    // }
 }
 
 module.exports = setBaseMapLayers;

@@ -1,4 +1,5 @@
 var map = require('./map');
+const setBaseMapLayers = require('../misc/baseMapLayers');
 
 function moveLayerToTop(layerName) {
     if (map.getLayer(layerName)) {
@@ -11,6 +12,13 @@ function setLayerOrder() {
 
     moveLayerToTop('baseReflectivity');
     moveLayerToTop('radioStationLayer');
+
+    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
+    if (!isRoadsStreetsVisChecked) {
+        setBaseMapLayers('cities');
+    } else if (isRoadsStreetsVisChecked) {
+        setBaseMapLayers('both');
+    }
 
     moveLayerToTop('mainAlertsLayerOutline');
     moveLayerToTop('mainAlertsLayer');

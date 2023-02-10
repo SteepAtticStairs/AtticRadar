@@ -4952,13 +4952,6 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     // make sure the alerts are always on top
     setLayerOrder();
 
-    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
-    if (!isRoadsStreetsVisChecked) {
-        setBaseMapLayers('cities');
-    } else if (isRoadsStreetsVisChecked) {
-        setBaseMapLayers('both');
-    }
-
     var isRadarVisChecked = $('#armrRadarVisBtnSwitchElem').is(':checked');
     if (!isRadarVisChecked) {
         map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
@@ -7977,6 +7970,7 @@ module.exports = {
 }
 },{"./map":63}],65:[function(require,module,exports){
 var map = require('./map');
+const setBaseMapLayers = require('../misc/baseMapLayers');
 
 function moveLayerToTop(layerName) {
     if (map.getLayer(layerName)) {
@@ -7989,6 +7983,13 @@ function setLayerOrder() {
 
     moveLayerToTop('baseReflectivity');
     moveLayerToTop('radioStationLayer');
+
+    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
+    if (!isRoadsStreetsVisChecked) {
+        setBaseMapLayers('cities');
+    } else if (isRoadsStreetsVisChecked) {
+        setBaseMapLayers('both');
+    }
 
     moveLayerToTop('mainAlertsLayerOutline');
     moveLayerToTop('mainAlertsLayer');
@@ -8004,7 +8005,7 @@ function setLayerOrder() {
 }
 
 module.exports = setLayerOrder;
-},{"./map":63}],66:[function(require,module,exports){
+},{"../misc/baseMapLayers":78,"./map":63}],66:[function(require,module,exports){
 var map = require('../map');
 
 function generateLayer() {
@@ -8628,6 +8629,7 @@ const map = require('../map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
 const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
+const setLayerOrder = require('../map/setLayerOrder');
 
 function settingsOption(index) {
     const divElem = '#settingsItemDiv';
@@ -8689,8 +8691,10 @@ function settingsOption(index) {
 
     armFunctions.toggleswitchFunctions($('#armrRoadsStreetsVisBtnSwitchElem'), function() {
         setBaseMapLayers('both');
+        setLayerOrder();
     }, function() {
         setBaseMapLayers('cities');
+        setLayerOrder();
     })
 
     armFunctions.toggleswitchFunctions($('#armrDayNightLineVisBtnSwitchElem'), function() {
@@ -8706,7 +8710,7 @@ function settingsOption(index) {
 module.exports = {
     settingsOption
 };
-},{"../map/map":63,"../map/terminator/terminator":66,"../misc/baseMapLayers":78,"../utils":90,"./atticRadarMenu":67,"./createMenuOption":68,"./createToolsOption":70}],75:[function(require,module,exports){
+},{"../map/map":63,"../map/setLayerOrder":65,"../map/terminator/terminator":66,"../misc/baseMapLayers":78,"../utils":90,"./atticRadarMenu":67,"./createMenuOption":68,"./createToolsOption":70}],75:[function(require,module,exports){
 const ut = require('../utils');
 const loaders = require('../loaders');
 
@@ -8978,7 +8982,7 @@ function setBaseMapLayers(roadsOrCitiesOrBoth) {
             mapFuncs.moveMapLayer(allCityLayers[item]);
         }
     }
-    mapFuncs.moveMapLayer('baseReflectivity');
+    // mapFuncs.moveMapLayer('baseReflectivity');
     if (roadsOrCitiesOrBoth == 'roads') {
         loadRoads();
     } else if (roadsOrCitiesOrBoth == 'cities') {
@@ -8987,10 +8991,10 @@ function setBaseMapLayers(roadsOrCitiesOrBoth) {
         loadRoads();
         loadCities();
     }
-    var stLayers = $('#dataDiv').data('stormTrackMapLayers')
-    for (var item in stLayers) {
-        mapFuncs.moveMapLayer(stLayers[item]);
-    }
+    // var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+    // for (var item in stLayers) {
+    //     mapFuncs.moveMapLayer(stLayers[item]);
+    // }
 }
 
 module.exports = setBaseMapLayers;

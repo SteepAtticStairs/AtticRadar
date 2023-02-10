@@ -214,13 +214,6 @@ function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     // make sure the alerts are always on top
     setLayerOrder();
 
-    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
-    if (!isRoadsStreetsVisChecked) {
-        setBaseMapLayers('cities');
-    } else if (isRoadsStreetsVisChecked) {
-        setBaseMapLayers('both');
-    }
-
     var isRadarVisChecked = $('#armrRadarVisBtnSwitchElem').is(':checked');
     if (!isRadarVisChecked) {
         map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
