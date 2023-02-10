@@ -14,6 +14,8 @@ const parsePlotTornado = require('./stormTracking/archive/tornadoVortexSignature
 const parsePlotMesocyclone = require('./stormTracking/archive/mesocycloneDetection');
 const parsePlotStormTracks = require('./stormTracking/archive/stormTracks');
 
+const plotStormTracks = require('./stormTracking/stormTracks');
+
 const ut = require('../utils');
 
 function mainL3Loading(thisObj) {
@@ -29,6 +31,7 @@ function mainL3Loading(thisObj) {
         console.log(l3rad);
 
         var station = stationAbbreviations[l3rad.textHeader.id3];
+        window.atticData.currentStation = station;
         $('#dataDiv').data('radarGeoData', {
             'height': l3rad.productDescription.height,
             'station': station,
@@ -56,7 +59,9 @@ function mainL3Loading(thisObj) {
         // plot the file
         ut.betterProgressBar('set', 90);
 
-        if (product != 'NTV' && product != 'NMD' && product != 'NST') {
+        if (product == 'NST') {
+            plotStormTracks(l3rad);
+        } else if (product != 'NTV' && product != 'NMD') {
             l3plot(l3rad);
         }
         // if (l3rad.textHeader.type == "NTV") {

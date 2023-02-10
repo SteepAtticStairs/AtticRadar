@@ -6419,6 +6419,8 @@ const parsePlotTornado = require('./stormTracking/archive/tornadoVortexSignature
 const parsePlotMesocyclone = require('./stormTracking/archive/mesocycloneDetection');
 const parsePlotStormTracks = require('./stormTracking/archive/stormTracks');
 
+const plotStormTracks = require('./stormTracking/stormTracks');
+
 const ut = require('../utils');
 
 function mainL3Loading(thisObj) {
@@ -6434,6 +6436,7 @@ function mainL3Loading(thisObj) {
         console.log(l3rad);
 
         var station = stationAbbreviations[l3rad.textHeader.id3];
+        window.atticData.currentStation = station;
         $('#dataDiv').data('radarGeoData', {
             'height': l3rad.productDescription.height,
             'station': station,
@@ -6461,7 +6464,9 @@ function mainL3Loading(thisObj) {
         // plot the file
         ut.betterProgressBar('set', 90);
 
-        if (product != 'NTV' && product != 'NMD' && product != 'NST') {
+        if (product == 'NST') {
+            plotStormTracks(l3rad);
+        } else if (product != 'NTV' && product != 'NMD') {
             l3plot(l3rad);
         }
         // if (l3rad.textHeader.type == "NTV") {
@@ -6483,7 +6488,7 @@ function mainL3Loading(thisObj) {
 }
 
 module.exports = mainL3Loading;
-},{"../../../lib/nexrad-level-3-data/src":141,"../../../resources/radarStations":262,"../../../resources/stationAbbreviations":263,"../distance/distanceMeasure":25,"../map/map":63,"../misc/autoUpdate":77,"../utils":90,"./l3info":51,"./l3plot":52,"./stormTracking/archive/mesocycloneDetection":55,"./stormTracking/archive/stormTracks":57,"./stormTracking/archive/tornadoVortexSignature":58,"@turf/turf":200}],54:[function(require,module,exports){
+},{"../../../lib/nexrad-level-3-data/src":141,"../../../resources/radarStations":262,"../../../resources/stationAbbreviations":263,"../distance/distanceMeasure":25,"../map/map":63,"../misc/autoUpdate":77,"../utils":90,"./l3info":51,"./l3plot":52,"./stormTracking/archive/mesocycloneDetection":55,"./stormTracking/archive/stormTracks":57,"./stormTracking/archive/tornadoVortexSignature":58,"./stormTracking/stormTracks":60,"@turf/turf":200}],54:[function(require,module,exports){
 // https://github.com/Unidata/MetPy/blob/main/src/metpy/io/nexrad.py
 
 const maxRanges = {
