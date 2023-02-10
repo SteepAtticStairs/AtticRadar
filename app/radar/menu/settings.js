@@ -7,17 +7,10 @@ const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
 
 function settingsOption(index) {
-    createMenuOption({
-        'divId': 'settingsItemDiv',
-        'iconId': 'settingsItemClass',
+    const divElem = '#settingsItemDiv';
+    const iconElem = '#settingsItemClass';
 
-        'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-grey',
-
-        'contents': 'Settings',
-        'icon': 'fa fa-gear',
-        'css': ''
-    }, function(divElem, iconElem) {
+    $(iconElem).on('click', function() {
         //$('#settingsModalTrigger').click();
         armFunctions.showARMwindow();
 

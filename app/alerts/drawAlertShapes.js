@@ -120,17 +120,10 @@ var noaaAlertsURL = `https://api.weather.gov/alerts/active`;
 var newAlertsArr = [];
 var y = 0;
 
-createMenuOption({
-    'divId': 'alertMenuItemDiv',
-    'iconId': 'alertMenuItemIcon',
+const divElem = '#alertMenuItemDiv';
+const iconElem = '#alertMenuItemIcon';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Show Alerts',
-    'icon': 'fa fa-circle-exclamation',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');

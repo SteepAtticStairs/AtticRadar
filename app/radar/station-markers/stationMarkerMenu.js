@@ -3,17 +3,10 @@ const showStations = require('./stationMarkers');
 const ut = require('../utils');
 const map = require('../map/map');
 
-createMenuOption({
-    'divId': 'stationMenuItemDiv',
-    'iconId': 'stationMenuItemIcon',
+const divElem = '#stationMenuItemDiv';
+const iconElem = '#stationMenuItemIcon';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Station Markers',
-    'icon': 'fa fa-satellite-dish',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if ($(iconElem).hasClass('icon-grey')) {
         $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');

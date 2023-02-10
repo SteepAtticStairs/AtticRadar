@@ -121,17 +121,10 @@ var noaaAlertsURL = `https://api.weather.gov/alerts/active`;
 var newAlertsArr = [];
 var y = 0;
 
-createMenuOption({
-    'divId': 'alertMenuItemDiv',
-    'iconId': 'alertMenuItemIcon',
+const divElem = '#alertMenuItemDiv';
+const iconElem = '#alertMenuItemIcon';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Show Alerts',
-    'icon': 'fa fa-circle-exclamation',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
@@ -2806,17 +2799,10 @@ const fetchMETARData = require('./fetchData');
 const useData = require('./useData');
 var map = require('../radar/map/map');
 
-createMenuOption({
-    'divId': 'metarStationMenuItemDiv',
-    'iconId': 'metarStationMenuItemIcon',
+const divElem = '#metarStationMenuItemDiv';
+const iconElem = '#metarStationMenuItemIcon';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'METAR Stations',
-    'icon': 'fa fa-temperature-half',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
@@ -5356,17 +5342,10 @@ const ut = require('../utils');
 const createMenuOption = require('../menu/createMenuOption');
 const getValue = require('./getValue');
 
-createMenuOption({
-    'divId': 'colorPickerItemDiv',
-    'iconId': 'colorPickerItemClass',
+const divElem = '#colorPickerItemDiv';
+const iconElem = '#colorPickerItemClass';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Color Picker',
-    'icon': 'fa fa-binoculars', // fa-binoculars, fa-microscope, fa-magnifying-glass
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
@@ -7584,7 +7563,7 @@ if (require('./misc/detectmobilebrowser')) {
     // $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
 
-    // $('.mapFooter').css('justify-content', 'space-evenly');
+    $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
 //$('#productMapFooter').hide();
@@ -8623,14 +8602,14 @@ module.exports = {
 };
 },{"./createToolsOption":70}],73:[function(require,module,exports){
 function setFooterMenuOrder() {
-    $('#colorPickerItemDiv').insertAfter('#metarStationMenuItemDiv');
-    $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#metarStationMenuItemDiv');
+    // $('#colorPickerItemDiv').insertAfter('#metarStationMenuItemDiv');
+    // $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#metarStationMenuItemDiv');
 
-    $('#settingsItemDiv').insertAfter('#colorPickerItemDiv');
-    $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#colorPickerItemDiv');
+    // $('#settingsItemDiv').insertAfter('#colorPickerItemDiv');
+    // $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#colorPickerItemDiv');
 
-    $('#toolsItemDiv').insertAfter('#settingsItemDiv');
-    $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#settingsItemDiv');
+    // $('#toolsItemDiv').insertAfter('#settingsItemDiv');
+    // $(document.createTextNode('\u00A0\u00A0\u00A0')).insertAfter('#settingsItemDiv');
 }
 
 module.exports = {
@@ -8646,17 +8625,10 @@ const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
 
 function settingsOption(index) {
-    createMenuOption({
-        'divId': 'settingsItemDiv',
-        'iconId': 'settingsItemClass',
+    const divElem = '#settingsItemDiv';
+    const iconElem = '#settingsItemClass';
 
-        'divClass': 'mapFooterMenuItem',
-        'iconClass': 'icon-grey',
-
-        'contents': 'Settings',
-        'icon': 'fa fa-gear',
-        'css': ''
-    }, function(divElem, iconElem) {
+    $(iconElem).on('click', function() {
         //$('#settingsModalTrigger').click();
         armFunctions.showARMwindow();
 
@@ -8873,17 +8845,11 @@ function flipIcon(icon, minimizeOrMaximize) {
 }
 
 addAllToolsItems();
-createMenuOption({
-    'divId': 'toolsItemDiv',
-    'iconId': 'toolsItemClass',
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
+const divElem = '#toolsItemDiv';
+const iconElem = '#toolsItemClass';
 
-    'contents': 'Tools',
-    'icon': 'fa fa-circle-chevron-right',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
@@ -10897,17 +10863,10 @@ const showStations = require('./stationMarkers');
 const ut = require('../utils');
 const map = require('../map/map');
 
-createMenuOption({
-    'divId': 'stationMenuItemDiv',
-    'iconId': 'stationMenuItemIcon',
+const divElem = '#stationMenuItemDiv';
+const iconElem = '#stationMenuItemIcon';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Station Markers',
-    'icon': 'fa fa-satellite-dish',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if ($(iconElem).hasClass('icon-grey')) {
         $(iconElem).removeClass('icon-grey');
         $(iconElem).addClass('icon-blue');

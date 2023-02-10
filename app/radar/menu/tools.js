@@ -71,17 +71,11 @@ function flipIcon(icon, minimizeOrMaximize) {
 }
 
 addAllToolsItems();
-createMenuOption({
-    'divId': 'toolsItemDiv',
-    'iconId': 'toolsItemClass',
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
+const divElem = '#toolsItemDiv';
+const iconElem = '#toolsItemClass';
 
-    'contents': 'Tools',
-    'icon': 'fa fa-circle-chevron-right',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');

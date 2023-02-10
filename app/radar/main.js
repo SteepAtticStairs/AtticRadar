@@ -110,7 +110,7 @@ if (require('./misc/detectmobilebrowser')) {
     // $('#colorPickerText').css('bottom', offset);
     //$('#mapFooter').css("align-items", "start");
 
-    // $('.mapFooter').css('justify-content', 'space-evenly');
+    $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
 //$('#productMapFooter').hide();

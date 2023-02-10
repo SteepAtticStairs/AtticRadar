@@ -3,17 +3,10 @@ const fetchMETARData = require('./fetchData');
 const useData = require('./useData');
 var map = require('../radar/map/map');
 
-createMenuOption({
-    'divId': 'metarStationMenuItemDiv',
-    'iconId': 'metarStationMenuItemIcon',
+const divElem = '#metarStationMenuItemDiv';
+const iconElem = '#metarStationMenuItemIcon';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'METAR Stations',
-    'icon': 'fa fa-temperature-half',
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');

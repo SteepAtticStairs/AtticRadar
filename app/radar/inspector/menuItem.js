@@ -3,17 +3,10 @@ const ut = require('../utils');
 const createMenuOption = require('../menu/createMenuOption');
 const getValue = require('./getValue');
 
-createMenuOption({
-    'divId': 'colorPickerItemDiv',
-    'iconId': 'colorPickerItemClass',
+const divElem = '#colorPickerItemDiv';
+const iconElem = '#colorPickerItemClass';
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
-
-    'contents': 'Color Picker',
-    'icon': 'fa fa-binoculars', // fa-binoculars, fa-microscope, fa-magnifying-glass
-    'css': ''
-}, function(divElem, iconElem) {
+$(iconElem).on('click', function() {
     if (!$(iconElem).hasClass('icon-blue')) {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
