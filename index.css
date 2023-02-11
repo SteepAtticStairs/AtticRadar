@@ -948,3 +948,7 @@ https://tobiasahlin.com/spinkit/
 .tscWide {
     right: 15px;
 }
+
+#radarStation:hover {
+    filter: brightness(80%);
+}

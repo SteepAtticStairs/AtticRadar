@@ -225,9 +225,11 @@
                 <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 4px;">Level 3</label>
             </div>
         </span>
-        <span id="radarInfoSpan">
-            <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
-            <div style="font-size: 12px"><sus id='radarStationParent'><i class="fa-solid fa-circle-info" id="radarStationIcon" style="display: none">&nbsp;&nbsp;</i><b id='radarStation'>No Station Selected</b></sus><a id="radarTime"></a></div>
+        <span id="radarInfoSpan" style="display: none">
+            <!-- <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
+            <div style="font-size: 12px"><sus id='radarStationParent'><i class="fa-solid fa-circle-info" id="radarStationIcon" style="display: none">&nbsp;&nbsp;</i><b id='radarStation'>No Station Selected</b></sus><a id="radarTime"></a></div> -->
+            <div style="font-size: 15px"><b class="icon-blue" id="radarStation" style="cursor: pointer">KLWX</b> <span id="radarLocation"></span></div>
+            <div style="font-size: 13px; color: rgb(161, 161, 161)">VCP: <span id="radarVCP"></span></div>
         </span>
     </div>
 

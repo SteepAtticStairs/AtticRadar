@@ -283,6 +283,7 @@ function showStations() {
 
                     $('#radarStationIcon').show();
                     document.getElementById('radarStation').innerHTML = clickedStation;
+                    document.getElementById('radarLocation').innerHTML = radarStationInfo[clickedStation].name;
 
                     if ($('#dataDiv').data('metarsActive')) {
                         //fetchMETARData.fetchMETARData('update');

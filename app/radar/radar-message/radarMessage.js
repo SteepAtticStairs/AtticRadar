@@ -135,7 +135,7 @@ function showRadarStatus(station) {
     //});
 }
 
-$('#radarStationParent').on('click', function() {
+$('#radarStation').on('click', function() {
     showRadarStatus($('#radarStation').text())
 })
 

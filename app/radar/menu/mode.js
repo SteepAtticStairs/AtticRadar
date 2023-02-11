@@ -11,7 +11,7 @@ function showHideFileBox(showHide) {
 
         $('#fileUploadSpan').show();
         $('#uploadModeSpan').show();
-        $('#radarInfoSpan').hide();
+        //$('#radarInfoSpan').hide();
         $('#currentModeSpan').hide();
 
         $('#radarHeader').css('height', '+=25px')
@@ -23,7 +23,7 @@ function showHideFileBox(showHide) {
 
         $('#fileUploadSpan').hide();
         $('#uploadModeSpan').hide();
-        $('#radarInfoSpan').show();
+        //$('#radarInfoSpan').show();
         $('#currentModeSpan').show();
 
         $('#radarHeader').css('height', '-=25px');

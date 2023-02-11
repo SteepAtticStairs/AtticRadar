@@ -2,6 +2,7 @@ const addDays = require('../utils').addDays;
 const ut = require('../utils');
 const getLevel2FileTime = require('../level2/l2FileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
+const radarStationInfo = require('../radar-message/radarStationInfo');
 const { DateTime } = require('luxon');
 
 var alreadyClicked = false;
@@ -30,6 +31,8 @@ function showL2Info(l2rad) {
     var theFileStation = l2rad.header.ICAO;
     $('#radarStationIcon').show();
     document.getElementById('radarStation').innerHTML = theFileStation;
+    document.getElementById('radarLocation').innerHTML = radarStationInfo[theFileStation].name;
+    $('#radarInfoSpan').show();
 
     $('#productsDropdownTrigger').show();
 

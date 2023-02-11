@@ -168,13 +168,13 @@ function loadL2Menu(elevsAndProds, l2rad) {
         return btnTemplate;
     }
 
-    if (isMobile) {
-        var warningModal = $(createModal(
-            'Warning',
-            'alert-warning',
-            'You appear to be using a mobile device. Choosing a lot of different Level 2 elevations / products is likely to crash the webpage. You can either continue and see how much your phone can take, or you can switch to a desktop computer, and use the website there. You should NOT run into this issue on desktop.'));
-        warningModal.modal('show');
-    }
+    // if (isMobile) {
+    //     var warningModal = $(createModal(
+    //         'Warning',
+    //         'alert-warning',
+    //         'You appear to be using a mobile device. Choosing a lot of different Level 2 elevations / products is likely to crash the webpage. You can either continue and see how much your phone can take, or you can switch to a desktop computer, and use the website there. You should NOT run into this issue on desktop.'));
+    //     warningModal.modal('show');
+    // }
 
     var duplicateElevs = {};
 

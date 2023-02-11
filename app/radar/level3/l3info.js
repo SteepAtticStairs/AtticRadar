@@ -3,6 +3,7 @@ const ut = require('../utils');
 const getLevel3FileTime = require('../level3/l3fileTime');
 const getTimeDiff = require('../misc/getTimeDiff');
 const stationAbbreviations = require('../../../resources/stationAbbreviations');
+const radarStationInfo = require('../radar-message/radarStationInfo');
 const { DateTime } = require('luxon');
 
 var alreadyClicked = false;
@@ -33,6 +34,8 @@ function showL3Info(l3rad) {// //showPlotBtn();
     var theFileStation = stationAbbreviations[l3rad.textHeader.id3];
     $('#radarStationIcon').show();
     document.getElementById('radarStation').innerHTML = theFileStation;
+    document.getElementById('radarLocation').innerHTML = radarStationInfo[theFileStation].name;
+    $('#radarInfoSpan').show();
 
     $('#productsDropdownTrigger').show();
 
