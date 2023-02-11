@@ -40,7 +40,7 @@ function showL3Info(l3rad) {// //showPlotBtn();
     $('#productsDropdownTrigger').show();
 
     var theFileVCP = l3rad.productDescription.vcp;
-    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
+    document.getElementById('radarVCP').innerHTML = `VCP: ${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var fileDateObj = getLevel3FileTime(l3rad);
     //var finalRadarDateTime = ut.printFancyTime(fileDateObj, ut.userTimeZone);

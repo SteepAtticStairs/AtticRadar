@@ -42,7 +42,7 @@ function showL2Info(l2rad) {
     } else {
         theFileVCP = l2rad.data[1][0].record.vcp;
     }
-    document.getElementById('radarVCP').innerHTML = `${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
+    document.getElementById('radarVCP').innerHTML = `VCP: ${theFileVCP} (${ut.vcpObj[theFileVCP]})`;
 
     var fileDateObj = getLevel2FileTime(l2rad);
     var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);

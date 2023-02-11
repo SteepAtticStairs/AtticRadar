@@ -284,6 +284,7 @@ function showStations() {
                     $('#radarStationIcon').show();
                     document.getElementById('radarStation').innerHTML = clickedStation;
                     document.getElementById('radarLocation').innerHTML = radarStationInfo[clickedStation].name;
+                    $('#radarInfoSpan').show();
 
                     if ($('#dataDiv').data('metarsActive')) {
                         //fetchMETARData.fetchMETARData('update');
