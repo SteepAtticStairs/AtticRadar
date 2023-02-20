@@ -74,29 +74,67 @@ function dealiasTest(l2rad) {
     for (var i in l2rad.data[2]) { velocities.push(l2rad.data[2][i].record.velocity.moment_data) }
 
     for (var i in velocities) {
+    //for (var i = 100; i < 120; i++) {
         var scaled_ray = [];
         for (var n in velocities[i]) {
-            // extract ray and scale to phase units
-            scaled_ray.push(velocities[i][n] * Math.PI / nyquist);
+            if (velocities[i][n] != null) {
+                // extract ray and scale to phase units
+                scaled_ray.push(velocities[i][n] * Math.PI / nyquist);
+            } else {
+                scaled_ray.push(null);
+            }
         }
         var periods = 0;
         var unwrapped_velocities = [...scaled_ray];
         for (var ii = 1; ii < scaled_ray.length; ii++) {
             ii = parseInt(ii);
-            var difference = scaled_ray[ii] - scaled_ray[ii - 1];
-            if (difference > Math.PI) {
-                periods -= 1;
-            } else if (difference < -Math.PI) {
-                periods += 1;
+            if (scaled_ray[ii] != null) {
+                var difference = scaled_ray[ii] - scaled_ray[ii - 1];
+                if (difference > Math.PI) {
+                    periods -= 1;
+                } else if (difference < -Math.PI) {
+                    periods += 1;
+                }
+                unwrapped_velocities[ii] = scaled_ray[ii] + 2 * Math.PI * periods;
             }
-            unwrapped_velocities[ii] = scaled_ray[ii] + 2 * Math.PI * periods;
         }
         // scale back into velocity units and store
         for (var x in unwrapped_velocities) {
-            unwrapped_velocities[x] = unwrapped_velocities[x] * nyquist / Math.PI;
+            if (unwrapped_velocities[x] != null) {
+                unwrapped_velocities[x] = unwrapped_velocities[x] * nyquist / Math.PI;
+            }
         }
         velocities[i] = [...unwrapped_velocities];
     }
+
+    // for (var i in velocities) {
+    //     for (var n in velocities[i]) {
+    //         try {
+    //             var leftPixel = velocities[parseInt(i) - 1][n];
+    //             var rightPixel = velocities[parseInt(i) + 1][n];
+    //             var curPixel = velocities[i][n];
+    //             if (Math.abs(curPixel) - Math.abs(leftPixel) > 10) {
+    //                 velocities[i][n] = (leftPixel + rightPixel) / 2;
+    //             }
+    //         } catch (e) {}
+    //     }
+    // }
+
+    // const average = array => array.reduce((a, b) => a + b) / array.length;
+    // var avg = average(unwrapped_velocities[i]);
+    // if (Math.abs(avg) > nyquist * 2) {
+    //     for (var x in unwrapped_velocities) {
+    //         //console.log(avg)
+    //         for (var n in velocities[i]) {
+    //             //velocities[i][n] = null;
+    //             if (avg > 0) {
+    //                 velocities[i][n] -= nyquist * 2;
+    //             } else if (avg < 0) {
+    //                 velocities[i][n] += 100;
+    //             }
+    //         }
+    //     }
+    // }
 
     // for (var i in velocities) {
     //     if (i >= 250 && i <= 270) { // i == 262
@@ -117,9 +155,11 @@ function dealiasTest(l2rad) {
     //         }
     //     }
     // }
-    // lng: -97.51734430176083, lat: 35.316678641320166
+    // lng: -97.51734430176083, lat: 35.316678641320166, zoom: 11 // KTLX
+    // lng: lng: -97.35454576227136, lat: 27.812346235337856, zoom: 6.5 // KCRP
+    // map.on('move', (e) => { console.log(map.getCenter()) })
     // map.on('move', (e) => { console.log(map.getZoom()) })
-    map.jumpTo({center: [-97.51734430176083, 35.316678641320166], zoom: 11});
+    map.jumpTo({center: [-97.35454576227136, 27.812346235337856], zoom: 6.5});
 
     //console.log(dealiased)
     for (var i in velocities) { l2rad.data[2][i].record.velocity.moment_data = velocities[i] }
