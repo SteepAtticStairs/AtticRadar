@@ -8,49 +8,135 @@ const loadL2Menu = require('./loadL2Menu');
 
 const ut = require('../utils');
 
+function upscaleTest(l2rad) {
+    // l2rad.data[8] = l2rad.data[8].map(num => [num, num]).flat();
+    // var isOrig = true;
+    // for (var i in l2rad.data[8]) {
+    //     try {
+    //         if (isOrig) {
+    //             isOrig = false;
+    //             // continue;
+    //         } else {
+    //             isOrig = true;
+
+    //             var curOrigValues = l2rad.data[8][i].record.reflect.moment_data;
+    //             //var nextInterpValues = l2rad.data[8][parseInt(i) + 1].record.reflect.moment_data;
+    //             var nextOrigValues = l2rad.data[8][parseInt(i) + 2].record.reflect.moment_data;
+    //             for (var n in curOrigValues) {
+    //                 if (curOrigValues[n] != null && nextOrigValues[n] != null) {
+    //                     var interp = (curOrigValues[n] + nextOrigValues[n]) / 2;
+    //                     l2rad.data[8][parseInt(i) + 1].record.reflect.moment_data[n] = interp;
+    //                 }
+    //             }
+    //         }
+    //     } catch (e) {}
+    // }
+
+    // var values = [];
+    // for (var i in l2rad.data[8]) { values.push([...l2rad.data[8][i].record.reflect.moment_data]) }
+
+    // // const values = [ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]
+    // var interpolatedValues = [];
+
+    // for (var i in values) {
+    //     i = parseInt(i);
+    //     var curRow = values[i];
+    //     var nextRow = values[i + 1];
+    //     interpolatedValues.push(curRow);
+    //     if (nextRow != undefined) {
+    //         var interpRow = [];
+    //         for (var n in curRow) {
+    //             var curPixel = curRow[n];
+    //             var nextPixel = nextRow[n];
+    //             if (curPixel != null && nextPixel != null) {
+    //                 interpRow.push((curPixel + nextPixel) / 2);
+    //             } else {
+    //                 interpRow.push(null);
+    //             }
+    //         }
+    //         interpolatedValues.push(interpRow);
+    //     }
+    // }
+    // l2rad.data[8] = l2rad.data[8].map(num => [num, num]).flat();
+    // for (var i in l2rad.data[8]) {
+    //     l2rad.data[8][i].record.reflect.moment_data = interpolatedValues[i];
+    //     if (interpolatedValues[i] == undefined) {
+    //         l2rad.data[8][i].record.reflect.moment_data = interpolatedValues[0];
+    //     }
+    // }
+
+    return l2rad;
+}
+
+function dealiasTest(l2rad) {
+    var velocities = [];
+    const nyquist = l2rad.data[2][0].record.radial.nyquist_velocity / 100;
+    for (var i in l2rad.data[2]) { velocities.push(l2rad.data[2][i].record.velocity.moment_data) }
+
+    for (var i in velocities) {
+        var scaled_ray = [];
+        for (var n in velocities[i]) {
+            // extract ray and scale to phase units
+            scaled_ray.push(velocities[i][n] * Math.PI / nyquist);
+        }
+        var periods = 0;
+        var unwrapped_velocities = [...scaled_ray];
+        for (var ii = 1; ii < scaled_ray.length; ii++) {
+            ii = parseInt(ii);
+            var difference = scaled_ray[ii] - scaled_ray[ii - 1];
+            if (difference > Math.PI) {
+                periods -= 1;
+            } else if (difference < -Math.PI) {
+                periods += 1;
+            }
+            unwrapped_velocities[ii] = scaled_ray[ii] + 2 * Math.PI * periods;
+        }
+        // scale back into velocity units and store
+        for (var x in unwrapped_velocities) {
+            unwrapped_velocities[x] = unwrapped_velocities[x] * nyquist / Math.PI;
+        }
+        velocities[i] = [...unwrapped_velocities];
+    }
+
+    // for (var i in velocities) {
+    //     if (i >= 250 && i <= 270) { // i == 262
+    //         dealiased[i] = velocities[i]
+    //         for (var n in velocities[i]) {
+    //             var curGate = velocities[i][n];
+    //             var prevGate = velocities[i][parseInt(n) - 1];
+
+    //             var diff = Math.abs(curGate - prevGate);
+    //             var correctedVal = curGate;
+    //             if (diff > nyquist) {
+    //                 //correctedVal = -50;
+    //                 correctedVal = switchSign(correctedVal);
+    //             }
+
+    //             // if (i >= 250 && i <= 270) { dealiased[i][n] = velocities[i][n] }
+    //             dealiased[i][n] = correctedVal;
+    //         }
+    //     }
+    // }
+    // lng: -97.51734430176083, lat: 35.316678641320166
+    // map.on('move', (e) => { console.log(map.getZoom()) })
+    map.jumpTo({center: [-97.51734430176083, 35.316678641320166], zoom: 11});
+
+    //console.log(dealiased)
+    for (var i in velocities) { l2rad.data[2][i].record.velocity.moment_data = velocities[i] }
+
+    return l2rad;
+}
+
 function mainL2Loading(thisObj) {
     var l2rad = new Level2Radar(ut.toBuffer(thisObj.result), function(l2rad) {
         console.log(l2rad);
 
-        // var velocities = [];
-        // const nyquist = l2rad.data[2][0].record.radial.nyquist_velocity / 100;
-        // for (var i in l2rad.data[2]) { velocities.push(l2rad.data[2][i].record.velocity.moment_data) }
-
-        // var dealiased = [];
-        // for (var i = 0; i < velocities.length; i++) {
-        //     dealiased[i] = [];
-        // }
-
-        // function switchSign(n) { return n - (n * 2) }
-
-        // for (var i in velocities) {
-        //     if (i >= 250 && i <= 270) { // i == 262
-        //         dealiased[i] = velocities[i]
-        //         for (var n in velocities[i]) {
-        //             var curGate = velocities[i][n];
-        //             var prevGate = velocities[i][parseInt(n) - 1];
-
-        //             var diff = Math.abs(curGate - prevGate);
-        //             var correctedVal = curGate;
-        //             if (diff > nyquist) {
-        //                 //correctedVal = -50;
-        //                 correctedVal = switchSign(correctedVal);
-        //             }
-
-        //             // if (i >= 250 && i <= 270) { dealiased[i][n] = velocities[i][n] }
-        //             dealiased[i][n] = correctedVal;
-        //         }
-        //     }
-        // }
-        // // lng: -97.51734430176083, lat: 35.316678641320166
-        // // map.on('move', (e) => { console.log(map.getZoom()) })
-        // map.jumpTo({center: [-97.51734430176083, 35.316678641320166], zoom: 11});
-
-        // //console.log(dealiased)
-        // for (var i in dealiased) { l2rad.data[2][i].record.velocity.moment_data = dealiased[i] }
+        // l2rad = dealiasTest(l2rad);
+        // l2rad = upscaleTest(l2rad);
 
         l2info(l2rad);
 
+        // l2plot(l2rad, 'REF', 8);
         l2plot(l2rad, 'REF', 1);
         //l2plot(l2rad, 'VEL', 2);
         // plot(l2rad, 'REF', {
