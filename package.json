@@ -13,6 +13,7 @@
     "aewx-metar-parser": "^1.0.0",
     "brfs": "^2.0.2",
     "canvas": "^2.9.1",
+    "cheap-ruler": "^3.0.2",
     "chroma-js": "^2.4.2",
     "geojson-geometries-lookup": "^0.5.0",
     "glslify-require": "^1.1.0",

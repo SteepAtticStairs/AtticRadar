@@ -1,6 +1,7 @@
 const chroma = require('chroma-js');
 const ut = require('../utils');
 const calcGPU = require('./calcGPU');
+var work = require('webworkify');
 
 function deg2rad(angle) { return angle * (Math.PI / 180) }
 
@@ -266,9 +267,15 @@ function calculateLngLat(ev, cb) {
     }
 
     // points = calcGPU(points, radarLatLng);
+    var w = work(require('./calcWorker.js'));
+    w.addEventListener('message', function(ev) {
+        console.log(`Calculated vertices in ${Date.now() - start} ms`);
+        cb({'data': [ev.data, colors]});
+    })
+    w.postMessage([points, radarLatLng], [points.buffer]);
 
-    console.log(`Calculated vertices in ${Date.now() - start} ms`);
-    cb({'data': [points, colors]});
+    // console.log(`Calculated vertices in ${Date.now() - start} ms`);
+    // cb({'data': [points, colors]});
 }
 
 module.exports = calculateLngLat;

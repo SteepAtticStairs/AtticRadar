@@ -59,6 +59,20 @@ function mainL3Loading(thisObj) {
         // plot the file
         ut.betterProgressBar('set', 90);
 
+        // var nyq = 20;
+        // for (var i in l3rad.radialPackets[0].radials) {
+        //     var curRadial = l3rad.radialPackets[0].radials[i].bins;
+        //     for (var n in curRadial) {
+        //         if (Math.abs(curRadial[n]) > nyq) {
+        //             if (curRadial[n] > 0) {
+        //                 l3rad.radialPackets[0].radials[i].bins[n] = curRadial[n] - (nyq * 2);
+        //             } else if (curRadial[n] < 0) {
+        //                 l3rad.radialPackets[0].radials[i].bins[n] = curRadial[n] + (nyq * 2);
+        //             }
+        //         }
+        //     }
+        // }
+
         if (product == 'NST') {
             plotStormTracks(l3rad);
         } else if (product != 'NTV' && product != 'NMD') {

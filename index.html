@@ -77,7 +77,7 @@
     -->
     <div id="mapFooter" class="mapFooter">
         <div id="productMapFooter" style="display: none">
-            <div id="productsDropdownTrigger" class="noselect"><div id="productsDropdownTriggerText" class="icon-blue">Products</div>
+            <div id="productsDropdownTrigger" class="noselect pdt"><div id="productsDropdownTriggerText" class="icon-blue pdt">Products</div>
                 <div id="extraProductInfo" class="noselect" style="display: none">Info</div>
             </div>
             <div id="radarDateTime" class="noselect" style="display: none">Date & Time</div>
@@ -573,6 +573,74 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="psmTiltDropdownBackdrop" class="psmNoHideElem" style="display: none"></div>
+    <div id="psmTiltDropdown" class="psmNoHideElem" style="display: none">
+        <div class="psmTiltDropdownRow psmNoHideElem" value="1">Tilt 1</div>
+        <div class="psmTiltDropdownRow psmNoHideElem" value="2">Tilt 2</div>
+        <div class="psmTiltDropdownRow psmNoHideElem" value="3">Tilt 3</div>
+        <div class="psmTiltDropdownRow psmNoHideElem" value="4">Tilt 4</div>
+    </div>
+    <div id="productSelectionMenu" style="display: none">
+        <div id="wsr88d_psm" style="display: none">
+            <div class="psmSectionBreak"></div>
+
+            <div class="psmSectionTitle">Super Resolution</div>
+            <div class="psmRow noselect" value="ref">Super-Res Base Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="vel">Super-Res Base Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
+
+            <div class="psmSectionBreak"></div>
+
+            <div class="psmSectionTitle">Digital</div>
+            <div class="psmRow noselect" value="rho">Correlation Coefficient<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="zdr">Differential Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="hyc">Hydrometer Classification<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="hhc">Hybrid Hydrometer Classification<div class="psmRowTiltSelect blankText">Tilt 1</div></div>
+            <div class="psmRow noselect" value="lowres-ref">Digital Base Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="lowres-vel">Digital Base Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="vil">Vertically Integrated Liquid<div class="psmRowTiltSelect blankText">Tilt 1</div></div>
+        </div>
+        <div id="tdwr_psm" style="display: none">
+            <div class="psmSectionBreak"></div>
+
+            <div class="psmSectionTitle">TDWR</div>
+            <div class="psmRow noselect" value="sr-ref">Short-Range Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="lr-ref">Long-Range Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
+            <div class="psmRow noselect" value="tdwrVel">Base Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
+        </div>
+        <div id="upload_psm" style="display: none">
+            <!-- <div id="l2ElevButtonsExpander" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Elevations</span>
+                <span id="l2ElevButtonsExpanderIcon" class="fa fa-chevron-right" style="font-size: 18px"></span>
+            </div>
+            <div id="l2ElevButtons" class="l2ElevButtons" class="container" style="display: none"></div> -->
+            <!-- <span class="l2ElevBtn">0.5</span>
+            <span class="l2ElevBtn">1.5</span>
+            <span class="l2ElevBtn">2.5</span> -->
+            <div id="l2ElevationButtons" class="container">
+                <!-- <div class="row gx-1" style="margin-top: 0.25rem">
+                    <div class="col">
+                        <div class="l2ElevationBtn" value="1">0.5°</div>
+                    </div>
+                    <div class="col">
+                        <div class="l2ElevationBtn" value="1">0.5°</div>
+                    </div>
+                    <div class="col">
+                        <div class="l2ElevationBtn" value="1">0.5°</div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="psmSectionBreak"></div>
+
+            <div class="psmSectionTitle">Level II Products</div>
+            <div class="psmRow l2prodSel noselect" value="l2-ref">Reflectivity</div>
+            <div class="psmRow l2prodSel noselect" value="l2-vel">Velocity</div>
+            <div class="psmRow l2prodSel noselect" value="l2-rho">Correlation Coefficient</div>
+            <div class="psmRow l2prodSel noselect" value="l2-zdr">Differential Reflectivity</div>
+            <div class="psmRow l2prodSel noselect" value="l2-sw ">Spectrum Width</div>
+            <div class="psmRow l2prodSel noselect" value="l2-phi">Differential Phase Shift</div>
         </div>
     </div>
 

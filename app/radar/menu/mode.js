@@ -10,9 +10,9 @@ function showHideFileBox(showHide) {
         $('#dataDiv').data('isFileUpload', true);
 
         $('#fileUploadSpan').show();
-        $('#uploadModeSpan').show();
-        //$('#radarInfoSpan').hide();
-        $('#currentModeSpan').hide();
+        // $('#uploadModeSpan').show();
+        // //$('#radarInfoSpan').hide();
+        // $('#currentModeSpan').hide();
 
         $('#radarHeader').css('height', '+=25px')
         $('.progressBar').css('top', '+=25px');
@@ -22,9 +22,9 @@ function showHideFileBox(showHide) {
         $('#dataDiv').data('isFileUpload', false);
 
         $('#fileUploadSpan').hide();
-        $('#uploadModeSpan').hide();
-        //$('#radarInfoSpan').show();
-        $('#currentModeSpan').show();
+        // $('#uploadModeSpan').hide();
+        // //$('#radarInfoSpan').show();
+        // $('#currentModeSpan').show();
 
         $('#radarHeader').css('height', '-=25px');
         $('.progressBar').css('top', '-=25px');

@@ -1,10 +1,11 @@
 const { Level2Radar } = require('../../../lib/nexrad-level-2-data/src');
 const { plot } = require('../../../lib/nexrad-level-2-plot/src');
-const l2listeners = require('../level2/eventListeners').loadL2Listeners;
+//const l2listeners = require('./archive/eventListeners').loadL2Listeners;
 const l2info = require('./l2info');
 const l2plot = require('./l2plot');
 
-const loadL2Menu = require('./loadL2Menu');
+//const loadL2Menu = require('./archive/loadL2Menu');
+const loadL2Menu = require('./l2menu');
 
 const ut = require('../utils');
 

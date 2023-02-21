@@ -171,6 +171,9 @@ in this function, this will be a string with the latest file's URL.
 var timesGoneBack = 0;
 function getLatestL3(station, product, index, callback, date) {
     if (!(product.length > 3)) {
+        /* we need to slice(1) here (remove the first letter) because the level 3 source we
+        * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
+        station = station.slice(1);
         //document.getElementById('spinnerParent').style.display = 'block';
         var curTime;
         if (date == undefined) {
@@ -225,7 +228,7 @@ function getLatestL3(station, product, index, callback, date) {
             }
         })
     } else {
-        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${$('#stationInp').val().toLowerCase()}/sn.last#`
+        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${station.toLowerCase()}/sn.last#`
         callback(fileUrl);
     }
 
@@ -279,9 +282,8 @@ function getLatestFile(station, levelProduct, callback) {
         }
         const product = levelProduct[1];
         const fileIndex = levelProduct[2];
-        /* we need to slice(1) here (remove the first letter) because the level 3 source we
-        * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
-        getLatestL3(station.slice(1), product, fileIndex, function (url) {
+
+        getLatestL3(station, product, fileIndex, function (url) {
             callback(url);
         })
     }

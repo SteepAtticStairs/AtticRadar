@@ -1,7 +1,7 @@
-const ut = require('../utils');
-const isMobile = require('../misc/detectmobilebrowser');
-const { plot } = require('../../../lib/nexrad-level-2-plot/src');
-const l2plot = require('./l2plot');
+const ut = require('../../utils');
+const isMobile = require('../../misc/detectmobilebrowser');
+const { plot } = require('../../../../lib/nexrad-level-2-plot/src');
+const l2plot = require('../l2plot');
 
 function createModal(title, headerColor, body) {
     var modalContent = 

@@ -952,3 +952,141 @@ https://tobiasahlin.com/spinkit/
 #radarStation:hover {
     filter: brightness(80%);
 }
+
+#productSelectionMenu {
+    position: absolute;
+    z-index: 997;
+    bottom: 50px;
+    left: 10px;
+    height: auto;
+    max-height: 200px;
+    width: auto;
+
+    background-color: rgb(66, 66, 66);
+    border-radius: 10px;
+    border: 1px solid black;
+
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    overflow: scroll;
+}
+/* psm = productSelectionMenu */
+.psmRow {
+    cursor: pointer;
+    color: white;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+/* .psmRow:hover {
+    background-color: rgb(85, 85, 85);
+} */
+.psmSectionBreak {
+    border: 0.5px solid rgb(113, 113, 113);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+.psmSectionTitle {
+    color: rgb(185, 185, 185);
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+.psmRowTiltSelect {
+    color: rgb(92, 157, 255);
+    margin-left: 20px;
+    /* font-weight: bold; */
+}
+.psmRowTiltSelect:hover {
+    filter: brightness(80%);
+    text-decoration: underline;
+}
+.blankText {
+    color: rgba(0, 0, 0, 0);
+    pointer-events: none;
+}
+
+#psmTiltDropdown {
+    position: absolute;
+    z-index: 999;
+    height: fit-content;
+    width: fit-content;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: rgb(43, 43, 43);
+    /* backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); */
+}
+#psmTiltDropdownBackdrop {
+    position: absolute;
+    z-index: 998;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+}
+.psmTiltDropdownRow {
+    cursor: pointer;
+    color: white;
+    /* height: 35px; */
+    font-size: 14px;
+    border-radius: 5px;
+    white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+
+    padding: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    margin: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.psmTiltDropdownRow:hover {
+    background-color: rgb(76, 110, 181);
+}
+
+#l2ElevationButtons {
+    /* margin: auto;
+    width: 90%; */
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.l2ElevationBtn {
+    padding: 2px;
+    background-color: #898989;
+    cursor: pointer;
+
+    border: 1px solid #3e3e3e;
+    border-radius: 7px;
+
+    text-align: center;
+}
+.l2ElevationBtn:hover {
+    filter: brightness(80%);
+    -webkit-filter: brightness(80%);
+    -moz-filter: brightness(80%);
+}
+.l2ElevationBtn:active {
+    filter: brightness(70%);
+    -webkit-filter: brightness(70%);
+    -moz-filter: brightness(70%);
+}
+.l2ElevationBtnSelected {
+    color: #125234 !important;
+    background-color: #96b0a4 !important;
+    border-color: #265d44 !important;
+}

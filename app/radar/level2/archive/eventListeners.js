@@ -1,6 +1,6 @@
-const { plot } = require('../../../lib/nexrad-level-2-plot/src');
-const loaders = require('../loaders');
-const mapFuncs = require('../map/mapFunctions');
+const { plot } = require('../../../../lib/nexrad-level-2-plot/src');
+const loaders = require('../../loaders');
+const mapFuncs = require('../../map/mapFunctions');
 
 // https://stackoverflow.com/a/15191130/18758797
 $.fn.animateRotate = function (angle, duration, easing, complete) {

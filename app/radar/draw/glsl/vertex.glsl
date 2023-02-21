@@ -222,7 +222,7 @@ void main() {
     //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))
     // )).x;
 
-    gl_Position = u_matrix * vec4(mercatorCoords.x, mercatorCoords.y, 0.0, 1.0);
+    gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);
     // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);
     // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);
     // gl_Position = u_matrix * gl_Position;

@@ -202,63 +202,63 @@ function showStations() {
 
     map.on('click', 'stationSymbolLayer', function (e) {
         if ($('#dataDiv').data('blueStations') != e.features[0].id/* && e.features[0].properties.status != 'down'*/) {
-            var clickedStation = e.features[0].properties.station;
-            var stationType = e.features[0].properties.type;
-            var id = e.features[0].id;
-
-            $(document).trigger('newStation', clickedStation);var alreadyClicked = false;
-
-            var productToLoad;
-            var abbvProductToLoad;
-            if (stationType == 'WSR-88D') {
-                $('#wsr88dMenu').show();
-                $('#tdwrMenu').hide();
-
-                productToLoad = 'N0B';
-                abbvProductToLoad = 'ref';
-                // $(`.productOption[value="${abbvProductToLoad}"]`).html()
-                $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
-
-                var menuElem = $('#wsr88dRefBtn');
-                if (menuElem.find('.selectedProductMenuItem').length == 0) {
-                    var htmlContent = menuElem.html();
-                    $('.selectedProductMenuItem').remove();
-                    menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
-                }
-            } else if (stationType == 'TDWR') {
-                $('#wsr88dMenu').hide();
-                $('#tdwrMenu').show();
-                $('#productsDropdownTriggerText').html($(`.productOption[value="${abbvProductToLoad}"]`).html());
-
-                productToLoad = 'TZ0';
-                abbvProductToLoad = 'sr-ref';
-                // $(`.productOption[value="${abbvProductToLoad}"]`).html()
-                $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
-
-                var menuElem = $('#tdwrRefBtn');
-                if (menuElem.find('.selectedProductMenuItem').length == 0) {
-                    var htmlContent = menuElem.html();
-                    $('.selectedProductMenuItem').remove();
-                    menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
-                }
-            }
-
-            // change other blue station background to normal
-            map.setFeatureState({
-                source: 'stationSymbolLayer',
-                id: $('#dataDiv').data('blueStations')
-            }, {
-                hover: false,
-                color: 2,
-                isClicked: true,
-            });
-
-            $('#dataDiv').data('blueStations', id);
-
-            disableMouseListeners();
-
             if (!$('#dataDiv').data('fromFileUpload')) {
                 if (!$('#dataDiv').data('isFileUpload')/* && $(this).css('background-color') != redColor*/) {
+                    var clickedStation = e.features[0].properties.station;
+                    var stationType = e.features[0].properties.type;
+                    var id = e.features[0].id;
+
+                    $(document).trigger('newStation', clickedStation);var alreadyClicked = false;
+
+                    var productToLoad;
+                    var abbvProductToLoad;
+                    if (stationType == 'WSR-88D') {
+                        $('#wsr88d_psm').show();
+                        $('#tdwr_psm').hide();
+
+                        productToLoad = 'N0B';
+                        abbvProductToLoad = 'ref';
+                        // $(`.productOption[value="${abbvProductToLoad}"]`).html()
+                        $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
+
+                        var menuElem = $('#wsr88dRefBtn');
+                        if (menuElem.find('.selectedProductMenuItem').length == 0) {
+                            var htmlContent = menuElem.html();
+                            $('.selectedProductMenuItem').remove();
+                            menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
+                        }
+                    } else if (stationType == 'TDWR') {
+                        $('#wsr88d_psm').hide();
+                        $('#tdwr_psm').show();
+                        $('#productsDropdownTriggerText').html($(`.productOption[value="${abbvProductToLoad}"]`).html());
+
+                        productToLoad = 'TZ0';
+                        abbvProductToLoad = 'sr-ref';
+                        // $(`.productOption[value="${abbvProductToLoad}"]`).html()
+                        $('#productsDropdownTriggerText').html(window.longProductNames[abbvProductToLoad]);
+
+                        var menuElem = $('#tdwrRefBtn');
+                        if (menuElem.find('.selectedProductMenuItem').length == 0) {
+                            var htmlContent = menuElem.html();
+                            $('.selectedProductMenuItem').remove();
+                            menuElem.html(`<i class="fa-solid fa-circle-check icon-green selectedProductMenuItem">&nbsp;&nbsp;</i>${htmlContent}`);
+                        }
+                    }
+
+                    // change other blue station background to normal
+                    map.setFeatureState({
+                        source: 'stationSymbolLayer',
+                        id: $('#dataDiv').data('blueStations')
+                    }, {
+                        hover: false,
+                        color: 2,
+                        isClicked: true,
+                    });
+
+                    $('#dataDiv').data('blueStations', id);
+
+                    disableMouseListeners();
+
                     // remove all other blue
                     $('.customMarker').each(function () {
                         if ($(this).css('background-color') == blueColor) {
