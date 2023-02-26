@@ -48,7 +48,7 @@ function correctRadarObject(l2rad) {
                             curRadialProduct.gate_count = curRadial.number_of_surveillance_bins;
                         } else {
                             curRadialProduct.gate_size = curRadial.doppler_range_sample_interval;
-                            curRadialProduct.gate_count = curRadial.number_of_surveillance_bins;
+                            curRadialProduct.gate_count = curRadial.number_of_doppler_bins;
                         }
                         curRadialProduct.first_gate = 0;
 
@@ -69,8 +69,7 @@ function l2plot(l2rad, product, elevation) {
 
     calculateVerticies(l2rad, 2, {
         'product': product,
-        'elevation': elevation,
-        'mode': 'mapPlot'
+        'elevation': elevation
     });
 }
 

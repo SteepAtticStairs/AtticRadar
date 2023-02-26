@@ -127,7 +127,6 @@ const dataNames = {
 function calculateVerticies(radarObj, level, options) {
     var start = Date.now();
 
-    var mode = options.mode;
     var product;
     var elevation;
     if (level == 2) {
