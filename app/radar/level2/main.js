@@ -183,12 +183,12 @@ function mainL2Loading(thisObj) {
 
         // l2rad = dealiasTest(l2rad);
         // l2rad = upscaleTest(l2rad);
-        // l2rad = dealias(l2rad);
+        l2rad = dealias(l2rad);
 
         l2info(l2rad);
 
         // l2plot(l2rad, 'REF', 8);
-        l2plot(l2rad, 'REF', 1);
+        l2plot(l2rad, 'VEL', 2);
         //l2plot(l2rad, 'VEL', 2);
         // plot(l2rad, 'REF', {
         //     elevations: 1,
