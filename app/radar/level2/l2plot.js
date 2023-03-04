@@ -67,9 +67,15 @@ function l2plot(l2rad, product, elevation) {
     window.l2rad = l2rad;
     window.l2radOptions = [product, elevation];
 
+    var shouldPlotDealiased = false;
+    if (product == 'VEL') {
+        shouldPlotDealiased = true;
+    }
+
     calculateVerticies(l2rad, 2, {
         'product': product,
-        'elevation': elevation
+        'elevation': elevation,
+        // 'plotDealiased': shouldPlotDealiased
     });
 }
 

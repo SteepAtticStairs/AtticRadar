@@ -153,9 +153,12 @@ function calculateVerticies(radarObj, level, options) {
     /*
     * Create an array holding all of the gate values
     */
+    var shouldPlotDealiased = options.plotDealiased;
+    var dataArrayName = 'moment_data';
+    // if (shouldPlotDealiased) { dataArrayName = 'dealias_data' }
     var prodValues = [];
     if (level == 2) {
-        for (var i in radarObj.data[elevation]) { prodValues.push(radarObj.data[elevation][i].record[dataNames[product]].moment_data) }
+        for (var i in radarObj.data[elevation]) { prodValues.push(radarObj.data[elevation][i].record[dataNames[product]][dataArrayName]) }
     } else if (level == 3) {
         for (var i in radarObj.radialPackets[0].radials) { prodValues.push(radarObj.radialPackets[0].radials[i].bins) }
     }

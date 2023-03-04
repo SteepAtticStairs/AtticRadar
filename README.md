@@ -1,5 +1,43 @@
 # AtticRadar
 
+A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, hurricane tracking, METAR station data, and much more.
+
+## Website
+
+You can find the app live here:<br>
+<b>[https://steepatticstairs.net/AtticRadar](https://steepatticstairs.net/AtticRadar)</b>
+
+## Credits
+
+The libraries that parse NEXRAD files client-side were provided by [netbymatt](https://github.com/netbymatt). This app wouldn't exist without his hard work on these projects.
+
+Inspiration for the app to be created, and some of the code for WebGL rendering, came from [QuadWeather's](https://twitter.com/quadweather) radar app, which can be found here: [https://radar.quadweather.com](https://radar.quadweather.com)
+
+Virtually all of the code for the doppler dealiasing algorithm comes from [pyart](https://github.com/ARM-DOE/pyart). I used their [region-based](https://github.com/ARM-DOE/pyart/blob/main/pyart/correct/region_dealias.py) dealiasing algorithm. I go into more depth about the process behind this in the JavaScript dealiasing file in this project.
+
+## Setup
+```
+git clone https://github.com/SteepAtticStairs/AtticRadar.git
+cd AtticRadar
+npm install
+npm run build
+php -S 127.0.0.1:8080
+```
+then you can go to `localhost:8080` or `127.0.0.1:8080` to view the website.
+
+(I used to use `python3 -m http.server 8080`, but it would frequently crash or freeze, which became extremely irritating. Although the php server functionality is really meant for php development, I have found that it works fine for this app, and it doesn't break like python's local server does.)
+
+You can also run
+```
+npm run serve
+```
+to use `watchify` (a part of Browserify) to auto-bundle the project every time you make a change.
+
+## History
+* `Sep 10 2022` - Renamed this project from "NexradJS" to "AtticRadar"
+
+<!-- # AtticRadar
+
 **FULL CREDIT GOES TO [netbymatt](https://github.com/netbymatt) for pretty much all of this project.**
 
 He provided **FOUR** libraries:<br>[nexrad-level-2-data](https://github.com/netbymatt/nexrad-level-2-data)<br>[nexrad-level-2-plot](https://github.com/netbymatt/nexrad-level-2-plot)<br>[nexrad-level-3-data](https://github.com/netbymatt/nexrad-level-3-data)<br>[nexrad-level-3-plot](https://github.com/netbymatt/nexrad-level-3-plot)<br>that allowed for the development of this project. I only take credit for porting these Node apps to the browser with [Browserify](https://browserify.org).
@@ -64,4 +102,4 @@ Notice how in the last example, the two parameters are separated by an ampersand
 
 
 # History
-* `Sep 10 2022` - Renamed this project from "NexradJS" to "AtticRadar"
+* `Sep 10 2022` - Renamed this project from "NexradJS" to "AtticRadar" -->

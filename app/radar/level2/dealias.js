@@ -1,4 +1,17 @@
-const pyodideFunctions = require('./pyodide');
+/**
+ * This implementation of a region based doppler dealiasing algorithm
+ * was ported almost exactly from pyart's "dealias_region_based" function.
+ * I used a specific commit as a reference point for this work, because
+ * it was right when "scipy.sparse.coo_matrix" had stopped being used
+ * by the algorithm.
+ * 
+ * You can find that commit here:
+ * https://github.com/ARM-DOE/pyart/blob/41b34052dc36becd1783bb7dfb87c39570cab707/pyart/correct/region_dealias.py
+ * 
+ * All of this is to say that I only truly wrote a couple of lines of this code.
+ * I simply ported pyart's dealiasing function from Python to JavaScript, with
+ * a lot of help from ChatGPT and Google.
+ */
 
 const np = {
     // https://stackoverflow.com/a/40475362/18758797
@@ -156,7 +169,7 @@ function _jumpToMapPosition() {
 }
 
 function _mergeCorrectedVelocities(correctedVelocities, l2rad, scanNumber) {
-    for (var i in correctedVelocities) { l2rad.data[scanNumber][i].record.velocity.moment_data = correctedVelocities[i] }
+    for (var i in correctedVelocities) { l2rad.data[scanNumber][i].record.velocity.dealias_data = correctedVelocities[i] }
     return l2rad;
 }
 
