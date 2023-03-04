@@ -183,7 +183,7 @@ function mainL2Loading(thisObj) {
 
         // l2rad = dealiasTest(l2rad);
         // l2rad = upscaleTest(l2rad);
-        // l2rad = dealias(l2rad);
+        // l2rad = dealias(l2rad, 2);
 
         l2info(l2rad);
 
