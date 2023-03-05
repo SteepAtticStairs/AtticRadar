@@ -140,10 +140,12 @@ function calculateVerticies(radarObj, level, options) {
     }
     window.atticData.product = product;
 
-    var shouldPlotDealiased = options.plotDealiased;
-    var alreadyDealiased = dealiasHelper.checkIfAlreadyDealiased(l2rad, elevation);
-    if (shouldPlotDealiased && !alreadyDealiased) {
-        l2rad = dealiasHelper.dealiasRadarObject(l2rad, elevation);
+    if (level == 2) {
+        var shouldPlotDealiased = options.plotDealiased;
+        var alreadyDealiased = dealiasHelper.checkIfAlreadyDealiased(l2rad, elevation);
+        if (shouldPlotDealiased && !alreadyDealiased) {
+            l2rad = dealiasHelper.dealiasRadarObject(l2rad, elevation);
+        }
     }
 
     /*
