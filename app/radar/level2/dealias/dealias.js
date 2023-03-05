@@ -46,7 +46,7 @@ const np = {
     },
     bincount(arr) {
         // Initialize the result array with zeros up to the maximum value in arr
-        let counts = new Array(Math.max(...[...new Set(arr)]) + 1).fill(0);
+        let counts = new Array(max(arr) + 1).fill(0);
         // Count the occurrences of each value in arr
         for (let x of arr) {
             counts[x] += 1;
@@ -170,6 +170,50 @@ function remove(arr, value) {
     return arr;
 }
 
+function min(arr) { return Math.min(...[...new Set(arr)]) }
+function max(arr) { return Math.max(...[...new Set(arr)]) }
+
+function _mask_values(velocities) {
+    // mask values
+    for (var i in velocities) {
+        for (var n in velocities[i]) {
+            if (velocities[i][n] == null) {
+                velocities[i][n] = -64.5;
+            }
+        }
+    }
+    return velocities;
+}
+
+function _find_sweep_interval_splits(nyquist, interval_splits, velocities) {
+    /* Return the interval limits for a given sweep. */
+    // The Nyquist interval is split into interval_splits  equal sized areas.
+    // If velocities outside the Nyquist are present the number and
+    // limits of the interval splits must be adjusted so that theses
+    // velocities are included in one of the splits.
+
+    var add_start = 0;
+    var add_end = 0;
+    var interval = (2 * nyquist) / (interval_splits);
+    // no change from default if all gates filtered
+    if (velocities.length != 0) {
+        var max_vel = max(velocities.flat());
+        var min_vel = min(velocities.flat());
+        if (max_vel > nyquist || min_vel < -nyquist) {
+            console.warn('Velocities outside of the Nyquist interval found in sweep.');
+            // additional intervals must be added to capture the velocities
+            // outside the nyquist limits
+            add_start = parseInt(Math.ceil((max_vel - nyquist) / (interval)));
+            add_end = parseInt(Math.ceil(-(min_vel + nyquist) / (interval)));
+        }
+    }
+
+    var start = -nyquist - add_start * interval;
+    var end = nyquist + add_end * interval;
+    var num = interval_splits + 1 + add_start + add_end;
+    return np.linspace(start, end, num);
+}
+
 /**
  * This function dealiases a 2D array of
  * doppler velocity values using a region-based algorithm.
@@ -190,12 +234,13 @@ function dealias(velocities, nyquist_vel) {
     var rays_wrap_around = true;
     // var nyquist_vel = _getNyquist(l2rad, scanNumber);
     var nyquist_interval = 2 * nyquist_vel;
-    var interval_limits = np.linspace(-nyquist_vel, nyquist_vel, interval_splits + 1);
 
     var sdata = copy(velocities); // copy of data for processing
+    sdata = _mask_values(sdata);
     var scorr = copy(velocities); // copy of data for output
 
     for (var sweep_slice = 1; sweep_slice < 2; sweep_slice++) {
+        var interval_limits = _find_sweep_interval_splits(nyquist_vel, interval_splits, sdata);
         var [labels, nfeatures] = _find_regions(sdata, interval_limits);
         var bincount = np.bincount(labels.flat());
         var num_masked_gates = bincount[0];
@@ -734,15 +779,6 @@ class _EdgeCollector {
 function _find_regions(vel, limits) {
     var label = np.zeros(np.shape(vel));
     var nfeatures = 0;
-
-    // mask values
-    for (var i in vel) {
-        for (var n in vel[i]) {
-            if (vel[i][n] == null) {
-                vel[i][n] = -64.5;
-            }
-        }
-    }
 
     for (let i = 0; i < limits.length - 1; i++) {
         const lmin = limits[i];
