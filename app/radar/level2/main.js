@@ -4,7 +4,7 @@ const { plot } = require('../../../lib/nexrad-level-2-plot/src');
 const l2info = require('./l2info');
 const l2plot = require('./l2plot');
 
-const dealias = require('./dealias');
+const dealias = require('./dealias/dealias');
 
 //const loadL2Menu = require('./archive/loadL2Menu');
 const loadL2Menu = require('./l2menu');
@@ -71,132 +71,20 @@ function upscaleTest(l2rad) {
     return l2rad;
 }
 
-function dealiasTest(l2rad) {
-    var velocities = [];
-    const nyquist = l2rad.data[2][0].record.radial.nyquist_velocity / 100;
-    for (var i in l2rad.data[2]) { velocities.push(l2rad.data[2][i].record.velocity.moment_data) }
-
-    for (var x = 150; x < 200; x++) {
-        var points = [...velocities[x]];
-        for (var i = 0; i < points.length; i++) {
-            if (points[i] != null) {
-                try {
-                    var difference = points[i] - points[i - 1];
-                    if (difference > nyquist) {
-                        points[i] = points[i] - nyquist * 2;
-                        // for (var n = i; n < points.length; n++) {
-                        //     points[n] = points[n] - nyquist * 2;
-                        // }
-                    } else if (difference < -nyquist) {
-                        points[i] = points[i] + nyquist * 2;
-                        // for (var n = i; n < points.length; n++) {
-                        //     points[n] = points[n] + nyquist * 2;
-                        // }
-                    }
-                } catch (e) {}
-            }
-        }
-        velocities[x] = points;
-    }
-
-    // for (var i in velocities) {
-    // //for (var i = 100; i < 120; i++) {
-    //     var scaled_ray = [];
-    //     for (var n in velocities[i]) {
-    //         if (velocities[i][n] != null) {
-    //             // extract ray and scale to phase units
-    //             scaled_ray.push(velocities[i][n] * Math.PI / nyquist);
-    //         } else {
-    //             scaled_ray.push(null);
-    //         }
-    //     }
-    //     var periods = 0;
-    //     var unwrapped_velocities = [...scaled_ray];
-    //     for (var ii = 1; ii < scaled_ray.length; ii++) {
-    //         ii = parseInt(ii);
-    //         if (scaled_ray[ii] != null) {
-    //             var difference = scaled_ray[ii] - scaled_ray[ii - 1];
-    //             if (difference > Math.PI) {
-    //                 periods -= 1;
-    //             } else if (difference < -Math.PI) {
-    //                 periods += 1;
-    //             }
-    //             unwrapped_velocities[ii] = scaled_ray[ii] + 2 * Math.PI * periods;
-    //         }
-    //     }
-    //     // scale back into velocity units and store
-    //     for (var x in unwrapped_velocities) {
-    //         if (unwrapped_velocities[x] != null) {
-    //             unwrapped_velocities[x] = unwrapped_velocities[x] * nyquist / Math.PI;
-    //         }
-    //     }
-    //     velocities[i] = [...unwrapped_velocities];
-    // }
-
-    // for (var i in velocities) {
-    //     for (var n in velocities[i]) {
-    //         try {
-    //             var leftPixel = velocities[parseInt(i) - 1][n];
-    //             var rightPixel = velocities[parseInt(i) + 1][n];
-    //             var curPixel = velocities[i][n];
-    //             if (Math.abs(curPixel) - Math.abs(leftPixel) > 10) {
-    //                 velocities[i][n] = (leftPixel + rightPixel) / 2;
-    //             }
-    //         } catch (e) {}
-    //     }
-    // }
-
-    // for (var i in velocities) {
-    //     if (i >= 250 && i <= 270) { // i == 262
-    //         dealiased[i] = velocities[i]
-    //         for (var n in velocities[i]) {
-    //             var curGate = velocities[i][n];
-    //             var prevGate = velocities[i][parseInt(n) - 1];
-
-    //             var diff = Math.abs(curGate - prevGate);
-    //             var correctedVal = curGate;
-    //             if (diff > nyquist) {
-    //                 //correctedVal = -50;
-    //                 correctedVal = switchSign(correctedVal);
-    //             }
-
-    //             // if (i >= 250 && i <= 270) { dealiased[i][n] = velocities[i][n] }
-    //             dealiased[i][n] = correctedVal;
-    //         }
-    //     }
-    // }
-    // lng: -97.51734430176083, lat: 35.316678641320166, zoom: 11 // KTLX
-    // lng: lng: -97.35454576227136, lat: 27.812346235337856, zoom: 6.5 // KCRP
-    // map.on('move', (e) => { console.log(map.getCenter()) })
-    // map.on('move', (e) => { console.log(map.getZoom()) })
-    map.jumpTo({center: [-97.35454576227136, 27.812346235337856], zoom: 6.5});
-
-    //console.log(dealiased)
-    for (var i in velocities) { l2rad.data[2][i].record.velocity.moment_data = velocities[i] }
-
-    return l2rad;
-}
-
 function mainL2Loading(thisObj) {
     var l2rad = new Level2Radar(ut.toBuffer(thisObj.result), function(l2rad) {
         console.log(l2rad);
 
-        // l2rad = dealiasTest(l2rad);
         // l2rad = upscaleTest(l2rad);
-        // l2rad = dealias(l2rad, 2);
+        // const dealiasHelper = require('./dealias/dealiasHelper');
+        // l2rad = dealiasHelper.dealiasRadarObject(l2rad, 2);
 
+        // display some file data on the info divs
         l2info(l2rad);
-
-        // l2plot(l2rad, 'REF', 8);
+        // plot the data
         l2plot(l2rad, 'REF', 1);
-        //l2plot(l2rad, 'VEL', 2);
-        // plot(l2rad, 'REF', {
-        //     elevations: 1,
-        // });
-
+        // load the elevation selection menu
         loadL2Menu(l2rad.listElevationsAndProducts(), l2rad);
-
-        //l2listeners(l2rad);
     });
 }
 

@@ -67,15 +67,17 @@ function l2plot(l2rad, product, elevation) {
     window.l2rad = l2rad;
     window.l2radOptions = [product, elevation];
 
-    var shouldPlotDealiased = false;
-    if (product == 'VEL') {
-        shouldPlotDealiased = true;
-    }
+    // var shouldPlotDealiased = false;
+    // if (product == 'VEL') {
+    //     shouldPlotDealiased = true;
+    // }
+    var shouldPlotDealiased = window.atticData.shouldPlotDealiased;
+    if (shouldPlotDealiased == undefined || product != 'VEL') { shouldPlotDealiased = false }
 
     calculateVerticies(l2rad, 2, {
         'product': product,
         'elevation': elevation,
-        // 'plotDealiased': shouldPlotDealiased
+        'plotDealiased': shouldPlotDealiased
     });
 }
 

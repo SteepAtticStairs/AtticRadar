@@ -150,15 +150,19 @@ function label_image(arr) {
     return [labels, label_count - 1];
 }
 
-function _generate2dArray(l2rad, scanNumber) {
-    var velocities = [];
-    for (var i in l2rad.data[scanNumber]) { velocities.push(l2rad.data[scanNumber][i].record.velocity.moment_data) }
-    return velocities;
-}
-function _getNyquist(l2rad, scanNumber) {
-    var nyquist = l2rad.data[scanNumber][0].record.radial.nyquist_velocity / 100;
-    return nyquist;
-}
+// function _generate2dArray(l2rad, scanNumber) {
+//     var velocities = [];
+//     for (var i in l2rad.data[scanNumber]) { velocities.push(l2rad.data[scanNumber][i].record.velocity.moment_data) }
+//     return velocities;
+// }
+// function _getNyquist(l2rad, scanNumber) {
+//     var nyquist = l2rad.data[scanNumber][0].record.radial.nyquist_velocity / 100;
+//     return nyquist;
+// }
+// function _mergeCorrectedVelocities(correctedVelocities, l2rad, scanNumber) {
+//     for (var i in correctedVelocities) { l2rad.data[scanNumber][i].record.velocity.dealias_data = correctedVelocities[i] }
+//     return l2rad;
+// }
 
 function _jumpToMapPosition() {
     // lng: -97.51734430176083, lat: 35.316678641320166, zoom: 11 // KTLX
@@ -166,11 +170,6 @@ function _jumpToMapPosition() {
     // map.on('move', (e) => { console.log(map.getCenter()) })
     // map.on('move', (e) => { console.log(map.getZoom()) })
     map.jumpTo({center: [-97.51734430176083, 35.316678641320166], zoom: 11});
-}
-
-function _mergeCorrectedVelocities(correctedVelocities, l2rad, scanNumber) {
-    for (var i in correctedVelocities) { l2rad.data[scanNumber][i].record.velocity.dealias_data = correctedVelocities[i] }
-    return l2rad;
 }
 
 function copy(arr) {
@@ -185,15 +184,25 @@ function remove(arr, value) {
     return arr;
 }
 
-function dealias(l2rad, scanNumber) {
+/**
+ * This function dealiases a 2D array of
+ * doppler velocity values using a region-based algorithm.
+ * 
+ * @param {Array} velocities A 2D array containing all of the velocity values.
+ * @param {Number} nyquist_vel A number representing the nyquist velocity.
+ * 
+ * @returns {Array} The corrected 2D array. It is the same as the original,
+ * except the aliased regions are corrected.
+ */
+function dealias(velocities, nyquist_vel) {
     var interval_splits = 3;
     var skip_between_rays = 100;
     var skip_along_ray = 100;
     var centered = true;
 
-    var velocities = _generate2dArray(l2rad, scanNumber);
+    // var velocities = _generate2dArray(l2rad, scanNumber);
     var rays_wrap_around = true;
-    var nyquist_vel = _getNyquist(l2rad, scanNumber);
+    // var nyquist_vel = _getNyquist(l2rad, scanNumber);
     var nyquist_interval = 2 * nyquist_vel;
     var interval_limits = np.linspace(-nyquist_vel, nyquist_vel, interval_splits + 1);
 
@@ -251,9 +260,9 @@ function dealias(l2rad, scanNumber) {
     }
 
     // _jumpToMapPosition();
-    l2rad = _mergeCorrectedVelocities(scorr, l2rad, scanNumber);
+    // l2rad = _mergeCorrectedVelocities(scorr, l2rad, scanNumber);
 
-    return l2rad;
+    return scorr;
 }
 
 function _combine_regions(region_tracker, edge_tracker) {

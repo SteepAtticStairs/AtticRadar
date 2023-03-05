@@ -9,6 +9,9 @@ function _generateRow(btnsHTML) {
     return `<div class="row gx-1" style="margin-top: 0.25rem">${btnsHTML}</div>`;
 }
 
+const dealiasBtnSelector = ':not(#dealiasBtn)';
+const dbs = dealiasBtnSelector; // just for shorthand
+
 function _generateElevationProductLookup(lEAP) {
     // object to lookup a scan number from elevation angle and product
     var elevationProductLookup = {};
@@ -46,7 +49,7 @@ function initEventListeners(l2rad, elevationProductLookup) {
     // sorts all the full elevations from least to greatest, and picks the lowest one
     window.atticData.fullAngle = Object.keys(elevationProductLookup).map(n => parseFloat(n)).sort(function(a, b) { return a - b })[0];
     // turn green the button that references the starting elevation
-    $(`.l2ElevationBtn[value="${window.atticData.fullAngle}"]`).addClass('l2ElevationBtnSelected');
+    $(`.l2ElevationBtn${dbs}[value="${window.atticData.fullAngle}"]`).addClass('l2ElevationBtnSelected');
 
     // make sure the correct product selection rows are showing
     var allProducts = l2rad.getAllProducts(); // get an array of all products in the radar file
@@ -54,9 +57,9 @@ function initEventListeners(l2rad, elevationProductLookup) {
     $('.l2prodSel').hide(); // hide all of the rows
     for (var i in allProducts) { $(`.l2prodSel[value="${allProducts[i]}"]`).show() } // show only the ones that are available
 
-    $('.l2ElevationBtn').click(function() {
+    $(`.l2ElevationBtn${dbs}`).click(function() {
         // turn all green buttons back to normal
-        $('.l2ElevationBtnSelected').removeClass('l2ElevationBtnSelected');
+        $(`.l2ElevationBtnSelected${dbs}`).removeClass('l2ElevationBtnSelected');
         // turn the current button green
         $(this).addClass('l2ElevationBtnSelected');
 
@@ -80,6 +83,18 @@ function initEventListeners(l2rad, elevationProductLookup) {
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
 
         l2plot(l2rad, product, scanNumber); // plot the selected product and the current elevation
+    })
+
+    $('#dealiasBtn').click(function() {
+        if ($(this).hasClass('dealiasBtnDeSelected')) {
+            // we're turning dealias mode ON
+            window.atticData.shouldPlotDealiased = true;
+            $(this).removeClass('dealiasBtnDeSelected').addClass('dealiasBtnSelected');
+        } else if ($(this).hasClass('dealiasBtnSelected')) {
+            // we're turning dealias mode OFF
+            window.atticData.shouldPlotDealiased = false;
+            $(this).removeClass('dealiasBtnSelected').addClass('dealiasBtnDeSelected');
+        }
     })
 }
 

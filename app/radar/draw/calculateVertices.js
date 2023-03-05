@@ -7,6 +7,7 @@ const stationAbbreviations = require('../../../resources/stationAbbreviations');
 const maxRanges = require('../level3/maxRanges');
 const setTextField = require('../inspector/archive/setTextField');
 const calculateLngLat = require('./calculateLngLat');
+const dealiasHelper = require('../level2/dealias/dealiasHelper');
 var work = require('webworkify');
 
 function rgbValToArray(rgbString) {
@@ -139,6 +140,12 @@ function calculateVerticies(radarObj, level, options) {
     }
     window.atticData.product = product;
 
+    var shouldPlotDealiased = options.plotDealiased;
+    var alreadyDealiased = dealiasHelper.checkIfAlreadyDealiased(l2rad, elevation);
+    if (shouldPlotDealiased && !alreadyDealiased) {
+        l2rad = dealiasHelper.dealiasRadarObject(l2rad, elevation);
+    }
+
     /*
     * Create an array holding all of the azimuth values
     */
@@ -153,7 +160,6 @@ function calculateVerticies(radarObj, level, options) {
     /*
     * Create an array holding all of the gate values
     */
-    var shouldPlotDealiased = options.plotDealiased;
     var dataArrayName = 'moment_data';
     if (shouldPlotDealiased) { dataArrayName = 'dealias_data' }
     var prodValues = [];

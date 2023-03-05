@@ -1090,3 +1090,14 @@ https://tobiasahlin.com/spinkit/
     background-color: #96b0a4 !important;
     border-color: #265d44 !important;
 }
+
+.dealiasBtnSelected {
+    color: #053b22 !important;
+    background-color: #527564 !important;
+    border-color: #153627 !important;
+}
+.dealiasBtnDeSelected {
+    color: #521212 !important;
+    background-color: #b09696 !important;
+    border-color: #764646 !important;
+}
