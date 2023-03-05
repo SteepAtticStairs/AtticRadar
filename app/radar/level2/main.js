@@ -78,6 +78,7 @@ function mainL2Loading(thisObj) {
         // l2rad = upscaleTest(l2rad);
         // const dealiasHelper = require('./dealias/dealiasHelper');
         // l2rad = dealiasHelper.dealiasRadarObject(l2rad, 2);
+        // window.atticData.shouldPlotDealiased = true;
 
         // display some file data on the info divs
         l2info(l2rad);

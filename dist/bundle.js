@@ -5587,20 +5587,6 @@ function label_image(arr) {
     return [labels, label_count - 1];
 }
 
-// function _generate2dArray(l2rad, scanNumber) {
-//     var velocities = [];
-//     for (var i in l2rad.data[scanNumber]) { velocities.push(l2rad.data[scanNumber][i].record.velocity.moment_data) }
-//     return velocities;
-// }
-// function _getNyquist(l2rad, scanNumber) {
-//     var nyquist = l2rad.data[scanNumber][0].record.radial.nyquist_velocity / 100;
-//     return nyquist;
-// }
-// function _mergeCorrectedVelocities(correctedVelocities, l2rad, scanNumber) {
-//     for (var i in correctedVelocities) { l2rad.data[scanNumber][i].record.velocity.dealias_data = correctedVelocities[i] }
-//     return l2rad;
-// }
-
 function _jumpToMapPosition() {
     // lng: -97.51734430176083, lat: 35.316678641320166, zoom: 11 // KTLX
     // lng: lng: -97.35454576227136, lat: 27.812346235337856, zoom: 6.5 // KCRP
@@ -5667,17 +5653,19 @@ function dealias(velocities, nyquist_vel) {
 
         // center sweep if requested, determine a global sweep unfold number
         // so that the average number of gate folds is zero.
-        // if (centered) {
-        //     var gates_dealiased = region_sizes.reduce((a, b) => a + b, 0);
-        //     // var total_folds = np.sum(region_sizes * region_tracker.unwrap_number[1:])
-        //     var total_folds = region_sizes.slice(1).reduce((a, b, i) => {
-        //         return a + b * region_tracker.unwrap_number[i + 1];
-        //     }, 0);
-        //     var sweep_offset = parseInt(Math.round(parseFloat(total_folds) / gates_dealiased));
-        //     if (sweep_offset != 0) {
-        //         region_tracker.unwrap_number -= sweep_offset;
-        //     }
-        // }
+        if (centered) {
+            var gates_dealiased = region_sizes.reduce((a, b) => a + b, 0);
+            var total_folds = 0;
+            for (var i = 0; i < region_sizes.length; i++) {
+                total_folds += region_sizes[i] * region_tracker.unwrap_number[i + 1];
+            }
+            var sweep_offset = Math.round(total_folds / gates_dealiased);
+            if (sweep_offset !== 0) {
+                for (var i = 0; i < region_tracker.unwrap_number.length; i++) {
+                    region_tracker.unwrap_number[i] -= sweep_offset;
+                }
+            }
+        }
 
         // dealias the data using the fold numbers
         // start from label 1 to skip masked region
@@ -6684,6 +6672,7 @@ function mainL2Loading(thisObj) {
         // l2rad = upscaleTest(l2rad);
         // const dealiasHelper = require('./dealias/dealiasHelper');
         // l2rad = dealiasHelper.dealiasRadarObject(l2rad, 2);
+        // window.atticData.shouldPlotDealiased = true;
 
         // display some file data on the info divs
         l2info(l2rad);
