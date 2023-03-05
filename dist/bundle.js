@@ -6476,6 +6476,7 @@ function initEventListeners(l2rad, elevationProductLookup) {
         window.atticData.fullAngle = fullAngle; // store it globally
 
         var scanNumber = elevationProductLookup[fullAngle][product]; // e.g. 7
+        window.atticData.currentScanNumber = scanNumber; // store it globally
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
 
         l2plot(l2rad, product, scanNumber); // plot the current product and selected elevation
@@ -6487,7 +6488,14 @@ function initEventListeners(l2rad, elevationProductLookup) {
         window.atticData.currentProduct = product; // store it globally
 
         var scanNumber = elevationProductLookup[window.atticData.fullAngle][product]; // e.g. 7
+        window.atticData.currentScanNumber = scanNumber; // store it globally
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+
+        if (product == 'VEL') {
+            $('#completeDealiasBtnContainer').show();
+        } else {
+            $('#completeDealiasBtnContainer').hide();
+        }
 
         l2plot(l2rad, product, scanNumber); // plot the selected product and the current elevation
     })
@@ -6497,10 +6505,16 @@ function initEventListeners(l2rad, elevationProductLookup) {
             // we're turning dealias mode ON
             window.atticData.shouldPlotDealiased = true;
             $(this).removeClass('dealiasBtnDeSelected').addClass('dealiasBtnSelected');
+            $(this).find('i').removeClass('fa-xmark').addClass('fa-check');
         } else if ($(this).hasClass('dealiasBtnSelected')) {
             // we're turning dealias mode OFF
             window.atticData.shouldPlotDealiased = false;
             $(this).removeClass('dealiasBtnSelected').addClass('dealiasBtnDeSelected');
+            $(this).find('i').removeClass('fa-check').addClass('fa-xmark');
+        }
+
+        if (window.atticData.currentProduct == 'VEL') {
+            l2plot(l2rad, window.atticData.currentProduct, window.atticData.currentScanNumber);
         }
     })
 }
