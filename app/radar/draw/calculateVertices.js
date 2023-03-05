@@ -155,7 +155,7 @@ function calculateVerticies(radarObj, level, options) {
     */
     var shouldPlotDealiased = options.plotDealiased;
     var dataArrayName = 'moment_data';
-    // if (shouldPlotDealiased) { dataArrayName = 'dealias_data' }
+    if (shouldPlotDealiased) { dataArrayName = 'dealias_data' }
     var prodValues = [];
     if (level == 2) {
         for (var i in radarObj.data[elevation]) { prodValues.push(radarObj.data[elevation][i].record[dataNames[product]][dataArrayName]) }
