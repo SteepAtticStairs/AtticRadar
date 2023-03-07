@@ -785,13 +785,13 @@ function displayAtticDialog(options) {
 function scaleValues(values, product) {
     if (product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL') {
         // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
-        for (var i in values) { values[i] = values[i] / 1.944 }
+        for (var i in values) { if (values[i] != -999) { values[i] = values[i] / 1.944 } }
     } else if (product == 'N0S') {
         // storm relative velocity
-        for (var i in values) { values[i] = values[i] - 0.5 }
+        for (var i in values) { if (values[i] != -999) { values[i] = values[i] - 0.5 } }
     } else if (product == 'N0H' || product == 'HHC') {
         // hydrometer classification || hybrid hydrometer classification
-        for (var i in values) { values[i] = values[i] + 0.5 }
+        for (var i in values) { if (values[i] != -999) { values[i] = values[i] + 0.5 } }
     }
     return values;
 }

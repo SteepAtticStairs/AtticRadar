@@ -16,8 +16,13 @@ const mathjs = math;
 
 function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     var colorScaleData = productColors[product];
-    var colors = colorScaleData.colors;
+    var colors = [...colorScaleData.colors];
     var values = [...colorScaleData.values];
+
+    // add range folded colors
+    colors.unshift('rgb(139, 0, 218)');
+    values.unshift(-999);
+
     values = ut.scaleValues(values, product);
     const cmin = values[0];
     window.atticData.cmin = cmin;

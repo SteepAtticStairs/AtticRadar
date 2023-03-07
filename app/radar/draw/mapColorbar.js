@@ -11,7 +11,21 @@ function chromaScaleToRgbString(scaleOutput) {
     return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
 }
 
+function remove(arr, value) {
+    var index = arr.indexOf(value);
+    if (index > -1) { // only splice array when item is found
+        arr.splice(arr, 1); // 2nd parameter means remove one item only
+    }
+    return arr;
+}
+
 function createAndShowColorbar(colors, values) {
+    colors = [...colors];
+    values = [...values];
+    // we don't want the "range folded" colors on the map colorbar
+    colors = remove(colors, 'rgb(139, 0, 218)');
+    values = remove(values, -999);
+
     if ($('#mapColorScale').is(":hidden")) {
         ut.setMapMargin('bottom', '+=15px');
     }

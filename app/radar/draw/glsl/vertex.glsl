@@ -189,9 +189,9 @@ vec2 destVincenty(float az, float distance) {
 }
 
 void main() {
-    float azimuth = float(aPosition.x);
-    float distance = float(aPosition.y);
-    vec2 mercatorCoords = destVincenty(azimuth, distance);
+    // float azimuth = float(aPosition.x);
+    // float distance = float(aPosition.y);
+    // vec2 mercatorCoords = destVincenty(azimuth, distance);
     // vec4 coords = vec4(
     //     mercatorCoords.x,
     //     mercatorCoords.y,

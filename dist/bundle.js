@@ -4625,7 +4625,7 @@ module.exports = "precision highp float;\n#define GLSLIFY 1\nuniform vec2 minmax
 },{}],34:[function(require,module,exports){
 module.exports = "precision highp float;\n#define GLSLIFY 1\nuniform vec2 minmax;\nvarying float color;\n\nvec4 EncodeFloatRGBA(float v) {\n    vec4 enc = vec4(1.0, 255.0, 65025.0, 16581375.0) * v;\n    enc = fract(enc);\n    enc -= enc.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n    return enc;\n}\n\nvoid main() {\n    vec4 encoded;\n\n    // get on 0-1 scale\n    float calcolor = min(1.0, max((color - minmax.x) / (minmax.y - minmax.x), 0.0));\n\n    // if upper end, need this check because [0,1)\n    if (abs(calcolor - 1.0) < 0.00001) {\n        encoded = vec4(1.0, 0.0, 0.0, 1.0);\n    } else {\n        encoded = EncodeFloatRGBA(calcolor);\n        encoded.a = 1.0;\n    }\n\n    gl_FragColor = encoded;\n}";
 },{}],35:[function(require,module,exports){
-module.exports = "#define GLSLIFY 1\nuniform mat4 u_matrix;\n// uniform vec4 u_eye_high;\n// uniform vec4 u_eye_low;\nattribute vec2 aPosition;\nuniform vec2 radarLatLng;\nattribute float aColor;\nvarying float color;\n\nfloat PI = 3.141592654;\n\nvec2 ds_set(float a) {\n    vec2 z;\n    z.x = a;\n    z.y = 0.0;\n    return z;\n}\n\nfloat add(float a, float b) { return (b != 0.) ? a + b : a; }\nfloat sub(float a, float b) { return (b != 0.) ? a - b : a; }\nfloat mul(float a, float b) { return (b != 1.) ? a * b : a; }\nfloat div(float a, float b) { return (b != 1.) ? a / b : a; }\nfloat fma(float a, float b, float c) { return a * b + c; }\n\nvec2 fastTwoSum(float a, float b) {\n    float s = add(a, b);\n    return vec2(s, sub(b, sub(s, a)));\n}\n\nvec2 twoSum(float a, float b) {\n    float s = add(a, b);\n    float b1 = sub(s, a);\n    return vec2(s, add(sub(b, b1), sub(a, sub(s, b1))));\n}\n\nvec2 twoProd(float a, float b) {\n    float ab = mul(a, b);\n    return vec2(ab, fma(a, b, -ab));\n}\n\nvec2 add22(vec2 X, vec2 Y) {\n    vec2 S = twoSum(X[0], Y[0]);\n    vec2 T = twoSum(X[1], Y[1]);\n    vec2 V = fastTwoSum(S[0], add(S[1], T[0]));\n    return fastTwoSum(V[0], add(T[1], V[1]));\n}\n\nvec2 sub22(vec2 X, vec2 Y) {\n    vec2 S = twoSum(X[0], -Y[0]);\n    vec2 T = twoSum(X[1], -Y[1]);\n    vec2 V = fastTwoSum(S[0], add(S[1], T[0]));\n    return fastTwoSum(V[0], add(T[1], V[1]));\n}\n\nvec2 mul22(vec2 X, vec2 Y) {\n    vec2 S = twoProd(X[0], Y[0]);\n    float t = mul(X[0], Y[1]);\n    float c = fma(X[1], Y[0], mul(X[0], Y[1]));\n    return fastTwoSum(S[0], add(S[1], c));\n}\n\nvec2 div22(vec2 X, vec2 Y) {\n    float s = div(X[0], Y[0]);\n    vec2 T = twoProd(s, Y[0]);\n    float c = add(sub(sub(X[0], T[0]), T[1]), X[1]);\n    return fastTwoSum(s, div(sub(c, mul(s, Y[1])), Y[0]));\n}\n\nfloat atan2(float x, float y) {\n    return atan(x / y);\n}\n\nfloat toRad(float degree) {\n    return degree * (PI / 180.0);\n}\nfloat toDeg(float radian) {\n    return radian * (180.0 / PI);\n}\n\nvec2 calcLngLat(float az, float distance) {\n    // convert distance from meters to kilometers\n    distance = distance * 1000.0;\n\n    // Define the starting latitude and longitude\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    // Convert the azimuth and starting coordinates to radians\n    float azRad = az * (PI / 180.0);\n    float lat1Rad = lat1 * (PI / 180.0);\n    float lon1Rad = lon1 * (PI / 180.0);\n\n    // the earth radius in meters\n    float earthRadius = 6378137.0;\n\n    // Calculate the destination latitude and longitude in radians\n    float lat2Rad = asin(sin(lat1Rad) * cos(distance / earthRadius) + cos(lat1Rad) * sin(distance / earthRadius) * cos(azRad));\n    float lon2Rad = lon1Rad + atan2(sin(azRad) * sin(distance / earthRadius) * cos(lat1Rad), cos(distance / earthRadius) - sin(lat1Rad) * sin(lat2Rad));\n\n    // Convert the destination latitude and longitude from radians to degrees\n    float lat2 = lat2Rad * (180.0 / PI);\n    float lon2 = lon2Rad * (180.0 / PI);\n\n    float x = (180.0 + lon2) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + lat2 * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\n// https://github.com/TankofVines/node-vincenty\nvec2 destVincenty(float az, float distance) {\n    // convert azimuth to bearing\n    float brng = az;\n    // convert distance from meters to kilometers\n    float dist = distance * 1000.0;\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    /*\n    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)\n    */\n    // length of semi-major axis of the ellipsoid (radius at equator) - meters\n    float a = 6378137.0;\n    // flattening of the ellipsoid\n    float f = 1.0 / 298.257223563; // (a − b) / a\n    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters\n    float b = 6356752.3142; // (1 − ƒ) * a\n\n    float s = dist;\n    float alpha1 = toRad(brng);\n    float sinAlpha1 = sin(alpha1);\n    float cosAlpha1 = cos(alpha1);\n\n    float tanU1 = (1.0 - f) * tan(toRad(lat1));\n    float cosU1 = 1.0 / sqrt((1.0 + tanU1 * tanU1));\n    float sinU1 = tanU1 * cosU1;\n    float sigma1 = atan2(tanU1, cosAlpha1);\n    float sinAlpha = cosU1 * sinAlpha1;\n    float cosSqAlpha = 1.0 - sinAlpha * sinAlpha;\n    float uSq = cosSqAlpha * (a * a - b * b) / (b * b);\n    float A = 1.0 + uSq / 16384.0 * (4096.0 + uSq * (-768.0 + uSq * (320.0 - 175.0 * uSq)));\n    float B = uSq / 1024.0 * (256.0 + uSq * (-128.0 + uSq * (74.0 - 47.0 * uSq)));\n\n    // float x = 0.0;\n    // for (int i = 0; i < 100; i++) {\n    //     x = x + 1.0;\n    //     if (x == 10.0) {\n    //         break;\n    //     }\n    // }\n\n    float sigma = s / (b * A);\n    float sigmaP = 2.0 * PI;\n\n    float cos2SigmaM;\n    float sinSigma;\n    float cosSigma;\n    float deltaSigma;\n    // 100 checks should be enough\n    for (int i = 0; i < 100; i++) {\n        cos2SigmaM = cos(2.0 * sigma1 + sigma);\n        sinSigma = sin(sigma);\n        cosSigma = cos(sigma);\n        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM) -\n            B / 6.0 * cos2SigmaM * (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SigmaM * cos2SigmaM)));\n        sigmaP = sigma;\n        sigma = s / (b * A) + deltaSigma;\n\n        if (abs(sigma - sigmaP) > 1e-12) {\n            break;\n        }\n    }\n\n    float tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;\n    float lat2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,\n        (1.0 - f) * sqrt(sinAlpha * sinAlpha + tmp * tmp));\n    float lambda = atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);\n    float C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha));\n    float L = lambda - (1.0 - C) * f * sinAlpha *\n        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM)));\n    float lon2 = mod((toRad(lon1) + L + 3.0 * PI), (2.0 * PI) - PI);  // normalise to -180...+180\n\n    // float revAz = atan2(sinAlpha, -tmp);  // final bearing, if required\n    //float result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };\n\n    float x = (toDeg(lon2)) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + toDeg(lat2) * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\nvoid main() {\n    float azimuth = float(aPosition.x);\n    float distance = float(aPosition.y);\n    vec2 mercatorCoords = destVincenty(azimuth, distance);\n    // vec4 coords = vec4(\n    //     mercatorCoords.x,\n    //     mercatorCoords.y,\n    //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,\n    //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x\n    // );\n\n    // float x = div22((\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][0], u_low_matrix[0][0]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][0], u_low_matrix[1][0]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][0], u_low_matrix[3][0]), ds_set(1.0)))\n    // ), (\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][3], u_low_matrix[0][3]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][3], u_low_matrix[1][3]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))\n    // )).x;\n    // float y = div22((\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][1], u_low_matrix[0][1]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][1], u_low_matrix[1][1]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][1], u_low_matrix[3][1]), ds_set(1.0)))\n    // ), (\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][3], u_low_matrix[0][3]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][3], u_low_matrix[1][3]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))\n    // )).x;\n\n    gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);\n    // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);\n    // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);\n    // gl_Position = u_matrix * gl_Position;\n    // gl_Position.w += u_eye_high.w;\n    color = aColor;\n}";
+module.exports = "#define GLSLIFY 1\nuniform mat4 u_matrix;\n// uniform vec4 u_eye_high;\n// uniform vec4 u_eye_low;\nattribute vec2 aPosition;\nuniform vec2 radarLatLng;\nattribute float aColor;\nvarying float color;\n\nfloat PI = 3.141592654;\n\nvec2 ds_set(float a) {\n    vec2 z;\n    z.x = a;\n    z.y = 0.0;\n    return z;\n}\n\nfloat add(float a, float b) { return (b != 0.) ? a + b : a; }\nfloat sub(float a, float b) { return (b != 0.) ? a - b : a; }\nfloat mul(float a, float b) { return (b != 1.) ? a * b : a; }\nfloat div(float a, float b) { return (b != 1.) ? a / b : a; }\nfloat fma(float a, float b, float c) { return a * b + c; }\n\nvec2 fastTwoSum(float a, float b) {\n    float s = add(a, b);\n    return vec2(s, sub(b, sub(s, a)));\n}\n\nvec2 twoSum(float a, float b) {\n    float s = add(a, b);\n    float b1 = sub(s, a);\n    return vec2(s, add(sub(b, b1), sub(a, sub(s, b1))));\n}\n\nvec2 twoProd(float a, float b) {\n    float ab = mul(a, b);\n    return vec2(ab, fma(a, b, -ab));\n}\n\nvec2 add22(vec2 X, vec2 Y) {\n    vec2 S = twoSum(X[0], Y[0]);\n    vec2 T = twoSum(X[1], Y[1]);\n    vec2 V = fastTwoSum(S[0], add(S[1], T[0]));\n    return fastTwoSum(V[0], add(T[1], V[1]));\n}\n\nvec2 sub22(vec2 X, vec2 Y) {\n    vec2 S = twoSum(X[0], -Y[0]);\n    vec2 T = twoSum(X[1], -Y[1]);\n    vec2 V = fastTwoSum(S[0], add(S[1], T[0]));\n    return fastTwoSum(V[0], add(T[1], V[1]));\n}\n\nvec2 mul22(vec2 X, vec2 Y) {\n    vec2 S = twoProd(X[0], Y[0]);\n    float t = mul(X[0], Y[1]);\n    float c = fma(X[1], Y[0], mul(X[0], Y[1]));\n    return fastTwoSum(S[0], add(S[1], c));\n}\n\nvec2 div22(vec2 X, vec2 Y) {\n    float s = div(X[0], Y[0]);\n    vec2 T = twoProd(s, Y[0]);\n    float c = add(sub(sub(X[0], T[0]), T[1]), X[1]);\n    return fastTwoSum(s, div(sub(c, mul(s, Y[1])), Y[0]));\n}\n\nfloat atan2(float x, float y) {\n    return atan(x / y);\n}\n\nfloat toRad(float degree) {\n    return degree * (PI / 180.0);\n}\nfloat toDeg(float radian) {\n    return radian * (180.0 / PI);\n}\n\nvec2 calcLngLat(float az, float distance) {\n    // convert distance from meters to kilometers\n    distance = distance * 1000.0;\n\n    // Define the starting latitude and longitude\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    // Convert the azimuth and starting coordinates to radians\n    float azRad = az * (PI / 180.0);\n    float lat1Rad = lat1 * (PI / 180.0);\n    float lon1Rad = lon1 * (PI / 180.0);\n\n    // the earth radius in meters\n    float earthRadius = 6378137.0;\n\n    // Calculate the destination latitude and longitude in radians\n    float lat2Rad = asin(sin(lat1Rad) * cos(distance / earthRadius) + cos(lat1Rad) * sin(distance / earthRadius) * cos(azRad));\n    float lon2Rad = lon1Rad + atan2(sin(azRad) * sin(distance / earthRadius) * cos(lat1Rad), cos(distance / earthRadius) - sin(lat1Rad) * sin(lat2Rad));\n\n    // Convert the destination latitude and longitude from radians to degrees\n    float lat2 = lat2Rad * (180.0 / PI);\n    float lon2 = lon2Rad * (180.0 / PI);\n\n    float x = (180.0 + lon2) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + lat2 * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\n// https://github.com/TankofVines/node-vincenty\nvec2 destVincenty(float az, float distance) {\n    // convert azimuth to bearing\n    float brng = az;\n    // convert distance from meters to kilometers\n    float dist = distance * 1000.0;\n    float lat1 = radarLatLng.x;\n    float lon1 = radarLatLng.y;\n\n    /*\n    * Define Earth's ellipsoidal constants (WGS-84 ellipsoid)\n    */\n    // length of semi-major axis of the ellipsoid (radius at equator) - meters\n    float a = 6378137.0;\n    // flattening of the ellipsoid\n    float f = 1.0 / 298.257223563; // (a − b) / a\n    // length of semi-minor axis of the ellipsoid (radius at the poles) - meters\n    float b = 6356752.3142; // (1 − ƒ) * a\n\n    float s = dist;\n    float alpha1 = toRad(brng);\n    float sinAlpha1 = sin(alpha1);\n    float cosAlpha1 = cos(alpha1);\n\n    float tanU1 = (1.0 - f) * tan(toRad(lat1));\n    float cosU1 = 1.0 / sqrt((1.0 + tanU1 * tanU1));\n    float sinU1 = tanU1 * cosU1;\n    float sigma1 = atan2(tanU1, cosAlpha1);\n    float sinAlpha = cosU1 * sinAlpha1;\n    float cosSqAlpha = 1.0 - sinAlpha * sinAlpha;\n    float uSq = cosSqAlpha * (a * a - b * b) / (b * b);\n    float A = 1.0 + uSq / 16384.0 * (4096.0 + uSq * (-768.0 + uSq * (320.0 - 175.0 * uSq)));\n    float B = uSq / 1024.0 * (256.0 + uSq * (-128.0 + uSq * (74.0 - 47.0 * uSq)));\n\n    // float x = 0.0;\n    // for (int i = 0; i < 100; i++) {\n    //     x = x + 1.0;\n    //     if (x == 10.0) {\n    //         break;\n    //     }\n    // }\n\n    float sigma = s / (b * A);\n    float sigmaP = 2.0 * PI;\n\n    float cos2SigmaM;\n    float sinSigma;\n    float cosSigma;\n    float deltaSigma;\n    // 100 checks should be enough\n    for (int i = 0; i < 100; i++) {\n        cos2SigmaM = cos(2.0 * sigma1 + sigma);\n        sinSigma = sin(sigma);\n        cosSigma = cos(sigma);\n        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM) -\n            B / 6.0 * cos2SigmaM * (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SigmaM * cos2SigmaM)));\n        sigmaP = sigma;\n        sigma = s / (b * A) + deltaSigma;\n\n        if (abs(sigma - sigmaP) > 1e-12) {\n            break;\n        }\n    }\n\n    float tmp = sinU1 * sinSigma - cosU1 * cosSigma * cosAlpha1;\n    float lat2 = atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAlpha1,\n        (1.0 - f) * sqrt(sinAlpha * sinAlpha + tmp * tmp));\n    float lambda = atan2(sinSigma * sinAlpha1, cosU1 * cosSigma - sinU1 * sinSigma * cosAlpha1);\n    float C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha));\n    float L = lambda - (1.0 - C) * f * sinAlpha *\n        (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1.0 + 2.0 * cos2SigmaM * cos2SigmaM)));\n    float lon2 = mod((toRad(lon1) + L + 3.0 * PI), (2.0 * PI) - PI);  // normalise to -180...+180\n\n    // float revAz = atan2(sinAlpha, -tmp);  // final bearing, if required\n    //float result = { lat: toDeg(lat2), lon: toDeg(lon2), finalBearing: toDeg(revAz) };\n\n    float x = (toDeg(lon2)) / 360.0;\n    float y = (180.0 - (180.0 / PI * log(tan(PI / 4.0 + toDeg(lat2) * PI / 360.0)))) / 360.0;\n\n    return vec2(x, y);\n}\n\nvoid main() {\n    // float azimuth = float(aPosition.x);\n    // float distance = float(aPosition.y);\n    // vec2 mercatorCoords = destVincenty(azimuth, distance);\n    // vec4 coords = vec4(\n    //     mercatorCoords.x,\n    //     mercatorCoords.y,\n    //     ds_sub(ds_set(mercatorCoords.x), ds_set(mercatorCoords.x)).x,\n    //     ds_sub(ds_set(mercatorCoords.y), ds_set(mercatorCoords.y)).x\n    // );\n\n    // float x = div22((\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][0], u_low_matrix[0][0]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][0], u_low_matrix[1][0]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][0], u_low_matrix[3][0]), ds_set(1.0)))\n    // ), (\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][3], u_low_matrix[0][3]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][3], u_low_matrix[1][3]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))\n    // )).x;\n    // float y = div22((\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][1], u_low_matrix[0][1]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][1], u_low_matrix[1][1]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][1], u_low_matrix[3][1]), ds_set(1.0)))\n    // ), (\n    //     add22(add22(\n    //     mul22(twoSum(u_high_matrix[0][3], u_low_matrix[0][3]), ds_set(mercatorCoords.x)),\n    //     mul22(twoSum(u_high_matrix[1][3], u_low_matrix[1][3]), ds_set(mercatorCoords.y))),\n    //     mul22(twoSum(u_high_matrix[3][3], u_low_matrix[3][3]), ds_set(1.0)))\n    // )).x;\n\n    gl_Position = u_matrix * vec4(aPosition.x, aPosition.y, 0.0, 1.0);\n    // gl_Position = vec4(vec3(coords.x, coords.y, 0.0) - u_eye_high.xyz, 0.0);\n    // gl_Position += vec4(vec3(coords.z, coords.w, 0.0) - u_eye_low.xyz, 0.0);\n    // gl_Position = u_matrix * gl_Position;\n    // gl_Position.w += u_eye_high.w;\n    color = aColor;\n}";
 },{}],36:[function(require,module,exports){
 const ut = require('../utils');
 
@@ -4640,7 +4640,21 @@ function chromaScaleToRgbString(scaleOutput) {
     return `rgb(${parseInt(scaleOutput._rgb[0])}, ${parseInt(scaleOutput._rgb[1])}, ${parseInt(scaleOutput._rgb[2])})`
 }
 
+function remove(arr, value) {
+    var index = arr.indexOf(value);
+    if (index > -1) { // only splice array when item is found
+        arr.splice(arr, 1); // 2nd parameter means remove one item only
+    }
+    return arr;
+}
+
 function createAndShowColorbar(colors, values) {
+    colors = [...colors];
+    values = [...values];
+    // we don't want the "range folded" colors on the map colorbar
+    colors = remove(colors, 'rgb(139, 0, 218)');
+    values = remove(values, -999);
+
     if ($('#mapColorScale').is(":hidden")) {
         ut.setMapMargin('bottom', '+=15px');
     }
@@ -4802,8 +4816,13 @@ const mathjs = math;
 
 function plotRadarToMap(verticiesArr, colorsArr, product, radarLatLng) {
     var colorScaleData = productColors[product];
-    var colors = colorScaleData.colors;
+    var colors = [...colorScaleData.colors];
     var values = [...colorScaleData.values];
+
+    // add range folded colors
+    colors.unshift('rgb(139, 0, 218)');
+    values.unshift(-999);
+
     values = ut.scaleValues(values, product);
     const cmin = values[0];
     window.atticData.cmin = cmin;
@@ -5287,58 +5306,61 @@ function formatValue(color, cmin, cmax) {
     if (color[3] == 255) {
         var value = scaled * (cmax - cmin) + cmin;
 
-        if (
-        product == 'REF' || product == 'N0B' || product == 'NXQ' || // reflectivity
-        product == 'SW ' || product == 'NSW' // spectrum width
-        ) {
-            // round to the nearest 0.5
-            value = Math.round(value * 2) / 2;
-        } else if (
-        product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL' // velocity
-        ) {
-            // round to the nearest 0.1
-            // level 2 & 3 velocity values are provided by default in m/s
-            value = parseFloat(value.toFixed(1));
-        } else if (
-        product == 'N0X' || product == 'ZDR' || // differential reflectivity
-        product == 'DVL' // vertically integrated liquid
-        ) {
-            value = parseFloat(value.toFixed(2));
-        } else if (
-        product == 'N0C' || product == 'RHO' || // correlation coefficient
-        product == 'PHI' // differential phase shift
-        ) {
-            // round to the nearest 16th
-            value = parseFloat(value.toFixed(3));
-        } else if (
-        product == 'N0H' || product == 'HHC' // hydrometer classification || hybrid hydrometer classification
-        ) {
-            var hycValues = {
-                0: 'Below Threshold', // ND
-                10: 'Biological', // BI
-                20: 'Ground Clutter', // GC
-                30: 'Ice Crystals', // IC
-                40: 'Dry Snow', // DS
-                50: 'Wet Snow', // WS
-                60: 'Light-Mod. Rain', // RA
-                70: 'Heavy Rain', // HR
-                80: 'Big Drops', // BD
-                90: 'Graupel', // GR
-                100: 'Hail / Rain', // HA
-                110: 'Large Hail', // LH
-                120: 'Giant Hail', // GH,
-                130: '130', // ??
-                140: 'Unknown', // UK
-                150: 'Range Folded' // RF
+        if (value == -999) {
+            value = 'Range Folded';
+        } else {
+            if (
+            product == 'REF' || product == 'N0B' || product == 'NXQ' || // reflectivity
+            product == 'SW ' || product == 'NSW' // spectrum width
+            ) {
+                // round to the nearest 0.5
+                value = Math.round(value * 2) / 2;
+            } else if (
+            product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL' // velocity
+            ) {
+                // round to the nearest 0.1
+                // level 2 & 3 velocity values are provided by default in m/s
+                value = parseFloat(value.toFixed(1));
+            } else if (
+            product == 'N0X' || product == 'ZDR' || // differential reflectivity
+            product == 'DVL' // vertically integrated liquid
+            ) {
+                value = parseFloat(value.toFixed(2));
+            } else if (
+            product == 'N0C' || product == 'RHO' || // correlation coefficient
+            product == 'PHI' // differential phase shift
+            ) {
+                // round to the nearest 16th
+                value = parseFloat(value.toFixed(3));
+            } else if (
+            product == 'N0H' || product == 'HHC' // hydrometer classification || hybrid hydrometer classification
+            ) {
+                var hycValues = {
+                    0: 'Below Threshold', // ND
+                    10: 'Biological', // BI
+                    20: 'Ground Clutter', // GC
+                    30: 'Ice Crystals', // IC
+                    40: 'Dry Snow', // DS
+                    50: 'Wet Snow', // WS
+                    60: 'Light-Mod. Rain', // RA
+                    70: 'Heavy Rain', // HR
+                    80: 'Big Drops', // BD
+                    90: 'Graupel', // GR
+                    100: 'Hail / Rain', // HA
+                    110: 'Large Hail', // LH
+                    120: 'Giant Hail', // GH,
+                    130: '130', // ??
+                    140: 'Unknown', // UK
+                    150: 'Range Folded' // RF
+                }
+                value = hycValues[Math.round(value)];
             }
-            value = hycValues[Math.round(value)];
-        }
 
-        // we don't need to add units to hydrometer classification
-        if (product != 'N0H' && product != 'HHC') {
-            value = `${value} ${ut.productUnits[product]}`;
+            // we don't need to add units to hydrometer classification
+            if (product != 'N0H' && product != 'HHC') {
+                value = `${value} ${ut.productUnits[product]}`;
+            }
         }
-
         return value;
     } else {
         return '';
@@ -12611,13 +12633,13 @@ function displayAtticDialog(options) {
 function scaleValues(values, product) {
     if (product == 'N0G' || product == 'N0U' || product == 'TVX' || product == 'VEL') {
         // velocity - convert from knots (what is provided in the colortable) to m/s (what the radial gates are in)
-        for (var i in values) { values[i] = values[i] / 1.944 }
+        for (var i in values) { if (values[i] != -999) { values[i] = values[i] / 1.944 } }
     } else if (product == 'N0S') {
         // storm relative velocity
-        for (var i in values) { values[i] = values[i] - 0.5 }
+        for (var i in values) { if (values[i] != -999) { values[i] = values[i] - 0.5 } }
     } else if (product == 'N0H' || product == 'HHC') {
         // hydrometer classification || hybrid hydrometer classification
-        for (var i in values) { values[i] = values[i] + 0.5 }
+        for (var i in values) { if (values[i] != -999) { values[i] = values[i] + 0.5 } }
     }
     return values;
 }
@@ -18681,7 +18703,9 @@ const parseMomentData = (raf) => {
 		// per documentation 0 = below threshold, 1 = range folding
 		if (val >= 2) {
 			data.moment_data.push((val - data.offset) / data.scale);
-		} else {
+		} else if (val == 1) {
+			data.moment_data.push(-999);
+		} else if (val == 0) {
 			data.moment_data.push(null);
 		}
 	}
@@ -19306,7 +19330,7 @@ const decompress = (raf, opt, callback) => {
 				iters++;
 				// extract the block from the buffer
 				const compressed = raf.buffer.slice(block.pos, block.pos + block.size);
-				if (JSON.stringify(compressed) != '{"type":"Buffer","data":[]}') {
+				if (compressed.length != 0) {
 					const output = bzip.decodeBlock(compressed, 32); // skip 32 bits 'BZh9' header
 					outBuffers.push(output);
 
