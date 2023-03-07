@@ -5668,18 +5668,21 @@ function dealias(velocities, nyquist_vel) {
     var skip_between_rays = 100;
     var skip_along_ray = 100;
     var centered = true;
-
-    // var velocities = _generate2dArray(l2rad, scanNumber);
     var rays_wrap_around = true;
-    // var nyquist_vel = _getNyquist(l2rad, scanNumber);
-    var nyquist_interval = 2 * nyquist_vel;
-
-    var sdata = copy(velocities); // copy of data for processing
-    sdata = _mask_values(sdata);
-    var scorr = copy(velocities); // copy of data for output
 
     for (var sweep_slice = 1; sweep_slice < 2; sweep_slice++) {
+        // extract sweep data
+        var sdata = copy(velocities); // copy of data for processing
+        sdata = _mask_values(sdata);
+        var scorr = copy(velocities); // copy of data for output
+
+        var nyquist_interval = 2 * nyquist_vel;
         var interval_limits = _find_sweep_interval_splits(nyquist_vel, interval_splits, sdata);
+        // skip sweep if all gates are masked or only a single region
+        if (nfeatures < 2) {
+            continue;
+        }
+
         var [labels, nfeatures] = _find_regions(sdata, interval_limits);
         var bincount = np.bincount(labels.flat());
         var num_masked_gates = bincount[0];
@@ -5688,6 +5691,11 @@ function dealias(velocities, nyquist_vel) {
         var [indices, edge_count, velos] = _edge_sum_and_count(
             labels, num_masked_gates, sdata, rays_wrap_around,
             skip_between_rays, skip_along_ray);
+
+        // no unfolding required if no edges exist between regions
+        if (edge_count.length == 0) {
+            continue;
+        }
 
         // find the number of folds in the regions
         var region_tracker = new _RegionTracker(region_sizes);
@@ -5956,12 +5964,16 @@ class _EdgeTracker {
 class _RegionTracker {
     /* Tracks the location of radar volume regions contained in each node
     * as the network is reduced. */
+
     constructor(region_sizes) {
+        /* initialize. */
+
         // number of gates in each node
-        let nregions = region_sizes.length + 1;
+        var nregions = region_sizes.length + 1;
         this.node_size = new Array(nregions).fill(0);
         this.node_size.fill(0, 1, nregions);
         this.node_size.splice(1, region_sizes.length, ...region_sizes);
+
         // array of lists containing the regions in each node
         this.regions_in_node = new Array(nregions).fill(0);
         for (let i = 0; i < nregions; i++) {
@@ -5971,11 +5983,11 @@ class _RegionTracker {
         // number of unwrappings to apply to dealias each region
         this.unwrap_number = new Array(nregions).fill(0);
     }
-
-    /* Merge node b into node a. */
     merge_nodes(node_a, node_b) {
+        /* Merge node b into node a. */
+
         // move all regions from node_b to node_a
-        let regions_to_merge = this.regions_in_node[node_b];
+        var regions_to_merge = this.regions_in_node[node_b];
         this.regions_in_node[node_a].push(...regions_to_merge);
         this.regions_in_node[node_b] = [];
 
@@ -5984,22 +5996,22 @@ class _RegionTracker {
         this.node_size[node_b] = 0;
         return;
     }
-
-    /* Unwrap all gates contained a node. */
     unwrap_node(node, nwrap) {
+        /* Unwrap all gates contained a node. */
+
         if (nwrap == 0) {
             return;
         }
         // for each region in node add nwrap
-        let regions_to_unwrap = this.regions_in_node[node];
+        var regions_to_unwrap = this.regions_in_node[node];
         for (var i = 0; i < regions_to_unwrap.length; i++) {
             this.unwrap_number[regions_to_unwrap[i]] += nwrap;
         }
         return;
     }
 
-    /* Return the number of gates in a node. */
     get_node_size(node) {
+        /* Return the number of gates in a node. */
         return this.node_size[node];
     }
 }
@@ -6015,6 +6027,11 @@ function _edge_sum_and_count(labels, num_masked_gates, data, rays_wrap_around, m
     var [index1, index2] = indices;
     var [vel1, vel2] = velocities;
     count = np.ones_like(vel1);
+
+    // return early if not edges were found
+    if (vel1.length == 0) {
+        return [[[], []], [], [[], []]];
+    }
 
     // find the unique edges, procedure based on method in
     // scipy.sparse.coo_matrix.sum_duplicates
