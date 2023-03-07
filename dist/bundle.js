@@ -21443,14 +21443,18 @@ const parser = (raf, productDescription) => {
 	}
 	if (productDescription?.plot?.maxDataValue !== undefined) {
 		// added by steepatticstairs
+		// below threshold
 		scaled[0] = null;
-		for (let i = start + 1; i <= productDescription.plot.maxDataValue; i += 1) {
+		// range folded
+		scaled[1] = -999;
+		for (let i = start + 2; i <= productDescription.plot.maxDataValue; i += 1) {
 			scaled.push(((i - scaling.offset) / scaling.scale));
 		}
 	} else if (productDescription?.plot?.dataLevels !== undefined) {
-		// below threshold and missing are null
+		// below threshold
 		scaled[0] = null;
-		scaled[1] = null;
+		// range folded
+		scaled[1] = -999;
 		for (let i = 2; i <= productDescription.plot.dataLevels; i += 1) {
 			scaled[i] = productDescription.plot.minimumDataValue + (i * productDescription.plot.dataIncrement);
 		}
