@@ -5665,7 +5665,9 @@ function _find_sweep_interval_splits(nyquist, interval_splits, velocities) {
  */
 function dealias(velocities, nyquist_vel) {
     var interval_splits = 3;
-    var skip_between_rays = 100;
+    // scan number "9" (pyart "8") of the radar file "KBMX20210325_222143_V06"
+    // only dealiases correctly with a value of 99 instead of 100
+    var skip_between_rays = 99;
     var skip_along_ray = 100;
     var centered = true;
     var rays_wrap_around = true;
@@ -6493,8 +6495,8 @@ function initEventListeners(l2rad, elevationProductLookup) {
         window.atticData.fullAngle = fullAngle; // store it globally
 
         var scanNumber = elevationProductLookup[fullAngle][product]; // e.g. 7
-        window.atticData.currentScanNumber = scanNumber; // store it globally
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        window.atticData.currentScanNumber = scanNumber; // store it globally
 
         l2plot(l2rad, product, scanNumber); // plot the current product and selected elevation
     })
@@ -6505,8 +6507,8 @@ function initEventListeners(l2rad, elevationProductLookup) {
         window.atticData.currentProduct = product; // store it globally
 
         var scanNumber = elevationProductLookup[window.atticData.fullAngle][product]; // e.g. 7
-        window.atticData.currentScanNumber = scanNumber; // store it globally
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        window.atticData.currentScanNumber = scanNumber; // store it globally
 
         if (product == 'VEL') {
             $('#completeDealiasBtnContainer').show();

@@ -69,8 +69,8 @@ function initEventListeners(l2rad, elevationProductLookup) {
         window.atticData.fullAngle = fullAngle; // store it globally
 
         var scanNumber = elevationProductLookup[fullAngle][product]; // e.g. 7
-        window.atticData.currentScanNumber = scanNumber; // store it globally
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        window.atticData.currentScanNumber = scanNumber; // store it globally
 
         l2plot(l2rad, product, scanNumber); // plot the current product and selected elevation
     })
@@ -81,8 +81,8 @@ function initEventListeners(l2rad, elevationProductLookup) {
         window.atticData.currentProduct = product; // store it globally
 
         var scanNumber = elevationProductLookup[window.atticData.fullAngle][product]; // e.g. 7
-        window.atticData.currentScanNumber = scanNumber; // store it globally
         scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        window.atticData.currentScanNumber = scanNumber; // store it globally
 
         if (product == 'VEL') {
             $('#completeDealiasBtnContainer').show();

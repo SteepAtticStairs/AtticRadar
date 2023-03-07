@@ -226,7 +226,9 @@ function _find_sweep_interval_splits(nyquist, interval_splits, velocities) {
  */
 function dealias(velocities, nyquist_vel) {
     var interval_splits = 3;
-    var skip_between_rays = 100;
+    // scan number "9" (pyart "8") of the radar file "KBMX20210325_222143_V06"
+    // only dealiases correctly with a value of 99 instead of 100
+    var skip_between_rays = 99;
     var skip_along_ray = 100;
     var centered = true;
     var rays_wrap_around = true;
