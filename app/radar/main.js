@@ -236,19 +236,33 @@ document.addEventListener('loadFile', function(event) {
 // ../data/level3/KOUN_SDUS54_N0QTLX_201305202016
 // ../data/level3/KOUN_SDUS54_N0UTLX_201305202016
 
-// setTimeout(function() {
-//     if (map.loaded()) {
-//         //$('#stationMenuItemIcon').click();
-//         loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
-//         //addRadarGeojson();
-//     } else {
-//         map.on('load', function() {
-//             //$('#stationMenuItemIcon').click();
-//             loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
-//             //addRadarGeojson();
-//         })
-//     }
-// }, 0)
+// function doWhenLoad(func) {
+//     setTimeout(function() {
+//         if (map.loaded()) {
+//             func();
+//         } else {
+//             map.on('load', function() {
+//                 func();
+//             })
+//         }
+//     }, 0)
+// }
+// doWhenLoad(function() {
+//     //$('#stationMenuItemIcon').click();
+//     // loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+//     //addRadarGeojson();
+//     // loaders.returnArrayBuffer('../data/KTLX20130520_201643_V06.gz#', 2, function(buffer) {
+//     //     console.log(buffer)
+//     // })
+//     fetch('../data/KCRP20170825_235733_V06#')
+//     .then(response => response.arrayBuffer())
+//     .then(buffer => {
+//         var fileBuffer = Buffer.from(buffer);
+//         const NEXRADLevel2File = require('./lib/level2/nexrad_level2');
+//         var file = new NEXRADLevel2File(fileBuffer);
+//         console.log(file.get_data('VEL', [1]))
+//     });
+// })
 
 // function doWhenLoad() {
 //     (function loadFileIndex(i, max) {
