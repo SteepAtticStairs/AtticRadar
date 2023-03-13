@@ -2,6 +2,7 @@ var map = require('./map/map');
 const ut = require('./utils');
 const loaders = require('./loaders');
 const tilts = require('./menu/tilts');
+const level2 = require('./lib/level2/level2');
 
 const mainL3Loading = require('./level3/main');
 const mainL2Loading = require('./level2/main');
@@ -236,33 +237,55 @@ document.addEventListener('loadFile', function(event) {
 // ../data/level3/KOUN_SDUS54_N0QTLX_201305202016
 // ../data/level3/KOUN_SDUS54_N0UTLX_201305202016
 
-// function doWhenLoad(func) {
-//     setTimeout(function() {
-//         if (map.loaded()) {
-//             func();
-//         } else {
-//             map.on('load', function() {
-//                 func();
-//             })
-//         }
-//     }, 0)
-// }
-// doWhenLoad(function() {
-//     //$('#stationMenuItemIcon').click();
-//     // loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
-//     //addRadarGeojson();
-//     // loaders.returnArrayBuffer('../data/KTLX20130520_201643_V06.gz#', 2, function(buffer) {
-//     //     console.log(buffer)
-//     // })
-//     fetch('../data/KCRP20170825_235733_V06#')
-//     .then(response => response.arrayBuffer())
-//     .then(buffer => {
-//         var fileBuffer = Buffer.from(buffer);
-//         const NEXRADLevel2File = require('./lib/level2/nexrad_level2');
-//         var file = new NEXRADLevel2File(fileBuffer);
-//         console.log(file.get_data('VEL', [1]))
-//     });
-// })
+function doWhenLoad(func) {
+    setTimeout(function() {
+        if (map.loaded()) {
+            func();
+        } else {
+            map.on('load', function() {
+                func();
+            })
+        }
+    }, 0)
+}
+doWhenLoad(function() {
+    //$('#stationMenuItemIcon').click();
+    // loaders.loadFileObject('../data/KTLX20130520_201643_V06.gz#', 2);
+    //addRadarGeojson();
+    // loaders.returnArrayBuffer('../data/KTLX20130520_201643_V06.gz#', 2, function(buffer) {
+    //     console.log(buffer)
+    // })
+    // const productColors = require('./products/productColors');
+    // const calculateLngLat = require('./draw/calculateLngLat');
+    // const plotRadarToMap = require('./draw/plotRadarToMap');
+
+    // level2('../data/KTLX20130520_201643_V06.gz#', function(warehouse) {
+    //     // warehouse._initialRadarObj.location()
+
+    //     var product = 'VEL';
+    //     var elev = 2;
+    //     var prod_range = warehouse.get_ranges(elev, product);
+    //     var az = warehouse.get_azimuths(elev);
+    //     var prodValues = warehouse.get_data(elev, product);
+    //     var loc = warehouse._initialRadarObj.location();
+    //     var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
+
+    //     var colorData = productColors[product];
+    //     var values = [...colorData.values];
+    //     values = ut.scaleValues(values, product);
+
+    //     calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+    //         var points = ev.data[0];
+    //         var colors = ev.data[1];
+    //         // for (var i = 0; i < points.length - 1; i += 2) {
+    //         //     var mercCoords = mc([points[i], points[i + 1]])
+    //         //     points[i] = mercCoords[0];
+    //         //     points[i + 1] = mercCoords[1];
+    //         // }
+    //         plotRadarToMap(points, colors, product, radarLatLng);
+    //     });
+    // })
+})
 
 // function doWhenLoad() {
 //     (function loadFileIndex(i, max) {

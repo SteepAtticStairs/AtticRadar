@@ -34,18 +34,11 @@ function _bufferToString(buffer) {
 }
 
 class NEXRADLevel2File {
-    constructor (filenameOrBuffer) {
-        var fileBuffer;
-        if (typeof filenameOrBuffer == 'string') {
-            // this is only for node environments
-            const fs = require('fs');
-            fileBuffer = fs.readFileSync(filename);
-        } else {
-            fileBuffer = filenameOrBuffer;
-        }
-
+    constructor (fileBuffer) {
         var fh = new RandomAccessFile(fileBuffer);
         fh = _decompressFile(fh);
+
+        this.nexradLevel = 2;
 
         var size = _structure_size(VOLUME_HEADER);
         this.volume_header = _unpack_structure(fh.read(size), VOLUME_HEADER);
@@ -210,7 +203,7 @@ class NEXRADLevel2File {
             Number of rays (radials) in the scan.
         */
 
-        return this.scan_msgs[scan];
+        return this.scan_msgs[scan].length;
     }
     get_ngates(scan_num, moment) {
         // obj = this.scan_info([scan])[0]
@@ -719,7 +712,19 @@ function _get_msg31_data_block(buf, ptr) {
         } else {
             throw new Error(`Unsupported bit size: ${s}.`);
         }
-        dic['data'] = data
+
+        var scaledData = [];
+        var offset = new Float32Array([dic.offset])[0];
+        var scale = new Float32Array([dic.scale])[0];
+        for (var i = 0; i < data.length; i++) {
+            if (data[i] >= 2) {
+                scaledData.push((data[i] - offset) / scale);
+            } else {
+                scaledData.push(null);
+            }
+        }
+
+        dic['data'] = scaledData;
     } else {
         dic = {};
     }
