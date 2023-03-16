@@ -188,20 +188,20 @@ const corr_coeff = {
 }
 const spectrum_width = {
     colors: [
-        'rgb(118, 118, 118)',
-        'rgb(137, 137, 137)',
-        'rgb(156, 156, 156)',
-        'rgb(78, 171, 78)',
-        'rgb(0, 187, 0)',
-        'rgb(127, 93, 0)',
-        'rgb(255, 0, 0)',
-        'rgb(231, 56, 0)',
-        'rgb(208, 112, 0)',
-        'rgb(231, 183, 0)',
-        'rgb(255, 255, 0)'
+        '#242424',
+        '#afafaf',
+        '#ff700a',
+        '#b30000',
+        '#f000ac',
+        '#8800c2',
+        '#e0fcff',
+        '#b4eb00',
+        '#7dd100',
     ],
     values: [
-        0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30
+        0, 5, 8, 10, 13, 15.5, 18, 20.5, 31 // m/s
+        // yes, those are strange values. here are the originals in knots:
+        // 0, 10, 15, 20, 25, 30, 35, 40, 60
     ],
 }
 const hydrometer_class = {
@@ -391,7 +391,7 @@ const productColors = {
     },
     REF: reflectivity,
     RHO: corr_coeff,
-    'SW ': spectrum_width,
+    SW: spectrum_width, // 'SW '
     TVX: velocity,
     TZL: reflectivity,
     TZX: reflectivity,

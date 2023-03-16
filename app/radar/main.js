@@ -2,7 +2,7 @@ var map = require('./map/map');
 const ut = require('./utils');
 const loaders = require('./loaders');
 const tilts = require('./menu/tilts');
-const level2 = require('./lib/level2/level2');
+const level2 = require('./lib/level2/level2Init');
 
 const mainL3Loading = require('./level3/main');
 const mainL2Loading = require('./level2/main');
@@ -259,31 +259,32 @@ doWhenLoad(function() {
     // const calculateLngLat = require('./draw/calculateLngLat');
     // const plotRadarToMap = require('./draw/plotRadarToMap');
 
-    // level2('../data/KTLX20130520_201643_V06.gz#', function(warehouse) {
+    // // KLIX20210829_181102_V06
+    // level2('../data/KTLX20130520_201643_V06.gz#', function(l2Factory) {
     //     // warehouse._initialRadarObj.location()
 
-    //     var product = 'VEL';
-    //     var elev = 2;
-    //     var prod_range = warehouse.get_ranges(elev, product);
-    //     var az = warehouse.get_azimuths(elev);
-    //     var prodValues = warehouse.get_data(elev, product);
-    //     var loc = warehouse._initialRadarObj.location();
-    //     var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
+    //     // var product = 'REF';
+    //     // var elev = 1;
+    //     // var prod_range = l2Factory.get_ranges(product, elev);
+    //     // var az = l2Factory.get_azimuth_angles(elev);
+    //     // var prodValues = l2Factory.get_data(product, elev);
+    //     // var loc = l2Factory.initialRadarObj.location();
+    //     // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
 
-    //     var colorData = productColors[product];
-    //     var values = [...colorData.values];
-    //     values = ut.scaleValues(values, product);
+    //     // var colorData = productColors[product];
+    //     // var values = [...colorData.values];
+    //     // values = ut.scaleValues(values, product);
 
-    //     calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
-    //         var points = ev.data[0];
-    //         var colors = ev.data[1];
-    //         // for (var i = 0; i < points.length - 1; i += 2) {
-    //         //     var mercCoords = mc([points[i], points[i + 1]])
-    //         //     points[i] = mercCoords[0];
-    //         //     points[i + 1] = mercCoords[1];
-    //         // }
-    //         plotRadarToMap(points, colors, product, radarLatLng);
-    //     });
+    //     // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+    //     //     var points = ev.data[0];
+    //     //     var colors = ev.data[1];
+    //     //     // for (var i = 0; i < points.length - 1; i += 2) {
+    //     //     //     var mercCoords = mc([points[i], points[i + 1]])
+    //     //     //     points[i] = mercCoords[0];
+    //     //     //     points[i + 1] = mercCoords[1];
+    //     //     // }
+    //     //     plotRadarToMap(points, colors, product, radarLatLng);
+    //     // });
     // })
 })
 
