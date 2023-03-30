@@ -1,5 +1,6 @@
 const get_nexrad_location = require('../nexradLocations');
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
+const level3Formatters = require('./level3Formatters');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
@@ -8,8 +9,26 @@ class Level3Factory {
     constructor (initial_radar_obj) {
         this.initial_radar_obj = initial_radar_obj;
 
+        this.nexrad_level = 3;
+
         this.header = initial_radar_obj.header;
         this.vcp = initial_radar_obj.prod_desc.vcp;
+        this.product_code = this.header.code;
+
+        var tab_pages = this.initial_radar_obj?.tab_pages;
+        if (this.product_code == 58) {
+            // storm tracks
+            this.formatted_tabular = level3Formatters.format_storm_tracks(tab_pages);
+        } else if (this.product_code == 59) {
+            // hail index
+            this.formatted_tabular = level3Formatters.format_hail_index(tab_pages);
+        } else if (this.product_code == 61) {
+            // tornado vortex signature
+            this.formatted_tabular = level3Formatters.format_tornado_vortex_signature(tab_pages);
+        } else if (this.product_code == 141) {
+            // mesocyclone_detection
+            this.formatted_tabular = level3Formatters.format_mesocyclone_detection(tab_pages);
+        }
     }
     /**
      * Get the gate values in the Level 3 file. Returns the scaled values, as documented per the ICD.
@@ -69,6 +88,28 @@ class Level3Factory {
                 return [0, 0, 0];
             }
         }
+    }
+    /**
+     * Finds the numerical VCP (volume coverage pattern) of the radar file. Returns 'null' if it could not be found.
+     * 
+     * @returns {Number} The VCP of the radar file.
+     */
+    get_vcp() {
+        if (this.vcp != undefined) {
+            return this.vcp;
+        } else if (this.initial_radar_obj.prod_desc.vcp != undefined) {
+            return this.initial_radar_obj.prod_desc.vcp;
+        } else {
+            return null;
+        }
+    }
+    /**
+     * Gets the date at which the radar volume was collected.
+     * 
+     * @returns {Date} A Date object that contains the radar volume's time.
+     */
+    get_date() {
+        return this.initial_radar_obj.metadata.vol_time;
     }
 
     /**

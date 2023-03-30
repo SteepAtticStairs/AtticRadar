@@ -8,6 +8,8 @@ class Level2Factory {
     constructor (initial_radar_obj) {
         this.initial_radar_obj = initial_radar_obj;
 
+        this.nexrad_level = 2;
+
         this.header = initial_radar_obj.volume_header;
         this.vcp = initial_radar_obj.vcp;
         this.nscans = this.initial_radar_obj.nscans;
