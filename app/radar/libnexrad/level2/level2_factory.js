@@ -1,4 +1,5 @@
 const get_nexrad_location = require('../nexrad_locations');
+const calculate_coordinates = require('../../plot/calculate_coordinates');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel2File' class.
@@ -183,6 +184,17 @@ class Level2Factory {
                 msg_headerMomentVCP ??
                 null;
         }
+    }
+
+    /**
+     * Function that plots the factory with its radar data to the map.
+     * 
+     * @param {*} moment The moment being requested. Can be one of the following: 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP'
+     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     */
+    plot(moment, elevationNumber) {
+        const options = {'product': moment, 'elevation': elevationNumber};
+        calculate_coordinates(this, options);
     }
 
     /**

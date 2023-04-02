@@ -263,60 +263,61 @@ function doWhenLoad(func) {
 //     // const calculateLngLat = require('./draw/calculateLngLat');
 //     // const plotRadarToMap = require('./draw/plotRadarToMap');
 
-//     const loaders_nexrad = require('./libnexrad/loaders_nexrad');
-//     loaders_nexrad.get_latest_level_3_url('KLWX', 'N0B', 0, function(url) {
-//         url = ut.phpProxy + url;
-//         level3(url, function(l3Factory) {
-//             console.log(l3Factory)
+//     // const loaders_nexrad = require('./libnexrad/loaders_nexrad');
+//     // loaders_nexrad.get_latest_level_3_url('KLWX', 'N0B', 0, function(url) {
+//     //     url = ut.phpProxy + url;
 
-//             // var product = 'REF';
-//             // var prod_range = l3Factory.get_ranges();
-//             // var az = l3Factory.get_azimuth_angles();
-//             // var prodValues = l3Factory.get_data();
-//             // var loc = l3Factory.get_location();
-//             // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
+//     level2('../data/KTLX20130520_201643_V06.gz#', function(L2Factory) {
+//         // console.log(L2Factory)
+//         L2Factory.plot('REF', 1);
 
-//             // var colorData = productColors[product];
-//             // var values = [...colorData.values];
-//             // values = ut.scaleValues(values, product);
+//         // var product = 'REF';
+//         // var prod_range = l3Factory.get_ranges();
+//         // var az = l3Factory.get_azimuth_angles();
+//         // var prodValues = l3Factory.get_data();
+//         // var loc = l3Factory.get_location();
+//         // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
 
-//             // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
-//             //     var points = ev.data[0];
-//             //     var colors = ev.data[1];
-//             //     // for (var i = 0; i < points.length - 1; i += 2) {
-//             //     //     var mercCoords = mc([points[i], points[i + 1]])
-//             //     //     points[i] = mercCoords[0];
-//             //     //     points[i + 1] = mercCoords[1];
-//             //     // }
-//             //     plotRadarToMap(points, colors, product, radarLatLng);
-//             // });
+//         // var colorData = productColors[product];
+//         // var values = [...colorData.values];
+//         // values = ut.scaleValues(values, product);
+
+//         // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+//         //     var points = ev.data[0];
+//         //     var colors = ev.data[1];
+//         //     // for (var i = 0; i < points.length - 1; i += 2) {
+//         //     //     var mercCoords = mc([points[i], points[i + 1]])
+//         //     //     points[i] = mercCoords[0];
+//         //     //     points[i + 1] = mercCoords[1];
+//         //     // }
+//         //     plotRadarToMap(points, colors, product, radarLatLng);
+//         // });
 
 
-//             // warehouse._initialRadarObj.location()
+//         // warehouse._initialRadarObj.location()
 
-//             // var product = 'REF';
-//             // var elev = 1;
-//             // var prod_range = l2Factory.get_ranges(product, elev);
-//             // var az = l2Factory.get_azimuth_angles(elev);
-//             // var prodValues = l2Factory.get_data(product, elev);
-//             // var loc = l2Factory.initialRadarObj.location();
-//             // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
+//         // var product = 'REF';
+//         // var elev = 1;
+//         // var prod_range = l2Factory.get_ranges(product, elev);
+//         // var az = l2Factory.get_azimuth_angles(elev);
+//         // var prodValues = l2Factory.get_data(product, elev);
+//         // var loc = l2Factory.initialRadarObj.location();
+//         // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
 
-//             // var colorData = productColors[product];
-//             // var values = [...colorData.values];
-//             // values = ut.scaleValues(values, product);
+//         // var colorData = productColors[product];
+//         // var values = [...colorData.values];
+//         // values = ut.scaleValues(values, product);
 
-//             // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
-//             //     var points = ev.data[0];
-//             //     var colors = ev.data[1];
-//             //     // for (var i = 0; i < points.length - 1; i += 2) {
-//             //     //     var mercCoords = mc([points[i], points[i + 1]])
-//             //     //     points[i] = mercCoords[0];
-//             //     //     points[i + 1] = mercCoords[1];
-//             //     // }
-//             //     plotRadarToMap(points, colors, product, radarLatLng);
-//             // });
-//         })
+//         // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+//         //     var points = ev.data[0];
+//         //     var colors = ev.data[1];
+//         //     // for (var i = 0; i < points.length - 1; i += 2) {
+//         //     //     var mercCoords = mc([points[i], points[i + 1]])
+//         //     //     points[i] = mercCoords[0];
+//         //     //     points[i + 1] = mercCoords[1];
+//         //     // }
+//         //     plotRadarToMap(points, colors, product, radarLatLng);
+//         // });
 //     })
 // })
 

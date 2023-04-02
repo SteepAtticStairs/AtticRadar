@@ -8,8 +8,8 @@ function level3(filename, callback) {
         var fileBuffer = Buffer.from(buffer);
         var file = new NEXRADLevel3File(fileBuffer);
 
-        var l3Factory = new Level3Factory(file);
-        callback(l3Factory);
+        var L3Factory = new Level3Factory(file);
+        callback(L3Factory);
     });
 }
 

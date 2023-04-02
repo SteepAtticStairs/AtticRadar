@@ -842,9 +842,40 @@ class NEXRADLevel3File {
         var data = this._buffer.get_next(64).toString('UTF-8').replace(/\uFFFD/g, '');
         var match = data.match(wmo_finder);
         if (match) {
-            this.wmo_code = match[1];
+            var header = {};
+            header.file_type = this._buffer.read_ascii(6);
+            // always a space
+            this._buffer.read_ascii(1);
+            // radar site id
+            header.siteID = this._buffer.read_ascii(4);
+            // always a space
+            this._buffer.read_ascii(1);
+            // ddhhmm day-hour-minute timestamp, returned as a string as a more useful timestamp is contained within the data of the file
+            header.ddhhmm = this._buffer.read_ascii(6);
+            // line breaks
+            this._buffer.read_ascii(3);
+            // type of data
+            header.type = this._buffer.read_ascii(3);
+            // site identifier as 3-letter code
+            header.id3 = this._buffer.read_ascii(3);
+            // line breaks
+            this._buffer.read_ascii(3);
+
+            this.wmo_code = header.file_type;
+            this.siteID = header.id3;
+            this.product_abbv = header.type;
+            this.text_header = header;
+
+            /* this.wmo_code = match[1];
             this.siteID = match[2];
-            this._buffer.skip(match.index + match[0].length);
+
+            var length_to_skip = match.index + match[0].length;
+
+            var product_abbv = this._buffer.get_next(length_to_skip).toString('UTF-8').replace(/\uFFFD/g, '');
+            product_abbv = product_abbv.split('\n')[1].slice(0, 3);
+            this.product_abbv = product_abbv;
+
+            this._buffer.skip(length_to_skip); */
         } else {
             this.wmo_code = '';
         }

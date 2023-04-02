@@ -1,6 +1,7 @@
 const get_nexrad_location = require('../nexrad_locations');
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
-const level3Formatters = require('./level3_formatters');
+const level3_formatters = require('./level3_formatters');
+const calculate_coordinates = require('../../plot/calculate_coordinates');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
@@ -14,20 +15,22 @@ class Level3Factory {
         this.header = initial_radar_obj.header;
         this.vcp = initial_radar_obj.prod_desc.vcp;
         this.product_code = this.header.code;
+        this.product_abbv = initial_radar_obj.product_abbv;
+        this.station = station_abbreviations[this.initial_radar_obj.siteID];
 
         var tab_pages = this.initial_radar_obj?.tab_pages;
         if (this.product_code == 58) {
             // storm tracks
-            this.formatted_tabular = level3Formatters.format_storm_tracks(tab_pages);
+            this.formatted_tabular = level3_formatters.format_storm_tracks(tab_pages);
         } else if (this.product_code == 59) {
             // hail index
-            this.formatted_tabular = level3Formatters.format_hail_index(tab_pages);
+            this.formatted_tabular = level3_formatters.format_hail_index(tab_pages);
         } else if (this.product_code == 61) {
             // tornado vortex signature
-            this.formatted_tabular = level3Formatters.format_tornado_vortex_signature(tab_pages);
+            this.formatted_tabular = level3_formatters.format_tornado_vortex_signature(tab_pages);
         } else if (this.product_code == 141) {
             // mesocyclone_detection
-            this.formatted_tabular = level3Formatters.format_mesocyclone_detection(tab_pages);
+            this.formatted_tabular = level3_formatters.format_mesocyclone_detection(tab_pages);
         }
     }
     /**
@@ -81,8 +84,7 @@ class Level3Factory {
                 return [this.initial_radar_obj.lat, this.initial_radar_obj.lon, this.initial_radar_obj.height];
             } else if (this.initial_radar_obj.hasOwnProperty('siteID')) {
                 // no coordinates, but a site id is provided, so we'll look it up
-                var full_station_id = station_abbreviations(this.initial_radar_obj.siteID);
-                [lat, lng, alt] = get_nexrad_location(full_station_id);
+                [lat, lng, alt] = get_nexrad_location(this.station);
             } else {
                 // no coordinates OR site id, likely a corrupted file
                 return [0, 0, 0];
@@ -110,6 +112,14 @@ class Level3Factory {
      */
     get_date() {
         return this.initial_radar_obj.metadata.vol_time;
+    }
+
+    /**
+     * Function that plots the factory with its radar data to the map.
+     * No parameters are needed since this is a Level 3 file, and nothing is returned.
+     */
+    plot() {
+        calculate_coordinates(this);
     }
 
     /**
