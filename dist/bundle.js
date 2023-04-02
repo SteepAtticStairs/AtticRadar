@@ -8188,7 +8188,7 @@ module.exports = RandomAccessFile;
 // module.exports.LITTLE_ENDIAN = LITTLE_ENDIAN;
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":290}],65:[function(require,module,exports){
-const get_nexrad_location = require('../nexradLocations');
+const get_nexrad_location = require('../nexrad_locations');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel2File' class.
@@ -8488,10 +8488,10 @@ function msToTime(s) {
 }
 
 module.exports = Level2Factory;
-},{"../nexradLocations":72}],66:[function(require,module,exports){
+},{"../nexrad_locations":72}],66:[function(require,module,exports){
 (function (Buffer){(function (){
-const NEXRADLevel2File = require('./level2Parser');
-const Level2Factory = require('./level2Factory');
+const NEXRADLevel2File = require('./level2_parser');
+const Level2Factory = require('./level2_factory');
 
 function level2(filename, callback) {
     fetch(filename)
@@ -8507,14 +8507,14 @@ function level2(filename, callback) {
 
 module.exports = level2;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./level2Factory":65,"./level2Parser":67,"buffer":290}],67:[function(require,module,exports){
+},{"./level2_factory":65,"./level2_parser":67,"buffer":290}],67:[function(require,module,exports){
 (function (Buffer){(function (){
 // const fs = require('fs');
 // https://github.com/cscott/seek-bzip
 const bzip = require('seek-bzip');
 const pako = require('pako');
 const BufferPack = require('bufferpack');
-const RandomAccessFile = require('../RandomAccessFile');
+const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
 
 function _arraysEqual(arr1, arr2) {
     return JSON.stringify(arr1) == JSON.stringify(arr2);
@@ -9759,10 +9759,10 @@ const NEXRAD_LOCATIONS = {
 
 module.exports = NEXRADLevel2File;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../RandomAccessFile":64,"buffer":290,"bufferpack":218,"pako":229,"seek-bzip":270}],68:[function(require,module,exports){
-const get_nexrad_location = require('../nexradLocations');
+},{"../buffer_tools/RandomAccessFile":64,"buffer":290,"bufferpack":218,"pako":229,"seek-bzip":270}],68:[function(require,module,exports){
+const get_nexrad_location = require('../nexrad_locations');
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
-const level3Formatters = require('./level3Formatters');
+const level3Formatters = require('./level3_formatters');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
@@ -9906,7 +9906,7 @@ function np_linspace(startValue, stopValue, cardinality) {
 }
 
 module.exports = Level3Factory;
-},{"../../../../resources/stationAbbreviations":279,"../nexradLocations":72,"./level3Formatters":69}],69:[function(require,module,exports){
+},{"../../../../resources/stationAbbreviations":279,"../nexrad_locations":72,"./level3_formatters":69}],69:[function(require,module,exports){
 /**
  * Function that takes all of the tabular pages in a storm tracks product, and creates a nicely-formatted object with the data.
  * The code is from netbymatt's "nexrad-level-3-data":
@@ -10120,8 +10120,8 @@ module.exports = {
 };
 },{}],70:[function(require,module,exports){
 (function (Buffer){(function (){
-const NEXRADLevel3File = require('./level3Parser');
-const Level3Factory = require('./level3Factory');
+const NEXRADLevel3File = require('./level3_parser');
+const Level3Factory = require('./level3_factory');
 
 function level3(filename, callback) {
     fetch(filename)
@@ -10137,13 +10137,13 @@ function level3(filename, callback) {
 
 module.exports = level3;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./level3Factory":68,"./level3Parser":71,"buffer":290}],71:[function(require,module,exports){
+},{"./level3_factory":68,"./level3_parser":71,"buffer":290}],71:[function(require,module,exports){
 (function (Buffer){(function (){
 // const fs = require('fs');
 const BufferPack = require('bufferpack');
 const zlib = require('zlib');
 const bzip = require('seek-bzip');
-const IOBuffer = require('../IOBuffer');
+const IOBuffer = require('../buffer_tools/IOBuffer');
 
 function _structure_size(structure) {
     /* Find the size of a structure in bytes. */
@@ -12057,7 +12057,7 @@ const prod_spec_map = {
 
 module.exports = NEXRADLevel3File;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../IOBuffer":63,"buffer":290,"bufferpack":218,"seek-bzip":270,"zlib":289}],72:[function(require,module,exports){
+},{"../buffer_tools/IOBuffer":63,"buffer":290,"bufferpack":218,"seek-bzip":270,"zlib":289}],72:[function(require,module,exports){
 function get_nexrad_location(station) {
     var loc = NEXRAD_LOCATIONS[station.toUpperCase()];
     return [loc['lat'], loc['lon'], loc['elev']];
@@ -12581,8 +12581,8 @@ var map = require('./map/map');
 const ut = require('./utils');
 const loaders = require('./loaders');
 const tilts = require('./menu/tilts');
-const level2 = require('./lib/level2/level2Init');
-const level3 = require('./lib/level3/level3Init');
+const level2 = require('./libnexrad/level2/level2_init');
+const level3 = require('./libnexrad/level3/level3_init');
 
 const mainL3Loading = require('./level3/main');
 const mainL2Loading = require('./level2/main');
@@ -12842,56 +12842,60 @@ function doWhenLoad(func) {
 //     // const calculateLngLat = require('./draw/calculateLngLat');
 //     // const plotRadarToMap = require('./draw/plotRadarToMap');
 
-//     level3('../data/level3/ILX_N0Q_2021_07_15_22_19_15#', function(l3Factory) {
-//         console.log(l3Factory)
+//     const loaders_nexrad = require('./libnexrad/loaders_nexrad');
+//     loaders_nexrad.get_latest_level_3_url('KLWX', 'N0B', 0, function(url) {
+//         url = ut.phpProxy + url;
+//         level3(url, function(l3Factory) {
+//             console.log(l3Factory)
 
-//         // var product = 'REF';
-//         // var prod_range = l3Factory.get_ranges();
-//         // var az = l3Factory.get_azimuth_angles();
-//         // var prodValues = l3Factory.get_data();
-//         // var loc = l3Factory.get_location();
-//         // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
+//             // var product = 'REF';
+//             // var prod_range = l3Factory.get_ranges();
+//             // var az = l3Factory.get_azimuth_angles();
+//             // var prodValues = l3Factory.get_data();
+//             // var loc = l3Factory.get_location();
+//             // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
 
-//         // var colorData = productColors[product];
-//         // var values = [...colorData.values];
-//         // values = ut.scaleValues(values, product);
+//             // var colorData = productColors[product];
+//             // var values = [...colorData.values];
+//             // values = ut.scaleValues(values, product);
 
-//         // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
-//         //     var points = ev.data[0];
-//         //     var colors = ev.data[1];
-//         //     // for (var i = 0; i < points.length - 1; i += 2) {
-//         //     //     var mercCoords = mc([points[i], points[i + 1]])
-//         //     //     points[i] = mercCoords[0];
-//         //     //     points[i + 1] = mercCoords[1];
-//         //     // }
-//         //     plotRadarToMap(points, colors, product, radarLatLng);
-//         // });
+//             // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+//             //     var points = ev.data[0];
+//             //     var colors = ev.data[1];
+//             //     // for (var i = 0; i < points.length - 1; i += 2) {
+//             //     //     var mercCoords = mc([points[i], points[i + 1]])
+//             //     //     points[i] = mercCoords[0];
+//             //     //     points[i + 1] = mercCoords[1];
+//             //     // }
+//             //     plotRadarToMap(points, colors, product, radarLatLng);
+//             // });
 
 
-//         // warehouse._initialRadarObj.location()
+//             // warehouse._initialRadarObj.location()
 
-//         // var product = 'REF';
-//         // var elev = 1;
-//         // var prod_range = l2Factory.get_ranges(product, elev);
-//         // var az = l2Factory.get_azimuth_angles(elev);
-//         // var prodValues = l2Factory.get_data(product, elev);
-//         // var loc = l2Factory.initialRadarObj.location();
-//         // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
+//             // var product = 'REF';
+//             // var elev = 1;
+//             // var prod_range = l2Factory.get_ranges(product, elev);
+//             // var az = l2Factory.get_azimuth_angles(elev);
+//             // var prodValues = l2Factory.get_data(product, elev);
+//             // var loc = l2Factory.initialRadarObj.location();
+//             // var radarLatLng = {'lat': loc[0], 'lng': loc[1]}
 
-//         // var colorData = productColors[product];
-//         // var values = [...colorData.values];
-//         // values = ut.scaleValues(values, product);
+//             // var colorData = productColors[product];
+//             // var values = [...colorData.values];
+//             // values = ut.scaleValues(values, product);
 
-//         // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
-//         //     var points = ev.data[0];
-//         //     var colors = ev.data[1];
-//         //     // for (var i = 0; i < points.length - 1; i += 2) {
-//         //     //     var mercCoords = mc([points[i], points[i + 1]])
-//         //     //     points[i] = mercCoords[0];
-//         //     //     points[i + 1] = mercCoords[1];
-//         //     // }
-//         //     plotRadarToMap(points, colors, product, radarLatLng);
-//         // });
+//             // calculateLngLat({'data': [prod_range, az, prodValues, radarLatLng, colorData.colors, values]}, function (ev) {
+//             //     var points = ev.data[0];
+//             //     var colors = ev.data[1];
+//             //     // for (var i = 0; i < points.length - 1; i += 2) {
+//             //     //     var mercCoords = mc([points[i], points[i + 1]])
+//             //     //     points[i] = mercCoords[0];
+//             //     //     points[i + 1] = mercCoords[1];
+//             //     // }
+//             //     plotRadarToMap(points, colors, product, radarLatLng);
+//             // });
+//         })
 //     })
 // })
 
@@ -12928,7 +12932,7 @@ function doWhenLoad(func) {
 //             .addTo(map);
 //     }
 // });
-},{"../hurricanes/historical/menuItem":13,"../radio/menuItem":107,"../weather-station/menuItem":117,"./inspector/entry":41,"./level2/main":51,"./level3/main":55,"./lib/level2/level2Init":66,"./lib/level3/level3Init":70,"./loaders":73,"./map/map":75,"./menu/atticRadarMenu":79,"./menu/mode":83,"./menu/productSelectionMenu":84,"./menu/settings":87,"./menu/tilts":88,"./menu/tools":89,"./misc/detectmobilebrowser":92,"./misc/fileUpload":93,"./radar-message/radarMessage":99,"./station-markers/stationMarkerMenu":101,"./utils":103}],75:[function(require,module,exports){
+},{"../hurricanes/historical/menuItem":13,"../radio/menuItem":107,"../weather-station/menuItem":117,"./inspector/entry":41,"./level2/main":51,"./level3/main":55,"./libnexrad/level2/level2_init":66,"./libnexrad/level3/level3_init":70,"./loaders":73,"./map/map":75,"./menu/atticRadarMenu":79,"./menu/mode":83,"./menu/productSelectionMenu":84,"./menu/settings":87,"./menu/tilts":88,"./menu/tools":89,"./misc/detectmobilebrowser":92,"./misc/fileUpload":93,"./radar-message/radarMessage":99,"./station-markers/stationMarkerMenu":101,"./utils":103}],75:[function(require,module,exports){
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
 const map = new mapboxgl.Map({
     container: 'map',

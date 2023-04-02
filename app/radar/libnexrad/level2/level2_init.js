@@ -1,5 +1,5 @@
-const NEXRADLevel2File = require('./level2Parser');
-const Level2Factory = require('./level2Factory');
+const NEXRADLevel2File = require('./level2_parser');
+const Level2Factory = require('./level2_factory');
 
 function level2(filename, callback) {
     fetch(filename)

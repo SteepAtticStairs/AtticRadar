@@ -1,6 +1,8 @@
 const turf = require('@turf/turf');
 const map = require('../radar/map/map');
-const url = `https://attic-server.herokuapp.com/proxy/index.php/?http://placefilenation.com/Placefiles/20lightning.php`;
+const ut = require('../radar/utils');
+// const url = `${ut.phpProxy}http://placefilenation.com/Placefiles/20lightning.php`;
+const url = `${ut.phpProxy}https://saratoga-weather.org/USA-blitzortung/placefile.txt`;
 
 fetch(url, {
     headers: {

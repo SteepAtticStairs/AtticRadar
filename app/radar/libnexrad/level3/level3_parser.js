@@ -2,7 +2,7 @@
 const BufferPack = require('bufferpack');
 const zlib = require('zlib');
 const bzip = require('seek-bzip');
-const IOBuffer = require('../IOBuffer');
+const IOBuffer = require('../buffer_tools/IOBuffer');
 
 function _structure_size(structure) {
     /* Find the size of a structure in bytes. */

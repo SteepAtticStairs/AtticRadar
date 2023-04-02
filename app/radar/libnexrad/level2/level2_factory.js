@@ -1,4 +1,4 @@
-const get_nexrad_location = require('../nexradLocations');
+const get_nexrad_location = require('../nexrad_locations');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel2File' class.

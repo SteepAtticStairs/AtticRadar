@@ -3,7 +3,7 @@
 const bzip = require('seek-bzip');
 const pako = require('pako');
 const BufferPack = require('bufferpack');
-const RandomAccessFile = require('../RandomAccessFile');
+const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
 
 function _arraysEqual(arr1, arr2) {
     return JSON.stringify(arr1) == JSON.stringify(arr2);

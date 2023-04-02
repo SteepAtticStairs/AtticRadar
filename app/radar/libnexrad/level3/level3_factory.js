@@ -1,6 +1,6 @@
-const get_nexrad_location = require('../nexradLocations');
+const get_nexrad_location = require('../nexrad_locations');
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
-const level3Formatters = require('./level3Formatters');
+const level3Formatters = require('./level3_formatters');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
