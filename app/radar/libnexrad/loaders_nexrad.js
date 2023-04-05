@@ -1,6 +1,21 @@
 const ut = require('../utils');
 
 /**
+ * Function that fetches a file and returns it as a Buffer.
+ * 
+ * @param {String} url The path to the file. It can be a local file, or a file stored on a remote server.
+ * @param {*} callback A callback function that has a single paramater, which is the buffer of the file.
+ */
+function file_to_buffer(url, callback) {
+    fetch(url)
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+        var fileBuffer = Buffer.from(buffer);
+        callback(fileBuffer);
+    });
+}
+
+/**
  * Function to get the latest Level 2 file for a station.
  * 
  * @param {String} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
@@ -132,6 +147,7 @@ function get_latest_level_3_url(station, product, index, callback, date) {
 }
 
 module.exports = {
+    file_to_buffer,
     get_latest_level_2_url,
     get_latest_level_3_url
 };
