@@ -261,7 +261,8 @@ document.addEventListener('loadFile', function(event) {
 
 //     // ../data/KTLX20130520_201643_V06.gz#
 //     // ../data/level3/SHV_NMD_2023_04_03_02_29_56#
-//     loaders_nexrad.file_to_buffer('../data/level3/SHV_NMD_2023_04_03_02_29_56#', function(buffer) {
+//     // ../data/level3/DTX_NTV_2023_04_05_17_40_06#
+//     loaders_nexrad.file_to_buffer('../data/level3/DTX_NTV_2023_04_05_17_40_06#', function(buffer) {
 //         const file = new NEXRADLevel3File(buffer);
 //         const L3Factory = new Level3Factory(file);
 //         console.log(L3Factory)

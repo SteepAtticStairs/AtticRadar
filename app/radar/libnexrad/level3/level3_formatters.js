@@ -129,7 +129,7 @@ function format_hail_index(pages) {
 }
 
 /**
- * Same as the first function, but for the TVS (Tornado Vortex Signature) product. The code can be found here:
+ * Same as the first function, but for the NTV (Tornado Vortex Signature) product. The code can be found here:
  * https://github.com/netbymatt/nexrad-level-3-data/blob/main/src/products/61/formatter.js
  * 
  *  format the text data provided
@@ -165,7 +165,9 @@ function format_tornado_vortex_signature(pages) {
 	pages.forEach((page) => {
 		page.forEach((line) => {
 			// extrat values
-			const rawMatch = line.match(/ {2}([A-Z0-9]{3}) {4}([A-Z][0-9]) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3})[ <>]{4}([0-9.]{4})[ <>]{3,4}([0-9.]{3,4})\/ {0,2}([0-9.]{1,4}) {3,5}([0-9.]{2,4})\/ {0,2}([0-9.]{1,4})/);
+			const rawMatch = line.match(/ {2}([A-Z0-9]{3}) {4}([A-Z][0-9]) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3})[ <>]{4}([0-9. ]{4})[ <>]{3,4}([0-9.]{3,4})\/ {0,2}([0-9.]{1,4}) {3,5}([0-9.]{2,4})\/ {0,2}([0-9.]{1,4})/);
+            console.log(`"${line}"`)
+            console.log(rawMatch)
 			if (!rawMatch) return;
 
 			// format the result
