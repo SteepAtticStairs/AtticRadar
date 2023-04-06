@@ -29,7 +29,7 @@ class Level3Factory {
             // tornado vortex signature
             this.formatted_tabular = level3_formatters.format_tornado_vortex_signature(tab_pages);
         } else if (this.product_code == 141) {
-            // mesocyclone_detection
+            // mesocyclone detection
             this.formatted_tabular = level3_formatters.format_mesocyclone_detection(tab_pages);
         }
     }

@@ -166,8 +166,6 @@ function format_tornado_vortex_signature(pages) {
 		page.forEach((line) => {
 			// extrat values
 			const rawMatch = line.match(/ {2}([A-Z0-9]{3}) {4}([A-Z][0-9]) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3})[ <>]{4}([0-9. ]{4})[ <>]{3,4}([0-9.]{3,4})\/ {0,2}([0-9.]{1,4}) {3,5}([0-9.]{2,4})\/ {0,2}([0-9.]{1,4})/);
-            console.log(`"${line}"`)
-            console.log(rawMatch)
 			if (!rawMatch) return;
 
 			// format the result
