@@ -239,28 +239,34 @@ document.addEventListener('loadFile', function(event) {
 // ../data/level3/KOUN_SDUS54_N0QTLX_201305202016
 // ../data/level3/KOUN_SDUS54_N0UTLX_201305202016
 
-function doWhenLoad(func) {
-    setTimeout(function() {
-        if (map.loaded()) {
-            func();
-        } else {
-            map.on('load', function() {
-                func();
-            })
-        }
-    }, 0)
-}
-doWhenLoad(function() {
-    const NEXRADLevel2File = require('./libnexrad/level2/level2_parser');
-    const Level2Factory = require('./libnexrad/level2/level2_factory');
-    const loaders_nexrad = require('./libnexrad/loaders_nexrad');
+// function doWhenLoad(func) {
+//     setTimeout(function() {
+//         if (map.loaded()) {
+//             func();
+//         } else {
+//             map.on('load', function() {
+//                 func();
+//             })
+//         }
+//     }, 0)
+// }
+// doWhenLoad(function() {
+//     const NEXRADLevel2File = require('./libnexrad/level2/level2_parser');
+//     const Level2Factory = require('./libnexrad/level2/level2_factory');
 
-    loaders_nexrad.file_to_buffer('../data/KTLX20130520_201643_V06.gz#', function(buffer) {
-        const file = new NEXRADLevel2File(buffer);
-        const L2Factory = new Level2Factory(file);
-        console.log(L2Factory)
-    })
-})
+//     const NEXRADLevel3File = require('./libnexrad/level3/level3_parser');
+//     const Level3Factory = require('./libnexrad/level3/level3_factory');
+
+//     const loaders_nexrad = require('./libnexrad/loaders_nexrad');
+
+//     // ../data/KTLX20130520_201643_V06.gz#
+//     // ../data/level3/SHV_NMD_2023_04_03_02_29_56#
+//     loaders_nexrad.file_to_buffer('../data/level3/SHV_NMD_2023_04_03_02_29_56#', function(buffer) {
+//         const file = new NEXRADLevel3File(buffer);
+//         const L3Factory = new Level3Factory(file);
+//         console.log(L3Factory)
+//     })
+// })
 
 // function doWhenLoad() {
 //     (function loadFileIndex(i, max) {
