@@ -3,219 +3,1470 @@ function get_nexrad_location(station) {
     return [loc['lat'], loc['lon'], loc['elev']];
 }
 
-// Locations of NEXRAD locations was retrieved from NOAA's
-// Historical Observing Metadata Repository (HOMR) on
-// 2014-Mar-27. http://www.ncdc.noaa.gov/homr/
-// The data below was extracted with:
-// cut -c 10-14,107-115,117-127,128-133
-
+/**
+ * Taken from https://api.weather.gov/radar/stations.
+ * Elevation units are in meters.
+ */
 const NEXRAD_LOCATIONS = {
-    'KABR': {'lat': 45.45583, 'lon': -98.41306, 'elev': 1302},
-    'KABX': {'lat': 35.14972, 'lon': -106.82333, 'elev': 5870},
-    'KAKQ': {'lat': 36.98389, 'lon': -77.0075, 'elev': 112},
-    'KAMA': {'lat': 35.23333, 'lon': -101.70889, 'elev': 3587},
-    'KAMX': {'lat': 25.61056, 'lon': -80.41306, 'elev': 14},
-    'KAPX': {'lat': 44.90722, 'lon': -84.71972, 'elev': 1464},
-    'KARX': {'lat': 43.82278, 'lon': -91.19111, 'elev': 1276},
-    'KATX': {'lat': 48.19472, 'lon': -122.49444, 'elev': 494},
-    'KBBX': {'lat': 39.49611, 'lon': -121.63167, 'elev': 173},
-    'KBGM': {'lat': 42.19972, 'lon': -75.985, 'elev': 1606},
-    'KBHX': {'lat': 40.49833, 'lon': -124.29194, 'elev': 2402},
-    'KBIS': {'lat': 46.77083, 'lon': -100.76028, 'elev': 1658},
-    'KBLX': {'lat': 45.85389, 'lon': -108.60611, 'elev': 3598},
-    'KBMX': {'lat': 33.17194, 'lon': -86.76972, 'elev': 645},
-    'KBOX': {'lat': 41.95583, 'lon': -71.1375, 'elev': 118},
-    'KBRO': {'lat': 25.91556, 'lon': -97.41861, 'elev': 23},
-    'KBUF': {'lat': 42.94861, 'lon': -78.73694, 'elev': 693},
-    'KBYX': {'lat': 24.59694, 'lon': -81.70333, 'elev': 8},
-    'KCAE': {'lat': 33.94861, 'lon': -81.11861, 'elev': 231},
-    'KCBW': {'lat': 46.03917, 'lon': -67.80694, 'elev': 746},
-    'KCBX': {'lat': 43.49083, 'lon': -116.23444, 'elev': 3061},
-    'KCCX': {'lat': 40.92306, 'lon': -78.00389, 'elev': 2405},
-    'KCLE': {'lat': 41.41306, 'lon': -81.86, 'elev': 763},
-    'KCLX': {'lat': 32.65556, 'lon': -81.04222, 'elev': 97},
-    'KCRI': {'lat': 35.2383, 'lon': -97.4602, 'elev': 1201},
-    'KCRP': {'lat': 27.78389, 'lon': -97.51083, 'elev': 45},
-    'KCXX': {'lat': 44.51111, 'lon': -73.16639, 'elev': 317},
-    'KCYS': {'lat': 41.15194, 'lon': -104.80611, 'elev': 6128},
-    'KDAX': {'lat': 38.50111, 'lon': -121.67667, 'elev': 30},
-    'KDDC': {'lat': 37.76083, 'lon': -99.96833, 'elev': 2590},
-    'KDFX': {'lat': 29.2725, 'lon': -100.28028, 'elev': 1131},
-    'KDGX': {'lat': 32.28, 'lon': -89.98444, 'elev': -99999},
-    'KDIX': {'lat': 39.94694, 'lon': -74.41111, 'elev': 149},
-    'KDLH': {'lat': 46.83694, 'lon': -92.20972, 'elev': 1428},
-    'KDMX': {'lat': 41.73111, 'lon': -93.72278, 'elev': 981},
-    'KDOX': {'lat': 38.82556, 'lon': -75.44, 'elev': 50},
-    'KDTX': {'lat': 42.69972, 'lon': -83.47167, 'elev': 1072},
-    'KDVN': {'lat': 41.61167, 'lon': -90.58083, 'elev': 754},
-    'KDYX': {'lat': 32.53833, 'lon': -99.25417, 'elev': 1517},
-    'KEAX': {'lat': 38.81028, 'lon': -94.26417, 'elev': 995},
-    'KEMX': {'lat': 31.89361, 'lon': -110.63028, 'elev': 5202},
-    'KENX': {'lat': 42.58639, 'lon': -74.06444, 'elev': 1826},
-    'KEOX': {'lat': 31.46028, 'lon': -85.45944, 'elev': 434},
-    'KEPZ': {'lat': 31.87306, 'lon': -106.6975, 'elev': 4104},
-    'KESX': {'lat': 35.70111, 'lon': -114.89139, 'elev': 4867},
-    'KEVX': {'lat': 30.56417, 'lon': -85.92139, 'elev': 140},
-    'KEWX': {'lat': 29.70361, 'lon': -98.02806, 'elev': 633},
-    'KEYX': {'lat': 35.09778, 'lon': -117.56, 'elev': 2757},
-    'KFCX': {'lat': 37.02417, 'lon': -80.27417, 'elev': 2868},
-    'KFDR': {'lat': 34.36222, 'lon': -98.97611, 'elev': 1267},
-    'KFDX': {'lat': 34.63528, 'lon': -103.62944, 'elev': 4650},
-    'KFFC': {'lat': 33.36333, 'lon': -84.56583, 'elev': 858},
-    'KFSD': {'lat': 43.58778, 'lon': -96.72889, 'elev': 1430},
-    'KFSX': {'lat': 34.57444, 'lon': -111.19833, 'elev': -99999},
-    'KFTG': {'lat': 39.78667, 'lon': -104.54528, 'elev': 5497},
-    'KFWS': {'lat': 32.57278, 'lon': -97.30278, 'elev': 683},
-    'KGGW': {'lat': 48.20639, 'lon': -106.62417, 'elev': 2276},
-    'KGJX': {'lat': 39.06222, 'lon': -108.21306, 'elev': 9992},
-    'KGLD': {'lat': 39.36694, 'lon': -101.7, 'elev': 3651},
-    'KGRB': {'lat': 44.49833, 'lon': -88.11111, 'elev': 682},
-    'KGRK': {'lat': 30.72167, 'lon': -97.38278, 'elev': 538},
-    'KGRR': {'lat': 42.89389, 'lon': -85.54472, 'elev': 778},
-    'KGSP': {'lat': 34.88306, 'lon': -82.22028, 'elev': 940},
-    'KGWX': {'lat': 33.89667, 'lon': -88.32889, 'elev': 476},
-    'KGYX': {'lat': 43.89139, 'lon': -70.25694, 'elev': 409},
-    'KHDX': {'lat': 33.07639, 'lon': -106.12222, 'elev': 4222},
-    'KHGX': {'lat': 29.47194, 'lon': -95.07889, 'elev': 18},
-    'KHNX': {'lat': 36.31417, 'lon': -119.63111, 'elev': 243},
-    'KHPX': {'lat': 36.73667, 'lon': -87.285, 'elev': 576},
-    'KHTX': {'lat': 34.93056, 'lon': -86.08361, 'elev': 1760},
-    'KICT': {'lat': 37.65444, 'lon': -97.4425, 'elev': 1335},
-    'KICX': {'lat': 37.59083, 'lon': -112.86222, 'elev': 10600},
-    'KILN': {'lat': 39.42028, 'lon': -83.82167, 'elev': 1056},
-    'KILX': {'lat': 40.15056, 'lon': -89.33667, 'elev': 582},
-    'KIND': {'lat': 39.7075, 'lon': -86.28028, 'elev': 790},
-    'KINX': {'lat': 36.175, 'lon': -95.56444, 'elev': 668},
-    'KIWA': {'lat': 33.28917, 'lon': -111.66917, 'elev': 1353},
-    'KIWX': {'lat': 41.40861, 'lon': -85.7, 'elev': 960},
-    'KJAX': {'lat': 30.48444, 'lon': -81.70194, 'elev': 33},
-    'KJGX': {'lat': 32.675, 'lon': -83.35111, 'elev': 521},
-    'KJKL': {'lat': 37.59083, 'lon': -83.31306, 'elev': 1364},
-    'KLBB': {'lat': 33.65417, 'lon': -101.81361, 'elev': 3259},
-    'KLCH': {'lat': 30.125, 'lon': -93.21583, 'elev': 13},
-    'KLGX': {'lat': 47.1158, 'lon': -124.1069, 'elev': 252},
-    'KLIX': {'lat': 30.33667, 'lon': -89.82528, 'elev': 24},
-    'KLNX': {'lat': 41.95778, 'lon': -100.57583, 'elev': 2970},
-    'KLOT': {'lat': 41.60444, 'lon': -88.08472, 'elev': 663},
-    'KLRX': {'lat': 40.73972, 'lon': -116.80278, 'elev': 6744},
-    'KLSX': {'lat': 38.69889, 'lon': -90.68278, 'elev': 608},
-    'KLTX': {'lat': 33.98917, 'lon': -78.42917, 'elev': 64},
-    'KLVX': {'lat': 37.97528, 'lon': -85.94389, 'elev': 719},
-    'KLWX': {'lat': 38.97628, 'lon': -77.48751, 'elev': -99999},
-    'KLZK': {'lat': 34.83639, 'lon': -92.26194, 'elev': 568},
-    'KMAF': {'lat': 31.94333, 'lon': -102.18889, 'elev': 2868},
-    'KMAX': {'lat': 42.08111, 'lon': -122.71611, 'elev': 7513},
-    'KMBX': {'lat': 48.3925, 'lon': -100.86444, 'elev': 1493},
-    'KMHX': {'lat': 34.77583, 'lon': -76.87639, 'elev': 31},
-    'KMKX': {'lat': 42.96778, 'lon': -88.55056, 'elev': 958},
-    'KMLB': {'lat': 28.11306, 'lon': -80.65444, 'elev': 99},
-    'KMOB': {'lat': 30.67944, 'lon': -88.23972, 'elev': 208},
-    'KMPX': {'lat': 44.84889, 'lon': -93.56528, 'elev': 946},
-    'KMQT': {'lat': 46.53111, 'lon': -87.54833, 'elev': 1411},
-    'KMRX': {'lat': 36.16833, 'lon': -83.40194, 'elev': 1337},
-    'KMSX': {'lat': 47.04111, 'lon': -113.98611, 'elev': 7855},
-    'KMTX': {'lat': 41.26278, 'lon': -112.44694, 'elev': 6460},
-    'KMUX': {'lat': 37.15528, 'lon': -121.8975, 'elev': 3469},
-    'KMVX': {'lat': 47.52806, 'lon': -97.325, 'elev': 986},
-    'KMXX': {'lat': 32.53667, 'lon': -85.78972, 'elev': 400},
-    'KNKX': {'lat': 32.91889, 'lon': -117.04194, 'elev': 955},
-    'KNQA': {'lat': 35.34472, 'lon': -89.87333, 'elev': 282},
-    'KOAX': {'lat': 41.32028, 'lon': -96.36639, 'elev': 1148},
-    'KOHX': {'lat': 36.24722, 'lon': -86.5625, 'elev': 579},
-    'KOKX': {'lat': 40.86556, 'lon': -72.86444, 'elev': 85},
-    'KOTX': {'lat': 47.68056, 'lon': -117.62583, 'elev': 2384},
-    'KPAH': {'lat': 37.06833, 'lon': -88.77194, 'elev': 392},
-    'KPBZ': {'lat': 40.53167, 'lon': -80.21833, 'elev': 1185},
-    'KPDT': {'lat': 45.69056, 'lon': -118.85278, 'elev': 1515},
-    'KPOE': {'lat': 31.15528, 'lon': -92.97583, 'elev': 408},
-    'KPUX': {'lat': 38.45944, 'lon': -104.18139, 'elev': 5249},
-    'KRAX': {'lat': 35.66528, 'lon': -78.49, 'elev': 348},
-    'KRGX': {'lat': 39.75417, 'lon': -119.46111, 'elev': 8299},
-    'KRIW': {'lat': 43.06611, 'lon': -108.47667, 'elev': 5568},
-    'KRLX': {'lat': 38.31194, 'lon': -81.72389, 'elev': 1080},
-    'KRTX': {'lat': 45.715, 'lon': -122.96417, 'elev': -99999},
-    'KSFX': {'lat': 43.10583, 'lon': -112.68528, 'elev': 4474},
-    'KSGF': {'lat': 37.23528, 'lon': -93.40028, 'elev': 1278},
-    'KSHV': {'lat': 32.45056, 'lon': -93.84111, 'elev': 273},
-    'KSJT': {'lat': 31.37111, 'lon': -100.49222, 'elev': 1890},
-    'KSOX': {'lat': 33.81778, 'lon': -117.635, 'elev': 3027},
-    'KSRX': {'lat': 35.29056, 'lon': -94.36167, 'elev': -99999},
-    'KTBW': {'lat': 27.70528, 'lon': -82.40194, 'elev': 41},
-    'KTFX': {'lat': 47.45972, 'lon': -111.38444, 'elev': 3714},
-    'KTLH': {'lat': 30.3975, 'lon': -84.32889, 'elev': 63},
-    'KTLX': {'lat': 35.33306, 'lon': -97.2775, 'elev': 1213},
-    'KTWX': {'lat': 38.99694, 'lon': -96.2325, 'elev': 1367},
-    'KTYX': {'lat': 43.75583, 'lon': -75.68, 'elev': 1846},
-    'KUDX': {'lat': 44.125, 'lon': -102.82944, 'elev': 3016},
-    'KUEX': {'lat': 40.32083, 'lon': -98.44167, 'elev': 1976},
-    'KVAX': {'lat': 30.89, 'lon': -83.00194, 'elev': 178},
-    'KVBX': {'lat': 34.83806, 'lon': -120.39583, 'elev': 1233},
-    'KVNX': {'lat': 36.74083, 'lon': -98.1275, 'elev': 1210},
-    'KVTX': {'lat': 34.41167, 'lon': -119.17861, 'elev': 2726},
-    'KVWX': {'lat': 38.2600, 'lon': -87.7247, 'elev': -99999},
-    'KYUX': {'lat': 32.49528, 'lon': -114.65583, 'elev': 174},
-    'LPLA': {'lat': 38.73028, 'lon': -27.32167, 'elev': 3334},
-    'PABC': {'lat': 60.79278, 'lon': -161.87417, 'elev': 162},
-    'PACG': {'lat': 56.85278, 'lon': -135.52917, 'elev': 270},
-    'PAEC': {'lat': 64.51139, 'lon': -165.295, 'elev': 54},
-    'PAHG': {'lat': 60.725914, 'lon': -151.35146, 'elev': 243},
-    'PAIH': {'lat': 59.46194, 'lon': -146.30111, 'elev': 67},
-    'PAKC': {'lat': 58.67944, 'lon': -156.62944, 'elev': 63},
-    'PAPD': {'lat': 65.03556, 'lon': -147.49917, 'elev': 2593},
-    'PGUA': {'lat': 13.45444, 'lon': 144.80833, 'elev': 264},
-    'PHKI': {'lat': 21.89417, 'lon': -159.55222, 'elev': 179},
-    'PHKM': {'lat': 20.12556, 'lon': -155.77778, 'elev': 3812},
-    'PHMO': {'lat': 21.13278, 'lon': -157.18, 'elev': 1363},
-    'PHWA': {'lat': 19.095, 'lon': -155.56889, 'elev': 1370},
-    'RKJK': {'lat': 35.92417, 'lon': 126.62222, 'elev': 78},
-    'RKSG': {'lat': 36.95972, 'lon': 127.01833, 'elev': 52},
-    'RODN': {'lat': 26.30194, 'lon': 127.90972, 'elev': 218},
-    'TJUA': {'lat': 18.1175, 'lon': -66.07861, 'elev': 2794},
-    'TJFK': {'lat': 40.5668, 'lon': -73.8874, 'elev': 112},
-    'TADW': {'lat': 38.6704, 'lon': -76.8446, 'elev': 346},
-    'TATL': {'lat': 33.6433, 'lon': -84.2524, 'elev': 1075},
-    'TBNA': {'lat': 35.9767, 'lon': -86.6618, 'elev': 817},
-    'TBOS': {'lat': 42.1515, 'lon': -70.9302, 'elev': 264},
-    'TBWI': {'lat': 39.0870, 'lon': -76.6276, 'elev': 297},
-    'TCLT': {'lat': 35.3269, 'lon': -80.8772, 'elev': 871},
-    'TCMH': {'lat': 39.9878, 'lon': -82.71, 'elev': 1148},
-    'TCVG': {'lat': 38.8799, 'lon': -84.5737, 'elev': 1053},
-    'TDAL': {'lat': 32.9076, 'lon': -96.9568, 'elev': 622},
-    'TDAY': {'lat': 39.9875, 'lon': -84.1102, 'elev': 1019},
-    'TDCA': {'lat': 38.7474, 'lon': -76.9509, 'elev': 345},
-    'TDEN': {'lat': 39.7256, 'lon': -104.5431, 'elev': 5701},
-    'TDFW': {'lat': 33.0396, 'lon': -96.8974, 'elev': 585},
-    'TDTW': {'lat': 42.0710, 'lon': -83.4704, 'elev': 772},
-    'TEWR': {'lat': 40.5880, 'lon': -74.2503, 'elev': 136},
-    'TFLL': {'lat': 26.1263, 'lon': -80.3478, 'elev': 120},
-    'THOU': {'lat': 29.5328, 'lon': -95.2444, 'elev': 117},
-    'TIAD': {'lat': 39.0675, 'lon': -77.5012, 'elev': 473},
-    'TIAH': {'lat': 30.0297, 'lon': -95.5708, 'elev': 253},
-    'TICH': {'lat': 37.4069, 'lon': -97.4764, 'elev': 1351},
-    'TIDS': {'lat': 39.5978, 'lon': -86.4085, 'elev': 847},
-    'TLAS': {'lat': 36.1292, 'lon': -115.0147, 'elev': 2058},
-    'TLVE': {'lat': 41.2805, 'lon': -81.9659, 'elev': 931},
-    'TMCI': {'lat': 39.4488, 'lon': -94.7396, 'elev': 1090},
-    'TMCO': {'lat': 28.2584, 'lon': -81.3133, 'elev': 169},
-    'TMDW': {'lat': 41.69, 'lon': -87.8034, 'elev': 763},
-    'TMEM': {'lat': 34.8867, 'lon': -90.0007, 'elev': 483},
-    'TMIA': {'lat': 25.7555, 'lon': -80.4932, 'elev': 125},
-    'TMKE': {'lat': 42.7619, 'lon': -87.9994, 'elev': 933},
-    'TMSP': {'lat': 44.8197, 'lon': -92.9392, 'elev': 1121},
-    'TMSY': {'lat': 29.9385, 'lon': -90.3811, 'elev': 99},
-    'TOKC': {'lat': 35.2474, 'lon': -97.5395, 'elev': 1308},
-    'TORD': {'lat': 41.7712, 'lon': -87.8363, 'elev': 744},
-    'TPBI': {'lat': 26.6572, 'lon': -80.2586, 'elev': 133},
-    'TPHL': {'lat': 39.9084, 'lon': -75.0426, 'elev': 153},
-    'TPHX': {'lat': 33.3678, 'lon': -112.1580, 'elev': 1089},
-    'TPIT': {'lat': 40.4641, 'lon': -80.4697, 'elev': 1386},
-    'TRDU': {'lat': 35.9898, 'lon': -78.6787, 'elev': 515},
-    'TSDF': {'lat': 38.0109, 'lon': -85.5995, 'elev': 731},
-    'TSJU': {'lat': 18.4313, 'lon': -66.1722, 'elev': 157},
-    'TSLC': {'lat': 40.9341, 'lon': -111.9214, 'elev': 4295},
-    'TSTL': {'lat': 38.7668, 'lon': -90.4698, 'elev': 647},
-    'TTPA': {'lat': 27.8196, 'lon': -82.5179, 'elev': 93},
-    'TTUL': {'lat': 36.0236, 'lon': -95.8175, 'elev': 823},
+    'KBGM': {
+        'lat': 42.1996899,
+        'lon': -75.98472,
+        'elev': 489.51,
+        'type': 'WSR-88D',
+        'name': 'Binghamton'
+    },
+    'KMVX': {
+        'lat': 47.52805,
+        'lon': -97.32499,
+        'elev': 300.53,
+        'type': 'WSR-88D',
+        'name': 'Fargo'
+    },
+    'KHPX': {
+        'lat': 36.73666,
+        'lon': -87.2849899,
+        'elev': 172,
+        'type': 'WSR-88D',
+        'name': 'Ft. Campbell'
+    },
+    'KRGX': {
+        'lat': 39.75405,
+        'lon': -119.46202,
+        'elev': 2529.54,
+        'type': 'WSR-88D',
+        'name': 'Reno'
+    },
+    'KFSD': {
+        'lat': 43.58777,
+        'lon': -96.72888,
+        'elev': 435.86,
+        'type': 'WSR-88D',
+        'name': 'Sioux Falls'
+    },
+    'TEWR': {
+        'lat': 40.593,
+        'lon': -74.27,
+        'elev': 41.45278,
+        'type': 'TDWR',
+        'name': 'Newark'
+    },
+    'KCAE': {
+        'lat': 33.9486,
+        'lon': -81.11861,
+        'elev': 70.41,
+        'type': 'WSR-88D',
+        'name': 'Columbia'
+    },
+    'TLVE': {
+        'lat': 41.29,
+        'lon': -82.008,
+        'elev': 283.76878,
+        'type': 'TDWR',
+        'name': 'Cleveland'
+    },
+    'TMSP': {
+        'lat': 44.871,
+        'lon': -92.933,
+        'elev': 341.68078,
+        'type': 'TDWR',
+        'name': 'Minneapolis'
+    },
+    'KMKX': {
+        'lat': 42.96777,
+        'lon': -88.55055,
+        'elev': 292,
+        'type': 'WSR-88D',
+        'name': 'Milwaukee'
+    },
+    'KDIX': {
+        'lat': 39.94694,
+        'lon': -74.41072,
+        'elev': 45.42,
+        'type': 'WSR-88D',
+        'name': 'Mt. Holly'
+    },
+    'PAKC': {
+        'lat': 58.67944,
+        'lon': -156.62942,
+        'elev': 19.2,
+        'type': 'WSR-88D',
+        'name': 'King Salmon'
+    },
+    'PABC': {
+        'lat': 60.79194,
+        'lon': -161.87637,
+        'elev': 49.07,
+        'type': 'WSR-88D',
+        'name': 'Bethel'
+    },
+    'KBOX': {
+        'lat': 41.95577,
+        'lon': -71.13686,
+        'elev': 35.97,
+        'type': 'WSR-88D',
+        'name': 'Boston'
+    },
+    'KGRR': {
+        'lat': 42.89388,
+        'lon': -85.54488,
+        'elev': 237.13,
+        'type': 'WSR-88D',
+        'name': 'Grand Rapids'
+    },
+    'KFTG': {
+        'lat': 39.78663,
+        'lon': -104.5458,
+        'elev': 1675.49,
+        'type': 'WSR-88D',
+        'name': 'Denver'
+    },
+    'KLCH': {
+        'lat': 30.1253,
+        'lon': -93.21588,
+        'elev': 17,
+        'type': 'WSR-88D',
+        'name': 'Lake Charles'
+    },
+    'KYUX': {
+        'lat': 32.49527,
+        'lon': -114.65668,
+        'elev': 53.04,
+        'type': 'WSR-88D',
+        'name': 'Yuma'
+    },
+    'KSHV': {
+        'lat': 32.45083,
+        'lon': -93.84124,
+        'elev': 83.21,
+        'type': 'WSR-88D',
+        'name': 'Shreveport'
+    },
+    'KSRX': {
+        'lat': 35.29041,
+        'lon': -94.36188,
+        'elev': 200,
+        'type': 'WSR-88D',
+        'name': 'Ft. Smith'
+    },
+    'TJFK': {
+        'lat': 40.589,
+        'lon': -73.881,
+        'elev': 34.13758,
+        'type': 'TDWR',
+        'name': 'New York City'
+    },
+    'TMCO': {
+        'lat': 28.344,
+        'lon': -81.3259999,
+        'elev': 51.51118,
+        'type': 'TDWR',
+        'name': 'Orlando International'
+    },
+    'KICX': {
+        'lat': 37.59104,
+        'lon': -112.86221,
+        'elev': 3244,
+        'type': 'WSR-88D',
+        'name': 'Cedar City'
+    },
+    'KMOB': {
+        'lat': 30.67944,
+        'lon': -88.23972,
+        'elev': 63.4,
+        'type': 'WSR-88D',
+        'name': 'Mobile'
+    },
+    'KMRX': {
+        'lat': 36.16833,
+        'lon': -83.40194,
+        'elev': 407.52,
+        'type': 'WSR-88D',
+        'name': 'Knoxville'
+    },
+    'KVBX': {
+        'lat': 34.83855,
+        'lon': -120.3979,
+        'elev': 383,
+        'type': 'WSR-88D',
+        'name': 'Vandenberg AFB'
+    },
+    'KJGX': {
+        'lat': 32.67499,
+        'lon': -83.35111,
+        'elev': 158.8,
+        'type': 'WSR-88D',
+        'name': 'Robins AFB'
+    },
+    'KIWA': {
+        'lat': 33.28916,
+        'lon': -111.66999,
+        'elev': 415,
+        'type': 'WSR-88D',
+        'name': 'Phoenix'
+    },
+    'KLOT': {
+        'lat': 41.6044399,
+        'lon': -88.08444,
+        'elev': 202.08,
+        'type': 'WSR-88D',
+        'name': 'Chicago'
+    },
+    'KPOE': {
+        'lat': 31.15527,
+        'lon': -92.97583,
+        'elev': 124.36,
+        'type': 'WSR-88D',
+        'name': 'Ft. Polk'
+    },
+    'KEAX': {
+        'lat': 38.81024,
+        'lon': -94.26446,
+        'elev': 303.28,
+        'type': 'WSR-88D',
+        'name': 'Kansas City'
+    },
+    'PAHG': {
+        'lat': 60.72591,
+        'lon': -151.35144,
+        'elev': 73.76,
+        'type': 'WSR-88D',
+        'name': 'Kenai'
+    },
+    'TTUL': {
+        'lat': 36.071,
+        'lon': -95.827,
+        'elev': 250.85038,
+        'type': 'TDWR',
+        'name': 'Tulsa'
+    },
+    'TJUA': {
+        'lat': 18.1156599,
+        'lon': -66.07817,
+        'elev': 867,
+        'type': 'WSR-88D',
+        'name': 'San Juan'
+    },
+    'KDVN': {
+        'lat': 41.61166,
+        'lon': -90.58083,
+        'elev': 229.82,
+        'type': 'WSR-88D',
+        'name': 'Quad Cities'
+    },
+    'KLVX': {
+        'lat': 37.97527,
+        'lon': -85.9438799,
+        'elev': 219.15,
+        'type': 'WSR-88D',
+        'name': 'Louisville'
+    },
+    'KHNX': {
+        'lat': 36.31416,
+        'lon': -119.63213,
+        'elev': 74.07,
+        'type': 'WSR-88D',
+        'name': 'San Joaquin Valley'
+    },
+    'KLWX': {
+        'lat': 38.9761,
+        'lon': -77.4875,
+        'elev': 88.54,
+        'type': 'WSR-88D',
+        'name': 'Sterling'
+    },
+    'KGWX': {
+        'lat': 33.89691,
+        'lon': -88.32919,
+        'elev': 155,
+        'type': 'WSR-88D',
+        'name': 'Columbus AFB'
+    },
+    'KDDC': {
+        'lat': 37.76083,
+        'lon': -99.96888,
+        'elev': 789.43,
+        'type': 'WSR-88D',
+        'name': 'Dodge City'
+    },
+    'KDMX': {
+        'lat': 41.7311,
+        'lon': -93.7228499,
+        'elev': 299.01,
+        'type': 'WSR-88D',
+        'name': 'Des Moines'
+    },
+    'PHKM': {
+        'lat': 20.12527,
+        'lon': -155.77776,
+        'elev': 1174,
+        'type': 'WSR-88D',
+        'name': 'Kohala'
+    },
+    'KDLH': {
+        'lat': 46.83694,
+        'lon': -92.20971,
+        'elev': 435.25,
+        'type': 'WSR-88D',
+        'name': 'Duluth'
+    },
+    'KEVX': {
+        'lat': 30.56503,
+        'lon': -85.92166,
+        'elev': 42.67,
+        'type': 'WSR-88D',
+        'name': 'Eglin AFB'
+    },
+    'TORD': {
+        'lat': 41.797,
+        'lon': -87.858,
+        'elev': 226.77118,
+        'type': 'TDWR',
+        'name': "Chicago O'Hare"
+    },
+    'KMAF': {
+        'lat': 31.94346,
+        'lon': -102.18924,
+        'elev': 883,
+        'type': 'WSR-88D',
+        'name': 'Odessa'
+    },
+    'KVNX': {
+        'lat': 36.74083,
+        'lon': -98.12749,
+        'elev': 368.81,
+        'type': 'WSR-88D',
+        'name': 'Vance AFB'
+    },
+    'KOTX': {
+        'lat': 47.6805499,
+        'lon': -117.62582,
+        'elev': 726.64,
+        'type': 'WSR-88D',
+        'name': 'Spokane'
+    },
+    'KBBX': {
+        'lat': 39.49611,
+        'lon': -121.63165,
+        'elev': 52.73,
+        'type': 'WSR-88D',
+        'name': 'Beale AFB'
+    },
+    'TADW': {
+        'lat': 38.695,
+        'lon': -76.845,
+        'elev': 105.46078,
+        'type': 'TDWR',
+        'name': 'Andrews Air Force Base'
+    },
+    'TCLT': {
+        'lat': 35.337,
+        'lon': -80.885,
+        'elev': 265.48078,
+        'type': 'TDWR',
+        'name': 'Charlotte'
+    },
+    'KGRK': {
+        'lat': 30.72166,
+        'lon': -97.3827699,
+        'elev': 163.98,
+        'type': 'WSR-88D',
+        'name': 'Ft. Hood'
+    },
+    'TSTL': {
+        'lat': 38.805,
+        'lon': -90.489,
+        'elev': 197.20558,
+        'type': 'TDWR',
+        'name': 'St. Louis'
+    },
+    'KEWX': {
+        'lat': 29.70405,
+        'lon': -98.0286,
+        'elev': 204,
+        'type': 'WSR-88D',
+        'name': 'Austin-San Antonio'
+    },
+    'KRAX': {
+        'lat': 35.66527,
+        'lon': -78.49,
+        'elev': 106.07,
+        'type': 'WSR-88D',
+        'name': 'Raleigh-Durham'
+    },
+    'KLNX': {
+        'lat': 41.95794,
+        'lon': -100.57621,
+        'elev': 919,
+        'type': 'WSR-88D',
+        'name': 'North Platte'
+    },
+    'KLBB': {
+        'lat': 33.65413,
+        'lon': -101.81416,
+        'elev': 1005,
+        'type': 'WSR-88D',
+        'name': 'Lubbock'
+    },
+    'TSJU': {
+        'lat': 18.474,
+        'lon': -66.179,
+        'elev': 47.85358,
+        'type': 'TDWR',
+        'name': 'San Juan'
+    },
+    'HWPA2': {
+        'lat': 59.65,
+        'lon': -151.46,
+        'elev': 7.6,
+        'type': 'Profiler',
+        'name': 'Homer'
+    },
+    'KPDT': {
+        'lat': 45.69055,
+        'lon': -118.8529,
+        'elev': 461.77,
+        'type': 'WSR-88D',
+        'name': 'Pendleton'
+    },
+    'KGSP': {
+        'lat': 34.8833,
+        'lon': -82.21983,
+        'elev': 291,
+        'type': 'WSR-88D',
+        'name': 'Greenville-Spartanburg'
+    },
+    'KEOX': {
+        'lat': 31.46055,
+        'lon': -85.45938,
+        'elev': 144,
+        'type': 'WSR-88D',
+        'name': 'Ft. Rucker'
+    },
+    'KBIS': {
+        'lat': 46.7708299,
+        'lon': -100.76027,
+        'elev': 505.36,
+        'type': 'WSR-88D',
+        'name': 'Bismarck'
+    },
+    'TDFW': {
+        'lat': 33.065,
+        'lon': -96.918,
+        'elev': 178.30798,
+        'type': 'TDWR',
+        'name': 'Dallas/Ft. Worth'
+    },
+    'PAIH': {
+        'lat': 59.46194,
+        'lon': -146.3010899,
+        'elev': 20.42,
+        'type': 'WSR-88D',
+        'name': 'Middleton Islands'
+    },
+    'KBYX': {
+        'lat': 24.59694,
+        'lon': -81.7033299,
+        'elev': 2.44,
+        'type': 'WSR-88D',
+        'name': 'Key West'
+    },
+    'KJAX': {
+        'lat': 30.48463,
+        'lon': -81.7019,
+        'elev': 19,
+        'type': 'WSR-88D',
+        'name': 'Jacksonville'
+    },
+    'KFDX': {
+        'lat': 34.63416,
+        'lon': -103.61888,
+        'elev': 1417.32,
+        'type': 'WSR-88D',
+        'name': 'Cannon AFB'
+    },
+    'TSLC': {
+        'lat': 40.967,
+        'lon': -111.93,
+        'elev': 1309.11598,
+        'type': 'TDWR',
+        'name': 'Salt Lake City'
+    },
+    'TPHX': {
+        'lat': 33.421,
+        'lon': -112.163,
+        'elev': 331.92718,
+        'type': 'TDWR',
+        'name': 'Phoenix'
+    },
+    'KESX': {
+        'lat': 35.70111,
+        'lon': -114.89138,
+        'elev': 1483.46,
+        'type': 'WSR-88D',
+        'name': 'Las Vegas'
+    },
+    'TCMH': {
+        'lat': 40.006,
+        'lon': -82.715,
+        'elev': 349.91038,
+        'type': 'TDWR',
+        'name': 'Columbus'
+    },
+    'KDYX': {
+        'lat': 32.53833,
+        'lon': -99.25416,
+        'elev': 462.38,
+        'type': 'WSR-88D',
+        'name': 'Dyess AFB'
+    },
+    'KTBW': {
+        'lat': 27.70527,
+        'lon': -82.40194,
+        'elev': 12.5,
+        'type': 'WSR-88D',
+        'name': 'Tampa Bay'
+    },
+    'TMSY': {
+        'lat': 30.022,
+        'lon': -90.403,
+        'elev': 30.17518,
+        'type': 'TDWR',
+        'name': 'New Orleans'
+    },
+    'KDFX': {
+        'lat': 29.2725,
+        'lon': -100.28027,
+        'elev': 344.73,
+        'type': 'WSR-88D',
+        'name': 'Laughlin AFB'
+    },
+    'TBNA': {
+        'lat': 35.9799999,
+        'lon': -86.662,
+        'elev': 249.02158,
+        'type': 'TDWR',
+        'name': 'Nashville'
+    },
+    'TMIA': {
+        'lat': 25.758,
+        'lon': -80.491,
+        'elev': 38.09998,
+        'type': 'TDWR',
+        'name': 'Miami'
+    },
+    'TATL': {
+        'lat': 33.647,
+        'lon': -84.262,
+        'elev': 327.65998,
+        'type': 'TDWR',
+        'name': 'Atlanta'
+    },
+    'KMUX': {
+        'lat': 37.15522,
+        'lon': -121.89843,
+        'elev': 1057.35,
+        'type': 'WSR-88D',
+        'name': 'San Francisco'
+    },
+    'KBRO': {
+        'lat': 25.91555,
+        'lon': -97.4186,
+        'elev': 7.01,
+        'type': 'WSR-88D',
+        'name': 'Brownsville'
+    },
+    'RKJK': {
+        'lat': 35.9241699,
+        'lon': 126.62222,
+        'elev': 23.77,
+        'type': 'WSR-88D',
+        'name': 'Kunsan AB'
+    },
+    'KAKQ': {
+        'lat': 36.98388,
+        'lon': -77.0074999,
+        'elev': 48,
+        'type': 'WSR-88D',
+        'name': 'Norfolk-Richmond'
+    },
+    'KBMX': {
+        'lat': 33.17194,
+        'lon': -86.76972,
+        'elev': 196.6,
+        'type': 'WSR-88D',
+        'name': 'Birmingham'
+    },
+    'TPIT': {
+        'lat': 40.501,
+        'lon': -80.486,
+        'elev': 422.45278,
+        'type': 'TDWR',
+        'name': 'Pittsburgh'
+    },
+    'TMDW': {
+        'lat': 41.651,
+        'lon': -87.73,
+        'elev': 232.56238,
+        'type': 'TDWR',
+        'name': 'Chicago Midway'
+    },
+    'KABR': {
+        'lat': 45.45583,
+        'lon': -98.41305,
+        'elev': 396.85,
+        'type': 'WSR-88D',
+        'name': 'Aberdeen'
+    },
+    'KSFX': {
+        'lat': 43.10559,
+        'lon': -112.68612,
+        'elev': 1363.68,
+        'type': 'WSR-88D',
+        'name': 'Idaho Falls'
+    },
+    'KSOX': {
+        'lat': 33.81773,
+        'lon': -117.63599,
+        'elev': 927,
+        'type': 'WSR-88D',
+        'name': 'Santa Ana Mountains'
+    },
+    'KTLH': {
+        'lat': 30.39749,
+        'lon': -84.32889,
+        'elev': 19.2,
+        'type': 'WSR-88D',
+        'name': 'Tallahassee'
+    },
+    'KHGX': {
+        'lat': 29.47194,
+        'lon': -95.07888,
+        'elev': 5.49,
+        'type': 'WSR-88D',
+        'name': 'Houston'
+    },
+    'KAMX': {
+        'lat': 25.61055,
+        'lon': -80.41305,
+        'elev': 4.27,
+        'type': 'WSR-88D',
+        'name': 'Miami'
+    },
+    'KMTX': {
+        'lat': 41.26277,
+        'lon': -112.44777,
+        'elev': 1975,
+        'type': 'WSR-88D',
+        'name': 'Salt Lake City'
+    },
+    'TDAY': {
+        'lat': 40.022,
+        'lon': -84.123,
+        'elev': 310.59118,
+        'type': 'TDWR',
+        'name': 'Dayton'
+    },
+    'KEPZ': {
+        'lat': 31.87305,
+        'lon': -106.69799,
+        'elev': 1250.9,
+        'type': 'WSR-88D',
+        'name': 'El Paso'
+    },
+    'KLZK': {
+        'lat': 34.83638,
+        'lon': -92.26194,
+        'elev': 173.13,
+        'type': 'WSR-88D',
+        'name': 'Little Rock'
+    },
+    'KHTX': {
+        'lat': 34.9305499,
+        'lon': -86.0836099,
+        'elev': 537.06,
+        'type': 'WSR-88D',
+        'name': 'Huntsville-Hytop'
+    },
+    'KEYX': {
+        'lat': 35.09777,
+        'lon': -117.56074,
+        'elev': 846,
+        'type': 'WSR-88D',
+        'name': 'Edwards AFB'
+    },
+    'KSGF': {
+        'lat': 37.23527,
+        'lon': -93.40027,
+        'elev': 389.53,
+        'type': 'WSR-88D',
+        'name': 'Springfield'
+    },
+    'KBLX': {
+        'lat': 45.85377,
+        'lon': -108.60679,
+        'elev': 1109,
+        'type': 'WSR-88D',
+        'name': 'Billings'
+    },
+    'KPUX': {
+        'lat': 38.45944,
+        'lon': -104.18138,
+        'elev': 1615,
+        'type': 'WSR-88D',
+        'name': 'Pueblo'
+    },
+    'KHDX': {
+        'lat': 33.07699,
+        'lon': -106.12002,
+        'elev': 1286.87,
+        'type': 'WSR-88D',
+        'name': 'Holloman AFB'
+    },
+    'KINX': {
+        'lat': 36.17499,
+        'lon': -95.56413,
+        'elev': 203.61,
+        'type': 'WSR-88D',
+        'name': 'Tulsa'
+    },
+    'KIWX': {
+        'lat': 41.3586,
+        'lon': -85.7,
+        'elev': 292.3,
+        'type': 'WSR-88D',
+        'name': 'North Webster'
+    },
+    'KGGW': {
+        'lat': 48.20635,
+        'lon': -106.62468,
+        'elev': 702,
+        'type': 'WSR-88D',
+        'name': 'Glasgow'
+    },
+    'KNQA': {
+        'lat': 35.34472,
+        'lon': -89.87333,
+        'elev': 103,
+        'type': 'WSR-88D',
+        'name': 'Memphis'
+    },
+    'TDAL': {
+        'lat': 32.926,
+        'lon': -96.968,
+        'elev': 189.58558,
+        'type': 'TDWR',
+        'name': 'Dallas Love Field'
+    },
+    'RODN': {
+        'lat': 26.3019399,
+        'lon': 127.90972,
+        'elev': 91,
+        'type': 'WSR-88D',
+        'name': 'Kadena'
+    },
+    'TPBI': {
+        'lat': 26.688,
+        'lon': -80.273,
+        'elev': 40.53838,
+        'type': 'TDWR',
+        'name': 'West Palm Beach'
+    },
+    'KCLX': {
+        'lat': 32.65552,
+        'lon': -81.04219,
+        'elev': 35,
+        'type': 'WSR-88D',
+        'name': 'Charleston'
+    },
+    'KIND': {
+        'lat': 39.70749,
+        'lon': -86.28027,
+        'elev': 240.79,
+        'type': 'WSR-88D',
+        'name': 'Indianapolis'
+    },
+    'TTPA': {
+        'lat': 27.86,
+        'lon': -82.518,
+        'elev': 28.34638,
+        'type': 'TDWR',
+        'name': 'Tampa Bay'
+    },
+    'KOKX': {
+        'lat': 40.8655199,
+        'lon': -72.8639199,
+        'elev': 25.91,
+        'type': 'WSR-88D',
+        'name': 'New York City'
+    },
+    'KGLD': {
+        'lat': 39.36694,
+        'lon': -101.70027,
+        'elev': 1112.82,
+        'type': 'WSR-88D',
+        'name': 'Goodland'
+    },
+    'KVTX': {
+        'lat': 34.41166,
+        'lon': -119.1786,
+        'elev': 830.88,
+        'type': 'WSR-88D',
+        'name': 'Los Angeles'
+    },
+    'KICT': {
+        'lat': 37.65444,
+        'lon': -97.44305,
+        'elev': 406.91,
+        'type': 'WSR-88D',
+        'name': 'Wichita'
+    },
+    'TDEN': {
+        'lat': 39.728,
+        'lon': -104.526,
+        'elev': 1737.66478,
+        'type': 'TDWR',
+        'name': 'Denver'
+    },
+    'TPHL': {
+        'lat': 39.949,
+        'lon': -75.069,
+        'elev': 46.63438,
+        'type': 'TDWR',
+        'name': 'Philadelphia'
+    },
+    'ROCO2': {
+        'lat': 35.2299999,
+        'lon': -97.45,
+        'elev': 363.3,
+        'type': 'Profiler',
+        'name': 'Norman'
+    },
+    'TCVG': {
+        'lat': 38.898,
+        'lon': -84.58,
+        'elev': 320.95438,
+        'type': 'TDWR',
+        'name': 'Covington'
+    },
+    'KDOX': {
+        'lat': 38.82555,
+        'lon': -75.44,
+        'elev': 15.24,
+        'type': 'WSR-88D',
+        'name': 'Dover AFB'
+    },
+    'TBWI': {
+        'lat': 39.09,
+        'lon': -76.63,
+        'elev': 90.52558,
+        'type': 'TDWR',
+        'name': 'Baltimore/Wash'
+    },
+    'KRIW': {
+        'lat': 43.0661,
+        'lon': -108.47729,
+        'elev': 1697.13,
+        'type': 'WSR-88D',
+        'name': 'Riverton'
+    },
+    'KVAX': {
+        'lat': 30.89027,
+        'lon': -83.0018,
+        'elev': 66,
+        'type': 'WSR-88D',
+        'name': 'Moody AFB'
+    },
+    'KABX': {
+        'lat': 35.14972,
+        'lon': -106.82388,
+        'elev': 1789.18,
+        'type': 'WSR-88D',
+        'name': 'Albuquerque'
+    },
+    'KNKX': {
+        'lat': 32.91888,
+        'lon': -117.04193,
+        'elev': 291.08,
+        'type': 'WSR-88D',
+        'name': 'San Diego'
+    },
+    'PACG': {
+        'lat': 56.85277,
+        'lon': -135.5291499,
+        'elev': 63.09,
+        'type': 'WSR-88D',
+        'name': 'Biorka Island'
+    },
+    'KMSX': {
+        'lat': 47.0411,
+        'lon': -113.9861,
+        'elev': 2417,
+        'type': 'WSR-88D',
+        'name': 'Missoula'
+    },
+    'KGRB': {
+        'lat': 44.49862,
+        'lon': -88.1110999,
+        'elev': 216,
+        'type': 'WSR-88D',
+        'name': 'Green Bay'
+    },
+    'KATX': {
+        'lat': 48.19461,
+        'lon': -122.49568,
+        'elev': 161,
+        'type': 'WSR-88D',
+        'name': 'Seattle-Tacoma'
+    },
+    'TSDF': {
+        'lat': 38.046,
+        'lon': -85.61,
+        'elev': 222.80878,
+        'type': 'TDWR',
+        'name': 'Louisville'
+    },
+    'KCRP': {
+        'lat': 27.78388,
+        'lon': -97.51083,
+        'elev': 13.72,
+        'type': 'WSR-88D',
+        'name': 'Corpus Christi'
+    },
+    'TLAS': {
+        'lat': 36.144,
+        'lon': -115.007,
+        'elev': 627.27838,
+        'type': 'TDWR',
+        'name': 'Las Vegas'
+    },
+    'TFLL': {
+        'lat': 26.143,
+        'lon': -80.344,
+        'elev': 36.57598,
+        'type': 'TDWR',
+        'name': 'Fort Lauderdale'
+    },
+    'TIAD': {
+        'lat': 39.084,
+        'lon': -77.529,
+        'elev': 144.17038,
+        'type': 'TDWR',
+        'name': 'Dulles'
+    },
+    'KSJT': {
+        'lat': 31.37111,
+        'lon': -100.49221,
+        'elev': 576.07,
+        'type': 'WSR-88D',
+        'name': 'San Angelo'
+    },
+    'TDTW': {
+        'lat': 42.111,
+        'lon': -83.515,
+        'elev': 235.30558,
+        'type': 'TDWR',
+        'name': 'Detroit'
+    },
+    'KPBZ': {
+        'lat': 40.53166,
+        'lon': -80.21794,
+        'elev': 361.19,
+        'type': 'WSR-88D',
+        'name': 'Pittsburgh'
+    },
+    'TMEM': {
+        'lat': 34.896,
+        'lon': -89.993,
+        'elev': 147.21838,
+        'type': 'TDWR',
+        'name': 'Memphis'
+    },
+    'KPAH': {
+        'lat': 37.06833,
+        'lon': -88.77194,
+        'elev': 119.48,
+        'type': 'WSR-88D',
+        'name': 'Paducah'
+    },
+    'KLIX': {
+        'lat': 30.33666,
+        'lon': -89.82541,
+        'elev': 20,
+        'type': 'WSR-88D',
+        'name': 'New Orleans'
+    },
+    'KRTX': {
+        'lat': 45.71499,
+        'lon': -122.96499,
+        'elev': 492,
+        'type': 'WSR-88D',
+        'name': 'Portland'
+    },
+    'TMCI': {
+        'lat': 39.498,
+        'lon': -94.742,
+        'elev': 332.23198,
+        'type': 'TDWR',
+        'name': 'Kansas City'
+    },
+    'KFCX': {
+        'lat': 37.02416,
+        'lon': -80.27416,
+        'elev': 874.17,
+        'type': 'WSR-88D',
+        'name': 'Roanoke'
+    },
+    'KARX': {
+        'lat': 43.82277,
+        'lon': -91.1911,
+        'elev': 388.92,
+        'type': 'WSR-88D',
+        'name': 'LaCrosse'
+    },
+    'KJKL': {
+        'lat': 37.5908299,
+        'lon': -83.31305,
+        'elev': 415.75,
+        'type': 'WSR-88D',
+        'name': 'Jackson'
+    },
+    'KGYX': {
+        'lat': 43.8913,
+        'lon': -70.25636,
+        'elev': 124.66,
+        'type': 'WSR-88D',
+        'name': 'Portland'
+    },
+    'KAMA': {
+        'lat': 35.23333,
+        'lon': -101.70927,
+        'elev': 1104,
+        'type': 'WSR-88D',
+        'name': 'Amarillo'
+    },
+    'KFSX': {
+        'lat': 34.57433,
+        'lon': -111.19843,
+        'elev': 2260.7,
+        'type': 'WSR-88D',
+        'name': 'Flagstaff'
+    },
+    'KMPX': {
+        'lat': 44.84888,
+        'lon': -93.56552,
+        'elev': 301,
+        'type': 'WSR-88D',
+        'name': 'Minneapolis-St. Paul'
+    },
+    'TIAH': {
+        'lat': 30.065,
+        'lon': -95.5669999,
+        'elev': 77.11438,
+        'type': 'TDWR',
+        'name': 'Houston Intercontinental'
+    },
+    'TICH': {
+        'lat': 37.507,
+        'lon': -97.437,
+        'elev': 411.78478,
+        'type': 'TDWR',
+        'name': 'Wichita'
+    },
+    'KCXX': {
+        'lat': 44.5111,
+        'lon': -73.16639,
+        'elev': 96.62,
+        'type': 'WSR-88D',
+        'name': 'Burlington'
+    },
+    'KDGX': {
+        'lat': 32.27999,
+        'lon': -89.98444,
+        'elev': 150.92,
+        'type': 'WSR-88D',
+        'name': 'Jackson'
+    },
+    'KLSX': {
+        'lat': 38.69888,
+        'lon': -90.68277,
+        'elev': 185.32,
+        'type': 'WSR-88D',
+        'name': 'St. Louis'
+    },
+    'KGJX': {
+        'lat': 39.06222,
+        'lon': -108.21375,
+        'elev': 3059,
+        'type': 'WSR-88D',
+        'name': 'Grand Junction'
+    },
+    'KOAX': {
+        'lat': 41.32027,
+        'lon': -96.3668,
+        'elev': 349.91,
+        'type': 'WSR-88D',
+        'name': 'Omaha'
+    },
+    'PHMO': {
+        'lat': 21.13277,
+        'lon': -157.18026,
+        'elev': 415.44,
+        'type': 'WSR-88D',
+        'name': 'Molokai'
+    },
+    'KMXX': {
+        'lat': 32.53664,
+        'lon': -85.78975,
+        'elev': 136,
+        'type': 'WSR-88D',
+        'name': 'Montgomery-Maxwell AFB'
+    },
+    'KCBX': {
+        'lat': 43.49021,
+        'lon': -116.23602,
+        'elev': 942,
+        'type': 'WSR-88D',
+        'name': 'Boise'
+    },
+    'KRLX': {
+        'lat': 38.3111,
+        'lon': -81.72277,
+        'elev': 335,
+        'type': 'WSR-88D',
+        'name': 'Charleston'
+    },
+    'TIDS': {
+        'lat': 39.637,
+        'lon': -86.436,
+        'elev': 258.16558,
+        'type': 'TDWR',
+        'name': 'Indianapolis'
+    },
+    'KLTX': {
+        'lat': 33.98916,
+        'lon': -78.42916,
+        'elev': 19.51,
+        'type': 'WSR-88D',
+        'name': 'Wilmington'
+    },
+    'KILX': {
+        'lat': 40.15049,
+        'lon': -89.3367899,
+        'elev': 188,
+        'type': 'WSR-88D',
+        'name': 'Lincoln'
+    },
+    'KDTX': {
+        'lat': 42.69999,
+        'lon': -83.47166,
+        'elev': 336,
+        'type': 'WSR-88D',
+        'name': 'Detroit'
+    },
+    'KLRX': {
+        'lat': 40.73972,
+        'lon': -116.80277,
+        'elev': 2067,
+        'type': 'WSR-88D',
+        'name': 'Elko'
+    },
+    'TDCA': {
+        'lat': 38.759,
+        'lon': -76.962,
+        'elev': 105.15598,
+        'type': 'TDWR',
+        'name': 'Washington National'
+    },
+    'KENX': {
+        'lat': 42.58655,
+        'lon': -74.06408,
+        'elev': 565,
+        'type': 'WSR-88D',
+        'name': 'Albany'
+    },
+    'RKSG': {
+        'lat': 37.2075699,
+        'lon': 127.28556,
+        'elev': 439,
+        'type': 'WSR-88D',
+        'name': 'Camp Humphreys'
+    },
+    'TMKE': {
+        'lat': 42.819,
+        'lon': -88.046,
+        'elev': 284.37838,
+        'type': 'TDWR',
+        'name': 'Milwaukee'
+    },
+    'KOHX': {
+        'lat': 36.24722,
+        'lon': -86.5625,
+        'elev': 176.48,
+        'type': 'WSR-88D',
+        'name': 'Nashville'
+    },
+    'KMAX': {
+        'lat': 42.08111,
+        'lon': -122.71735,
+        'elev': 2289.96,
+        'type': 'WSR-88D',
+        'name': 'Medford'
+    },
+    'KFDR': {
+        'lat': 34.36219,
+        'lon': -98.97666,
+        'elev': 386.18,
+        'type': 'WSR-88D',
+        'name': 'Frederick'
+    },
+    'KMQT': {
+        'lat': 46.5311,
+        'lon': -87.54833,
+        'elev': 430.07,
+        'type': 'WSR-88D',
+        'name': 'Marquette'
+    },
+    'KCBW': {
+        'lat': 46.03916,
+        'lon': -67.80642,
+        'elev': 227.38,
+        'type': 'WSR-88D',
+        'name': 'Hodgdon'
+    },
+    'KBUF': {
+        'lat': 42.9486,
+        'lon': -78.73694,
+        'elev': 211.23,
+        'type': 'WSR-88D',
+        'name': 'Buffalo'
+    },
+    'KTFX': {
+        'lat': 47.45972,
+        'lon': -111.38527,
+        'elev': 1140,
+        'type': 'WSR-88D',
+        'name': 'Great Falls'
+    },
+    'THOU': {
+        'lat': 29.516,
+        'lon': -95.242,
+        'elev': 35.66158,
+        'type': 'TDWR',
+        'name': 'Houston Hobby'
+    },
+    'KDAX': {
+        'lat': 38.50111,
+        'lon': -121.67782,
+        'elev': 9.14,
+        'type': 'WSR-88D',
+        'name': 'Sacramento'
+    },
+    'KTLX': {
+        'lat': 35.33305,
+        'lon': -97.27775,
+        'elev': 369.72,
+        'type': 'WSR-88D',
+        'name': 'Oklahoma City'
+    },
+    'KTWX': {
+        'lat': 38.99694,
+        'lon': -96.23249,
+        'elev': 416.66,
+        'type': 'WSR-88D',
+        'name': 'Topeka'
+    },
+    'PAEC': {
+        'lat': 64.51139,
+        'lon': -165.29498,
+        'elev': 17.68,
+        'type': 'WSR-88D',
+        'name': 'Nome'
+    },
+    'TOKC': {
+        'lat': 35.276,
+        'lon': -97.51,
+        'elev': 398.67838,
+        'type': 'TDWR',
+        'name': 'Oklahoma City'
+    },
+    'KEMX': {
+        'lat': 31.89361,
+        'lon': -110.63027,
+        'elev': 1586.48,
+        'type': 'WSR-88D',
+        'name': 'Tucson'
+    },
+    'PHWA': {
+        'lat': 19.095,
+        'lon': -155.56887,
+        'elev': 420.62,
+        'type': 'WSR-88D',
+        'name': 'South Hawaii'
+    },
+    'KFWS': {
+        'lat': 32.57277,
+        'lon': -97.30313,
+        'elev': 212,
+        'type': 'WSR-88D',
+        'name': 'Dallas-Ft. Worth'
+    },
+    'TBOS': {
+        'lat': 42.158,
+        'lon': -70.933,
+        'elev': 80.46718,
+        'type': 'TDWR',
+        'name': 'Boston'
+    },
+    'KUDX': {
+        'lat': 44.12471,
+        'lon': -102.82999,
+        'elev': 939,
+        'type': 'WSR-88D',
+        'name': 'Rapid City'
+    },
+    'PHKI': {
+        'lat': 21.89389,
+        'lon': -159.55249,
+        'elev': 69,
+        'type': 'WSR-88D',
+        'name': 'South Kauai'
+    },
+    'TRDU': {
+        'lat': 36.002,
+        'lon': -78.697,
+        'elev': 156.97198,
+        'type': 'TDWR',
+        'name': 'Raleigh Durham'
+    },
+    'KMLB': {
+        'lat': 28.11305,
+        'lon': -80.6544399,
+        'elev': 10.67,
+        'type': 'WSR-88D',
+        'name': 'Melbourne'
+    },
+    'KCYS': {
+        'lat': 41.15194,
+        'lon': -104.8061,
+        'elev': 1867.81,
+        'type': 'WSR-88D',
+        'name': 'Cheyenne'
+    },
+    'KFFC': {
+        'lat': 33.36333,
+        'lon': -84.56583,
+        'elev': 261.52,
+        'type': 'WSR-88D',
+        'name': 'Atlanta'
+    },
+    'AWPA2': {
+        'lat': 61.15,
+        'lon': -149.78,
+        'elev': 97,
+        'type': 'Profiler',
+        'name': 'Anchorage'
+    },
+    'KVWX': {
+        'lat': 38.26024,
+        'lon': -87.72452,
+        'elev': 155.75,
+        'type': 'WSR-88D',
+        'name': 'Evansville'
+    },
+    'KAPX': {
+        'lat': 44.90634,
+        'lon': -84.71953,
+        'elev': 446.23,
+        'type': 'WSR-88D',
+        'name': 'Gaylord'
+    },
+    'KCCX': {
+        'lat': 40.92305,
+        'lon': -78.00389,
+        'elev': 733.04,
+        'type': 'WSR-88D',
+        'name': 'State College'
+    },
+    'KBHX': {
+        'lat': 40.49833,
+        'lon': -124.29215,
+        'elev': 732.13,
+        'type': 'WSR-88D',
+        'name': 'Eureka'
+    },
+    'KILN': {
+        'lat': 39.42027,
+        'lon': -83.82166,
+        'elev': 321.87,
+        'type': 'WSR-88D',
+        'name': 'Wilmington'
+    },
+    'PGUA': {
+        'lat': 13.45583,
+        'lon': 144.81112,
+        'elev': 83,
+        'type': 'WSR-88D',
+        'name': 'Anderson AFB'
+    },
+    'KCLE': {
+        'lat': 41.41305,
+        'lon': -81.86,
+        'elev': 232.56,
+        'type': 'WSR-88D',
+        'name': 'Cleveland'
+    },
+    'KUEX': {
+        'lat': 40.32083,
+        'lon': -98.44194,
+        'elev': 602.28,
+        'type': 'WSR-88D',
+        'name': 'Grand Island'
+    },
+    'PAPD': {
+        'lat': 65.03511,
+        'lon': -147.5014,
+        'elev': 790.35,
+        'type': 'WSR-88D',
+        'name': 'Pedro Dome'
+    },
+    'TLKA2': {
+        'lat': 62.31,
+        'lon': -150.4199999,
+        'elev': 151,
+        'type': 'Profiler',
+        'name': 'Talkeetna'
+    },
+    'KMHX': {
+        'lat': 34.77583,
+        'lon': -76.87639,
+        'elev': 9.45,
+        'type': 'WSR-88D',
+        'name': 'Morehead City'
+    },
+    'KMBX': {
+        'lat': 48.39249,
+        'lon': -100.86443,
+        'elev': 455.07,
+        'type': 'WSR-88D',
+        'name': 'Minot AFB'
+    },
+    'KTYX': {
+        'lat': 43.75582,
+        'lon': -75.68,
+        'elev': 562.66,
+        'type': 'WSR-88D',
+        'name': 'Montague'
+    },
+    'KLGX': {
+        'lat': 47.11689,
+        'lon': -124.10663,
+        'elev': 76.8,
+        'type': 'WSR-88D',
+        'name': 'Langley Hill'
+    }
 }
 
-module.exports = get_nexrad_location;
+module.exports = {
+    get_nexrad_location,
+    NEXRAD_LOCATIONS
+};

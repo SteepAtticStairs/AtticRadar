@@ -1,4 +1,4 @@
-const get_nexrad_location = require('../nexrad_locations');
+const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 
 /**
