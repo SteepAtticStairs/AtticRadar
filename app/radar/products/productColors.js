@@ -300,27 +300,10 @@ const productColors = {
         ],
     },
     HHC: hydrometer_class,
-
     N0B: reflectivity,
-    N1B: reflectivity,
-    N2B: reflectivity,
-    N3B: reflectivity,
-
     N0C: corr_coeff,
-    N1C: corr_coeff,
-    N2C: corr_coeff,
-    N3C: corr_coeff,
-
     N0G: velocity,
-    N1G: velocity,
-    N2G: velocity,
-    N3G: velocity,
-
     N0H: hydrometer_class,
-    N1H: hydrometer_class,
-    N2H: hydrometer_class,
-    N3H: hydrometer_class,
-
     N0S: {
         colors: [
             'rgb(155, 31, 139)',
@@ -387,22 +370,9 @@ const productColors = {
         ],
     },
     N0U: velocity,
-    N1U: velocity,
-    N2U: velocity,
-    N3U: velocity,
-
     N0X: diff_reflectivity,
-    N1X: diff_reflectivity,
-    N2X: diff_reflectivity,
-    N3X: diff_reflectivity,
-
     NSW: spectrum_width,
-
-    N0Q: reflectivity,
-    N1Q: reflectivity,
-    N2Q: reflectivity,
-    N3Q: reflectivity,
-
+    NXQ: reflectivity,
     PHI: {
         colors: [
             'rgb(255, 255, 255)',
@@ -422,17 +392,9 @@ const productColors = {
     REF: reflectivity,
     RHO: corr_coeff,
     SW: spectrum_width, // 'SW '
-
-    TV0: velocity,
-    TV1: velocity,
-    TV2: velocity,
-
+    TVX: velocity,
     TZL: reflectivity,
-    TZ0: reflectivity,
-    TZ1: reflectivity,
-    TZ2: reflectivity,
-    TZ3: reflectivity,
-
+    TZX: reflectivity,
     VEL: velocity,
     ZDR: diff_reflectivity
 }
