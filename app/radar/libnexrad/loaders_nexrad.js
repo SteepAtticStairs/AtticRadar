@@ -1,5 +1,11 @@
 const ut = require('../utils');
 
+const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');
+const Level2Factory = require('../libnexrad/level2/level2_factory');
+
+const NEXRADLevel3File = require('../libnexrad/level3/level3_parser');
+const Level3Factory = require('../libnexrad/level3/level3_factory');
+
 /**
  * Function that fetches a file and returns it as a Buffer.
  * 
@@ -146,8 +152,31 @@ function get_latest_level_3_url(station, product, index, callback, date) {
     // })
 }
 
+/**
+ * Function to quickly plot and display info about a Level 3 file.
+ * 
+ * @param {String} station - See documentation for "get_latest_level_3_url" function.
+ * @param {String} product - See documentation for "get_latest_level_3_url" function.
+ * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L3Factory class.
+ */
+function quick_level_3_plot(station, product, callback = null) {
+    if (callback == null) { callback = function() {} }
+    get_latest_level_3_url(station, product, 0, function(url) {
+        file_to_buffer(ut.phpProxy + url, function(buffer) {
+            const file = new NEXRADLevel3File(buffer);
+            const L3Factory = new Level3Factory(file);
+            console.log(L3Factory);
+            L3Factory.display_file_info();
+            L3Factory.plot();
+
+            callback(L3Factory);
+        })
+    })
+}
+
 module.exports = {
     file_to_buffer,
     get_latest_level_2_url,
-    get_latest_level_3_url
+    get_latest_level_3_url,
+    quick_level_3_plot
 };

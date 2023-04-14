@@ -1,7 +1,10 @@
 const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
+const nexrad_locations = require('../nexrad_locations').NEXRAD_LOCATIONS;
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
 const level3_formatters = require('./level3_formatters');
 const calculate_coordinates = require('../../plot/calculate_coordinates');
+const display_file_info = require('../../libnexrad_dom/level3/display_file_info');
+const ut = require('../../utils');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
@@ -17,6 +20,7 @@ class Level3Factory {
         this.product_code = this.header.code;
         this.product_abbv = initial_radar_obj.product_abbv;
         this.station = station_abbreviations[this.initial_radar_obj.siteID];
+        this.elevation_angle = this.get_elevation_angle();
 
         var tab_pages = this.initial_radar_obj?.tab_pages;
         if (this.product_code == 58) {
@@ -115,11 +119,28 @@ class Level3Factory {
     }
 
     /**
+     * Returns the elevation angle of the radar product/
+     * 
+     * @returns {Number} A number representing the file's elevation angle.
+     */
+    get_elevation_angle() {
+        return this.initial_radar_obj.metadata.el_angle;
+    }
+
+    /**
      * Function that plots the factory with its radar data to the map.
      * No parameters are needed since this is a Level 3 file, and nothing is returned.
      */
     plot() {
         calculate_coordinates(this);
+    }
+
+    /**
+     * Function that writes the necessary file information to the DOM.
+     */
+    display_file_info() {
+        // execute code from another file
+        display_file_info.apply(this);
     }
 
     /**

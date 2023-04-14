@@ -263,10 +263,10 @@ document.addEventListener('loadFile', function(event) {
 //     // ../data/level3/SHV_NMD_2023_04_03_02_29_56# (from Unidata AWS bucket)
 //     // ../data/level3/DTX_NTV_2023_04_05_17_40_06# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
 //     // ../data/level3/DTX_NHI_2023_04_05_18_05_14# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
-//     loaders_nexrad.file_to_buffer('../data/level3/DTX_NHI_2023_04_05_18_05_14#', function(buffer) {
-//         const file = new NEXRADLevel3File(buffer);
-//         const L3Factory = new Level3Factory(file);
-//         console.log(L3Factory)
+//     loaders_nexrad.file_to_buffer('../data/KJGX19700101_000000_V06#', function(buffer) {
+//         const file = new NEXRADLevel2File(buffer);
+//         const L2Factory = new Level2Factory(file);
+//         console.log(L2Factory)
 //     })
 // })
 
