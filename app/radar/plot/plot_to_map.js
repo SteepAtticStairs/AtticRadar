@@ -1,7 +1,8 @@
 const product_colors = require('../products/productColors');
 const ut = require('../utils')
 const map_funcs = require('../map/mapFunctions');
-const initStormTracks = require('../level3/stormTracking/fetchData');
+// const initStormTracks = require('../level3/stormTracking/fetchData');
+const init_storm_tracks = require('../libnexrad_helpers/level3/storm_tracks/init_storm_tracks');
 const setLayerOrder = require('../map/setLayerOrder');
 const create_and_show_colorbar = require('./create_and_show_colorbar');
 const create_WebGL_texture = require('./create_WebGL_texture');
@@ -223,7 +224,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
 
     var isInFileUploadMode = $('#armrModeBtnSwitchElem').is(':checked');
     if (!isInFileUploadMode) {
-        initStormTracks.initStormTracks();
+        init_storm_tracks.fetch_data();
         // STstuff.loadAllStormTrackingStuff();
     }
 
@@ -235,7 +236,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
         map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
     }
 
-    console.log('File plotting complete');
+    // console.log('File plotting complete');
     ut.betterProgressBar('set', 100);
     ut.betterProgressBar('hide');
 

@@ -119,7 +119,7 @@ class Level3Factory {
     }
 
     /**
-     * Returns the elevation angle of the radar product/
+     * Returns the elevation angle of the radar product.
      * 
      * @returns {Number} A number representing the file's elevation angle.
      */

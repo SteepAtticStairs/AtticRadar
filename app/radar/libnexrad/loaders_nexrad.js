@@ -153,6 +153,34 @@ function get_latest_level_3_url(station, product, index, callback, date) {
 }
 
 /**
+ * Function to return a L3Factory instance from a station and a product.
+ * 
+ * @param {String} station - See documentation for "get_latest_level_3_url" function.
+ * @param {String} product - See documentation for "get_latest_level_3_url" function.
+ * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L3Factory class.
+ */
+function return_level_3_factory_from_info(station, product, callback) {
+    get_latest_level_3_url(station, product, 0, (url) => {
+        return_level_3_factory_from_url(url, (L3Factory) => {
+            callback(L3Factory);
+        })
+    })
+}
+/**
+ * Function to return a L3Factory instance from a URL.
+ * 
+ * @param {String} url - See documentation for "file_to_buffer" function.
+ * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L3Factory class.
+ */
+function return_level_3_factory_from_url(url, callback) {
+    file_to_buffer(ut.phpProxy + url, (buffer) => {
+        const file = new NEXRADLevel3File(buffer);
+        const L3Factory = new Level3Factory(file);
+        callback(L3Factory);
+    })
+}
+
+/**
  * Function to quickly plot and display info about a Level 3 file.
  * 
  * @param {String} station - See documentation for "get_latest_level_3_url" function.
@@ -161,16 +189,12 @@ function get_latest_level_3_url(station, product, index, callback, date) {
  */
 function quick_level_3_plot(station, product, callback = null) {
     if (callback == null) { callback = function() {} }
-    get_latest_level_3_url(station, product, 0, function(url) {
-        file_to_buffer(ut.phpProxy + url, function(buffer) {
-            const file = new NEXRADLevel3File(buffer);
-            const L3Factory = new Level3Factory(file);
-            console.log(L3Factory);
-            L3Factory.display_file_info();
-            L3Factory.plot();
+    return_level_3_factory_from_info(station, product, (L3Factory) => {
+        console.log(L3Factory);
+        L3Factory.display_file_info();
+        L3Factory.plot();
 
-            callback(L3Factory);
-        })
+        callback(L3Factory);
     })
 }
 
@@ -178,5 +202,7 @@ module.exports = {
     file_to_buffer,
     get_latest_level_2_url,
     get_latest_level_3_url,
+    return_level_3_factory_from_info,
+    return_level_3_factory_from_url,
     quick_level_3_plot
 };
