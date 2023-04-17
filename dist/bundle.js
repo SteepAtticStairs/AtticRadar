@@ -9758,7 +9758,7 @@ const nexrad_locations = require('../nexrad_locations').NEXRAD_LOCATIONS;
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
 const level3_formatters = require('./level3_formatters');
 const calculate_coordinates = require('../../plot/calculate_coordinates');
-const display_file_info = require('../../libnexrad_dom/level3/display_file_info');
+const display_file_info = require('../../libnexrad_helpers/level3/display_file_info');
 const ut = require('../../utils');
 
 /**
@@ -9930,7 +9930,7 @@ function np_linspace(startValue, stopValue, cardinality) {
 }
 
 module.exports = Level3Factory;
-},{"../../../../resources/stationAbbreviations":287,"../../libnexrad_dom/level3/display_file_info":72,"../../plot/calculate_coordinates":98,"../../utils":111,"../nexrad_locations":71,"./level3_formatters":68}],68:[function(require,module,exports){
+},{"../../../../resources/stationAbbreviations":287,"../../libnexrad_helpers/level3/display_file_info":72,"../../plot/calculate_coordinates":98,"../../utils":111,"../nexrad_locations":71,"./level3_formatters":68}],68:[function(require,module,exports){
 /**
  * Function that takes all of the tabular pages in a storm tracks product, and creates a nicely-formatted object with the data.
  * The code is from netbymatt's "nexrad-level-3-data":

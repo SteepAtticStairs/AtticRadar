@@ -3,7 +3,7 @@ const nexrad_locations = require('../nexrad_locations').NEXRAD_LOCATIONS;
 const station_abbreviations = require('../../../../resources/stationAbbreviations');
 const level3_formatters = require('./level3_formatters');
 const calculate_coordinates = require('../../plot/calculate_coordinates');
-const display_file_info = require('../../libnexrad_dom/level3/display_file_info');
+const display_file_info = require('../../libnexrad_helpers/level3/display_file_info');
 const ut = require('../../utils');
 
 /**
