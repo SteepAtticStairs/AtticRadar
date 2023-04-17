@@ -9877,9 +9877,11 @@ class Level3Factory {
      * Returns the elevation angle of the radar product.
      * 
      * @returns {Number} A number representing the file's elevation angle.
+     * If the angle is "undefined", the return value will be "0.0".
      */
     get_elevation_angle() {
-        return this.initial_radar_obj.metadata.el_angle;
+        const el_angle = this.initial_radar_obj.metadata.el_angle;
+        return el_angle !== undefined ? el_angle : 0.0;
     }
 
     /**
@@ -10679,7 +10681,7 @@ class DigitalHMCMapper extends DataMapper {
         super();
         this.labels = ['ND', 'BI', 'GC', 'IC', 'DS', 'WS', 'RA', 'HR', 'BD', 'GR', 'HA', 'LH', 'GH', 'UK', 'RF'];
         for (let i = 10; i < 256; i++) {
-            this.lut[i] = Math.floor(i / 10);
+            this.lut[i] = Math.floor(i/* / 10*/);
         }
         this.lut[150] = this.RANGE_FOLD;
     }

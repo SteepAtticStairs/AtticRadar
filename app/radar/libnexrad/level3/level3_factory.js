@@ -122,9 +122,11 @@ class Level3Factory {
      * Returns the elevation angle of the radar product.
      * 
      * @returns {Number} A number representing the file's elevation angle.
+     * If the angle is "undefined", the return value will be "0.0".
      */
     get_elevation_angle() {
-        return this.initial_radar_obj.metadata.el_angle;
+        const el_angle = this.initial_radar_obj.metadata.el_angle;
+        return el_angle !== undefined ? el_angle : 0.0;
     }
 
     /**

@@ -476,7 +476,7 @@ class DigitalHMCMapper extends DataMapper {
         super();
         this.labels = ['ND', 'BI', 'GC', 'IC', 'DS', 'WS', 'RA', 'HR', 'BD', 'GR', 'HA', 'LH', 'GH', 'UK', 'RF'];
         for (let i = 10; i < 256; i++) {
-            this.lut[i] = Math.floor(i / 10);
+            this.lut[i] = Math.floor(i/* / 10*/);
         }
         this.lut[150] = this.RANGE_FOLD;
     }
