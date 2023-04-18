@@ -66,11 +66,12 @@ function get_latest_level_2_url(station, callback) {
  * in this function, this will be a string with the latest file's URL.
  * @param {Date} date - A value used internally within the function. Do not pass a value for this parameter.
  */
+var timesGoneBack = 0;
 function get_latest_level_3_url(station, product, index, callback, date) {
     if (!(product.length > 3)) {
         /* we need to slice(1) here (remove the first letter) because the level 3 source we
         * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
-        station = station.slice(1);
+        var corrected_station = station.slice(1);
         //document.getElementById('spinnerParent').style.display = 'block';
         var curTime;
         if (date == undefined) {
@@ -83,9 +84,9 @@ function get_latest_level_3_url(station, product, index, callback, date) {
         if (month.toString().length == 1) month = "0" + month.toString();
         var day = curTime.getUTCDate();
         if (day.toString().length == 1) day = "0" + day.toString();
-        var stationToGet = station.toUpperCase().replace(/ /g, '')
+        var stationToGet = corrected_station.toUpperCase().replace(/ /g, '')
         var urlBase = "https://unidata-nexrad-level3.s3.amazonaws.com/";
-        var filenamePrefix = `${station}_${product}_${year}_${month}_${day}`;
+        var filenamePrefix = `${corrected_station}_${product}_${year}_${month}_${day}`;
         // var urlPrefInfo = '?list-type=2&delimiter=/%2F&prefix=';
         var urlPrefInfo = '?prefix=';
         var fullURL = `${urlBase}${urlPrefInfo}${filenamePrefix}`
@@ -117,7 +118,7 @@ function get_latest_level_3_url(station, product, index, callback, date) {
                     var d = curTime;
                     d.setDate(d.getDate() - 1);
                     timesGoneBack++;
-                    getLatestL3(station, product, index, callback, d);
+                    get_latest_level_3_url(station, product, index, callback, d);
                 } else {
                     callback(null);
                 }

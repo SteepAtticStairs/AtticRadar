@@ -1,23 +1,11 @@
-//var map = require('../map/map');
 const ut = require('../utils');
-const radarStationInfo = require('./radarStationInfo');
+const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
+const get_station_status = require('../misc/getStationStatus');
 
 // https://www.weather.gov/nl2/NEXRADView
 
-function resetStationDiv(station) {
-    setTimeout(function() {
-        $('#radarStationIcon').removeClass('fa-bounce');
-        document.getElementById('radarStation').innerHTML = station;
-    }, 500)
-}
-
 function showRadarStatus(station) {
     if (station == 'No Station Selected') {
-        // ut.spawnModal({
-        //     'title': 'Error',
-        //     'headerColor': 'alert-danger',
-        //     'body': '<div>Please <b>select a radar station</b> before attempting to view station info.</div>'
-        // })
         ut.displayAtticDialog({
             'title': 'Error',
             'body': '<div>Please <b>select a radar station</b> before attempting to view station info.</div',
@@ -26,113 +14,84 @@ function showRadarStatus(station) {
         })
         return;
     }
-    document.getElementById('radarStation').innerHTML = 'Loading...'
-    $('#radarStationIcon').addClass('fa-bounce');
-    //var radmessageURL = `https://api.weather.gov/products/types/FTM/locations/${station.substring(1)}/#`;
-    //$.getJSON(ut.preventFileCaching(radmessageURL), function (data) {
-    //var radstatURL = `https://api.weather.gov/radar/stations/${station}/#`;
-    //$.getJSON(ut.preventFileCaching(ut.phpProxy + radstatURL), function(stationData) {
-    var radarType = radarStationInfo[station].type;
-    var stationName = radarStationInfo[station].name;
-
-    var stationStatusDiv;
-    try {
-        var stationStatusObj = $('#dataDiv').data('stationStatusObj');
-        var curStationStatus = stationStatusObj[station].status;
-        if (curStationStatus == 'up') { stationStatusDiv = `<b class='new-file'>ONLINE</b>` }
-        if (curStationStatus == 'down') { stationStatusDiv = `<b class='old-file'>OFFLINE</b>` }
-    } catch (e) {
-        console.warn(e);
-        stationStatusDiv = `<b>unknown</b>`
-    }
 
     var latestURL = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.75ftm/SI.${station.toLowerCase()}/sn.last`
-    $.get(ut.preventFileCaching(ut.phpProxy + latestURL + '#'), function (data) {
-        // var radstatMessageIssuanceTime = new Date(data.issuanceTime);
-        // var radstatMessageText = data.productText;
+    var url = ut.preventFileCaching(ut.phpProxy + latestURL + '#');
+    // console.log(url)
+    fetch(url)
+    .then(response => {
+        response.text().then(text => {
+            console.log(text);
+            const file_modified_date = response.headers.get('Last-Modified');
 
-        // // extract the text in between the \n\n sequences -
-        // // that text is all we need
-        // var middle = radstatMessageText.slice(
-        //     radstatMessageText.indexOf('\n\n') + 1,
-        //     radstatMessageText.lastIndexOf('\n\n'),
-        // );
-
-        // radstatMessageText.replace(/\n/g, '<br>');
-        // var messageID = `<a class='false-anchor' onclick='window.location.href = "${msgURL}"'>${data.id}</a>`;
-        // var messageName = data.productName;
-        // var messageTime = ut.printFancyTime(radstatMessageIssuanceTime);
-
-        var messageText = data;
-        var messageTime;
-        var messageAge;
-        var ageClass;
-
-        try {
+            var message_date_string;
+            var message_date_obj;
             // convert to uppercase so we don't run into case issues
-            var messageTextToUse = messageText.toUpperCase();
+            const message_text_to_use = text.toUpperCase();
             // split the FTM product into lines
-            var newlineSplit = messageTextToUse.split(/\r?\n/);
+            const newline_split = message_text_to_use.split(/\r?\n/);
             // find and return the line that contains 'Message Date'
-            const match = newlineSplit.find(element => { if (element.includes('MESSAGE DATE')) { return true; } });
-            // remove the string from the line, we only need the date data (e.g. 'Sep 14 2022 14:17:04')
-            var dateStr = match.replace('MESSAGE DATE:  ', '');
-            // convert to a date object in UTC time
-            var dateObj = new Date(`${dateStr} UTC`);
-            messageTime = ut.printFancyTime(dateObj);
+            const match = newline_split.find(element => { if (element.includes('MESSAGE DATE')) { return true; } });
+            if (match !== undefined) { // we want to extract the message send time from the message itself, preferably
+                // remove the string from the line, we only need the date text (e.g. 'Sep 14 2022 14:17:04')
+                const date_str = match.replace('MESSAGE DATE:  ', '');
+                // convert to a date object in UTC time
+                const date_obj = new Date(`${date_str} UTC`);
+                message_date_obj = date_obj;
+                message_date_string = ut.printFancyTime(date_obj);
+            } else { // if not, we'll use the "Last-Modified" header for the message file
+                // convert to a date object in UTC time
+                const date_obj = new Date(`${file_modified_date} UTC`);
+                message_date_obj = date_obj;
+                message_date_string = ut.printFancyTime(date_obj);
+            }
 
-            const dateDiff = ut.getDateDiff(dateObj, new Date());
-            var formattedDateDiff;
-            if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
-            if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
-            if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
-            if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
+            const date_diff = ut.getDateDiff(message_date_obj, new Date());
+            var formatted_date_diff;
+            var age_class;
+            if (date_diff.s) { formatted_date_diff = `${date_diff.s}s`; }
+            if (date_diff.m) { formatted_date_diff = `${date_diff.m}m ${date_diff.s}s`; }
+            if (date_diff.h) { formatted_date_diff = `${date_diff.h}h ${date_diff.m}m`; }
+            if (date_diff.d) { formatted_date_diff = `${date_diff.d}d ${date_diff.h}h`; }
 
             // greater than or equal to 3 days
-            if (dateDiff.d >= 3) { ageClass = 'old-file'; }
+            if (date_diff.d >= 3) { age_class = 'old-file'; }
             // greater than or equal to 1 days but less than 3 days
-            if (dateDiff.d >= 1 && dateDiff.d < 3) { ageClass = 'recent-file'; }
+            if (date_diff.d >= 1 && date_diff.d < 3) { age_class = 'recent-file'; }
             // 0 days
-            if (dateDiff.d == 0) { ageClass = 'new-file'; }
-            messageAge = `<b class='${ageClass}'>${formattedDateDiff} old</b>`
-            //document.getElementById('top-right').innerHTML = formattedDateDiff;
-        } catch (e) {
-            console.warn(e);
-            messageTime = 'There was an error while parsing the message time.'
-            messageAge = 'N/A'
-            ageClass = ''
-        }
+            if (date_diff.d == 0) { age_class = 'new-file'; }
+            var message_age = `<b class='${age_class}'>${formatted_date_diff} old</b>`;
 
-        var htmlContent = 
+            const radar_station_status = window.atticData.radar_station_status;
+            const current_station_status = radar_station_status[station].status;
+            var radar_station_status_div;
+            if (radar_station_status == undefined) {
+                radar_station_status_div = `<b>unknown</b>`;
+            } else {
+                if (current_station_status == 'up') {
+                    radar_station_status_div = `<b class='new-file'>ONLINE</b>`;
+                } else if (current_station_status == 'down') {
+                    radar_station_status_div = `<b class='old-file'>OFFLINE</b>`;
+                }
+            }
+
+            var html_content = 
 `<b>Radar Station: </b>${station}
-<b>Radar Name: </b>${stationName}
-<b>Radar Type: </b>${radarType}
-<b>Station Status: ${stationStatusDiv}</b>
+<b>Radar Name: </b>${nexrad_locations[station].name}
+<b>Radar Type: </b>${nexrad_locations[station].type}
+<b>Station Status: ${radar_station_status_div}</b>
 
-<b>Message Send Time: </b>${messageTime}
-<div style="white-space: pre-wrap;"><b>Message (${messageAge}):</b><div class="code">${messageText}</div></div>`
-        // ut.spawnModal({
-        //     'title': `${station} Info`,
-        //     'headerColor': 'alert-warning',
-        //     'body': htmlContent
-        // })
-        ut.displayAtticDialog({
-            'title': `${station} Info`,
-            'body': htmlContent,
-            'color': 'rgb(37 94 151)',
-            'textColor': 'rgb(182 218 255)',
-        })
-        resetStationDiv(station);
+<b>Message Send Time: </b>${message_date_string}
+<div style="white-space: pre-wrap;"><b>Message (${message_age}):</b><div class="code">${text}</div></div>`
 
-        // document.getElementById('radstatMessageID').innerHTML = `${data.id}<br><div class='false-anchor' onclick='window.location.href = "${msgURL}"'>${msgURL}</a>`;
-        // document.getElementById('radstatMessageName').innerHTML = data.productName;
-        // document.getElementById('radstatMessage').innerHTML = radstatMessageText;
-        // document.getElementById('radstatMessageTime').innerHTML = printFancyTime(radstatMessageIssuanceTime);
-
-        console.log(messageText);
+            ut.displayAtticDialog({
+                'title': `${station} Info`,
+                'body': html_content,
+                'color': 'rgb(37, 94, 151)',
+                'textColor': 'rgb(182, 218, 255)',
+            })
+        });
     });
-    //});
-    //});
 }
 
 $('#radarStation').on('click', function() {

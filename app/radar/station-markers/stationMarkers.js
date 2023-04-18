@@ -112,6 +112,7 @@ function _add_stations_layer(radar_stations_geojson, callback) {
                 });
 
                 get_station_status((data) => {
+                    window.atticData.radar_station_status = data;
                     const statusified_geojson = _generate_stations_geojson(data);
                     map.getSource('stationSymbolLayer').setData(statusified_geojson);
                 })
