@@ -1,4 +1,5 @@
 const nexrad_locations = require('../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
+const get_date_diff = require('../../misc/get_date_diff');
 const { DateTime } = require('luxon');
 const ut = require('../../utils');
 
@@ -23,21 +24,11 @@ function _position_footer() {
 }
 
 function _display_time_diff() {
-    const dateDiff = ut.getDateDiff(this.get_date(), new Date());
-    var formattedDateDiff;
-    if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
-    if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
-    if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
-    if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
+    const date_diff = get_date_diff(this.get_date(), 'radar_plot');
 
     $('#top-right').removeClass();
-    // greater than 1 hour or 1 day OR greater than or equal to 0 hours 30 minutes
-    if (dateDiff.h > 0 || dateDiff.d > 0 || (dateDiff.h == 0 && dateDiff.m >= 30)) { $('#top-right').addClass('old-file'); }
-    // greater than or equal to 0 hours 10 minutes
-    if (dateDiff.h == 0 && dateDiff.m >= 10) { $('#top-right').addClass('recent-file'); }
-    // less than 0 hours 10 minutes
-    if (dateDiff.h == 0 && dateDiff.m < 10) { $('#top-right').addClass('new-file'); }
-    $('#top-right').html(formattedDateDiff);
+    $('#top-right').addClass(date_diff.class);
+    $('#top-right').html(date_diff.formatted);
 }
 
 /**

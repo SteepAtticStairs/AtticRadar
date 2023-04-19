@@ -1,5 +1,6 @@
 const ut = require('../utils');
 const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
+const get_date_diff = require('../misc/get_date_diff');
 const get_station_status = require('../misc/getStationStatus');
 
 // https://www.weather.gov/nl2/NEXRADView
@@ -46,21 +47,8 @@ function showRadarStatus(station) {
                 message_date_string = ut.printFancyTime(date_obj);
             }
 
-            const date_diff = ut.getDateDiff(message_date_obj, new Date());
-            var formatted_date_diff;
-            var age_class;
-            if (date_diff.s) { formatted_date_diff = `${date_diff.s}s`; }
-            if (date_diff.m) { formatted_date_diff = `${date_diff.m}m ${date_diff.s}s`; }
-            if (date_diff.h) { formatted_date_diff = `${date_diff.h}h ${date_diff.m}m`; }
-            if (date_diff.d) { formatted_date_diff = `${date_diff.d}d ${date_diff.h}h`; }
-
-            // greater than or equal to 3 days
-            if (date_diff.d >= 3) { age_class = 'old-file'; }
-            // greater than or equal to 1 days but less than 3 days
-            if (date_diff.d >= 1 && date_diff.d < 3) { age_class = 'recent-file'; }
-            // 0 days
-            if (date_diff.d == 0) { age_class = 'new-file'; }
-            var message_age = `<b class='${age_class}'>${formatted_date_diff} old</b>`;
+            const date_diff = get_date_diff(message_date_obj, 'radar_message');
+            var message_age = `<b class='${date_diff.class}'>${date_diff.formatted} old</b>`;
 
             const radar_station_status = window.atticData.radar_station_status;
             const current_station_status = radar_station_status[station].status;

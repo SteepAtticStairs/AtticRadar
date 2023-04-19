@@ -60,7 +60,7 @@ $('#dataDiv').data('stormTracksVisibility', true);
 require('./station-markers/stationMarkerMenu');
 
 // load the radar message listener
-require('./radar-message/radarMessage');
+require('./radar-message/radar_message');
 
 // load the historical hurricanes module
 require('../hurricanes/historical/menuItem');
