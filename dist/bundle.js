@@ -14023,6 +14023,7 @@ function plot_storm_tracks(L3Factory) {
 
         coords = getCoords(curCell.current);
         points.push(coords);
+        const originalInitialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
         initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
         for (var i in curCell.forecast) {
             var curPoint = curCell.forecast[i];
@@ -14030,10 +14031,11 @@ function plot_storm_tracks(L3Factory) {
                 coords = getCoords(curPoint);
                 parallelLines.push(generateParallelLine(initialPoint, coords, curCell, i));
                 points.push(coords);
+                initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
             }
         }
 
-        return [points, initialPoint, parallelLines];
+        return [points, originalInitialPoint, parallelLines];
     }
 
     var stormIDs = Object.keys(allTracks);
