@@ -85,10 +85,10 @@ function plot_storm_tracks(L3Factory) {
     var multiPointGeoJSON = turf.featureCollection(multiPointCoords);
     var featureCollectionGeoJSON = turf.featureCollection(featureCollectionObjects.flat());
 
-    var stormTrackLayers = [];
+    var storm_track_layers = [];
     // to add black borders to the lines
     for (var i = 0; i <= 1; i++) {
-        stormTrackLayers.push('stormTrackParallelLines' + i);
+        storm_track_layers.push('stormTrackParallelLines' + i);
         map.addLayer({
             id: 'stormTrackParallelLines' + i,
             type: 'line',
@@ -104,7 +104,7 @@ function plot_storm_tracks(L3Factory) {
                 'line-width': i == 1 ? 2 : 4,
             }
         })
-        stormTrackLayers.push('stormTrackLines' + i);
+        storm_track_layers.push('stormTrackLines' + i);
         map.addLayer({
             id: 'stormTrackLines' + i,
             type: 'line',
@@ -121,7 +121,7 @@ function plot_storm_tracks(L3Factory) {
             }
         })
     }
-    stormTrackLayers.push('stormTrackInitialPoint');
+    storm_track_layers.push('stormTrackInitialPoint');
     map.addLayer({
         id: 'stormTrackInitialPoint',
         type: 'circle',
@@ -136,8 +136,7 @@ function plot_storm_tracks(L3Factory) {
             'circle-stroke-color': 'black',
         }
     })
-    if (window.atticData.stormTrackLayers == undefined) { window.atticData.stormTrackLayers = [] }
-    window.atticData.stormTrackLayers.push(...stormTrackLayers);
+    window.atticData.storm_track_layers = storm_track_layers;
 
     function cellClick(e) {
         // if (window.atticData.currentStation == L3Factory.station) {

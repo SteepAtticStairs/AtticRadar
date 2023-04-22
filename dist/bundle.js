@@ -13955,7 +13955,6 @@ function _load_storm_track_product(product, callback) {
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
 
     loaders_nexrad.get_latest_level_3_url(currentStation, product, 0, (url) => {
-        console.log(url)
         if (url == null) {
             // nothing here yet
             deal_with_storm_track_layers();
@@ -13975,11 +13974,19 @@ function _load_storm_track_product(product, callback) {
 function deal_with_storm_track_layers() {
     const map = require('../../../map/map');
 
-    var stormTrackLayers = window.atticData.stormTrackLayers;
-    if (stormTrackLayers != undefined) {
-        for (var i in stormTrackLayers) {
-            if (map.getLayer(stormTrackLayers[i])) { map.removeLayer(stormTrackLayers[i]) }
-            if (map.getSource(stormTrackLayers[i])) { map.removeSource(stormTrackLayers[i]) }
+    var storm_track_layers = window.atticData.storm_track_layers;
+    if (storm_track_layers != undefined) {
+        for (var i in storm_track_layers) {
+            if (map.getLayer(storm_track_layers[i])) { map.removeLayer(storm_track_layers[i]) }
+            if (map.getSource(storm_track_layers[i])) { map.removeSource(storm_track_layers[i]) }
+        }
+    }
+
+    var tvs_layers = window.atticData.tvs_layers;
+    if (tvs_layers != undefined) {
+        for (var i in tvs_layers) {
+            if (map.getLayer(tvs_layers[i])) { map.removeLayer(tvs_layers[i]) }
+            if (map.getSource(tvs_layers[i])) { map.removeSource(tvs_layers[i]) }
         }
     }
 }
@@ -14081,10 +14088,10 @@ function plot_storm_tracks(L3Factory) {
     var multiPointGeoJSON = turf.featureCollection(multiPointCoords);
     var featureCollectionGeoJSON = turf.featureCollection(featureCollectionObjects.flat());
 
-    var stormTrackLayers = [];
+    var storm_track_layers = [];
     // to add black borders to the lines
     for (var i = 0; i <= 1; i++) {
-        stormTrackLayers.push('stormTrackParallelLines' + i);
+        storm_track_layers.push('stormTrackParallelLines' + i);
         map.addLayer({
             id: 'stormTrackParallelLines' + i,
             type: 'line',
@@ -14100,7 +14107,7 @@ function plot_storm_tracks(L3Factory) {
                 'line-width': i == 1 ? 2 : 4,
             }
         })
-        stormTrackLayers.push('stormTrackLines' + i);
+        storm_track_layers.push('stormTrackLines' + i);
         map.addLayer({
             id: 'stormTrackLines' + i,
             type: 'line',
@@ -14117,7 +14124,7 @@ function plot_storm_tracks(L3Factory) {
             }
         })
     }
-    stormTrackLayers.push('stormTrackInitialPoint');
+    storm_track_layers.push('stormTrackInitialPoint');
     map.addLayer({
         id: 'stormTrackInitialPoint',
         type: 'circle',
@@ -14132,8 +14139,7 @@ function plot_storm_tracks(L3Factory) {
             'circle-stroke-color': 'black',
         }
     })
-    if (window.atticData.stormTrackLayers == undefined) { window.atticData.stormTrackLayers = [] }
-    window.atticData.stormTrackLayers.push(...stormTrackLayers);
+    window.atticData.storm_track_layers = storm_track_layers;
 
     function cellClick(e) {
         // if (window.atticData.currentStation == L3Factory.station) {
@@ -14220,8 +14226,8 @@ function plot_tornado_vortex_signature(L3Factory) {
     }
     var multipoint_geoJSON = turf.featureCollection(multipoint_coords);
 
-    var storm_track_layers = [];
-    storm_track_layers.push('tvsInitialPoint');
+    var tvs_layers = [];
+    tvs_layers.push('tvsInitialPoint');
     map.addLayer({
         id: 'tvsInitialPoint',
         type: 'circle',
@@ -14236,8 +14242,7 @@ function plot_tornado_vortex_signature(L3Factory) {
             'circle-stroke-color': 'black',
         }
     })
-    if (window.atticData.stormTrackLayers == undefined) { window.atticData.stormTrackLayers = [] }
-    window.atticData.stormTrackLayers.push(...storm_track_layers);
+    window.atticData.tvs_layers = tvs_layers;
 
     function cellClick(e) {
         // if (window.atticData.currentStation == L3Factory.station) {
@@ -14833,6 +14838,29 @@ function doWhenLoad(func) {
         }
     }, 0)
 }
+// doWhenLoad(function() {
+//     const NEXRADLevel2File = require('./libnexrad/level2/level2_parser');
+//     const Level2Factory = require('./libnexrad/level2/level2_factory');
+
+//     const NEXRADLevel3File = require('./libnexrad/level3/level3_parser');
+//     const Level3Factory = require('./libnexrad/level3/level3_factory');
+
+//     const loaders_nexrad = require('./libnexrad/loaders_nexrad');
+
+//     // // ../data/KTLX20130520_201643_V06.gz#
+//     // // ../data/level3/SHV_NMD_2023_04_03_02_29_56# (from Unidata AWS bucket)
+//     // // ../data/level3/DTX_NTV_2023_04_05_17_40_06# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
+//     // // ../data/level3/DTX_NHI_2023_04_05_18_05_14# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
+//     // TLX_NST_2023_04_19_21_55_59
+//     // TLX_TVS_2023_04_19_21_55_59
+//     // TLX_NMD_2023_04_19_21_55_59
+//     loaders_nexrad.file_to_buffer('../data/level3/TLX_TVS_2023_04_19_21_55_59#', function(buffer) {
+//         const file = new NEXRADLevel3File(buffer);
+//         const L3Factory = new Level3Factory(file);
+//         console.log(L3Factory);
+//         L3Factory.plot();
+//     })
+// })
 
 // function doWhenLoad() {
 //     (function loadFileIndex(i, max) {
@@ -15147,8 +15175,6 @@ function moveLayerToTop(layerName) {
 }
 
 function setLayerOrder() {
-    var stormTrackLayers = window.atticData.stormTrackLayers;
-
     moveLayerToTop('baseReflectivity');
     moveLayerToTop('radioStationLayer');
 
@@ -15163,9 +15189,16 @@ function setLayerOrder() {
     moveLayerToTop('mainAlertsLayer');
     moveLayerToTop('mainAlertsLayerFill');
 
-    if (stormTrackLayers != undefined) {
-        for (var i in stormTrackLayers) {
-            moveLayerToTop(stormTrackLayers[i]);
+    var storm_track_layers = window.atticData.storm_track_layers;
+    if (storm_track_layers != undefined) {
+        for (var i in storm_track_layers) {
+            moveLayerToTop(storm_track_layers[i]);
+        }
+    }
+    var tvs_layers = window.atticData.tvs_layers;
+    if (tvs_layers != undefined) {
+        for (var i in tvs_layers) {
+            moveLayerToTop(tvs_layers[i]);
         }
     }
 

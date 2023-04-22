@@ -250,6 +250,29 @@ function doWhenLoad(func) {
         }
     }, 0)
 }
+// doWhenLoad(function() {
+//     const NEXRADLevel2File = require('./libnexrad/level2/level2_parser');
+//     const Level2Factory = require('./libnexrad/level2/level2_factory');
+
+//     const NEXRADLevel3File = require('./libnexrad/level3/level3_parser');
+//     const Level3Factory = require('./libnexrad/level3/level3_factory');
+
+//     const loaders_nexrad = require('./libnexrad/loaders_nexrad');
+
+//     // // ../data/KTLX20130520_201643_V06.gz#
+//     // // ../data/level3/SHV_NMD_2023_04_03_02_29_56# (from Unidata AWS bucket)
+//     // // ../data/level3/DTX_NTV_2023_04_05_17_40_06# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
+//     // // ../data/level3/DTX_NHI_2023_04_05_18_05_14# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
+//     // TLX_NST_2023_04_19_21_55_59
+//     // TLX_TVS_2023_04_19_21_55_59
+//     // TLX_NMD_2023_04_19_21_55_59
+//     loaders_nexrad.file_to_buffer('../data/level3/TLX_TVS_2023_04_19_21_55_59#', function(buffer) {
+//         const file = new NEXRADLevel3File(buffer);
+//         const L3Factory = new Level3Factory(file);
+//         console.log(L3Factory);
+//         L3Factory.plot();
+//     })
+// })
 
 // function doWhenLoad() {
 //     (function loadFileIndex(i, max) {

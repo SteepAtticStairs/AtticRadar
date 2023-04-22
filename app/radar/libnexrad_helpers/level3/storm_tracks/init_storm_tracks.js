@@ -4,7 +4,6 @@ function _load_storm_track_product(product, callback) {
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
 
     loaders_nexrad.get_latest_level_3_url(currentStation, product, 0, (url) => {
-        console.log(url)
         if (url == null) {
             // nothing here yet
             deal_with_storm_track_layers();
@@ -24,11 +23,19 @@ function _load_storm_track_product(product, callback) {
 function deal_with_storm_track_layers() {
     const map = require('../../../map/map');
 
-    var stormTrackLayers = window.atticData.stormTrackLayers;
-    if (stormTrackLayers != undefined) {
-        for (var i in stormTrackLayers) {
-            if (map.getLayer(stormTrackLayers[i])) { map.removeLayer(stormTrackLayers[i]) }
-            if (map.getSource(stormTrackLayers[i])) { map.removeSource(stormTrackLayers[i]) }
+    var storm_track_layers = window.atticData.storm_track_layers;
+    if (storm_track_layers != undefined) {
+        for (var i in storm_track_layers) {
+            if (map.getLayer(storm_track_layers[i])) { map.removeLayer(storm_track_layers[i]) }
+            if (map.getSource(storm_track_layers[i])) { map.removeSource(storm_track_layers[i]) }
+        }
+    }
+
+    var tvs_layers = window.atticData.tvs_layers;
+    if (tvs_layers != undefined) {
+        for (var i in tvs_layers) {
+            if (map.getLayer(tvs_layers[i])) { map.removeLayer(tvs_layers[i]) }
+            if (map.getSource(tvs_layers[i])) { map.removeSource(tvs_layers[i]) }
         }
     }
 }

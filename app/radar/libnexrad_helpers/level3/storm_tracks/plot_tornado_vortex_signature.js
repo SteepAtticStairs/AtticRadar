@@ -33,8 +33,8 @@ function plot_tornado_vortex_signature(L3Factory) {
     }
     var multipoint_geoJSON = turf.featureCollection(multipoint_coords);
 
-    var storm_track_layers = [];
-    storm_track_layers.push('tvsInitialPoint');
+    var tvs_layers = [];
+    tvs_layers.push('tvsInitialPoint');
     map.addLayer({
         id: 'tvsInitialPoint',
         type: 'circle',
@@ -49,8 +49,7 @@ function plot_tornado_vortex_signature(L3Factory) {
             'circle-stroke-color': 'black',
         }
     })
-    if (window.atticData.stormTrackLayers == undefined) { window.atticData.stormTrackLayers = [] }
-    window.atticData.stormTrackLayers.push(...storm_track_layers);
+    window.atticData.tvs_layers = tvs_layers;
 
     function cellClick(e) {
         // if (window.atticData.currentStation == L3Factory.station) {
