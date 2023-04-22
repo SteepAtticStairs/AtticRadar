@@ -220,7 +220,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
 
     map_funcs.removeMapLayer('baseReflectivity');
 
-    map.addLayer(layer);
+    map.addLayer(layer, 'land-structure-line');
 
     var isInFileUploadMode = $('#armrModeBtnSwitchElem').is(':checked');
     if (!isInFileUploadMode) {

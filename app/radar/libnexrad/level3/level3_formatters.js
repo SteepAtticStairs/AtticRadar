@@ -165,26 +165,34 @@ function format_tornado_vortex_signature(pages) {
 	pages.forEach((page) => {
 		page.forEach((line) => {
 			// extrat values
-			const rawMatch = line.match(/ {2}([A-Z0-9]{3}) {4}([A-Z][0-9]) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3})[ <>]{4}([0-9. ]{4})[ <>]{3,4}([0-9.]{3,4})\/ {0,2}([0-9.]{1,4}) {3,5}([0-9.]{2,4})\/ {0,2}([0-9.]{1,4})/);
+			const rawMatch = line.match(/ {2}([A-Z0-9]{3}) {4}([A-Z][0-9]) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3}) {3,5}([0-9.]{1,3})\/ {0,2}([0-9.]{1,4})[ <>]{4}([0-9. ]{4})[ <>]{3,4}([0-9.]{3,4})\/ {0,2}([0-9.]{1,4}) {3,5}([0-9.]{2,4})\/ {0,2}([0-9.]{1,4})/);
 			if (!rawMatch) return;
 
 			// format the result
-			const [, type, id, az, range, avfdv, lldv, mxdv, mvdvhgt, depth, base, top, maxshear, maxshearheight] = [...rawMatch];
+			var [, type, id, az, range, avfdv, lldv, mxdv, mvdvhgt, depth, base, top, maxshear, maxshearheight] = [...rawMatch];
+            const cell_id = `${id}`; // copy the string
 			// store to array
-			result[id] = {
-				type,
-				az: +az,
-				range: +range,
-				avfdv: +avfdv,
-				lldv: +lldv,
-				mxdv: +mxdv,
-				mvdvhgt: +mvdvhgt,
-				depth: +depth,
-				base: +base,
-				top: +top,
-				maxshear: +maxshear,
-				maxshearheight: +maxshearheight,
-			};
+            // allow for duplicate cell IDs
+            if (result[id] != undefined) {
+                while (result[id] != undefined) {
+                    id = `${id}-0`;
+                }
+            }
+            result[id] = {
+                type,
+                cell_id: cell_id,
+                az: +az,
+                range: +range,
+                avfdv: +avfdv,
+                lldv: +lldv,
+                mxdv: +mxdv,
+                mvdvhgt: +mvdvhgt,
+                depth: +depth,
+                base: +base,
+                top: +top,
+                maxshear: +maxshear,
+                maxshearheight: +maxshearheight,
+            };
 		});
 	});
 

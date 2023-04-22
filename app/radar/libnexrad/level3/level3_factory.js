@@ -6,6 +6,9 @@ const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/level3/display_file_info');
 const ut = require('../../utils');
 
+const plot_storm_tracks = require('../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks');
+const plot_tornado_vortex_signature = require('../../libnexrad_helpers/level3/storm_tracks/plot_tornado_vortex_signature');
+
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
  */
@@ -134,7 +137,16 @@ class Level3Factory {
      * No parameters are needed since this is a Level 3 file, and nothing is returned.
      */
     plot() {
-        calculate_coordinates(this);
+        // 58 = storm tracks (NST)
+        // 141 = mesocyclone detection (NMD)
+        // 61 = tornado vortex signature (TVS)
+        if (this.product_code == 58) {
+            plot_storm_tracks(this);
+        } else if (this.product_code == 61) {
+            plot_tornado_vortex_signature(this);
+        } else {
+            calculate_coordinates(this);
+        }
     }
 
     /**

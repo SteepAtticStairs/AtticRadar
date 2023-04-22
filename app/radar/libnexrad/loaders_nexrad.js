@@ -68,7 +68,7 @@ function get_latest_level_2_url(station, callback) {
  */
 var timesGoneBack = 0;
 function get_latest_level_3_url(station, product, index, callback, date) {
-    if (!(product.length > 3)) {
+    if (!(product.length > 3) || (product == 'NTV' || product == 'NMD' || product == 'NST')) {
         /* we need to slice(1) here (remove the first letter) because the level 3 source we
         * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
         var corrected_station = station.slice(1);
@@ -125,6 +125,9 @@ function get_latest_level_3_url(station, product, index, callback, date) {
             }
         })
     } else {
+        if (product == 'NST') { product = '58sti' }
+        if (product == 'NTV') { product = '61tvs' }
+        if (product == 'NMD') { product = '141md' }
         var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${station.toLowerCase()}/sn.last#`
         callback(fileUrl);
     }

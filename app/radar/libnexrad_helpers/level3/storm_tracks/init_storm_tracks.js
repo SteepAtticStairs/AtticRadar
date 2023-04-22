@@ -1,3 +1,26 @@
+function _load_storm_track_product(product, callback) {
+    const currentStation = window.atticData.currentStation;
+    // imports have to be inside function for some reason
+    const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
+
+    loaders_nexrad.get_latest_level_3_url(currentStation, product, 0, (url) => {
+        console.log(url)
+        if (url == null) {
+            // nothing here yet
+            deal_with_storm_track_layers();
+        } else if (window.atticData.curStormTrackURL != url) {
+            window.atticData.curStormTrackURL = url;
+            deal_with_storm_track_layers();
+
+            loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
+                console.log(L3Factory);
+                L3Factory.plot();
+                callback();
+            })
+        }
+    })
+}
+
 function deal_with_storm_track_layers() {
     const map = require('../../../map/map');
 
@@ -11,25 +34,8 @@ function deal_with_storm_track_layers() {
 }
 
 function fetch_data() {
-    // imports have to be inside function for some reason
-    const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
-    const plot_storm_tracks = require('./plot_storm_tracks');
-
-    const currentStation = window.atticData.currentStation;
-
-    loaders_nexrad.get_latest_level_3_url(currentStation, 'NST', 0, (url) => {
-        if (url == null) {
-            // nothing here yet
-            deal_with_storm_track_layers();
-        } else if (window.atticData.curStormTrackURL != url) {
-            window.atticData.curStormTrackURL = url;
-            deal_with_storm_track_layers();
-
-            loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                console.log(L3Factory);
-                plot_storm_tracks(L3Factory);
-            })
-        }
+    _load_storm_track_product('NST', () => {
+        // _load_storm_track_product('NTV', () => {});
     })
 }
 

@@ -1,4 +1,5 @@
-const radarStations = require('../../../../../resources/radarStations');
+// const radarStations = require('../../../../../resources/radarStations');
+const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const turf = require('@turf/turf');
 const map = require('../../../map/map');
 const setLayerOrder = require('../../../map/setLayerOrder');
@@ -14,9 +15,8 @@ function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     return destiation;
 }
 
-function getCoords(degNmObj) {
-    const currentStation = window.atticData.currentStation;
-    const currentStationCoords = { 'lat': radarStations[currentStation][1], 'lng': radarStations[currentStation][2] }
+function getCoords(degNmObj, station) {
+    const currentStationCoords = { 'lat': nexrad_locations[station].lat, 'lng': nexrad_locations[station].lon }
 
     var coords = findTerminalCoordinates(currentStationCoords.lat, currentStationCoords.lng, degNmObj.nm, degNmObj.deg);
     return turf.getCoords(coords);
@@ -54,14 +54,14 @@ function plot_storm_tracks(L3Factory) {
         var initialPoint;
         var curCell = allTracks[id];
 
-        coords = getCoords(curCell.current);
+        coords = getCoords(curCell.current, L3Factory.station);
         points.push(coords);
         const originalInitialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
         initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
         for (var i in curCell.forecast) {
             var curPoint = curCell.forecast[i];
             if (curPoint != null) {
-                coords = getCoords(curPoint);
+                coords = getCoords(curPoint, L3Factory.station);
                 parallelLines.push(generateParallelLine(initialPoint, coords, curCell, i));
                 points.push(coords);
                 initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
@@ -136,10 +136,11 @@ function plot_storm_tracks(L3Factory) {
             'circle-stroke-color': 'black',
         }
     })
-    window.atticData.stormTrackLayers = stormTrackLayers;
+    if (window.atticData.stormTrackLayers == undefined) { window.atticData.stormTrackLayers = [] }
+    window.atticData.stormTrackLayers.push(...stormTrackLayers);
 
     function cellClick(e) {
-        if (window.atticData.currentStation == L3Factory.station) {
+        // if (window.atticData.currentStation == L3Factory.station) {
             const properties = e.features[0].properties;
             const cellID = properties.cellID;
             const cellProperties = JSON.parse(properties.cellProperties);
@@ -149,7 +150,8 @@ function plot_storm_tracks(L3Factory) {
             var hourMin = ut.printHourMin(fileTime, ut.userTimeZone);
 
             var popupHTML =
-                `<div>Cell <b>${cellID}</b> at <b>${hourMin}</b></div>`
+`<b><u>Storm Track</u></b>
+<div>Cell <b>${cellID}</b> at <b>${hourMin}</b></div>`
 
             function flip(num) {
                 if (num >= 180) {
@@ -167,7 +169,7 @@ function plot_storm_tracks(L3Factory) {
                 .setLngLat(JSON.parse(properties.coords))
                 .setHTML(popupHTML)
                 .addTo(map);
-        }
+        // }
     }
     map.on('click', 'stormTrackInitialPoint', cellClick);
     map.on('mouseenter', 'stormTrackInitialPoint', () => { map.getCanvas().style.cursor = 'pointer'; });

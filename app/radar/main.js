@@ -239,36 +239,17 @@ document.addEventListener('loadFile', function(event) {
 // ../data/level3/KOUN_SDUS54_N0QTLX_201305202016
 // ../data/level3/KOUN_SDUS54_N0UTLX_201305202016
 
-// function doWhenLoad(func) {
-//     setTimeout(function() {
-//         if (map.loaded()) {
-//             func();
-//         } else {
-//             map.on('load', function() {
-//                 func();
-//             })
-//         }
-//     }, 0)
-// }
-// doWhenLoad(function() {
-//     const NEXRADLevel2File = require('./libnexrad/level2/level2_parser');
-//     const Level2Factory = require('./libnexrad/level2/level2_factory');
-
-//     const NEXRADLevel3File = require('./libnexrad/level3/level3_parser');
-//     const Level3Factory = require('./libnexrad/level3/level3_factory');
-
-//     const loaders_nexrad = require('./libnexrad/loaders_nexrad');
-
-//     // ../data/KTLX20130520_201643_V06.gz#
-//     // ../data/level3/SHV_NMD_2023_04_03_02_29_56# (from Unidata AWS bucket)
-//     // ../data/level3/DTX_NTV_2023_04_05_17_40_06# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
-//     // ../data/level3/DTX_NHI_2023_04_05_18_05_14# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
-//     loaders_nexrad.file_to_buffer('../data/KJGX19700101_000000_V06#', function(buffer) {
-//         const file = new NEXRADLevel2File(buffer);
-//         const L2Factory = new Level2Factory(file);
-//         console.log(L2Factory)
-//     })
-// })
+function doWhenLoad(func) {
+    setTimeout(function() {
+        if (map.loaded()) {
+            func();
+        } else {
+            map.on('load', function() {
+                func();
+            })
+        }
+    }, 0)
+}
 
 // function doWhenLoad() {
 //     (function loadFileIndex(i, max) {

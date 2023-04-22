@@ -13,12 +13,12 @@ function setLayerOrder() {
     moveLayerToTop('baseReflectivity');
     moveLayerToTop('radioStationLayer');
 
-    var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
-    if (!isRoadsStreetsVisChecked) {
-        setBaseMapLayers('cities');
-    } else if (isRoadsStreetsVisChecked) {
-        setBaseMapLayers('both');
-    }
+    // var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
+    // if (!isRoadsStreetsVisChecked) {
+    //     setBaseMapLayers('cities');
+    // } else if (isRoadsStreetsVisChecked) {
+    //     setBaseMapLayers('both');
+    // }
 
     moveLayerToTop('mainAlertsLayerOutline');
     moveLayerToTop('mainAlertsLayer');

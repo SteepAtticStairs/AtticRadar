@@ -16,6 +16,18 @@ function _copy(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
+function do_when_map_load(func) {
+    setTimeout(function() {
+        if (map.loaded()) {
+            func();
+        } else {
+            map.on('load', function() {
+                func();
+            })
+        }
+    }, 0)
+}
+
 /**
  * Helper function that generates a geojson object from a simple object with radar station data.
  * 
@@ -50,76 +62,53 @@ function _generate_stations_geojson(status_info = null) {
  * @param {Function} callback A callback function.
  */
 function _add_stations_layer(radar_stations_geojson, callback) {
-    const blueColor = 'rgb(0, 157, 255)';
-    const redColor = 'rgb(255, 78, 78)';
-    const orangeColor = 'rgb(176, 128, 26)';
-    const standardColor = 'rgb(200, 200, 200)';
+    do_when_map_load(() => {
+        map.addSource('stationSymbolLayer', {
+            'type': 'geojson',
+            'generateId': true,
+            'data': radar_stations_geojson
+        });
 
-    map.on('load', function (e) {
-        map.loadImage(
-            './resources/roundedRectangle.png',
-            (error, image) => {
-                if (error) throw error;
-                map.addImage('custom-marker', image, {
-                    "sdf": "true"
-                });
-                map.addSource('stationSymbolLayer', {
-                    'type': 'geojson',
-                    'generateId': true,
-                    'data': radar_stations_geojson
-                });
+        // Add a symbol layer
+        map.addLayer({
+            'id': 'stationSymbolLayer',
+            'type': 'symbol',
+            'source': 'stationSymbolLayer',
+            'layout': {
+                'icon-image': [
+                    'case',
+                    // ['==', ['feature-state', 'color'], 3],
+                    // 'blue_station_marker',
+                    ['==', ['get', 'status'], 'down'],
+                    'red_station_marker',
+                    ['==', ['get', 'type'], 'TDWR'],
+                    'orange_station_marker',
+                    // ['==', ['feature-state', 'color'], 1],
+                    // 'dark_grey_station_marker', // mouse-over
+                    // ['==', ['feature-state', 'color'], 2],
+                    // 'grey_station_marker',
+                    'grey_station_marker'
+                ],
 
-                // Add a symbol layer
-                map.addLayer({
-                    'id': 'stationSymbolLayer',
-                    'type': 'symbol',
-                    'source': 'stationSymbolLayer',
-                    'layout': {
-                        'icon-image': 'custom-marker',
-                        'icon-size': 0.07,
-                        // get the title name from the source's "title" property
-                        'text-field': ['get', 'station_id'],
-                        'text-size': 13,
-                        'text-font': [
-                            'Arial Unicode MS Bold'
-                        ],
-                        //'text-offset': [0, 1.25],
-                        //'text-anchor': 'top'
-                    },
-                    //['==', ['case', ['feature-state', 'color'], 1]],
-                    //'rgb(136, 136, 136)',
-                    //['==', ['case', ['feature-state', 'color'], 2]],
-                    //'rgb(200, 200, 200)',
-                    //['==', ['case', ['feature-state', 'color'], 3]],
-                    //blueColor
-                    'paint': {
-                        'text-color': 'black',
-                        'icon-color': [
-                            'case',
-                            // ['==', ['feature-state', 'color'], 3],
-                            // blueColor,
-                            ['==', ['get', 'status'], 'down'],
-                            redColor,
-                            ['==', ['get', 'type'], 'TDWR'],
-                            orangeColor,
-                            // ['==', ['feature-state', 'color'], 1],
-                            // 'rgb(136, 136, 136)',
-                            // ['==', ['feature-state', 'color'], 2],
-                            // 'rgb(200, 200, 200)',
-                            standardColor
-                        ]
-                    }
-                });
-
-                get_station_status((data) => {
-                    window.atticData.radar_station_status = data;
-                    const statusified_geojson = _generate_stations_geojson(data);
-                    map.getSource('stationSymbolLayer').setData(statusified_geojson);
-                })
-
-                callback();
+                'icon-size': 0.23,
+                'text-field': ['get', 'station_id'],
+                'text-size': 13,
+                'text-font': [
+                    'Arial Unicode MS Bold'
+                ],
+            },
+            'paint': {
+                'text-color': 'black'
             }
-        );
+        });
+
+        get_station_status((data) => {
+            window.atticData.radar_station_status = data;
+            const statusified_geojson = _generate_stations_geojson(data);
+            map.getSource('stationSymbolLayer').setData(statusified_geojson);
+        })
+
+        callback();
     });
 }
 
