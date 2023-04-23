@@ -14315,17 +14315,19 @@ function plot_tornado_vortex_signature(L3Factory) {
     tvs_layers.push('tvsInitialPoint');
     map.addLayer({
         id: 'tvsInitialPoint',
-        type: 'circle',
+        type: 'symbol',
         source: {
             'type': 'geojson',
             'data': multipoint_geoJSON,
         },
-        paint: {
-            'circle-radius': 4.5,
-            'circle-stroke-width': 1,
-            'circle-color': '#FF4B51', // red
-            'circle-stroke-color': 'black',
-        }
+        layout: {
+            'icon-image': 'tornado_icon',
+            'icon-size': 0.2,
+            'text-allow-overlap': true,
+            'text-ignore-placement': true,
+            'icon-allow-overlap': true,
+            'icon-ignore-placement': true,
+        },
     })
     window.atticData.tvs_layers = tvs_layers;
 
