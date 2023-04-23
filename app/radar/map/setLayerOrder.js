@@ -8,7 +8,7 @@ function moveLayerToTop(layerName) {
 }
 
 function setLayerOrder() {
-    moveLayerToTop('baseReflectivity');
+    // moveLayerToTop('baseReflectivity');
     moveLayerToTop('radioStationLayer');
 
     // var isRoadsStreetsVisChecked = $('#armrRoadsStreetsVisBtnSwitchElem').is(':checked');
