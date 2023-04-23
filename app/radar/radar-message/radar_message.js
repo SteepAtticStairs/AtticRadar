@@ -1,6 +1,6 @@
 const ut = require('../utils');
 const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
-const get_date_diff = require('../misc/get_date_diff');
+const { get_date_diff } = require('../misc/get_date_diff');
 const get_station_status = require('../misc/getStationStatus');
 
 // https://www.weather.gov/nl2/NEXRADView

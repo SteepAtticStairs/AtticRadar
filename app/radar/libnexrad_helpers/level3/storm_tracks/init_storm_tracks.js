@@ -2,6 +2,8 @@ function _load_storm_track_product(product, callback) {
     const current_station = window.atticData.currentStation;
     // imports have to be inside function for some reason
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
+    const { get_date_diff_obj } = require('../../../misc/get_date_diff');
+    const luxon = require('luxon');
 
     loaders_nexrad.get_latest_level_3_url(current_station, product, 0, (url) => {
         if (url == null) {
@@ -10,28 +12,35 @@ function _load_storm_track_product(product, callback) {
             deal_with_tvs_layers();
         } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                function _plot() {
-                    console.log(L3Factory);
-                    L3Factory.plot();
-                    callback();
-                }
+                const date_diff = get_date_diff_obj(L3Factory.get_date(), new Date());
+                const duration = luxon.Duration.fromObject(date_diff);
+                if (duration.shiftTo('minutes').toObject().minutes <= 15) {
+                    function _plot() {
+                        console.log(L3Factory);
+                        L3Factory.plot();
+                        callback();
+                    }
 
-                const file_id = L3Factory.generate_unique_id();
+                    const file_id = L3Factory.generate_unique_id();
 
-                if (product == 'NST' && window.atticData.current_storm_track_id != file_id) {
-                    window.atticData.current_storm_track_id == file_id;
+                    if (product == 'NST' && window.atticData.current_storm_track_id != file_id) {
+                        window.atticData.current_storm_track_id == file_id;
+                        deal_with_storm_track_layers();
+                        _plot();
+                    }
+                    if (product == 'NTV' && window.atticData.current_tvs_id != file_id) {
+                        window.atticData.current_tvs_id == file_id;
+                        deal_with_tvs_layers();
+                        _plot();
+                    }
+                    if (product == 'NMD' && window.atticData.current_nmd_id != file_id) {
+                        window.atticData.current_nmd_id == file_id;
+                        // deal_with_storm_track_layers();
+                        _plot();
+                    }
+                } else {
                     deal_with_storm_track_layers();
-                    _plot();
-                }
-                if (product == 'NTV' && window.atticData.current_tvs_id != file_id) {
-                    window.atticData.current_tvs_id == file_id;
                     deal_with_tvs_layers();
-                    _plot();
-                }
-                if (product == 'NMD' && window.atticData.current_nmd_id != file_id) {
-                    window.atticData.current_nmd_id == file_id;
-                    // deal_with_storm_track_layers();
-                    _plot();
                 }
             })
         }

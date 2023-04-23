@@ -1,7 +1,7 @@
 const luxon = require('luxon');
 
 // https://stackoverflow.com/a/544429/18758797
-function _get_date_diff_obj(date1, date2) {
+function get_date_diff_obj(date1, date2) {
     // var diff = Date.parse( date2 ) - Date.parse( date1 );
     // var isNegative = (diff < 0);
     // if (isNegative) {
@@ -40,7 +40,7 @@ function _get_date_diff_obj(date1, date2) {
  * 'class' - a string that contains the class you would apply to an HTML element to give it the appropriate color for its age.
  */
 function get_date_diff(date_obj, usage) {
-    const date_diff = _get_date_diff_obj(date_obj, new Date());
+    const date_diff = get_date_diff_obj(date_obj, new Date());
     const duration = luxon.Duration.fromObject(date_diff);
 
     var formatted_date_diff;
@@ -82,4 +82,7 @@ function get_date_diff(date_obj, usage) {
     }
 }
 
-module.exports = get_date_diff;
+module.exports = {
+    get_date_diff,
+    get_date_diff_obj
+};

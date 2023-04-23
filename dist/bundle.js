@@ -12216,7 +12216,7 @@ const prod_spec_map = {
 
 module.exports = NEXRADLevel3File;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../buffer_tools/IOBuffer":63,"buffer":302,"bufferpack":230,"seek-bzip":282,"zlib":301}],70:[function(require,module,exports){
+},{"../buffer_tools/IOBuffer":63,"buffer":302,"bufferpack":230,"seek-bzip":282,"zlib":300}],70:[function(require,module,exports){
 (function (Buffer){(function (){
 const ut = require('../utils');
 
@@ -13906,7 +13906,7 @@ module.exports = {
 };
 },{}],72:[function(require,module,exports){
 const nexrad_locations = require('../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
-const get_date_diff = require('../../misc/get_date_diff');
+const { get_date_diff } = require('../../misc/get_date_diff');
 const { DateTime } = require('luxon');
 const ut = require('../../utils');
 
@@ -13997,6 +13997,8 @@ function _load_storm_track_product(product, callback) {
     const current_station = window.atticData.currentStation;
     // imports have to be inside function for some reason
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
+    const { get_date_diff_obj } = require('../../../misc/get_date_diff');
+    const luxon = require('luxon');
 
     loaders_nexrad.get_latest_level_3_url(current_station, product, 0, (url) => {
         if (url == null) {
@@ -14005,28 +14007,35 @@ function _load_storm_track_product(product, callback) {
             deal_with_tvs_layers();
         } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                function _plot() {
-                    console.log(L3Factory);
-                    L3Factory.plot();
-                    callback();
-                }
+                const date_diff = get_date_diff_obj(L3Factory.get_date(), new Date());
+                const duration = luxon.Duration.fromObject(date_diff);
+                if (duration.shiftTo('minutes').toObject().minutes <= 15) {
+                    function _plot() {
+                        console.log(L3Factory);
+                        L3Factory.plot();
+                        callback();
+                    }
 
-                const file_id = L3Factory.generate_unique_id();
+                    const file_id = L3Factory.generate_unique_id();
 
-                if (product == 'NST' && window.atticData.current_storm_track_id != file_id) {
-                    window.atticData.current_storm_track_id == file_id;
+                    if (product == 'NST' && window.atticData.current_storm_track_id != file_id) {
+                        window.atticData.current_storm_track_id == file_id;
+                        deal_with_storm_track_layers();
+                        _plot();
+                    }
+                    if (product == 'NTV' && window.atticData.current_tvs_id != file_id) {
+                        window.atticData.current_tvs_id == file_id;
+                        deal_with_tvs_layers();
+                        _plot();
+                    }
+                    if (product == 'NMD' && window.atticData.current_nmd_id != file_id) {
+                        window.atticData.current_nmd_id == file_id;
+                        // deal_with_storm_track_layers();
+                        _plot();
+                    }
+                } else {
                     deal_with_storm_track_layers();
-                    _plot();
-                }
-                if (product == 'NTV' && window.atticData.current_tvs_id != file_id) {
-                    window.atticData.current_tvs_id == file_id;
                     deal_with_tvs_layers();
-                    _plot();
-                }
-                if (product == 'NMD' && window.atticData.current_nmd_id != file_id) {
-                    window.atticData.current_nmd_id == file_id;
-                    // deal_with_storm_track_layers();
-                    _plot();
                 }
             })
         }
@@ -14066,7 +14075,7 @@ function fetch_data() {
 module.exports = {
     fetch_data
 };
-},{"../../../libnexrad/loaders_nexrad":70,"../../../map/map":78}],74:[function(require,module,exports){
+},{"../../../libnexrad/loaders_nexrad":70,"../../../map/map":78,"../../../misc/get_date_diff":99,"luxon":239}],74:[function(require,module,exports){
 // const radarStations = require('../../../../../resources/radarStations');
 const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const turf = require('@turf/turf');
@@ -16626,7 +16635,7 @@ module.exports = getTimeDiff;
 const luxon = require('luxon');
 
 // https://stackoverflow.com/a/544429/18758797
-function _get_date_diff_obj(date1, date2) {
+function get_date_diff_obj(date1, date2) {
     // var diff = Date.parse( date2 ) - Date.parse( date1 );
     // var isNegative = (diff < 0);
     // if (isNegative) {
@@ -16665,7 +16674,7 @@ function _get_date_diff_obj(date1, date2) {
  * 'class' - a string that contains the class you would apply to an HTML element to give it the appropriate color for its age.
  */
 function get_date_diff(date_obj, usage) {
-    const date_diff = _get_date_diff_obj(date_obj, new Date());
+    const date_diff = get_date_diff_obj(date_obj, new Date());
     const duration = luxon.Duration.fromObject(date_diff);
 
     var formatted_date_diff;
@@ -16707,7 +16716,10 @@ function get_date_diff(date_obj, usage) {
     }
 }
 
-module.exports = get_date_diff;
+module.exports = {
+    get_date_diff,
+    get_date_diff_obj
+};
 },{"luxon":239}],100:[function(require,module,exports){
 function initPaletteTooltip(produc, colortcanvas) {
     var hycObj = {
@@ -18857,7 +18869,7 @@ module.exports = radarStationInfo;
 },{}],112:[function(require,module,exports){
 const ut = require('../utils');
 const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
-const get_date_diff = require('../misc/get_date_diff');
+const { get_date_diff } = require('../misc/get_date_diff');
 const get_station_status = require('../misc/getStationStatus');
 
 // https://www.weather.gov/nl2/NEXRADView
@@ -27042,7 +27054,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":138,"zlib":301}],143:[function(require,module,exports){
+},{"./classes/RandomAccessFile":138,"zlib":300}],143:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -28535,7 +28547,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":292}],158:[function(require,module,exports){
+},{"fs":301}],158:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -31434,7 +31446,7 @@ function mergeFeatureCollectionStream (inputs) {
 module.exports.merge = merge;
 module.exports.mergeFeatureCollectionStream = mergeFeatureCollectionStream;
 
-},{"@mapbox/geojson-normalize":218,"fs":292,"geojson-stream":237}],218:[function(require,module,exports){
+},{"@mapbox/geojson-normalize":218,"fs":301,"geojson-stream":237}],218:[function(require,module,exports){
 module.exports = normalize;
 
 var types = {
@@ -57629,7 +57641,7 @@ module.exports = function (metaData, opt) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./constants":260,"./packer":270,"buffer":302,"zlib":301}],270:[function(require,module,exports){
+},{"./constants":260,"./packer":270,"buffer":302,"zlib":300}],270:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -57762,7 +57774,7 @@ Packer.prototype.packIEND = function () {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitpacker":258,"./constants":260,"./crc":261,"./filter-pack":262,"buffer":302,"zlib":301}],271:[function(require,module,exports){
+},{"./bitpacker":258,"./constants":260,"./crc":261,"./filter-pack":262,"buffer":302,"zlib":300}],271:[function(require,module,exports){
 "use strict";
 
 module.exports = function paethPredictor(left, above, upLeft) {
@@ -57951,7 +57963,7 @@ ParserAsync.prototype._complete = function (filteredData) {
   this.emit("parsed", normalisedBitmapData);
 };
 
-},{"./bitmapper":257,"./chunkstream":259,"./filter-parse-async":263,"./format-normaliser":266,"./parser":274,"util":355,"zlib":301}],273:[function(require,module,exports){
+},{"./bitmapper":257,"./chunkstream":259,"./filter-parse-async":263,"./format-normaliser":266,"./parser":274,"util":355,"zlib":300}],273:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -58067,7 +58079,7 @@ module.exports = function (buffer, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitmapper":257,"./filter-parse-sync":264,"./format-normaliser":266,"./parser":274,"./sync-inflate":277,"./sync-reader":278,"buffer":302,"zlib":301}],274:[function(require,module,exports){
+},{"./bitmapper":257,"./filter-parse-sync":264,"./format-normaliser":266,"./parser":274,"./sync-inflate":277,"./sync-reader":278,"buffer":302,"zlib":300}],274:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -58745,7 +58757,7 @@ exports.createInflate = createInflate;
 exports.inflateSync = inflateSync;
 
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":334,"assert":293,"buffer":302,"util":355,"zlib":301}],278:[function(require,module,exports){
+},{"_process":334,"assert":292,"buffer":302,"util":355,"zlib":300}],278:[function(require,module,exports){
 "use strict";
 
 let SyncReader = (module.exports = function (buffer) {
@@ -61313,8 +61325,6 @@ const stationAbbreviations = {
 
 module.exports = stationAbbreviations;
 },{}],292:[function(require,module,exports){
-
-},{}],293:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -61824,7 +61834,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":321,"util/":296}],294:[function(require,module,exports){
+},{"object-assign":321,"util/":295}],293:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -61849,14 +61859,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],295:[function(require,module,exports){
+},{}],294:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],296:[function(require,module,exports){
+},{}],295:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -62446,7 +62456,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":295,"_process":334,"inherits":294}],297:[function(require,module,exports){
+},{"./support/isBuffer":294,"_process":334,"inherits":293}],296:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -62477,7 +62487,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],298:[function(require,module,exports){
+},{}],297:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -62629,9 +62639,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
+},{}],298:[function(require,module,exports){
+
 },{}],299:[function(require,module,exports){
-arguments[4][292][0].apply(exports,arguments)
-},{"dup":292}],300:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -63043,7 +63053,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":334,"assert":293,"buffer":302,"pako/lib/zlib/constants":324,"pako/lib/zlib/deflate.js":326,"pako/lib/zlib/inflate.js":328,"pako/lib/zlib/zstream":332}],301:[function(require,module,exports){
+},{"_process":334,"assert":292,"buffer":302,"pako/lib/zlib/constants":324,"pako/lib/zlib/deflate.js":326,"pako/lib/zlib/inflate.js":328,"pako/lib/zlib/zstream":332}],300:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -63655,7 +63665,9 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":300,"_process":334,"assert":293,"buffer":302,"stream":336,"util":355}],302:[function(require,module,exports){
+},{"./binding":299,"_process":334,"assert":292,"buffer":302,"stream":336,"util":355}],301:[function(require,module,exports){
+arguments[4][298][0].apply(exports,arguments)
+},{"dup":298}],302:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -65436,7 +65448,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":298,"buffer":302,"ieee754":315}],303:[function(require,module,exports){
+},{"base64-js":297,"buffer":302,"ieee754":315}],303:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -66912,7 +66924,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":297,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313}],321:[function(require,module,exports){
+},{"available-typed-arrays":296,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313}],321:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -75004,7 +75016,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":337,"./_stream_duplex":338,"./internal/streams/async_iterator":343,"./internal/streams/buffer_list":344,"./internal/streams/destroy":345,"./internal/streams/from":347,"./internal/streams/state":349,"./internal/streams/stream":350,"_process":334,"buffer":302,"events":306,"inherits":316,"string_decoder/":351,"util":299}],341:[function(require,module,exports){
+},{"../errors":337,"./_stream_duplex":338,"./internal/streams/async_iterator":343,"./internal/streams/buffer_list":344,"./internal/streams/destroy":345,"./internal/streams/from":347,"./internal/streams/state":349,"./internal/streams/stream":350,"_process":334,"buffer":302,"events":306,"inherits":316,"string_decoder/":351,"util":298}],341:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -76327,7 +76339,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":302,"util":299}],345:[function(require,module,exports){
+},{"buffer":302,"util":298}],345:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -77043,8 +77055,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],353:[function(require,module,exports){
-arguments[4][295][0].apply(exports,arguments)
-},{"dup":295}],354:[function(require,module,exports){
+arguments[4][294][0].apply(exports,arguments)
+},{"dup":294}],354:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -77794,7 +77806,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').slice(2);
+          }).join('\n').substr(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -77811,7 +77823,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.slice(1, -1);
+      name = name.substr(1, name.length - 2);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
@@ -78158,4 +78170,4 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":297,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313,"is-typed-array":320}]},{},[38]);
+},{"available-typed-arrays":296,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313,"is-typed-array":320}]},{},[38]);
