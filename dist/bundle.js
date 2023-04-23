@@ -9937,6 +9937,26 @@ class Level3Factory {
     }
 
     /**
+     * Generates a unique ID associated with the file.
+     * 
+     * @returns {String} A string with the file's ID.
+     */
+    generate_unique_id() {
+        const station = this.station;
+        const product_abbv = this.product_abbv;
+        const date = this.get_date();
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1;
+        const day = date.getUTCDate();
+        const hour = date.getUTCHours();
+        const minute = date.getUTCMinutes();
+        const second = date.getUTCSeconds();
+
+        const formatted_string = `${station}_${product_abbv}_${year}_${month}_${day}_${hour}_${minute}_${second}`;
+        return formatted_string;
+    }
+
+    /**
      * Helper function that scales all of the values in an input array to the desired size. This is useful when converting NEXRAD binary data from its stored format to its readable format, as defined in the ICD.
      * 
      * @param {*} inputValues A 1D or 2D array containing values you wish to scale.
@@ -12268,7 +12288,7 @@ function get_latest_level_2_url(station, callback) {
  */
 var timesGoneBack = 0;
 function get_latest_level_3_url(station, product, index, callback, date) {
-    if (!(product.length > 3) || (product == 'NTV' || product == 'NMD' || product == 'NST')) {
+    if (/* !(product.length > 3) || */ (product != 'NTV' && product != 'NMD' && product != 'NST')) {
         /* we need to slice(1) here (remove the first letter) because the level 3 source we
         * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
         var corrected_station = station.slice(1);
@@ -13974,22 +13994,40 @@ function display_file_info() {
 module.exports = display_file_info;
 },{"../../libnexrad/nexrad_locations":71,"../../misc/detectmobilebrowser":95,"../../misc/get_date_diff":99,"../../utils":115,"luxon":239}],73:[function(require,module,exports){
 function _load_storm_track_product(product, callback) {
-    const currentStation = window.atticData.currentStation;
+    const current_station = window.atticData.currentStation;
     // imports have to be inside function for some reason
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
 
-    loaders_nexrad.get_latest_level_3_url(currentStation, product, 0, (url) => {
+    loaders_nexrad.get_latest_level_3_url(current_station, product, 0, (url) => {
         if (url == null) {
             // nothing here yet
             deal_with_storm_track_layers();
-        } else if (window.atticData.curStormTrackURL != url) {
-            window.atticData.curStormTrackURL = url;
-            deal_with_storm_track_layers();
-
+            deal_with_tvs_layers();
+        } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                console.log(L3Factory);
-                L3Factory.plot();
-                callback();
+                function _plot() {
+                    console.log(L3Factory);
+                    L3Factory.plot();
+                    callback();
+                }
+
+                const file_id = L3Factory.generate_unique_id();
+
+                if (product == 'NST' && window.atticData.current_storm_track_id != file_id) {
+                    window.atticData.current_storm_track_id == file_id;
+                    deal_with_storm_track_layers();
+                    _plot();
+                }
+                if (product == 'NTV' && window.atticData.current_tvs_id != file_id) {
+                    window.atticData.current_tvs_id == file_id;
+                    deal_with_tvs_layers();
+                    _plot();
+                }
+                if (product == 'NMD' && window.atticData.current_nmd_id != file_id) {
+                    window.atticData.current_nmd_id == file_id;
+                    // deal_with_storm_track_layers();
+                    _plot();
+                }
             })
         }
     })
@@ -14005,6 +14043,10 @@ function deal_with_storm_track_layers() {
             if (map.getSource(storm_track_layers[i])) { map.removeSource(storm_track_layers[i]) }
         }
     }
+}
+
+function deal_with_tvs_layers() {
+    const map = require('../../../map/map');
 
     var tvs_layers = window.atticData.tvs_layers;
     if (tvs_layers != undefined) {
@@ -14017,7 +14059,7 @@ function deal_with_storm_track_layers() {
 
 function fetch_data() {
     _load_storm_track_product('NST', () => {
-        // _load_storm_track_product('NTV', () => {});
+        _load_storm_track_product('NTV', () => {});
     })
 }
 
@@ -14218,6 +14260,7 @@ module.exports = plot_storm_tracks;
 const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const turf = require('@turf/turf');
 const ut = require('../../../utils');
+const setLayerOrder = require('../../../map/setLayerOrder');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var metersInNauticalMiles = 1852;
@@ -14309,10 +14352,12 @@ function plot_tornado_vortex_signature(L3Factory) {
     map.on('click', 'tvsInitialPoint', cellClick);
     map.on('mouseenter', 'tvsInitialPoint', () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', 'tvsInitialPoint', () => { map.getCanvas().style.cursor = ''; });
+
+    setLayerOrder();
 }
 
 module.exports = plot_tornado_vortex_signature;
-},{"../../../libnexrad/nexrad_locations":71,"../../../utils":115,"@turf/turf":226}],76:[function(require,module,exports){
+},{"../../../libnexrad/nexrad_locations":71,"../../../map/setLayerOrder":80,"../../../utils":115,"@turf/turf":226}],76:[function(require,module,exports){
 const mapFuncs = require('./map/mapFunctions');
 const ut = require('./utils');
 

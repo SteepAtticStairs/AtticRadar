@@ -1,20 +1,38 @@
 function _load_storm_track_product(product, callback) {
-    const currentStation = window.atticData.currentStation;
+    const current_station = window.atticData.currentStation;
     // imports have to be inside function for some reason
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
 
-    loaders_nexrad.get_latest_level_3_url(currentStation, product, 0, (url) => {
+    loaders_nexrad.get_latest_level_3_url(current_station, product, 0, (url) => {
         if (url == null) {
             // nothing here yet
             deal_with_storm_track_layers();
-        } else if (window.atticData.curStormTrackURL != url) {
-            window.atticData.curStormTrackURL = url;
-            deal_with_storm_track_layers();
-
+            deal_with_tvs_layers();
+        } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                console.log(L3Factory);
-                L3Factory.plot();
-                callback();
+                function _plot() {
+                    console.log(L3Factory);
+                    L3Factory.plot();
+                    callback();
+                }
+
+                const file_id = L3Factory.generate_unique_id();
+
+                if (product == 'NST' && window.atticData.current_storm_track_id != file_id) {
+                    window.atticData.current_storm_track_id == file_id;
+                    deal_with_storm_track_layers();
+                    _plot();
+                }
+                if (product == 'NTV' && window.atticData.current_tvs_id != file_id) {
+                    window.atticData.current_tvs_id == file_id;
+                    deal_with_tvs_layers();
+                    _plot();
+                }
+                if (product == 'NMD' && window.atticData.current_nmd_id != file_id) {
+                    window.atticData.current_nmd_id == file_id;
+                    // deal_with_storm_track_layers();
+                    _plot();
+                }
             })
         }
     })
@@ -30,6 +48,10 @@ function deal_with_storm_track_layers() {
             if (map.getSource(storm_track_layers[i])) { map.removeSource(storm_track_layers[i]) }
         }
     }
+}
+
+function deal_with_tvs_layers() {
+    const map = require('../../../map/map');
 
     var tvs_layers = window.atticData.tvs_layers;
     if (tvs_layers != undefined) {
@@ -42,7 +64,7 @@ function deal_with_storm_track_layers() {
 
 function fetch_data() {
     _load_storm_track_product('NST', () => {
-        // _load_storm_track_product('NTV', () => {});
+        _load_storm_track_product('NTV', () => {});
     })
 }
 

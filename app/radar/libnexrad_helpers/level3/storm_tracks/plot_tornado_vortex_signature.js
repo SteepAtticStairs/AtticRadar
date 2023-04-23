@@ -1,6 +1,7 @@
 const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const turf = require('@turf/turf');
 const ut = require('../../../utils');
+const setLayerOrder = require('../../../map/setLayerOrder');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var metersInNauticalMiles = 1852;
@@ -92,6 +93,8 @@ function plot_tornado_vortex_signature(L3Factory) {
     map.on('click', 'tvsInitialPoint', cellClick);
     map.on('mouseenter', 'tvsInitialPoint', () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', 'tvsInitialPoint', () => { map.getCanvas().style.cursor = ''; });
+
+    setLayerOrder();
 }
 
 module.exports = plot_tornado_vortex_signature;

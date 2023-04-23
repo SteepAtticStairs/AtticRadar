@@ -158,6 +158,26 @@ class Level3Factory {
     }
 
     /**
+     * Generates a unique ID associated with the file.
+     * 
+     * @returns {String} A string with the file's ID.
+     */
+    generate_unique_id() {
+        const station = this.station;
+        const product_abbv = this.product_abbv;
+        const date = this.get_date();
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1;
+        const day = date.getUTCDate();
+        const hour = date.getUTCHours();
+        const minute = date.getUTCMinutes();
+        const second = date.getUTCSeconds();
+
+        const formatted_string = `${station}_${product_abbv}_${year}_${month}_${day}_${hour}_${minute}_${second}`;
+        return formatted_string;
+    }
+
+    /**
      * Helper function that scales all of the values in an input array to the desired size. This is useful when converting NEXRAD binary data from its stored format to its readable format, as defined in the ICD.
      * 
      * @param {*} inputValues A 1D or 2D array containing values you wish to scale.
