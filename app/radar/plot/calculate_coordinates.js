@@ -14,8 +14,10 @@ function calculate_coordinates(nexrad_factory, options) {
     if (nexrad_factory.nexrad_level == 2) {
         product = options.product;
         elevation = options.elevation;
+        window.atticData.product_code = product;
     } else if (nexrad_factory.nexrad_level == 3) {
         product = nexrad_factory.product_abbv;
+        window.atticData.product_code = nexrad_factory.product_code;
     }
     window.atticData.product = product;
 
