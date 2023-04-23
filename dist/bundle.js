@@ -9783,6 +9783,8 @@ const station_abbreviations = require('../../../../resources/stationAbbreviation
 const level3_formatters = require('./level3_formatters');
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/level3/display_file_info');
+const { get_date_diff_obj } = require('../../misc/get_date_diff');
+const luxon = require('luxon');
 const ut = require('../../utils');
 
 const plot_storm_tracks = require('../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks');
@@ -9957,6 +9959,17 @@ class Level3Factory {
     }
 
     /**
+     * Gets the file's age in minutes.
+     * 
+     * @returns {Number} The file's age in minutes
+     */
+    get_file_age_in_minutes() {
+        const date_diff = get_date_diff_obj(this.get_date(), new Date());
+        const duration = luxon.Duration.fromObject(date_diff);
+        return duration.shiftTo('minutes').toObject().minutes;
+    }
+
+    /**
      * Helper function that scales all of the values in an input array to the desired size. This is useful when converting NEXRAD binary data from its stored format to its readable format, as defined in the ICD.
      * 
      * @param {*} inputValues A 1D or 2D array containing values you wish to scale.
@@ -9988,7 +10001,7 @@ function np_linspace(startValue, stopValue, cardinality) {
 }
 
 module.exports = Level3Factory;
-},{"../../../../resources/stationAbbreviations":291,"../../libnexrad_helpers/level3/display_file_info":72,"../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks":74,"../../libnexrad_helpers/level3/storm_tracks/plot_tornado_vortex_signature":75,"../../plot/calculate_coordinates":102,"../../utils":115,"../nexrad_locations":71,"./level3_formatters":68}],68:[function(require,module,exports){
+},{"../../../../resources/stationAbbreviations":291,"../../libnexrad_helpers/level3/display_file_info":72,"../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks":74,"../../libnexrad_helpers/level3/storm_tracks/plot_tornado_vortex_signature":75,"../../misc/get_date_diff":99,"../../plot/calculate_coordinates":102,"../../utils":115,"../nexrad_locations":71,"./level3_formatters":68,"luxon":239}],68:[function(require,module,exports){
 /**
  * Function that takes all of the tabular pages in a storm tracks product, and creates a nicely-formatted object with the data.
  * The code is from netbymatt's "nexrad-level-3-data":
@@ -12216,7 +12229,7 @@ const prod_spec_map = {
 
 module.exports = NEXRADLevel3File;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../buffer_tools/IOBuffer":63,"buffer":302,"bufferpack":230,"seek-bzip":282,"zlib":300}],70:[function(require,module,exports){
+},{"../buffer_tools/IOBuffer":63,"buffer":302,"bufferpack":230,"seek-bzip":282,"zlib":301}],70:[function(require,module,exports){
 (function (Buffer){(function (){
 const ut = require('../utils');
 
@@ -13997,8 +14010,6 @@ function _load_storm_track_product(product, callback) {
     const current_station = window.atticData.currentStation;
     // imports have to be inside function for some reason
     const loaders_nexrad = require('../../../libnexrad/loaders_nexrad');
-    const { get_date_diff_obj } = require('../../../misc/get_date_diff');
-    const luxon = require('luxon');
 
     loaders_nexrad.get_latest_level_3_url(current_station, product, 0, (url) => {
         if (url == null) {
@@ -14007,9 +14018,7 @@ function _load_storm_track_product(product, callback) {
             deal_with_tvs_layers();
         } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                const date_diff = get_date_diff_obj(L3Factory.get_date(), new Date());
-                const duration = luxon.Duration.fromObject(date_diff);
-                if (duration.shiftTo('minutes').toObject().minutes <= 15) {
+                if (L3Factory.get_file_age_in_minutes() <= 15) {
                     function _plot() {
                         console.log(L3Factory);
                         L3Factory.plot();
@@ -14075,7 +14084,7 @@ function fetch_data() {
 module.exports = {
     fetch_data
 };
-},{"../../../libnexrad/loaders_nexrad":70,"../../../map/map":78,"../../../misc/get_date_diff":99,"luxon":239}],74:[function(require,module,exports){
+},{"../../../libnexrad/loaders_nexrad":70,"../../../map/map":78}],74:[function(require,module,exports){
 // const radarStations = require('../../../../../resources/radarStations');
 const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const turf = require('@turf/turf');
@@ -27054,7 +27063,7 @@ module.exports = (raf) => {
 	return new RandomAccessFile(data, BIG_ENDIAN);
 };
 
-},{"./classes/RandomAccessFile":138,"zlib":300}],143:[function(require,module,exports){
+},{"./classes/RandomAccessFile":138,"zlib":301}],143:[function(require,module,exports){
 (function (Buffer){(function (){
 const parseData = require('./parsedata');
 const combineData = require('./combinedata');
@@ -28547,7 +28556,7 @@ module.exports = {
 	writePngToFile,
 };
 
-},{"fs":301}],158:[function(require,module,exports){
+},{"fs":292}],158:[function(require,module,exports){
 const { parser } = require('../packets');
 const graphic22 = require('./graphic22');
 
@@ -31446,7 +31455,7 @@ function mergeFeatureCollectionStream (inputs) {
 module.exports.merge = merge;
 module.exports.mergeFeatureCollectionStream = mergeFeatureCollectionStream;
 
-},{"@mapbox/geojson-normalize":218,"fs":301,"geojson-stream":237}],218:[function(require,module,exports){
+},{"@mapbox/geojson-normalize":218,"fs":292,"geojson-stream":237}],218:[function(require,module,exports){
 module.exports = normalize;
 
 var types = {
@@ -57641,7 +57650,7 @@ module.exports = function (metaData, opt) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./constants":260,"./packer":270,"buffer":302,"zlib":300}],270:[function(require,module,exports){
+},{"./constants":260,"./packer":270,"buffer":302,"zlib":301}],270:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -57774,7 +57783,7 @@ Packer.prototype.packIEND = function () {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitpacker":258,"./constants":260,"./crc":261,"./filter-pack":262,"buffer":302,"zlib":300}],271:[function(require,module,exports){
+},{"./bitpacker":258,"./constants":260,"./crc":261,"./filter-pack":262,"buffer":302,"zlib":301}],271:[function(require,module,exports){
 "use strict";
 
 module.exports = function paethPredictor(left, above, upLeft) {
@@ -57963,7 +57972,7 @@ ParserAsync.prototype._complete = function (filteredData) {
   this.emit("parsed", normalisedBitmapData);
 };
 
-},{"./bitmapper":257,"./chunkstream":259,"./filter-parse-async":263,"./format-normaliser":266,"./parser":274,"util":355,"zlib":300}],273:[function(require,module,exports){
+},{"./bitmapper":257,"./chunkstream":259,"./filter-parse-async":263,"./format-normaliser":266,"./parser":274,"util":355,"zlib":301}],273:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -58079,7 +58088,7 @@ module.exports = function (buffer, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitmapper":257,"./filter-parse-sync":264,"./format-normaliser":266,"./parser":274,"./sync-inflate":277,"./sync-reader":278,"buffer":302,"zlib":300}],274:[function(require,module,exports){
+},{"./bitmapper":257,"./filter-parse-sync":264,"./format-normaliser":266,"./parser":274,"./sync-inflate":277,"./sync-reader":278,"buffer":302,"zlib":301}],274:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -58757,7 +58766,7 @@ exports.createInflate = createInflate;
 exports.inflateSync = inflateSync;
 
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":334,"assert":292,"buffer":302,"util":355,"zlib":300}],278:[function(require,module,exports){
+},{"_process":334,"assert":293,"buffer":302,"util":355,"zlib":301}],278:[function(require,module,exports){
 "use strict";
 
 let SyncReader = (module.exports = function (buffer) {
@@ -61325,6 +61334,8 @@ const stationAbbreviations = {
 
 module.exports = stationAbbreviations;
 },{}],292:[function(require,module,exports){
+
+},{}],293:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -61834,7 +61845,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":321,"util/":295}],293:[function(require,module,exports){
+},{"object-assign":321,"util/":296}],294:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -61859,14 +61870,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],294:[function(require,module,exports){
+},{}],295:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],295:[function(require,module,exports){
+},{}],296:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -62456,7 +62467,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":294,"_process":334,"inherits":293}],296:[function(require,module,exports){
+},{"./support/isBuffer":295,"_process":334,"inherits":294}],297:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -62487,7 +62498,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],297:[function(require,module,exports){
+},{}],298:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -62639,9 +62650,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],298:[function(require,module,exports){
-
 },{}],299:[function(require,module,exports){
+arguments[4][292][0].apply(exports,arguments)
+},{"dup":292}],300:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -63053,7 +63064,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":334,"assert":292,"buffer":302,"pako/lib/zlib/constants":324,"pako/lib/zlib/deflate.js":326,"pako/lib/zlib/inflate.js":328,"pako/lib/zlib/zstream":332}],300:[function(require,module,exports){
+},{"_process":334,"assert":293,"buffer":302,"pako/lib/zlib/constants":324,"pako/lib/zlib/deflate.js":326,"pako/lib/zlib/inflate.js":328,"pako/lib/zlib/zstream":332}],301:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -63665,9 +63676,7 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":299,"_process":334,"assert":292,"buffer":302,"stream":336,"util":355}],301:[function(require,module,exports){
-arguments[4][298][0].apply(exports,arguments)
-},{"dup":298}],302:[function(require,module,exports){
+},{"./binding":300,"_process":334,"assert":293,"buffer":302,"stream":336,"util":355}],302:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -65448,7 +65457,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":297,"buffer":302,"ieee754":315}],303:[function(require,module,exports){
+},{"base64-js":298,"buffer":302,"ieee754":315}],303:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -66924,7 +66933,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":296,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313}],321:[function(require,module,exports){
+},{"available-typed-arrays":297,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313}],321:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -75016,7 +75025,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":337,"./_stream_duplex":338,"./internal/streams/async_iterator":343,"./internal/streams/buffer_list":344,"./internal/streams/destroy":345,"./internal/streams/from":347,"./internal/streams/state":349,"./internal/streams/stream":350,"_process":334,"buffer":302,"events":306,"inherits":316,"string_decoder/":351,"util":298}],341:[function(require,module,exports){
+},{"../errors":337,"./_stream_duplex":338,"./internal/streams/async_iterator":343,"./internal/streams/buffer_list":344,"./internal/streams/destroy":345,"./internal/streams/from":347,"./internal/streams/state":349,"./internal/streams/stream":350,"_process":334,"buffer":302,"events":306,"inherits":316,"string_decoder/":351,"util":299}],341:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -76339,7 +76348,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":302,"util":298}],345:[function(require,module,exports){
+},{"buffer":302,"util":299}],345:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -77055,8 +77064,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],353:[function(require,module,exports){
-arguments[4][294][0].apply(exports,arguments)
-},{"dup":294}],354:[function(require,module,exports){
+arguments[4][295][0].apply(exports,arguments)
+},{"dup":295}],354:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -77806,7 +77815,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').substr(2);
+          }).join('\n').slice(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -77823,7 +77832,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
+      name = name.slice(1, -1);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
@@ -78170,4 +78179,4 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":296,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313,"is-typed-array":320}]},{},[38]);
+},{"available-typed-arrays":297,"call-bind/callBound":303,"es-abstract/helpers/getOwnPropertyDescriptor":305,"for-each":307,"has-tostringtag/shams":313,"is-typed-array":320}]},{},[38]);

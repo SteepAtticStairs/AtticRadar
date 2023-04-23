@@ -4,6 +4,8 @@ const station_abbreviations = require('../../../../resources/stationAbbreviation
 const level3_formatters = require('./level3_formatters');
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/level3/display_file_info');
+const { get_date_diff_obj } = require('../../misc/get_date_diff');
+const luxon = require('luxon');
 const ut = require('../../utils');
 
 const plot_storm_tracks = require('../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks');
@@ -175,6 +177,17 @@ class Level3Factory {
 
         const formatted_string = `${station}_${product_abbv}_${year}_${month}_${day}_${hour}_${minute}_${second}`;
         return formatted_string;
+    }
+
+    /**
+     * Gets the file's age in minutes.
+     * 
+     * @returns {Number} The file's age in minutes
+     */
+    get_file_age_in_minutes() {
+        const date_diff = get_date_diff_obj(this.get_date(), new Date());
+        const duration = luxon.Duration.fromObject(date_diff);
+        return duration.shiftTo('minutes').toObject().minutes;
     }
 
     /**
