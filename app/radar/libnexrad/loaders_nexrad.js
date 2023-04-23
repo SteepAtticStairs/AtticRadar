@@ -128,7 +128,8 @@ function get_latest_level_3_url(station, product, index, callback, date) {
         if (product == 'NST') { product = '58sti' }
         if (product == 'NTV') { product = '61tvs' }
         if (product == 'NMD') { product = '141md' }
-        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${station.toLowerCase()}/sn.last#`
+        var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${station.toLowerCase()}/sn.last#`;
+        fileUrl = ut.preventFileCaching(fileUrl);
         callback(fileUrl);
     }
 

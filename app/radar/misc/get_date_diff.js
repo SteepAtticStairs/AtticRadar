@@ -42,6 +42,7 @@ function get_date_diff_obj(date1, date2) {
 function get_date_diff(date_obj, usage) {
     const date_diff = get_date_diff_obj(date_obj, new Date());
     const duration = luxon.Duration.fromObject(date_diff);
+    const duration_minutes = duration.shiftTo('minutes').toObject().minutes;
 
     var formatted_date_diff;
     var age_class;
@@ -54,26 +55,26 @@ function get_date_diff(date_obj, usage) {
 
     if (usage == 'radar_message') {
         // 0 days
-        if (date_diff.days == 0) { age_class = 'new-file'; }
+        if (duration_minutes < 1440) { age_class = 'new-file'; }
     } else if (usage == 'radar_plot') {
         // less than 0 hours 10 minutes
-        if (date_diff.hours == 0 && date_diff.minutes < 10) { age_class = 'new-file'; }
+        if (duration_minutes < 10) { age_class = 'new-file'; }
     }
 
     if (usage == 'radar_message') {
         // greater than or equal to 1 days but less than 3 days
-        if (date_diff.days >= 1 && date_diff.days < 3) { age_class = 'recent-file'; }
+        if (duration_minutes >= 1440 && duration_minutes < 4320) { age_class = 'recent-file'; }
     } else if (usage == 'radar_plot') {
         // greater than or equal to 0 hours 10 minutes
-        if (date_diff.hours > 0 || date_diff.days > 0 || (date_diff.hours == 0 && date_diff.minutes >= 30)) { age_class = 'recent-file'; }
+        if (duration_minutes >= 10) { age_class = 'recent-file'; }
     }
 
     if (usage == 'radar_message') {
         // greater than or equal to 3 days
-        if (date_diff.days >= 3) { age_class = 'old-file'; }
+        if (duration_minutes >= 4320) { age_class = 'old-file'; }
     } else if (usage == 'radar_plot') {
-        // greater than 1 hour or 1 day OR greater than or equal to 0 hours 30 minutes
-        if (date_diff.hours > 0 || date_diff.days > 0 || (date_diff.hours == 0 && date_diff.minutes >= 30)) { age_class = 'old-file'; }
+        // greater than or equal to 0 hours 30 minutes
+        if (duration_minutes >= 30) { age_class = 'old-file'; }
     }
 
     return {

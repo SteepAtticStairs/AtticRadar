@@ -10,7 +10,7 @@ function _load_storm_track_product(product, callback) {
             deal_with_tvs_layers();
         } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
-                if (L3Factory.get_file_age_in_minutes() <= 15) {
+                if (L3Factory.get_file_age_in_minutes() <= 30) {
                     function _plot() {
                         console.log(L3Factory);
                         L3Factory.plot();
