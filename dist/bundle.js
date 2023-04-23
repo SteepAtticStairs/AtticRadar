@@ -19175,6 +19175,8 @@ function _init_click_listener() {
         const base = e.features[0].properties;
         const clickedStation = base.station_id;
         window.atticData.currentStation = clickedStation;
+        $('#radarStation').html(clickedStation);
+        $('#radarLocation').html(nexrad_locations[clickedStation].name);
         const stationType = base.type;
 
         var productToLoad;
