@@ -164,6 +164,13 @@ function plot_storm_tracks(L3Factory) {
                 popupHTML += `<div><b>${ut.degToCompass(flip(cellProperties.movement.deg))}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
             }
 
+            if (cellProperties.graph_data != undefined) {
+                popupHTML +=
+`<br>
+<div>Max Reflectivity: <b>${cellProperties?.graph_data?.dbzm} dBZ</b>
+<div>Height of Max Refl: <b>${cellProperties?.graph_data?.hgt} kft</b>`
+            }
+
             new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
                 .setLngLat(JSON.parse(properties.coords))
                 .setHTML(popupHTML)

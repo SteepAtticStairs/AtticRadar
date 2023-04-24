@@ -9806,10 +9806,11 @@ class Level3Factory {
         this.station = station_abbreviations[this.initial_radar_obj.siteID];
         this.elevation_angle = this.get_elevation_angle();
 
-        var tab_pages = this.initial_radar_obj?.tab_pages;
+        const tab_pages = this.initial_radar_obj?.tab_pages;
+        const graph_pages = this.initial_radar_obj?.graph_pages;
         if (this.product_code == 58) {
             // storm tracks
-            this.formatted_tabular = level3_formatters.format_storm_tracks(tab_pages);
+            this.formatted_tabular = level3_formatters.format_storm_tracks(tab_pages, graph_pages);
         } else if (this.product_code == 59) {
             // hail index
             this.formatted_tabular = level3_formatters.format_hail_index(tab_pages);
@@ -10024,7 +10025,7 @@ module.exports = Level3Factory;
  * @param {*} pages An array with all of the tabular pages to parse. Each array element should be one page, with lines separated by "\n".
  * @returns {Object} An object with the formatted storm tracks.
  */
-function format_storm_tracks(pages) {
+function format_storm_tracks(tab_pages, graph_pages) {
     // parse no data, new and positional info
     // kts returns {deg,kts} instead of the default {deg,nm}
     const parseStringPosition = (position, kts = false) => {
@@ -10049,17 +10050,46 @@ function format_storm_tracks(pages) {
         };
     };
 
+    var graph_formatted = {};
+    graph_pages.forEach((page) => {
+        var storm_ids = [];
+        var dbzm_hgt_arr = [];
+        page.forEach((line) => {
+            if (!line.hasOwnProperty('text')) return;
+            line = line.text;
+
+            if (line.startsWith(' STORM ID')) {
+                // an array of storm ids, e.g. ['Q9', 'I1', 'F0', 'X9', 'C9', 'V7']
+                storm_ids = line.replace(' STORM ID', '').split(' ').filter(String);
+            } else if (line.startsWith(' DBZM HGT')) {
+                // an array with max dBZ and max dBZ height, e.g. ['38', '8.6', '38', '9.7', '38', '9.6']
+                dbzm_hgt_arr = line.replace(' DBZM HGT', '').split(' ').filter(String);
+            }
+        })
+        for (var i = 0; i < storm_ids.length; i++) {
+            var storm_id = storm_ids[i];
+            var dbzm_index = i * 2;
+            var hgt_index = i * 2 + 1;
+            graph_formatted[storm_id] = {
+                'dbzm': parseFloat(dbzm_hgt_arr[dbzm_index]),
+                'hgt': parseFloat(dbzm_hgt_arr[hgt_index])
+            };
+        }
+    })
+
     // extract relevant data
     // divide tabular data into lines
-    pages = pages.map(i => i.split('\n'));
-    if (!pages) return {};
+    tab_pages = tab_pages.map(i => i.split('\n'));
+    if (!tab_pages) return {};
     var result = {};
 
     // format line by line
-    pages.forEach((page) => {
+    tab_pages.forEach((page) => {
         page.forEach((line) => {
+            // console.log(`"${line}"`)
             // look for ID and current position to find valid line
             const idMatch = line.match(/ {2}([A-Z][0-9]) {5}[0-9 ]{3}\/[0-9 ]{3} {3}/);
+            // console.log(!(idMatch == null))
             if (!idMatch) return;
 
             // store the id
@@ -10073,9 +10103,12 @@ function format_storm_tracks(pages) {
 
             // format the result
             const [current, movement, ...forecast] = stringPositions;
+            var graph_data;
+            if (graph_formatted[id] != undefined) { graph_data = graph_formatted[id]; }
+
             // store to array
             result[id] = {
-                current, movement, forecast,
+                current, movement, forecast, graph_data,
             };
         });
     });
@@ -14250,6 +14283,13 @@ function plot_storm_tracks(L3Factory) {
 
             if (cellProperties.movement != 'new') {
                 popupHTML += `<div><b>${ut.degToCompass(flip(cellProperties.movement.deg))}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
+            }
+
+            if (cellProperties.graph_data != undefined) {
+                popupHTML +=
+`<br>
+<div>Max Reflectivity: <b>${cellProperties?.graph_data?.dbzm} dBZ</b>
+<div>Height of Max Refl: <b>${cellProperties?.graph_data?.hgt} kft</b>`
             }
 
             new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })

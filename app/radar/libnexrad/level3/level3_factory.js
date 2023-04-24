@@ -27,10 +27,11 @@ class Level3Factory {
         this.station = station_abbreviations[this.initial_radar_obj.siteID];
         this.elevation_angle = this.get_elevation_angle();
 
-        var tab_pages = this.initial_radar_obj?.tab_pages;
+        const tab_pages = this.initial_radar_obj?.tab_pages;
+        const graph_pages = this.initial_radar_obj?.graph_pages;
         if (this.product_code == 58) {
             // storm tracks
-            this.formatted_tabular = level3_formatters.format_storm_tracks(tab_pages);
+            this.formatted_tabular = level3_formatters.format_storm_tracks(tab_pages, graph_pages);
         } else if (this.product_code == 59) {
             // hail index
             this.formatted_tabular = level3_formatters.format_hail_index(tab_pages);
