@@ -40,8 +40,8 @@ require('../weather-station/menuItem').weatherstationToolsOption();
 // load the radio menu item
 require('../radio/menuItem').weatherRadioToolsOption();
 
-// // load the lightning module
-// require('../lightning/fetch_data');
+// load the lightning module
+require('../lightning/menu_item');
 
 // load the tools menu
 require('./menu/tools');

@@ -22,6 +22,8 @@ function setLayerOrder() {
     moveLayerToTop('mainAlertsLayer');
     moveLayerToTop('mainAlertsLayerFill');
 
+    moveLayerToTop('lightningLayer');
+
     var storm_track_layers = window.atticData.storm_track_layers;
     if (storm_track_layers != undefined) {
         for (var i in storm_track_layers) {
