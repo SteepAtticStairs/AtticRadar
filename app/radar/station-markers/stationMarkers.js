@@ -2,7 +2,6 @@ const turf = require('@turf/turf');
 const ut = require('../utils');
 const map = require('../map/map');
 const get_station_status = require('../misc/getStationStatus');
-const show_hide_upload_menu = require('../upload/OLD_upload_menu');
 
 const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');
 const Level2Factory = require('../libnexrad/level2/level2_factory');
@@ -197,9 +196,6 @@ function _init_click_listener() {
 
         $('#radarInfoSpan').show();
 
-        // if (window.atticData.from_file_upload) {
-        //     show_hide_upload_menu('hide');
-        // }
         window.atticData.from_file_upload = false;
         loaders_nexrad.quick_level_3_plot(clickedStation, productToLoad, (L3Factory) => {});
     });

@@ -2,7 +2,7 @@ const createMenuOption = require('./createMenuOption');
 const createOffCanvasItem = require('./createOffCanvasItem');
 const armFunctions = require('./atticRadarMenu');
 const ut = require('../utils');
-const show_hide_upload_menu = require('../upload/OLD_upload_menu');
+// const show_hide_upload_menu = require('../upload/OLD_upload_menu');
 
 
 $('#armrModeBtn').click(function() {
@@ -23,7 +23,7 @@ armFunctions.toggleswitchFunctions($('#armrModeBtnSwitchElem'), function() {
             .addClass('armrIcon-Red fa-upload');
         // change the text
         $('#armrModeBtnSlideDown').find('.slideDownText').text('File Upload Mode');
-        show_hide_upload_menu('show');
+        // show_hide_upload_menu('show');
     // }
 }, function() {
     // if (!$('#dataDiv').data('noMoreClicks')) {
@@ -37,6 +37,6 @@ armFunctions.toggleswitchFunctions($('#armrModeBtnSwitchElem'), function() {
             .addClass('armrIcon-Green fa-clock');
         // change the text
         $('#armrModeBtnSlideDown').find('.slideDownText').text('Current File Mode');
-        show_hide_upload_menu('hide');
+        // show_hide_upload_menu('hide');
     // }
 })
