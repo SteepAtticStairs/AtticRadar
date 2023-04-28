@@ -222,7 +222,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
 
     map.addLayer(layer, 'land-structure-line');
 
-    var isInFileUploadMode = $('#armrModeBtnSwitchElem').is(':checked');
+    var isInFileUploadMode = window.atticData.from_file_upload; /* $('#armrModeBtnSwitchElem').is(':checked'); */
     if (!isInFileUploadMode) {
         init_storm_tracks.fetch_data();
         // STstuff.loadAllStormTrackingStuff();

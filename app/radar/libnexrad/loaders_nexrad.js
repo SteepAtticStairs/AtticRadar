@@ -184,6 +184,17 @@ function return_level_3_factory_from_url(url, callback) {
         callback(L3Factory);
     })
 }
+/**
+ * Function to return a L3Factory instance from an ArrayBuffer.
+ * 
+ * @param {ArrayBuffer} arraybuffer - An ArrayBuffer which contains the data of the radar file.
+ * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L3Factory class.
+ */
+function return_level_3_factory_from_buffer(arraybuffer, callback) {
+    const file = new NEXRADLevel3File(arraybuffer);
+    const L3Factory = new Level3Factory(file);
+    callback(L3Factory);
+}
 
 /**
  * Function to quickly plot and display info about a Level 3 file.
@@ -209,5 +220,6 @@ module.exports = {
     get_latest_level_3_url,
     return_level_3_factory_from_info,
     return_level_3_factory_from_url,
+    return_level_3_factory_from_buffer,
     quick_level_3_plot
 };

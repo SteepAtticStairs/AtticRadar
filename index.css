@@ -228,7 +228,7 @@ https://tobiasahlin.com/spinkit/
 }
 
 #drop_zone {
-    height: 40px;
+    height: 100px;
     width: auto;
     /* top right bottom left */
     padding: 0px 20px 0px 20px;
@@ -237,7 +237,7 @@ https://tobiasahlin.com/spinkit/
     align-items: center;
     cursor: pointer;
 
-    border: 1px solid rgb(72, 72, 72);
+    border: 2px solid rgb(136, 136, 136);
     border-style: dashed;
 }
 

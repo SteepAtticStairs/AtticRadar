@@ -1,6 +1,7 @@
 const ut = require('../utils');
 const loaders = require('../loaders');
 const loaders_nexrad = require('../libnexrad/loaders_nexrad');
+const show_hide_upload_menu = require('../upload/OLD_upload_menu');
 
 var productLookup = {
     1: {
@@ -103,6 +104,10 @@ $('.psmRow').click(function(e) {
         var selectedTiltNum = $(this).find('.psmRowTiltSelect').text().split(' ')[1];
         var resultProduct = productLookup[selectedTiltNum][value];
 
+        // if (window.atticData.from_file_upload) {
+        //     show_hide_upload_menu('hide');
+        // }
+        window.atticData.from_file_upload = false;
         loaders_nexrad.quick_level_3_plot(currentStation, resultProduct, (L3Factory) => {});
         // loaders.getLatestFile(currentStation, [3, resultProduct, 0], function(url) {
         //     console.log(url)

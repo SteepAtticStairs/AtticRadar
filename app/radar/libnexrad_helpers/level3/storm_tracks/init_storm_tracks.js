@@ -74,5 +74,7 @@ function fetch_data() {
 }
 
 module.exports = {
-    fetch_data
+    fetch_data,
+    deal_with_storm_track_layers,
+    deal_with_tvs_layers
 };

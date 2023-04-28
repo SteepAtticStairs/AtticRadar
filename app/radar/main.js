@@ -18,8 +18,8 @@ window.atticData = {};
 // initially hide the progress bar
 ut.progressBarVal('hide');
 
-// add file upload listeners
-require('./misc/fileUpload');
+// add file upload MENU listeners
+require('./upload/upload_menu');
 
 // load the mode control
 require('./menu/mode');

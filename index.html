@@ -218,17 +218,6 @@
     <div id="radarHeader" class="radarHeader">
         <div id="top-left"></div>
         <div id="top-right"></div>
-        <span id="fileUploadSpan" style="display: none">
-            <input type="file" id="hiddenFileUploader" style="display: none">
-            <div id="drop_zone">Drop Level 2 file here</div>
-
-            <div id="levelRadios">
-                <input class="form-check-input levelRadioInputs" type="radio" name="fileUploadLevelSelectorRadio" id="inlineRadio1" value="2" style="float: left" checked>
-                <label class="form-check-label levelRadioInputs" for="inlineRadio1" style="float: left; margin-left: 4px;">Level 2</label>
-                <input class="form-check-input levelRadioInputs" type="radio" name="fileUploadLevelSelectorRadio" id="inlineRadio2" value="3" style="float: right">
-                <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 4px;">Level 3</label>
-            </div>
-        </span>
         <span id="radarInfoSpan" style="display: none">
             <!-- <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
             <div style="font-size: 12px"><sus id='radarStationParent'><i class="fa-solid fa-circle-info" id="radarStationIcon" style="display: none">&nbsp;&nbsp;</i><b id='radarStation'>No Station Selected</b></sus><a id="radarTime"></a></div> -->
@@ -495,7 +484,13 @@
 
                     <br>
 
-                    <div class="armrHeader">MODE</div>
+                    <div class="armrHeader">OPEN FILE</div>
+                    <div class="atticRadarMenuRow" id="armrUploadFileBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-upload"></i>
+                        Upload Radar File
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+                    <!-- <div class="armrHeader">MODE</div>
                     <div class="atticRadarMenuRow" id="armrModeBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-sliders"></i>
                         Change Mode
@@ -505,7 +500,7 @@
                         <i class="armrIcon armrIcon-Green fa-solid fa-clock"></i>
                         <span class="slideDownText">Current File Mode</span>
                         <i class="toggleSwitchContainter" id="armrModeBtnSwitch"><input type="checkbox" id="armrModeBtnSwitchElem" class="toggleSwitch" /><label for="armrModeBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
-                    </div>
+                    </div> -->
 
                     <br>
 
