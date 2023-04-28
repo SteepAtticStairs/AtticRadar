@@ -2748,7 +2748,7 @@ function load_lightning() {
     })
         .then(response => response.text())
         .then(data => {
-            // console.log(data)
+            console.log(data)
             data = data.split('\n');
 
             var points = [];
@@ -2762,7 +2762,9 @@ function load_lightning() {
                     var lng = parseFloat(row[1]);
                     var time = row[5].replace('Blitzortung @ ', '').slice(0, -4);
 
-                    const date = luxon.DateTime.fromFormat(time, 'HH:mm:ss', { zone: 'America/Los_Angeles' }); // PDT
+                    // old format was "HH:mm:ss", e.g. "18:34:26" or "03:16:45"
+                    // new format is "h:mm:ssa", e.g. "8:34:26am" or "7:30:33pm"
+                    const date = luxon.DateTime.fromFormat(time, 'h:mm:ssa', { zone: 'America/Los_Angeles' }); // PDT
                     const diff = luxon.DateTime.now().diff(date);
                     const diff_minutes = diff.as('minutes');
                     if (diff_minutes <= 15) {
@@ -14982,11 +14984,11 @@ if (require('./misc/detectmobilebrowser')) {
 
 //$('#productMapFooter').hide();
 
-var startTimer = Date.now();
-$.get(ut.phpProxy + "https://google.com", function(data) {
-    var endTimer = Date.now();
-    console.log(`Established connection to main proxy in ${endTimer - startTimer} ms`)
-})
+// var startTimer = Date.now();
+// $.get(ut.phpProxy + "https://google.com", function(data) {
+//     var endTimer = Date.now();
+//     console.log(`Established connection to main proxy in ${endTimer - startTimer} ms`)
+// })
 
 // var startTimer2 = Date.now();
 // $.get(ut.phpProxy2 + "https://google.com", function(data) {
@@ -19389,7 +19391,7 @@ $('#armrUploadFileBtn').click(() => {
     arm_functions.hideARMwindow();
 
     ut.displayAtticDialog({
-        'title': 'Upload',
+        'title': 'UPLOAD',
         'body': upload_dialog_content,
         'color': 'rgb(76, 143, 195)',
         'textColor': 'black'

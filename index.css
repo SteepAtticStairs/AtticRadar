@@ -719,6 +719,10 @@ https://tobiasahlin.com/spinkit/
     border-top: 1px solid black;
     border-right: 1px solid black;
 
+    font-weight: bold;
+    font-weight: 900;
+    letter-spacing: 1.25px;
+
     text-align: center;
 
     background-color: rgb(175, 175, 175);

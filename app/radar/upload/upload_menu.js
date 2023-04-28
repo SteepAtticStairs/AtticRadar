@@ -10,7 +10,7 @@ $('#armrUploadFileBtn').click(() => {
     arm_functions.hideARMwindow();
 
     ut.displayAtticDialog({
-        'title': 'Upload',
+        'title': 'UPLOAD',
         'body': upload_dialog_content,
         'color': 'rgb(76, 143, 195)',
         'textColor': 'black'
