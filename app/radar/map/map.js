@@ -9,6 +9,8 @@ const map = new mapboxgl.Map({
     // bearingSnap: 360,
     maxPitch: 0,
 
+    fadeDuration: 0,
+
     attributionControl: false,
     //renderWorldCopies: false,
     //maxPitch: 75,
@@ -30,6 +32,14 @@ $('#map').on('contextmenu', function(e) {
         e.preventDefault();
     }
 })
+
+// map.on('zoomstart', function() {
+//     if ($('#dataDiv').data('stationMarkersVisible') || $('#dataDiv').data('metarsActive')) {
+//         map._fadeDuration = 0;
+//     } else {
+//         map._fadeDuration = 300;
+//     }
+// })
 
 // map.on('click', (e) => {
 //     const popup = new mapboxgl.Popup({ className: 'alertPopup' })
@@ -83,14 +93,6 @@ window.onclick = () => { map.resize() }
 //     console.log(e.lngLat)
 //     console.log(map.getZoom())
 // })
-
-map.on('zoomstart', function() {
-    if ($('#dataDiv').data('stationMarkersVisible') || $('#dataDiv').data('metarsActive')) {
-        map._fadeDuration = 0;
-    } else {
-        map._fadeDuration = 300;
-    }
-})
 
 // // https://github.com/mapbox/mapbox-gl-js/issues/3039#issuecomment-401964567
 // function registerControlPosition(map, positionName) {
