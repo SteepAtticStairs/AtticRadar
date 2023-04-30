@@ -27,7 +27,6 @@ function load_file(files_obj) {
         const buffer = Buffer.from(this.result);
 
         if (window.atticData.current_level_input == 3) {
-            loaders_nexrad.quick_level_3_plot
             loaders_nexrad.return_level_3_factory_from_buffer(buffer, (L3Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L3Factory);

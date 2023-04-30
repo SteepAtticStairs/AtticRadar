@@ -77,6 +77,11 @@ function get_date_diff(date_obj, usage) {
         if (duration_minutes >= 30) { age_class = 'old-file'; }
     }
 
+    // we don't want a color if we're in file upload mode
+    if (usage == 'radar_plot' && window.atticData.from_file_upload) {
+        age_class = '';
+    }
+
     return {
         'formatted': formatted_date_diff,
         'class': age_class

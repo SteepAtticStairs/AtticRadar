@@ -16759,6 +16759,11 @@ function get_date_diff(date_obj, usage) {
         if (duration_minutes >= 30) { age_class = 'old-file'; }
     }
 
+    // we don't want a color if we're in file upload mode
+    if (usage == 'radar_plot' && window.atticData.from_file_upload) {
+        age_class = '';
+    }
+
     return {
         'formatted': formatted_date_diff,
         'class': age_class
@@ -19292,7 +19297,6 @@ function load_file(files_obj) {
         const buffer = Buffer.from(this.result);
 
         if (window.atticData.current_level_input == 3) {
-            loaders_nexrad.quick_level_3_plot
             loaders_nexrad.return_level_3_factory_from_buffer(buffer, (L3Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L3Factory);
