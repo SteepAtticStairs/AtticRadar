@@ -4,7 +4,7 @@ const init_event_listeners = require('./file_upload');
 
 const upload_dialog_content = 
 `<input type="file" id="hiddenFileUploader" style="display: none">\
-<div id="drop_zone">Drop Level 3 file here</div>`
+<div id="drop_zone">Drop NEXRAD file here</div>`
 
 $('#armrUploadFileBtn').click(() => {
     arm_functions.hideARMwindow();

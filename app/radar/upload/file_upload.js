@@ -1,6 +1,7 @@
 const ut = require('../utils');
 const loaders_nexrad = require('../libnexrad/loaders_nexrad');
 const map_funcs = require('../map/mapFunctions');
+const detect_level = require('../libnexrad/detect_level');
 const { deal_with_storm_track_layers, deal_with_tvs_layers } = require('../libnexrad_helpers/level3/storm_tracks/init_storm_tracks');
 
 function reset_everything() {
@@ -25,8 +26,9 @@ function load_file(files_obj) {
     const reader = new FileReader();
     reader.addEventListener('load', function () {
         const buffer = Buffer.from(this.result);
+        const detected_radar_level = detect_level(buffer);
 
-        if (window.atticData.current_level_input == 3) {
+        if (window.atticData.detected_radar_level == 3) {
             loaders_nexrad.return_level_3_factory_from_buffer(buffer, (L3Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L3Factory);
@@ -40,6 +42,21 @@ function load_file(files_obj) {
 
                 reset_everything();
             })
+        } else if (detected_radar_level == 2) {
+            loaders_nexrad.return_level_2_factory_from_buffer(buffer, (L2Factory) => {
+                window.atticData.from_file_upload = true;
+                console.log(L2Factory);
+
+                map_funcs.removeMapLayer('baseReflectivity');
+
+                L2Factory.display_file_info();
+                L2Factory.plot('REF', 1);
+
+                reset_everything();
+            })
+        } else if (detected_radar_level == undefined) {
+            // nothing here yet
+            console.error('Level detection failed.');
         }
     }, false);
     reader.readAsArrayBuffer(uploaded_file);
@@ -103,13 +120,13 @@ function init_event_listeners() {
         $('#hiddenFileUploader').click();
     })
 
-    // $('#dataDiv').data('currentLevelInput', '2');
-    window.atticData.current_level_input = 3;
-    $('.levelRadioInputs').on('click', function () {
-        window.atticData.current_level_input = parseInt(this.value);
-        // $('#dataDiv').data('currentLevelInput', this.value);
-        $('#drop_zone').text(`Drop Level ${this.value} file here`);
-    })
+    // // $('#dataDiv').data('currentLevelInput', '2');
+    // window.atticData.current_level_input = 3;
+    // $('.levelRadioInputs').on('click', function () {
+    //     window.atticData.current_level_input = parseInt(this.value);
+    //     // $('#dataDiv').data('currentLevelInput', this.value);
+    //     $('#drop_zone').text(`Drop Level ${this.value} file here`);
+    // })
 }
 
 module.exports = init_event_listeners;

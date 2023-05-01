@@ -236,9 +236,11 @@ https://tobiasahlin.com/spinkit/
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    font-weight: 550;
 
     border: 2px solid rgb(136, 136, 136);
     border-style: dashed;
+    border-radius: 10px;
 }
 
 #progBarParent {

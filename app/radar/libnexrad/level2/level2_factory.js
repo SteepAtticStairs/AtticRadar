@@ -1,5 +1,6 @@
 const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const calculate_coordinates = require('../../plot/calculate_coordinates');
+const display_file_info = require('../../libnexrad_helpers/display_file_info');
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel2File' class.
@@ -14,8 +15,11 @@ class Level2Factory {
         this.header = initial_radar_obj.volume_header;
         this.vcp = initial_radar_obj.vcp;
         this.nscans = this.initial_radar_obj.nscans;
+        this.station = this.header.icao;
+        this.vcp = this.get_vcp();
 
         this._group_and_sort_sweeps();
+        this.elevation_angle = this.get_elevation_angle(1);
     }
     /**
      * Get the gate values for a given moment and elevation number.
@@ -141,6 +145,26 @@ class Level2Factory {
         return [lat, lng, alt];
     }
     /**
+     * Get the elevation angle for a given elevation number.
+     * 
+     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     */
+    get_elevation_angle(elevationNumber) {
+        var elev_angles = this.get_value_from_sweep('elevation_angle', 'msg_header', elevationNumber);
+
+        var msg_type = this.initial_radar_obj.msg_type;
+        var scale;
+        if (msg_type == '1') {
+            scale = 180 / (4096 * 8);
+        } else {
+            scale = 1;
+        }
+
+        var scaleFunction = function(x) { return x * scale; };
+        elev_angles = this._scale_values(elev_angles, scaleFunction);
+        return elev_angles[0];
+    }
+    /**
      * Gets the date at which the radar volume was collected.
      * If an elevation number is passed, the date for that sweep is returned.
      * If nothing is passed, the date for the whole volume is returned.
@@ -193,8 +217,17 @@ class Level2Factory {
      * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
      */
     plot(moment, elevationNumber) {
+        this.elevation_angle = this.get_elevation_angle(elevationNumber);
         const options = {'product': moment, 'elevation': elevationNumber};
         calculate_coordinates(this, options);
+    }
+
+    /**
+     * Function that writes the necessary file information to the DOM.
+     */
+    display_file_info() {
+        // execute code from another file
+        display_file_info.apply(this);
     }
 
     /**

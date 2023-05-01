@@ -1,14 +1,14 @@
-const nexrad_locations = require('../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
-const { get_date_diff } = require('../../misc/get_date_diff');
+const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
+const { get_date_diff } = require('../misc/get_date_diff');
 const { DateTime } = require('luxon');
-const ut = require('../../utils');
+const ut = require('../utils');
 
 var alreadyClicked = false;
 function _position_footer() {
     if (!alreadyClicked) {
         alreadyClicked = true;
         var offset;
-        if (require('../../misc/detectmobilebrowser')) {
+        if (require('../misc/detectmobilebrowser')) {
             offset = $(window).height() * (5 / 100);
         } else {
             offset = 0;
