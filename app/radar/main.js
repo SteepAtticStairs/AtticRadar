@@ -119,6 +119,8 @@ if (require('./misc/detectmobilebrowser')) {
     $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
+$('#armrUploadFileBtn').click();
+
 //$('#productMapFooter').hide();
 
 // var startTimer = Date.now();

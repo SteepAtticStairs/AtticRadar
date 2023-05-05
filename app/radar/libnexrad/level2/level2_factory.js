@@ -1,6 +1,16 @@
 const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
+const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
+
+// https://stackoverflow.com/a/8043061
+function _zero_pad(num) {
+    const formatted_number = num.toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+    })
+    return formatted_number;
+}
 
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel2File' class.
@@ -150,19 +160,15 @@ class Level2Factory {
      * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
      */
     get_elevation_angle(elevationNumber) {
-        var elev_angles = this.get_value_from_sweep('elevation_angle', 'msg_header', elevationNumber);
-
         var msg_type = this.initial_radar_obj.msg_type;
-        var scale;
+        var elev_angle;
         if (msg_type == '1') {
-            scale = 180 / (4096 * 8);
+            elev_angle = this.get_value_from_sweep('elevation_angle', 'msg_header', elevationNumber)[0];
         } else {
-            scale = 1;
+            elev_angle = this.initial_radar_obj.vcp.cut_parameters[elevationNumber - 1].elevation_angle;
         }
 
-        var scaleFunction = function(x) { return x * scale; };
-        elev_angles = this._scale_values(elev_angles, scaleFunction);
-        return elev_angles[0];
+        return elev_angle * (180 / (4096 * 8));
     }
     /**
      * Gets the date at which the radar volume was collected.
@@ -209,7 +215,6 @@ class Level2Factory {
                 null;
         }
     }
-
     /**
      * Function that plots the factory with its radar data to the map.
      * 
@@ -218,16 +223,97 @@ class Level2Factory {
      */
     plot(moment, elevationNumber) {
         this.elevation_angle = this.get_elevation_angle(elevationNumber);
+
+        // we don't want to load the elevation menu multiple times for the same radar file
+        const file_id = this.generate_unique_id();
+        if (window.atticData.L2_file_id != file_id) { // if we're on a new file
+            window.atticData.L2_file_id = file_id; // set the new id globally
+            elevation_menu.apply(this, [this.list_elevations_and_products()]); // load the elevation menu
+        }
+
+        this.display_file_info();
         const options = {'product': moment, 'elevation': elevationNumber};
         calculate_coordinates(this, options);
     }
-
     /**
      * Function that writes the necessary file information to the DOM.
      */
     display_file_info() {
         // execute code from another file
         display_file_info.apply(this);
+    }
+    /**
+     * Function that loops over every sweep, and stores information about the sweep in an array.
+     * This is useful for creating buttons in the DOM. Often abbreviated "lEAP".
+     * 
+     * @returns {Array} An array with sorted information about each sweep. Formatted as such:
+     * [elevation angle, elevation number, moments in the elevation, waveform type]
+     */
+    list_elevations_and_products() {
+        var elevation_angle;
+		var elev_angle_arr = [];
+        for (var key = 0; key < this.initial_radar_obj.vcp.cut_parameters.length; key++) {
+            try {
+                var elevations_base = this.initial_radar_obj.vcp.cut_parameters[key];
+                var product_base = this.grouped_sweeps[key + 1][0];
+
+                var all_products_arr = [];
+                ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW'].forEach(prop => {
+                    if (product_base.hasOwnProperty(prop)) {
+                        all_products_arr.push(prop);
+                    }
+                });
+
+                elevation_angle = elevations_base.elevation_angle * (180 / (4096 * 8));
+                elev_angle_arr.push([
+                    elevation_angle,
+                    (key + 1).toString(),
+                    all_products_arr,
+                    elevations_base.waveform_type
+                ]);
+            } catch (e) {
+                console.warn(`Warning on elevation ${elevation_angle}: ${e}`);
+            }
+        }
+        return elev_angle_arr;
+    }
+    /**
+     * Function that returns an array with the product abbreviations of all of the products contained in the radar file
+     * 
+     * @returns {Array} An array with all of the radar file's moments
+     */
+	get_all_products() {
+		var lEAP = this.list_elevations_and_products();
+
+		var all_products = [];
+		for (var i in lEAP) {
+			var products = lEAP[i][2];
+			for (var n in products) {
+				if (!all_products.includes(products[n])) {
+					all_products.push(products[n]);
+				}
+			}
+		}
+
+		return all_products;
+	}
+    /**
+     * Generates a unique ID associated with the file.
+     * 
+     * @returns {String} A string with the file's ID.
+     */
+    generate_unique_id() {
+        const station = this.station;
+        const date = this.get_date();
+        const year = date.getUTCFullYear();
+        const month = _zero_pad(date.getUTCMonth() + 1);
+        const day = _zero_pad(date.getUTCDate());
+        const hour = _zero_pad(date.getUTCHours());
+        const minute = _zero_pad(date.getUTCMinutes());
+        const second = _zero_pad(date.getUTCSeconds());
+
+        const formatted_string = `${station}${year}${month}${day}_${hour}${minute}${second}`;
+        return formatted_string;
     }
 
     /**

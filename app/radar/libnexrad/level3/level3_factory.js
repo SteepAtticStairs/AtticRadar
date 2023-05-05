@@ -11,6 +11,15 @@ const ut = require('../../utils');
 const plot_storm_tracks = require('../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks');
 const plot_tornado_vortex_signature = require('../../libnexrad_helpers/level3/storm_tracks/plot_tornado_vortex_signature');
 
+// https://stackoverflow.com/a/8043061
+function _zero_pad(num) {
+    const formatted_number = num.toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+    })
+    return formatted_number;
+}
+
 /**
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
  */
@@ -148,6 +157,7 @@ class Level3Factory {
         } else if (this.product_code == 61) {
             plot_tornado_vortex_signature(this);
         } else {
+            this.display_file_info();
             calculate_coordinates(this);
         }
     }
@@ -170,11 +180,11 @@ class Level3Factory {
         const product_abbv = this.product_abbv;
         const date = this.get_date();
         const year = date.getUTCFullYear();
-        const month = date.getUTCMonth() + 1;
-        const day = date.getUTCDate();
-        const hour = date.getUTCHours();
-        const minute = date.getUTCMinutes();
-        const second = date.getUTCSeconds();
+        const month = _zero_pad(date.getUTCMonth() + 1);
+        const day = _zero_pad(date.getUTCDate());
+        const hour = _zero_pad(date.getUTCHours());
+        const minute = _zero_pad(date.getUTCMinutes());
+        const second = _zero_pad(date.getUTCSeconds());
 
         const formatted_string = `${station}_${product_abbv}_${year}_${month}_${day}_${hour}_${minute}_${second}`;
         return formatted_string;

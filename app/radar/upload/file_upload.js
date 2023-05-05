@@ -37,7 +37,7 @@ function load_file(files_obj) {
                 deal_with_storm_track_layers();
                 deal_with_tvs_layers();
 
-                L3Factory.display_file_info();
+                // L3Factory.display_file_info();
                 L3Factory.plot();
 
                 reset_everything();
@@ -46,10 +46,13 @@ function load_file(files_obj) {
             loaders_nexrad.return_level_2_factory_from_buffer(buffer, (L2Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L2Factory);
+                // console.log(L2Factory.list_elevations_and_products())
 
                 map_funcs.removeMapLayer('baseReflectivity');
+                deal_with_storm_track_layers();
+                deal_with_tvs_layers();
 
-                L2Factory.display_file_info();
+                // L2Factory.display_file_info();
                 L2Factory.plot('REF', 1);
 
                 reset_everything();

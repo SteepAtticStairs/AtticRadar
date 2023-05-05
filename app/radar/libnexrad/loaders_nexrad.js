@@ -207,7 +207,7 @@ function quick_level_3_plot(station, product, callback = null) {
     if (callback == null) { callback = function() {} }
     return_level_3_factory_from_info(station, product, (L3Factory) => {
         console.log(L3Factory);
-        L3Factory.display_file_info();
+        // L3Factory.display_file_info();
         L3Factory.plot();
 
         callback(L3Factory);
