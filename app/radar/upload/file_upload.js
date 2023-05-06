@@ -28,7 +28,7 @@ function load_file(files_obj) {
         const buffer = Buffer.from(this.result);
         const detected_radar_level = detect_level(buffer);
 
-        if (window.atticData.detected_radar_level == 3) {
+        if (detected_radar_level == 3) {
             loaders_nexrad.return_level_3_factory_from_buffer(buffer, (L3Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L3Factory);
