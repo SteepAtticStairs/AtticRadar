@@ -172,12 +172,14 @@ function _init_click_listener() {
         $('#radarStation').html(clickedStation);
         $('#radarLocation').html(nexrad_locations[clickedStation].name);
         const stationType = base.type;
+        window.atticData.L2_file_id = '';
 
         var productToLoad;
         var abbvProductToLoad;
         if (stationType == 'WSR-88D') {
             $('#wsr88d_psm').show();
             $('#tdwr_psm').hide();
+            $('#level2_psm').hide();
 
             productToLoad = 'N0B';
             abbvProductToLoad = 'ref';
@@ -186,7 +188,7 @@ function _init_click_listener() {
         } else if (stationType == 'TDWR') {
             $('#wsr88d_psm').hide();
             $('#tdwr_psm').show();
-            $('#productsDropdownTriggerText').html($(`.productOption[value="${abbvProductToLoad}"]`).html());
+            $('#level2_psm').hide();
 
             productToLoad = 'TZ0';
             abbvProductToLoad = 'sr-ref';

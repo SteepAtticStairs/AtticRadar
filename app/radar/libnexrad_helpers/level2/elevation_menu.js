@@ -74,7 +74,7 @@ function initEventListeners(L2Factory, elevationProductLookup) {
         // l2plot(l2rad, product, scanNumber); // plot the current product and selected elevation
     })
 
-    $('.psmRow').click(function() {
+    function _psm_click() {
         var product = $(this).attr('value'); // e.g. l2-vel
         product = product.replace('l2-', '').toUpperCase(); // l2-vel --> VEL
         window.atticData.currentProduct = product; // store it globally
@@ -91,7 +91,9 @@ function initEventListeners(L2Factory, elevationProductLookup) {
 
         L2Factory.plot(product, scanNumber); // plot the selected product and the current elevation
         // l2plot(l2rad, product, scanNumber); // plot the selected product and the current elevation
-    })
+    }
+    $('.psmRow.l2prodSel').off('click'); // disable all prior listeners
+    $('.psmRow.l2prodSel').click(_psm_click);
 
     $('#dealiasBtn').click(function() {
         if ($(this).hasClass('dealiasBtnDeSelected')) {
@@ -143,7 +145,8 @@ function load_elevation_menu(lEAP) {
         completeHTML += _generateRow(btnsInThisRow); // if there are leftover buttons, generate a row with the remaining buttons
     }
     $('#l2ElevationButtons').html(completeHTML); // add the complete "buttons div" to the DOM
-    $('#upload_psm').show(); // show the parent div for the elevation buttons and the psmRows
+    $('.psm').hide();
+    $('#level2_psm').show(); // show the parent div for the elevation buttons and the psmRows
 
     initEventListeners(this, elevationProductLookup); // initialize the event listeners for all of these buttons
 }
