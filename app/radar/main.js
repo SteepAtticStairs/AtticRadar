@@ -119,7 +119,7 @@ if (require('./misc/detectmobilebrowser')) {
     $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
-$('#armrUploadFileBtn').click();
+// $('#armrUploadFileBtn').click();
 
 //$('#productMapFooter').hide();
 

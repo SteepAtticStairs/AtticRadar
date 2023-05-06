@@ -75,6 +75,7 @@ function initEventListeners(L2Factory, elevationProductLookup) {
     })
 
     function _psm_click() {
+        $('#productsDropdownTriggerText').text($(this).text()); // e.g. "Velocity"
         var product = $(this).attr('value'); // e.g. l2-vel
         product = product.replace('l2-', '').toUpperCase(); // l2-vel --> VEL
         window.atticData.currentProduct = product; // store it globally
@@ -148,6 +149,7 @@ function load_elevation_menu(lEAP) {
     $('.psm').hide();
     $('#level2_psm').show(); // show the parent div for the elevation buttons and the psmRows
 
+    $('#productsDropdownTriggerText').text('Reflectivity'); // we start out with reflectivity
     initEventListeners(this, elevationProductLookup); // initialize the event listeners for all of these buttons
 }
 
