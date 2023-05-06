@@ -1,6 +1,6 @@
-function _generateBtnTemplate(angle) {
+function _generateBtnTemplate(angle, number) {
     return `<div class="col">
-        <div class="l2ElevationBtn" value="${angle}">${angle.toFixed(1)}°</div>
+        <div class="l2ElevationBtn" value="${angle}" number="${number}">${angle.toFixed(1)}°</div>
     </div>`;
 }
 function _generateRow(btnsHTML) {
@@ -44,10 +44,13 @@ function _generateElevationProductLookup(lEAP) {
 function initEventListeners(L2Factory, elevationProductLookup) {
     // we start with reflectivity
     window.atticData.currentProduct = 'REF';
+    // we start at 1
+    window.atticData.currentScanNumber = 1;
     // sorts all the full elevations from least to greatest, and picks the lowest one
     window.atticData.fullAngle = Object.keys(elevationProductLookup).map(n => parseFloat(n)).sort(function(a, b) { return a - b })[0];
     // turn green the button that references the starting elevation
-    $(`.l2ElevationBtn${dbs}[value="${window.atticData.fullAngle}"]`).addClass('l2ElevationBtnSelected');
+    // $(`.l2ElevationBtn${dbs}[value="${window.atticData.fullAngle}"]`).addClass('l2ElevationBtnSelected');
+    $(`.l2ElevationBtn${dbs}[number="${window.atticData.currentScanNumber}"]`).addClass('l2ElevationBtnSelected');
 
     // make sure the correct product selection rows are showing
     var allProducts = L2Factory.get_all_products(); // get an array of all products in the radar file
@@ -66,8 +69,9 @@ function initEventListeners(L2Factory, elevationProductLookup) {
         var fullAngle = $(this).attr('value'); // e.g. 0.4833984375
         window.atticData.fullAngle = fullAngle; // store it globally
 
-        var scanNumber = elevationProductLookup[fullAngle][product]; // e.g. 7
-        scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        // var scanNumber = elevationProductLookup[fullAngle][product]; // e.g. 7
+        // scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        var scanNumber = parseInt($(this).attr('number'));
         window.atticData.currentScanNumber = scanNumber; // store it globally
 
         L2Factory.plot(product, scanNumber); // plot the current product and selected elevation
@@ -80,9 +84,10 @@ function initEventListeners(L2Factory, elevationProductLookup) {
         product = product.replace('l2-', '').toUpperCase(); // l2-vel --> VEL
         window.atticData.currentProduct = product; // store it globally
 
-        var scanNumber = elevationProductLookup[window.atticData.fullAngle][product]; // e.g. 7
-        scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
-        window.atticData.currentScanNumber = scanNumber; // store it globally
+        var scanNumber = window.atticData.currentScanNumber;
+        // var scanNumber = elevationProductLookup[window.atticData.fullAngle][product]; // e.g. 7
+        // scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
+        // window.atticData.currentScanNumber = scanNumber; // store it globally
 
         if (product == 'VEL') {
             $('#completeDealiasBtnContainer').show();
@@ -130,17 +135,17 @@ function load_elevation_menu(lEAP) {
         var elevationProducts = lEAP[i][2]; // array listing all of the products in the elevation, e.g. ['REF', 'VEL', 'SW ']
         var elevationWFT = lEAP[i][3]; // waveform type
 
-        if (!duplicateElevs.includes(elevationAngle)) {
-            duplicateElevs.push(elevationAngle);
+        // if (!duplicateElevs.includes(elevationAngle)) {
+        //     duplicateElevs.push(elevationAngle);
 
-            var btnHTML = _generateBtnTemplate(elevationAngle); // generate the single button template for the current angle
+            var btnHTML = _generateBtnTemplate(elevationAngle, elevationNumber); // generate the single button template for the current angle
             btnsInThisRow += btnHTML; // add the button to the current row
             if (iters % 3 == 0 && iters != 1) { // every three buttons, but not the first iteration
                 completeHTML += _generateRow(btnsInThisRow); // generate the row from the buttons and add to the final HTML string
                 btnsInThisRow = ''; // reset the string to hold the row's buttons
             }
             iters++; // increase the counter
-        }
+        // }
     }
     if (btnsInThisRow != '') {
         completeHTML += _generateRow(btnsInThisRow); // if there are leftover buttons, generate a row with the remaining buttons
