@@ -43,7 +43,9 @@ function display_file_info() {
 
     // set some DOM content
     $('#radarStation').html(this.station);
-    $('#radarLocation').html(nexrad_locations[this.station].name);
+    var radar_name = nexrad_locations[this.station]?.name;
+    if (radar_name == undefined) { radar_name = 'Unknown'; }
+    $('#radarLocation').html(radar_name);
 
     // set the date box content
     var fileDateObj = this.get_date();
@@ -61,7 +63,9 @@ function display_file_info() {
     $('#productsDropdownTrigger').show();
 
     // display the VCP
-    $('#radarVCP').html(`VCP: ${this.vcp} (${ut.vcpObj[this.vcp]})`);
+    var radar_vcp = ut.vcpObj[this.vcp];
+    if (radar_vcp == undefined) { radar_vcp = 'Unknown'; }
+    $('#radarVCP').html(`VCP: ${this.vcp} (${radar_vcp})`);
 
     // display the elevation angle
     $('#extraProductInfo').show().html(`Elevation: ${this.elevation_angle.toFixed(1)}°`);

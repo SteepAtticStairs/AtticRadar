@@ -202,6 +202,14 @@ class Level3Factory {
     }
 
     /**
+     * Zooms and pans the map to the radar's location.
+     */
+    fly_to_location() {
+        const location = this.get_location();
+        map.flyTo({ center: [location[1], location[0]], zoom: 6.5, speed: 1.75, essential: true });
+    }
+
+    /**
      * Helper function that scales all of the values in an input array to the desired size. This is useful when converting NEXRAD binary data from its stored format to its readable format, as defined in the ICD.
      * 
      * @param {*} inputValues A 1D or 2D array containing values you wish to scale.

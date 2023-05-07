@@ -11,7 +11,7 @@ const fragment_source = require('./glsl/fragment.glsl');
 const fragment_framebuffer_source = require('./glsl/fragment_framebuffer.glsl');
 const map = require('../map/map');
 
-function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
+function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_factory) {
     var color_scale_data = product_colors[product];
     var colors = [...color_scale_data.colors];
     var values = [...color_scale_data.values];
@@ -219,7 +219,6 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
     }
 
     map_funcs.removeMapLayer('baseReflectivity');
-
     map.addLayer(layer, 'land-structure-line');
 
     var isInFileUploadMode = window.atticData.from_file_upload; /* $('#armrModeBtnSwitchElem').is(':checked'); */
@@ -240,22 +239,16 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng) {
     ut.betterProgressBar('set', 100);
     ut.betterProgressBar('hide');
 
-    // if ($('#colorPickerItemClass').hasClass('icon-blue')) {
-    //     $('#colorPickerItemClass').click();
-    // }
-
     var distanceMeasureMapLayers = $('#dataDiv').data('distanceMeasureMapLayers');
     for (var i in distanceMeasureMapLayers) {
         if (map.getLayer(distanceMeasureMapLayers[i])) {
             map.moveLayer(distanceMeasureMapLayers[i]);
         }
     }
-    // setTimeout(function() {
-    //     //$('#dataDiv').trigger('loadGeoJSON');
-    //     //$('#dataDiv').data('calcPolygonsData', [url, phi, radarLat, radarLon, radVersion]);
-    //     var calcPolygonsData = $('#dataDiv').data('calcPolygonsData');
-    //     generateGeoJSON(calcPolygonsData[0], calcPolygonsData[1], calcPolygonsData[2], calcPolygonsData[3], calcPolygonsData[4])
-    // }, 500)
+
+    if (isInFileUploadMode) {
+        nexrad_factory.fly_to_location();
+    }
 }
 
 module.exports = plot_to_map;

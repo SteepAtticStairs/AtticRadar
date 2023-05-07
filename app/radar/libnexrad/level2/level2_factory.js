@@ -2,6 +2,7 @@ const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
 const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
+const map = require('../../map/map');
 
 // https://stackoverflow.com/a/8043061
 function _zero_pad(num) {
@@ -31,6 +32,7 @@ class Level2Factory {
         this._group_and_sort_sweeps();
         this.elevation_angle = this.get_elevation_angle(1);
     }
+
     /**
      * Get the gate values for a given moment and elevation number.
      * 
@@ -53,6 +55,7 @@ class Level2Factory {
 
         return data;
     }
+
     /**
      * Get the azimuth angles for a given moment and elevation number.
      * 
@@ -77,6 +80,7 @@ class Level2Factory {
         azimuths = this._adjust_azimuths(azimuths);
         return azimuths;
     }
+
     /**
      * Get the ranges (distances) from the radar, for each gate along a radial at any azimuth.
      * 
@@ -96,6 +100,7 @@ class Level2Factory {
         }
         return prod_range;
     }
+
     /**
      * Gets a specific value in a moment for each radial in a sweep. This can be useful when gathering data that varies across all radials.
      * 
@@ -119,12 +124,13 @@ class Level2Factory {
         }
         return output;
     }
+
     /**
      * Retrieves the radar's coordinates and altitude, by first searching a radial record, and if that fails, by looking up the radar's ICAO.
      * 
      * @param {String} station (optional) The four-letter ICAO of a radar station. If passed, the function will return the coordinates of that station.
      * This is useful for older AR2V files where the location data is not included.
-     * @returns {Array} An array in the format [latitude, longitude, altitude]. Will return [0, 0, 0] if the radar's location could not be determined.
+     * @returns {Array} An array in the format [latitude, longitude, altitude (in meters)]. Will return [0, 0, 0] if the radar's location could not be determined.
      */
     get_location(station = null) {
         var lat, lng, alt;
@@ -154,6 +160,7 @@ class Level2Factory {
 
         return [lat, lng, alt];
     }
+
     /**
      * Get the elevation angle for a given elevation number.
      * 
@@ -170,6 +177,7 @@ class Level2Factory {
 
         return elev_angle * (180 / (4096 * 8));
     }
+
     /**
      * Gets the date at which the radar volume was collected.
      * If an elevation number is passed, the date for that sweep is returned.
@@ -194,6 +202,7 @@ class Level2Factory {
 
         return this._julian_and_millis_to_date(modifiedJulianDate, milliseconds);
     }
+
     /**
      * Finds the numerical VCP (volume coverage pattern) of the radar file. Returns 'null' if it could not be found.
      * 
@@ -215,6 +224,7 @@ class Level2Factory {
                 null;
         }
     }
+
     /**
      * Function that plots the factory with its radar data to the map.
      * 
@@ -235,6 +245,7 @@ class Level2Factory {
         const options = {'product': moment, 'elevation': elevationNumber};
         calculate_coordinates(this, options);
     }
+
     /**
      * Function that writes the necessary file information to the DOM.
      */
@@ -242,6 +253,7 @@ class Level2Factory {
         // execute code from another file
         display_file_info.apply(this);
     }
+
     /**
      * Function that loops over every sweep, and stores information about the sweep in an array.
      * This is useful for creating buttons in the DOM. Often abbreviated "lEAP".
@@ -277,6 +289,7 @@ class Level2Factory {
         }
         return elev_angle_arr;
     }
+
     /**
      * Function that returns an array with the product abbreviations of all of the products contained in the radar file
      * 
@@ -297,6 +310,7 @@ class Level2Factory {
 
 		return all_products;
 	}
+
     /**
      * Generates a unique ID associated with the file.
      * 
@@ -314,6 +328,14 @@ class Level2Factory {
 
         const formatted_string = `${station}${year}${month}${day}_${hour}${minute}${second}`;
         return formatted_string;
+    }
+
+    /**
+     * Zooms and pans the map to the radar's location.
+     */
+    fly_to_location() {
+        const location = this.get_location();
+        map.flyTo({ center: [location[1], location[0]], zoom: 6.5, speed: 1.75, essential: true });
     }
 
     /**

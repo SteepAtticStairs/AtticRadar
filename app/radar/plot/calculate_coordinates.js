@@ -123,7 +123,7 @@ function calculate_coordinates(nexrad_factory, options) {
     var w = work(require('./calculation_worker'));
     w.addEventListener('message', function(ev) {
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
-        plot_to_map(ev.data, colors, product, radar_lat_lng);
+        plot_to_map(ev.data, colors, product, radar_lat_lng, nexrad_factory);
     })
     w.postMessage([points, radar_lat_lng], [points.buffer]);
 }

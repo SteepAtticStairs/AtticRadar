@@ -1463,7 +1463,32 @@ const NEXRAD_LOCATIONS = {
         'elev': 76.8,
         'type': 'WSR-88D',
         'name': 'Langley Hill'
-    }
+    },
+
+    'KULM': {
+        'NONSTANDARD': true,
+        'lat': 32.52944,
+        'lon': -92.01222,
+        'elev': 43,
+        'type': 'N/A', // Polarimetric S-band Doppler
+        'name': 'Monroe / ULM'
+    },
+    'WILU': {
+        'NONSTANDARD': true,
+        'lat': 40.46551,
+        'lon': -90.68594,
+        'elev': 212,
+        'type': 'N/A',
+        'name': 'Western Illinois University'
+    },
+    'FWLX': {
+        'NONSTANDARD': true,
+        'lat': 35.25498,
+        'lon': -87.32543,
+        'elev': 303,
+        'type': 'N/A',
+        'name': 'WLX X-Band'
+    },
 }
 
 module.exports = {
