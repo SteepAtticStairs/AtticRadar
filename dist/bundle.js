@@ -8416,6 +8416,7 @@ class Level2Factory {
 
         this._group_and_sort_sweeps();
         this.elevation_angle = this.get_elevation_angle(1);
+        this.elevation_number = 1;
     }
 
     /**
@@ -8629,6 +8630,7 @@ class Level2Factory {
      */
     plot(moment, elevation_number) {
         this.elevation_angle = this.get_elevation_angle(elevation_number);
+        this.elevation_number = elevation_number;
 
         // we don't want to load the elevation menu multiple times for the same radar file
         const file_id = this.generate_unique_id();
@@ -14505,7 +14507,12 @@ function display_file_info() {
     $('#radarLocation').html(radar_name);
 
     // set the date box content
-    var fileDateObj = this.get_date();
+    var fileDateObj;
+    if (this.nexrad_level == 2) {
+        fileDateObj = this.get_date(this.elevation_number);
+    } else {
+        fileDateObj = this.get_date();
+    }
     var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);
     var formattedRadarDate = formattedDateObj.toFormat('L/d/yyyy');
     var formattedRadarTime = formattedDateObj.toFormat('h:mm a ZZZZ');

@@ -48,7 +48,12 @@ function display_file_info() {
     $('#radarLocation').html(radar_name);
 
     // set the date box content
-    var fileDateObj = this.get_date();
+    var fileDateObj;
+    if (this.nexrad_level == 2) {
+        fileDateObj = this.get_date(this.elevation_number);
+    } else {
+        fileDateObj = this.get_date();
+    }
     var formattedDateObj = DateTime.fromJSDate(fileDateObj).setZone(ut.userTimeZone);
     var formattedRadarDate = formattedDateObj.toFormat('L/d/yyyy');
     var formattedRadarTime = formattedDateObj.toFormat('h:mm a ZZZZ');
