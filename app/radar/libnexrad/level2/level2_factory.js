@@ -268,27 +268,53 @@ class Level2Factory {
     list_elevations_and_products() {
         var elevation_angle;
 		var elev_angle_arr = [];
-        for (var key = 0; key < this.initial_radar_obj.vcp.cut_parameters.length; key++) {
-            try {
-                var elevations_base = this.initial_radar_obj.vcp.cut_parameters[key];
-                var product_base = this.grouped_sweeps[key + 1][0];
+        if (this.initial_radar_obj.msg_type == '31') {
+            for (var key = 0; key < this.initial_radar_obj.vcp.cut_parameters.length; key++) {
+                try {
+                    var elevations_base = this.initial_radar_obj.vcp.cut_parameters[key];
+                    var product_base = this.grouped_sweeps[key + 1][0];
 
-                var all_products_arr = [];
-                ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW'].forEach(prop => {
-                    if (product_base.hasOwnProperty(prop)) {
-                        all_products_arr.push(prop);
-                    }
-                });
+                    var all_products_arr = [];
+                    ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW'].forEach(prop => {
+                        if (product_base.hasOwnProperty(prop)) {
+                            all_products_arr.push(prop);
+                        }
+                    });
 
-                elevation_angle = elevations_base.elevation_angle * (180 / (4096 * 8));
-                elev_angle_arr.push([
-                    elevation_angle,
-                    (key + 1).toString(),
-                    all_products_arr,
-                    elevations_base.waveform_type
-                ]);
-            } catch (e) {
-                console.warn(`Warning on elevation ${elevation_angle}: ${e}`);
+                    elevation_angle = elevations_base.elevation_angle * (180 / (4096 * 8));
+                    elev_angle_arr.push([
+                        elevation_angle,
+                        (key + 1).toString(),
+                        all_products_arr,
+                        elevations_base.waveform_type
+                    ]);
+                } catch (e) {
+                    console.warn(`Warning on elevation ${elevation_angle}: ${e}`);
+                }
+            }
+        } else if (this.initial_radar_obj.msg_type == '1') {
+            for (var key = 1; key < this.grouped_sweeps.length; key++) {
+                try {
+                    var elevations_base = this.grouped_sweeps[key][0].msg_header;
+                    var product_base = this.grouped_sweeps[key][0];
+
+                    var all_products_arr = [];
+                    ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW'].forEach(prop => {
+                        if (product_base.hasOwnProperty(prop)) {
+                            all_products_arr.push(prop);
+                        }
+                    });
+
+                    elevation_angle = elevations_base.elevation_angle * (180 / (4096 * 8));
+                    elev_angle_arr.push([
+                        elevation_angle,
+                        key.toString(),
+                        all_products_arr,
+                        null
+                    ]);
+                } catch (e) {
+                    console.warn(`Warning on elevation ${elevation_angle}: ${e}`);
+                }
             }
         }
         return elev_angle_arr;

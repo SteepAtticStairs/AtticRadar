@@ -247,7 +247,15 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     }
 
     if (isInFileUploadMode) {
-        nexrad_factory.fly_to_location();
+        if (nexrad_factory.nexrad_level == 2) {
+            const file_id = nexrad_factory.generate_unique_id();
+            if (window.atticData.L2_file_id_zoomed_yet != file_id) { // if we're on a new file
+                window.atticData.L2_file_id_zoomed_yet = file_id; // set the new id globally
+                nexrad_factory.fly_to_location();
+            }
+        } else {
+            nexrad_factory.fly_to_location();
+        }
     }
 }
 
