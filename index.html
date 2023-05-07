@@ -752,7 +752,7 @@
     </div>
 
     <script>
-        function addScriptTag(type, url, cb) {
+        function add_script_tag(type, url, cb) {
             if (type == 'js') {
                 var s = document.createElement("script");
                 s.type = "text/javascript";
@@ -772,58 +772,75 @@
             }
         }
 
+        // from ChatGPT
+        function load_all_libraries(library_configs, callback) {
+            if (library_configs.length === 0) {
+                // Base case: all libraries have been loaded
+                callback();
+                return;
+            }
+
+            var config = library_configs.shift();
+            var type = config[0];
+            var path = config[1];
+
+            add_script_tag(type, path, function () {
+                // Callback function after the library is loaded
+                load_all_libraries(library_configs, callback);
+            });
+        }
+
         document.getElementById('bodyDiv').style.display = 'none';
-        addScriptTag('js', 'https://code.jquery.com/jquery-3.2.1.min.js', function() {
-        addScriptTag('js', 'https://code.jquery.com/ui/1.13.1/jquery-ui.min.js', function() {
-        addScriptTag('css', 'https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css', function() {
+        load_all_libraries([
+            ['js', 'https://code.jquery.com/jquery-3.2.1.min.js'],
+            ['js', 'https://code.jquery.com/ui/1.13.1/jquery-ui.min.js'],
+            ['css', 'https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css'],
 
-        addScriptTag('css', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css', function() {
-        addScriptTag('js', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js', function() {
+            ['css', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css'],
+            ['js', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'],
 
-        // https://cdnjs.com/libraries/font-awesome
-        addScriptTag('css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css', function() {
+            // https://cdnjs.com/libraries/font-awesome
+            ['css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css'],
 
-        // https://getbootstrap.com/docs/5.2/getting-started/download/
-        addScriptTag('css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css', function() {
-        addScriptTag('js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js', function() {
+            // https://getbootstrap.com/docs/5.2/getting-started/download/
+            ['css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css'],
+            ['js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js'],
 
-        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js', function() {
-        addScriptTag('css', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css', function() {
+            ['js', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js'],
+            ['css', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css'],
 
-        // https://getbootstrap.com/docs/5.2/components/tooltips/
-        addScriptTag('js', 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js', function() {
+            // https://getbootstrap.com/docs/5.2/components/tooltips/
+            ['js', 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js'],
 
-        // https://github.com/manuelbieh/geolib
-        addScriptTag('js', 'https://cdn.jsdelivr.net/npm/geolib@3.3.3/lib/index.min.js', function() {
+            // https://github.com/manuelbieh/geolib
+            ['js', 'https://cdn.jsdelivr.net/npm/geolib@3.3.3/lib/index.min.js'],
 
-        // https://developers.google.com/chart/interactive/docs/gallery/linechart
-        addScriptTag('js', 'https://www.gstatic.com/charts/loader.js', function() {
+            // https://developers.google.com/chart/interactive/docs/gallery/linechart
+            ['js', 'https://www.gstatic.com/charts/loader.js'],
 
-        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js', function() {
-        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js', function() {
+            ['js', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js'],
+            ['js', 'https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js'],
 
-        addScriptTag('js', 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.5.0/math.js', function() {
+            ['js', 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.5.0/math.js'],
 
-        // https://github.com/webgeodatavore/GeoJSON.Terminator
-        addScriptTag('js', 'https://unpkg.com/@webgeodatavore/geojson.terminator@1.0.0/GeoJSON.Terminator.js', function() {
+            // https://github.com/webgeodatavore/GeoJSON.Terminator
+            ['js', 'https://unpkg.com/@webgeodatavore/geojson.terminator@1.0.0/GeoJSON.Terminator.js'],
 
-        addScriptTag('js', 'https://unpkg.com/gpu.js@2.16.0/dist/gpu-browser.min.js', function() {
+            ['js', 'https://unpkg.com/gpu.js@2.16.0/dist/gpu-browser.min.js'],
 
-        // https://spin.js.org/
-        addScriptTag('css', 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.1/spin.css', function() {
-        addScriptTag('js', 'https://spin.js.org/spin.umd.js', function() {
+            // https://spin.js.org/
+            ['css', 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.1/spin.css'],
+            ['js', 'https://spin.js.org/spin.umd.js'],
 
-        addScriptTag('js', './app/hurricanes/historical/stormList.js', function() {
+            ['js', './app/hurricanes/historical/stormList.js'],
 
-        addScriptTag('css', './index.css', function() {
+            ['css', './index.css'],
 
-        addScriptTag('js', './dist/bundle.js', function() {
+            ['js', './dist/bundle.js'],
+        ], () => {
             document.getElementById('bodyDiv').style.display = 'block';
             document.getElementById('loadingLibrariesDiv').style.display = 'none';
-
-
-
-        })})})})})})})})})})})})})})})})})})})})})})})
+        })
     </script>
 </body>
 </html>
