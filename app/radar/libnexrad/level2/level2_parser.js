@@ -609,10 +609,20 @@ function _get_msg1_from_buf(buf, pos, dic) {
         doppler_first = doppler_first - 2**16;
     }
 
+    function _check_empty(moment, nbins) {
+        var key = moment;
+        if (nbins == 0) {
+            key = `${moment}_empty`;
+        }
+        return key;
+    }
+
     if (msg1_header['sur_pointer']) {
         var offset = pos + msg_header_size + msg1_header['sur_pointer']
         var data = Uint8Array.from(buf.slice(offset, offset + sur_nbins));
-        dic['REF'] = {
+
+        var key = _check_empty('REF', sur_nbins);
+        dic[key] = {
             'ngates': sur_nbins,
             'gate_spacing': sur_step,
             'first_gate': sur_first,
@@ -624,7 +634,9 @@ function _get_msg1_from_buf(buf, pos, dic) {
     if (msg1_header['vel_pointer']) {
         var offset = pos + msg_header_size + msg1_header['vel_pointer']
         var data = Uint8Array.from(buf.slice(offset, offset + doppler_nbins));
-        dic['VEL'] = {
+
+        var key = _check_empty('VEL', doppler_nbins);
+        dic[key] = {
             'ngates': doppler_nbins,
             'gate_spacing': doppler_step,
             'first_gate': doppler_first,
@@ -640,7 +652,9 @@ function _get_msg1_from_buf(buf, pos, dic) {
     if (msg1_header['width_pointer']) {
         var offset = pos + msg_header_size + msg1_header['width_pointer']
         var data = Uint8Array.from(buf.slice(offset, offset + doppler_nbins));
-        dic['SW'] = {
+
+        var key = _check_empty('SW', doppler_nbins);
+        dic[key] = {
             'ngates': doppler_nbins,
             'gate_spacing': doppler_step,
             'first_gate': doppler_first,

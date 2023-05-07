@@ -30,7 +30,8 @@ class Level2Factory {
         this.vcp = this.get_vcp();
 
         this.station = this.header.icao;
-        if (this.station.trim() == '') {
+        const station_remove_irregular = this.station.replaceAll('\u0000', '').trim();
+        if (station_remove_irregular == '') {
             const station_from_filename = this.filename.substring(0, 4);
             this.station = station_from_filename;
             this.header.icao = station_from_filename;
