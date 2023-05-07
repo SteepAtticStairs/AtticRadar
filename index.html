@@ -112,104 +112,6 @@
             <span id="toolsItemClass" class="fa icon-grey fa-circle-chevron-right"></span>
         </div>
         <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-
-    </div>
-    <div id="tiltsDropdownBtn" style="display: none"></div>
-
-    <!-- Default dropup button -->
-    <!-- <div id="productsDropdownTrigger" class="noselect" style="display: none">Products</div> -->
-    <div class="btn-group dropup" id="productsDropdown" style="position: absolute">
-        <button style="display: none" type="button" id="productsDropdownBtn" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-            Products
-        </button>
-        <ul class="dropdown-menu" id="productsSelectionMenu" style="height: 200px; overflow-y: auto; cursor: pointer;">
-            <sus id="currentModeSpan">
-                <li><h6 class="dropdown-header">Tilt</h6></li>
-                <div id="newTiltsMenu">
-                    <!-- &nbsp;&nbsp;&nbsp;
-                    <input class="form-check-input" type="radio" id="checkTilt1" name="inlineRadioOptions" value="1">
-                    <label class="form-check-label" for="checkTilt1">1</label>
-                    &nbsp;&nbsp;&nbsp;
-                    <input class="form-check-input" type="radio" id="checkTilt2" name="inlineRadioOptions" value="2">
-                    <label class="form-check-label" for="checkTilt2">2</label>
-                    &nbsp;&nbsp;&nbsp;
-                    <input class="form-check-input" type="radio" id="checkTilt3" name="inlineRadioOptions" value="3">
-                    <label class="form-check-label" for="checkTilt3">3</label>
-                    &nbsp;&nbsp;&nbsp;
-                    <input class="form-check-input" type="radio" id="checkTilt4" name="inlineRadioOptions" value="4">
-                    <label class="form-check-label" for="checkTilt4">4</label> -->
-                </div>
-
-                <script>
-                    window.longProductNames = {
-                        'ref': 'Super-Res Base Reflectivity',
-                        'vel': 'Super-Res Base Velocity',
-                        'rho': 'Correlation Coefficient',
-                        'zdr': 'Differential Reflectivity',
-                        'hyc': 'Hydrometer Classification',
-                        'hhc': 'Hybrid Hydrometer Classification',
-                        'sw ': 'Base Spectrum Width',
-                        'lowres-ref': 'Digital Base Reflectivity',
-                        'lowres-vel': 'Digital Base Velocity',
-                        'vil': 'Vertically Integrated Liquid',
-                        'srv': 'Storm Relative Velocity',
-                        'sr-ref': 'Short-Range Reflectivity',
-                        'lr-ref': 'Long-Range Reflectivity',
-                        'tdwrVel': 'Base Velocity'
-                    }
-                </script>
-
-                <sus id="wsr88dMenu">
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">Super Resolution</h6></li>
-                    <li><a class="dropdown-item productOption" value="ref" id="wsr88dRefBtn">Base Reflectivity</a></li>
-                    <li><a class="dropdown-item productOption" value="vel">Base Velocity</a></li>
-
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">Digital</h6></li>
-                    <li><a class="dropdown-item productOption" value="rho">Correlation Coefficient</a></li>
-                    <li><a class="dropdown-item productOption" value="zdr">Differential Reflectivity</a></li>
-                    <li><a class="dropdown-item productOption" value="hyc">Hydrometer Classification</a></li>
-                    <li><a class="dropdown-item productOption" value="hhc">Hybrid Hydrometer Classification</a></li>
-                    <!-- <li><a class="dropdown-item productOption" value="sw ">Base Spectrum Width</a></li> -->
-                    <li><a class="dropdown-item productOption" value="lowres-ref">Digital Base Reflectivity</a></li>
-                    <li><a class="dropdown-item productOption" value="lowres-vel">Digital Base Velocity</a></li>
-                    <li><a class="dropdown-item productOption" value="vil">Vertically Integrated Liquid</a></li>
-<!-- 
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">Classic</h6></li>
-                    <li><a class="dropdown-item productOption" value="srv">Storm Relative Velocity</a></li> -->
-                    <!-- <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">Other products have been<br>temporarily disabled<br>for maintenance.</h6></li> -->
-                </sus>
-                <sus id="tdwrMenu">
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">TDWR</h6></li>
-                    <li><a class="dropdown-item productOption" value="sr-ref" id="tdwrRefBtn">Short-Range Reflectivity</a></li>
-                    <li><a class="dropdown-item productOption" value="lr-ref">Long-Range Reflectivity</a></li>
-                    <li><a class="dropdown-item productOption" value="tdwrVel">Base Velocity</a></li>
-                </sus>
-            </sus>
-
-            <sus id="uploadModeSpan" style="display: none">
-                <div id="l2ElevButtonsExpander" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span>Elevations</span>
-                    <span id="l2ElevButtonsExpanderIcon" class="fa fa-chevron-right" style="font-size: 18px"></span>
-                </div>
-                <div id="l2ElevButtons" class="l2ElevButtons" class="container" style="display: none"></div>
-                <!-- <span class="l2ElevBtn">0.5</span>
-                <span class="l2ElevBtn">1.5</span>
-                <span class="l2ElevBtn">2.5</span> -->
-                <li><hr class="dropdown-divider"></li>
-                <li><h6 class="dropdown-header">Level II Products</h6></li>
-                <li><a class="dropdown-item l2ProductOption" value="l2-ref">Reflectivity</a></li>
-                <li><a class="dropdown-item l2ProductOption" value="l2-vel">Velocity</a></li>
-                <li><a class="dropdown-item l2ProductOption" value="l2-rho">Correlation Coefficient</a></li>
-                <li><a class="dropdown-item l2ProductOption" value="l2-zdr">Differential Reflectivity</a></li>
-                <li><a class="dropdown-item l2ProductOption" value="l2-sw ">Spectrum Width</a></li>
-                <li><a class="dropdown-item l2ProductOption" value="l2-phi">Differential Phase Shift</a></li>
-            </sus>
-        </ul>
     </div>
 
     <!--
@@ -234,41 +136,6 @@
     <div style="display: none">
         <div class="progress align-middle" id="progBarParent">
             <div class="progress-bar" id="progBar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="150"></div>
-        </div>
-    </div>
-
-    <div id="mapHeader" style="display: none">
-        <!-- <span id="fileUploadSpan" style="display: none">
-            <input type="file" id="hiddenFileUploader" style="display: none">
-            <div id="drop_zone">Drop Level 2 file here</div>
-
-            <div id="levelRadios">
-                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="2" checked>
-                <label class="form-check-label levelRadioInputs" for="inlineRadio1">Level 2</label>
-                <input class="form-check-input levelRadioInputs" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="3" style="float: right">
-                <label class="form-check-label levelRadioInputs" for="inlineRadio2" style="float: right; margin-right: 3px;">Level 3</label>
-            </div>
-        </span>
-        <span id="radarInfoSpan">
-            <div id="radarTime"></div>
-            <b>Station: </b><a id='radarStation'>None</a>
-            <br>
-            <b>VCP: </b><a id='radarVCP'>None</a>
-        </span> -->
-    </div>
-
-    <!--
-        SPINNER
-    -->
-    <div id="spinnerParent" style="display: none">
-        <!-- <div id="spinnerDisplayText">The radar is currently loading. Patience here is key - this should be quick.</div> -->
-        <div class="sk-chase">
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
         </div>
     </div>
 
@@ -318,150 +185,8 @@
     </div>
 
     <!--
-        THIS IS THE MODAL FOR THE ALERTS MODULE
-    -->
-    <button id="alertModalTrigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#alertModal" style="display: none"></button>
-    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header alert alert-success">
-                    <h5 class="modal-title" id="alertModalLabel">Alerts</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="alertModalBody">
-                    <div class="accordion" id="alertModalAccordion">
-                        
-                    </div>
-                </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> -->
-            </div>
-        </div>
-    </div>
-
-
-    <!--
-        THIS IS THE HTML FOR THE OFFCANVAS MENU
-    -->
-    <button class="btn btn-primary" id="offCanvasBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-        aria-controls="offcanvasExample" style="display: none"></button>
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body" id="offCanvasBody"></div>
-    </div>
-
-    <!--
-        THIS IS THE HTML FOR THE SETTINGS MENU
-    -->
-    <button id="settingsModalTrigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#settingsModal" style="display: none"></button>
-    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header alert alert-secondary">
-                    <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="settingsModalBody">
-                    <div class="form-check" id="stormTracksCheckbox">
-                        <input class="form-check-input" type="checkbox" value="" id="stormTracksCheckBtn" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Toggle Storm Track Visibility
-                        </label>
-                    </div>
-                    <div class="form-check" id="radarVisibilityCheckbox">
-                        <input class="form-check-input" type="checkbox" value="" id="radarVisibilityCheckBtn" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Toggle Radar Visibility
-                        </label>
-                    </div>
-                    <div class="form-check" id="showExtraMapLayersCheckbox">
-                        <input class="form-check-input" type="checkbox" value="" id="showExtraMapLayersCheckBtn">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Show Extra Map Layers
-                        </label>
-                    </div>
-                    <div class="form-check" id="showDayNightLineLayersCheckbox">
-                        <input class="form-check-input" type="checkbox" value="" id="showDayNightLineCheckBtn">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Show Day-Night Line
-                        </label>
-                    </div>
-                    <div class="form-check" id="showExtraAlertPolygonsCheckbox" style="display: none">
-                        <input class="form-check-input" type="checkbox" value="" id="showExtraAlertPolygonsCheckBtn" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Show Extra Alert Polygons
-                        </label>
-                    </div>
-                </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> -->
-            </div>
-        </div>
-    </div>
-
-    <!--
-        THIS IS THE HTML FOR THE HURRICANE ARCHIVE MENU
-    -->
-    <button id="hurricaneArchiveModalTrigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hurricaneArchiveModal" style="display: none"></button>
-    <div class="modal fade" id="hurricaneArchiveModal" tabindex="-1" aria-labelledby="hurricaneArchiveModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header alert alert-primary">
-                    <h5 class="modal-title" id="hurricaneArchiveModalLabel">Hurricane Archive</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="hurricaneArchiveModalBody">
-                    <form class="px-4 py-2">
-                        <input type="search" class="form-control" id="haSearchStorm" placeholder="Katrina" autofocus="autofocus">
-                    </form>
-                    <div class="dropdown-center" id="haStormNameDropdown">
-                        <button id="haStormNameDropdownBtn" style="display: none" class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown button
-                        </button>
-                        <ul class="dropdown-menu thingsToHideWhileTyping" id="haStormNameDropdownMenu" style="width: 100%; text-align: center; display: none">
-                            <!-- <li><a class="dropdown-item" href="#" value="al">Atlantic</a></li>
-                            <li><a class="dropdown-item" href="#" value="ep">East Pacific</a></li>
-                            <li><a class="dropdown-item" href="#" value="cp">Central Pacific</a></li> -->
-                        </ul>
-                        <div id="haStormNameDropdownEmpty" class="dropdown-header thingsToHideWhileTyping" style="text-align: center">Please enter a hurricane name.</div>
-                        <div id="haStormNameDropdownError" class="dropdown-header thingsToHideWhileTyping" style="text-align: center; display: none">No hurricanes found.</div>
-                    </div>
-                    <br><br><br><br><br><br>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="hurricaneArchiveMapControl" style="display: none">
-        <div id="haMapControlMinimize">
-            <i id="haMapControlMinimizeIcon" class="fa-solid fa-chevron-left"></i>
-        </div>
-        <div id="haClearMapOuter">
-            <div class="alert alert-danger offCanvasMenuItem" id="haClearMap">
-                <span class="fa-solid fa-circle-xmark haClearBtnContents">&nbsp;&nbsp;</span>
-                <span class="haClearBtnContents">Clear</span>
-            </div>
-        </div>
-        <div id="haMapControlText"style="margin: 4px 40px 4px 4px; display: none;"></div>
-    </div>
-
-    <!--
         THIS IS THE HTML FOR THE NEW MODAL (DIALOG) (i wrote it myself)
     -->
-    <div id="atticDialog" style="display: none">
-        <div id="atticDialogContainer" class="alertsMonospaceText">
-            <b><div id="atticDialogHeaderContainer"><div id="atticDialogHeader"></div><i id="atticDialogClose" class="fa fa-xmark"></i></div></b>
-            <div id="atticDialogBody"></div>
-        </div>
-    </div>
-
     <div id="atcDlg" style="display: none">
         <div id="atcDlgContainer">
             <div id="atcDlgHeader"><span id="atcDlgHeaderText">header</span><i id="atcDlgClose" class="fa fa-xmark"></i></div>
@@ -655,22 +380,6 @@
         </div>
     </div>
 
-    <!-- <script>
-        $('#haDatePicker').datepicker({
-            format: "yyyy",
-            viewMode: "years", 
-            minViewMode: "years",
-            autoclose: true,
-            startDate: new Date(new Date().setFullYear(1851)),
-            endDate: new Date(new Date().setFullYear(2021))
-        })
-
-        var haStormNameDropdown = new bootstrap.Dropdown($('#haStormNameDropdown'));
-        haStormNameDropdown.show();
-    </script> -->
-
-    <!-- <textarea id="w3review" name="w3review" rows="15" cols="15" style="position: absolute; z-index: 100000"></textarea> -->
-
     <div id="colorPicker" class="colorPicker"></div>
     <div id="colorPickerText" class="colorPicker"></div>
 
@@ -686,72 +395,28 @@
 
     <div id='toolsMenuTooltip'></div>
 
-    <!-- <script>
-        document.getElementById('collapseBtnBtn').addEventListener('click', function() {
-            setTimeout(function() {
-                $("#optionsBox").animate({ scrollTop: $("#optionsBox").scrollHeight }, 400);
-            }, 0)
-        })
-        //$('#mapHeader').height($('#mapHeader').height() - 10);
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        var val = 0;
-        $('#progBar').css('width', 0 + '%').attr('aria-valuenow', 0);
-        // (function myLoop(i, b) {
-        //     setTimeout(function() {
-        //         $('#progBar').css('width', val + '%').attr('aria-valuenow', val);
-        //         var ranInt = getRandomInt(0, 100);
-        //         val++;
-        //         if (--i) myLoop(i, ranInt);
-        //     }, b)
-        // })(101, 50);
-    </script> -->
-
     <div id="map"></div>
 
-    <!-- <canvas id="texturecolorbar" class="texturecolorbar"></canvas>
-    <script type="x-shader/x-vertex" id="vertexShader">
-        //x: azimuth
-        //y: range
-        //z: value
-        attribute vec2 aPosition;
-        attribute float aColor;
-        uniform mat4 u_matrix;
-        varying float color;
-
-        void main() {
-            color = aColor;
-            gl_Position = u_matrix * vec4(aPosition.x,aPosition.y,0.0,1.0);
-        }
-    </script>
-    <script type="x-shader/x-fragment" id="fragmentShader">
-        precision mediump float;
-        varying float color;
-        uniform sampler2D u_texture;
-        void main() {
-            //gl_FragColor = vec4(0.0,color/60.0,0.0,1.0);
-            float calcolor = (color)/(70.0);
-            gl_FragColor = texture2D(u_texture,vec2(min(max(calcolor,0.0),1.0),0.0));
-            //gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-        }
-    </script>
-    <script>
-        //$.getJSON('./data/radar/KAMA_sub.json', function(data) {
-        //  console.log(data);
-        //})
-    </script>
-    <script src="./polygonTest/demo-radar-script.js"></script> -->
-
-    <!-- <script src="./app/index.js"></script> -->
-
-    <!-- <script src="./dist/bundle.js"></script> -->
-    <!-- <script src="./polygonTest/demo-radar-script.js"></script> -->
     </div>
 
     <script>
+        window.longProductNames = {
+            'ref': 'Super-Res Base Reflectivity',
+            'vel': 'Super-Res Base Velocity',
+            'rho': 'Correlation Coefficient',
+            'zdr': 'Differential Reflectivity',
+            'hyc': 'Hydrometer Classification',
+            'hhc': 'Hybrid Hydrometer Classification',
+            'sw ': 'Base Spectrum Width',
+            'lowres-ref': 'Digital Base Reflectivity',
+            'lowres-vel': 'Digital Base Velocity',
+            'vil': 'Vertically Integrated Liquid',
+            'srv': 'Storm Relative Velocity',
+            'sr-ref': 'Short-Range Reflectivity',
+            'lr-ref': 'Long-Range Reflectivity',
+            'tdwrVel': 'Base Velocity'
+        }
+
         function add_script_tag(type, url, cb) {
             if (type == 'js') {
                 var s = document.createElement("script");

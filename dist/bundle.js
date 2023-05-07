@@ -2724,7 +2724,7 @@ function useData(data, action) {
 ${ut.knotsToMph(metarWindSpeed, 0)} mph
 ${ut.knotsToMph(metarWindGustSpeed, 0)} mph gusts
 ${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})
-<img src="./resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
+<img src="./icons/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${metarWindDirection}deg)">
 <!-- <br>
 <div><b>METAR Plot <a href="https://github.com/phoenix-opsgroup/metar-plot">(credit)</a>:</b></div>
 <div>{svgStr}</div> -->
@@ -20914,7 +20914,7 @@ function plotData(data, base) {
 ${windSpeed} mph
 ${windGusts} mph gusts
 ${windDirection}° (${ut.degToCompass(windDirection)})
-<img src="./resources/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${windDirection}deg)">`
+<img src="./icons/compass.png" class="centerImg" style="max-width: 50%; max-height: 50%; transform: rotate(${windDirection}deg)">`
 
     var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
     var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';
