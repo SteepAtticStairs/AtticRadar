@@ -2,6 +2,7 @@ const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
 const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
+const dealias = require('../../libnexrad_helpers/level2/dealias/dealias');
 const map = require('../../map/map');
 
 // https://stackoverflow.com/a/8043061
@@ -45,13 +46,20 @@ class Level2Factory {
      * Get the gate values for a given moment and elevation number.
      * 
      * @param {*} moment The moment being requested. Can be one of the following: 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP'
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Boolean} retrieve_dealiased Whether or not to return the dealiased data.
      * @returns {Array} A 2D array, with each sub-array being an array of its corresponding radial's data.
      */
-    get_data(moment, elevationNumber) {
-        var data = this.get_value_from_sweep('data', moment, elevationNumber);
+    get_data(moment, elevation_number, retrieve_dealiased) {
+        var key = 'data';
+        if (retrieve_dealiased == undefined) { retrieve_dealiased = false }
+        if (retrieve_dealiased) { key = 'dealiased_data' }
+        var data = this.get_value_from_sweep(key, moment, elevation_number);
+        if (retrieve_dealiased) {
+            return data;
+        }
 
-        var prod_hdr = this.grouped_sweeps[elevationNumber][0][moment];
+        var prod_hdr = this.grouped_sweeps[elevation_number][0][moment];
         var offset = prod_hdr.offset;
         var scale = prod_hdr.scale;
 
@@ -67,11 +75,11 @@ class Level2Factory {
     /**
      * Get the azimuth angles for a given moment and elevation number.
      * 
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      * @returns {Array} An array, containing all of the azimuth angles for each radial in the sweep.
      */
-    get_azimuth_angles(elevationNumber) {
-        var azimuths = this.get_value_from_sweep('azimuth_angle', 'msg_header', elevationNumber);
+    get_azimuth_angles(elevation_number) {
+        var azimuths = this.get_value_from_sweep('azimuth_angle', 'msg_header', elevation_number);
 
         var msg_type = this.initial_radar_obj.msg_type;
         var scale;
@@ -93,11 +101,11 @@ class Level2Factory {
      * Get the ranges (distances) from the radar, for each gate along a radial at any azimuth.
      * 
      * @param {*} moment The moment being requested. Can be one of the following: 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP'
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      * @returns {Array} An array, containing all of the ranges for any azimuth in the sweep.
      */
-    get_ranges(moment, elevationNumber) {
-        var prod_hdr = this.grouped_sweeps[elevationNumber][0][moment];
+    get_ranges(moment, elevation_number) {
+        var prod_hdr = this.grouped_sweeps[elevation_number][0][moment];
         var gate_count = prod_hdr.ngates;
         var gate_size = prod_hdr.gate_spacing / 1000;
         var first_gate = prod_hdr.first_gate / 1000;
@@ -114,12 +122,12 @@ class Level2Factory {
      * 
      * @param {String} key The key to look for in the requested moment's object.
      * @param {String} moment The moment being requested. Can be one of the following: 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP', 'ELV', 'RAD', 'VOL', 'header', 'msg_header'
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      * @returns {Array} An array, containing the requested values for each radial in a sweep.
      */
-    get_value_from_sweep(key, moment, elevationNumber) {
+    get_value_from_sweep(key, moment, elevation_number) {
         var output = [];
-        var curSweep = this.grouped_sweeps[elevationNumber];
+        var curSweep = this.grouped_sweeps[elevation_number];
         for (var i in curSweep) {
             var curRecord = curSweep[i];
             if (curRecord.hasOwnProperty(moment)) {
@@ -172,15 +180,15 @@ class Level2Factory {
     /**
      * Get the elevation angle for a given elevation number.
      * 
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      */
-    get_elevation_angle(elevationNumber) {
+    get_elevation_angle(elevation_number) {
         var msg_type = this.initial_radar_obj.msg_type;
         var elev_angle;
         if (msg_type == '1') {
-            elev_angle = this.get_value_from_sweep('elevation_angle', 'msg_header', elevationNumber)[0];
+            elev_angle = this.get_value_from_sweep('elevation_angle', 'msg_header', elevation_number)[0];
         } else {
-            elev_angle = this.initial_radar_obj.vcp.cut_parameters[elevationNumber - 1].elevation_angle;
+            elev_angle = this.initial_radar_obj.vcp.cut_parameters[elevation_number - 1].elevation_angle;
         }
 
         return elev_angle * (180 / (4096 * 8));
@@ -191,19 +199,19 @@ class Level2Factory {
      * If an elevation number is passed, the date for that sweep is returned.
      * If nothing is passed, the date for the whole volume is returned.
      * 
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      * @returns {Date} A Date object that contains the radar volume's time.
      */
-    get_date(elevationNumber = null) {
+    get_date(elevation_number = null) {
         var modifiedJulianDate, milliseconds;
 
-        if (elevationNumber == null) {
+        if (elevation_number == null) {
             modifiedJulianDate = this.header.date;
             milliseconds = this.header.time;
         } else {
             // the date & time for the first radial in a sweep. each radial has its own date,
             // but we'll only use the first one, representing the start of the sweep.
-            var sweepHeader = this.grouped_sweeps[elevationNumber][0].header;
+            var sweepHeader = this.grouped_sweeps[elevation_number][0].header;
             modifiedJulianDate = sweepHeader.date;
             milliseconds = sweepHeader.ms;
         }
@@ -241,10 +249,10 @@ class Level2Factory {
      * Function that plots the factory with its radar data to the map.
      * 
      * @param {*} moment The moment being requested. Can be one of the following: 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP'
-     * @param {Number} elevationNumber A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      */
-    plot(moment, elevationNumber) {
-        this.elevation_angle = this.get_elevation_angle(elevationNumber);
+    plot(moment, elevation_number) {
+        this.elevation_angle = this.get_elevation_angle(elevation_number);
 
         // we don't want to load the elevation menu multiple times for the same radar file
         const file_id = this.generate_unique_id();
@@ -254,7 +262,7 @@ class Level2Factory {
         }
 
         this.display_file_info();
-        const options = {'product': moment, 'elevation': elevationNumber};
+        const options = {'product': moment, 'elevation': elevation_number};
         calculate_coordinates(this, options);
     }
 
@@ -377,6 +385,54 @@ class Level2Factory {
     }
 
     /**
+     * Returns the nyquist velocity for a given sweep.
+     * 
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @returns {Number} The nyquist velocity.
+     */
+    get_nyquist_vel(elevation_number) {
+        var nyquist; 
+        if (this.initial_radar_obj.msg_type == '31') {
+            nyquist = this.grouped_sweeps[elevation_number][0].RAD.nyquist_vel;
+        } else if (this.initial_radar_obj.msg_type == '1') {
+            nyquist = this.grouped_sweeps[elevation_number][0].msg_header.nyquist_vel;
+        }
+        return nyquist / 100;
+    }
+
+    /**
+     * Dealiases the velocity data for a given sweep.
+     * The data is outputted to the "dealiased_data" key for the "VEL" moment in the sweep.
+     * 
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
+     */
+    dealias(elevation_number) {
+        const nyquist = this.get_nyquist_vel(elevation_number);
+        const velocities = this.get_data('VEL', elevation_number);
+        const dealiased_velocities = dealias(velocities, nyquist);
+
+        for (var i = 0; i < this.grouped_sweeps[elevation_number].length; i++) {
+            this.grouped_sweeps[elevation_number][i].VEL.dealiased_data = dealiased_velocities[i];
+        }
+    }
+
+    /**
+     * Checks whether or not a given sweep has been dealiased yet.
+     * 
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @returns {Boolean} Whether or not the sweep has been dealiased yet.
+     */
+    check_if_already_dealiased(elevation_number) {
+        if (this.grouped_sweeps[elevation_number][0]?.VEL?.dealiased_data == undefined) {
+            // we HAVEN'T dealiased yet
+            return false;
+        } else {
+            // we HAVE dealiased
+            return true;
+        }
+    }
+
+    /**
      * Helper function that converts a modified julian date (MJD) and milliseconds to a JavaScript Date object.
      * 
      * @param {Number} modifiedJulianDate A Number representing the modified julian date.
@@ -401,6 +457,7 @@ class Level2Factory {
 
         return fileDateObj;
     }
+
     /**
      * Helper function that scales all of the values in an input array to the desired size. This is useful when converting NEXRAD binary data from its stored format to its readable format, as defined in the ICD.
      * 
@@ -418,6 +475,7 @@ class Level2Factory {
         }
         return inputValues;
     }
+
     /**
      * Helper function that performs some adjustments on the azimuth values.
      * Taken from the example at:
@@ -440,6 +498,7 @@ class Level2Factory {
         azimuths = [azimuths[0] - avg_spacing].concat(azimuths, [azimuths[azimuths.length - 1] + avg_spacing]);
         return azimuths;
     }
+
     /**
      * Helper function that groups all of the
      * radial records found in the file by their elevation number.

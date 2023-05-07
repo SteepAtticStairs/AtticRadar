@@ -107,7 +107,7 @@ function initEventListeners(L2Factory, lEAP, elevationProductLookup) {
         _enable_correct_buttons(lEAP);
 
         if (product == 'VEL') {
-            // $('#completeDealiasBtnContainer').show();
+            $('#completeDealiasBtnContainer').show();
         } else {
             $('#completeDealiasBtnContainer').hide();
         }
@@ -120,12 +120,12 @@ function initEventListeners(L2Factory, lEAP, elevationProductLookup) {
     $('#dealiasBtn').click(function() {
         if ($(this).hasClass('dealiasBtnDeSelected')) {
             // we're turning dealias mode ON
-            window.atticData.shouldPlotDealiased = true;
+            window.atticData.should_plot_dealiased = true;
             $(this).removeClass('dealiasBtnDeSelected').addClass('dealiasBtnSelected');
             $(this).find('i').removeClass('fa-xmark').addClass('fa-check');
         } else if ($(this).hasClass('dealiasBtnSelected')) {
             // we're turning dealias mode OFF
-            window.atticData.shouldPlotDealiased = false;
+            window.atticData.should_plot_dealiased = false;
             $(this).removeClass('dealiasBtnSelected').addClass('dealiasBtnDeSelected');
             $(this).find('i').removeClass('fa-check').addClass('fa-xmark');
         }

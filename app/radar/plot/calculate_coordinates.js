@@ -21,9 +21,23 @@ function calculate_coordinates(nexrad_factory, options) {
     }
     window.atticData.product = product;
 
+    var should_plot_dealiased;
+    if (nexrad_factory.nexrad_level == 2 && product == 'VEL') {
+        should_plot_dealiased = window.atticData.should_plot_dealiased;
+        var already_dealiased = nexrad_factory.check_if_already_dealiased(elevation);
+        if (should_plot_dealiased && !already_dealiased) {
+            nexrad_factory.dealias(elevation);
+        }
+    }
+
     var azimuths = nexrad_factory.get_azimuth_angles(elevation);
-    var data = nexrad_factory.get_data(product, elevation);
     var ranges = nexrad_factory.get_ranges(product, elevation);
+    var data;
+    if (nexrad_factory.nexrad_level == 2) {
+        data = nexrad_factory.get_data(product, elevation, should_plot_dealiased);
+    } else {
+        data = nexrad_factory.get_data(product, elevation);
+    }
 
     var location = nexrad_factory.get_location();
     var radar_lat_lng = {'lat': location[0], 'lng': location[1]};
