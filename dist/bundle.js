@@ -14408,7 +14408,28 @@ function _generateElevationProductLookup(lEAP) {
     return elevationProductLookup;
 }
 
-function initEventListeners(L2Factory, elevationProductLookup) {
+function _enable_correct_buttons(lEAP) {
+    // make sure the correct product selection rows are available
+    $('.psmRowDisabled').removeClass('psmRowDisabled'); // reset all of the rows
+    const moments = lEAP[window.atticData.currentScanNumber - 1][2]; // scan number indices start at 1, lEAP indices start at 0
+    ['REF', 'VEL', 'RHO', 'PHI', 'ZDR', 'SW'].forEach(prop => { // loop through all possible moments
+        const formatted_moment = `l2-${prop.toLowerCase()}`; // convert to the psmRow's abbreviation convention
+        if (!moments.includes(prop)) { // if the current elevation doesn't contain the moment
+            $(`.l2prodSel[value="${formatted_moment}"]`).addClass('psmRowDisabled'); // disable the corresponding psmRow
+        }
+    })
+    // make sure the correct elevation buttons are available
+    $('.l2ElevationBtnDisabled').removeClass('l2ElevationBtnDisabled'); // reset all of the buttons
+    for (var i = 0; i < lEAP.length; i++) { // loop through the lEAP
+        const scan_number = i + 1; // scan number indices start at 1, lEAP indices start at 0
+        const moments = lEAP[i][2]; // all the moments in the elevation number
+        if (!moments.includes(window.atticData.currentProduct)) { // if the elevation number does not contain the current product
+            $(`.l2ElevationBtn[number="${scan_number}"]`).addClass('l2ElevationBtnDisabled'); // disable the corresponding elevation button
+        }
+    }
+}
+
+function initEventListeners(L2Factory, lEAP, elevationProductLookup) {
     // we start with reflectivity
     window.atticData.currentProduct = 'REF';
     // we start at 1
@@ -14416,14 +14437,10 @@ function initEventListeners(L2Factory, elevationProductLookup) {
     // sorts all the full elevations from least to greatest, and picks the lowest one
     window.atticData.fullAngle = Object.keys(elevationProductLookup).map(n => parseFloat(n)).sort(function(a, b) { return a - b })[0];
     // turn green the button that references the starting elevation
-    // $(`.l2ElevationBtn${dbs}[value="${window.atticData.fullAngle}"]`).addClass('l2ElevationBtnSelected');
     $(`.l2ElevationBtn${dbs}[number="${window.atticData.currentScanNumber}"]`).addClass('l2ElevationBtnSelected');
 
-    // make sure the correct product selection rows are showing
-    var allProducts = L2Factory.get_all_products(); // get an array of all products in the radar file
-    allProducts = allProducts.map(n => `l2-${n.toLowerCase()}`); // convert to the psmRow's abbreviation convention
-    $('.l2prodSel').hide(); // hide all of the rows
-    for (var i in allProducts) { $(`.l2prodSel[value="${allProducts[i]}"]`).show() } // show only the ones that are available
+    // make sure the correct buttons are available
+    _enable_correct_buttons(lEAP);
 
     $(`.l2ElevationBtn${dbs}`).click(function() {
         // turn all green buttons back to normal
@@ -14436,13 +14453,13 @@ function initEventListeners(L2Factory, elevationProductLookup) {
         var fullAngle = $(this).attr('value'); // e.g. 0.4833984375
         window.atticData.fullAngle = fullAngle; // store it globally
 
-        // var scanNumber = elevationProductLookup[fullAngle][product]; // e.g. 7
-        // scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
-        var scanNumber = parseInt($(this).attr('number'));
+        var scanNumber = parseInt($(this).attr('number')); // e.g. 7
         window.atticData.currentScanNumber = scanNumber; // store it globally
 
+        // make sure the correct buttons are available
+        _enable_correct_buttons(lEAP);
+
         L2Factory.plot(product, scanNumber); // plot the current product and selected elevation
-        // l2plot(l2rad, product, scanNumber); // plot the current product and selected elevation
     })
 
     function _psm_click() {
@@ -14451,19 +14468,18 @@ function initEventListeners(L2Factory, elevationProductLookup) {
         product = product.replace('l2-', '').toUpperCase(); // l2-vel --> VEL
         window.atticData.currentProduct = product; // store it globally
 
-        var scanNumber = window.atticData.currentScanNumber;
-        // var scanNumber = elevationProductLookup[window.atticData.fullAngle][product]; // e.g. 7
-        // scanNumber = parseInt(scanNumber[0]); // take the first in the array and convert to INT
-        // window.atticData.currentScanNumber = scanNumber; // store it globally
+        var scanNumber = window.atticData.currentScanNumber; // e.g. 7
+
+        // make sure the correct buttons are available
+        _enable_correct_buttons(lEAP);
 
         if (product == 'VEL') {
-            $('#completeDealiasBtnContainer').show();
+            // $('#completeDealiasBtnContainer').show();
         } else {
             $('#completeDealiasBtnContainer').hide();
         }
 
         L2Factory.plot(product, scanNumber); // plot the selected product and the current elevation
-        // l2plot(l2rad, product, scanNumber); // plot the selected product and the current elevation
     }
     $('.psmRow.l2prodSel').off('click'); // disable all prior listeners
     $('.psmRow.l2prodSel').click(_psm_click);
@@ -14483,36 +14499,31 @@ function initEventListeners(L2Factory, elevationProductLookup) {
 
         if (window.atticData.currentProduct == 'VEL') {
             L2Factory.plot(window.atticData.currentProduct, window.atticData.currentScanNumber);
-            // l2plot(l2rad, window.atticData.currentProduct, window.atticData.currentScanNumber);
         }
     })
 }
 
 function load_elevation_menu(lEAP) {
     var elevationProductLookup = _generateElevationProductLookup(lEAP);
+    console.log(lEAP);
     console.log(elevationProductLookup);
 
     var iters = 1; // track how many buttons have been added to the current row
     var completeHTML = ''; // string to store the complete "buttons div"
     var btnsInThisRow = ''; // string to store buttons in the current row - gets reset every new row
-    var duplicateElevs = []; // array to track duplicate elevations
     for (var i in lEAP) {
         var elevationAngle = lEAP[i][0]; // elevation angle in degrees, e.g. 0.4833984375
         var elevationNumber = lEAP[i][1]; // the iteration from the base sweep, e.g. 7
         var elevationProducts = lEAP[i][2]; // array listing all of the products in the elevation, e.g. ['REF', 'VEL', 'SW ']
         var elevationWFT = lEAP[i][3]; // waveform type
 
-        // if (!duplicateElevs.includes(elevationAngle)) {
-        //     duplicateElevs.push(elevationAngle);
-
-            var btnHTML = _generateBtnTemplate(elevationAngle, elevationNumber); // generate the single button template for the current angle
-            btnsInThisRow += btnHTML; // add the button to the current row
-            if (iters % 3 == 0 && iters != 1) { // every three buttons, but not the first iteration
-                completeHTML += _generateRow(btnsInThisRow); // generate the row from the buttons and add to the final HTML string
-                btnsInThisRow = ''; // reset the string to hold the row's buttons
-            }
-            iters++; // increase the counter
-        // }
+        var btnHTML = _generateBtnTemplate(elevationAngle, elevationNumber); // generate the single button template for the current angle
+        btnsInThisRow += btnHTML; // add the button to the current row
+        if (iters % 3 == 0 && iters != 1) { // every three buttons, but not the first iteration
+            completeHTML += _generateRow(btnsInThisRow); // generate the row from the buttons and add to the final HTML string
+            btnsInThisRow = ''; // reset the string to hold the row's buttons
+        }
+        iters++; // increase the counter
     }
     if (btnsInThisRow != '') {
         completeHTML += _generateRow(btnsInThisRow); // if there are leftover buttons, generate a row with the remaining buttons
@@ -14522,7 +14533,7 @@ function load_elevation_menu(lEAP) {
     $('#level2_psm').show(); // show the parent div for the elevation buttons and the psmRows
 
     $('#productsDropdownTriggerText').text('Reflectivity'); // we start out with reflectivity
-    initEventListeners(this, elevationProductLookup); // initialize the event listeners for all of these buttons
+    initEventListeners(this, lEAP, elevationProductLookup); // initialize the event listeners for all of these buttons
 }
 
 module.exports = load_elevation_menu;

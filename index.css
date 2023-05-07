@@ -992,6 +992,11 @@ https://tobiasahlin.com/spinkit/
     padding-left: 20px;
     padding-right: 20px;
 }
+.psmRowDisabled {
+    pointer-events: none;
+    /* background-color: #3a3a3a !important; */
+    color: #7d7d7d !important;
+}
 /* .psmRow:hover {
     background-color: rgb(85, 85, 85);
 } */
@@ -1095,6 +1100,11 @@ https://tobiasahlin.com/spinkit/
     color: #125234 !important;
     background-color: #96b0a4 !important;
     border-color: #265d44 !important;
+}
+.l2ElevationBtnDisabled {
+    pointer-events: none;
+    background-color: #606060 !important;
+    border-color: #3e3e3e !important; /* same as .l2ElevationBtn */
 }
 
 .dealiasBtnSelected {
