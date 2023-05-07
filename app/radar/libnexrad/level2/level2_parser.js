@@ -34,9 +34,11 @@ function _bufferToString(buffer) {
 }
 
 class NEXRADLevel2File {
-    constructor (fileBuffer) {
+    constructor (fileBuffer, filename) {
         var fh = new RandomAccessFile(fileBuffer);
         fh = _decompressFile(fh);
+
+        this.filename = filename;
 
         this.nexradLevel = 2;
 

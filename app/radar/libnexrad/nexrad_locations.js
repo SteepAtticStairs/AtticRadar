@@ -1,5 +1,8 @@
 function get_nexrad_location(station) {
-    var loc = NEXRAD_LOCATIONS[station.toUpperCase()];
+    var loc = NEXRAD_LOCATIONS?.[station.toUpperCase()];
+    if (loc == undefined) {
+        return [0, 0, 0];
+    }
     return [loc['lat'], loc['lon'], loc['elev']];
 }
 

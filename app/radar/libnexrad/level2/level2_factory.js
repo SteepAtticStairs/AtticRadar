@@ -22,12 +22,19 @@ class Level2Factory {
         this.initial_radar_obj = initial_radar_obj;
 
         this.nexrad_level = 2;
+        this.filename = initial_radar_obj.filename;
 
         this.header = initial_radar_obj.volume_header;
         this.vcp = initial_radar_obj.vcp;
         this.nscans = this.initial_radar_obj.nscans;
-        this.station = this.header.icao;
         this.vcp = this.get_vcp();
+
+        this.station = this.header.icao;
+        if (this.station.trim() == '') {
+            const station_from_filename = this.filename.substring(0, 4);
+            this.station = station_from_filename;
+            this.header.icao = station_from_filename;
+        }
 
         this._group_and_sort_sweeps();
         this.elevation_angle = this.get_elevation_angle(1);

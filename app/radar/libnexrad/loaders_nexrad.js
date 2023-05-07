@@ -22,6 +22,17 @@ function file_to_buffer(url, callback) {
 }
 
 /**
+ * Parses a URL and returns a filename.
+ * 
+ * @param {String} url The url to parse.
+ * @returns {String} The radar file's filename.
+ */
+function _url_to_filename(url) {
+    const url_array = new URL(url).pathname.split('/');
+    return url_array[url_array.length - 1];
+}
+
+/**
  * Function to get the latest Level 2 file for a station.
  * 
  * @param {String} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
@@ -221,8 +232,8 @@ function quick_level_3_plot(station, product, callback = null) {
  * @param {ArrayBuffer} arraybuffer - An ArrayBuffer which contains the data of the radar file.
  * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L2Factory class.
  */
-function return_level_2_factory_from_buffer(arraybuffer, callback) {
-    const file = new NEXRADLevel2File(arraybuffer);
+function return_level_2_factory_from_buffer(arraybuffer, filename, callback) {
+    const file = new NEXRADLevel2File(arraybuffer, filename);
     const L2Factory = new Level2Factory(file);
     callback(L2Factory);
 }

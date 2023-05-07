@@ -25,6 +25,7 @@ function load_file(files_obj) {
 
     const reader = new FileReader();
     reader.addEventListener('load', function () {
+        const filename = uploaded_file.name;
         const buffer = Buffer.from(this.result);
         const detected_radar_level = detect_level(buffer);
 
@@ -43,7 +44,7 @@ function load_file(files_obj) {
                 reset_everything();
             })
         } else if (detected_radar_level == 2) {
-            loaders_nexrad.return_level_2_factory_from_buffer(buffer, (L2Factory) => {
+            loaders_nexrad.return_level_2_factory_from_buffer(buffer, filename, (L2Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L2Factory);
                 // console.log(L2Factory.list_elevations_and_products())

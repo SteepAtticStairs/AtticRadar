@@ -8398,12 +8398,19 @@ class Level2Factory {
         this.initial_radar_obj = initial_radar_obj;
 
         this.nexrad_level = 2;
+        this.filename = initial_radar_obj.filename;
 
         this.header = initial_radar_obj.volume_header;
         this.vcp = initial_radar_obj.vcp;
         this.nscans = this.initial_radar_obj.nscans;
-        this.station = this.header.icao;
         this.vcp = this.get_vcp();
+
+        this.station = this.header.icao;
+        if (this.station.trim() == '') {
+            const station_from_filename = this.filename.substring(0, 4);
+            this.station = station_from_filename;
+            this.header.icao = station_from_filename;
+        }
 
         this._group_and_sort_sweeps();
         this.elevation_angle = this.get_elevation_angle(1);
@@ -8895,9 +8902,11 @@ function _bufferToString(buffer) {
 }
 
 class NEXRADLevel2File {
-    constructor (fileBuffer) {
+    constructor (fileBuffer, filename) {
         var fh = new RandomAccessFile(fileBuffer);
         fh = _decompressFile(fh);
+
+        this.filename = filename;
 
         this.nexradLevel = 2;
 
@@ -12641,6 +12650,17 @@ function file_to_buffer(url, callback) {
 }
 
 /**
+ * Parses a URL and returns a filename.
+ * 
+ * @param {String} url The url to parse.
+ * @returns {String} The radar file's filename.
+ */
+function _url_to_filename(url) {
+    const url_array = new URL(url).pathname.split('/');
+    return url_array[url_array.length - 1];
+}
+
+/**
  * Function to get the latest Level 2 file for a station.
  * 
  * @param {String} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
@@ -12840,8 +12860,8 @@ function quick_level_3_plot(station, product, callback = null) {
  * @param {ArrayBuffer} arraybuffer - An ArrayBuffer which contains the data of the radar file.
  * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L2Factory class.
  */
-function return_level_2_factory_from_buffer(arraybuffer, callback) {
-    const file = new NEXRADLevel2File(arraybuffer);
+function return_level_2_factory_from_buffer(arraybuffer, filename, callback) {
+    const file = new NEXRADLevel2File(arraybuffer, filename);
     const L2Factory = new Level2Factory(file);
     callback(L2Factory);
 }
@@ -12861,7 +12881,10 @@ module.exports = {
 }).call(this)}).call(this,require("buffer").Buffer)
 },{"../libnexrad/level2/level2_factory":68,"../libnexrad/level2/level2_parser":69,"../libnexrad/level3/level3_factory":70,"../libnexrad/level3/level3_parser":72,"../utils":120,"buffer":307}],74:[function(require,module,exports){
 function get_nexrad_location(station) {
-    var loc = NEXRAD_LOCATIONS[station.toUpperCase()];
+    var loc = NEXRAD_LOCATIONS?.[station.toUpperCase()];
+    if (loc == undefined) {
+        return [0, 0, 0];
+    }
     return [loc['lat'], loc['lon'], loc['elev']];
 }
 
@@ -19748,6 +19771,7 @@ function load_file(files_obj) {
 
     const reader = new FileReader();
     reader.addEventListener('load', function () {
+        const filename = uploaded_file.name;
         const buffer = Buffer.from(this.result);
         const detected_radar_level = detect_level(buffer);
 
@@ -19766,7 +19790,7 @@ function load_file(files_obj) {
                 reset_everything();
             })
         } else if (detected_radar_level == 2) {
-            loaders_nexrad.return_level_2_factory_from_buffer(buffer, (L2Factory) => {
+            loaders_nexrad.return_level_2_factory_from_buffer(buffer, filename, (L2Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L2Factory);
                 // console.log(L2Factory.list_elevations_and_products())
