@@ -200,6 +200,10 @@ class Level2Factory {
             milliseconds = sweepHeader.ms;
         }
 
+        if (this.station == 'KULM' || this.station == 'WILU' || this.station == 'FWLX') {
+            modifiedJulianDate = this.grouped_sweeps[1][0].header.date;
+        }
+
         return this._julian_and_millis_to_date(modifiedJulianDate, milliseconds);
     }
 

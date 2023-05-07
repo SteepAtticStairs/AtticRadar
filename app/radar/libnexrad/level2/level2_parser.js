@@ -697,6 +697,8 @@ function _get_msg31_from_buf(buf, pos, dic) {
 function _get_msg31_data_block(buf, ptr) {
     /* Unpack a msg_31 data block into a dictionary. */
     var block_name = _bufferToString(buf.slice(ptr + 1, ptr + 4)).trim();
+    // remove invalid characters (https://stackoverflow.com/a/12756018)
+    block_name = block_name.replace(/[^a-z0-9 ,.?!]/ig, '');
 
     var dic;
     if (block_name == 'VOL') {
