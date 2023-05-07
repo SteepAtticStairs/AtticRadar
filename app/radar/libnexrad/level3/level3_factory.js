@@ -1,6 +1,6 @@
 const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const nexrad_locations = require('../nexrad_locations').NEXRAD_LOCATIONS;
-const station_abbreviations = require('../../../../resources/stationAbbreviations');
+const nexrad_station_abbreviations = require('../nexrad_station_abbreviations');
 const level3_formatters = require('./level3_formatters');
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
@@ -33,7 +33,7 @@ class Level3Factory {
         this.vcp = initial_radar_obj.prod_desc.vcp;
         this.product_code = this.header.code;
         this.product_abbv = initial_radar_obj.product_abbv;
-        this.station = station_abbreviations[this.initial_radar_obj.siteID];
+        this.station = nexrad_station_abbreviations[this.initial_radar_obj.siteID];
         this.elevation_angle = this.get_elevation_angle();
 
         const tab_pages = this.initial_radar_obj?.tab_pages;

@@ -3,8 +3,6 @@ const useData = require('./useData');
 const pako = require('pako');
 var map = require('../radar/map/map');
 
-const radarStations = require('../../resources/radarStations');
-
 function xhrGzipFile(url, cb) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
