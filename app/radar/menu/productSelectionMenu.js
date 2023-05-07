@@ -1,5 +1,4 @@
 const ut = require('../utils');
-const loaders = require('../loaders');
 const loaders_nexrad = require('../libnexrad/loaders_nexrad');
 
 var productLookup = {
