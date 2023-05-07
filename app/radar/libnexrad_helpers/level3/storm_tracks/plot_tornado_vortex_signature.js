@@ -97,6 +97,15 @@ function plot_tornado_vortex_signature(L3Factory) {
     map.on('mouseleave', 'tvsInitialPoint', () => { map.getCanvas().style.cursor = ''; });
 
     setLayerOrder();
+
+    var isSTVisChecked = $('#armrSTVisBtnSwitchElem').is(':checked');
+    if (!isSTVisChecked) {
+        if (tvs_layers != undefined) {
+            for (var i in tvs_layers) {
+                map.setLayoutProperty(tvs_layers[i], 'visibility', 'none');
+            }
+        }
+    }
 }
 
 module.exports = plot_tornado_vortex_signature;

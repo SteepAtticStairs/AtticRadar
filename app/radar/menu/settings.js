@@ -23,14 +23,21 @@ function settingsOption(index) {
         var isChecked = $(this).is(':checked');
         $('#dataDiv').data('stormTracksVisibility', isChecked);
 
-        var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+        var st_layers = window.atticData.storm_track_layers;
+        var tvs_layers = window.atticData.tvs_layers;
         if (!isChecked) {
-            for (var item in stLayers) {
-                map.setLayoutProperty(stLayers[item], 'visibility', 'none');
+            for (var item in st_layers) {
+                map.setLayoutProperty(st_layers[item], 'visibility', 'none');
+            }
+            for (var item in tvs_layers) {
+                map.setLayoutProperty(tvs_layers[item], 'visibility', 'none');
             }
         } else if (isChecked) {
-            for (var item in stLayers) {
-                map.setLayoutProperty(stLayers[item], 'visibility', 'visible');
+            for (var item in st_layers) {
+                map.setLayoutProperty(st_layers[item], 'visibility', 'visible');
+            }
+            for (var item in tvs_layers) {
+                map.setLayoutProperty(tvs_layers[item], 'visibility', 'visible');
             }
         }
     })

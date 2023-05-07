@@ -185,9 +185,9 @@ function plot_storm_tracks(L3Factory) {
 
     var isSTVisChecked = $('#armrSTVisBtnSwitchElem').is(':checked');
     if (!isSTVisChecked) {
-        if (stormTrackLayers != undefined) {
-            for (var i in stormTrackLayers) {
-                map.setLayoutProperty(stormTrackLayers[i], 'visibility', 'none');
+        if (storm_track_layers != undefined) {
+            for (var i in storm_track_layers) {
+                map.setLayoutProperty(storm_track_layers[i], 'visibility', 'none');
             }
         }
     }

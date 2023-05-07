@@ -11306,9 +11306,9 @@ function plot_storm_tracks(L3Factory) {
 
     var isSTVisChecked = $('#armrSTVisBtnSwitchElem').is(':checked');
     if (!isSTVisChecked) {
-        if (stormTrackLayers != undefined) {
-            for (var i in stormTrackLayers) {
-                map.setLayoutProperty(stormTrackLayers[i], 'visibility', 'none');
+        if (storm_track_layers != undefined) {
+            for (var i in storm_track_layers) {
+                map.setLayoutProperty(storm_track_layers[i], 'visibility', 'none');
             }
         }
     }
@@ -11415,6 +11415,15 @@ function plot_tornado_vortex_signature(L3Factory) {
     map.on('mouseleave', 'tvsInitialPoint', () => { map.getCanvas().style.cursor = ''; });
 
     setLayerOrder();
+
+    var isSTVisChecked = $('#armrSTVisBtnSwitchElem').is(':checked');
+    if (!isSTVisChecked) {
+        if (tvs_layers != undefined) {
+            for (var i in tvs_layers) {
+                map.setLayoutProperty(tvs_layers[i], 'visibility', 'none');
+            }
+        }
+    }
 }
 
 module.exports = plot_tornado_vortex_signature;
@@ -12617,14 +12626,21 @@ function settingsOption(index) {
         var isChecked = $(this).is(':checked');
         $('#dataDiv').data('stormTracksVisibility', isChecked);
 
-        var stLayers = $('#dataDiv').data('stormTrackMapLayers')
+        var st_layers = window.atticData.storm_track_layers;
+        var tvs_layers = window.atticData.tvs_layers;
         if (!isChecked) {
-            for (var item in stLayers) {
-                map.setLayoutProperty(stLayers[item], 'visibility', 'none');
+            for (var item in st_layers) {
+                map.setLayoutProperty(st_layers[item], 'visibility', 'none');
+            }
+            for (var item in tvs_layers) {
+                map.setLayoutProperty(tvs_layers[item], 'visibility', 'none');
             }
         } else if (isChecked) {
-            for (var item in stLayers) {
-                map.setLayoutProperty(stLayers[item], 'visibility', 'visible');
+            for (var item in st_layers) {
+                map.setLayoutProperty(st_layers[item], 'visibility', 'visible');
+            }
+            for (var item in tvs_layers) {
+                map.setLayoutProperty(tvs_layers[item], 'visibility', 'visible');
             }
         }
     })
