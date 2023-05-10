@@ -1,6 +1,7 @@
 // const fs = require('fs');
 // https://github.com/cscott/seek-bzip
 const bzip = require('seek-bzip');
+const compressjs = require('../../../../lib/compressjs/main');
 const pako = require('pako');
 const BufferPack = require('bufferpack');
 const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
@@ -750,8 +751,10 @@ class RadarDecompressor {
         this.unused_data;
     }
     _decompress_chunk(chunk) {
+        const algorithm = compressjs.Bzip2;
+        return algorithm.decompressFile(chunk);
         // skip 32 bits 'BZh9' header
-        return bzip.decodeBlock(chunk, 32);
+        // return bzip.decodeBlock(chunk, 32);
         // https://github.com/jvrousseau/bzip2.js
         // return bzip2.simple(bzip2.array(chunk));
     }
@@ -790,8 +793,9 @@ function _decompress_records(file_handler) {
         cbuf = decompressor.unused_data;
         // create a new RadarDecompressor
         decompressor = new RadarDecompressor();
+        var decompressed = decompressor.decompress(cbuf);
         // uncompress and push to the final buffer
-        buf.push(decompressor.decompress(cbuf));
+        buf.push(decompressed);
     }
     // combine the array of Uint8Arrays + 1 buffer to a single buffer
     var finalBuffer = Buffer.concat(buf);
