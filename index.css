@@ -5,6 +5,16 @@
     width: 100%;
 }
 
+/* https://stackoverflow.com/a/38994837 */
+/* https://stackoverflow.com/a/13184693 */
+html {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
 .false-anchor {
     cursor: pointer;
     text-decoration: underline;
