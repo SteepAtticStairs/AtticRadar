@@ -1,7 +1,7 @@
-var noaaColors = require('./noaaColors');
+var noaa_colors = require('./noaa_colors');
 
 // these are custom colors that override noaa's colors
-const myPolygonColors = {
+const my_polygon_colors = {
     'Tornado Warning': 'rgb(233, 51, 35)',
     'Severe Thunderstorm Warning': 'rgb(244, 185, 65)',
     'Flood Warning': 'rgb(147, 241, 75)',
@@ -34,37 +34,37 @@ const myPolygonColors = {
     'Gale Warning': 'rgb(50, 111, 255)'
 }
 
-function getPolygonColors(alertEvent) {
-    // var noaaColors = require('./noaaColors');
-    // for (var item in noaaColors) {
-    //     delete noaaColors[item].FIELD3;
-    //     var unformattedRGB = noaaColors[item].rgb2;
+function get_polygon_colors(alert_event) {
+    // var noaa_colors = require('./noaa_colors');
+    // for (var item in noaa_colors) {
+    //     delete noaa_colors[item].FIELD3;
+    //     var unformattedRGB = noaa_colors[item].rgb2;
     //     var formattedRGB = unformattedRGB.split(' ');
     //     formattedRGB = `rgb(${formattedRGB[0]}, ${formattedRGB[1]}, ${formattedRGB[2]})`
-    //     noaaColors[item].rgb = formattedRGB;
+    //     noaa_colors[item].rgb = formattedRGB;
 
-    //     noaaColors[item].hex = `#${noaaColors[item].hex2}`;
+    //     noaa_colors[item].hex = `#${noaa_colors[item].hex2}`;
 
-    //     delete noaaColors[item].rgb2;
-    //     delete noaaColors[item].hex2;
+    //     delete noaa_colors[item].rgb2;
+    //     delete noaa_colors[item].hex2;
     // }
-    // console.log(noaaColors)
-    // for (var item in noaaColors) {
+    // console.log(noaa_colors)
+    // for (var item in noaa_colors) {
     //     if (myPolygonColors[item] != undefined) {
-    //         noaaColors[item].rgb = myPolygonColors[item];
-    //         //noaaColors[item].rgb = myPolygonColors[item];
+    //         noaa_colors[item].rgb = myPolygonColors[item];
+    //         //noaa_colors[item].rgb = myPolygonColors[item];
     //     }
     // }
-    // console.log(noaaColors)
+    // console.log(noaa_colors)
 
-    if (Object.keys(noaaColors).includes(alertEvent)) {
-        var c = noaaColors[alertEvent].rgb;
-        if (Object.keys(noaaColors[alertEvent]).includes('originalColor')) {
-            c = noaaColors[alertEvent].rgb;
+    if (Object.keys(noaa_colors).includes(alert_event)) {
+        var c = noaa_colors[alert_event].rgb;
+        if (Object.keys(noaa_colors[alert_event]).includes('originalColor')) {
+            c = noaa_colors[alert_event].rgb;
         }
         return {
             'color': c,
-            'priority': noaaColors[alertEvent].priority
+            'priority': noaa_colors[alert_event].priority
         }
     } else {
         return {
@@ -74,4 +74,4 @@ function getPolygonColors(alertEvent) {
     }
 }
 
-module.exports = getPolygonColors;
+module.exports = get_polygon_colors;

@@ -1,4 +1,4 @@
-const noaaColors = {
+const noaa_colors = {
     "Tsunami Warning": {
         "priority": "1",
         "colorName": "Tomato",
@@ -789,4 +789,4 @@ const noaaColors = {
     }
 }
 
-module.exports = noaaColors;
+module.exports = noaa_colors;

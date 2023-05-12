@@ -16,7 +16,7 @@ require('../radio/entry');
 require('../radio/menuItem').weatherRadioToolsOption();
 
 // initialize the alerts
-require('../alerts/entry');
+require('../alerts/init_alerts');
 
 // initialize the hurricanes module
 require('../hurricanes/entry');

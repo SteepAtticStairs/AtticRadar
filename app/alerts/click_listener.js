@@ -1,18 +1,10 @@
 var map = require('../radar/map/map');
 const ut = require('../radar/utils');
-const getPolygonColors = require('./polygonColors');
+const get_polygon_colors = require('./colors/polygon_colors');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
-function rgbToRGBA(rgb, opacity) {
-    var str = rgb.slice(0, -1)
-    str += `, ${opacity})`;
-    str = str.slice(3);
-    str = 'rgba' + str;
-    return str;
-}
-
-function addMarker(e) {
+function click_listener(e) {
     var popupItem = '';
     var alertContentObj = {};
     var alreadyAddedWmoIDs = [];
@@ -21,12 +13,12 @@ function addMarker(e) {
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
         //console.log(e.features[key])
-        console.log(properties)
+        // console.log(properties)
         var wmoId = parameters.WMOidentifier[0];
         if (!alreadyAddedWmoIDs.includes(wmoId)) {
         alreadyAddedWmoIDs.push(wmoId);
 
-        var initColor = getPolygonColors(properties.event).color;
+        var initColor = get_polygon_colors(properties.event).color;
         var backgroundColor = initColor;
         var borderColor = chroma(initColor).darken(1.5);
         var textColor = chroma(initColor).luminance() > 0.4 ? 'black' : 'white';
@@ -127,7 +119,7 @@ function addMarker(e) {
         //     'css': 'height: 50vh; overflow: scroll',
         //     'body': alertContentObj[id].body
         // })
-        console.log(alertContentObj[id])
+        // console.log(alertContentObj[id])
         ut.displayAtticDialog({
             'title': alertContentObj[id].title,
             'body': alertContentObj[id].body,
@@ -137,4 +129,4 @@ function addMarker(e) {
     })
 }
 
-module.exports = addMarker;
+module.exports = click_listener;

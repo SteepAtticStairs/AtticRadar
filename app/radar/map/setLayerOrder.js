@@ -18,9 +18,9 @@ function setLayerOrder() {
     //     setBaseMapLayers('both');
     // }
 
-    moveLayerToTop('mainAlertsLayerOutline');
-    moveLayerToTop('mainAlertsLayer');
-    moveLayerToTop('mainAlertsLayerFill');
+    moveLayerToTop('alertsLayerOutline');
+    moveLayerToTop('alertsLayer');
+    moveLayerToTop('alertsLayerFill');
 
     moveLayerToTop('lightningLayer');
 
