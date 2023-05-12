@@ -80,7 +80,7 @@ function useData(data, action) {
         //     }
         // });
         map.loadImage(
-            './resources/roundedRectangle.png',
+            './icons/rounded_rectangle.png',
             (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker-metar', image, {
