@@ -79,7 +79,10 @@ function get_latest_level_2_url(station, callback) {
  */
 var timesGoneBack = 0;
 function get_latest_level_3_url(station, product, index, callback, date) {
-    if (/* !(product.length > 3) || */ (product != 'NTV' && product != 'NMD' && product != 'NST' && product != '134il' && product != 'p94r0' && product != 'p99v0')) {
+    if (
+        product != 'NTV' && product != 'NMD' && product != 'NST' &&
+        product != '134il' && product.slice(0, 3) != 'p94' && product.slice(0, 3) != 'p99'
+    ) {
         /* we need to slice(1) here (remove the first letter) because the level 3 source we
         * are using only accepts a three character ICAO, e.g. "MHX" / "LWX" */
         var corrected_station = station.slice(1);

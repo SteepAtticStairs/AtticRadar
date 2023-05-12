@@ -5,6 +5,25 @@ const ut = require('./utils');
 // which will store data that can be accessed globally
 window.atticData = {};
 
+// initialize the weather station module
+require('../weather-station/entry');
+// load the weather-station menu item
+require('../weather-station/menuItem').weatherstationToolsOption();
+
+// initialize the weather radio module
+require('../radio/entry');
+// load the radio menu item
+require('../radio/menuItem').weatherRadioToolsOption();
+
+// initialize the alerts
+require('../alerts/entry');
+
+// initialize the hurricanes module
+require('../hurricanes/entry');
+
+// initialize the METARs module
+require('../metars/entry');
+
 // add file upload MENU listeners
 require('./upload/upload_menu');
 
@@ -19,12 +38,6 @@ require('./menu/productSelectionMenu');
 
 // load the settings menu
 require('./menu/settings').settingsOption();
-
-// load the weather-station menu item
-require('../weather-station/menuItem').weatherstationToolsOption();
-
-// load the radio menu item
-require('../radio/menuItem').weatherRadioToolsOption();
 
 // load the lightning module
 require('../lightning/menu_item');
@@ -41,14 +54,6 @@ require('./station-markers/stationMarkerMenu');
 // load the radar message listener
 require('./radar-message/radar_message');
 
-// // load the historical hurricanes module
-// require('../hurricanes/historical/menuItem');
-
-// // add the help control
-// require('./map/controls/help/helpControl');
-
-// add the menu control
-//require('./map/controls/offCanvasMenu');
 
 $('#atcDlg').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
