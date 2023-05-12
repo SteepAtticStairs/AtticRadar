@@ -77,7 +77,7 @@ if (require('./misc/detectmobilebrowser')) {
     $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
-// $('#armrUploadFileBtn').click();
+$('#armrUploadFileBtn').click();
 
 // ../data/RODN20220831_075245_V06
 // ../data/KCRP20170825_235733_V06

@@ -1117,3 +1117,11 @@ https://tobiasahlin.com/spinkit/
     background-color: #ab6262 !important;
     border-color: #764646 !important;
 }
+
+.sweepChangeBtn {
+    background-color: #bebebe !important;
+}
+.sweepChangeBtnDisabled {
+    background-color: #717171 !important;
+    pointer-events: none;
+}

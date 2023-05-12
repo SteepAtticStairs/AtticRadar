@@ -422,6 +422,7 @@ const productColors = {
     REF: reflectivity,
     RHO: corr_coeff,
     SW: spectrum_width, // 'SW '
+    CFP: reflectivity,
 
     TV0: velocity,
     TV1: velocity,
