@@ -34,7 +34,8 @@ function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
     // 15min, 30min, 45min, 1hr
     var timeIntervalLookup = [0.25, 0.5, 0.75, 1];
     // ((speed * time interval) * convert kts to mph) / scaling
-    const distanceForLine = (cellData.movement.kts * timeIntervalLookup[forecastIndex] * 0.868976242) / 12; // miles
+    // const distanceForLine = (cellData.movement.kts * timeIntervalLookup[forecastIndex] * 0.868976242) / 12; // miles
+    const distanceForLine = 1.25; // miles
 
     var leftBearing = subtractFromBearing(bearing, 90);
     var leftPoint = turf.destination(destPoint, distanceForLine, leftBearing, {units: 'miles'});
