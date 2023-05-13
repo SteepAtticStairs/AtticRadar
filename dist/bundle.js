@@ -2428,6 +2428,7 @@ const chroma = require('chroma-js');
 const low_temp = 'rgb(247, 198, 251)';
 const high_temp = 'rgb(163, 8, 148)';
 const temp_colors_dictionary = {
+    '0': low_temp,
     '10': 'rgb(204, 120, 214)',
     '20': 'rgb(137, 67, 177)',
     '30': 'rgb(55, 30, 149)',
@@ -2439,6 +2440,7 @@ const temp_colors_dictionary = {
     '90': 'rgb(192, 56, 30)',
     '100': 'rgb(237, 14, 133)',
     '110': 'rgb(237, 14, 215)',
+    '120': high_temp
 }
 const temperatures = Object.keys(temp_colors_dictionary).map(Number);
 const colors = Object.values(temp_colors_dictionary);
