@@ -1,18 +1,22 @@
+/* https://stackoverflow.com/a/38994837 */
+/* https://stackoverflow.com/a/13184693 */
+html {
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
 #map {
     position: absolute;
     top: 0;
     bottom: 0;
     width: 100%;
-}
-
-/* https://stackoverflow.com/a/38994837 */
-/* https://stackoverflow.com/a/13184693 */
-html {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-}
-::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
 }
 
 .false-anchor {
@@ -337,11 +341,15 @@ https://tobiasahlin.com/spinkit/
     font-size: small;
     /* color: white; */
     cursor: pointer;
+    position: absolute;
+    left: 10px;
 }
 #radarDateTime {
     font-size: small;
     color: white;
     text-align: center;
+    position: absolute;
+    right: 10px;
 }
 #extraProductInfo {
     font-size: small;
