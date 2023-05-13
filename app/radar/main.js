@@ -6,9 +6,9 @@ const ut = require('./utils');
 window.atticData = {};
 
 // initialize the weather station module
-require('../weather-station/entry');
+require('../weather_station/entry');
 // load the weather-station menu item
-require('../weather-station/menuItem').weatherstationToolsOption();
+require('../weather_station/menuItem').weatherstationToolsOption();
 
 // initialize the weather radio module
 require('../radio/entry');
@@ -46,10 +46,10 @@ require('../core/menu/tools');
 require('./inspector/entry');
 
 // load the station marker menu item
-require('./station-markers/stationMarkerMenu');
+require('./station_markers/station_marker_menu');
 
 // load the radar message listener
-require('./radar-message/radar_message');
+require('./radar_message/radar_message');
 
 
 $('#atcDlg').on('click', function(e) {
@@ -62,7 +62,7 @@ $('#atcDlg').on('click', function(e) {
 ut.setMapMargin('bottom', $('#mapFooter').height());
 ut.setMapMargin('top', $('#radarHeader').height());
 
-if (require('./misc/detectmobilebrowser')) {
+if (require('../core/misc/detect_mobile_browser')) {
     //$('#mapFooter').css("height", "+=20px");
     var div = document.createElement('div');
     div.className = 'mapFooter';

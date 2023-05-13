@@ -1,5 +1,4 @@
 var map = require('./map');
-const setBaseMapLayers = require('../../radar/misc/baseMapLayers');
 
 function moveLayerToTop(layerName) {
     if (map.getLayer(layerName)) {

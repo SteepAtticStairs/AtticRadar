@@ -2,7 +2,7 @@ const ut = require('../radar/utils');
 var map = require('../core/map/map');
 const { DateTime } = require('luxon');
 const createCssClasses = require('./createCssClasses');
-const isMobile = require('../radar/misc/detectmobilebrowser');
+const isMobile = require('../core/misc/detect_mobile_browser');
 const stormTypeData = require('./stormTypeData');
 
 createCssClasses.createCssClasses();

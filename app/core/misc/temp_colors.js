@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../radar/utils');
 
 const tempColorObj = {
     'low': 'rgb(247, 198, 251)',

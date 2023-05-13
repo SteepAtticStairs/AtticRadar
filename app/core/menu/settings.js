@@ -1,6 +1,5 @@
 const ut = require('../../radar/utils');
 const map = require('../map/map');
-const setBaseMapLayers = require('../../radar/misc/baseMapLayers');
 const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
 const setLayerOrder = require('../map/setLayerOrder');
@@ -68,14 +67,6 @@ function settingsOption(index) {
                 }
             }
         }
-    })
-
-    armFunctions.toggleswitchFunctions($('#armrRoadsStreetsVisBtnSwitchElem'), function() {
-        setBaseMapLayers('both');
-        setLayerOrder();
-    }, function() {
-        setBaseMapLayers('cities');
-        setLayerOrder();
     })
 
     armFunctions.toggleswitchFunctions($('#armrDayNightLineVisBtnSwitchElem'), function() {

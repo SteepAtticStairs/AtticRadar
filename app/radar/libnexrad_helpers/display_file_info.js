@@ -1,5 +1,5 @@
 const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
-const { get_date_diff } = require('../misc/get_date_diff');
+const { get_date_diff } = require('../../core/misc/get_date_diff');
 const { DateTime } = require('luxon');
 const ut = require('../utils');
 
@@ -8,7 +8,7 @@ function _position_footer() {
     if (!alreadyClicked) {
         alreadyClicked = true;
         var offset;
-        if (require('../misc/detectmobilebrowser')) {
+        if (require('../../core/misc/detect_mobile_browser')) {
             offset = $(window).height() * (5 / 100);
         } else {
             offset = 0;

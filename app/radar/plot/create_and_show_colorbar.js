@@ -30,7 +30,7 @@ function create_and_show_colorbar(colors, values) {
         ut.setMapMargin('bottom', '+=15px');
     }
     var offset;
-    if (require('../misc/detectmobilebrowser')) {
+    if (require('../../core/misc/detect_mobile_browser')) {
         offset = $(window).height() * (5 / 100);
     } else {
         offset = 0;
