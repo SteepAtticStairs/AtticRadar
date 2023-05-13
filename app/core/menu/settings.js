@@ -3,6 +3,7 @@ const map = require('../map/map');
 const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
 const setLayerOrder = require('../map/setLayerOrder');
+const fetchMETARData = require('../../metars/fetch_data');
 
 function settingsOption(index) {
     const divElem = '#settingsItemDiv';
@@ -74,6 +75,12 @@ function settingsOption(index) {
     }, function() {
         terminator.toggleVisibility('hide');
     })
+
+    // armFunctions.toggleswitchFunctions($('#armrUSAMETARSSwitchElem'), function() {
+    //     fetchMETARData.fetchMETARData();
+    // }, function() {
+    //     fetchMETARData.fetchMETARData();
+    // })
 
     // this is in app/alerts/drawAlertShapes.js
     //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})

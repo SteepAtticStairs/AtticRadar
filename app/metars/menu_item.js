@@ -15,7 +15,7 @@ $(iconElem).on('click', function() {
             useData.toggleMETARStationMarkers('show');
         } else {
             // layer doesn't exist - load it onto the map for the first time
-            fetchMETARData.fetchMETARData('load');
+            fetchMETARData.fetchMETARData();
         }
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
