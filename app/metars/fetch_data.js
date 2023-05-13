@@ -38,7 +38,7 @@ function fetchMETARData() {
     var url = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.xml.gz#';
     //var url =  '../resources/USA_Test_METAR.xml';
     var noCacheURL = ut.preventFileCaching(ut.phpProxy + url);
-    console.log(noCacheURL)
+    // console.log(noCacheURL)
     xhrGzipFile(noCacheURL, function(data) {
         var xml = pako.inflate(new Uint8Array(data), { to: 'string' });
         var parsedXMLData = ut.xmlToJson(xml);

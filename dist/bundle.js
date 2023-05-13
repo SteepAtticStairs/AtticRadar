@@ -2284,7 +2284,8 @@ function create_circle_with_text(text, circle_color, text_color, width_height, f
     // Set text properties
     const number = text; // Replace with your desired number
     const font_size = radius * font_size_scale; // Adjust the proportion as needed
-    ctx.font = `bold ${font_size}px Arial`;
+    const font_family_from_css = getComputedStyle(document.body).fontFamily;
+    ctx.font = `bold ${font_size}px ${font_family_from_css}`;
     ctx.fillStyle = text_color;
     ctx.textAlign = 'center';
 
@@ -3725,7 +3726,7 @@ function fetchMETARData() {
     var url = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.xml.gz#';
     //var url =  '../resources/USA_Test_METAR.xml';
     var noCacheURL = ut.preventFileCaching(ut.phpProxy + url);
-    console.log(noCacheURL)
+    // console.log(noCacheURL)
     xhrGzipFile(noCacheURL, function(data) {
         var xml = pako.inflate(new Uint8Array(data), { to: 'string' });
         var parsedXMLData = ut.xmlToJson(xml);

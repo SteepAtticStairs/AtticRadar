@@ -24,7 +24,8 @@ function create_circle_with_text(text, circle_color, text_color, width_height, f
     // Set text properties
     const number = text; // Replace with your desired number
     const font_size = radius * font_size_scale; // Adjust the proportion as needed
-    ctx.font = `bold ${font_size}px Arial`;
+    const font_family_from_css = getComputedStyle(document.body).fontFamily;
+    ctx.font = `bold ${font_size}px ${font_family_from_css}`;
     ctx.fillStyle = text_color;
     ctx.textAlign = 'center';
 
