@@ -1,5 +1,5 @@
 const ut = require('../radar/utils');
-const useData = require('./use_data');
+const load_images = require('./load_images');
 const pako = require('pako');
 var map = require('../core/map/map');
 
@@ -13,7 +13,7 @@ function xhrGzipFile(url, cb) {
     xhr.send();
 }
 
-function fetchMETARData(action) {
+function fetchMETARData() {
     // var curStation = $('#dataDiv').data('currentStation');
     // $('#dataDiv').data('currentMetarRadarStation', curStation);
 
@@ -42,7 +42,7 @@ function fetchMETARData(action) {
     xhrGzipFile(noCacheURL, function(data) {
         var xml = pako.inflate(new Uint8Array(data), { to: 'string' });
         var parsedXMLData = ut.xmlToJson(xml);
-        useData.useData(parsedXMLData, action);
+        load_images(parsedXMLData);
     })
 }
 

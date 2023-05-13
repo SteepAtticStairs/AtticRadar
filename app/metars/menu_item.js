@@ -10,8 +10,6 @@ $(iconElem).on('click', function() {
         $(iconElem).addClass('icon-blue');
         $(iconElem).removeClass('icon-grey');
 
-        $('#dataDiv').data('metarsActive', true);
-
         if (map.getLayer('metarSymbolLayer')) {
             // layer does exist - toggle the visibility to on
             useData.toggleMETARStationMarkers('show');
@@ -22,8 +20,6 @@ $(iconElem).on('click', function() {
     } else if ($(iconElem).hasClass('icon-blue')) {
         $(iconElem).removeClass('icon-blue');
         $(iconElem).addClass('icon-grey');
-
-        $('#dataDiv').data('metarsActive', false);
 
         // layer does exist - toggle the visibility to off
         useData.toggleMETARStationMarkers('hide');
