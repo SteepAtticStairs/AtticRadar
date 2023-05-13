@@ -57,76 +57,77 @@ function calculate_coordinates(nexrad_factory, options) {
     }
 
     var points = new Float32Array(total * 12);
+    var colors = new Float32Array(total * 6);
     var points_index = 0;
-    function push_point(value) {
-        points[points_index] = value;
-        points_index++;
+    var colors_index = 0;
+
+    function push_point(pointArray) {
+        for (var i = 0; i < pointArray.length; i++) {
+            points[points_index++] = pointArray[i];
+        }
     }
 
-    var colors = new Float32Array(total * 6);
-    var colors_index = 0;
-    function push_color(value) {
-        colors[colors_index] = value;
-        colors_index++;
+    function push_color(colorArray) {
+        for (var i = 0; i < colorArray.length; i++) {
+            colors[colors_index++] = colorArray[i];
+        }
     }
 
     function get_azimuth_distance(i, n) {
         return {
-            'azimuth': azimuths[i],
-            'distance': ranges[n]
-        }
+            azimuth: azimuths[i],
+            distance: ranges[n]
+        };
     }
 
-    for (var i in azimuths) {
-        for (var n in ranges) {
+    for (var i = 0; i < azimuths.length - 1; i++) {
+        for (var n = 0; n < ranges.length - 1; n++) {
             try {
-                if (data[i][n] != null) {
-                    //var theN = parseInt(goodIndexes[i][n]);
-                    i = parseInt(i);
-                    n = parseInt(n);
+                if (data[i][n] !== null) {
                     var base_locs = get_azimuth_distance(i, n);
-                    //var base = destVincenty(base_locs.azimuth, base_locs.distance);
+                    // var base = destVincenty(base_locs.azimuth, base_locs.distance);
 
                     var one_up_locs = get_azimuth_distance(i, n + 1);
-                    //var one_up = destVincenty(one_up_locs.azimuth, one_up_locs.distance);
+                    // var one_up = destVincenty(one_up_locs.azimuth, one_up_locs.distance);
 
                     var one_sideways_locs = get_azimuth_distance(i + 1, n);
-                    //var one_sideways = destVincenty(one_sideways_locs.azimuth, one_sideways_locs.distance);
+                    // var one_sideways = destVincenty(one_sideways_locs.azimuth, one_sideways_locs.distance);
 
                     var other_corner_locs = get_azimuth_distance(i + 1, n + 1);
-                    //var other_corner = destVincenty(other_corner_locs.azimuth, other_corner_locs.distance);
+                    // var other_corner = destVincenty(other_corner_locs.azimuth, other_corner_locs.distance);
 
-                    push_point(base_locs.azimuth);
-                    push_point(base_locs.distance);
+                    push_point([
+                        base_locs.azimuth,
+                        base_locs.distance,
+                        one_up_locs.azimuth,
+                        one_up_locs.distance,
+                        one_sideways_locs.azimuth,
+                        one_sideways_locs.distance,
+                        one_sideways_locs.azimuth,
+                        one_sideways_locs.distance,
+                        one_up_locs.azimuth,
+                        one_up_locs.distance,
+                        other_corner_locs.azimuth,
+                        other_corner_locs.distance
+                    ]);
 
-                    push_point(one_up_locs.azimuth);
-                    push_point(one_up_locs.distance);
-
-                    push_point(one_sideways_locs.azimuth);
-                    push_point(one_sideways_locs.distance);
-                    push_point(one_sideways_locs.azimuth);
-                    push_point(one_sideways_locs.distance);
-
-                    push_point(one_up_locs.azimuth);
-                    push_point(one_up_locs.distance);
-
-                    push_point(other_corner_locs.azimuth);
-                    push_point(other_corner_locs.distance);
-
-
-                    push_color(data[i][n]);
-                    push_color(data[i][n]);
-                    push_color(data[i][n]);
-                    push_color(data[i][n]);
-                    push_color(data[i][n]);
-                    push_color(data[i][n]);
-
-                    // push_color(data[i][n]);
-                    // push_color(data[i][n + 1]);
-                    // push_color(data[i + 1][n]);
-                    // push_color(data[i + 1][n]);
-                    // push_color(data[i][n + 1]);
-                    // push_color(data[i + 1][n + 1]);
+                    var color = data[i][n];
+                    push_color([
+                        color,
+                        color,
+                        color,
+                        color,
+                        color,
+                        color
+                    ]);
+                    // push_color([
+                    //     data[i][n],
+                    //     data[i][n + 1],
+                    //     data[i + 1][n],
+                    //     data[i + 1][n],
+                    //     data[i][n + 1],
+                    //     data[i + 1][n + 1],
+                    // ]);
                 }
             } catch (e) {
                 // console.warn(e)
