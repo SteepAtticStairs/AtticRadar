@@ -5,15 +5,11 @@ const ut = require('./utils');
 // which will store data that can be accessed globally
 window.atticData = {};
 
-// initialize the weather station module
-require('../weather_station/entry');
-// load the weather-station menu item
-require('../weather_station/menuItem').weatherstationToolsOption();
+// load the weather station menu item
+require('../weather_station/menu_item').weatherstationToolsOption();
 
-// initialize the weather radio module
-require('../radio/entry');
 // load the radio menu item
-require('../radio/menuItem').weatherRadioToolsOption();
+require('../radio/menu_item').weatherRadioToolsOption();
 
 // initialize the alerts
 require('../alerts/init_alerts');

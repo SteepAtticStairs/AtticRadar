@@ -1,4 +1,4 @@
-const plotData = require('./plotData');
+const plotData = require('./plot_data');
 const ut = require('../radar/utils');
 
 function fetchData() {

@@ -1,5 +1,5 @@
-const fetchMETARData = require('./fetchData');
-const useData = require('./useData');
+const fetchMETARData = require('./fetch_data');
+const useData = require('./use_data');
 var map = require('../core/map/map');
 
 const divElem = '#metarStationMenuItemDiv';

@@ -5,4 +5,4 @@ var map = require('../core/map/map');
 */
 
 // load the starting file
-require('./menuItem');
+require('./menu_item');

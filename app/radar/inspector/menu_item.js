@@ -1,6 +1,6 @@
 var map = require('../../core/map/map');
 const ut = require('../utils');
-const getValue = require('./getValue');
+const getValue = require('./get_value');
 
 const divElem = '#colorPickerItemDiv';
 const iconElem = '#colorPickerItemClass';

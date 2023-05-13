@@ -1,4 +1,4 @@
-const product_colors = require('../products/productColors');
+const product_colors = require('../products/product_colors');
 const ut = require('../utils')
 const map_funcs = require('../../core/map/mapFunctions');
 // const initStormTracks = require('../level3/stormTracking/fetchData');

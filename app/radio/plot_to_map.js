@@ -1,5 +1,5 @@
-const nwrStations = require('./data/nwrStations');
-const radioStreams = require('./data/radioStreams');
+const nwrStations = require('./data/nwr_stations');
+const radioStreams = require('./data/radio_streams');
 const turf = require('@turf/turf');
 const setLayerOrder = require('../core/map/setLayerOrder');
 const ut = require('../radar/utils');

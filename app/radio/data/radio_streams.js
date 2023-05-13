@@ -1,6 +1,6 @@
 // https://saratoga-weather.org/NWR-radios-data.php
 
-const radioStreams = {
+const radio_streams = {
     "KEC49": {
         "call": "KEC49",
         "alt": "N",
@@ -4432,4 +4432,4 @@ const radioStreams = {
 }
 
 
-module.exports = radioStreams;
+module.exports = radio_streams;

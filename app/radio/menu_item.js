@@ -1,4 +1,4 @@
-const plotToMap = require('./plotToMap');
+const plotToMap = require('./plot_to_map');
 const armFunctions = require('../core/menu/atticRadarMenu');
 var map = require('../core/map/map');
 

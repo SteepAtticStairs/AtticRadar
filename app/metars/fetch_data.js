@@ -1,5 +1,5 @@
 const ut = require('../radar/utils');
-const useData = require('./useData');
+const useData = require('./use_data');
 const pako = require('pako');
 var map = require('../core/map/map');
 

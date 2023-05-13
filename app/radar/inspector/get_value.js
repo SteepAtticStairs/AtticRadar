@@ -1,4 +1,4 @@
-const formatValue = require('./formatValue');
+const formatValue = require('./format_value');
 
 function readPixels(gl, x, y) {
     var data = new Uint8Array(4);

@@ -23,7 +23,7 @@ for (var i in CALLSIGN) {
         'REMARKS': REMARKS[i]
     }
 }
-fs.writeFileSync('nwrStations.js', `
-const nwrStations = ${JSON.stringify(final)}
+fs.writeFileSync('nwr_stations.js', `
+const nwr_stations = ${JSON.stringify(final)}
 
-module.exports = nwrStations;`, 'utf-8');
+module.exports = nwr_stations;`, 'utf-8');
