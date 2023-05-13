@@ -1,5 +1,5 @@
 const get_polygon_colors = require('./colors/polygon_colors');
-const set_layer_order = require('../radar/map/setLayerOrder');
+const set_layer_order = require('../core/map/setLayerOrder');
 const click_listener = require('./click_listener');
 
 function add_alert_layers(geojson) {

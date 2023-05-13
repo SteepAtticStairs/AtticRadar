@@ -1,11 +1,11 @@
 const createToolsOption = require('./createToolsOption');
 const createMenuOption = require('./createMenuOption');
 const ut = require('../utils');
-const map = require('../map/map');
+const map = require('../../core/map/map');
 const setBaseMapLayers = require('../misc/baseMapLayers');
-const terminator = require('../map/terminator/terminator');
+const terminator = require('../../core/map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
-const setLayerOrder = require('../map/setLayerOrder');
+const setLayerOrder = require('../../core/map/setLayerOrder');
 
 function settingsOption(index) {
     const divElem = '#settingsItemDiv';

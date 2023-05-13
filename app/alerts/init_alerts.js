@@ -1,6 +1,6 @@
 const fetch_data = require('./fetch_data');
 const click_listener = require('./click_listener');
-const set_layer_order = require('../radar/map/setLayerOrder');
+const set_layer_order = require('../core/map/setLayerOrder');
 
 const div_elem = '#alertMenuItemDiv';
 const icon_elem = '#alertMenuItemIcon';

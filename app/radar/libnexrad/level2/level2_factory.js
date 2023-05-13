@@ -3,7 +3,7 @@ const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
 const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
 const dealias = require('../../libnexrad_helpers/level2/dealias/dealias');
-const map = require('../../map/map');
+const map = require('../../../core/map/map');
 
 // https://stackoverflow.com/a/8043061
 function _zero_pad(num) {

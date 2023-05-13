@@ -1,4 +1,4 @@
-var map = require('./map/map');
+var map = require('../core/map/map');
 const ut = require('./utils');
 
 // initialize the "atticData" global variable,

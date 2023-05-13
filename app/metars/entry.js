@@ -1,4 +1,4 @@
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 /*
 * This file is the entry point for the METARs module.

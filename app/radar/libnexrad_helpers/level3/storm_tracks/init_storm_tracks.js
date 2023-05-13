@@ -44,7 +44,7 @@ function _load_storm_track_product(product, callback) {
 }
 
 function deal_with_storm_track_layers() {
-    const map = require('../../../map/map');
+    const map = require('../../../../core/map/map');
 
     var storm_track_layers = window.atticData.storm_track_layers;
     if (storm_track_layers != undefined) {
@@ -56,7 +56,7 @@ function deal_with_storm_track_layers() {
 }
 
 function deal_with_tvs_layers() {
-    const map = require('../../../map/map');
+    const map = require('../../../../core/map/map');
 
     var tvs_layers = window.atticData.tvs_layers;
     if (tvs_layers != undefined) {

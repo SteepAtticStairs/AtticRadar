@@ -1,5 +1,5 @@
 const ut = require('../radar/utils');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 function showPopup(e, coordsFromFeatureOrClick) {
     var lat;

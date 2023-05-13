@@ -1,4 +1,4 @@
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 const chroma = require('chroma-js');

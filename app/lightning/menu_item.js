@@ -1,4 +1,4 @@
-const map = require('../radar/map/map');
+const map = require('../core/map/map');
 const load_lightning = require('./load_lightning');
 
 const divElem = '#lightningItemDiv';

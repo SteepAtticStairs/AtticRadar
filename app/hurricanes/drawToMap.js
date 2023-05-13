@@ -1,5 +1,5 @@
 const ut = require('../radar/utils');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 const { DateTime } = require('luxon');
 const createCssClasses = require('./createCssClasses');
 const isMobile = require('../radar/misc/detectmobilebrowser');

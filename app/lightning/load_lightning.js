@@ -1,7 +1,7 @@
 const turf = require('@turf/turf');
-const map = require('../radar/map/map');
+const map = require('../core/map/map');
 const ut = require('../radar/utils');
-const setLayerOrder = require('../radar/map/setLayerOrder');
+const setLayerOrder = require('../core/map/setLayerOrder');
 const luxon = require('luxon');
 
 // const url = `${ut.phpProxy}http://placefilenation.com/Placefiles/20lightning.php`;

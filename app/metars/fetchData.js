@@ -1,7 +1,7 @@
 const ut = require('../radar/utils');
 const useData = require('./useData');
 const pako = require('pako');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 function xhrGzipFile(url, cb) {
     var xhr = new XMLHttpRequest();

@@ -1,15 +1,15 @@
 const product_colors = require('../products/productColors');
 const ut = require('../utils')
-const map_funcs = require('../map/mapFunctions');
+const map_funcs = require('../../core/map/mapFunctions');
 // const initStormTracks = require('../level3/stormTracking/fetchData');
 const init_storm_tracks = require('../libnexrad_helpers/level3/storm_tracks/init_storm_tracks');
-const setLayerOrder = require('../map/setLayerOrder');
+const setLayerOrder = require('../../core/map/setLayerOrder');
 const create_and_show_colorbar = require('./create_and_show_colorbar');
 const create_WebGL_texture = require('./create_WebGL_texture');
 const vertex_source = require('./glsl/vertex.glsl');
 const fragment_source = require('./glsl/fragment.glsl');
 const fragment_framebuffer_source = require('./glsl/fragment_framebuffer.glsl');
-const map = require('../map/map');
+const map = require('../../core/map/map');
 
 function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_factory) {
     var color_scale_data = product_colors[product];

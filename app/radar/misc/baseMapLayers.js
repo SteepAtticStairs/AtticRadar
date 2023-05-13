@@ -1,5 +1,5 @@
-var map = require('../map/map');
-const mapFuncs = require('../map/mapFunctions');
+var map = require('../../core/map/map');
+const mapFuncs = require('../../core/map/mapFunctions');
 
 function setBaseMapLayers(roadsOrCitiesOrBoth) {
     const layers = map.getStyle().layers;

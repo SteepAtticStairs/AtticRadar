@@ -1,7 +1,7 @@
 const ut = require('../radar/utils');
 const getTempColor = require('../radar/misc/tempColors');
 const chroma = require('chroma-js');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 window.map = map;
 
 function getFormattedDateDiff(dateDiff) {

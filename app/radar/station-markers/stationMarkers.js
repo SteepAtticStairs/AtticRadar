@@ -1,6 +1,6 @@
 const turf = require('@turf/turf');
 const ut = require('../utils');
-const map = require('../map/map');
+const map = require('../../core/map/map');
 const get_station_status = require('../misc/getStationStatus');
 
 const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');

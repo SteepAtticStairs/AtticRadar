@@ -2,7 +2,7 @@ const ut = require('../radar/utils');
 const createMenuOption = require('../radar/menu/createMenuOption');
 const armFunctions = require('../radar/menu/atticRadarMenu');
 const fetchData = require('./fetchData');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 var layerArray = $('#dataDiv').data('hurricaneMapLayers');
 

@@ -1,4 +1,4 @@
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 const ut = require('../radar/utils');
 const get_polygon_colors = require('./colors/polygon_colors');
 const chroma = require('chroma-js')

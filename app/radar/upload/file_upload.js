@@ -1,6 +1,6 @@
 const ut = require('../utils');
 const loaders_nexrad = require('../libnexrad/loaders_nexrad');
-const map_funcs = require('../map/mapFunctions');
+const map_funcs = require('../../core/map/mapFunctions');
 const detect_level = require('../libnexrad/detect_level');
 const { deal_with_storm_track_layers, deal_with_tvs_layers } = require('../libnexrad_helpers/level3/storm_tracks/init_storm_tracks');
 

@@ -5,7 +5,7 @@ const loadOutlooks = require('./loadOutlooks');
 const stormTypeData = require('./stormTypeData');
 const chroma = require('chroma-js');
 const { DateTime } = require('luxon');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_CONE_latest.kmz
 // https://www.nhc.noaa.gov/storm_graphics/api/AL052022_TRACK_latest.kmz

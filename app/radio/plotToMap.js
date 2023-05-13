@@ -1,9 +1,9 @@
 const nwrStations = require('./data/nwrStations');
 const radioStreams = require('./data/radioStreams');
 const turf = require('@turf/turf');
-const setLayerOrder = require('../radar/map/setLayerOrder');
+const setLayerOrder = require('../core/map/setLayerOrder');
 const ut = require('../radar/utils');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 const radioBtnGreen = 'rgb(57, 161, 53)';
 const radioBtnRed = 'rgb(200, 44, 44)';

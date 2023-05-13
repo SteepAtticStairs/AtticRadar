@@ -1,7 +1,7 @@
 const createToolsOption = require('../radar/menu/createToolsOption');
 const plotToMap = require('./plotToMap');
 const armFunctions = require('../radar/menu/atticRadarMenu');
-var map = require('../radar/map/map');
+var map = require('../core/map/map');
 
 function weatherRadioToolsOption(index) {
     armFunctions.toggleswitchFunctions($('#armrWeatherRadioBtnSwitchElem'), function() {
