@@ -1,4 +1,4 @@
-const createToolsOption = require('./createToolsOption');
+const createToolsOption = require('../../core/menu/createToolsOption');
 
 // createMenuOption({
 //     'divId': 'reloadItemDiv',

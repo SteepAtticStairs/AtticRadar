@@ -27,23 +27,20 @@ require('../metars/entry');
 // add file upload MENU listeners
 require('./upload/upload_menu');
 
-// load the mode control
-require('./menu/mode');
-
 // load the atticRadarMenu helper file
-require('./menu/atticRadarMenu');
+require('../core/menu/atticRadarMenu');
 
 // load the productSelectionMenu helper file
-require('./menu/productSelectionMenu');
+require('../core/menu/productSelectionMenu');
 
 // load the settings menu
-require('./menu/settings').settingsOption();
+require('../core/menu/settings').settingsOption();
 
 // load the lightning module
 require('../lightning/menu_item');
 
 // load the tools menu
-require('./menu/tools');
+require('../core/menu/tools');
 
 // load the data inspector tool
 require('./inspector/entry');

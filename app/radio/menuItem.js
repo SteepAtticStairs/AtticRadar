@@ -1,6 +1,5 @@
-const createToolsOption = require('../radar/menu/createToolsOption');
 const plotToMap = require('./plotToMap');
-const armFunctions = require('../radar/menu/atticRadarMenu');
+const armFunctions = require('../core/menu/atticRadarMenu');
 var map = require('../core/map/map');
 
 function weatherRadioToolsOption(index) {

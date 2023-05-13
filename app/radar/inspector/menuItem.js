@@ -1,6 +1,5 @@
 var map = require('../../core/map/map');
 const ut = require('../utils');
-const createMenuOption = require('../menu/createMenuOption');
 const getValue = require('./getValue');
 
 const divElem = '#colorPickerItemDiv';

@@ -1,5 +1,3 @@
-const createMenuOption = require('../radar/menu/createMenuOption');
-const createOffCanvasItem = require('../radar/menu/createOffCanvasItem');
 const armFunctions = require('../radar/menu/atticRadarMenu');
 const loadMarkers = require('./loadMarkers');
 var map = require('../radar/map/map');

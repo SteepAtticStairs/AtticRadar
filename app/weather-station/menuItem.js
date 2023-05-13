@@ -1,7 +1,6 @@
-const createToolsOption = require('../radar/menu/createToolsOption');
 const fetchData = require('./fetchData');
 const ut = require('../radar/utils');
-const armFunctions = require('../radar/menu/atticRadarMenu');
+const armFunctions = require('../core/menu/atticRadarMenu');
 
 function weatherstationToolsOption(index) {
     $('#armrAtticStationBtn').click(function() {

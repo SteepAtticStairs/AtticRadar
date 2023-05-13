@@ -1,5 +1,5 @@
 const ut = require('../utils');
-const arm_functions = require('../menu/atticRadarMenu');
+const arm_functions = require('../../core/menu/atticRadarMenu');
 const init_event_listeners = require('./file_upload');
 
 const upload_dialog_content = 

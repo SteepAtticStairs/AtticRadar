@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../radar/utils');
 const createMenuOption = require('./createMenuOption');
 
 const showHideDuration = 250;

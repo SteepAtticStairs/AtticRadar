@@ -1,4 +1,3 @@
-const createMenuOption = require('../radar/menu/createMenuOption');
 const fetchMETARData = require('./fetchData');
 const useData = require('./useData');
 var map = require('../core/map/map');

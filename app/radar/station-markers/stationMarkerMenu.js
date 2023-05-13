@@ -1,4 +1,4 @@
-const createMenuOption = require('../menu/createMenuOption');
+const createMenuOption = require('../../core/menu/createMenuOption');
 const showStations = require('./stationMarkers');
 const ut = require('../utils');
 const map = require('../../core/map/map');
