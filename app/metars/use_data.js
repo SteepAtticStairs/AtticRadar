@@ -7,7 +7,7 @@ const metar_station_info = require('./data/metar_station_info');
 
 // const parseMETAR = require('metar');
 const metarParser = require('aewx-metar-parser');
-const metar_plot = require('metar-plot');
+// const metar_plot = require('metar-plot');
 
 const metar_info_lookup = Papa.parse(metar_station_info, {
     header: true,
@@ -31,7 +31,7 @@ function resetTemplate() {
 
 function useData(data) {
     resetTemplate();
-    console.log(data)
+    console.log(data);
     for (var item in data.response.data.METAR) {
         if (data.response.data.METAR[item].hasOwnProperty('latitude')) {
             var lat = parseFloat(data.response.data.METAR[item].latitude['#text']);
