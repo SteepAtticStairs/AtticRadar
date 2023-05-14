@@ -12506,7 +12506,18 @@ require('./menu_item');
 const ut = require('../radar/utils');
 const load_images = require('./load_images');
 const pako = require('pako');
+const Papa = require('papaparse');
+const metar_station_info = require('./data/metar_station_info');
 var map = require('../core/map/map');
+
+const metar_info_lookup = Papa.parse(metar_station_info, {
+    header: true,
+    dynamicTyping: true,
+}).data;
+function _get_metar_station_info(station_id) {
+    const result = metar_info_lookup.find(obj => obj.station_id === station_id);
+    return result;
+}
 
 function xhrGzipFile(url, cb) {
     var xhr = new XMLHttpRequest();
@@ -12547,6 +12558,21 @@ function fetchMETARData() {
     xhrGzipFile(noCacheURL, function(data) {
         var xml = pako.inflate(new Uint8Array(data), { to: 'string' });
         var parsedXMLData = ut.xmlToJson(xml);
+
+        for (var item in parsedXMLData.response.data.METAR) {
+            if (parsedXMLData.response.data.METAR[item].hasOwnProperty('latitude')) {
+                var stationId = parsedXMLData.response.data.METAR[item].station_id['#text'];
+                const current_metar_info = _get_metar_station_info(stationId);
+
+                const only_USA = true; // $('#armrUSAMETARSBtnSwitchElem').is(':checked');
+                if (only_USA) {
+                    if (current_metar_info.country != 'US'/* || current_metar_info.country == 'CA'*/) {
+                        delete parsedXMLData.response.data.METAR[item];
+                    }
+                }
+            }
+        }
+
         load_images(parsedXMLData);
     })
 }
@@ -12554,7 +12580,7 @@ function fetchMETARData() {
 module.exports = {
     fetchMETARData
 }
-},{"../core/map/map":7,"../radar/utils":77,"./load_images":36,"pako":107}],36:[function(require,module,exports){
+},{"../core/map/map":7,"../radar/utils":77,"./data/metar_station_info":33,"./load_images":36,"pako":107,"papaparse":123}],36:[function(require,module,exports){
 const use_data = require('./use_data');
 const create_circle_with_text = require('../core/misc/create_circle_with_text');
 const get_temp_color = require('../core/misc/temp_colors');
@@ -12632,21 +12658,10 @@ var map = require('../core/map/map');
 const ut = require('../radar/utils');
 const getTempColor = require('../core/misc/temp_colors');
 const chroma = require('chroma-js');
-const Papa = require('papaparse');
-const metar_station_info = require('./data/metar_station_info');
 
 // const parseMETAR = require('metar');
 const metarParser = require('aewx-metar-parser');
 // const metar_plot = require('metar-plot');
-
-const metar_info_lookup = Papa.parse(metar_station_info, {
-    header: true,
-    dynamicTyping: true,
-}).data;
-function _get_metar_station_info(station_id) {
-    const result = metar_info_lookup.find(obj => obj.station_id === station_id);
-    return result;
-}
 
 var geojsonTemplate = {
     "type": "FeatureCollection",
@@ -12677,35 +12692,23 @@ function useData(data) {
                 var parsedMetarData = metarParser(rawMetarText);
                 var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
                 var tempColor = getTempColor(parsedMetarTemp);
-                const current_metar_info = _get_metar_station_info(stationId);
 
                 // const metar_img_data = metar_plot.metarToImgSrc(metar_plot.rawMetarToMetarPlot(rawMetarText));
 
-                function _add_to_geojson() {
-                    geojsonTemplate.features.push({
-                        'properties': {
-                            'stationID': stationId,
-                            'rawMetarText': rawMetarText,
-                            'temp': parsedMetarTemp,
-                            'tempColor': tempColor[0],
-                            'tempColorText': tempColor[1],
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates":
-                                [lon, lat]
-                        }
-                    });
-                }
-
-                const only_USA = true; // $('#armrUSAMETARSBtnSwitchElem').is(':checked');
-                if (only_USA) {
-                    if (current_metar_info.country == 'US'/* || current_metar_info.country == 'CA'*/) {
-                        _add_to_geojson();
+                geojsonTemplate.features.push({
+                    'properties': {
+                        'stationID': stationId,
+                        'rawMetarText': rawMetarText,
+                        'temp': parsedMetarTemp,
+                        'tempColor': tempColor[0],
+                        'tempColorText': tempColor[1],
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates":
+                            [lon, lat]
                     }
-                } else {
-                    _add_to_geojson();
-                }
+                });
             }
             catch(err) {
                 // console.warn(`${stationId}: ${err.message}`)
@@ -12918,7 +12921,7 @@ module.exports = {
     useData,
     toggleMETARStationMarkers
 }
-},{"../core/map/map":7,"../core/misc/temp_colors":21,"../radar/utils":77,"./data/metar_station_info":33,"aewx-metar-parser":96,"chroma-js":99,"papaparse":123}],39:[function(require,module,exports){
+},{"../core/map/map":7,"../core/misc/temp_colors":21,"../radar/utils":77,"aewx-metar-parser":96,"chroma-js":99}],39:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.
 */

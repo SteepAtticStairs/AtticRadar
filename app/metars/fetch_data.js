@@ -1,7 +1,18 @@
 const ut = require('../radar/utils');
 const load_images = require('./load_images');
 const pako = require('pako');
+const Papa = require('papaparse');
+const metar_station_info = require('./data/metar_station_info');
 var map = require('../core/map/map');
+
+const metar_info_lookup = Papa.parse(metar_station_info, {
+    header: true,
+    dynamicTyping: true,
+}).data;
+function _get_metar_station_info(station_id) {
+    const result = metar_info_lookup.find(obj => obj.station_id === station_id);
+    return result;
+}
 
 function xhrGzipFile(url, cb) {
     var xhr = new XMLHttpRequest();
@@ -42,6 +53,21 @@ function fetchMETARData() {
     xhrGzipFile(noCacheURL, function(data) {
         var xml = pako.inflate(new Uint8Array(data), { to: 'string' });
         var parsedXMLData = ut.xmlToJson(xml);
+
+        for (var item in parsedXMLData.response.data.METAR) {
+            if (parsedXMLData.response.data.METAR[item].hasOwnProperty('latitude')) {
+                var stationId = parsedXMLData.response.data.METAR[item].station_id['#text'];
+                const current_metar_info = _get_metar_station_info(stationId);
+
+                const only_USA = true; // $('#armrUSAMETARSBtnSwitchElem').is(':checked');
+                if (only_USA) {
+                    if (current_metar_info.country != 'US'/* || current_metar_info.country == 'CA'*/) {
+                        delete parsedXMLData.response.data.METAR[item];
+                    }
+                }
+            }
+        }
+
         load_images(parsedXMLData);
     })
 }

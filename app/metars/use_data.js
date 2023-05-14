@@ -2,21 +2,10 @@ var map = require('../core/map/map');
 const ut = require('../radar/utils');
 const getTempColor = require('../core/misc/temp_colors');
 const chroma = require('chroma-js');
-const Papa = require('papaparse');
-const metar_station_info = require('./data/metar_station_info');
 
 // const parseMETAR = require('metar');
 const metarParser = require('aewx-metar-parser');
 // const metar_plot = require('metar-plot');
-
-const metar_info_lookup = Papa.parse(metar_station_info, {
-    header: true,
-    dynamicTyping: true,
-}).data;
-function _get_metar_station_info(station_id) {
-    const result = metar_info_lookup.find(obj => obj.station_id === station_id);
-    return result;
-}
 
 var geojsonTemplate = {
     "type": "FeatureCollection",
@@ -47,35 +36,23 @@ function useData(data) {
                 var parsedMetarData = metarParser(rawMetarText);
                 var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
                 var tempColor = getTempColor(parsedMetarTemp);
-                const current_metar_info = _get_metar_station_info(stationId);
 
                 // const metar_img_data = metar_plot.metarToImgSrc(metar_plot.rawMetarToMetarPlot(rawMetarText));
 
-                function _add_to_geojson() {
-                    geojsonTemplate.features.push({
-                        'properties': {
-                            'stationID': stationId,
-                            'rawMetarText': rawMetarText,
-                            'temp': parsedMetarTemp,
-                            'tempColor': tempColor[0],
-                            'tempColorText': tempColor[1],
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates":
-                                [lon, lat]
-                        }
-                    });
-                }
-
-                const only_USA = true; // $('#armrUSAMETARSBtnSwitchElem').is(':checked');
-                if (only_USA) {
-                    if (current_metar_info.country == 'US'/* || current_metar_info.country == 'CA'*/) {
-                        _add_to_geojson();
+                geojsonTemplate.features.push({
+                    'properties': {
+                        'stationID': stationId,
+                        'rawMetarText': rawMetarText,
+                        'temp': parsedMetarTemp,
+                        'tempColor': tempColor[0],
+                        'tempColorText': tempColor[1],
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates":
+                            [lon, lat]
                     }
-                } else {
-                    _add_to_geojson();
-                }
+                });
             }
             catch(err) {
                 // console.warn(`${stationId}: ${err.message}`)
