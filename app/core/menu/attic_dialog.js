@@ -24,4 +24,11 @@ function display_attic_dialog(options) {
     // $('#atticDialogContainer').height(bodyHeight);
 }
 
+$('#atcDlg').on('click', function(e) {
+    var clickedTarget = $(e.target).attr('id');
+    if (clickedTarget == 'atcDlg' || clickedTarget == 'atcDlgClose') {
+        $(this).hide();
+    }
+})
+
 module.exports = display_attic_dialog;

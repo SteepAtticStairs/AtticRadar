@@ -1,60 +1,6 @@
 var map = require('../core/map/map');
 const ut = require('./utils');
 
-// initialize the "atticData" global variable,
-// which will store data that can be accessed globally
-window.atticData = {};
-
-// load the weather station menu item
-require('../weather_station/menu_item').weatherstationToolsOption();
-
-// load the radio menu item
-require('../radio/menu_item').weatherRadioToolsOption();
-
-// initialize the alerts
-require('../alerts/init_alerts');
-
-// initialize the hurricanes module
-require('../hurricanes/entry');
-
-// initialize the METARs module
-require('../metars/entry');
-
-// add file upload MENU listeners
-require('./upload/upload_menu');
-
-// load the atticRadarMenu helper file
-require('../core/menu/atticRadarMenu');
-
-// load the productSelectionMenu helper file
-require('../core/menu/productSelectionMenu');
-
-// load the settings menu
-require('../core/menu/settings').settingsOption();
-
-// load the lightning module
-require('../lightning/menu_item');
-
-// load the tools menu
-require('../core/menu/tools');
-
-// load the data inspector tool
-require('./inspector/entry');
-
-// load the station marker menu item
-require('./station_markers/station_marker_menu');
-
-// load the radar message listener
-require('./radar_message/radar_message');
-
-
-$('#atcDlg').on('click', function(e) {
-    var clickedTarget = $(e.target).attr('id');
-    if (clickedTarget == 'atcDlg' || clickedTarget == 'atcDlgClose') {
-        $(this).hide();
-    }
-})
-
 ut.setMapMargin('bottom', $('#mapFooter').height());
 ut.setMapMargin('top', $('#radarHeader').height());
 
