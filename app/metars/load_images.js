@@ -3,31 +3,10 @@ const create_circle_with_text = require('../core/misc/create_circle_with_text');
 const get_temp_color = require('../core/misc/temp_colors');
 const metar_plot = require('metar-plot');
 
-function loadImage(imageUrl) {
-    return new Promise((resolve, reject) => {
-        map.loadImage(imageUrl, (error, image) => {
-            if (error) reject(error);
-            else resolve(image);
-        });
-    });
-}
-
 function _add_image_to_map(image_url, image_name, callback) {
     const img = new Image(200, 200);
     img.onload = () => map.addImage(image_name, img);
     img.src = image_url;
-    // img.src = `data:image/svg+xml;charset=utf-8,${image_url}`;
-    callback();
-
-    // loadImage(image_url)
-    //     .then((image) => {
-    //         // Add the image to the map style.
-    //         map.addImage(`${image_name}`, image);
-    //         callback();
-    //     })
-    //     .catch((error) => {
-    //         throw error;
-    //     });
 }
 
 function load_images(parsedXMLData) {
@@ -55,20 +34,11 @@ function load_images(parsedXMLData) {
     //     }
     // }
 
-    let count = 0;
-    const total = all_images_to_add.length;
-
-    function addImageCallback() {
-        count++;
-        // console.log(`Image ${count} added to the map.`);
-        if (count === total) {
-            use_data.useData(parsedXMLData);
-        }
+    for (let i = 0; i < all_images_to_add.length; i++) {
+        _add_image_to_map(all_images_to_add[i][0], all_images_to_add[i][1]);
     }
 
-    for (let i = 0; i < total; i++) {
-        _add_image_to_map(all_images_to_add[i][0], all_images_to_add[i][1], addImageCallback);
-    }
+    use_data.useData(parsedXMLData);
 }
 
 module.exports = load_images;

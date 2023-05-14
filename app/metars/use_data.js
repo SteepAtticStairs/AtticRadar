@@ -78,7 +78,7 @@ function useData(data) {
                 }
             }
             catch(err) {
-                console.warn(`${stationId}: ${err.message}`)
+                // console.warn(`${stationId}: ${err.message}`)
             }
         } else {
             //console.log(data.response.data.METAR[item].station_id['#text'])
