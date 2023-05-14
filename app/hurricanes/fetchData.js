@@ -1,5 +1,6 @@
 const unzipKMZ = require('./unzip');
 const ut = require('../radar/utils');
+const display_attic_dialog = require('../core/menu/attic_dialog');
 const drawHurricanesToMap = require('./drawToMap');
 const loadOutlooks = require('./loadOutlooks');
 const stormTypeData = require('./stormTypeData');
@@ -104,7 +105,7 @@ function exportFetchData() {
             <h5 style='text-align: center'>There are <b class='alertTextDescriber'>no active Tropical Cyclones</b> in the Atlantic, East Pacific, or West Pacific basins.</h5>
             <div style='text-align: center'>Updated: ${DateTime.now().toFormat('L/d/yyyy h:mm a ZZZZ')} <b>(${formattedDateDiff} ago)</b></div><br>`
 
-            ut.displayAtticDialog({
+            display_attic_dialog({
                 'title': 'No Active Systems',
                 'body': body,
                 'color': headerColor,

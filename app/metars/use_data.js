@@ -1,5 +1,6 @@
 var map = require('../core/map/map');
 const ut = require('../radar/utils');
+const display_attic_dialog = require('../core/menu/attic_dialog');
 const getTempColor = require('../core/misc/temp_colors');
 const chroma = require('chroma-js');
 
@@ -189,7 +190,7 @@ ${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})
 
             // var dialogColor = chroma(tempColor[0]).alpha(0.8).css();
             // var dialogTextColor = chroma(dialogColor).luminance() > 0.4 ? 'black' : 'white';
-            ut.displayAtticDialog({
+            display_attic_dialog({
                 'title': `Station ${id}`,
                 'body': metarHTMLBody, //JSON.stringify(data, null, 4),
                 'color': 'rgb(19, 19, 19)',
@@ -197,7 +198,7 @@ ${metarWindDirection}° (${ut.degToCompass(metarWindDirection)})
             });
         } catch(err) {
             var headerColor = '#ba3043';
-            ut.displayAtticDialog({
+            display_attic_dialog({
                 'title': `Station ${id}: Error`,
                 'color': headerColor,
                 'textColor': chroma(headerColor).luminance() > 0.4 ? 'black' : 'white',
