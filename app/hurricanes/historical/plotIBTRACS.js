@@ -1,4 +1,4 @@
-const ut = require('../../radar/utils');
+const ut = require('../../core/utils');
 var map = require('../../radar/map/map');
 
 // https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt

@@ -1,5 +1,5 @@
 const parseHurricaneFile = require('./plotIBTRACS');
-const ut = require('../../radar/utils');
+const ut = require('../../core/utils');
 
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

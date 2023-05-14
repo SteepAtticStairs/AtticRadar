@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const { get_date_diff } = require('../../core/misc/get_date_diff');
 const get_station_status = require('../station_markers/get_station_status');

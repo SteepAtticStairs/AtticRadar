@@ -1,6 +1,6 @@
 const createMenuOption = require('../../core/menu/createMenuOption');
 const showStations = require('./station_markers');
-const ut = require('../utils');
+const ut = require('../../core/utils');
 const map = require('../../core/map/map');
 
 const divElem = '#stationMenuItemDiv';

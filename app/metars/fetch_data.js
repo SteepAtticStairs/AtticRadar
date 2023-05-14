@@ -1,4 +1,4 @@
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const load_images = require('./load_images');
 const pako = require('pako');
 const Papa = require('papaparse');

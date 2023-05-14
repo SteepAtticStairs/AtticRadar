@@ -1,5 +1,5 @@
-const product_colors = require('../products/product_colors');
-const ut = require('../utils')
+const product_colors = require('../colormaps/colormaps');
+const ut = require('../../core/utils')
 const map_funcs = require('../../core/map/mapFunctions');
 // const initStormTracks = require('../level3/stormTracking/fetchData');
 const init_storm_tracks = require('../libnexrad_helpers/level3/storm_tracks/init_storm_tracks');

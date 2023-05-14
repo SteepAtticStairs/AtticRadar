@@ -1,4 +1,4 @@
-const ut = require('../../radar/utils');
+const ut = require('../utils');
 const loaders_nexrad = require('../../radar/libnexrad/loaders_nexrad');
 
 var productLookup = {

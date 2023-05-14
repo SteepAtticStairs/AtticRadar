@@ -1,5 +1,5 @@
 const plotData = require('./plot_data');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 
 function fetchData() {
     // class valueWithUnits {

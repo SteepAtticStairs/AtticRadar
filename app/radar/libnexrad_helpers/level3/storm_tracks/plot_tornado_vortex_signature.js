@@ -1,6 +1,6 @@
 const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const turf = require('@turf/turf');
-const ut = require('../../../utils');
+const ut = require('../../../../core/utils');
 const setLayerOrder = require('../../../../core/map/setLayerOrder');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {

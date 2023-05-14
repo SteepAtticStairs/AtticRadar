@@ -1,4 +1,4 @@
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const getTempColor = require('../core/misc/temp_colors');
 const chroma = require('chroma-js');
 const display_attic_dialog = require('../core/menu/attic_dialog');

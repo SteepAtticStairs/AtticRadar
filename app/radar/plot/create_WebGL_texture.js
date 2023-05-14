@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 const PNG = require('pngjs').PNG;
 const chroma = require('chroma-js');
 

@@ -1,4 +1,4 @@
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 var map = require('../core/map/map');
 
 function showPopup(e, coordsFromFeatureOrClick) {

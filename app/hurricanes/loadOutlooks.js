@@ -1,5 +1,5 @@
 const unzipKMZ = require('./unzip');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const drawOutlookToMap = require('./drawOutlooks');
 var map = require('../core/map/map');
 

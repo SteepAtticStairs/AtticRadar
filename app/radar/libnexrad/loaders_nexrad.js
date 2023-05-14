@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 
 const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');
 const Level2Factory = require('../libnexrad/level2/level2_factory');

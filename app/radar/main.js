@@ -1,5 +1,5 @@
 var map = require('../core/map/map');
-const ut = require('./utils');
+const ut = require('../core/utils');
 
 ut.setMapMargin('bottom', $('#mapFooter').height());
 ut.setMapMargin('top', $('#radarHeader').height());

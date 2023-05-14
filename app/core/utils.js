@@ -4,7 +4,7 @@
 */
 // https://attic-server.herokuapp.com/proxy/index.php/?
 
-const map = require('../core/map/map');
+const map = require('./map/map');
 
 // https://php-cors-proxy.herokuapp.com/?
 const phpProxy = 'https://attic-server.herokuapp.com/proxy/index.php/?'; //https://api.allorigins.win/raw?url=';
@@ -421,7 +421,7 @@ function waitVisible(elem, callback, timeout) {
 }
 
 function flyToStation() {
-    var map = require('../core/map/map');
+    var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
     $.getJSON('./resources/radarStations.json', function(data) {

@@ -1,6 +1,6 @@
 const plot_to_map = require('./plot_to_map');
-const product_colors = require('../products/product_colors');
-const ut = require('../utils')
+const product_colors = require('../colormaps/colormaps');
+const ut = require('../../core/utils')
 const chroma = require('chroma-js');
 const work = require('webworkify');
 

@@ -1,7 +1,7 @@
 const createOffCanvasItem = require('../../radar/menu/createOffCanvasItem');
 const initHurricaneArchiveListeners = require('./eventListeners');
 const parseHurricaneFile = require('./plotIBTRACS');
-const ut = require('../../radar/utils');
+const ut = require('../../core/utils');
 var map = require('../../radar/map/map');
 
 function startRightAway() {

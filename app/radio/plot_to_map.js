@@ -2,7 +2,7 @@ const nwrStations = require('./data/nwr_stations');
 const radioStreams = require('./data/radio_streams');
 const turf = require('@turf/turf');
 const setLayerOrder = require('../core/map/setLayerOrder');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 var map = require('../core/map/map');
 
 const radioBtnGreen = 'rgb(57, 161, 53)';

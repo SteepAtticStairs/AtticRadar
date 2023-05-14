@@ -1,5 +1,5 @@
 const turf = require('@turf/turf');
-const ut = require('../utils');
+const ut = require('../../core/utils');
 const map = require('../../core/map/map');
 const get_station_status = require('./get_station_status');
 

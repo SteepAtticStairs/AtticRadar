@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 const arm_functions = require('../../core/menu/atticRadarMenu');
 const init_event_listeners = require('./file_upload');
 

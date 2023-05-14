@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 
 function rgbValToArray(rgbString) {
     return rgbString

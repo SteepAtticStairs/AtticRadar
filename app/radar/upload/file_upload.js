@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 const loaders_nexrad = require('../libnexrad/loaders_nexrad');
 const map_funcs = require('../../core/map/mapFunctions');
 const detect_level = require('../libnexrad/detect_level');

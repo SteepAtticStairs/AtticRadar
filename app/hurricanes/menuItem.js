@@ -1,4 +1,4 @@
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const armFunctions = require('../core/menu/atticRadarMenu');
 const fetchData = require('./fetchData');
 var map = require('../core/map/map');

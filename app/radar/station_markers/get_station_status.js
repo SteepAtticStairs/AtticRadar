@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 
 var allStationStatusObj = {};
 function getStationStatus(callback) {

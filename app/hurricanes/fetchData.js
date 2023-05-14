@@ -1,5 +1,5 @@
 const unzipKMZ = require('./unzip');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const display_attic_dialog = require('../core/menu/attic_dialog');
 const drawHurricanesToMap = require('./drawToMap');
 const loadOutlooks = require('./loadOutlooks');

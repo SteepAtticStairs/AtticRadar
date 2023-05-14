@@ -1,5 +1,5 @@
 //var map = require('../map/map');
-const ut = require('../../radar/utils');
+const ut = require('../utils');
 
 var tooltipElem = $('#toolsMenuTooltip');
 tooltipElem.hide();

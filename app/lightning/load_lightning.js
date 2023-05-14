@@ -1,6 +1,6 @@
 const turf = require('@turf/turf');
 const map = require('../core/map/map');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const setLayerOrder = require('../core/map/setLayerOrder');
 const luxon = require('luxon');
 

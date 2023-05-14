@@ -1,4 +1,4 @@
-const ut = require('../../radar/utils');
+const ut = require('../utils');
 const map = require('../map/map');
 const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');

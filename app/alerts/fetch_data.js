@@ -1,4 +1,4 @@
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const plot_alerts = require('./plot_alerts');
 
 const new_alerts_url = `https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;

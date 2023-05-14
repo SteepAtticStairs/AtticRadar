@@ -1,4 +1,4 @@
-const ut = require('../utils');
+const ut = require('../../core/utils');
 
 const product_units = {
     'REF': 'dBZ', // level 2 reflectivity

@@ -6,7 +6,7 @@ const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
 const { get_date_diff_obj } = require('../../../core/misc/get_date_diff');
 const luxon = require('luxon');
-const ut = require('../../utils');
+const ut = require('../../../core/utils');
 
 const plot_storm_tracks = require('../../libnexrad_helpers/level3/storm_tracks/plot_storm_tracks');
 const plot_tornado_vortex_signature = require('../../libnexrad_helpers/level3/storm_tracks/plot_tornado_vortex_signature');

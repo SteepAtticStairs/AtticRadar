@@ -3,7 +3,7 @@ const nexrad_locations = require('../../../libnexrad/nexrad_locations').NEXRAD_L
 const turf = require('@turf/turf');
 const map = require('../../../../core/map/map');
 const setLayerOrder = require('../../../../core/map/setLayerOrder');
-const ut = require('../../../utils');
+const ut = require('../../../../core/utils');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var metersInNauticalMiles = 1852;

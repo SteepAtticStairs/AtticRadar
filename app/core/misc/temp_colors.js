@@ -1,4 +1,4 @@
-const ut = require('../../radar/utils');
+const ut = require('../utils');
 const chroma = require('chroma-js');
 
 const low_temp = 'rgb(247, 198, 251)';

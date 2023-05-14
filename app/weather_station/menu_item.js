@@ -1,5 +1,5 @@
 const fetchData = require('./fetch_data');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const armFunctions = require('../core/menu/atticRadarMenu');
 
 function weatherstationToolsOption(index) {

@@ -1,7 +1,7 @@
 const nexrad_locations = require('../libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 const { get_date_diff } = require('../../core/misc/get_date_diff');
 const { DateTime } = require('luxon');
-const ut = require('../utils');
+const ut = require('../../core/utils');
 
 var alreadyClicked = false;
 function _position_footer() {

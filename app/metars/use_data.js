@@ -1,5 +1,5 @@
 var map = require('../core/map/map');
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 const display_attic_dialog = require('../core/menu/attic_dialog');
 const getTempColor = require('../core/misc/temp_colors');
 const chroma = require('chroma-js');

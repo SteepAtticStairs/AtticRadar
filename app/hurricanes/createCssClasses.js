@@ -1,4 +1,4 @@
-const ut = require('../radar/utils');
+const ut = require('../core/utils');
 
 // https://github.com/mapbox/mapbox-gl-js/issues/2848#issuecomment-354447882
 
