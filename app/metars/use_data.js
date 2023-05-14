@@ -7,7 +7,7 @@ const metar_station_info = require('./data/metar_station_info');
 
 // const parseMETAR = require('metar');
 const metarParser = require('aewx-metar-parser');
-//const { rawMetarToSVG } = require('metar-plot')
+const metar_plot = require('metar-plot');
 
 const metar_info_lookup = Papa.parse(metar_station_info, {
     header: true,
@@ -48,6 +48,8 @@ function useData(data) {
                 var parsedMetarTemp = parseInt(ut.CtoF(parsedMetarData.temperature.celsius));
                 var tempColor = getTempColor(parsedMetarTemp);
                 const current_metar_info = _get_metar_station_info(stationId);
+
+                // const metar_img_data = metar_plot.metarToImgSrc(metar_plot.rawMetarToMetarPlot(rawMetarText));
 
                 function _add_to_geojson() {
                     geojsonTemplate.features.push({

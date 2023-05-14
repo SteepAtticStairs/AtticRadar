@@ -20,6 +20,7 @@
     "glslify-require": "^1.1.0",
     "luxon": "^3.0.3",
     "metar": "^1.0.0",
+    "metar-plot": "^2.0.0",
     "pako": "^2.1.0",
     "papaparse": "^5.4.1",
     "pngjs": "^6.0.0",
