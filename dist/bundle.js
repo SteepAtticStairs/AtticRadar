@@ -37,7 +37,7 @@ function click_listener(e) {
         "><i class="fa-solid fa-circle-info"></i> ${properties.event}</b>`;
 
         var lineSpace = '';
-        var preStart = '<p style="line-height: 130%; margin-bottom: 0 !important">';
+        var preStart = '<div style="margin-bottom: 0 !important">';
         var lineBreak = `<br>${preStart}`;
         var amountOfParams = 0;
         function addParameter(parameterName, textValueID) {
@@ -76,7 +76,11 @@ function click_listener(e) {
         if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
         if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
         if (amountOfParams != 0) { popupItem += '<br>' }
-        popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></p></div>`;
+        popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
+
+        // if (parseInt(key) + 1 < e.features.length) {
+        //     popupItem += '<br>';
+        // }
 
         function checkPropertyExists(property) {
             var isUndefined = typeof property == 'undefined';
