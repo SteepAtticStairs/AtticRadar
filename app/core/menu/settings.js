@@ -4,6 +4,7 @@ const terminator = require('../map/terminator/terminator');
 const armFunctions = require('./atticRadarMenu');
 const setLayerOrder = require('../map/setLayerOrder');
 const fetchMETARData = require('../../metars/fetch_data');
+const fetch_alerts_data = require('../../alerts/fetch_data');
 
 function settingsOption(index) {
     const divElem = '#settingsItemDiv';
@@ -74,6 +75,13 @@ function settingsOption(index) {
         terminator.toggleVisibility('show');
     }, function() {
         terminator.toggleVisibility('hide');
+    })
+
+    armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'),
+        function() { fetch_alerts_data._fetch_data(); }, function() { fetch_alerts_data._fetch_data();
+    })
+    armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'),
+        function() { fetch_alerts_data._fetch_data(); }, function() { fetch_alerts_data._fetch_data();
     })
 
     // armFunctions.toggleswitchFunctions($('#armrUSAMETARSSwitchElem'), function() {
