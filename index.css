@@ -344,6 +344,7 @@ https://tobiasahlin.com/spinkit/
     justify-content: space-between;
     align-items: center;
     padding: 0px 5px 0px 5px;
+    box-sizing: border-box;
 }
 #productsDropdownTrigger, #productsDropdown {
     font-size: small;
