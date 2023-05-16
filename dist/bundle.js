@@ -1055,12 +1055,16 @@ function filter_alerts(alerts_data) {
     if (show_warnings) {
         alerts_whitelist.push(...warnings_whitelist);
     }
-    if (show_watches) {
-        alerts_whitelist.push(...watches_whitelist);
-    }
+    // if (show_watches) {
+    //     alerts_whitelist.push(...watches_whitelist);
+    // }
 
     alerts_data.features = alerts_data.features.filter((feature) => {
         const current_alert_name = feature.properties.event;
+        if (show_watches && current_alert_name.includes('Watch') && !alerts_whitelist.includes(current_alert_name)) {
+            alerts_whitelist.push(current_alert_name);
+        }
+
         return alerts_whitelist.includes(current_alert_name);
     });
     return alerts_data;
@@ -71861,7 +71865,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').slice(2);
+          }).join('\n').substr(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -71878,7 +71882,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.slice(1, -1);
+      name = name.substr(1, name.length - 2);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
