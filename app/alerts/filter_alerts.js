@@ -9,6 +9,8 @@ const warnings_whitelist = [
 function filter_alerts(alerts_data) {
     const alerts_whitelist = [];
 
+    const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
+    window.atticData.EUP_checked = EUP_checked;
     const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
     window.atticData.show_warnings = show_warnings;
     const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
@@ -23,6 +25,14 @@ function filter_alerts(alerts_data) {
     if (show_warnings) {
         alerts_whitelist.push(...warnings_whitelist);
     }
+
+    if (EUP_checked) {
+        alerts_data.features = alerts_data.features.filter((feature) => {
+            const current_alert_geometry = feature.geometry;
+            return current_alert_geometry != null;
+        });
+    }
+    
 
     alerts_data.features = alerts_data.features.filter((feature) => {
         const current_alert_name = feature.properties.event;
