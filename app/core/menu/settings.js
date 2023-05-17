@@ -86,6 +86,7 @@ function settingsOption(index) {
     armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrStatementsBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrAdvisoriesBtnSwitchElem'), _reload_alerts, _reload_alerts);
+    armFunctions.toggleswitchFunctions($('#armrOtherBtnSwitchElem'), _reload_alerts, _reload_alerts);
 
     // armFunctions.toggleswitchFunctions($('#armrUSAMETARSSwitchElem'), function() {
     //     fetchMETARData.fetchMETARData();

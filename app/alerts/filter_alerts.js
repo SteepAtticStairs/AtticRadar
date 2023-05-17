@@ -17,6 +17,8 @@ function filter_alerts(alerts_data) {
     window.atticData.show_statements = show_statements;
     const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
     window.atticData.show_advisories = show_advisories;
+    const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
+    window.atticData.show_other = show_other;
 
     if (show_warnings) {
         alerts_whitelist.push(...warnings_whitelist);
@@ -32,6 +34,13 @@ function filter_alerts(alerts_data) {
             alerts_whitelist.push(current_alert_name);
         }
         if (show_advisories && current_alert_name.includes('Advisory') && !alerts_whitelist.includes(current_alert_name)) {
+            alerts_whitelist.push(current_alert_name);
+        }
+        if (
+            show_other && 
+            (!current_alert_name.includes('Watch') && !current_alert_name.includes('Statement') && !current_alert_name.includes('Advisory')) &&
+            !alerts_whitelist.includes(current_alert_name)
+        ) {
             alerts_whitelist.push(current_alert_name);
         }
 
