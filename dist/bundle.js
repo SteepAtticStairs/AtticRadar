@@ -6,6 +6,10 @@ const display_attic_dialog = require('../core/menu/attic_dialog');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
+// https://www.geeksforgeeks.org/how-to-change-the-height-of-br-tag
+const break_small = `<span style="display: block; margin-bottom: -.4em;"></span>`;
+const break_large = `<span style="display: block; margin-bottom: 0.75em;"></span>`;
+
 function click_listener(e) {
     var popupItem = '';
     var alertContentObj = {};
@@ -76,12 +80,14 @@ function click_listener(e) {
         if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
         if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
         if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
-        if (amountOfParams != 0) { popupItem += '<br>' }
+        if (amountOfParams != 0) { popupItem += break_small }
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
 
-        // if (parseInt(key) + 1 < e.features.length) {
-        //     popupItem += '<br>';
-        // }
+        if (parseInt(key) + 1 < e.features.length) {
+            popupItem += break_large;
+        } else {
+            popupItem += break_small;
+        }
 
         function checkPropertyExists(property) {
             var isUndefined = typeof property == 'undefined';
@@ -1051,7 +1057,9 @@ function filter_alerts(alerts_data) {
     const alerts_whitelist = [];
 
     const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
+    window.atticData.show_warnings = show_warnings;
     const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+    window.atticData.show_warnings = show_watches;
     if (show_warnings) {
         alerts_whitelist.push(...warnings_whitelist);
     }
@@ -1083,6 +1091,12 @@ $(icon_elem).on('click', function () {
     if (!$(icon_elem).hasClass('icon-blue')) {
         $(icon_elem).addClass('icon-blue');
         $(icon_elem).removeClass('icon-grey');
+
+        const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
+        const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+        if (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches) {
+            fetch_data._fetch_data();
+        }
 
         if (map.getLayer('alertsLayer')) {
             // map.getCanvas().style.cursor = 'crosshair';
@@ -2296,12 +2310,13 @@ function settingsOption(index) {
         terminator.toggleVisibility('hide');
     })
 
-    armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'),
-        function() { fetch_alerts_data._fetch_data(); }, function() { fetch_alerts_data._fetch_data();
-    })
-    armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'),
-        function() { fetch_alerts_data._fetch_data(); }, function() { fetch_alerts_data._fetch_data();
-    })
+    function _reload_alerts() {
+        if ($('#alertMenuItemIcon').hasClass('icon-blue')) {
+            fetch_alerts_data._fetch_data();
+        }
+    }
+    armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'), _reload_alerts, _reload_alerts);
+    armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), _reload_alerts, _reload_alerts);
 
     // armFunctions.toggleswitchFunctions($('#armrUSAMETARSSwitchElem'), function() {
     //     fetchMETARData.fetchMETARData();
@@ -71865,7 +71880,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').substr(2);
+          }).join('\n').slice(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -71882,7 +71897,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
+      name = name.slice(1, -1);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")

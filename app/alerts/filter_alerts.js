@@ -13,7 +13,9 @@ function filter_alerts(alerts_data) {
     const alerts_whitelist = [];
 
     const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
+    window.atticData.show_warnings = show_warnings;
     const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+    window.atticData.show_warnings = show_watches;
     if (show_warnings) {
         alerts_whitelist.push(...warnings_whitelist);
     }

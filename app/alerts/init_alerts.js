@@ -10,6 +10,12 @@ $(icon_elem).on('click', function () {
         $(icon_elem).addClass('icon-blue');
         $(icon_elem).removeClass('icon-grey');
 
+        const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
+        const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+        if (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches) {
+            fetch_data._fetch_data();
+        }
+
         if (map.getLayer('alertsLayer')) {
             // map.getCanvas().style.cursor = 'crosshair';
             map.on('click', 'alertsLayerFill', click_listener);

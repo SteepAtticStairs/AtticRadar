@@ -77,12 +77,13 @@ function settingsOption(index) {
         terminator.toggleVisibility('hide');
     })
 
-    armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'),
-        function() { fetch_alerts_data._fetch_data(); }, function() { fetch_alerts_data._fetch_data();
-    })
-    armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'),
-        function() { fetch_alerts_data._fetch_data(); }, function() { fetch_alerts_data._fetch_data();
-    })
+    function _reload_alerts() {
+        if ($('#alertMenuItemIcon').hasClass('icon-blue')) {
+            fetch_alerts_data._fetch_data();
+        }
+    }
+    armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'), _reload_alerts, _reload_alerts);
+    armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), _reload_alerts, _reload_alerts);
 
     // armFunctions.toggleswitchFunctions($('#armrUSAMETARSSwitchElem'), function() {
     //     fetchMETARData.fetchMETARData();

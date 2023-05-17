@@ -5,6 +5,10 @@ const display_attic_dialog = require('../core/menu/attic_dialog');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 
+// https://www.geeksforgeeks.org/how-to-change-the-height-of-br-tag
+const break_small = `<span style="display: block; margin-bottom: -.4em;"></span>`;
+const break_large = `<span style="display: block; margin-bottom: 0.75em;"></span>`;
+
 function click_listener(e) {
     var popupItem = '';
     var alertContentObj = {};
@@ -75,12 +79,14 @@ function click_listener(e) {
         if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
         if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
         if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
-        if (amountOfParams != 0) { popupItem += '<br>' }
+        if (amountOfParams != 0) { popupItem += break_small }
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
 
-        // if (parseInt(key) + 1 < e.features.length) {
-        //     popupItem += '<br>';
-        // }
+        if (parseInt(key) + 1 < e.features.length) {
+            popupItem += break_large;
+        } else {
+            popupItem += break_small;
+        }
 
         function checkPropertyExists(property) {
             var isUndefined = typeof property == 'undefined';
