@@ -12,7 +12,10 @@ $(icon_elem).on('click', function () {
 
         const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
         const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
-        if (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches) {
+        if (
+            (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches) &&
+            (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined)
+        ) {
             fetch_data._fetch_data();
         }
 
