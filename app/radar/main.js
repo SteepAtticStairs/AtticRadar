@@ -21,6 +21,25 @@ if (require('../core/misc/detect_mobile_browser')) {
     $('.mapFooter').css('justify-content', 'space-evenly');
 }
 
+// function roundArrayElements(array) {
+//     const roundedArray = [];
+//     for (let i = 0; i < array.length; i++) {
+//         if (Array.isArray(array[i])) {
+//             roundedArray.push(roundArrayElements(array[i])); // Recursively handle nested arrays
+//         } else {
+//             // Round the current element to three decimal places
+//             const roundedValue = parseFloat(array[i].toFixed(3));
+//             roundedArray.push(roundedValue);
+//         }
+//     }
+//     return roundedArray;
+// }
+
+// for (var i in forecast_zones) {
+//     forecast_zones[i].geometry.coordinates = roundArrayElements(forecast_zones[i].geometry.coordinates);
+// }
+// console.log(forecast_zones);
+
 // $('#armrUploadFileBtn').click();
 
 // ../data/RODN20220831_075245_V06
