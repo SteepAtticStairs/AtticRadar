@@ -2,16 +2,21 @@ const ut = require('../core/utils');
 const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
 
+const url_prefix = 'https://steepatticstairs.net/AtticRadar/';
+
 const new_alerts_url = `https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 const sws_alerts_url = `https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
 // https://realearth.ssec.wisc.edu/products/?app=_ALL_
 const all_alerts_url = `https://realearth.ssec.wisc.edu/api/shapes?products=NWS-Alerts-All`;
 const noaa_alerts_url = `https://api.weather.gov/alerts/active`;
 
+// previously, these were written as:
+// "../app/alerts/zones/forecast_zones.js.gz"
+// but that didn't work when pushed to github pages
 const zone_urls = [
-    '../app/alerts/zones/forecast_zones.js.gz',
-    '../app/alerts/zones/county_zones.js.gz',
-    '../app/alerts/zones/fire_zones.js.gz',
+    `${url_prefix}app/alerts/zones/forecast_zones.js.gz`,
+    `${url_prefix}app/alerts/zones/county_zones.js.gz`,
+    `${url_prefix}app/alerts/zones/fire_zones.js.gz`,
 ];
 
 var headers = new Headers();
