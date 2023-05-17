@@ -12,9 +12,14 @@ $(icon_elem).on('click', function () {
 
         const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
         const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+        const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
+        const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
         if (
-            (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches) &&
-            (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined)
+            (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches ||
+            window.atticData.show_statements != show_statements || window.atticData.show_advisories != show_advisories) 
+            &&
+            (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined ||
+            window.atticData.show_statements != undefined || window.atticData.show_advisories != undefined)
         ) {
             fetch_data._fetch_data();
         }
