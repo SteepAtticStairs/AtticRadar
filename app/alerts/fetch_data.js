@@ -57,9 +57,9 @@ function _fetch_data() {
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
-        _fetch_zone_dictionaries(() => {
+        // _fetch_zone_dictionaries(() => {
             _fetch_alerts_data();
-        })
+        // })
     } else {
         _fetch_alerts_data();
     }
