@@ -117,8 +117,8 @@ function plot_alerts(alerts_data) {
 
     _add_alert_layers(alerts_data);
 
-    // const merged_geoJSON = _combine_dictionary_data(alerts_data);
-    // map.getSource('alertsSource').setData(merged_geoJSON);
+    const merged_geoJSON = _combine_dictionary_data(alerts_data);
+    map.getSource('alertsSource').setData(merged_geoJSON);
 
     set_layer_order();
 }

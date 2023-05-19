@@ -1073,9 +1073,9 @@ function _fetch_data() {
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
-        // _fetch_zone_dictionaries(() => {
+        _fetch_zone_dictionaries(() => {
             _fetch_alerts_data();
-        // })
+        })
     } else {
         _fetch_alerts_data();
     }
@@ -1322,8 +1322,8 @@ function plot_alerts(alerts_data) {
 
     _add_alert_layers(alerts_data);
 
-    // const merged_geoJSON = _combine_dictionary_data(alerts_data);
-    // map.getSource('alertsSource').setData(merged_geoJSON);
+    const merged_geoJSON = _combine_dictionary_data(alerts_data);
+    map.getSource('alertsSource').setData(merged_geoJSON);
 
     set_layer_order();
 }
