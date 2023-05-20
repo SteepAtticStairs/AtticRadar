@@ -37,6 +37,13 @@ function setLayerOrder() {
     }
 
     moveLayerToTop('stationSymbolLayer');
+
+    var surface_fronts_layers = window.atticData.surface_fronts_layers;
+    if (surface_fronts_layers != undefined) {
+        for (var i in surface_fronts_layers) {
+            moveLayerToTop(surface_fronts_layers[i]);
+        }
+    }
 }
 
 module.exports = setLayerOrder;

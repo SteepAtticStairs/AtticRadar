@@ -1,88 +1,56 @@
 const SurfaceFronts = require('./SurfaceFronts');
 const plot_data = require('./plot_data');
+const ut = require('../core/utils');
+
+const directory_list_url = `https://tgftp.nws.noaa.gov/SL.us008001/DF.c5/DC.textf/DS.codas/ls-lt`;
 
 function fetch_data() {
-    const fronts = new SurfaceFronts(text);
-    console.log(fronts);
-    plot_data(fronts);
+    fetch(ut.phpProxy + directory_list_url)
+    .then(response => response.text())
+    .then(data => {
+        const lines = data.split('\n');
+
+        var latest_time;
+        var latest_filename;
+        for (var i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].split(/[ ]+/);
+            if (!lines[i][0] == '') {
+                const month = lines[i][5];
+                const day = lines[i][6];
+                const time = lines[i][7];
+                const formatted_time = new Date(`${month} ${day}, ${new Date().getUTCFullYear()} ${time}`);
+                const filename = lines[i][8];
+
+                if (latest_time == undefined) {
+                    latest_time = formatted_time;
+                    latest_filename = filename;
+                } else {
+                    if (formatted_time.getTime() > latest_time.getTime()) {
+                        latest_time = formatted_time;
+                        latest_filename = filename;
+                    }
+                }
+            }
+        }
+
+        const latest_file_url = `https://tgftp.nws.noaa.gov/SL.us008001/DF.c5/DC.textf/DS.codas/${latest_filename}`;
+        fetch(ut.phpProxy + latest_file_url)
+        .then(response => response.text())
+        .then(data => {
+            const formatted_lines = data.replaceAll('\r', '').split('\n').filter(line => { return line.trim() != '' });
+            const split_index = formatted_lines.indexOf('$$');
+
+            const lowres_lines = formatted_lines.slice(0, split_index - 1);
+            const hires_lines = formatted_lines.slice(split_index + 1, formatted_lines.length - 1);
+
+            const lowres_bulletin = lowres_lines.join('\n');
+            const hires_bulletin = hires_lines.join('\n');
+
+            const fronts = new SurfaceFronts(hires_bulletin);
+            console.log(fronts);
+            plot_data(fronts);
+        })
+    })
 }
 
 module.exports = fetch_data;
-
-const text =
-`####018002793####
-ASUS02 KWBC 201500
-
-CODSUS
-
- 
-CODED SURFACE FRONTAL POSITIONS
-NWS WEATHER PREDICTION CENTER COLLEGE PARK MD
-1218 PM EDT SAT MAY 20 2023
- 
-VALID 052015Z
-HIGHS 1021 2691029 1019 2161213 1028 4421105 1022 3571112 1022 3861115 1028
-6171063 1018 4930763 1028 3791065 1027 4190956 1027 3620997 1021 4111138 1027
-4601346 1029 3821350 1017 6841596 1026 5721371 1020 3400826
-LOWS 1011 4570798 1016 3840757 1015 3510881 1017 3270932 1017 3300884 1015
-3570758 1014 3531150 1015 2830984 1000 6400534 998 5690780 1011 6671397 1017
-3931227 1016 4621196 1014 5270983 1018 5491169 1014 5201061 1023 3781042 988
-7660702 983 6620344
-TROF 2200911 1950918 1710912
-TROF 1770984 1941003 2561003
-TROF 3001171 2881175 2691189
-TROF 2540806 2700818 2830838
-TROF 2910731 2720746 2500757
-TROF 2771003 2790991 2820986
-TROF 2710955 2730966 2770970 2840976 2830985
-COLD 3560758 3340755 3090769 2940790
-STNRY 2910846 2990863 3080874 3220876 3300884
-TROF 2311096 2511112 2831131 3191135 3501148
-COLD 3250933 3120948 2990970 2920994 2931031
-STNRY 3620854 3560867 3510881
-COLD 4560797 4420791 4190797 4020808 3810828 3620855
-TROF 3300884 3390879 3490880
-TROF 3070941 3090926 3200911 3230893 3300885
-STNRY 3500881 3440889 3400901 3340908 3310923 3270931
-TROF 4100797 4010790 3870784 3700783
-WARM 3570759 3610760 3650760 3690759 3720761
-STNRY 3840757 3770762 3720761
-WARM 3840757 3990746 4100727 4160703
-WARM 4580797 4650780 4710747 4860719 4920696 5060671 5060637
-OCFNT 6400535 6320509 6200492 6070489
-WARM 6080489 5980468 5860454
-COLD 6080489 5880495 5640514 5460541 5370571 5360604
-WARM 5690782 5650756 5500733 5490711 5560685 5540665
-WARM 5420767 5180786 5030821 4890837
-TROF 4091187 3861180 3661166 3531152
-TROF 3291078 3311093 3261109 3251122
-TROF 4311220 4081229 3931226
-TROF 3591171 3621192 3711207 3911226
-TROF 3821262 3821244 3901229
-COLD 5670782 5480799 5350836 5280898 5270942
-STNRY 5270942 5280965 5270983
-COLD 5270985 5261035 5291087 5351117
-STNRY 5351118 5421141 5491166
-STNRY 5501174 5581197 5681217 5831231 6031233 6251245 6501279 6671339 6671396
-OCFNT 5781704 5991686 6091650
-COLD 6091649 6131594 6141551 6091504
-STNRY 6661403 6481500 6481582 6341625 6101651
-TROF 4451207 4511200 4611197
-TROF 5001201 4831192 4631195
-TROF 5121172 5201160 5321149 5391134
-TROF 4821107 4871087 4991068 5191062
-TROF 3471069 3591064 3681045 3781042
-TROF 4721045 4551041 4261047 4051044 3911047 3791043
-TROF 4311164 4271142 4281122
-TROF 6220772 5960791 5730785
-TROF 4750863 4640844 4580804
-TROF 4251094 4161102 4101119 3971133
-WARM 8301209 8031187 7651204
-COLD 4881413 4711410 4451425
-TROF 7381340 7061343 6801358 6701390
-TROF 6631718 6511691 6351650 6261645
-TROF 7540860 7560774 7660708
-TROF 6680548 6970516 7310532 7680697
-TROF 6090443 6260395 6600348
- 
-$$`

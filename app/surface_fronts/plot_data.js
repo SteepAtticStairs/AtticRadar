@@ -1,5 +1,6 @@
 const map = require('../core/map/map');
 const turf = require('@turf/turf');
+const set_layer_order = require('../core/map/setLayerOrder');
 
 /**
  * https://www.wpc.ncep.noaa.gov/html/fntcodes2.shtml
@@ -121,6 +122,8 @@ function plot_data(SurfaceFronts) {
 
         _add_pressure_point_layer('high', highs_collection);
         _add_pressure_point_layer('low', lows_collection);
+
+        set_layer_order();
     })
 }
 

@@ -52,7 +52,8 @@ function load() {
     // load the radar message listener
     require('../../radar/radar_message/radar_message');
 
-    // require('../../surface_fronts/fetch_data')();
+    // load the surface fronts module
+    require('../../surface_fronts/menu_item');
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
