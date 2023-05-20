@@ -51,6 +51,8 @@ function load() {
 
     // load the radar message listener
     require('../../radar/radar_message/radar_message');
+
+    // require('../../surface_fronts/fetch_data')();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
