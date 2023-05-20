@@ -5,13 +5,8 @@ const div_elem = '#surfaceFrontsMenuItemDiv';
 const icon_elem = '#surfaceFrontsMenuItemIcon';
 
 const surface_fronts_layers = [
-    'warm_front_layer',
-    'cold_front_layer',
-    'occluded_front_layer',
-    'trough_front_layer',
-
-    'high_pressure_point_layer',
-    'low_pressure_point_layer',
+    'fronts_layer',
+    'pressure_points_layer',
 ];
 window.atticData.surface_fronts_layers = surface_fronts_layers;
 
