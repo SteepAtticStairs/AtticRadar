@@ -2,6 +2,7 @@ const turf = require('@turf/turf');
 const ut = require('../../core/utils');
 const map = require('../../core/map/map');
 const get_station_status = require('./get_station_status');
+const set_layer_order = require('../../core/map/setLayerOrder');
 
 const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');
 const Level2Factory = require('../libnexrad/level2/level2_factory');
@@ -108,7 +109,9 @@ function _add_stations_layer(radar_stations_geojson, callback) {
             window.atticData.radar_station_status = data;
             const statusified_geojson = _generate_stations_geojson(data);
             map.getSource('stationSymbolLayer').setData(statusified_geojson);
-        })
+        });
+
+        set_layer_order();
 
         callback();
     });

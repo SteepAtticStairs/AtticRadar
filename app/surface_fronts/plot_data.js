@@ -11,15 +11,16 @@ const purple = 'rgb(95, 54, 196)';
 const orange = 'rgb(194, 115, 47)';
 
 function wait_for_map_load(func) {
-    setTimeout(function() {
-        if (map.loaded()) {
-            func();
-        } else {
-            map.on('load', function() {
-                func();
-            })
-        }
-    }, 0)
+    func();
+    // setTimeout(function() {
+    //     if (map.loaded()) {
+    //         func();
+    //     } else {
+    //         map.on('load', function() {
+    //             func();
+    //         })
+    //     }
+    // }, 0)
 }
 
 function _return_fronts_linestrings(key, SurfaceFronts) {

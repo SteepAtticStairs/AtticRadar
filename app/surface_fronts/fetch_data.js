@@ -2,6 +2,30 @@ const SurfaceFronts = require('./SurfaceFronts');
 const plot_data = require('./plot_data');
 const ut = require('../core/utils');
 
+function _remove_empty_strings_from_array(array) {
+    return array.filter(line => { return line.trim() != '' });
+}
+
+function _find_hires_bulletin(all_bulletins_array) {
+    var lowres_found;
+    for (var i = 0; i < all_bulletins_array.length; i++) {
+        const current_bulletin = all_bulletins_array[i];
+        const current_bulletin_split = current_bulletin.split('\n');
+
+        const last_line = current_bulletin_split[current_bulletin_split.length - 1];
+        const last_line_split = _remove_empty_strings_from_array(last_line.split(' '));
+
+        const numbers = last_line_split.filter(Number);
+        if ((numbers[0].length == 4 || numbers[0].length == 5) && lowres_found == undefined) {
+            lowres_found = current_bulletin;
+        }
+        if (numbers[0].length == 7) {
+            return current_bulletin;
+        }
+    }
+    return lowres_found;
+}
+
 const directory_list_url = `https://tgftp.nws.noaa.gov/SL.us008001/DF.c5/DC.textf/DS.codas/ls-lt`;
 
 function fetch_data() {
@@ -37,14 +61,21 @@ function fetch_data() {
         fetch(ut.phpProxy + latest_file_url)
         .then(response => response.text())
         .then(data => {
-            const formatted_lines = data.replaceAll('\r', '').split('\n').filter(line => { return line.trim() != '' });
-            const split_index = formatted_lines.indexOf('$$');
+            var formatted_lines = _remove_empty_strings_from_array(data.replaceAll('\r', '').split('\n'));
+            formatted_lines = formatted_lines.join('\n');
 
-            const lowres_lines = formatted_lines.slice(0, split_index - 1);
-            const hires_lines = formatted_lines.slice(split_index + 1, formatted_lines.length - 1);
+            const split_bulletins = formatted_lines.split(/(?<!\$\$)\$\$(?!\$\$)/);
 
-            const lowres_bulletin = lowres_lines.join('\n');
-            const hires_bulletin = hires_lines.join('\n');
+            const joined_bulletins = [];
+            for (var i in split_bulletins) {
+                var temp_split = split_bulletins[i].split('\n');
+                temp_split = _remove_empty_strings_from_array(temp_split);
+                if (temp_split.length != 0) {
+                    joined_bulletins.push(temp_split.join('\n'));
+                }
+            }
+
+            const hires_bulletin = _find_hires_bulletin(joined_bulletins);
 
             const fronts = new SurfaceFronts(hires_bulletin);
             console.log(fronts);

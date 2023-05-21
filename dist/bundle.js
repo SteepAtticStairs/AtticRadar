@@ -23843,6 +23843,7 @@ const turf = require('@turf/turf');
 const ut = require('../../core/utils');
 const map = require('../../core/map/map');
 const get_station_status = require('./get_station_status');
+const set_layer_order = require('../../core/map/setLayerOrder');
 
 const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');
 const Level2Factory = require('../libnexrad/level2/level2_factory');
@@ -23949,7 +23950,9 @@ function _add_stations_layer(radar_stations_geojson, callback) {
             window.atticData.radar_station_status = data;
             const statusified_geojson = _generate_stations_geojson(data);
             map.getSource('stationSymbolLayer').setData(statusified_geojson);
-        })
+        });
+
+        set_layer_order();
 
         callback();
     });
@@ -24060,7 +24063,7 @@ function showStations() {
 }
 
 module.exports = showStations;
-},{"../../core/map/map":9,"../../core/utils":25,"../libnexrad/level2/level2_factory":51,"../libnexrad/level2/level2_parser":52,"../libnexrad/level3/level3_factory":53,"../libnexrad/level3/level3_parser":55,"../libnexrad/loaders_nexrad":56,"../libnexrad/nexrad_locations":57,"./get_station_status":75,"@turf/turf":102}],78:[function(require,module,exports){
+},{"../../core/map/map":9,"../../core/map/setLayerOrder":11,"../../core/utils":25,"../libnexrad/level2/level2_factory":51,"../libnexrad/level2/level2_parser":52,"../libnexrad/level3/level3_factory":53,"../libnexrad/level3/level3_parser":55,"../libnexrad/loaders_nexrad":56,"../libnexrad/nexrad_locations":57,"./get_station_status":75,"@turf/turf":102}],78:[function(require,module,exports){
 (function (Buffer){(function (){
 const ut = require('../../core/utils');
 const loaders_nexrad = require('../libnexrad/loaders_nexrad');
@@ -29103,6 +29106,30 @@ const SurfaceFronts = require('./SurfaceFronts');
 const plot_data = require('./plot_data');
 const ut = require('../core/utils');
 
+function _remove_empty_strings_from_array(array) {
+    return array.filter(line => { return line.trim() != '' });
+}
+
+function _find_hires_bulletin(all_bulletins_array) {
+    var lowres_found;
+    for (var i = 0; i < all_bulletins_array.length; i++) {
+        const current_bulletin = all_bulletins_array[i];
+        const current_bulletin_split = current_bulletin.split('\n');
+
+        const last_line = current_bulletin_split[current_bulletin_split.length - 1];
+        const last_line_split = _remove_empty_strings_from_array(last_line.split(' '));
+
+        const numbers = last_line_split.filter(Number);
+        if ((numbers[0].length == 4 || numbers[0].length == 5) && lowres_found == undefined) {
+            lowres_found = current_bulletin;
+        }
+        if (numbers[0].length == 7) {
+            return current_bulletin;
+        }
+    }
+    return lowres_found;
+}
+
 const directory_list_url = `https://tgftp.nws.noaa.gov/SL.us008001/DF.c5/DC.textf/DS.codas/ls-lt`;
 
 function fetch_data() {
@@ -29138,14 +29165,21 @@ function fetch_data() {
         fetch(ut.phpProxy + latest_file_url)
         .then(response => response.text())
         .then(data => {
-            const formatted_lines = data.replaceAll('\r', '').split('\n').filter(line => { return line.trim() != '' });
-            const split_index = formatted_lines.indexOf('$$');
+            var formatted_lines = _remove_empty_strings_from_array(data.replaceAll('\r', '').split('\n'));
+            formatted_lines = formatted_lines.join('\n');
 
-            const lowres_lines = formatted_lines.slice(0, split_index - 1);
-            const hires_lines = formatted_lines.slice(split_index + 1, formatted_lines.length - 1);
+            const split_bulletins = formatted_lines.split(/(?<!\$\$)\$\$(?!\$\$)/);
 
-            const lowres_bulletin = lowres_lines.join('\n');
-            const hires_bulletin = hires_lines.join('\n');
+            const joined_bulletins = [];
+            for (var i in split_bulletins) {
+                var temp_split = split_bulletins[i].split('\n');
+                temp_split = _remove_empty_strings_from_array(temp_split);
+                if (temp_split.length != 0) {
+                    joined_bulletins.push(temp_split.join('\n'));
+                }
+            }
+
+            const hires_bulletin = _find_hires_bulletin(joined_bulletins);
 
             const fronts = new SurfaceFronts(hires_bulletin);
             console.log(fronts);
@@ -29206,15 +29240,16 @@ const purple = 'rgb(95, 54, 196)';
 const orange = 'rgb(194, 115, 47)';
 
 function wait_for_map_load(func) {
-    setTimeout(function() {
-        if (map.loaded()) {
-            func();
-        } else {
-            map.on('load', function() {
-                func();
-            })
-        }
-    }, 0)
+    func();
+    // setTimeout(function() {
+    //     if (map.loaded()) {
+    //         func();
+    //     } else {
+    //         map.on('load', function() {
+    //             func();
+    //         })
+    //     }
+    // }, 0)
 }
 
 function _return_fronts_linestrings(key, SurfaceFronts) {
