@@ -59,7 +59,7 @@ class SurfaceFronts {
         this.lows = {};
 
         var highs_lows_lines = [];
-        for (var i = 7; i < this.lines.length; i++) {
+        for (var i = 6; i < this.lines.length; i++) {
             if (frontal_types.some(substr => this.lines[i].startsWith(substr))) {
                 this._extra.fronts_pointer = i;
                 break;
@@ -82,14 +82,13 @@ class SurfaceFronts {
 
     parse_header() {
         this.header = {};
-        const header_lines = this.lines.slice(0, 7);
+        const header_lines = this.lines.slice(0, 6);
 
-        this.header.text_header = header_lines[1];
-        this.header.message_type = header_lines[2];
-        this.header.message_description = header_lines[3];
-        this.header.message_author = header_lines[4];
-        this.header.date_string = header_lines[5];
-        this.header.valid_time = header_lines[6];
+        this.header.message_type = header_lines[1];
+        this.header.message_description = header_lines[2];
+        this.header.message_author = header_lines[3];
+        this.header.date_string = header_lines[4];
+        this.header.valid_time = header_lines[5];
     }
 
     _parse_highs_lows_raw_data(data) {
