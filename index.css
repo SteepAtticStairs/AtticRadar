@@ -760,7 +760,7 @@ https://tobiasahlin.com/spinkit/
     align-items: center;
     justify-content: center;
 
-    width: 100%;
+    /* width: 100%; */
     height: 50px;
     padding: 5px;
 
@@ -789,7 +789,7 @@ https://tobiasahlin.com/spinkit/
     position: absolute;
     overflow: scroll;
 
-    width: 100%;
+    /* width: 100%; */
     height: auto;
     /* 85vh - top padding - header height */
     max-height: calc(85vh - 10px - 50px);

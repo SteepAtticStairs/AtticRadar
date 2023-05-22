@@ -19407,7 +19407,7 @@ const prod_spec_map = {
 
 module.exports = NEXRADLevel3File;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../buffer_tools/IOBuffer":48,"buffer":174,"bufferpack":106,"seek-bzip":159,"zlib":173}],56:[function(require,module,exports){
+},{"../buffer_tools/IOBuffer":48,"buffer":174,"bufferpack":106,"seek-bzip":159,"zlib":172}],56:[function(require,module,exports){
 (function (Buffer){(function (){
 const ut = require('../../core/utils');
 
@@ -29288,27 +29288,53 @@ function _add_pressure_point_layer(feature_collection) {
 
 function _return_symbols_points(key, SurfaceFronts) {
     var properties = {};
+
+    const semicircle_offset = [0, 20];
+    const semicircle_size = 0.2;
+    const semicircle_modifier = -90;
+
+    const triangle_offset = [0, 0];
+    const triangle_size = 0.16;
+    const triangle_modifier = -90;
+
     if (key == 'warm') {
-        properties.modifier = -90;
+        properties.modifier = semicircle_modifier;
         properties.image = 'red_semicircle';
-        properties.size = 0.2;
-        properties.offset = [0, 20];
+        properties.size = semicircle_size;
+        properties.offset = semicircle_offset;
     } else if (key == 'cold') {
-        properties.modifier = -90;
+        properties.modifier = triangle_modifier;
         properties.image = 'blue_triangle';
-        properties.size = 0.16;
-        // properties.offset = [0, -50];
+        properties.size = triangle_size;
+        properties.offset = triangle_offset;
     }
 
     const points = [];
     const base = SurfaceFronts.fronts[key];
     for (var n = 0; n < base.length; n++) {
+        var last_symbol = 'purple_semicircle';
         for (var i = 0; i < base[n].coordinates.length; i++) {
             const current_point = base[n].coordinates[i];
             const next_point = base[n].coordinates[i + 1];
             if (i % 2 != 0) { // we're on a midpoint
                 const midpoint = turf.point(current_point);
                 const bearing = turf.bearing(turf.point(current_point), turf.point(next_point));
+
+                if (key == 'occluded') {
+                    if (last_symbol == 'purple_semicircle') {
+                        last_symbol = 'purple_triangle';
+                        properties.image = last_symbol;
+                        properties.modifier = triangle_modifier;
+                        properties.size = triangle_size;
+                        properties.offset = triangle_offset;
+                    } else if (last_symbol == 'purple_triangle') {
+                        last_symbol = 'purple_semicircle';
+                        properties.image = last_symbol;
+                        properties.modifier = semicircle_modifier;
+                        properties.size = semicircle_size;
+                        properties.offset = semicircle_offset;
+                    }
+                }
 
                 properties.bearing = bearing;
                 midpoint.properties = JSON.parse(JSON.stringify(properties));
@@ -29351,9 +29377,11 @@ function plot_data(SurfaceFronts) {
 
     const warm_front_symbols_points = _return_symbols_points('warm', SurfaceFronts);
     const cold_front_symbols_points = _return_symbols_points('cold', SurfaceFronts);
+    const occluded_front_symbols_points = _return_symbols_points('occluded', SurfaceFronts);
     const all_front_symbols_points = turf.featureCollection([
         ...warm_front_symbols_points,
         ...cold_front_symbols_points,
+        ...occluded_front_symbols_points
     ]);
 
     const highs_points = _return_pressure_points('high', SurfaceFronts);
@@ -31918,7 +31946,7 @@ function mergeFeatureCollectionStream (inputs) {
 module.exports.merge = merge;
 module.exports.mergeFeatureCollectionStream = mergeFeatureCollectionStream;
 
-},{"@mapbox/geojson-normalize":101,"fs":164,"geojson-stream":109}],101:[function(require,module,exports){
+},{"@mapbox/geojson-normalize":101,"fs":173,"geojson-stream":109}],101:[function(require,module,exports){
 module.exports = normalize;
 
 var types = {
@@ -55200,7 +55228,7 @@ module.exports = function (metaData, opt) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./constants":138,"./packer":148,"buffer":174,"zlib":173}],148:[function(require,module,exports){
+},{"./constants":138,"./packer":148,"buffer":174,"zlib":172}],148:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -55333,7 +55361,7 @@ Packer.prototype.packIEND = function () {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitpacker":136,"./constants":138,"./crc":139,"./filter-pack":140,"buffer":174,"zlib":173}],149:[function(require,module,exports){
+},{"./bitpacker":136,"./constants":138,"./crc":139,"./filter-pack":140,"buffer":174,"zlib":172}],149:[function(require,module,exports){
 "use strict";
 
 module.exports = function paethPredictor(left, above, upLeft) {
@@ -55522,7 +55550,7 @@ ParserAsync.prototype._complete = function (filteredData) {
   this.emit("parsed", normalisedBitmapData);
 };
 
-},{"./bitmapper":135,"./chunkstream":137,"./filter-parse-async":141,"./format-normaliser":144,"./parser":152,"util":226,"zlib":173}],151:[function(require,module,exports){
+},{"./bitmapper":135,"./chunkstream":137,"./filter-parse-async":141,"./format-normaliser":144,"./parser":152,"util":226,"zlib":172}],151:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -55638,7 +55666,7 @@ module.exports = function (buffer, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitmapper":135,"./filter-parse-sync":142,"./format-normaliser":144,"./parser":152,"./sync-inflate":155,"./sync-reader":156,"buffer":174,"zlib":173}],152:[function(require,module,exports){
+},{"./bitmapper":135,"./filter-parse-sync":142,"./format-normaliser":144,"./parser":152,"./sync-inflate":155,"./sync-reader":156,"buffer":174,"zlib":172}],152:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -56316,7 +56344,7 @@ exports.createInflate = createInflate;
 exports.inflateSync = inflateSync;
 
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":205,"assert":165,"buffer":174,"util":226,"zlib":173}],156:[function(require,module,exports){
+},{"_process":205,"assert":164,"buffer":174,"util":226,"zlib":172}],156:[function(require,module,exports){
 "use strict";
 
 let SyncReader = (module.exports = function (buffer) {
@@ -57451,8 +57479,6 @@ module.exports = function (fn, options) {
 };
 
 },{}],164:[function(require,module,exports){
-
-},{}],165:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -57962,7 +57988,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":193,"util/":168}],166:[function(require,module,exports){
+},{"object-assign":193,"util/":167}],165:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -57987,14 +58013,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],167:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],168:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -58584,7 +58610,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":167,"_process":205,"inherits":166}],169:[function(require,module,exports){
+},{"./support/isBuffer":166,"_process":205,"inherits":165}],168:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -58615,7 +58641,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],170:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -58767,9 +58793,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
+},{}],170:[function(require,module,exports){
+
 },{}],171:[function(require,module,exports){
-arguments[4][164][0].apply(exports,arguments)
-},{"dup":164}],172:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -59181,7 +59207,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":205,"assert":165,"buffer":174,"pako/lib/zlib/constants":196,"pako/lib/zlib/deflate.js":198,"pako/lib/zlib/inflate.js":200,"pako/lib/zlib/zstream":204}],173:[function(require,module,exports){
+},{"_process":205,"assert":164,"buffer":174,"pako/lib/zlib/constants":196,"pako/lib/zlib/deflate.js":198,"pako/lib/zlib/inflate.js":200,"pako/lib/zlib/zstream":204}],172:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -59793,7 +59819,9 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":172,"_process":205,"assert":165,"buffer":174,"stream":207,"util":226}],174:[function(require,module,exports){
+},{"./binding":171,"_process":205,"assert":164,"buffer":174,"stream":207,"util":226}],173:[function(require,module,exports){
+arguments[4][170][0].apply(exports,arguments)
+},{"dup":170}],174:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -61574,7 +61602,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":170,"buffer":174,"ieee754":187}],175:[function(require,module,exports){
+},{"base64-js":169,"buffer":174,"ieee754":187}],175:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -63050,7 +63078,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":169,"call-bind/callBound":175,"es-abstract/helpers/getOwnPropertyDescriptor":177,"for-each":179,"has-tostringtag/shams":185}],193:[function(require,module,exports){
+},{"available-typed-arrays":168,"call-bind/callBound":175,"es-abstract/helpers/getOwnPropertyDescriptor":177,"for-each":179,"has-tostringtag/shams":185}],193:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -70609,7 +70637,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":208,"./_stream_duplex":209,"./internal/streams/async_iterator":214,"./internal/streams/buffer_list":215,"./internal/streams/destroy":216,"./internal/streams/from":218,"./internal/streams/state":220,"./internal/streams/stream":221,"_process":205,"buffer":174,"events":178,"inherits":188,"string_decoder/":222,"util":171}],212:[function(require,module,exports){
+},{"../errors":208,"./_stream_duplex":209,"./internal/streams/async_iterator":214,"./internal/streams/buffer_list":215,"./internal/streams/destroy":216,"./internal/streams/from":218,"./internal/streams/state":220,"./internal/streams/stream":221,"_process":205,"buffer":174,"events":178,"inherits":188,"string_decoder/":222,"util":170}],212:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -71932,7 +71960,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":174,"util":171}],216:[function(require,module,exports){
+},{"buffer":174,"util":170}],216:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -72648,8 +72676,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],224:[function(require,module,exports){
-arguments[4][167][0].apply(exports,arguments)
-},{"dup":167}],225:[function(require,module,exports){
+arguments[4][166][0].apply(exports,arguments)
+},{"dup":166}],225:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -73399,7 +73427,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').slice(2);
+          }).join('\n').substr(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -73416,7 +73444,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.slice(1, -1);
+      name = name.substr(1, name.length - 2);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
@@ -73763,4 +73791,4 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":169,"call-bind/callBound":175,"es-abstract/helpers/getOwnPropertyDescriptor":177,"for-each":179,"has-tostringtag/shams":185,"is-typed-array":192}]},{},[8]);
+},{"available-typed-arrays":168,"call-bind/callBound":175,"es-abstract/helpers/getOwnPropertyDescriptor":177,"for-each":179,"has-tostringtag/shams":185,"is-typed-array":192}]},{},[8]);

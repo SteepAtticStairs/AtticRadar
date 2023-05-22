@@ -121,27 +121,53 @@ function _add_pressure_point_layer(feature_collection) {
 
 function _return_symbols_points(key, SurfaceFronts) {
     var properties = {};
+
+    const semicircle_offset = [0, 20];
+    const semicircle_size = 0.2;
+    const semicircle_modifier = -90;
+
+    const triangle_offset = [0, 0];
+    const triangle_size = 0.16;
+    const triangle_modifier = -90;
+
     if (key == 'warm') {
-        properties.modifier = -90;
+        properties.modifier = semicircle_modifier;
         properties.image = 'red_semicircle';
-        properties.size = 0.2;
-        properties.offset = [0, 20];
+        properties.size = semicircle_size;
+        properties.offset = semicircle_offset;
     } else if (key == 'cold') {
-        properties.modifier = -90;
+        properties.modifier = triangle_modifier;
         properties.image = 'blue_triangle';
-        properties.size = 0.16;
-        // properties.offset = [0, -50];
+        properties.size = triangle_size;
+        properties.offset = triangle_offset;
     }
 
     const points = [];
     const base = SurfaceFronts.fronts[key];
     for (var n = 0; n < base.length; n++) {
+        var last_symbol = 'purple_semicircle';
         for (var i = 0; i < base[n].coordinates.length; i++) {
             const current_point = base[n].coordinates[i];
             const next_point = base[n].coordinates[i + 1];
             if (i % 2 != 0) { // we're on a midpoint
                 const midpoint = turf.point(current_point);
                 const bearing = turf.bearing(turf.point(current_point), turf.point(next_point));
+
+                if (key == 'occluded') {
+                    if (last_symbol == 'purple_semicircle') {
+                        last_symbol = 'purple_triangle';
+                        properties.image = last_symbol;
+                        properties.modifier = triangle_modifier;
+                        properties.size = triangle_size;
+                        properties.offset = triangle_offset;
+                    } else if (last_symbol == 'purple_triangle') {
+                        last_symbol = 'purple_semicircle';
+                        properties.image = last_symbol;
+                        properties.modifier = semicircle_modifier;
+                        properties.size = semicircle_size;
+                        properties.offset = semicircle_offset;
+                    }
+                }
 
                 properties.bearing = bearing;
                 midpoint.properties = JSON.parse(JSON.stringify(properties));
@@ -184,9 +210,11 @@ function plot_data(SurfaceFronts) {
 
     const warm_front_symbols_points = _return_symbols_points('warm', SurfaceFronts);
     const cold_front_symbols_points = _return_symbols_points('cold', SurfaceFronts);
+    const occluded_front_symbols_points = _return_symbols_points('occluded', SurfaceFronts);
     const all_front_symbols_points = turf.featureCollection([
         ...warm_front_symbols_points,
         ...cold_front_symbols_points,
+        ...occluded_front_symbols_points
     ]);
 
     const highs_points = _return_pressure_points('high', SurfaceFronts);
