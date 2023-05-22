@@ -29176,6 +29176,7 @@ const blue = 'rgb(0, 100, 245)'; // 'rgb(0, 0, 245)';
 const red = 'rgb(234, 51, 35)';
 const purple = 'rgb(95, 54, 196)';
 const orange = 'rgb(194, 115, 47)';
+const green = 'rgb(0, 255, 0)';
 
 function wait_for_map_load(func) {
     func();
@@ -29188,6 +29189,10 @@ function wait_for_map_load(func) {
     //         })
     //     }
     // }, 0)
+}
+
+function _copy(object) {
+    return JSON.parse(JSON.stringify(object));
 }
 
 /**
@@ -29218,11 +29223,24 @@ function _return_fronts_linestrings(key, SurfaceFronts) {
     const lines = [];
     for (var i = 0; i < SurfaceFronts.fronts[key].length; i++) {
         const base = SurfaceFronts.fronts[key][i];
+        properties.strength = base.strength;
         base.coordinates = add_midpoints(base.coordinates);
 
-        properties.strength = base.strength;
-        const linestring = turf.lineString(base.coordinates, properties);
-        lines.push(linestring);
+        if (key == 'stationary') {
+            var last_color = red;
+            for (var n = 0; n < base.coordinates.length - 2; n += 2) {
+                if (last_color == red) last_color = blue;
+                else if (last_color == blue) last_color = red;
+                properties.color = last_color;
+
+                const sub_array = base.coordinates.slice(n, n + 3);
+                const linestring = turf.lineString(sub_array, _copy(properties));
+                lines.push(linestring);
+            }
+        } else {
+            const linestring = turf.lineString(base.coordinates, properties);
+            lines.push(linestring);
+        }
     }
     return lines;
 }
@@ -29312,7 +29330,7 @@ function _return_symbols_points(key, SurfaceFronts) {
     const points = [];
     const base = SurfaceFronts.fronts[key];
     for (var n = 0; n < base.length; n++) {
-        var last_symbol = 'purple_semicircle';
+        var last_symbol = 'semicircle';
         for (var i = 0; i < base[n].coordinates.length; i++) {
             const current_point = base[n].coordinates[i];
             const next_point = base[n].coordinates[i + 1];
@@ -29320,16 +29338,23 @@ function _return_symbols_points(key, SurfaceFronts) {
                 const midpoint = turf.point(current_point);
                 const bearing = turf.bearing(turf.point(current_point), turf.point(next_point));
 
-                if (key == 'occluded') {
-                    if (last_symbol == 'purple_semicircle') {
-                        last_symbol = 'purple_triangle';
-                        properties.image = last_symbol;
+                // occluded and stationary fronts have alternating symbols
+                if (key == 'occluded' || key == 'stationary') {
+                    if (last_symbol == 'semicircle') {
+                        last_symbol = 'triangle';
+
+                        if (key == 'occluded') properties.image = `purple_${last_symbol}`;
+                        else if (key == 'stationary') properties.image = `blue_${last_symbol}`;
+
                         properties.modifier = triangle_modifier;
                         properties.size = triangle_size;
                         properties.offset = triangle_offset;
-                    } else if (last_symbol == 'purple_triangle') {
-                        last_symbol = 'purple_semicircle';
-                        properties.image = last_symbol;
+                    } else if (last_symbol == 'triangle') {
+                        last_symbol = 'semicircle';
+
+                        if (key == 'occluded') properties.image = `purple_${last_symbol}`;
+                        else if (key == 'stationary') properties.image = `red_${last_symbol}`;
+
                         properties.modifier = semicircle_modifier;
                         properties.size = semicircle_size;
                         properties.offset = semicircle_offset;
@@ -29337,7 +29362,7 @@ function _return_symbols_points(key, SurfaceFronts) {
                 }
 
                 properties.bearing = bearing;
-                midpoint.properties = JSON.parse(JSON.stringify(properties));
+                midpoint.properties = _copy(properties);
                 points.push(midpoint);
             }
         }
@@ -29368,20 +29393,24 @@ function plot_data(SurfaceFronts) {
     const cold_front_linestrings = _return_fronts_linestrings('cold', SurfaceFronts);
     const occluded_front_linestrings = _return_fronts_linestrings('occluded', SurfaceFronts);
     const trough_front_linestrings = _return_fronts_linestrings('trough', SurfaceFronts);
+    const stationary_front_linestrings = _return_fronts_linestrings('stationary', SurfaceFronts);
     const all_fronts_linestrings = turf.featureCollection([
         ...warm_front_linestrings,
         ...cold_front_linestrings,
         ...occluded_front_linestrings,
-        ...trough_front_linestrings
+        ...trough_front_linestrings,
+        ...stationary_front_linestrings
     ]);
 
     const warm_front_symbols_points = _return_symbols_points('warm', SurfaceFronts);
     const cold_front_symbols_points = _return_symbols_points('cold', SurfaceFronts);
     const occluded_front_symbols_points = _return_symbols_points('occluded', SurfaceFronts);
+    const stationary_front_symbols_points = _return_symbols_points('stationary', SurfaceFronts);
     const all_front_symbols_points = turf.featureCollection([
         ...warm_front_symbols_points,
         ...cold_front_symbols_points,
-        ...occluded_front_symbols_points
+        ...occluded_front_symbols_points,
+        ...stationary_front_symbols_points
     ]);
 
     const highs_points = _return_pressure_points('high', SurfaceFronts);
