@@ -7,6 +7,7 @@ const icon_elem = '#surfaceFrontsMenuItemIcon';
 const surface_fronts_layers = [
     'fronts_layer',
     'pressure_points_layer',
+    'front_symbols_layer',
 ];
 window.atticData.surface_fronts_layers = surface_fronts_layers;
 
