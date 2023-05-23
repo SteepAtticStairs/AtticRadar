@@ -59,6 +59,9 @@ class RadarUpdater {
                 this.latest_date = fetched_date;
             }
 
+            // console.log(fetched_date, this.latest_date);
+            // console.log(url);
+
             if (fetched_date.getTime() > this.latest_date.getTime()) {
                 console.log(`Successfully found new radar scan at ${formatted_now}.`);
                 this.plot_func(url);

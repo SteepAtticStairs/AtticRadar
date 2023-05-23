@@ -19640,6 +19640,10 @@ function return_level_3_factory_from_buffer(arraybuffer, callback) {
 function quick_level_3_plot(station, product, callback = null) {
     if (callback == null) { callback = function() {} }
     return_level_3_factory_from_info(station, product, (L3Factory) => {
+        if (window?.atticData?.current_RadarUpdater != undefined) {
+            window.atticData.current_RadarUpdater.disable();
+        }
+
         console.log(L3Factory);
         // L3Factory.display_file_info();
         L3Factory.plot();
@@ -19657,6 +19661,10 @@ function quick_level_3_plot(station, product, callback = null) {
 function level_3_plot_from_url(url, callback = null) {
     if (callback == null) { callback = function() {} }
     return_level_3_factory_from_url(url, (L3Factory) => {
+        if (window?.atticData?.current_RadarUpdater != undefined) {
+            window.atticData.current_RadarUpdater.disable();
+        }
+
         L3Factory.plot();
         callback(L3Factory);
     })
@@ -24158,6 +24166,9 @@ class RadarUpdater {
             if (this.latest_date == undefined) {
                 this.latest_date = fetched_date;
             }
+
+            // console.log(fetched_date, this.latest_date);
+            // console.log(url);
 
             if (fetched_date.getTime() > this.latest_date.getTime()) {
                 console.log(`Successfully found new radar scan at ${formatted_now}.`);
