@@ -10,6 +10,7 @@ const vertex_source = require('./glsl/vertex.glsl');
 const fragment_source = require('./glsl/fragment.glsl');
 const fragment_framebuffer_source = require('./glsl/fragment_framebuffer.glsl');
 const map = require('../../core/map/map');
+const RadarUpdater = require('../updater/RadarUpdater');
 
 function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_factory) {
     var color_scale_data = product_colors[product];
@@ -256,6 +257,15 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         } else {
             nexrad_factory.fly_to_location();
         }
+    }
+
+    if (!isInFileUploadMode) {
+        if (window?.atticData?.current_RadarUpdater != undefined) {
+            window.atticData.current_RadarUpdater.disable();
+        }
+        const current_RadarUpdater = new RadarUpdater(nexrad_factory);
+        window.atticData.current_RadarUpdater = current_RadarUpdater;
+        current_RadarUpdater.enable();
     }
 }
 

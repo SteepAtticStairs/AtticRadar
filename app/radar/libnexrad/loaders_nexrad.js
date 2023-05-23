@@ -73,8 +73,8 @@ function get_latest_level_2_url(station, callback) {
  * @param {String} station - The four letter ICAO of the station. e.g. "KLWX" / "KMHX"
  * @param {String} product - Three letter abbreviation of the Level 3 product being retrieved. e.g. "NST", "N0B", "N0G"
  * @param {Number} index - A number that represents the time of the file to load. e.g. 0 for the latest file, 5 for 5 files back, etc.
- * @param {Function} callback - The function to run after the retrieval. Use a single variable
- * in this function, this will be a string with the latest file's URL.
+ * @param {Function} callback - The function to run after the retrieval. Use two variables
+ * in this function, which will be a string with the latest file's URL, and a date object for the radar file.
  * @param {Date} date - A value used internally within the function. Do not pass a value for this parameter.
  */
 var timesGoneBack = 0;
@@ -116,14 +116,17 @@ function get_latest_level_3_url(station, product, index, callback, date) {
                 //console.log(dataToWorkWith)
                 var contentsBase = dataToWorkWith.ListBucketResult.Contents;
                 var filenameKey;
+                var dateKey;
                 if (Array.isArray(contentsBase)) {
                     filenameKey = contentsBase[contentsBase.length - (index + 1)].Key.HASHtext;
+                    dateKey = contentsBase[contentsBase.length - (index + 1)].LastModified.HASHtext;
                 } else {
                     filenameKey = contentsBase.Key.HASHtext;
+                    dateKey = contentsBase.LastModified.HASHtext;
                 }
 
                 var finishedURL = `${urlBase}${filenameKey}`;
-                callback(finishedURL);
+                callback(finishedURL, new Date(dateKey));
             } catch(e) {
                 // we don't want to go back days for storm tracking - most of the time an empty directory
                 // of storm track files means there are no storm tracks avaliable at the time (e.g. clear skies / no storms)
@@ -144,7 +147,13 @@ function get_latest_level_3_url(station, product, index, callback, date) {
         if (product == 'NMD') { product = '141md' }
         var fileUrl = `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${station.toLowerCase()}/sn.last#`;
         fileUrl = ut.preventFileCaching(fileUrl);
-        callback(fileUrl);
+
+        fetch(ut.phpProxy + `https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.${product}/SI.${station.toLowerCase()}/sn.last#`)
+        .then(response => {
+            const file_modified_date = response.headers.get('Last-Modified');
+
+            callback(fileUrl, new Date(file_modified_date));
+        })
     }
 
     /*
@@ -228,6 +237,20 @@ function quick_level_3_plot(station, product, callback = null) {
     })
 }
 
+/**
+ * Plot a Level 3 file from a url.
+ * 
+ * @param {String} url - See documentation for "file_to_buffer" function.
+ * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L3Factory class.
+ */
+function level_3_plot_from_url(url, callback = null) {
+    if (callback == null) { callback = function() {} }
+    return_level_3_factory_from_url(url, (L3Factory) => {
+        L3Factory.plot();
+        callback(L3Factory);
+    })
+}
+
 
 /**
  * Function to return a L2Factory instance from an ArrayBuffer.
@@ -250,6 +273,7 @@ module.exports = {
     return_level_3_factory_from_url,
     return_level_3_factory_from_buffer,
     quick_level_3_plot,
+    level_3_plot_from_url,
 
     return_level_2_factory_from_buffer
 };
