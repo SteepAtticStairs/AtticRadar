@@ -786,7 +786,7 @@ https://tobiasahlin.com/spinkit/
     cursor: pointer;
 }
 #atcDlgBody {
-    position: absolute;
+    /* position: absolute; */
     overflow: scroll;
 
     /* width: 100%; */
