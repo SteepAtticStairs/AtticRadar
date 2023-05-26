@@ -53,7 +53,7 @@ function load() {
     require('../../surface_fronts/menu_item');
 
     // load the hurricanes module
-    // require('../../hurricanes/menu_item');
+    require('../../hurricanes/menu_item');
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {

@@ -18,7 +18,7 @@ function init() {
 armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function() {
     const hurricane_layers = window.atticData.hurricane_layers;
 
-    if (map.getLayer(hurricane_layers?.[0])) {
+    if (map.getLayer(hurricane_layers?.[0]) || map.getSource(hurricane_layers?.[0])) {
         for (var i = 0; i < hurricane_layers.length; i++) {
             if (map.getLayer(hurricane_layers[i])) {
                 map.setLayoutProperty(hurricane_layers[i], 'visibility', 'visible');
