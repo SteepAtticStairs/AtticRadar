@@ -34,7 +34,7 @@ $(icon_elem).on('click', function () {
 
             map.setLayoutProperty('alertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('alertsLayerFill', 'visibility', 'visible');
-            map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
+            // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
 
             set_layer_order();
         } else {
@@ -49,6 +49,6 @@ $(icon_elem).on('click', function () {
 
         map.setLayoutProperty('alertsLayer', 'visibility', 'none');
         map.setLayoutProperty('alertsLayerFill', 'visibility', 'none');
-        map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
+        // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
     }
 })

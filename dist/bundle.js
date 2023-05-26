@@ -84,7 +84,7 @@ function click_listener(e) {
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
 
         if (parseInt(key) + 1 < e.features.length) {
-            popupItem += break_large;
+            // popupItem += break_large;
         } else {
             popupItem += break_small;
         }
@@ -1184,7 +1184,7 @@ $(icon_elem).on('click', function () {
 
             map.setLayoutProperty('alertsLayer', 'visibility', 'visible');
             map.setLayoutProperty('alertsLayerFill', 'visibility', 'visible');
-            map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
+            // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
 
             set_layer_order();
         } else {
@@ -1199,7 +1199,7 @@ $(icon_elem).on('click', function () {
 
         map.setLayoutProperty('alertsLayer', 'visibility', 'none');
         map.setLayoutProperty('alertsLayerFill', 'visibility', 'none');
-        map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
+        // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
     }
 })
 },{"../core/map/setLayerOrder":11,"./click_listener":1,"./fetch_data":4}],7:[function(require,module,exports){
@@ -1219,25 +1219,26 @@ function _add_alert_layers(geojson) {
             data: geojson,
         })
         map.addLayer({
-            'id': `alertsLayerOutline`,
-            'type': 'line',
-            'source': `alertsSource`,
-            'paint': {
-                //#014385 blue
-                //#850101 red
-                'line-color': 'black',
-                'line-width': 8
-            }
-        });
-        map.addLayer({
             'id': `alertsLayer`,
             'type': 'line',
             'source': `alertsSource`,
             'paint': {
-                //#014385 blue
-                //#850101 red
-                'line-color': ['get', 'color'],
-                'line-width': 3
+                'line-color': [
+                    'case',
+                    ['==', ['get', 'type'], 'outline'],
+                    ['get', 'color'],
+                    ['==', ['get', 'type'], 'border'],
+                    'black',
+                    'rgba(0, 0, 0, 0)'
+                ],
+                'line-width': [
+                    'case',
+                    ['==', ['get', 'type'], 'outline'],
+                    3,
+                    ['==', ['get', 'type'], 'border'],
+                    8,
+                    0
+                ]
             }
         });
         map.addLayer({
@@ -1318,6 +1319,17 @@ function plot_alerts(alerts_data) {
     }
     alerts_data = _sort_by_priority(alerts_data);
     alerts_data = filter_alerts(alerts_data);
+
+    var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
+    duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
+    for (var i = 0; i < duplicate_features.length; i++) {
+        if (i % 2 === 0) {
+            duplicate_features[i].properties.type = 'border';
+        } else {
+            duplicate_features[i].properties.type = 'outline';
+        }
+    }
+    alerts_data.features = duplicate_features;
     console.log(alerts_data);
 
     _add_alert_layers(alerts_data);
@@ -1384,11 +1396,8 @@ function load() {
     // load the surface fronts module
     require('../../surface_fronts/menu_item');
 
-    // const HurricaneFetcher = require('../../hurricanes/HurricaneFetcher');
-    // const HurricaneParser = require('../../hurricanes/HurricaneParser');
-    // new HurricaneFetcher((master_storms_list) => {
-    //     new HurricaneParser(master_storms_list);
-    // });
+    // load the hurricanes module
+    // require('../../hurricanes/menu_item');
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
@@ -18413,7 +18422,7 @@ const prod_spec_map = {
 
 module.exports = NEXRADLevel3File;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../buffer_tools/IOBuffer":39,"buffer":166,"bufferpack":98,"seek-bzip":151,"zlib":165}],47:[function(require,module,exports){
+},{"../buffer_tools/IOBuffer":39,"buffer":166,"bufferpack":98,"seek-bzip":151,"zlib":164}],47:[function(require,module,exports){
 (function (Buffer){(function (){
 const ut = require('../../core/utils');
 
@@ -31099,7 +31108,7 @@ function mergeFeatureCollectionStream (inputs) {
 module.exports.merge = merge;
 module.exports.mergeFeatureCollectionStream = mergeFeatureCollectionStream;
 
-},{"@mapbox/geojson-normalize":93,"fs":156,"geojson-stream":101}],93:[function(require,module,exports){
+},{"@mapbox/geojson-normalize":93,"fs":165,"geojson-stream":101}],93:[function(require,module,exports){
 module.exports = normalize;
 
 var types = {
@@ -54381,7 +54390,7 @@ module.exports = function (metaData, opt) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./constants":130,"./packer":140,"buffer":166,"zlib":165}],140:[function(require,module,exports){
+},{"./constants":130,"./packer":140,"buffer":166,"zlib":164}],140:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -54514,7 +54523,7 @@ Packer.prototype.packIEND = function () {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitpacker":128,"./constants":130,"./crc":131,"./filter-pack":132,"buffer":166,"zlib":165}],141:[function(require,module,exports){
+},{"./bitpacker":128,"./constants":130,"./crc":131,"./filter-pack":132,"buffer":166,"zlib":164}],141:[function(require,module,exports){
 "use strict";
 
 module.exports = function paethPredictor(left, above, upLeft) {
@@ -54703,7 +54712,7 @@ ParserAsync.prototype._complete = function (filteredData) {
   this.emit("parsed", normalisedBitmapData);
 };
 
-},{"./bitmapper":127,"./chunkstream":129,"./filter-parse-async":133,"./format-normaliser":136,"./parser":144,"util":218,"zlib":165}],143:[function(require,module,exports){
+},{"./bitmapper":127,"./chunkstream":129,"./filter-parse-async":133,"./format-normaliser":136,"./parser":144,"util":218,"zlib":164}],143:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -54819,7 +54828,7 @@ module.exports = function (buffer, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./bitmapper":127,"./filter-parse-sync":134,"./format-normaliser":136,"./parser":144,"./sync-inflate":147,"./sync-reader":148,"buffer":166,"zlib":165}],144:[function(require,module,exports){
+},{"./bitmapper":127,"./filter-parse-sync":134,"./format-normaliser":136,"./parser":144,"./sync-inflate":147,"./sync-reader":148,"buffer":166,"zlib":164}],144:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -55497,7 +55506,7 @@ exports.createInflate = createInflate;
 exports.inflateSync = inflateSync;
 
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":197,"assert":157,"buffer":166,"util":218,"zlib":165}],148:[function(require,module,exports){
+},{"_process":197,"assert":156,"buffer":166,"util":218,"zlib":164}],148:[function(require,module,exports){
 "use strict";
 
 let SyncReader = (module.exports = function (buffer) {
@@ -56632,8 +56641,6 @@ module.exports = function (fn, options) {
 };
 
 },{}],156:[function(require,module,exports){
-
-},{}],157:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -57143,7 +57150,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":185,"util/":160}],158:[function(require,module,exports){
+},{"object-assign":185,"util/":159}],157:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -57168,14 +57175,14 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],159:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],160:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -57765,7 +57772,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":159,"_process":197,"inherits":158}],161:[function(require,module,exports){
+},{"./support/isBuffer":158,"_process":197,"inherits":157}],160:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -57796,7 +57803,7 @@ module.exports = function availableTypedArrays() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],162:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -57948,9 +57955,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
+},{}],162:[function(require,module,exports){
+
 },{}],163:[function(require,module,exports){
-arguments[4][156][0].apply(exports,arguments)
-},{"dup":156}],164:[function(require,module,exports){
 (function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
@@ -58362,7 +58369,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":197,"assert":157,"buffer":166,"pako/lib/zlib/constants":188,"pako/lib/zlib/deflate.js":190,"pako/lib/zlib/inflate.js":192,"pako/lib/zlib/zstream":196}],165:[function(require,module,exports){
+},{"_process":197,"assert":156,"buffer":166,"pako/lib/zlib/constants":188,"pako/lib/zlib/deflate.js":190,"pako/lib/zlib/inflate.js":192,"pako/lib/zlib/zstream":196}],164:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -58974,7 +58981,9 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":164,"_process":197,"assert":157,"buffer":166,"stream":199,"util":218}],166:[function(require,module,exports){
+},{"./binding":163,"_process":197,"assert":156,"buffer":166,"stream":199,"util":218}],165:[function(require,module,exports){
+arguments[4][162][0].apply(exports,arguments)
+},{"dup":162}],166:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -60755,7 +60764,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":162,"buffer":166,"ieee754":179}],167:[function(require,module,exports){
+},{"base64-js":161,"buffer":166,"ieee754":179}],167:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
@@ -62231,7 +62240,7 @@ module.exports = function isTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":161,"call-bind/callBound":167,"es-abstract/helpers/getOwnPropertyDescriptor":169,"for-each":171,"has-tostringtag/shams":177}],185:[function(require,module,exports){
+},{"available-typed-arrays":160,"call-bind/callBound":167,"es-abstract/helpers/getOwnPropertyDescriptor":169,"for-each":171,"has-tostringtag/shams":177}],185:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -69790,7 +69799,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":200,"./_stream_duplex":201,"./internal/streams/async_iterator":206,"./internal/streams/buffer_list":207,"./internal/streams/destroy":208,"./internal/streams/from":210,"./internal/streams/state":212,"./internal/streams/stream":213,"_process":197,"buffer":166,"events":170,"inherits":180,"string_decoder/":214,"util":163}],204:[function(require,module,exports){
+},{"../errors":200,"./_stream_duplex":201,"./internal/streams/async_iterator":206,"./internal/streams/buffer_list":207,"./internal/streams/destroy":208,"./internal/streams/from":210,"./internal/streams/state":212,"./internal/streams/stream":213,"_process":197,"buffer":166,"events":170,"inherits":180,"string_decoder/":214,"util":162}],204:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -71113,7 +71122,7 @@ function () {
 
   return BufferList;
 }();
-},{"buffer":166,"util":163}],208:[function(require,module,exports){
+},{"buffer":166,"util":162}],208:[function(require,module,exports){
 (function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
@@ -71829,8 +71838,8 @@ function config (name) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],216:[function(require,module,exports){
-arguments[4][159][0].apply(exports,arguments)
-},{"dup":159}],217:[function(require,module,exports){
+arguments[4][158][0].apply(exports,arguments)
+},{"dup":158}],217:[function(require,module,exports){
 // Currently in sync with Node.js lib/internal/util/types.js
 // https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
 
@@ -72580,7 +72589,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
         if (array) {
           str = str.split('\n').map(function(line) {
             return '  ' + line;
-          }).join('\n').slice(2);
+          }).join('\n').substr(2);
         } else {
           str = '\n' + str.split('\n').map(function(line) {
             return '   ' + line;
@@ -72597,7 +72606,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
     name = JSON.stringify('' + key);
     if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.slice(1, -1);
+      name = name.substr(1, name.length - 2);
       name = ctx.stylize(name, 'name');
     } else {
       name = name.replace(/'/g, "\\'")
@@ -72944,4 +72953,4 @@ module.exports = function whichTypedArray(value) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":161,"call-bind/callBound":167,"es-abstract/helpers/getOwnPropertyDescriptor":169,"for-each":171,"has-tostringtag/shams":177,"is-typed-array":184}]},{},[8]);
+},{"available-typed-arrays":160,"call-bind/callBound":167,"es-abstract/helpers/getOwnPropertyDescriptor":169,"for-each":171,"has-tostringtag/shams":177,"is-typed-array":184}]},{},[8]);

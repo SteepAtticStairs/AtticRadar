@@ -52,11 +52,8 @@ function load() {
     // load the surface fronts module
     require('../../surface_fronts/menu_item');
 
-    // const HurricaneFetcher = require('../../hurricanes/HurricaneFetcher');
-    // const HurricaneParser = require('../../hurricanes/HurricaneParser');
-    // new HurricaneFetcher((master_storms_list) => {
-    //     new HurricaneParser(master_storms_list);
-    // });
+    // load the hurricanes module
+    // require('../../hurricanes/menu_item');
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {

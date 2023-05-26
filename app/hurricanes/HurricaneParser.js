@@ -1,9 +1,9 @@
 class HurricaneParser {
-    constructor(master_storms_list) {
+    constructor(master_storms_list, callback) {
         this.master_storms_list = master_storms_list;
 
         this.parse_kmz(() => {
-            console.log(this.master_storms_list)
+            callback(this.master_storms_list);
         });
     }
 

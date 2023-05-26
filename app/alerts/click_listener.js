@@ -83,7 +83,7 @@ function click_listener(e) {
         popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
 
         if (parseInt(key) + 1 < e.features.length) {
-            popupItem += break_large;
+            // popupItem += break_large;
         } else {
             popupItem += break_small;
         }

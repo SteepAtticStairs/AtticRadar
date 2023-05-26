@@ -14,25 +14,26 @@ function _add_alert_layers(geojson) {
             data: geojson,
         })
         map.addLayer({
-            'id': `alertsLayerOutline`,
-            'type': 'line',
-            'source': `alertsSource`,
-            'paint': {
-                //#014385 blue
-                //#850101 red
-                'line-color': 'black',
-                'line-width': 8
-            }
-        });
-        map.addLayer({
             'id': `alertsLayer`,
             'type': 'line',
             'source': `alertsSource`,
             'paint': {
-                //#014385 blue
-                //#850101 red
-                'line-color': ['get', 'color'],
-                'line-width': 3
+                'line-color': [
+                    'case',
+                    ['==', ['get', 'type'], 'outline'],
+                    ['get', 'color'],
+                    ['==', ['get', 'type'], 'border'],
+                    'black',
+                    'rgba(0, 0, 0, 0)'
+                ],
+                'line-width': [
+                    'case',
+                    ['==', ['get', 'type'], 'outline'],
+                    3,
+                    ['==', ['get', 'type'], 'border'],
+                    8,
+                    0
+                ]
             }
         });
         map.addLayer({
@@ -113,6 +114,17 @@ function plot_alerts(alerts_data) {
     }
     alerts_data = _sort_by_priority(alerts_data);
     alerts_data = filter_alerts(alerts_data);
+
+    var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
+    duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
+    for (var i = 0; i < duplicate_features.length; i++) {
+        if (i % 2 === 0) {
+            duplicate_features[i].properties.type = 'border';
+        } else {
+            duplicate_features[i].properties.type = 'outline';
+        }
+    }
+    alerts_data.features = duplicate_features;
     console.log(alerts_data);
 
     _add_alert_layers(alerts_data);
