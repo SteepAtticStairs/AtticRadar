@@ -19,9 +19,6 @@ function load() {
     // initialize the alerts
     require('../../alerts/init_alerts');
 
-    // initialize the hurricanes module
-    require('../../hurricanes/entry');
-
     // initialize the METARs module
     require('../../metars/entry');
 
@@ -54,6 +51,12 @@ function load() {
 
     // load the surface fronts module
     require('../../surface_fronts/menu_item');
+
+    // const HurricaneFetcher = require('../../hurricanes/HurricaneFetcher');
+    // const HurricaneParser = require('../../hurricanes/HurricaneParser');
+    // new HurricaneFetcher((master_storms_list) => {
+    //     new HurricaneParser(master_storms_list);
+    // });
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
