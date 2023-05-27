@@ -3762,8 +3762,36 @@ class HurricaneFetcher {
     constructor(callback) {
         this.list_storms((master_storms_list) => {
             this.fetch_kmz(master_storms_list, (master_storms_list) => {
-                callback(master_storms_list);
+                this.fetch_forecast_text(master_storms_list, (master_storms_list) => {
+                    callback(master_storms_list);
+                });
             });
+        });
+    }
+
+    fetch_forecast_text(master_storms_list, callback) {
+        const jtwc_ids = Object.keys(master_storms_list.jtwc);
+
+        function _jtwc_fetch_from_ids(cb, index = 0) {
+            const id = jtwc_ids[index];
+            const formatted_id = id.slice(0, 4) + '20' + id.slice(4, 6); // convert to the correct format here
+
+            const forecast_text_url = `https://www.nrlmry.navy.mil/atcf_web/docs/current_storms/${formatted_id.toLowerCase()}.fst`;
+            fetch(ut.phpProxy + forecast_text_url)
+            .then(response => response.text())
+            .then(text => {
+                master_storms_list.jtwc[id].forecast_text = text;
+
+                if (index < jtwc_ids.length - 1) {
+                    _jtwc_fetch_from_ids(cb, index + 1);
+                } else {
+                    cb();
+                }
+            })
+        }
+
+        _jtwc_fetch_from_ids(() => {
+            callback(master_storms_list);
         });
     }
 
@@ -3773,7 +3801,7 @@ class HurricaneFetcher {
         function _jtwc_fetch_from_ids(cb, index = 0) {
             const id = jtwc_ids[index];
             const kmz_url = `https://www.metoc.navy.mil/jtwc/products/${id.toLowerCase()}.kmz`;
-            fetch(kmz_url)
+            fetch(ut.phpProxy + kmz_url)
             .then(response => response.blob())
             .then(blob => {
                 blob.lastModifiedDate = new Date();
@@ -3873,13 +3901,45 @@ class HurricaneFormatter {
 
 module.exports = HurricaneFormatter;
 },{"@turf/turf":99}],28:[function(require,module,exports){
+function _remove_empty_strings_from_array(array) {
+    return array.filter(line => { return line.trim() != '' });
+}
+
 class HurricaneParser {
     constructor(master_storms_list, callback) {
         this.master_storms_list = master_storms_list;
 
         this.parse_kmz(() => {
+            this.parse_forecast_text();
             callback(this.master_storms_list);
         });
+    }
+
+    parse_forecast_text() {
+        const keys = Object.keys(this.master_storms_list.jtwc);
+        for (var i = 0; i < keys.length; i++) {
+            const current_storm = keys[i];
+            const forecast_text = this.master_storms_list.jtwc[current_storm].forecast_text;
+
+            const lines = forecast_text.split('\n');
+            for (var n = 0; n < lines.length; n++) {
+                const line = lines[n];
+                const parts = _remove_empty_strings_from_array(line.split(/\s+/).map(elem => elem.replaceAll(',', '')));
+
+                if (parts.length != 0) {
+                    const obj = {
+                        'basin': parts[0], // WP
+                        'storm_index': parts[1], // 02
+                        'start_date': parts[2], // 2023052618
+                        'agency': parts[4], // JTWC
+                        'forecast_hour': parts[5], // 120
+                        'latitude': parts[6], // 227N
+                        'longitude': parts[7], // 1248E
+                        'storm_type_abbv': parts[10], // TY
+                    }
+                }
+            }
+        }
     }
 
     parse_kmz(callback) {
@@ -3954,6 +4014,8 @@ class HurricanePlotter {
 
         window.atticData.hurricane_layers = [];
         this.plot_all_storms();
+
+        console.log(this.master_storms_list)
     }
 
     plot_all_storms() {
@@ -3972,16 +4034,19 @@ class HurricanePlotter {
 
         for (var i = 0; i < forecast_points.features.length; i++) {
             const name = forecast_points.features[i].properties.name;
-            const matched = name.match(/(\d+\s*knots)/)[0];
-            const knots = parseInt(matched.replaceAll(' knots', ''));
+            const matched = name.match(/(\d+\s*knots)/)?.[0];
+            if (matched) {
+                const knots = parseInt(matched.replaceAll(' knots', ''));
 
-            const sshws_value = ut.getSSHWSVal(ut.knotsToMph(knots));
-            forecast_points.features[i].properties.sshws_value = sshws_value[0];
-            forecast_points.features[i].properties.sshws_abbv = sshws_value[2];
-            forecast_points.features[i].properties.sshws_color = sshws_value[1];
+                const sshws_value = ut.getSSHWSVal(ut.knotsToMph(knots));
+                forecast_points.features[i].properties.sshws_value = sshws_value[0];
+                forecast_points.features[i].properties.sshws_abbv = sshws_value[2];
+                forecast_points.features[i].properties.sshws_color = sshws_value[1];
 
-            forecast_points.features[i].properties.coordinates = forecast_points.features[i].geometry.coordinates;
+                forecast_points.features[i].properties.coordinates = forecast_points.features[i].geometry.coordinates;
+            }
         }
+        forecast_points.features = forecast_points.features.filter(feature => feature.properties.sshws_value != undefined);
 
         const layer_name = `forecast_points_${storm_id}_layer`;
         const label_layer_name = `forecast_points_label_${storm_id}_layer`;

@@ -1,10 +1,42 @@
+function _remove_empty_strings_from_array(array) {
+    return array.filter(line => { return line.trim() != '' });
+}
+
 class HurricaneParser {
     constructor(master_storms_list, callback) {
         this.master_storms_list = master_storms_list;
 
         this.parse_kmz(() => {
+            this.parse_forecast_text();
             callback(this.master_storms_list);
         });
+    }
+
+    parse_forecast_text() {
+        const keys = Object.keys(this.master_storms_list.jtwc);
+        for (var i = 0; i < keys.length; i++) {
+            const current_storm = keys[i];
+            const forecast_text = this.master_storms_list.jtwc[current_storm].forecast_text;
+
+            const lines = forecast_text.split('\n');
+            for (var n = 0; n < lines.length; n++) {
+                const line = lines[n];
+                const parts = _remove_empty_strings_from_array(line.split(/\s+/).map(elem => elem.replaceAll(',', '')));
+
+                if (parts.length != 0) {
+                    const obj = {
+                        'basin': parts[0], // WP
+                        'storm_index': parts[1], // 02
+                        'start_date': parts[2], // 2023052618
+                        'agency': parts[4], // JTWC
+                        'forecast_hour': parts[5], // 120
+                        'latitude': parts[6], // 227N
+                        'longitude': parts[7], // 1248E
+                        'storm_type_abbv': parts[10], // TY
+                    }
+                }
+            }
+        }
     }
 
     parse_kmz(callback) {

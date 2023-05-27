@@ -19,6 +19,8 @@ class HurricanePlotter {
 
         window.atticData.hurricane_layers = [];
         this.plot_all_storms();
+
+        console.log(this.master_storms_list)
     }
 
     plot_all_storms() {
@@ -37,16 +39,19 @@ class HurricanePlotter {
 
         for (var i = 0; i < forecast_points.features.length; i++) {
             const name = forecast_points.features[i].properties.name;
-            const matched = name.match(/(\d+\s*knots)/)[0];
-            const knots = parseInt(matched.replaceAll(' knots', ''));
+            const matched = name.match(/(\d+\s*knots)/)?.[0];
+            if (matched) {
+                const knots = parseInt(matched.replaceAll(' knots', ''));
 
-            const sshws_value = ut.getSSHWSVal(ut.knotsToMph(knots));
-            forecast_points.features[i].properties.sshws_value = sshws_value[0];
-            forecast_points.features[i].properties.sshws_abbv = sshws_value[2];
-            forecast_points.features[i].properties.sshws_color = sshws_value[1];
+                const sshws_value = ut.getSSHWSVal(ut.knotsToMph(knots));
+                forecast_points.features[i].properties.sshws_value = sshws_value[0];
+                forecast_points.features[i].properties.sshws_abbv = sshws_value[2];
+                forecast_points.features[i].properties.sshws_color = sshws_value[1];
 
-            forecast_points.features[i].properties.coordinates = forecast_points.features[i].geometry.coordinates;
+                forecast_points.features[i].properties.coordinates = forecast_points.features[i].geometry.coordinates;
+            }
         }
+        forecast_points.features = forecast_points.features.filter(feature => feature.properties.sshws_value != undefined);
 
         const layer_name = `forecast_points_${storm_id}_layer`;
         const label_layer_name = `forecast_points_label_${storm_id}_layer`;

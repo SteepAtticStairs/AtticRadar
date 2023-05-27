@@ -7,8 +7,36 @@ class HurricaneFetcher {
     constructor(callback) {
         this.list_storms((master_storms_list) => {
             this.fetch_kmz(master_storms_list, (master_storms_list) => {
-                callback(master_storms_list);
+                this.fetch_forecast_text(master_storms_list, (master_storms_list) => {
+                    callback(master_storms_list);
+                });
             });
+        });
+    }
+
+    fetch_forecast_text(master_storms_list, callback) {
+        const jtwc_ids = Object.keys(master_storms_list.jtwc);
+
+        function _jtwc_fetch_from_ids(cb, index = 0) {
+            const id = jtwc_ids[index];
+            const formatted_id = id.slice(0, 4) + '20' + id.slice(4, 6); // convert to the correct format here
+
+            const forecast_text_url = `https://www.nrlmry.navy.mil/atcf_web/docs/current_storms/${formatted_id.toLowerCase()}.fst`;
+            fetch(ut.phpProxy + forecast_text_url)
+            .then(response => response.text())
+            .then(text => {
+                master_storms_list.jtwc[id].forecast_text = text;
+
+                if (index < jtwc_ids.length - 1) {
+                    _jtwc_fetch_from_ids(cb, index + 1);
+                } else {
+                    cb();
+                }
+            })
+        }
+
+        _jtwc_fetch_from_ids(() => {
+            callback(master_storms_list);
         });
     }
 
@@ -18,7 +46,7 @@ class HurricaneFetcher {
         function _jtwc_fetch_from_ids(cb, index = 0) {
             const id = jtwc_ids[index];
             const kmz_url = `https://www.metoc.navy.mil/jtwc/products/${id.toLowerCase()}.kmz`;
-            fetch(kmz_url)
+            fetch(ut.phpProxy + kmz_url)
             .then(response => response.blob())
             .then(blob => {
                 blob.lastModifiedDate = new Date();
