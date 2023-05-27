@@ -2,6 +2,7 @@ const ut = require('../core/utils');
 const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
 const geojsonMerge = require('@mapbox/geojson-merge');
+const turf = require('@turf/turf');
 
 const url_prefix = 'https://steepatticstairs.net/AtticRadar/';
 
@@ -70,19 +71,7 @@ function _fetch_data() {
 }
 
 function _combine_dictionary_data(alerts_data) {
-    var polygonGeojson = {
-        "type": "FeatureCollection",
-        "features": []
-    }
-    function pushNewPolygon(geometry, properties) {
-        // this allows you to add properties for each cell
-        var objToPush = {
-            "type": "Feature",
-            "geometry": geometry,
-            "properties": properties
-        }
-        polygonGeojson.features.push(objToPush)
-    }
+    const polygons = [];
     for (var item in alerts_data.features) {
         if (alerts_data.features[item].geometry == null) {
             var affectedZones = alerts_data.features[item].properties.affectedZones;
@@ -99,13 +88,15 @@ function _combine_dictionary_data(alerts_data) {
                     zoneToPush = fire_zones[affectedZones[i]];
                 }
                 if (zoneToPush != undefined) {
-                    pushNewPolygon(zoneToPush.geometry, alerts_data.features[item].properties);
+                    const polygon = turf.feature(zoneToPush.geometry, alerts_data.features[item].properties);
+                    polygons.push(polygon);
                 }
             }
         }
     }
+    const polygon_collection = turf.featureCollection(polygons);
     var merged_geoJSON = geojsonMerge.merge([
-        polygonGeojson,
+        polygon_collection,
         alerts_data
     ]);
     return merged_geoJSON;
