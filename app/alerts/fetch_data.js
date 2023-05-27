@@ -1,6 +1,7 @@
 const ut = require('../core/utils');
 const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
+const geojsonMerge = require('@mapbox/geojson-merge');
 
 const url_prefix = 'https://steepatticstairs.net/AtticRadar/';
 
@@ -23,14 +24,14 @@ var headers = new Headers();
 headers.append('pragma', 'no-cache');
 headers.append('cache-control', 'no-cache');
 
-function _fetch_alerts_data() {
+function _fetch_alerts_data(callback) {
     fetch(noaa_alerts_url, {
         cache: 'no-store',
         // headers: headers
     })
     .then(response => response.json())
     .then(alerts_data => {
-        plot_alerts(alerts_data);
+        plot_alerts(alerts_data, callback);
     })
 }
 
@@ -57,12 +58,57 @@ function _fetch_data() {
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
-        _fetch_zone_dictionaries(() => {
-            _fetch_alerts_data();
+        _fetch_alerts_data((alerts_data) => {
+            _fetch_zone_dictionaries(() => {
+                const merged_geoJSON = _combine_dictionary_data(alerts_data);
+                map.getSource('alertsSource').setData(merged_geoJSON);
+            });
         })
     } else {
         _fetch_alerts_data();
     }
+}
+
+function _combine_dictionary_data(alerts_data) {
+    var polygonGeojson = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+    function pushNewPolygon(geometry, properties) {
+        // this allows you to add properties for each cell
+        var objToPush = {
+            "type": "Feature",
+            "geometry": geometry,
+            "properties": properties
+        }
+        polygonGeojson.features.push(objToPush)
+    }
+    for (var item in alerts_data.features) {
+        if (alerts_data.features[item].geometry == null) {
+            var affectedZones = alerts_data.features[item].properties.affectedZones;
+            for (var i in affectedZones) {
+                var zoneToPush;
+                if (affectedZones[i].includes('forecast')) {
+                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
+                    zoneToPush = forecast_zones[affectedZones[i]];
+                } else if (affectedZones[i].includes('county')) {
+                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
+                    zoneToPush = county_zones[affectedZones[i]];
+                } else if (affectedZones[i].includes('fire')) {
+                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
+                    zoneToPush = fire_zones[affectedZones[i]];
+                }
+                if (zoneToPush != undefined) {
+                    pushNewPolygon(zoneToPush.geometry, alerts_data.features[item].properties);
+                }
+            }
+        }
+    }
+    var merged_geoJSON = geojsonMerge.merge([
+        polygonGeojson,
+        alerts_data
+    ]);
+    return merged_geoJSON;
 }
 
 module.exports = {

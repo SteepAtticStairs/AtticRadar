@@ -1017,6 +1017,7 @@ module.exports = get_polygon_colors;
 const ut = require('../core/utils');
 const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
+const geojsonMerge = require('@mapbox/geojson-merge');
 
 const url_prefix = 'https://steepatticstairs.net/AtticRadar/';
 
@@ -1039,14 +1040,14 @@ var headers = new Headers();
 headers.append('pragma', 'no-cache');
 headers.append('cache-control', 'no-cache');
 
-function _fetch_alerts_data() {
+function _fetch_alerts_data(callback) {
     fetch(noaa_alerts_url, {
         cache: 'no-store',
         // headers: headers
     })
     .then(response => response.json())
     .then(alerts_data => {
-        plot_alerts(alerts_data);
+        plot_alerts(alerts_data, callback);
     })
 }
 
@@ -1073,18 +1074,63 @@ function _fetch_data() {
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
-        _fetch_zone_dictionaries(() => {
-            _fetch_alerts_data();
+        _fetch_alerts_data((alerts_data) => {
+            _fetch_zone_dictionaries(() => {
+                const merged_geoJSON = _combine_dictionary_data(alerts_data);
+                map.getSource('alertsSource').setData(merged_geoJSON);
+            });
         })
     } else {
         _fetch_alerts_data();
     }
 }
 
+function _combine_dictionary_data(alerts_data) {
+    var polygonGeojson = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+    function pushNewPolygon(geometry, properties) {
+        // this allows you to add properties for each cell
+        var objToPush = {
+            "type": "Feature",
+            "geometry": geometry,
+            "properties": properties
+        }
+        polygonGeojson.features.push(objToPush)
+    }
+    for (var item in alerts_data.features) {
+        if (alerts_data.features[item].geometry == null) {
+            var affectedZones = alerts_data.features[item].properties.affectedZones;
+            for (var i in affectedZones) {
+                var zoneToPush;
+                if (affectedZones[i].includes('forecast')) {
+                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
+                    zoneToPush = forecast_zones[affectedZones[i]];
+                } else if (affectedZones[i].includes('county')) {
+                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
+                    zoneToPush = county_zones[affectedZones[i]];
+                } else if (affectedZones[i].includes('fire')) {
+                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
+                    zoneToPush = fire_zones[affectedZones[i]];
+                }
+                if (zoneToPush != undefined) {
+                    pushNewPolygon(zoneToPush.geometry, alerts_data.features[item].properties);
+                }
+            }
+        }
+    }
+    var merged_geoJSON = geojsonMerge.merge([
+        polygonGeojson,
+        alerts_data
+    ]);
+    return merged_geoJSON;
+}
+
 module.exports = {
     _fetch_data
 }
-},{"../core/utils":25,"./plot_alerts":7,"pako":115}],5:[function(require,module,exports){
+},{"../core/utils":25,"./plot_alerts":7,"@mapbox/geojson-merge":97,"pako":115}],5:[function(require,module,exports){
 const warnings_whitelist = [
     'Tornado Warning',
     'Severe Thunderstorm Warning',
@@ -1160,23 +1206,23 @@ $(icon_elem).on('click', function () {
         $(icon_elem).addClass('icon-blue');
         $(icon_elem).removeClass('icon-grey');
 
-        const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
-        const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
-        const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
-        const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
-        const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
-        const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
-        if (
-            (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches ||
-            window.atticData.show_statements != show_statements || window.atticData.show_advisories != show_advisories ||
-            window.atticData.show_other != show_other || window.atticData.EUP_checked != EUP_checked) 
-            &&
-            (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined ||
-            window.atticData.show_statements != undefined || window.atticData.show_advisories != undefined ||
-            window.atticData.show_other != undefined || window.atticData.EUP_checked != undefined)
-        ) {
-            fetch_data._fetch_data();
-        }
+        // const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
+        // const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
+        // const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+        // const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
+        // const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
+        // const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
+        // if (
+        //     (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches ||
+        //     window.atticData.show_statements != show_statements || window.atticData.show_advisories != show_advisories ||
+        //     window.atticData.show_other != show_other || window.atticData.EUP_checked != EUP_checked) 
+        //     &&
+        //     (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined ||
+        //     window.atticData.show_statements != undefined || window.atticData.show_advisories != undefined ||
+        //     window.atticData.show_other != undefined || window.atticData.EUP_checked != undefined)
+        // ) {
+        //     fetch_data._fetch_data();
+        // }
 
         if (map.getLayer('alertsLayer')) {
             // map.getCanvas().style.cursor = 'crosshair';
@@ -1207,7 +1253,6 @@ const get_polygon_colors = require('./colors/polygon_colors');
 const set_layer_order = require('../core/map/setLayerOrder');
 const click_listener = require('./click_listener');
 const filter_alerts = require('./filter_alerts');
-const geojsonMerge = require('@mapbox/geojson-merge');
 const map = require('../core/map/map');
 
 function _add_alert_layers(geojson) {
@@ -1264,61 +1309,21 @@ function _add_alert_layers(geojson) {
     }
 }
 
-function _combine_dictionary_data(alerts_data) {
-    var polygonGeojson = {
-        "type": "FeatureCollection",
-        "features": []
-    }
-    function pushNewPolygon(geometry, properties) {
-        // this allows you to add properties for each cell
-        var objToPush = {
-            "type": "Feature",
-            "geometry": geometry,
-            "properties": properties
-        }
-        polygonGeojson.features.push(objToPush)
-    }
-    for (var item in alerts_data.features) {
-        if (alerts_data.features[item].geometry == null) {
-            var affectedZones = alerts_data.features[item].properties.affectedZones;
-            for (var i in affectedZones) {
-                var zoneToPush;
-                if (affectedZones[i].includes('forecast')) {
-                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
-                    zoneToPush = forecast_zones[affectedZones[i]];
-                } else if (affectedZones[i].includes('county')) {
-                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
-                    zoneToPush = county_zones[affectedZones[i]];
-                } else if (affectedZones[i].includes('fire')) {
-                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
-                    zoneToPush = fire_zones[affectedZones[i]];
-                }
-                if (zoneToPush != undefined) {
-                    pushNewPolygon(zoneToPush.geometry, alerts_data.features[item].properties);
-                }
-            }
-        }
-    }
-    var merged_geoJSON = geojsonMerge.merge([
-        polygonGeojson,
-        alerts_data
-    ]);
-    return merged_geoJSON;
-}
-
 function _sort_by_priority(data) {
     data.features = data.features.sort((a, b) => b.properties.priority - a.properties.priority);
     return data;
 }
 
-function plot_alerts(alerts_data) {
+function plot_alerts(alerts_data, callback) {
+    if (callback == undefined) { callback = function() {} }
+
     for (var item in alerts_data.features) {
         var gpc = get_polygon_colors(alerts_data.features[item].properties.event); // gpc = get polygon colors
         alerts_data.features[item].properties.color = gpc.color;
         alerts_data.features[item].properties.priority = parseInt(gpc.priority);
     }
     alerts_data = _sort_by_priority(alerts_data);
-    alerts_data = filter_alerts(alerts_data);
+    // alerts_data = filter_alerts(alerts_data);
 
     var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
     duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
@@ -1334,14 +1339,13 @@ function plot_alerts(alerts_data) {
 
     _add_alert_layers(alerts_data);
 
-    const merged_geoJSON = _combine_dictionary_data(alerts_data);
-    map.getSource('alertsSource').setData(merged_geoJSON);
-
     set_layer_order();
+
+    callback(alerts_data);
 }
 
 module.exports = plot_alerts;
-},{"../core/map/map":9,"../core/map/setLayerOrder":11,"./click_listener":1,"./colors/polygon_colors":3,"./filter_alerts":5,"@mapbox/geojson-merge":97}],8:[function(require,module,exports){
+},{"../core/map/map":9,"../core/map/setLayerOrder":11,"./click_listener":1,"./colors/polygon_colors":3,"./filter_alerts":5}],8:[function(require,module,exports){
 /*
 * This file is the entry point for the project - everything starts here.
 */
@@ -4196,6 +4200,8 @@ const map = require('../core/map/map');
 const ut = require('../core/utils');
 const setLayerOrder = require('../core/map/setLayerOrder');
 const luxon = require('luxon');
+
+// https://luker.org/resources/grlevelx/placefiles/
 
 // const url = `${ut.phpProxy}http://placefilenation.com/Placefiles/20lightning.php`;
 const url = `${ut.phpProxy}https://saratoga-weather.org/USA-blitzortung/placefile.txt`;

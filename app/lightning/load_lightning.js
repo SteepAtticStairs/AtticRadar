@@ -4,6 +4,8 @@ const ut = require('../core/utils');
 const setLayerOrder = require('../core/map/setLayerOrder');
 const luxon = require('luxon');
 
+// https://luker.org/resources/grlevelx/placefiles/
+
 // const url = `${ut.phpProxy}http://placefilenation.com/Placefiles/20lightning.php`;
 const url = `${ut.phpProxy}https://saratoga-weather.org/USA-blitzortung/placefile.txt`;
 
