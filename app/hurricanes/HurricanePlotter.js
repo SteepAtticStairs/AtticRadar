@@ -1,6 +1,18 @@
 const map = require('../core/map/map');
 const ut = require('../core/utils');
 
+function _map_click(e) {
+    var coords = JSON.parse(e.features[0].properties.coordinates);
+    if (coords.length == 3) {
+        coords.pop();
+    }
+
+    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+        .setLngLat(coords)
+        .setHTML(e.features[0].properties.description)
+        .addTo(map);
+}
+
 class HurricanePlotter {
     constructor(master_storms_list) {
         this.master_storms_list = master_storms_list;
@@ -32,6 +44,8 @@ class HurricanePlotter {
             forecast_points.features[i].properties.sshws_value = sshws_value[0];
             forecast_points.features[i].properties.sshws_abbv = sshws_value[2];
             forecast_points.features[i].properties.sshws_color = sshws_value[1];
+
+            forecast_points.features[i].properties.coordinates = forecast_points.features[i].geometry.coordinates;
         }
 
         const layer_name = `forecast_points_${storm_id}_layer`;
@@ -67,6 +81,15 @@ class HurricanePlotter {
                 'text-ignore-placement': true,
             }
         });
+
+        map.on('mouseover', label_layer_name, function(e) {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseout', label_layer_name, function(e) {
+            map.getCanvas().style.cursor = '';
+        });
+
+        // map.on('click', label_layer_name, _map_click);
     }
 
     _plot_forecast_track(storm_id) {
