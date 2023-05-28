@@ -1,8 +1,7 @@
 const ut = require('../core/utils');
 const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
-const geojsonMerge = require('@mapbox/geojson-merge');
-const turf = require('@turf/turf');
+const combine_dictionary_data = require('./combine_dictionary_data');
 
 const url_prefix = 'https://steepatticstairs.net/AtticRadar/';
 
@@ -63,7 +62,7 @@ function _fetch_data(callback) {
 
         _fetch_alerts_data((alerts_data) => {
             _fetch_zone_dictionaries(() => {
-                const merged_geoJSON = _combine_dictionary_data(alerts_data);
+                const merged_geoJSON = combine_dictionary_data(alerts_data);
                 map.getSource('alertsSource').setData(merged_geoJSON);
 
                 callback();
@@ -71,44 +70,12 @@ function _fetch_data(callback) {
         })
     } else {
         _fetch_alerts_data((alerts_data) => {
-            const merged_geoJSON = _combine_dictionary_data(alerts_data);
+            const merged_geoJSON = combine_dictionary_data(alerts_data);
             map.getSource('alertsSource').setData(merged_geoJSON);
 
             callback();
         })
     }
-}
-
-function _combine_dictionary_data(alerts_data) {
-    const polygons = [];
-    for (var item in alerts_data.features) {
-        if (alerts_data.features[item].geometry == null) {
-            var affectedZones = alerts_data.features[item].properties.affectedZones;
-            for (var i in affectedZones) {
-                var zoneToPush;
-                if (affectedZones[i].includes('forecast')) {
-                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
-                    zoneToPush = forecast_zones[affectedZones[i]];
-                } else if (affectedZones[i].includes('county')) {
-                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
-                    zoneToPush = county_zones[affectedZones[i]];
-                } else if (affectedZones[i].includes('fire')) {
-                    affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
-                    zoneToPush = fire_zones[affectedZones[i]];
-                }
-                if (zoneToPush != undefined) {
-                    const polygon = turf.feature(zoneToPush.geometry, alerts_data.features[item].properties);
-                    polygons.push(polygon);
-                }
-            }
-        }
-    }
-    const polygon_collection = turf.featureCollection(polygons);
-    var merged_geoJSON = geojsonMerge.merge([
-        polygon_collection,
-        alerts_data
-    ]);
-    return merged_geoJSON;
 }
 
 module.exports = {

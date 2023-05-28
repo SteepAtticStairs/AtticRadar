@@ -8,42 +8,28 @@
     "package": "npx electron-packager . --overwrite --icon ./icons/icon.icns"
   },
   "dependencies": {
-    "@mapbox/geojson-merge": "^1.1.1",
     "@turf/turf": "^6.5.0",
     "aewx-metar-parser": "^1.0.0",
     "brfs": "^2.0.2",
     "bufferpack": "^0.0.6",
-    "canvas": "^2.9.1",
     "cheap-ruler": "^3.0.2",
     "chroma-js": "^2.4.2",
-    "geojson-geometries-lookup": "^0.5.0",
     "glslify-require": "^1.1.0",
     "luxon": "^3.0.3",
-    "metar": "^1.0.0",
     "metar-plot": "^2.0.0",
     "pako": "^2.1.0",
     "papaparse": "^5.4.1",
     "pngjs": "^6.0.0",
-    "proj4": "^2.8.0",
     "seek-bzip": "^2.0.0",
     "shelljs": "^0.8.5",
-    "simplify-geojson": "^1.0.5",
-    "webworkify": "^1.5.0",
-    "zlibjs": "^0.3.1"
+    "webworkify": "^1.5.0"
   },
   "devDependencies": {
-    "del": "^6.0.0",
     "electron": "^21.2.0",
     "electron-packager": "^17.0.0",
     "eslint": "^8.0.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^39.1.0",
-    "glob": "^8.0.1",
-    "gulp": "^4.0.2",
-    "gulp-jsdoc3": "^3.0.0",
-    "jsdoc": "^3.6.10",
-    "jsdoc-to-markdown": "^7.1.1"
+    "eslint-plugin-import": "^2.22.1"
   },
   "engines": {
     "node": ">=13.0.0"
