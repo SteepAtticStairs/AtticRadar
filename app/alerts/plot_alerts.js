@@ -66,13 +66,18 @@ function _sort_by_priority(data) {
 function plot_alerts(alerts_data, callback) {
     if (callback == undefined) { callback = function() {} }
 
+    // const already_data = map.getSource('alertsSource')?._data;
+    // if (already_data != undefined) {
+    //     alerts_data = already_data;
+    // }
+
     for (var item in alerts_data.features) {
         var gpc = get_polygon_colors(alerts_data.features[item].properties.event); // gpc = get polygon colors
         alerts_data.features[item].properties.color = gpc.color;
         alerts_data.features[item].properties.priority = parseInt(gpc.priority);
     }
     alerts_data = _sort_by_priority(alerts_data);
-    // alerts_data = filter_alerts(alerts_data);
+    alerts_data = filter_alerts(alerts_data);
 
     var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
     duplicate_features = JSON.parse(JSON.stringify(duplicate_features));

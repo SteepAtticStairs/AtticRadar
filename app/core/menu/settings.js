@@ -82,7 +82,7 @@ function settingsOption(index) {
             fetch_alerts_data._fetch_data();
         }
     }
-    armFunctions.toggleswitchFunctions($('#armrEUPBtnSwitchElem'), _reload_alerts, _reload_alerts);
+    // armFunctions.toggleswitchFunctions($('#armrEUPBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrStatementsBtnSwitchElem'), _reload_alerts, _reload_alerts);

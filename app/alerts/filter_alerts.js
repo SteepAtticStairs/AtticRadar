@@ -7,10 +7,8 @@ const warnings_whitelist = [
 ];
 
 function filter_alerts(alerts_data) {
-    const alerts_whitelist = [];
-
-    const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
-    window.atticData.EUP_checked = EUP_checked;
+    // const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
+    // window.atticData.EUP_checked = EUP_checked;
     const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
     window.atticData.show_warnings = show_warnings;
     const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
@@ -22,40 +20,42 @@ function filter_alerts(alerts_data) {
     const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
     window.atticData.show_other = show_other;
 
-    if (show_warnings) {
-        alerts_whitelist.push(...warnings_whitelist);
-    }
+    function _check_alert(current_alert_name, has_geometry, boolean_array) {
+        var should_return = false;
 
-    if (EUP_checked) {
-        alerts_data.features = alerts_data.features.filter((feature) => {
-            const current_alert_geometry = feature.geometry;
-            return current_alert_geometry != null;
-        });
+        if (boolean_array[0] && current_alert_name.includes('Warning') && current_alert_name != 'Flood Warning') {
+            if (has_geometry) should_return = true;
+        }
+        if (boolean_array[1] && current_alert_name.includes('Statement')) {
+            if (has_geometry) should_return = true;
+        }
+        if (boolean_array[2] && current_alert_name.includes('Watch')) {
+            should_return = true;
+        }
+        if (boolean_array[3] && current_alert_name.includes('Advisory')) {
+            should_return = true;
+        }
+
+        return should_return;
     }
-    
 
     alerts_data.features = alerts_data.features.filter((feature) => {
         const current_alert_name = feature.properties.event;
+        const has_geometry = feature.geometry != null;
 
-        if (show_watches && current_alert_name.includes('Watch') && !alerts_whitelist.includes(current_alert_name)) {
-            alerts_whitelist.push(current_alert_name);
+        var should_return = _check_alert(current_alert_name, has_geometry, [show_warnings, show_statements, show_watches, show_advisories]);
+        if (show_other) {
+            // this simulates a check on all other alert filter parameters.
+            // essentially, if the current alert wouldn't be shown if everything
+            // else was enabled, in other words, if every other option box was checked,
+            // it's an "other" alert.
+            if (!_check_alert(current_alert_name, has_geometry, [true, true, true, true])) {
+                should_return = true;
+            }
         }
-        if (show_statements && current_alert_name.includes('Statement') && !alerts_whitelist.includes(current_alert_name)) {
-            alerts_whitelist.push(current_alert_name);
-        }
-        if (show_advisories && current_alert_name.includes('Advisory') && !alerts_whitelist.includes(current_alert_name)) {
-            alerts_whitelist.push(current_alert_name);
-        }
-        if (
-            show_other && 
-            (!current_alert_name.includes('Watch') && !current_alert_name.includes('Statement') && !current_alert_name.includes('Advisory')) &&
-            !alerts_whitelist.includes(current_alert_name)
-        ) {
-            alerts_whitelist.push(current_alert_name);
-        }
-
-        return alerts_whitelist.includes(current_alert_name);
+        return should_return;
     });
+
     return alerts_data;
 }
 

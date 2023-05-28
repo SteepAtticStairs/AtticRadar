@@ -55,7 +55,9 @@ function _fetch_zone_dictionaries(callback, index = 0) {
     })
 }
 
-function _fetch_data() {
+function _fetch_data(callback) {
+    if (callback == undefined) { callback = function() {} }
+
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
@@ -63,10 +65,17 @@ function _fetch_data() {
             _fetch_zone_dictionaries(() => {
                 const merged_geoJSON = _combine_dictionary_data(alerts_data);
                 map.getSource('alertsSource').setData(merged_geoJSON);
+
+                callback();
             });
         })
     } else {
-        _fetch_alerts_data();
+        _fetch_alerts_data((alerts_data) => {
+            const merged_geoJSON = _combine_dictionary_data(alerts_data);
+            map.getSource('alertsSource').setData(merged_geoJSON);
+
+            callback();
+        })
     }
 }
 

@@ -1071,7 +1071,9 @@ function _fetch_zone_dictionaries(callback, index = 0) {
     })
 }
 
-function _fetch_data() {
+function _fetch_data(callback) {
+    if (callback == undefined) { callback = function() {} }
+
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
@@ -1079,10 +1081,17 @@ function _fetch_data() {
             _fetch_zone_dictionaries(() => {
                 const merged_geoJSON = _combine_dictionary_data(alerts_data);
                 map.getSource('alertsSource').setData(merged_geoJSON);
+
+                callback();
             });
         })
     } else {
-        _fetch_alerts_data();
+        _fetch_alerts_data((alerts_data) => {
+            const merged_geoJSON = _combine_dictionary_data(alerts_data);
+            map.getSource('alertsSource').setData(merged_geoJSON);
+
+            callback();
+        })
     }
 }
 
@@ -1131,10 +1140,8 @@ const warnings_whitelist = [
 ];
 
 function filter_alerts(alerts_data) {
-    const alerts_whitelist = [];
-
-    const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
-    window.atticData.EUP_checked = EUP_checked;
+    // const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
+    // window.atticData.EUP_checked = EUP_checked;
     const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
     window.atticData.show_warnings = show_warnings;
     const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
@@ -1146,40 +1153,42 @@ function filter_alerts(alerts_data) {
     const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
     window.atticData.show_other = show_other;
 
-    if (show_warnings) {
-        alerts_whitelist.push(...warnings_whitelist);
-    }
+    function _check_alert(current_alert_name, has_geometry, boolean_array) {
+        var should_return = false;
 
-    if (EUP_checked) {
-        alerts_data.features = alerts_data.features.filter((feature) => {
-            const current_alert_geometry = feature.geometry;
-            return current_alert_geometry != null;
-        });
+        if (boolean_array[0] && current_alert_name.includes('Warning') && current_alert_name != 'Flood Warning') {
+            if (has_geometry) should_return = true;
+        }
+        if (boolean_array[1] && current_alert_name.includes('Statement')) {
+            if (has_geometry) should_return = true;
+        }
+        if (boolean_array[2] && current_alert_name.includes('Watch')) {
+            should_return = true;
+        }
+        if (boolean_array[3] && current_alert_name.includes('Advisory')) {
+            should_return = true;
+        }
+
+        return should_return;
     }
-    
 
     alerts_data.features = alerts_data.features.filter((feature) => {
         const current_alert_name = feature.properties.event;
+        const has_geometry = feature.geometry != null;
 
-        if (show_watches && current_alert_name.includes('Watch') && !alerts_whitelist.includes(current_alert_name)) {
-            alerts_whitelist.push(current_alert_name);
+        var should_return = _check_alert(current_alert_name, has_geometry, [show_warnings, show_statements, show_watches, show_advisories]);
+        if (show_other) {
+            // this simulates a check on all other alert filter parameters.
+            // essentially, if the current alert wouldn't be shown if everything
+            // else was enabled, in other words, if every other option box was checked,
+            // it's an "other" alert.
+            if (!_check_alert(current_alert_name, has_geometry, [true, true, true, true])) {
+                should_return = true;
+            }
         }
-        if (show_statements && current_alert_name.includes('Statement') && !alerts_whitelist.includes(current_alert_name)) {
-            alerts_whitelist.push(current_alert_name);
-        }
-        if (show_advisories && current_alert_name.includes('Advisory') && !alerts_whitelist.includes(current_alert_name)) {
-            alerts_whitelist.push(current_alert_name);
-        }
-        if (
-            show_other && 
-            (!current_alert_name.includes('Watch') && !current_alert_name.includes('Statement') && !current_alert_name.includes('Advisory')) &&
-            !alerts_whitelist.includes(current_alert_name)
-        ) {
-            alerts_whitelist.push(current_alert_name);
-        }
-
-        return alerts_whitelist.includes(current_alert_name);
+        return should_return;
     });
+
     return alerts_data;
 }
 
@@ -1197,33 +1206,36 @@ $(icon_elem).on('click', function () {
         $(icon_elem).addClass('icon-blue');
         $(icon_elem).removeClass('icon-grey');
 
-        // const EUP_checked = $('#armrEUPBtnSwitchElem').is(':checked');
-        // const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
-        // const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
-        // const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
-        // const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
-        // const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
-        // if (
-        //     (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches ||
-        //     window.atticData.show_statements != show_statements || window.atticData.show_advisories != show_advisories ||
-        //     window.atticData.show_other != show_other || window.atticData.EUP_checked != EUP_checked) 
-        //     &&
-        //     (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined ||
-        //     window.atticData.show_statements != undefined || window.atticData.show_advisories != undefined ||
-        //     window.atticData.show_other != undefined || window.atticData.EUP_checked != undefined)
-        // ) {
-        //     fetch_data._fetch_data();
-        // }
+        // this checks if an options switch has been changed while the alerts are disabled,
+        // but they've already been initialized, so they would just be re-shown otherwise
+        const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
+        const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
+        const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
+        const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
+        const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
+        if (
+            (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches ||
+            window.atticData.show_statements != show_statements || window.atticData.show_advisories != show_advisories ||
+            window.atticData.show_other != show_other)
+            &&
+            (window.atticData.show_warnings != undefined || window.atticData.show_watches != undefined ||
+            window.atticData.show_statements != undefined || window.atticData.show_advisories != undefined ||
+            window.atticData.show_other != undefined)
+        ) {
+            fetch_data._fetch_data(() => {
+                if (map.getLayer('alertsLayer')) {
+                    // map.getCanvas().style.cursor = 'crosshair';
+                    map.on('click', 'alertsLayerFill', click_listener);
 
-        if (map.getLayer('alertsLayer')) {
-            // map.getCanvas().style.cursor = 'crosshair';
-            map.on('click', 'alertsLayerFill', click_listener);
+                    map.setLayoutProperty('alertsLayer', 'visibility', 'visible');
+                    map.setLayoutProperty('alertsLayerFill', 'visibility', 'visible');
+                    // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
 
-            map.setLayoutProperty('alertsLayer', 'visibility', 'visible');
-            map.setLayoutProperty('alertsLayerFill', 'visibility', 'visible');
-            // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
-
-            set_layer_order();
+                    set_layer_order();
+                }/* else {
+                    fetch_data._fetch_data();
+                }*/
+            });
         } else {
             fetch_data._fetch_data();
         }
@@ -1308,13 +1320,18 @@ function _sort_by_priority(data) {
 function plot_alerts(alerts_data, callback) {
     if (callback == undefined) { callback = function() {} }
 
+    // const already_data = map.getSource('alertsSource')?._data;
+    // if (already_data != undefined) {
+    //     alerts_data = already_data;
+    // }
+
     for (var item in alerts_data.features) {
         var gpc = get_polygon_colors(alerts_data.features[item].properties.event); // gpc = get polygon colors
         alerts_data.features[item].properties.color = gpc.color;
         alerts_data.features[item].properties.priority = parseInt(gpc.priority);
     }
     alerts_data = _sort_by_priority(alerts_data);
-    // alerts_data = filter_alerts(alerts_data);
+    alerts_data = filter_alerts(alerts_data);
 
     var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
     duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
@@ -2458,7 +2475,7 @@ function settingsOption(index) {
             fetch_alerts_data._fetch_data();
         }
     }
-    armFunctions.toggleswitchFunctions($('#armrEUPBtnSwitchElem'), _reload_alerts, _reload_alerts);
+    // armFunctions.toggleswitchFunctions($('#armrEUPBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrStatementsBtnSwitchElem'), _reload_alerts, _reload_alerts);
