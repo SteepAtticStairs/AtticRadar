@@ -17,6 +17,7 @@ $(icon_elem).on('click', function () {
         const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
         const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
         const show_other = $('#armrOtherBtnSwitchElem').is(':checked');
+
         if (
             (window.atticData.show_warnings != show_warnings || window.atticData.show_watches != show_watches ||
             window.atticData.show_statements != show_statements || window.atticData.show_advisories != show_advisories ||
@@ -36,12 +37,19 @@ $(icon_elem).on('click', function () {
                     // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'visible');
 
                     set_layer_order();
-                }/* else {
-                    fetch_data._fetch_data();
-                }*/
+                }
             });
         } else {
-            fetch_data._fetch_data();
+            if (map.getLayer('alertsLayer')) {
+                map.on('click', 'alertsLayerFill', click_listener);
+
+                map.setLayoutProperty('alertsLayer', 'visibility', 'visible');
+                map.setLayoutProperty('alertsLayerFill', 'visibility', 'visible');
+
+                set_layer_order();
+            }else {
+                fetch_data._fetch_data();
+            }
         }
     } else if ($(icon_elem).hasClass('icon-blue')) {
         $(icon_elem).removeClass('icon-blue');

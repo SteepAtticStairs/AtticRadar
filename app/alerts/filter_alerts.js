@@ -12,7 +12,7 @@ function filter_alerts(alerts_data) {
     const show_warnings = $('#armrWarningsBtnSwitchElem').is(':checked');
     window.atticData.show_warnings = show_warnings;
     const show_watches = $('#armrWatchesBtnSwitchElem').is(':checked');
-    window.atticData.show_warnings = show_watches;
+    window.atticData.show_watches = show_watches;
     const show_statements = $('#armrStatementsBtnSwitchElem').is(':checked');
     window.atticData.show_statements = show_statements;
     const show_advisories = $('#armrAdvisoriesBtnSwitchElem').is(':checked');
