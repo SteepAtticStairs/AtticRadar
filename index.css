@@ -522,6 +522,7 @@ https://tobiasahlin.com/spinkit/
     line-height: 17px;
     background-color: rgba(105, 105, 105, 0.5);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgb(49, 49, 49);
     border-radius: 15px;
     color: white;
