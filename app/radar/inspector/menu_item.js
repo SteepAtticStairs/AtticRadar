@@ -15,6 +15,18 @@ $(iconElem).on('click', function() {
         $('#colorPickerText').hide();
         $('#colorPickerBorder').css('display', 'flex');
 
+        // $(document).on('mousemove', function (e) {
+        //     $('#colorPickerBorder').css({
+        //         left: e.pageX - $('#colorPickerBorder').height() / 2,
+        //         top: e.pageY - $('#colorPickerBorder').width() / 2,
+        //     });
+        //     $('#colorPicker').css({
+        //         left: e.pageX - $('#colorPicker').height() / 2,
+        //         top: e.pageY - $('#colorPicker').width() / 2,
+        //     });
+        //     $('#colorPickerBorder,#colorPicker').css('bottom', '');
+        // });
+
         // if (window.l3rad != undefined) {
         //     if (window.prevl3rad != window.l3rad) {
         //         window.prevl3rad = window.l3rad;

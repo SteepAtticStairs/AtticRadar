@@ -472,6 +472,7 @@ https://tobiasahlin.com/spinkit/
 }
 #verticalLine {
     border-left: 3px solid rgb(125, 125, 125);
+    border-radius: 25px;
     outline: 1px solid black;
 
     height: calc(100% + 25px);
@@ -482,6 +483,7 @@ https://tobiasahlin.com/spinkit/
 }
 #horizontalLine {
     border-top: 3px solid rgb(125, 125, 125);
+    border-radius: 25px;
     outline: 1px solid black;
 
     width: calc(100% + 25px);
@@ -489,6 +491,22 @@ https://tobiasahlin.com/spinkit/
     z-index: 1000;
     pointer-events: none;
     display: none;
+}
+#radarCenterLine {
+    border-left: 3px solid red;
+    border-radius: 25px;
+    outline: 1px solid black;
+
+    height: 100%;
+    top: -50%;
+
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    display: none;
+
+    transform: rotate(45deg);
+    transform-origin: 50% 100%;
 }
 #colorPickerText {
     text-align: center;

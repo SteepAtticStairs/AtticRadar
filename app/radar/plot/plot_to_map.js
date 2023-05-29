@@ -267,6 +267,8 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         window.atticData.current_RadarUpdater = current_RadarUpdater;
         current_RadarUpdater.enable();
     }
+
+    window.atticData.current_nexrad_location = nexrad_factory.get_location();
 }
 
 module.exports = plot_to_map;

@@ -745,7 +745,7 @@ function setMapMargin(topOrBottom, value) {
     } else if (topOrBottom == 'bottom') {
         $('#map').css('bottom', value);
         $('.colorPickerCircle').css('bottom', value);
-        $('#colorPickerText').css('bottom', value - 70);
+        $('#colorPickerText').css('bottom', value - 80);
     }
     map.resize();
 

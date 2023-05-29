@@ -3697,7 +3697,7 @@ function setMapMargin(topOrBottom, value) {
     } else if (topOrBottom == 'bottom') {
         $('#map').css('bottom', value);
         $('.colorPickerCircle').css('bottom', value);
-        $('#colorPickerText').css('bottom', value - 70);
+        $('#colorPickerText').css('bottom', value - 80);
     }
     map.resize();
 
@@ -14185,6 +14185,7 @@ function formatValue(color, cmin, cmax) {
 
 module.exports = formatValue;
 },{"../../core/utils":26}],43:[function(require,module,exports){
+const turf = require('@turf/turf');
 const formatValue = require('./format_value');
 
 function readPixels(gl, x, y) {
@@ -14203,7 +14204,8 @@ function getValue(e) {
         const canvasWidth = parseFloat(canvas.style.width, 10);
         const canvasHeight = parseFloat(canvas.style.height, 10);
 
-        var mapCenter = map.project(map.getCenter());
+        const map_center = map.getCenter();
+        var mapCenter = map.project(map_center);
         // e.point.x and y, specifying the horizontal and vertical pixels read from the lower left corner of the screen
         canvasX = mapCenter.x; // e.point.x;
         canvasY = mapCenter.y; // e.point.y;
@@ -14230,12 +14232,27 @@ function getValue(e) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         var [r, g, b, a] = readPixels(gl, bufferX, bufferY);
         var color = `rgba(${r}, ${g}, ${b}, ${a})`;
-        $('#colorPicker').css('background-color', color);
+        if (color != 'rgba(0, 0, 0, 0)') {
+            $('#colorPicker').css('background-color', color);
+        }
+
+        const radar_location = window.atticData.current_nexrad_location;
+        if (radar_location != undefined) {
+            const map_center_formatted = [map_center.lng, map_center.lat];
+            const radar_location_formatted = [radar_location[1], radar_location[0]];
+            const bearing = turf.bearing(turf.point(map_center_formatted), turf.point(radar_location_formatted));
+
+            $('#radarCenterLine').css({
+                '-webkit-transform': `rotate(${bearing}deg)`,
+                '-moz-transform': `rotate(${bearing}deg)`,
+                'transform': `rotate(${bearing}deg)` /* For modern browsers(CSS3)  */
+            });
+        }
     }
 }
 
 module.exports = getValue;
-},{"./format_value":42}],44:[function(require,module,exports){
+},{"./format_value":42,"@turf/turf":98}],44:[function(require,module,exports){
 var map = require('../../core/map/map');
 const ut = require('../../core/utils');
 const getValue = require('./get_value');
@@ -14252,6 +14269,18 @@ $(iconElem).on('click', function() {
         $('.colorPicker').show();
         $('#colorPickerText').hide();
         $('#colorPickerBorder').css('display', 'flex');
+
+        // $(document).on('mousemove', function (e) {
+        //     $('#colorPickerBorder').css({
+        //         left: e.pageX - $('#colorPickerBorder').height() / 2,
+        //         top: e.pageY - $('#colorPickerBorder').width() / 2,
+        //     });
+        //     $('#colorPicker').css({
+        //         left: e.pageX - $('#colorPicker').height() / 2,
+        //         top: e.pageY - $('#colorPicker').width() / 2,
+        //     });
+        //     $('#colorPickerBorder,#colorPicker').css('bottom', '');
+        // });
 
         // if (window.l3rad != undefined) {
         //     if (window.prevl3rad != window.l3rad) {
@@ -23253,6 +23282,8 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         window.atticData.current_RadarUpdater = current_RadarUpdater;
         current_RadarUpdater.enable();
     }
+
+    window.atticData.current_nexrad_location = nexrad_factory.get_location();
 }
 
 module.exports = plot_to_map;
