@@ -3693,11 +3693,11 @@ function zeroPad(num, length) {
 function setMapMargin(topOrBottom, value) {
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
-        $('#colorPicker').css('top', value);
+        $('.colorPickerCircle').css('top', value);
     } else if (topOrBottom == 'bottom') {
         $('#map').css('bottom', value);
-        $('#colorPicker').css('bottom', value);
-        $('#colorPickerText').css('bottom', value - 40);
+        $('.colorPickerCircle').css('bottom', value);
+        $('#colorPickerText').css('bottom', value - 70);
     }
     map.resize();
 
@@ -14179,7 +14179,7 @@ function formatValue(color, cmin, cmax) {
         }
         return value;
     } else {
-        return '';
+        return null;
     }
 }
 
@@ -14219,6 +14219,11 @@ function getValue(e) {
         const cmax = window.atticData.cmax;
         if (cmin != undefined) {
             var value = formatValue(data, cmin, cmax);
+            if (value == null) {
+                $('#colorPickerText').hide();
+            } else {
+                $('#colorPickerText').show();
+            }
             $('#colorPickerText').text(value);
         }
 
@@ -14245,6 +14250,8 @@ $(iconElem).on('click', function() {
 
         map.on('move', getValue);
         $('.colorPicker').show();
+        $('#colorPickerText').hide();
+        $('#colorPickerBorder').css('display', 'flex');
 
         // if (window.l3rad != undefined) {
         //     if (window.prevl3rad != window.l3rad) {

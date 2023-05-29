@@ -90,7 +90,7 @@ function formatValue(color, cmin, cmax) {
         }
         return value;
     } else {
-        return '';
+        return null;
     }
 }
 

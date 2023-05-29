@@ -437,12 +437,11 @@ https://tobiasahlin.com/spinkit/
     margin-right: auto;
 }
 
-
-#colorPicker {
-    width: 40px;
-    height: 40px;
+.colorPickerCircle {
     /*background-color: white;*/
     border: 3px solid rgb(125, 125, 125);
+    outline: 1px solid black;
+    box-shadow: 0px 0px 0px 1px black inset;
     border-radius: 50%;
 
     position: absolute;
@@ -452,6 +451,42 @@ https://tobiasahlin.com/spinkit/
     left: 0;
     right: 0;
     margin: auto;
+    pointer-events: none;
+    display: none;
+}
+#colorPicker {
+    width: 10px;
+    height: 10px;
+
+    z-index: 1002;
+    background-color: black;
+}
+#colorPickerBorder {
+    width: 40px;
+    height: 40px;
+
+    z-index: 1001;
+    display: none; /* display: flex; */
+    justify-content: center;
+    align-items: center;
+}
+#verticalLine {
+    border-left: 3px solid rgb(125, 125, 125);
+    outline: 1px solid black;
+
+    height: calc(100% + 25px);
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    display: none;
+}
+#horizontalLine {
+    border-top: 3px solid rgb(125, 125, 125);
+    outline: 1px solid black;
+
+    width: calc(100% + 25px);
+    position: absolute;
+    z-index: 1000;
     pointer-events: none;
     display: none;
 }

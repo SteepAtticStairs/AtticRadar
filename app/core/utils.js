@@ -741,11 +741,11 @@ function zeroPad(num, length) {
 function setMapMargin(topOrBottom, value) {
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
-        $('#colorPicker').css('top', value);
+        $('.colorPickerCircle').css('top', value);
     } else if (topOrBottom == 'bottom') {
         $('#map').css('bottom', value);
-        $('#colorPicker').css('bottom', value);
-        $('#colorPickerText').css('bottom', value - 40);
+        $('.colorPickerCircle').css('bottom', value);
+        $('#colorPickerText').css('bottom', value - 70);
     }
     map.resize();
 

@@ -32,6 +32,11 @@ function getValue(e) {
         const cmax = window.atticData.cmax;
         if (cmin != undefined) {
             var value = formatValue(data, cmin, cmax);
+            if (value == null) {
+                $('#colorPickerText').hide();
+            } else {
+                $('#colorPickerText').show();
+            }
             $('#colorPickerText').text(value);
         }
 

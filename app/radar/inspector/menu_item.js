@@ -12,6 +12,8 @@ $(iconElem).on('click', function() {
 
         map.on('move', getValue);
         $('.colorPicker').show();
+        $('#colorPickerText').hide();
+        $('#colorPickerBorder').css('display', 'flex');
 
         // if (window.l3rad != undefined) {
         //     if (window.prevl3rad != window.l3rad) {
