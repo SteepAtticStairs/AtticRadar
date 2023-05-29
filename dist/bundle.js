@@ -4332,17 +4332,17 @@ function load_lightning() {
                     'circle-color': [
                         'case',
                         ['<=', ['get', 'diff_minutes'], 3],
-                        '#f3d03a',
+                        '#8d42f5',
                         ['<=', ['get', 'diff_minutes'], 6],
-                        '#d6b524',
+                        '#6f2dcc',
                         ['<=', ['get', 'diff_minutes'], 9],
-                        '#b09213',
+                        '#551ba6',
                         ['<=', ['get', 'diff_minutes'], 12],
-                        '#947a0c',
+                        '#3c0e7d',
                         ['<=', ['get', 'diff_minutes'], 15],
-                        '#756004',
+                        '#260554',
 
-                        '#f3d03a'
+                        '#8d42f5'
                     ],
                     'circle-stroke-color': 'black'
                 }
