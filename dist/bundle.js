@@ -14188,6 +14188,38 @@ module.exports = formatValue;
 const turf = require('@turf/turf');
 const formatValue = require('./format_value');
 
+function beam_height(distance_km, elevation_meters, elevation_angle) {
+    var elevation = elevation_meters; // m
+    var height = elevation / 1000; // km
+    var range = distance_km; // km
+    var elevAngle = elevation_angle; // 0.5;
+    var earthRadius = 6374; // km
+
+    const radians = Math.PI / 180;
+
+    /*
+    * Calculates the beam height MSL (mean sea level (this means above sea level)) in km.
+    * Formula taken from https://wx.erau.edu/faculty/mullerb/Wx365/Doppler_formulas/doppler_formulas.pdf
+    */
+    var beamHeightMSL = Math.sqrt(
+        Math.pow(range, 2)
+        +
+        Math.pow((4/3) * earthRadius + height, 2)
+        +
+        (2*range)*((4/3) * earthRadius + height)
+        *
+        Math.sin(elevAngle * radians)
+    ) - (4/3) * earthRadius;
+
+    function km_to_kft(km) { return km * 3.28084 }
+    function km_to_miles(km) { return km * 1.609 }
+
+    var beamHeightKFT = km_to_kft(beamHeightMSL);
+    var beamHeightMI = km_to_miles(beamHeightMSL);
+
+    return beamHeightMI;
+}
+
 function readPixels(gl, x, y) {
     var data = new Uint8Array(4);
     gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, data);
@@ -14226,7 +14258,7 @@ function getValue(e) {
             } else {
                 $('#colorPickerText').show();
             }
-            $('#colorPickerText').text(value);
+            $('#colorPickerTextValue').text(value);
         }
 
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -14238,15 +14270,20 @@ function getValue(e) {
 
         const radar_location = window.atticData.current_nexrad_location;
         if (radar_location != undefined) {
-            const map_center_formatted = [map_center.lng, map_center.lat];
-            const radar_location_formatted = [radar_location[1], radar_location[0]];
-            const bearing = turf.bearing(turf.point(map_center_formatted), turf.point(radar_location_formatted));
+            const map_center_formatted = turf.point([map_center.lng, map_center.lat]);
+            const radar_location_formatted = turf.point([radar_location[1], radar_location[0]]);
+            const bearing = turf.bearing(map_center_formatted, radar_location_formatted);
 
             $('#radarCenterLine').css({
                 '-webkit-transform': `rotate(${bearing}deg)`,
                 '-moz-transform': `rotate(${bearing}deg)`,
                 'transform': `rotate(${bearing}deg)` /* For modern browsers(CSS3)  */
             });
+
+            const current_elevation_angle = window.atticData.current_elevation_angle;
+            const distance_from_radar = turf.distance(map_center_formatted, radar_location_formatted, { units: 'kilometers' });
+            const beam_height_calculated = beam_height(distance_from_radar, radar_location[2], current_elevation_angle);
+            $('#colorPickerTextBeamHeight').text(`${beam_height_calculated.toFixed(1)} mi`)
         }
     }
 }
@@ -23284,6 +23321,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     }
 
     window.atticData.current_nexrad_location = nexrad_factory.get_location();
+    window.atticData.current_elevation_angle = nexrad_factory.elevation_angle;
 }
 
 module.exports = plot_to_map;

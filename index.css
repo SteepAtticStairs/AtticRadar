@@ -514,11 +514,17 @@ https://tobiasahlin.com/spinkit/
     text-align: center;
     width: fit-content;
     height: fit-content;
-    padding: 1px 5px;
-    /* line-height: 25px; */
-    background-color: rgb(136, 136, 136);
-    border: 1px solid black;
-    border-radius: 5px;
+    /* padding: 0px 5px; */
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    line-height: 17px;
+    background-color: rgba(105, 105, 105, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgb(49, 49, 49);
+    border-radius: 15px;
+    color: white;
 
     position: absolute;
     z-index: 1000;

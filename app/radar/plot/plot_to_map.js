@@ -269,6 +269,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     }
 
     window.atticData.current_nexrad_location = nexrad_factory.get_location();
+    window.atticData.current_elevation_angle = nexrad_factory.elevation_angle;
 }
 
 module.exports = plot_to_map;
