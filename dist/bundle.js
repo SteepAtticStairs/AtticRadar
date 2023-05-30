@@ -1878,25 +1878,25 @@ function hideARMwindow() {
     });
 }
 
-createMenuOption({
-    'divId': 'offcanvasMenuItemDiv',
-    'iconId': 'offcanvasMenuItemIcon',
+// createMenuOption({
+//     'divId': 'offcanvasMenuItemDiv',
+//     'iconId': 'offcanvasMenuItemIcon',
 
-    'divClass': 'mapFooterMenuItem',
-    'iconClass': 'icon-grey',
+//     'divClass': 'mapFooterMenuItem',
+//     'iconClass': 'icon-grey',
 
-    'location': 'top-left',
-    'size': 30,
+//     'location': 'top-left',
+//     'size': 30,
 
-    'contents': 'Open Offcanvas Menu',
-    'icon': 'fa fa-bars',
-    'css': ''
-}, function(divElem, iconElem) {
-    showARMwindow();
+//     'contents': 'Open Offcanvas Menu',
+//     'icon': 'fa fa-bars',
+//     'css': ''
+// }, function(divElem, iconElem) {
+//     showARMwindow();
 
-    $('#atticRadarMenuSettingsScreen').hide();
-    $('#atticRadarMenuMainScreen').show();
-})
+//     $('#atticRadarMenuSettingsScreen').hide();
+//     $('#atticRadarMenuMainScreen').show();
+// })
 
 // provided by ChatGPT
 $.fn.rotateArrow = function (degrees, easing, duration) {
@@ -2477,8 +2477,8 @@ function settingsOption(index) {
         //$('#settingsModalTrigger').click();
         armFunctions.showARMwindow();
 
-        $('#atticRadarMenuMainScreen').hide();
-        $('#atticRadarMenuSettingsScreen').show();
+        $('#atticRadarMenuSettingsScreen').hide();
+        $('#atticRadarMenuMainScreen').show();
     })
 
     $('#armrSTVisBtnSwitchElem').on('click', function() {

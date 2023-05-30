@@ -14,8 +14,8 @@ function settingsOption(index) {
         //$('#settingsModalTrigger').click();
         armFunctions.showARMwindow();
 
-        $('#atticRadarMenuMainScreen').hide();
-        $('#atticRadarMenuSettingsScreen').show();
+        $('#atticRadarMenuSettingsScreen').hide();
+        $('#atticRadarMenuMainScreen').show();
     })
 
     $('#armrSTVisBtnSwitchElem').on('click', function() {
