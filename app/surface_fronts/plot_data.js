@@ -1,6 +1,7 @@
 const map = require('../core/map/map');
 const turf = require('@turf/turf');
 const set_layer_order = require('../core/map/setLayerOrder');
+const icons = require('../core/map/icons/icons');
 
 /**
  * https://www.wpc.ncep.noaa.gov/html/fntcodes2.shtml
@@ -140,22 +141,22 @@ function _add_pressure_point_layer(feature_collection) {
 function _return_symbols_points(key, SurfaceFronts) {
     var properties = {};
 
-    const semicircle_offset = [0, 20];
+    const semicircle_offset = [0, 10];
     const semicircle_size = 0.2;
     const semicircle_modifier = -90;
 
     const triangle_offset = [0, 0];
-    const triangle_size = 0.16;
+    const triangle_size = 0.14;
     const triangle_modifier = -90;
 
     if (key == 'warm') {
         properties.modifier = semicircle_modifier;
-        properties.image = 'red_semicircle';
+        properties.image = 'semicircle_red';
         properties.size = semicircle_size;
         properties.offset = semicircle_offset;
     } else if (key == 'cold') {
         properties.modifier = triangle_modifier;
-        properties.image = 'blue_triangle';
+        properties.image = 'triangle_blue';
         properties.size = triangle_size;
         properties.offset = triangle_offset;
     }
@@ -176,8 +177,8 @@ function _return_symbols_points(key, SurfaceFronts) {
                     if (last_symbol == 'semicircle') {
                         last_symbol = 'triangle';
 
-                        if (key == 'occluded') properties.image = `purple_${last_symbol}`;
-                        else if (key == 'stationary') properties.image = `blue_${last_symbol}`;
+                        if (key == 'occluded') properties.image = `${last_symbol}_purple`;
+                        else if (key == 'stationary') properties.image = `${last_symbol}_blue`;
 
                         properties.modifier = triangle_modifier;
                         properties.size = triangle_size;
@@ -185,8 +186,8 @@ function _return_symbols_points(key, SurfaceFronts) {
                     } else if (last_symbol == 'triangle') {
                         last_symbol = 'semicircle';
 
-                        if (key == 'occluded') properties.image = `purple_${last_symbol}`;
-                        else if (key == 'stationary') properties.image = `red_${last_symbol}`;
+                        if (key == 'occluded') properties.image = `${last_symbol}_purple`;
+                        else if (key == 'stationary') properties.image = `${last_symbol}_red`;
 
                         properties.modifier = semicircle_modifier;
                         properties.size = semicircle_size;
@@ -254,11 +255,18 @@ function plot_data(SurfaceFronts) {
     ]);
 
     wait_for_map_load(() => {
-        _add_fronts_layer(all_fronts_linestrings);
-        _add_pressure_point_layer(all_pressure_points_linestrings);
-        _add_front_symbols_layer(all_front_symbols_points);
+        icons.add_icon_svg([
+            [icons.icons.blue_triangle, 'triangle_blue'],
+            [icons.icons.purple_triangle, 'triangle_purple'],
+            [icons.icons.red_semicircle, 'semicircle_red'],
+            [icons.icons.purple_semicircle, 'semicircle_purple'],
+        ], () => {
+            _add_fronts_layer(all_fronts_linestrings);
+            _add_pressure_point_layer(all_pressure_points_linestrings);
+            _add_front_symbols_layer(all_front_symbols_points);
 
-        set_layer_order();
+            set_layer_order();
+        })
     })
 }
 

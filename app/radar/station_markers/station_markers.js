@@ -3,6 +3,7 @@ const ut = require('../../core/utils');
 const map = require('../../core/map/map');
 const get_station_status = require('./get_station_status');
 const set_layer_order = require('../../core/map/setLayerOrder');
+const icons = require('../../core/map/icons/icons');
 
 const NEXRADLevel2File = require('../libnexrad/level2/level2_parser');
 const Level2Factory = require('../libnexrad/level2/level2_factory');
@@ -66,54 +67,61 @@ function _generate_stations_geojson(status_info = null) {
  */
 function _add_stations_layer(radar_stations_geojson, callback) {
     do_when_map_load(() => {
-        map.addSource('stationSymbolLayer', {
-            'type': 'geojson',
-            'generateId': true,
-            'data': radar_stations_geojson
+        icons.add_icon_svg([
+            [icons.icons.grey_station_marker, 'grey_station'],
+            [icons.icons.blue_station_marker, 'blue_station'],
+            [icons.icons.red_station_marker, 'red_station'],
+            [icons.icons.orange_station_marker, 'orange_station'],
+        ], () => {
+            map.addSource('stationSymbolLayer', {
+                'type': 'geojson',
+                'generateId': true,
+                'data': radar_stations_geojson
+            });
+
+            // Add a symbol layer
+            map.addLayer({
+                'id': 'stationSymbolLayer',
+                'type': 'symbol',
+                'source': 'stationSymbolLayer',
+                'layout': {
+                    'icon-image': [
+                        'case',
+                        ['==', ['get', 'clicked'], 'yes'],
+                        'blue_station',
+                        ['==', ['get', 'status'], 'down'],
+                        'red_station',
+                        ['==', ['get', 'type'], 'TDWR'],
+                        'orange_station',
+                        // ['==', ['feature-state', 'color'], 1],
+                        // 'dark_grey_station_marker', // mouse-over
+                        // ['==', ['feature-state', 'color'], 2],
+                        // 'grey_station_marker',
+                        'grey_station'
+                    ],
+
+                    'icon-size': 0.23,
+                    'text-field': ['get', 'station_id'],
+                    'text-size': 13,
+                    'text-font': [
+                        'Arial Unicode MS Bold'
+                    ],
+                },
+                'paint': {
+                    'text-color': 'black'
+                }
+            });
+
+            get_station_status((data) => {
+                window.atticData.radar_station_status = data;
+                const statusified_geojson = _generate_stations_geojson(data);
+                map.getSource('stationSymbolLayer').setData(statusified_geojson);
+            });
+
+            set_layer_order();
+
+            callback();
         });
-
-        // Add a symbol layer
-        map.addLayer({
-            'id': 'stationSymbolLayer',
-            'type': 'symbol',
-            'source': 'stationSymbolLayer',
-            'layout': {
-                'icon-image': [
-                    'case',
-                    ['==', ['get', 'clicked'], 'yes'],
-                    'blue_station_marker',
-                    ['==', ['get', 'status'], 'down'],
-                    'red_station_marker',
-                    ['==', ['get', 'type'], 'TDWR'],
-                    'orange_station_marker',
-                    // ['==', ['feature-state', 'color'], 1],
-                    // 'dark_grey_station_marker', // mouse-over
-                    // ['==', ['feature-state', 'color'], 2],
-                    // 'grey_station_marker',
-                    'grey_station_marker'
-                ],
-
-                'icon-size': 0.23,
-                'text-field': ['get', 'station_id'],
-                'text-size': 13,
-                'text-font': [
-                    'Arial Unicode MS Bold'
-                ],
-            },
-            'paint': {
-                'text-color': 'black'
-            }
-        });
-
-        get_station_status((data) => {
-            window.atticData.radar_station_status = data;
-            const statusified_geojson = _generate_stations_geojson(data);
-            map.getSource('stationSymbolLayer').setData(statusified_geojson);
-        });
-
-        set_layer_order();
-
-        callback();
     });
 }
 
