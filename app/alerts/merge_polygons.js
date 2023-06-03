@@ -1,7 +1,27 @@
 const turf = require('@turf/turf');
 
+// https://developer.mozilla.org/en-US/docs/Glossary/Base64
+function utf8_to_b64(str) {
+    return window.btoa(encodeURIComponent(str));
+}
+
+// https://stackoverflow.com/a/7616484
+function hash_string(str) {
+    var hash = 0,
+        i, chr;
+    if (str.length === 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 function merge_polygons(polygons) {
-    // const zs = ['MSZ001', 'MSZ007', 'MSZ008', 'MSZ010', 'MSZ011', 'MSZ012', 'MSZ020'];
+    // // const zs = ['MSZ001', 'MSZ007', 'MSZ008', 'MSZ010', 'MSZ011', 'MSZ012', 'MSZ020'];
+    // const zs = ['PZZ252', 'PZZ253', 'PZZ272', 'PZZ273'];
+
     // const shapes = [];
     // for (var i = 0; i < zs.length; i++) {
     //     shapes.push(...turf.explode(forecast_zones[zs[i]]).features);
@@ -23,14 +43,20 @@ function merge_polygons(polygons) {
     //         'line-width': 3
     //     }
     // });
+    // return turf.featureCollection(polygons);
 
     const lookup = {};
     for (var i = 0; i < polygons.length; i++) {
         const properties = polygons[i].properties;
-        const wmo_id = properties.parameters.WMOidentifier[0];
         const affected_zones = properties.affectedZones;
 
-        lookup[wmo_id] = {
+        const id = hash_string(JSON.stringify(properties));
+        // var id = properties.parameters?.VTEC?.[0];
+        // if (id == undefined) {
+        //     id = properties.parameters?.WMOidentifier?.[0];
+        // }
+
+        lookup[id] = {
             'properties': properties,
             'affected_zones': affected_zones
         }
