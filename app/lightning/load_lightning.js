@@ -63,10 +63,13 @@ function load_lightning(callback) {
                     layout: {
                         'icon-image': 'lightning_bolt_bold',
                         'icon-size': 0.2,
-                        'text-allow-overlap': true,
-                        'text-ignore-placement': true,
-                        'icon-allow-overlap': true,
-                        'icon-ignore-placement': true,
+                        // 'text-allow-overlap': true,
+                        // 'text-ignore-placement': true,
+                        // 'icon-allow-overlap': true,
+                        // 'icon-ignore-placement': true,
+                        'icon-padding': 0,
+                        'symbol-sort-key': ['get', 'diff_minutes'],
+                        'symbol-z-order': 'viewport-y'
                     },
                     paint: {
                         'icon-opacity': [
@@ -86,6 +89,28 @@ function load_lightning(callback) {
                         ],
                     }
                 })
+
+                // map.on('zoomend', () => {
+                //     const bounds = map.getBounds();
+                //     const top_left = [bounds.getNorthWest().lng, bounds.getNorthWest().lat];
+                //     const top_right = [bounds.getNorthEast().lng, bounds.getNorthEast().lat];
+                //     const bottom_left = [bounds.getSouthWest().lng, bounds.getSouthWest().lat];
+                //     const bottom_right = [bounds.getSouthEast().lng, bounds.getSouthEast().lat];
+                //     const bbox = turf.polygon([[top_left, top_right, bottom_left, bottom_right, top_left]]);
+
+                //     // const lightning_within_view = turf.pointsWithinPolygon(collection, bbox);
+                //     // map.getSource('lightningSource').setData(lightning_within_view);
+                // })
+                // map.on('zoomend', () => {
+                //     // console.log('done');
+                //     map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
+                //     map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', false);
+                // })
+                // map.on('zoomstart', () => {
+                //     // console.log('done');
+                //     map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
+                //     map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
+                // })
 
                 setLayerOrder();
                 callback();
