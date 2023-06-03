@@ -51,6 +51,16 @@ function settingsOption(index) {
         }
     })
 
+    armFunctions.toggleswitchFunctions($('#armrLightningVisBtnSwitchElem'), function() {
+        if (map.getLayer('lightningLayer')) {
+            map.setLayoutProperty('lightningLayer', 'visibility', 'visible');
+        }
+    }, function() {
+        if (map.getLayer('lightningLayer')) {
+            map.setLayoutProperty('lightningLayer', 'visibility', 'none');
+        }
+    })
+
     armFunctions.toggleswitchFunctions($('#armrSTVisBtnSwitchElem'), function() {
         var stormTrackLayers = window.atticData.stormTrackLayers;
         if (stormTrackLayers != undefined) {

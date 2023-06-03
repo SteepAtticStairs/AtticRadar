@@ -99,6 +99,14 @@ class SurfaceFronts {
         const coordinates = [];
 
         const parts = this._remove_empty_strings_from_array(data.split(' '));
+        // this is a simple check to see if the first item is a pressure value,
+        // e.g. above 800 mb but below 1200 mb. If not, there is an error where
+        // coordinates were provided first - in that case, simply remove the
+        // leading "straggler".
+        if (!(parseInt(parts[0]) > 800 && parseInt(parts[0]) < 1200)) {
+            parts.shift();
+        }
+
         for (var i = 0; i < parts.length; i++) {
             if (i % 2 == 0) {
                 const pressure = parseInt(parts[i]);

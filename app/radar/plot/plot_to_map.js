@@ -11,6 +11,8 @@ const fragment_source = require('./glsl/fragment.glsl');
 const fragment_framebuffer_source = require('./glsl/fragment_framebuffer.glsl');
 const map = require('../../core/map/map');
 const RadarUpdater = require('../updater/RadarUpdater');
+const filter_lightning = require('../../lightning/filter_lightning');
+const load_lightning = require('../../lightning/load_lightning');
 
 function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_factory) {
     var color_scale_data = product_colors[product];
@@ -226,6 +228,23 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     if (!isInFileUploadMode) {
         init_storm_tracks.fetch_data();
         // STstuff.loadAllStormTrackingStuff();
+
+        function _after() {
+            filter_lightning();
+            const isLightningVisChecked = $('#armrLightningVisBtnSwitchElem').is(':checked');
+            if (!isLightningVisChecked) {
+                if (map.getLayer('lightningLayer')) {
+                    map.setLayoutProperty('lightningLayer', 'visibility', 'none');
+                }
+            }
+        }
+        if (!map.getLayer('lightningLayer')) {
+            load_lightning(() => {
+                _after();
+            });
+        } else {
+            _after();
+        }
     }
 
     // make sure the alerts are always on top
