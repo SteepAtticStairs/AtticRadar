@@ -1,5 +1,7 @@
 // const geojsonMerge = require('@mapbox/geojson-merge');
 const turf = require('@turf/turf');
+const map = require('../core/map/map');
+const merge_polygons = require('./merge_polygons');
 
 function combine_dictionary_data(alerts_data) {
     const polygons = [];
@@ -9,12 +11,15 @@ function combine_dictionary_data(alerts_data) {
             for (var i in affectedZones) {
                 var zoneToPush;
                 if (affectedZones[i].includes('forecast')) {
+                    alerts_data.features[item].properties.zone_type = 'forecast';
                     affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/forecast/', '');
                     zoneToPush = forecast_zones[affectedZones[i]];
                 } else if (affectedZones[i].includes('county')) {
+                    alerts_data.features[item].properties.zone_type = 'county';
                     affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/county/', '');
                     zoneToPush = county_zones[affectedZones[i]];
                 } else if (affectedZones[i].includes('fire')) {
+                    alerts_data.features[item].properties.zone_type = 'fire';
                     affectedZones[i] = affectedZones[i].replace('https://api.weather.gov/zones/fire/', '');
                     zoneToPush = fire_zones[affectedZones[i]];
                 }
@@ -25,7 +30,10 @@ function combine_dictionary_data(alerts_data) {
             }
         }
     }
-    const polygon_collection = turf.featureCollection(polygons);
+
+    // const polygon_collection = turf.featureCollection(polygons);
+    const polygon_collection = merge_polygons(polygons);
+
     var merged_geoJSON = geojson_merge([
         polygon_collection,
         alerts_data
