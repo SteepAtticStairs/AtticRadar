@@ -1,6 +1,6 @@
 # AtticRadar
 
-A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, hurricane tracking, METAR station data, and much more.
+A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.
 
 ## Website
 
