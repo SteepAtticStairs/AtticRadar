@@ -57,7 +57,7 @@ function load_lightning(callback) {
                 [icons.icons.lightning_bolt_bold, 'lightning_bolt_bold']
             ], () => {
                 const calculate_opacity_level = (decrease_rate) => Array.from({ length: 5 }, (_, i) => 1 - i * decrease_rate);
-                const levels = calculate_opacity_level(0.075);
+                const levels = calculate_opacity_level(0.125);
 
                 map.addLayer({
                     id: 'lightningLayer',
@@ -70,10 +70,10 @@ function load_lightning(callback) {
                             ['exponential', 0.5],
                             ['zoom'],
                             7,
-                            0.27,
+                            0.24,
 
                             10,
-                            0.35
+                            0.33
                         ],
                         // 'text-allow-overlap': true,
                         // 'text-ignore-placement': true,
@@ -104,7 +104,7 @@ function load_lightning(callback) {
 
                 map.on('zoom', () => {
                     const map_zoom = map.getZoom();
-                    if (map_zoom >= 7) {
+                    if (map_zoom >= 6) {
                         map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
                         map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
                     } else {
