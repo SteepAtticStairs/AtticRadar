@@ -34,9 +34,6 @@ function load() {
     // load the settings menu
     require('../menu/settings').settingsOption();
 
-    // load the lightning module
-    require('../../lightning/menu_item');
-
     // load the tools menu
     require('../menu/tools');
 

@@ -56,13 +56,25 @@ function load_lightning(callback) {
             icons.add_icon_svg([
                 [icons.icons.lightning_bolt_bold, 'lightning_bolt_bold']
             ], () => {
+                const calculate_opacity_level = (decrease_rate) => Array.from({ length: 5 }, (_, i) => 1 - i * decrease_rate);
+                const levels = calculate_opacity_level(0.075);
+
                 map.addLayer({
                     id: 'lightningLayer',
                     type: 'symbol',
                     source: 'lightningSource',
                     layout: {
                         'icon-image': 'lightning_bolt_bold',
-                        'icon-size': 0.2,
+                        'icon-size': [
+                            'interpolate',
+                            ['exponential', 0.5],
+                            ['zoom'],
+                            7,
+                            0.27,
+
+                            10,
+                            0.35
+                        ],
                         // 'text-allow-overlap': true,
                         // 'text-ignore-placement': true,
                         // 'icon-allow-overlap': true,
@@ -75,18 +87,29 @@ function load_lightning(callback) {
                         'icon-opacity': [
                             'case',
                             ['<=', ['get', 'diff_minutes'], 3],
-                            1,
+                            levels[0],
                             ['<=', ['get', 'diff_minutes'], 6],
-                            0.8,
+                            levels[1],
                             ['<=', ['get', 'diff_minutes'], 9],
-                            0.6,
+                            levels[2],
                             ['<=', ['get', 'diff_minutes'], 12],
-                            0.4,
+                            levels[3],
                             ['<=', ['get', 'diff_minutes'], 15],
-                            0.2,
+                            levels[4],
 
-                            1
+                            levels[0],
                         ],
+                    }
+                })
+
+                map.on('zoom', () => {
+                    const map_zoom = map.getZoom();
+                    if (map_zoom >= 7) {
+                        map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
+                        map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
+                    } else {
+                        map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
+                        map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', false);
                     }
                 })
 
