@@ -14,17 +14,17 @@ const break_large = `<span style="display: block; margin-bottom: 0.75em;"></span
 function click_listener(e) {
     var popupItem = '';
     var alertContentObj = {};
-    var alreadyAddedWmoIDs = [];
+    var alreadyAddedAlerts = [];
     for (key in e.features) {
-        var id = `${Date.now()}alert`;
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
-        //console.log(e.features[key])
-        // console.log(properties)
-        var wmoId = parameters.WMOidentifier[0];
-        if (!alreadyAddedWmoIDs.includes(wmoId)) {
-        alreadyAddedWmoIDs.push(wmoId);
 
+        delete properties.type;
+        const hash = hash_string(JSON.stringify(properties));
+        if (!alreadyAddedAlerts.includes(hash)) {
+            alreadyAddedAlerts.push(hash);
+
+            var id = `${hash}alert`;
             var initColor = get_polygon_colors(properties.event).color;
             var backgroundColor = initColor;
             var borderColor = chroma(initColor).darken(1.5);
@@ -98,17 +98,26 @@ function click_listener(e) {
                     return property;
                 }
             }
+
+            var main_headline = checkPropertyExists(parameters.NWSheadline);
+            var secondary_headline = checkPropertyExists(properties.headline);
+            if (main_headline == 'None') {
+                var temp = secondary_headline;
+                secondary_headline = main_headline;
+                main_headline = temp;
+            }
+
             var extentedAlertDescription = 
 `<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${checkPropertyExists(properties.event)}
 <hr>${checkPropertyExists(properties.senderName)}</b>
-<hr>${checkPropertyExists(properties.headline)}
+<hr>${secondary_headline}
+<hr>${main_headline}
 <hr><b class="alertTextDescriber">Sent:</b><br>${ut.printFancyTime(new Date(properties.sent))}
 <br><b class="alertTextDescriber">WMO Identifier:</b><br>${checkPropertyExists(parameters.WMOidentifier)}
 <b class="alertTextDescriber">VTEC:</b><br>${checkPropertyExists(parameters.VTEC)}
-<br><b class="alertTextDescriber">NWS Headline:</b><br>${checkPropertyExists(parameters.NWSheadline)}
 <br><b class="alertTextDescriber">Description:</b><br>${checkPropertyExists(properties.description)}
-<br><b class="alertTextDescriber">Instructions:</b><br>${checkPropertyExists(properties.instruction)}</div>
-<br><b class="alertTextDescriber">Areas affected:</b><br><i>${checkPropertyExists(properties.areaDesc)}</i>`
+<br><b class="alertTextDescriber">Instructions:</b><br>${checkPropertyExists(properties.instruction)}
+<br><b class="alertTextDescriber">Areas affected:</b><br><i>${checkPropertyExists(properties.areaDesc)}</i></div>`
             alertContentObj[id] = {
                 'title': `${properties.event}`,
                 'body': extentedAlertDescription,
