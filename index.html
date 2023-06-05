@@ -484,15 +484,30 @@
             'tdwrVel': 'Base Velocity'
         }
 
-        function add_script_tag(type, url, cb) {
+        function add_script_tag(type, url, compressed, cb) {
             if (type == 'js') {
-                var s = document.createElement("script");
-                s.type = "text/javascript";
-                s.src = url;
-                document.head.appendChild(s);
+                if (compressed) {
+                    fetch(url)
+                    .then(response => response.arrayBuffer())
+                    .then(buffer => {
+                        const inflated = pako.inflate(buffer, { to: 'string' });
 
-                s.onreadystatechange = cb;
-                s.onload = cb;
+                        var s = document.createElement('script');
+                        s.type = 'text/javascript';
+                        s.innerHTML = inflated;
+                        document.head.appendChild(s);
+
+                        cb();
+                    })
+                } else {
+                    var s = document.createElement("script");
+                    s.type = "text/javascript";
+                    s.src = url;
+                    document.head.appendChild(s);
+
+                    s.onreadystatechange = cb;
+                    s.onload = cb;
+                }
             } else if (type == 'css') {
                 var l = document.createElement('link');
                 l.rel = 'stylesheet'
@@ -515,8 +530,9 @@
             var config = library_configs.shift();
             var type = config[0];
             var path = config[1];
+            var compressed = config[2];
 
-            add_script_tag(type, path, function () {
+            add_script_tag(type, path, compressed, function () {
                 // Callback function after the library is loaded
                 load_all_libraries(library_configs, callback);
             });
@@ -564,11 +580,13 @@
             ['css', 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.1/spin.css'],
             ['js', 'https://spin.js.org/spin.umd.js'],
 
+            ['js', 'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js'],
+
             // ['js', './app/hurricanes/historical/stormList.js'],
 
             ['css', './index.css'],
 
-            ['js', './dist/bundle.js'],
+            ['js', './dist/bundle.js.gz', true],
         ], () => {
             document.getElementById('bodyDiv').style.display = 'block';
             document.getElementById('loadingLibrariesDiv').style.display = 'none';

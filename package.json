@@ -2,7 +2,7 @@
   "name": "AtticRadar",
   "main": "main.js",
   "scripts": {
-    "build": "browserify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js",
+    "build": "browserify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js; gzip -k -f dist/bundle.js",
     "serve": "watchify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js -v",
     "start": "electron .",
     "package": "npx electron-packager . --overwrite --icon ./icons/icon.icns"
