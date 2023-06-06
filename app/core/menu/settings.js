@@ -5,6 +5,7 @@ const armFunctions = require('./atticRadarMenu');
 const setLayerOrder = require('../map/setLayerOrder');
 const fetchMETARData = require('../../metars/fetch_data');
 const fetch_alerts_data = require('../../alerts/fetch_data');
+const fetch_spc_data = require('../../spc/fetch_data');
 
 function settingsOption(index) {
     const divElem = '#settingsItemDiv';
@@ -107,6 +108,20 @@ function settingsOption(index) {
 
     // this is in app/alerts/drawAlertShapes.js
     //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})
+
+    armFunctions.toggleswitchFunctions($('#armrSPCOutlooksVisBtnSwitchElem'), function() {
+        if (map.getLayer('spc_fill')) {
+            map.setLayoutProperty('spc_fill', 'visibility', 'visible');
+            map.setLayoutProperty('spc_border', 'visibility', 'visible');
+        } else {
+            fetch_spc_data();
+        }
+    }, function() {
+        if (map.getLayer('spc_fill')) {
+            map.setLayoutProperty('spc_fill', 'visibility', 'none');
+            map.setLayoutProperty('spc_border', 'visibility', 'none');
+        }
+    })
 }
 
 module.exports = {
