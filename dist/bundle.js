@@ -2065,6 +2065,8 @@ function setLayerOrder() {
         }
     }
 
+    moveLayerToTop('metarSymbolLayer');
+
     moveLayerToTop('lightningLayer');
 
     moveLayerToTop('stationSymbolLayer');
