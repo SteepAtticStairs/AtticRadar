@@ -525,6 +525,7 @@
         }
 
         function _set_progress_bar_width(width_percent) {
+            if (width_percent >= 100) { width_percent = 100 }
             const elem = document.getElementById('loadingLibrariesProgressBarInner');
             elem.style.right = '4px';
             const width = elem.offsetWidth;
@@ -606,8 +607,7 @@
         }
 
         var total_byte_length;
-        // from ChatGPT
-        function _add_libraries(library_configs, callback) {
+        function load_all_libraries(library_configs, callback) {
             if (total_byte_length == undefined) {
                 total_byte_length = library_configs.reduce((acc, curr) => acc + curr[2], 0);
             }
@@ -626,26 +626,8 @@
 
             add_script_tag(type, path, byte_length, total_byte_length, compressed, function () {
                 // Callback function after the library is loaded
-                _add_libraries(library_configs, callback);
+                load_all_libraries(library_configs, callback);
             });
-        }
-
-        function load_all_libraries(library_configs, callback) {
-            function _pre(path, cb) {
-                fetch(path, { method: 'HEAD' })
-                .then(response => {
-                    const content_length = response.headers.get('content-length');
-                    cb(parseInt(content_length));
-                })
-            }
-            _pre('./index.css', (content_length) => {
-                library_configs[library_configs.length - 2][2] = content_length;
-                _pre('./dist/bundle.js', (content_length) => {
-                    library_configs[library_configs.length - 1][2] = content_length;
-
-                    _add_libraries(library_configs, callback);
-                })
-            })
         }
 
         document.getElementById('bodyDiv').style.display = 'none';
@@ -694,9 +676,9 @@
 
             // ['js', './app/hurricanes/historical/stormList.js'],
 
-            ['css', './index.css', 0],
+            ['css', './index.css', 25540],
 
-            ['js', './dist/bundle.js', 0],
+            ['js', './dist/bundle.js', 3567120],
         ], () => {
             document.getElementById('bodyDiv').style.display = 'block';
             document.getElementById('loadingLibrariesDiv').style.display = 'none';
