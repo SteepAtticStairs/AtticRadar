@@ -607,7 +607,8 @@
         }
 
         var total_byte_length;
-        function load_all_libraries(library_configs, callback) {
+        // from ChatGPT
+        function _add_libraries(library_configs, callback) {
             if (total_byte_length == undefined) {
                 total_byte_length = library_configs.reduce((acc, curr) => acc + curr[2], 0);
             }
@@ -626,8 +627,24 @@
 
             add_script_tag(type, path, byte_length, total_byte_length, compressed, function () {
                 // Callback function after the library is loaded
-                load_all_libraries(library_configs, callback);
+                _add_libraries(library_configs, callback);
             });
+        }
+
+        function load_all_libraries(library_configs, callback) {
+            function _pre(cb) {
+                fetch('./tools/size.txt')
+                .then(response => response.json())
+                .then(json => {
+                    cb(json);
+                })
+            }
+            _pre((filesizes) => {
+                library_configs[library_configs.length - 2][2] = filesizes['index.css'];
+                library_configs[library_configs.length - 1][2] = filesizes['bundle.js'];
+
+                _add_libraries(library_configs, callback);
+            })
         }
 
         document.getElementById('bodyDiv').style.display = 'none';
@@ -676,12 +693,12 @@
 
             // ['js', './app/hurricanes/historical/stormList.js'],
 
-            ['css', './index.css', 25540],
+            ['css', './index.css', 0],
 
-            ['js', './dist/bundle.js', 3567120],
+            ['js', './dist/bundle.js', 0],
         ], () => {
-            document.getElementById('bodyDiv').style.display = 'block';
-            document.getElementById('loadingLibrariesDiv').style.display = 'none';
+            // document.getElementById('bodyDiv').style.display = 'block';
+            // document.getElementById('loadingLibrariesDiv').style.display = 'none';
         })
     </script>
 </body>
