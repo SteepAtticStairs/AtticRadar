@@ -10,9 +10,12 @@ function _load_storm_track_product(product, callback) {
             deal_with_tvs_layers();
         } else {
             loaders_nexrad.return_level_3_factory_from_url(url, (L3Factory) => {
+                var desc_str = 'Storm Tracks:';
+                if (product == 'NTV') { desc_str = 'Tornado Vortex Signature:' }
+
                 if (L3Factory.get_file_age_in_minutes() <= 30) {
                     function _plot() {
-                        console.log(L3Factory);
+                        console.log(desc_str, L3Factory);
                         L3Factory.plot();
                         callback();
                     }

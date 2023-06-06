@@ -19,7 +19,8 @@ function load_lightning(callback) {
     })
         .then(response => response.text())
         .then(data => {
-            console.log(data);
+            // console.log(data);
+            console.log(`Fetched lightning data with a byte length of ${ut.formatBytes(new Blob([data]).size)}.`);
             data = data.split('\n');
 
             var points = [];

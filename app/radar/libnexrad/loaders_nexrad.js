@@ -233,7 +233,7 @@ function quick_level_3_plot(station, product, callback = null) {
             window.atticData.current_RadarUpdater.disable();
         }
 
-        console.log(L3Factory);
+        console.log('Main file:', L3Factory);
         // L3Factory.display_file_info();
         L3Factory.plot();
 

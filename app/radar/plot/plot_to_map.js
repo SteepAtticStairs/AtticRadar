@@ -245,6 +245,8 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         } else {
             _after();
         }
+    } else {
+        filter_lightning(true);
     }
 
     // make sure the alerts are always on top
@@ -278,10 +280,10 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         }
     }
 
+    if (window?.atticData?.current_RadarUpdater != undefined) {
+        window.atticData.current_RadarUpdater.disable();
+    }
     if (!isInFileUploadMode) {
-        if (window?.atticData?.current_RadarUpdater != undefined) {
-            window.atticData.current_RadarUpdater.disable();
-        }
         const current_RadarUpdater = new RadarUpdater(nexrad_factory);
         window.atticData.current_RadarUpdater = current_RadarUpdater;
         current_RadarUpdater.enable();

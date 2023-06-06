@@ -2,11 +2,16 @@ const map = require('../core/map/map');
 const turf = require('@turf/turf');
 const NEXRAD_LOCATIONS = require('../radar/libnexrad/nexrad_locations').NEXRAD_LOCATIONS;
 
-function filter_lightning(data = undefined) {
-    if (data == undefined) {
-        data = JSON.parse(JSON.stringify(window.atticData.original_lightning_points));
+function filter_lightning(total_hide = false) {
+    if (total_hide) {
+        const fc =  turf.featureCollection([]);
+        if (map.getSource('lightningSource')) {
+            map.getSource('lightningSource').setData(fc);
+        }
+        return fc;
     }
 
+    var data = JSON.parse(JSON.stringify(window.atticData.original_lightning_points));
     const points = [];
 
     const current_station = window.atticData.currentStation;
