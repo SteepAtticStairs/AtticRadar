@@ -123,7 +123,7 @@ var settingsScreen = '#atticRadarMenuSettingsScreen';
 var spcScreen = '#atticRadarMenuSPCScreen';
 
 $('#armrSettingsBtn').click(function() {
-    $(`${mainMenuScreen}`).fadeOut(fadeDuration, function() {
+    $(`${mainMenuScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
         $(`${settingsScreen}`).fadeIn(fadeDuration);
     });
     // mainMenuScreen.css('position', 'absolute').hide('slide', { direction: 'left' }, 1000);
@@ -139,7 +139,7 @@ $('#armrSettingsBtn').click(function() {
     // });
 })
 $('#armsSettingsBackBtn').click(function() {
-    $(`${settingsScreen}`).fadeOut(fadeDuration, function() {
+    $(`${settingsScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
         $(`${mainMenuScreen}`).fadeIn(fadeDuration);
     });
 })

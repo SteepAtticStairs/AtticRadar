@@ -2267,7 +2267,7 @@ var settingsScreen = '#atticRadarMenuSettingsScreen';
 var spcScreen = '#atticRadarMenuSPCScreen';
 
 $('#armrSettingsBtn').click(function() {
-    $(`${mainMenuScreen}`).fadeOut(fadeDuration, function() {
+    $(`${mainMenuScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
         $(`${settingsScreen}`).fadeIn(fadeDuration);
     });
     // mainMenuScreen.css('position', 'absolute').hide('slide', { direction: 'left' }, 1000);
@@ -2283,7 +2283,7 @@ $('#armrSettingsBtn').click(function() {
     // });
 })
 $('#armsSettingsBackBtn').click(function() {
-    $(`${settingsScreen}`).fadeOut(fadeDuration, function() {
+    $(`${settingsScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
         $(`${mainMenuScreen}`).fadeIn(fadeDuration);
     });
 })
@@ -2770,6 +2770,7 @@ function settingsOption(index) {
         armFunctions.showARMwindow();
 
         $('#atticRadarMenuSettingsScreen').hide();
+        $('#atticRadarMenuSPCScreen').hide();
         $('#atticRadarMenuMainScreen').show();
     })
 
@@ -29166,7 +29167,6 @@ function _hide_layers() {
 }
 
 function _click_listener(e) {
-    console.log(e)
     for (var i = 0; i < e.features.length; i++) {
         const properties = e.features[i].properties;
 

@@ -16,6 +16,7 @@ function settingsOption(index) {
         armFunctions.showARMwindow();
 
         $('#atticRadarMenuSettingsScreen').hide();
+        $('#atticRadarMenuSPCScreen').hide();
         $('#atticRadarMenuMainScreen').show();
     })
 
