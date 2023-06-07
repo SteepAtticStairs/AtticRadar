@@ -52,8 +52,14 @@ function load() {
     // load the hurricanes module
     require('../../hurricanes/menu_item');
 
+    // load the SPC module
+    require('../../spc/menu_item');
+
     // detect if AtticRadar is being loaded in an iframe
     require('../misc/detect_iframe');
+
+    // $('#settingsItemClass').click();
+    // $('#armrSPCOutlooksBtn').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {

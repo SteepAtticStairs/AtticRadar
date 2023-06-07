@@ -261,7 +261,7 @@
     <div id="atticRadarMenu" style="display: none">
         <div id="atticRadarMenuContainer">
             <div id="atticRadarMenuBody">
-                <div id="atticRadarMenuMainScreen">
+                <div id="atticRadarMenuMainScreen" class="armScreen">
                     <div class="armsHeader">Menu<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
                     <br>
                     <div class="armrHeader">SETTINGS</div>
@@ -339,7 +339,7 @@
                     <br>
                     <div class="atticRadarMenuRow">Contents Top</div> -->
                 </div>
-                <div id="atticRadarMenuSettingsScreen" style="display: none">
+                <div id="atticRadarMenuSettingsScreen" class="armScreen" style="display: none">
                     <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSettingsBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Settings<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
                     <br>
                     <div class="armrHeader armrHeaderWide">MAP LAYERS</div>
@@ -355,10 +355,10 @@
                         Lightning
                         <i class="toggleSwitchContainter tscWide" id="armrLightningVisBtnSwitch"><input type="checkbox" id="armrLightningVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrLightningVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSPCOutlooksVisBtn">
+                    <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSPCOutlooksVisBtn">
                         SPC Outlooks
                         <i class="toggleSwitchContainter tscWide" id="armrSPCOutlooksVisBtnSwitch"><input type="checkbox" id="armrSPCOutlooksVisBtnSwitchElem" class="toggleSwitch" /><label for="armrSPCOutlooksVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
-                    </div>
+                    </div> -->
                     <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightningVisBtn">
                         Lightning
                         <i class="toggleSwitchContainter tscWide" id="armrLightningVisBtnSwitch"><input type="checkbox" id="armrLightningVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrLightningVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
@@ -376,6 +376,16 @@
                         <i class="toggleSwitchContainter tscWide" id="armrUSAMETARSBtnSwitch"><input type="checkbox" id="armrUSAMETARSBtnSwitchElem" class="toggleSwitch" checked /><label for="armrUSAMETARSBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div> -->
                     <br>
+
+                    <div class="armrHeader">SPC</div>
+                    <div class="atticRadarMenuRow" id="armrSPCOutlooksBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
+                        SPC Outlooks
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+
+                    <br>
+
                     <div class="armrHeader armrHeaderWide">ALERTS</div>
                     <!-- <div class="atticRadarMenuRow armrTop armrWide" id="armrEUPBtn">
                         <b style="font-weight: 900">Standard Alerts Only</b>
@@ -386,22 +396,35 @@
                         Warnings
                         <i class="toggleSwitchContainter tscWide" id="armrWarningsBtnSwitch"><input type="checkbox" id="armrWarningsBtnSwitchElem" class="toggleSwitch" checked /><label for="armrWarningsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrWatchesBtn">
+                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrWatchesBtn">
                         Watches
                         <i class="toggleSwitchContainter tscWide" id="armrWatchesBtnSwitch"><input type="checkbox" id="armrWatchesBtnSwitchElem" class="toggleSwitch" /><label for="armrWatchesBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrStatementsBtn">
+                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrStatementsBtn">
                         Statements
                         <i class="toggleSwitchContainter tscWide" id="armrStatementsBtnSwitch"><input type="checkbox" id="armrStatementsBtnSwitchElem" class="toggleSwitch" checked /><label for="armrStatementsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrAdvisoriesBtn">
+                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrAdvisoriesBtn">
                         Advisories
                         <i class="toggleSwitchContainter tscWide" id="armrAdvisoriesBtnSwitch"><input type="checkbox" id="armrAdvisoriesBtnSwitchElem" class="toggleSwitch" /><label for="armrAdvisoriesBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrOtherBtn">
+                    <div class="atticRadarMenuRow armrBottom armrWide" id="armrOtherBtn">
                         Other&nbsp;<i style="opacity: 50%">(everything else)</i>
                         <i class="toggleSwitchContainter tscWide" id="armrOtherBtnSwitch"><input type="checkbox" id="armrOtherBtnSwitchElem" class="toggleSwitch" /><label for="armrOtherBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
+                </div>
+                <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
+                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
+                    <br>
+                    <div class="armrHeader">Day 1</div>
+                    <div class="atticRadarMenuRow armrTop armrWide" id="armrSPC_day1_cat_Btn">
+                        Categorical
+                        <i class="toggleSwitchContainter tscWide" id="armrSPC_day1_cat_BtnSwitch"><input type="checkbox" id="armrSPC_day1_cat_BtnSwitchElem" class="toggleSwitch" /><label for="armrSPC_day1_cat_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <!-- <div class="atticRadarMenuRow armrTop armrWide" id="armrSPC_day1_fire_Btn">
+                        Fire
+                        <i class="toggleSwitchContainter tscWide" id="armrSPC_day1_fire_BtnSwitch"><input type="checkbox" id="armrSPC_day1_fire_BtnSwitchElem" class="toggleSwitch" /><label for="armrSPC_day1_fire_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div> -->
                 </div>
             </div>
         </div>

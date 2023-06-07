@@ -118,12 +118,13 @@ $('.armrSlideDown').hover(function() {
 
 const fadeDuration = 150;
 
-var mainMenuScreen = $('#atticRadarMenuMainScreen');
-var settingsScreen = $('#atticRadarMenuSettingsScreen');
+var mainMenuScreen = '#atticRadarMenuMainScreen';
+var settingsScreen = '#atticRadarMenuSettingsScreen';
+var spcScreen = '#atticRadarMenuSPCScreen';
 
 $('#armrSettingsBtn').click(function() {
-    mainMenuScreen.fadeOut(fadeDuration, function() {
-        settingsScreen.fadeIn(fadeDuration);
+    $(`${mainMenuScreen}`).fadeOut(fadeDuration, function() {
+        $(`${settingsScreen}`).fadeIn(fadeDuration);
     });
     // mainMenuScreen.css('position', 'absolute').hide('slide', { direction: 'left' }, 1000);
     // settingsScreen.show('slide', { direction: 'right' }, 1000);
@@ -138,8 +139,19 @@ $('#armrSettingsBtn').click(function() {
     // });
 })
 $('#armsSettingsBackBtn').click(function() {
-    settingsScreen.fadeOut(fadeDuration, function() {
-        mainMenuScreen.fadeIn(fadeDuration);
+    $(`${settingsScreen}`).fadeOut(fadeDuration, function() {
+        $(`${mainMenuScreen}`).fadeIn(fadeDuration);
+    });
+})
+
+$('#armrSPCOutlooksBtn').click(function() {
+    $(`${mainMenuScreen},${settingsScreen}`).fadeOut(fadeDuration, function() {
+        $(`${spcScreen}`).fadeIn(fadeDuration);
+    });
+})
+$('#armsSPCBackBtn').click(function() {
+    $(`${mainMenuScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
+        $(`${settingsScreen}`).fadeIn(fadeDuration);
     });
 })
 

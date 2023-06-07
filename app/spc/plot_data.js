@@ -1,7 +1,18 @@
 const map = require('../core/map/map');
 const set_layer_order = require('../core/map/setLayerOrder');
 
+function _hide_layers() {
+    if (map.getLayer('spc_fill')) {
+        // map.setLayoutProperty('spc_fill', 'visibility', 'none');
+        // map.setLayoutProperty('spc_border', 'visibility', 'none');
+        map.removeLayer('spc_fill');
+        map.removeLayer('spc_border');
+        map.removeSource('spc_source');
+    }
+}
+
 function _click_listener(e) {
+    console.log(e)
     for (var i = 0; i < e.features.length; i++) {
         const properties = e.features[i].properties;
 
@@ -16,6 +27,8 @@ function _click_listener(e) {
 }
 
 function plot_data(geojson) {
+    _hide_layers();
+
     map.addSource('spc_source', {
         'type': 'geojson',
         data: geojson

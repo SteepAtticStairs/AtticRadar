@@ -109,19 +109,19 @@ function settingsOption(index) {
     // this is in app/alerts/drawAlertShapes.js
     //$('#showExtraAlertPolygonsCheckbox').on('click', function() {})
 
-    armFunctions.toggleswitchFunctions($('#armrSPCOutlooksVisBtnSwitchElem'), function() {
-        if (map.getLayer('spc_fill')) {
-            map.setLayoutProperty('spc_fill', 'visibility', 'visible');
-            map.setLayoutProperty('spc_border', 'visibility', 'visible');
-        } else {
-            fetch_spc_data();
-        }
-    }, function() {
-        if (map.getLayer('spc_fill')) {
-            map.setLayoutProperty('spc_fill', 'visibility', 'none');
-            map.setLayoutProperty('spc_border', 'visibility', 'none');
-        }
-    })
+    // armFunctions.toggleswitchFunctions($('#armrSPCOutlooksVisBtnSwitchElem'), function() {
+    //     if (map.getLayer('spc_fill')) {
+    //         map.setLayoutProperty('spc_fill', 'visibility', 'visible');
+    //         map.setLayoutProperty('spc_border', 'visibility', 'visible');
+    //     } else {
+    //         fetch_spc_data();
+    //     }
+    // }, function() {
+    //     if (map.getLayer('spc_fill')) {
+    //         map.setLayoutProperty('spc_fill', 'visibility', 'none');
+    //         map.setLayoutProperty('spc_border', 'visibility', 'none');
+    //     }
+    // })
 }
 
 module.exports = {
