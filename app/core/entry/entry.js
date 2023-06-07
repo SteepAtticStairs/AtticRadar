@@ -51,6 +51,9 @@ function load() {
 
     // load the hurricanes module
     require('../../hurricanes/menu_item');
+
+    // detect if AtticRadar is being loaded in an iframe
+    require('../misc/detect_iframe');
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
