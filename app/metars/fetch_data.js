@@ -58,10 +58,12 @@ function fetchMETARData() {
             if (parsedXMLData.response.data.METAR[item].hasOwnProperty('latitude')) {
                 var stationId = parsedXMLData.response.data.METAR[item].station_id['#text'];
                 const current_metar_info = _get_metar_station_info(stationId);
+                const country = current_metar_info.country;
 
+                const allowed_countries = ['US', 'PR', 'GU', 'VI', 'AS'];
                 const only_USA = true; // $('#armrUSAMETARSBtnSwitchElem').is(':checked');
                 if (only_USA) {
-                    if (current_metar_info.country != 'US'/* || current_metar_info.country == 'CA'*/) {
+                    if (!allowed_countries.includes(country)) {
                         delete parsedXMLData.response.data.METAR[item];
                     }
                 }
