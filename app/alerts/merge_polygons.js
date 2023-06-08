@@ -58,8 +58,10 @@ function merge_polygons(polygons) {
             else if (lookup[key].properties.zone_type == 'county') { zones = county_zones }
             else if (lookup[key].properties.zone_type == 'fire') { zones = fire_zones }
 
-            const exploded = turf.explode(zones[zs[n]]).features;
-            shapes.push(...exploded);
+            if (zones[zs[n]] != undefined) {
+                const exploded = turf.explode(zones[zs[n]]).features;
+                shapes.push(...exploded);
+            }
         }
         const fc = turf.featureCollection(shapes);
         const outline = turf.convex(fc);
