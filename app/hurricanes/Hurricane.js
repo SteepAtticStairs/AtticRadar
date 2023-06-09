@@ -14,7 +14,6 @@ class Hurricane {
     }
 
     plot() {
-        window.atticData.hurricane_layers = [];
         this._plot_cone();
         this._plot_forecast_track();
         this._plot_forecast_points();
@@ -23,6 +22,7 @@ class Hurricane {
     _plot_forecast_points() {
         const source_name = `hurricane_forecast_points_${this._storm_id}_source`;
         const layer_name = `hurricane_forecast_points_${this._storm_id}_layer`;
+        // const label_layer_name = `hurricane_forecast_points_label_${this._storm_id}_layer`;
         window.atticData.hurricane_layers.push(source_name, layer_name);
 
         map.addSource(source_name, {
@@ -32,15 +32,11 @@ class Hurricane {
 
         map.addLayer({
             'id': layer_name,
-            'type': 'symbol',
+            'type': 'circle',
             'source': source_name,
-            'layout': {
-                'icon-image': ['get', 'sshws_abbv'],
-                'icon-size': 0.13,
-                'symbol-sort-key': ['get', 'order'],
-
-                // 'icon-allow-overlap': true,
-                // 'icon-ignore-placement': true,
+            'paint': {
+                'circle-radius': 6,
+                'circle-color': ['get', 'sshws_color'],
             }
         });
 
@@ -122,16 +118,6 @@ class Hurricane {
             points.push(turf.point(coords, properties));
         }
         points = points.filter(feature => feature.properties.sshws_value != undefined);
-
-        // set the order for map symbol collision
-        for (var i = 0; i < points.length; i++) {
-            // points[i].properties.order = 1;
-            // points[i].properties.order = points.length - i;
-            points[i].properties.order = i;
-        }
-        // points[0].properties.order = 0;
-        // points[points.length - 1].properties.order = 0;
-
         this.forecast_points = turf.featureCollection(points);
     }
 

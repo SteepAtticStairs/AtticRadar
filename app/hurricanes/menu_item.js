@@ -11,6 +11,7 @@ armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function()
                 map.setLayoutProperty(hurricane_layers[i], 'visibility', 'visible');
             }
         }
+        $('#hurricaneLegendDiv').show();
     } else {
         init();
     }
@@ -22,4 +23,5 @@ armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function()
             map.setLayoutProperty(hurricane_layers[i], 'visibility', 'none');
         }
     }
+    $('#hurricaneLegendDiv').hide();
 })

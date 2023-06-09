@@ -1617,6 +1617,7 @@ function load() {
 
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
+    // $('#armrHurricanesBtnSwitchElem').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
@@ -4230,7 +4231,6 @@ class Hurricane {
     }
 
     plot() {
-        window.atticData.hurricane_layers = [];
         this._plot_cone();
         this._plot_forecast_track();
         this._plot_forecast_points();
@@ -4239,6 +4239,7 @@ class Hurricane {
     _plot_forecast_points() {
         const source_name = `hurricane_forecast_points_${this._storm_id}_source`;
         const layer_name = `hurricane_forecast_points_${this._storm_id}_layer`;
+        // const label_layer_name = `hurricane_forecast_points_label_${this._storm_id}_layer`;
         window.atticData.hurricane_layers.push(source_name, layer_name);
 
         map.addSource(source_name, {
@@ -4248,15 +4249,11 @@ class Hurricane {
 
         map.addLayer({
             'id': layer_name,
-            'type': 'symbol',
+            'type': 'circle',
             'source': source_name,
-            'layout': {
-                'icon-image': ['get', 'sshws_abbv'],
-                'icon-size': 0.13,
-                'symbol-sort-key': ['get', 'order'],
-
-                // 'icon-allow-overlap': true,
-                // 'icon-ignore-placement': true,
+            'paint': {
+                'circle-radius': 6,
+                'circle-color': ['get', 'sshws_color'],
             }
         });
 
@@ -4338,16 +4335,6 @@ class Hurricane {
             points.push(turf.point(coords, properties));
         }
         points = points.filter(feature => feature.properties.sshws_value != undefined);
-
-        // set the order for map symbol collision
-        for (var i = 0; i < points.length; i++) {
-            // points[i].properties.order = 1;
-            // points[i].properties.order = points.length - i;
-            points[i].properties.order = i;
-        }
-        // points[0].properties.order = 0;
-        // points[points.length - 1].properties.order = 0;
-
         this.forecast_points = turf.featureCollection(points);
     }
 
@@ -4365,6 +4352,17 @@ const Hurricane = require('./Hurricane');
 const icons = require('../core/map/icons/icons');
 const create_circle_with_text = require('../core/misc/create_circle_with_text');
 const ut = require('../core/utils');
+
+function _position_legend() {
+    const elem = $('#hurricaneLegendDiv');
+    const padding = 15;
+
+    elem.show();
+    elem.css({
+        'top': parseFloat($('#map').css('top')) + padding,
+        'left': padding
+    });
+}
 
 function init_hurricane_loading() {
     jtwc_fetch_data((jtwc_storage) => {
@@ -4385,6 +4383,8 @@ function init_hurricane_loading() {
             [C4_circle, 'C4'],
             [C5_circle, 'C5'],
         ], () => {
+            window.atticData.hurricane_layers = [];
+            _position_legend();
             // console.log(jtwc_storage);
 
             const keys = Object.keys(jtwc_storage);
@@ -4595,6 +4595,7 @@ armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function()
                 map.setLayoutProperty(hurricane_layers[i], 'visibility', 'visible');
             }
         }
+        $('#hurricaneLegendDiv').show();
     } else {
         init();
     }
@@ -4606,6 +4607,7 @@ armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function()
             map.setLayoutProperty(hurricane_layers[i], 'visibility', 'none');
         }
     }
+    $('#hurricaneLegendDiv').hide();
 })
 },{"../core/map/map":13,"../core/menu/atticRadarMenu":17,"./init":32}],37:[function(require,module,exports){
 const map = require('../core/map/map');

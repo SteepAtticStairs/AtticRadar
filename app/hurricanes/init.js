@@ -4,6 +4,17 @@ const icons = require('../core/map/icons/icons');
 const create_circle_with_text = require('../core/misc/create_circle_with_text');
 const ut = require('../core/utils');
 
+function _position_legend() {
+    const elem = $('#hurricaneLegendDiv');
+    const padding = 15;
+
+    elem.show();
+    elem.css({
+        'top': parseFloat($('#map').css('top')) + padding,
+        'left': padding
+    });
+}
+
 function init_hurricane_loading() {
     jtwc_fetch_data((jtwc_storage) => {
         const TD_circle = create_circle_with_text('TD', ut.sshwsValues[0][1], 'black', 200, 1.2, false);
@@ -23,6 +34,8 @@ function init_hurricane_loading() {
             [C4_circle, 'C4'],
             [C5_circle, 'C5'],
         ], () => {
+            window.atticData.hurricane_layers = [];
+            _position_legend();
             // console.log(jtwc_storage);
 
             const keys = Object.keys(jtwc_storage);

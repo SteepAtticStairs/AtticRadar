@@ -60,6 +60,7 @@ function load() {
 
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
+    // $('#armrHurricanesBtnSwitchElem').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
