@@ -1,19 +1,6 @@
 const armFunctions = require('../core/menu/atticRadarMenu');
 const map = require('../core/map/map');
-
-const HurricaneFetcher = require('./HurricaneFetcher');
-const HurricaneParser = require('./HurricaneParser');
-const HurricaneFormatter = require('./HurricaneFormatter');
-const HurricanePlotter = require('./HurricanePlotter');
-
-function init() {
-    new HurricaneFetcher((master_storms_list) => {
-        new HurricaneParser(master_storms_list, (master_storms_list) => {
-            const formatted = new HurricaneFormatter(master_storms_list);
-            new HurricanePlotter(formatted.master_storms_list);
-        });
-    });
-}
+const init = require('./init');
 
 armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function() {
     const hurricane_layers = window.atticData.hurricane_layers;

@@ -1,0 +1,76 @@
+const ut = require('../../core/utils');
+const jtwc_format_data = require('./jtwc_format_data');
+
+function _parse_jtwc_text(text) {
+    // Regular expression pattern to match the URL
+    const url_pattern = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/g;
+    // Find all occurrences of the URL pattern in the HTML code
+    const matches = [...text.matchAll(url_pattern)];
+
+    const ids = [];
+    for (var i = 0; i < matches.length; i++) {
+        const url = matches[i][2];
+        if (url.includes('kmz')) {
+            const url_parts = url.split('/');
+            const id = url_parts[url_parts.length - 1].replaceAll('.kmz', '');
+            ids.push(id);
+        }
+    }
+    return ids;
+}
+
+function _list_storms(callback) {
+    const jtwc_storm_list_url = `https://www.metoc.navy.mil/jtwc/rss/jtwc.rss`;
+    const jtwc_storage = {};
+
+    fetch(ut.phpProxy + jtwc_storm_list_url)
+    .then(response => response.text())
+    .then(text => {
+        const jtwc_ids = _parse_jtwc_text(text);
+
+        for (var i = 0; i < jtwc_ids.length; i++) {
+            jtwc_storage[jtwc_ids[i]] = {
+                'kmz': ''
+            }
+        }
+
+        callback(jtwc_storage);
+    })
+}
+
+function _fetch_kmz(jtwc_storage, callback) {
+    const jtwc_ids = Object.keys(jtwc_storage);
+
+    function _jtwc_fetch_from_ids(cb, index = 0) {
+        const id = jtwc_ids[index];
+        const kmz_url = `https://www.metoc.navy.mil/jtwc/products/${id.toLowerCase()}.kmz`;
+        fetch(ut.phpProxy + kmz_url)
+        .then(response => response.blob())
+        .then(blob => {
+            blob.lastModifiedDate = new Date();
+            blob.name = kmz_url;
+
+            jtwc_storage[id].kmz = blob;
+
+            if (index < jtwc_ids.length - 1) {
+                _jtwc_fetch_from_ids(cb, index + 1);
+            } else {
+                cb();
+            }
+        })
+    }
+
+    _jtwc_fetch_from_ids(() => {
+        callback(jtwc_storage);
+    });
+}
+
+function jtwc_fetch_data(callback) {
+    _list_storms((jtwc_storage) => {
+        _fetch_kmz(jtwc_storage, (jtwc_storage) => {
+            jtwc_format_data(jtwc_storage, callback);
+        })
+    })
+}
+
+module.exports = jtwc_fetch_data;

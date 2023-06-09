@@ -13,38 +13,56 @@ function move_layer_to_top(layer_name, before_layer = undefined) {
 function setLayerOrder() {
     const before_layer = 'land-structure-line';
 
+    // SPC Outlooks layers
     move_layer_to_top('spc_fill', before_layer);
     move_layer_to_top('spc_border', before_layer);
 
+    // the main radar layer
     move_layer_to_top('baseReflectivity', before_layer);
 
+    // weather radio layer
     move_layer_to_top('radioStationLayer');
 
+    // alerts layers
     move_layer_to_top('alertsLayerOutline');
     move_layer_to_top('alertsLayer');
     move_layer_to_top('alertsLayerFill');
-    var storm_track_layers = window.atticData.storm_track_layers;
+
+    // storm tracks layers
+    const storm_track_layers = window.atticData.storm_track_layers;
     if (storm_track_layers != undefined) {
-        for (var i in storm_track_layers) {
+        for (var i = 0; i < storm_track_layers.length; i++) {
             move_layer_to_top(storm_track_layers[i]);
         }
     }
-    var tvs_layers = window.atticData.tvs_layers;
+    const tvs_layers = window.atticData.tvs_layers;
     if (tvs_layers != undefined) {
-        for (var i in tvs_layers) {
+        for (var i = 0; i < tvs_layers.length; i++) {
             move_layer_to_top(tvs_layers[i]);
         }
     }
 
+    // metar layer
     move_layer_to_top('metarSymbolLayer');
 
+    // lightning layer
     move_layer_to_top('lightningLayer');
 
+    // station marker layer
     move_layer_to_top('stationSymbolLayer');
 
-    var surface_fronts_layers = window.atticData.surface_fronts_layers;
+    // hurricane layers
+    const hurricane_layers = window.atticData.hurricane_layers;
+    if (hurricane_layers != undefined) {
+        for (var i = 0; i < hurricane_layers.length; i++) {
+            move_layer_to_top(hurricane_layers[i]);
+        }
+    }
+
+    // surface fronts layers
+    const surface_fronts_layers = window.atticData.surface_fronts_layers;
     if (surface_fronts_layers != undefined) {
-        for (var i in surface_fronts_layers) {
+        for (var i = 0; i < surface_fronts_layers.length; i++) {
             move_layer_to_top(surface_fronts_layers[i]);
         }
     }
