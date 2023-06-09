@@ -73,7 +73,7 @@ function _get_font_metrics(text, width_height, font_size_scale, font_family_from
     return [text_x, text_y];
 }
 
-function create_circle_with_text(text, circle_color, text_color, width_height, font_size_scale) {
+function create_circle_with_text(text, circle_color, text_color, width_height, font_size_scale, return_encoded = true) {
     // Get the font family from the CSS
     const font_family_from_css = getComputedStyle(document.body).fontFamily;
 
@@ -110,9 +110,12 @@ function create_circle_with_text(text, circle_color, text_color, width_height, f
     svg.appendChild(text_element);
 
     // Return the SVG data
-    const serializer = new XMLSerializer();
-    const svg_data = serializer.serializeToString(svg);
-    return 'data:image/svg+xml,' + encodeURIComponent(svg_data);
+    const svg_data = new XMLSerializer().serializeToString(svg);
+    if (return_encoded) {
+        return 'data:image/svg+xml,' + encodeURIComponent(svg_data);
+    } else {
+        return svg_data;
+    }
 }
 
 module.exports = create_circle_with_text;

@@ -23,8 +23,7 @@ class Hurricane {
     _plot_forecast_points() {
         const source_name = `hurricane_forecast_points_${this._storm_id}_source`;
         const layer_name = `hurricane_forecast_points_${this._storm_id}_layer`;
-        const label_layer_name = `hurricane_forecast_points_label_${this._storm_id}_layer`;
-        window.atticData.hurricane_layers.push(layer_name, label_layer_name);
+        window.atticData.hurricane_layers.push(source_name, layer_name);
 
         map.addSource(source_name, {
             'type': 'geojson',
@@ -33,46 +32,18 @@ class Hurricane {
 
         map.addLayer({
             'id': layer_name,
-            'type': 'circle',
-            'source': source_name,
-            'paint': {
-                'circle-radius': 12, /* [
-                    'case',
-                    ['==', ['get', 'first_point'], true],
-                    16,
-                    ['==', ['get', 'first_point'], false],
-                    12,
-                    12
-                ], */
-                'circle-color': ['get', 'sshws_color'],
-            }
-        });
-        map.addLayer({
-            'id': label_layer_name,
             'type': 'symbol',
             'source': source_name,
             'layout': {
-                'text-field': ['get', 'sshws_abbv'],
-                'text-font': [
-                    'Arial Unicode MS Bold'
-                ],
-                'text-size': 14, /* [
-                    'case',
-                    ['==', ['get', 'first_point'], true],
-                    18,
-                    ['==', ['get', 'first_point'], false],
-                    14,
-                    14
-                ], */
-                // 'text-allow-overlap': true,
-                // 'text-ignore-placement': true,
+                'icon-image': ['get', 'sshws_abbv'],
+                'icon-size': 0.13,
             }
         });
 
-        map.on('mouseover', label_layer_name, function(e) {
+        map.on('mouseover', layer_name, function(e) {
             map.getCanvas().style.cursor = 'pointer';
         });
-        map.on('mouseout', label_layer_name, function(e) {
+        map.on('mouseout', layer_name, function(e) {
             map.getCanvas().style.cursor = '';
         });
 

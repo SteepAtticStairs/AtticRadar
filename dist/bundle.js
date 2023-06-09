@@ -3069,7 +3069,7 @@ function _get_font_metrics(text, width_height, font_size_scale, font_family_from
     return [text_x, text_y];
 }
 
-function create_circle_with_text(text, circle_color, text_color, width_height, font_size_scale) {
+function create_circle_with_text(text, circle_color, text_color, width_height, font_size_scale, return_encoded = true) {
     // Get the font family from the CSS
     const font_family_from_css = getComputedStyle(document.body).fontFamily;
 
@@ -3106,9 +3106,12 @@ function create_circle_with_text(text, circle_color, text_color, width_height, f
     svg.appendChild(text_element);
 
     // Return the SVG data
-    const serializer = new XMLSerializer();
-    const svg_data = serializer.serializeToString(svg);
-    return 'data:image/svg+xml,' + encodeURIComponent(svg_data);
+    const svg_data = new XMLSerializer().serializeToString(svg);
+    if (return_encoded) {
+        return 'data:image/svg+xml,' + encodeURIComponent(svg_data);
+    } else {
+        return svg_data;
+    }
 }
 
 module.exports = create_circle_with_text;
@@ -4236,8 +4239,7 @@ class Hurricane {
     _plot_forecast_points() {
         const source_name = `hurricane_forecast_points_${this._storm_id}_source`;
         const layer_name = `hurricane_forecast_points_${this._storm_id}_layer`;
-        const label_layer_name = `hurricane_forecast_points_label_${this._storm_id}_layer`;
-        window.atticData.hurricane_layers.push(layer_name, label_layer_name);
+        window.atticData.hurricane_layers.push(source_name, layer_name);
 
         map.addSource(source_name, {
             'type': 'geojson',
@@ -4246,46 +4248,18 @@ class Hurricane {
 
         map.addLayer({
             'id': layer_name,
-            'type': 'circle',
-            'source': source_name,
-            'paint': {
-                'circle-radius': 12, /* [
-                    'case',
-                    ['==', ['get', 'first_point'], true],
-                    16,
-                    ['==', ['get', 'first_point'], false],
-                    12,
-                    12
-                ], */
-                'circle-color': ['get', 'sshws_color'],
-            }
-        });
-        map.addLayer({
-            'id': label_layer_name,
             'type': 'symbol',
             'source': source_name,
             'layout': {
-                'text-field': ['get', 'sshws_abbv'],
-                'text-font': [
-                    'Arial Unicode MS Bold'
-                ],
-                'text-size': 14, /* [
-                    'case',
-                    ['==', ['get', 'first_point'], true],
-                    18,
-                    ['==', ['get', 'first_point'], false],
-                    14,
-                    14
-                ], */
-                // 'text-allow-overlap': true,
-                // 'text-ignore-placement': true,
+                'icon-image': ['get', 'sshws_abbv'],
+                'icon-size': 0.13,
             }
         });
 
-        map.on('mouseover', label_layer_name, function(e) {
+        map.on('mouseover', layer_name, function(e) {
             map.getCanvas().style.cursor = 'pointer';
         });
-        map.on('mouseout', label_layer_name, function(e) {
+        map.on('mouseout', layer_name, function(e) {
             map.getCanvas().style.cursor = '';
         });
 
@@ -4374,28 +4348,49 @@ module.exports = Hurricane;
 },{"../core/map/map":13,"../core/utils":30,"@turf/turf":107}],32:[function(require,module,exports){
 const jtwc_fetch_data = require('./jtwc/jtwc_fetch_data');
 const Hurricane = require('./Hurricane');
+const icons = require('../core/map/icons/icons');
+const create_circle_with_text = require('../core/misc/create_circle_with_text');
+const ut = require('../core/utils');
 
 function init_hurricane_loading() {
     jtwc_fetch_data((jtwc_storage) => {
-        // console.log(jtwc_storage);
+        const TD_circle = create_circle_with_text('TD', ut.sshwsValues[0][1], 'black', 200, 1.2, false);
+        const TS_circle = create_circle_with_text('TS', ut.sshwsValues[1][1], 'black', 200, 1.2, false);
+        const C1_circle = create_circle_with_text('C1', ut.sshwsValues[2][1], 'black', 200, 1.2, false);
+        const C2_circle = create_circle_with_text('C2', ut.sshwsValues[3][1], 'black', 200, 1.2, false);
+        const C3_circle = create_circle_with_text('C3', ut.sshwsValues[4][1], 'black', 200, 1.2, false);
+        const C4_circle = create_circle_with_text('C4', ut.sshwsValues[5][1], 'black', 200, 1.2, false);
+        const C5_circle = create_circle_with_text('C5', ut.sshwsValues[6][1], 'black', 200, 1.2, false);
 
-        const keys = Object.keys(jtwc_storage);
-        for (var i = 0; i < keys.length; i++) {
-            const storm_id = keys[i];
-            const cone = jtwc_storage[storm_id].cone;
-            const forecast_track = jtwc_storage[storm_id].forecast_track;
-            const points = jtwc_storage[storm_id].forecast_points;
-            const point_properties = jtwc_storage[storm_id].forecast_point_properties;
+        icons.add_icon_svg([
+            [TD_circle, 'TD'],
+            [TS_circle, 'TS'],
+            [C1_circle, 'C1'],
+            [C2_circle, 'C2'],
+            [C3_circle, 'C3'],
+            [C4_circle, 'C4'],
+            [C5_circle, 'C5'],
+        ], () => {
+            // console.log(jtwc_storage);
 
-            const cyclone = new Hurricane(storm_id, cone, forecast_track, points, point_properties);
-            cyclone.plot();
-            console.log(cyclone);
-        }
+            const keys = Object.keys(jtwc_storage);
+            for (var i = 0; i < keys.length; i++) {
+                const storm_id = keys[i];
+                const cone = jtwc_storage[storm_id].cone;
+                const forecast_track = jtwc_storage[storm_id].forecast_track;
+                const points = jtwc_storage[storm_id].forecast_points;
+                const point_properties = jtwc_storage[storm_id].forecast_point_properties;
+
+                const cyclone = new Hurricane(storm_id, cone, forecast_track, points, point_properties);
+                cyclone.plot();
+                console.log(cyclone);
+            }
+        });
     });
 }
 
 module.exports = init_hurricane_loading;
-},{"./Hurricane":31,"./jtwc/jtwc_fetch_data":33}],33:[function(require,module,exports){
+},{"../core/map/icons/icons":12,"../core/misc/create_circle_with_text":25,"../core/utils":30,"./Hurricane":31,"./jtwc/jtwc_fetch_data":33}],33:[function(require,module,exports){
 const ut = require('../../core/utils');
 const jtwc_format_data = require('./jtwc_format_data');
 
