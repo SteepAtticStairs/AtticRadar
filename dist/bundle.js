@@ -4253,6 +4253,10 @@ class Hurricane {
             'layout': {
                 'icon-image': ['get', 'sshws_abbv'],
                 'icon-size': 0.13,
+                'symbol-sort-key': ['get', 'order'],
+
+                // 'icon-allow-overlap': true,
+                // 'icon-ignore-placement': true,
             }
         });
 
@@ -4334,6 +4338,16 @@ class Hurricane {
             points.push(turf.point(coords, properties));
         }
         points = points.filter(feature => feature.properties.sshws_value != undefined);
+
+        // set the order for map symbol collision
+        for (var i = 0; i < points.length; i++) {
+            // points[i].properties.order = 1;
+            // points[i].properties.order = points.length - i;
+            points[i].properties.order = i;
+        }
+        // points[0].properties.order = 0;
+        // points[points.length - 1].properties.order = 0;
+
         this.forecast_points = turf.featureCollection(points);
     }
 
@@ -4499,7 +4513,6 @@ function _grab_cone_track_points(jtwc_storage) {
 
         const points = [];
         const point_properties = [];
-        var matched_yet = false;
         for (var n = 0; n < geojson.features.length; n++) {
             const name = geojson.features[n].properties.name;
             const type = geojson.features[n].geometry.type;
@@ -4510,16 +4523,11 @@ function _grab_cone_track_points(jtwc_storage) {
                 const matched = name.match(/(\d+\s*knots)/)?.[0];
                 if (matched) {
                     const this_point_properties = {};
-                    if (!matched_yet) {
-                        matched_yet = true;
-                        this_point_properties.first_point = true;
-                    } else {
-                        this_point_properties.first_point = false;
-                    }
 
                     const knots = parseInt(matched.replaceAll(' knots', ''));
                     this_point_properties.knots = knots;
                     point_properties.push(this_point_properties);
+
                     points.push(geojson.features[n].geometry.coordinates);
                 }
             }

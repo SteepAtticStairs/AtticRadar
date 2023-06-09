@@ -37,6 +37,10 @@ class Hurricane {
             'layout': {
                 'icon-image': ['get', 'sshws_abbv'],
                 'icon-size': 0.13,
+                'symbol-sort-key': ['get', 'order'],
+
+                // 'icon-allow-overlap': true,
+                // 'icon-ignore-placement': true,
             }
         });
 
@@ -118,6 +122,16 @@ class Hurricane {
             points.push(turf.point(coords, properties));
         }
         points = points.filter(feature => feature.properties.sshws_value != undefined);
+
+        // set the order for map symbol collision
+        for (var i = 0; i < points.length; i++) {
+            // points[i].properties.order = 1;
+            // points[i].properties.order = points.length - i;
+            points[i].properties.order = i;
+        }
+        // points[0].properties.order = 0;
+        // points[points.length - 1].properties.order = 0;
+
         this.forecast_points = turf.featureCollection(points);
     }
 
