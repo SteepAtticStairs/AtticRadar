@@ -4249,7 +4249,14 @@ class Hurricane {
             'type': 'circle',
             'source': source_name,
             'paint': {
-                'circle-radius': 12,
+                'circle-radius': 12, /* [
+                    'case',
+                    ['==', ['get', 'first_point'], true],
+                    16,
+                    ['==', ['get', 'first_point'], false],
+                    12,
+                    12
+                ], */
                 'circle-color': ['get', 'sshws_color'],
             }
         });
@@ -4262,9 +4269,16 @@ class Hurricane {
                 'text-font': [
                     'Arial Unicode MS Bold'
                 ],
-                'text-size': 14,
-                'text-allow-overlap': true,
-                'text-ignore-placement': true,
+                'text-size': 14, /* [
+                    'case',
+                    ['==', ['get', 'first_point'], true],
+                    18,
+                    ['==', ['get', 'first_point'], false],
+                    14,
+                    14
+                ], */
+                // 'text-allow-overlap': true,
+                // 'text-ignore-placement': true,
             }
         });
 
@@ -4333,7 +4347,7 @@ class Hurricane {
 
     _format_points() {
         var points = [];
-        for (var i = 0; i < this._forecast_point_properties.length; i++) {
+        for (var i = 0; i < this._forecast_point_coordinates.length; i++) {
             const coords = this._forecast_point_coordinates[i];
             const properties = this._forecast_point_properties[i];
 
@@ -4490,21 +4504,28 @@ function _grab_cone_track_points(jtwc_storage) {
 
         const points = [];
         const point_properties = [];
+        var matched_yet = false;
         for (var n = 0; n < geojson.features.length; n++) {
             const name = geojson.features[n].properties.name;
             const type = geojson.features[n].geometry.type;
 
             if (type == 'Point') {
-                points.push(geojson.features[n].geometry.coordinates);
-
                 const properties = geojson.features[n].properties;
                 const name = properties.name;
                 const matched = name.match(/(\d+\s*knots)/)?.[0];
                 if (matched) {
+                    const this_point_properties = {};
+                    if (!matched_yet) {
+                        matched_yet = true;
+                        this_point_properties.first_point = true;
+                    } else {
+                        this_point_properties.first_point = false;
+                    }
+
                     const knots = parseInt(matched.replaceAll(' knots', ''));
-                    point_properties.push({
-                        'knots': knots
-                    })
+                    this_point_properties.knots = knots;
+                    point_properties.push(this_point_properties);
+                    points.push(geojson.features[n].geometry.coordinates);
                 }
             }
 

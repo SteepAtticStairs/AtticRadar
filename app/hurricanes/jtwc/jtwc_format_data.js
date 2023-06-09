@@ -29,21 +29,28 @@ function _grab_cone_track_points(jtwc_storage) {
 
         const points = [];
         const point_properties = [];
+        var matched_yet = false;
         for (var n = 0; n < geojson.features.length; n++) {
             const name = geojson.features[n].properties.name;
             const type = geojson.features[n].geometry.type;
 
             if (type == 'Point') {
-                points.push(geojson.features[n].geometry.coordinates);
-
                 const properties = geojson.features[n].properties;
                 const name = properties.name;
                 const matched = name.match(/(\d+\s*knots)/)?.[0];
                 if (matched) {
+                    const this_point_properties = {};
+                    if (!matched_yet) {
+                        matched_yet = true;
+                        this_point_properties.first_point = true;
+                    } else {
+                        this_point_properties.first_point = false;
+                    }
+
                     const knots = parseInt(matched.replaceAll(' knots', ''));
-                    point_properties.push({
-                        'knots': knots
-                    })
+                    this_point_properties.knots = knots;
+                    point_properties.push(this_point_properties);
+                    points.push(geojson.features[n].geometry.coordinates);
                 }
             }
 

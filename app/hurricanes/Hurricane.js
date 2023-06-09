@@ -36,7 +36,14 @@ class Hurricane {
             'type': 'circle',
             'source': source_name,
             'paint': {
-                'circle-radius': 12,
+                'circle-radius': 12, /* [
+                    'case',
+                    ['==', ['get', 'first_point'], true],
+                    16,
+                    ['==', ['get', 'first_point'], false],
+                    12,
+                    12
+                ], */
                 'circle-color': ['get', 'sshws_color'],
             }
         });
@@ -49,9 +56,16 @@ class Hurricane {
                 'text-font': [
                     'Arial Unicode MS Bold'
                 ],
-                'text-size': 14,
-                'text-allow-overlap': true,
-                'text-ignore-placement': true,
+                'text-size': 14, /* [
+                    'case',
+                    ['==', ['get', 'first_point'], true],
+                    18,
+                    ['==', ['get', 'first_point'], false],
+                    14,
+                    14
+                ], */
+                // 'text-allow-overlap': true,
+                // 'text-ignore-placement': true,
             }
         });
 
@@ -120,7 +134,7 @@ class Hurricane {
 
     _format_points() {
         var points = [];
-        for (var i = 0; i < this._forecast_point_properties.length; i++) {
+        for (var i = 0; i < this._forecast_point_coordinates.length; i++) {
             const coords = this._forecast_point_coordinates[i];
             const properties = this._forecast_point_properties[i];
 
