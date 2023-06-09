@@ -1231,7 +1231,7 @@ https://tobiasahlin.com/spinkit/
 
 #hurricaneLegendDiv {
     position: absolute;
-    z-index: 1000000;
+    z-index: 500;
     width: fit-content;
     height: fit-content;
 

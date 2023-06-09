@@ -101,6 +101,18 @@ function settingsOption(index) {
     armFunctions.toggleswitchFunctions($('#armrAdvisoriesBtnSwitchElem'), _reload_alerts, _reload_alerts);
     armFunctions.toggleswitchFunctions($('#armrOtherBtnSwitchElem'), _reload_alerts, _reload_alerts);
 
+    armFunctions.toggleswitchFunctions($('#armrHurricaneLegendVisBtnSwitchElem'), function() {
+        const is_hurricanes_enabled = $('#armrHurricanesBtnSwitchElem').is(':checked');
+        if (is_hurricanes_enabled) {
+            $('#hurricaneLegendDiv').show();
+        }
+    }, function() {
+        const is_hurricanes_enabled = $('#armrHurricanesBtnSwitchElem').is(':checked');
+        if (is_hurricanes_enabled) {
+            $('#hurricaneLegendDiv').hide();
+        }
+    })
+
     // armFunctions.toggleswitchFunctions($('#armrUSAMETARSSwitchElem'), function() {
     //     fetchMETARData.fetchMETARData();
     // }, function() {

@@ -2,6 +2,23 @@ const armFunctions = require('../core/menu/atticRadarMenu');
 const map = require('../core/map/map');
 const init = require('./init');
 
+function _legend(show_hide) {
+    const show_legend = $('#armrHurricaneLegendVisBtnSwitchElem').is(':checked');
+
+    const elem = $('#hurricaneLegendDiv');
+    const padding = 15;
+
+    elem.css({
+        'top': parseFloat($('#map').css('top')) + padding,
+        'left': padding
+    });
+
+    if (show_legend) {
+        if (show_hide == 'show') elem.show();
+        else if (show_hide == 'hide') elem.hide();
+    }
+}
+
 armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function() {
     const hurricane_layers = window.atticData.hurricane_layers;
 
@@ -11,8 +28,9 @@ armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function()
                 map.setLayoutProperty(hurricane_layers[i], 'visibility', 'visible');
             }
         }
-        $('#hurricaneLegendDiv').show();
+        _legend('show');
     } else {
+        _legend('show');
         init();
     }
 }, function() {
@@ -23,5 +41,5 @@ armFunctions.toggleswitchFunctions($('#armrHurricanesBtnSwitchElem'), function()
             map.setLayoutProperty(hurricane_layers[i], 'visibility', 'none');
         }
     }
-    $('#hurricaneLegendDiv').hide();
+    _legend('hide');
 })
