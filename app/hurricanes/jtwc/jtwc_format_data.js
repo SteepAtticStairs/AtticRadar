@@ -27,6 +27,8 @@ function _grab_cone_track_points(jtwc_storage) {
         const current_storm = keys[i];
         const geojson = jtwc_storage[current_storm].geojson;
 
+        var last_day_seen = null;
+        var month_look_index = 0;
         const points = [];
         const point_properties = [];
         for (var n = 0; n < geojson.features.length; n++) {
@@ -48,7 +50,18 @@ function _grab_cone_track_points(jtwc_storage) {
                     const date_split = date.split('/');
                     const day = parseInt(date_split[0]);
                     const time = date_split[1];
-                    const current_month_abbv = new Date().toLocaleString('default', { month: 'long' }).slice(0, 3);
+
+                    // this is just a simple check to see if there is month crossing
+                    if (last_day_seen == null) last_day_seen = day;
+                    if (last_day_seen > day) {
+                        month_look_index++;
+                    }
+                    last_day_seen = day;
+
+                    const month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    const current_month_abbv = month_names[new Date().getMonth() + month_look_index].slice(0, 3);
+                    // const current_month_abbv = new Date().toLocaleString('default', { month: 'long' }).slice(0, 3);
+
                     this_point_properties.current_month_abbv = current_month_abbv;
                     this_point_properties.day = day;
                     this_point_properties.time = time;
