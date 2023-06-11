@@ -1265,3 +1265,13 @@ https://tobiasahlin.com/spinkit/
     color: rgba(0, 0, 0, 0);
     pointer-events: none;
 }
+
+.TD { background-color: #348feb; }
+.TS { background-color: #12cc47; }
+.C1 { background-color: #ebcb2f; }
+.C2 { background-color: #eb932f; }
+.C3 { background-color: #eb642f; }
+.C4 { background-color: #eb3b2f; }
+.C5 { background-color: #eb2f87; }
+.OTHER { background-color: #b75eff; }
+.UNKNOWN { background-color: #808080; }

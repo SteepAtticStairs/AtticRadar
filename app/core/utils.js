@@ -482,16 +482,19 @@ function preventFileCaching(url) {
     return url += `&?nocache=${curTime.getTime()}`;
 }
 
+function _return_css_color(class_name) {
+    return $(`.${class_name}`).css('backgroundColor');
+}
 var sshwsValues = [
-    ['Tropical Depression', '#348feb', 'TD'],
-    ['Tropical Storm', '#12cc47', 'TS'],
-    ['Category 1', '#ebcb2f', 'C1'],
-    ['Category 2', '#eb932f', 'C2'],
-    ['Category 3', '#eb642f', 'C3'],
-    ['Category 4', '#eb3b2f', 'C4'],
-    ['Category 5', '#eb2f87', 'C5'],
-    ['Other', 'rgb(183, 94, 255)', 'Other'],
-    ['Unknown', 'rgb(128, 128, 128)', '?']
+    ['Tropical Depression', _return_css_color('TD'), 'TD'],
+    ['Tropical Storm', _return_css_color('TS'), 'TS'],
+    ['Category 1', _return_css_color('C1'), 'C1'],
+    ['Category 2', _return_css_color('C2'), 'C2'],
+    ['Category 3', _return_css_color('C3'), 'C3'],
+    ['Category 4', _return_css_color('C4'), 'C4'],
+    ['Category 5', _return_css_color('C5'), 'C5'],
+    ['Other', _return_css_color('OTHER'), 'Other'],
+    ['Unknown', _return_css_color('UNKNOWN'), '?']
 ]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
