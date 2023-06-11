@@ -2,21 +2,30 @@ const ut = require('../../core/utils');
 const jtwc_format_data = require('./jtwc_format_data');
 
 function _parse_jtwc_text(text) {
-    // Regular expression pattern to match the URL
+    // regex to match the URL
     const url_pattern = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/g;
-    // Find all occurrences of the URL pattern in the HTML code
-    const matches = [...text.matchAll(url_pattern)];
+    const url_matches = [...text.matchAll(url_pattern)];
+
+    // regex to match the cyclone's name
+    const name_pattern = /<b>Tropical Cyclone\s+\d+[A-Z]\s+\((.*?)\).*?<b>Tropical Storm\s+\d+[A-Z]\s+\((.*?)\)/gs;
+    const name_matches = name_pattern.exec(text);
+    var names_found = 0;
 
     const ids = [];
-    for (var i = 0; i < matches.length; i++) {
-        const url = matches[i][2];
+    const names = [];
+    for (var i = 0; i < url_matches.length; i++) {
+        const url = url_matches[i][2];
         if (url.includes('kmz')) {
             const url_parts = url.split('/');
             const id = url_parts[url_parts.length - 1].replaceAll('.kmz', '');
             ids.push(id);
+
+            const name = name_matches[names_found + 1];
+            names.push(name);
+            names_found++;
         }
     }
-    return ids;
+    return [ids, names];
 }
 
 function _list_storms(callback) {
@@ -26,10 +35,11 @@ function _list_storms(callback) {
     fetch(ut.phpProxy + jtwc_storm_list_url)
     .then(response => response.text())
     .then(text => {
-        const jtwc_ids = _parse_jtwc_text(text);
+        const [jtwc_ids, jtwc_names] = _parse_jtwc_text(text);
 
         for (var i = 0; i < jtwc_ids.length; i++) {
             jtwc_storage[jtwc_ids[i]] = {
+                'name': jtwc_names[i],
                 'kmz': ''
             }
         }

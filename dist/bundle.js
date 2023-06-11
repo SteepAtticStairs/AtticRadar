@@ -4234,9 +4234,31 @@ const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
 
+function _click_listener(e) {
+    const feature = e.features[0];
+    const properties = feature.properties;
+
+    const html_contents = 
+`<div style="text-align: center">
+<b style="color: ${properties.sshws_color}">${properties.sshws_value}
+<br>
+${properties.storm_name}</b>
+<br>
+<b>${ut.knotsToMph(properties.knots)}</b> mph
+<br>
+${properties.current_month_abbv} ${properties.day}, ${properties.time}
+</div>`
+
+    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+        .setLngLat(JSON.parse(properties.coordinates))
+        .setHTML(html_contents)
+        .addTo(map);
+}
+
 class Hurricane {
-    constructor (storm_id, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
+    constructor (storm_id, storm_name, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
         this._storm_id = storm_id;
+        this._storm_name = storm_name;
         this._cone_coordinates = cone_coordinates;
         this._forecast_track_coordinates = forecast_track_coordinates;
         this._forecast_point_coordinates = forecast_point_coordinates;
@@ -4279,7 +4301,7 @@ class Hurricane {
             map.getCanvas().style.cursor = '';
         });
 
-        // map.on('click', label_layer_name, _map_click);
+        map.on('click', layer_name, _click_listener);
     }
 
     _plot_forecast_track() {
@@ -4346,6 +4368,7 @@ class Hurricane {
             properties.sshws_abbv = sshws_value[2];
             properties.sshws_color = sshws_value[1];
             properties.coordinates = coords;
+            properties.storm_name = this._storm_name;
 
             points.push(turf.point(coords, properties));
         }
@@ -4364,69 +4387,57 @@ module.exports = Hurricane;
 },{"../core/map/map":13,"../core/utils":30,"@turf/turf":107}],32:[function(require,module,exports){
 const jtwc_fetch_data = require('./jtwc/jtwc_fetch_data');
 const Hurricane = require('./Hurricane');
-const icons = require('../core/map/icons/icons');
-const create_circle_with_text = require('../core/misc/create_circle_with_text');
-const ut = require('../core/utils');
 
 function init_hurricane_loading() {
     jtwc_fetch_data((jtwc_storage) => {
-        const TD_circle = create_circle_with_text('TD', ut.sshwsValues[0][1], 'black', 200, 1.2, false);
-        const TS_circle = create_circle_with_text('TS', ut.sshwsValues[1][1], 'black', 200, 1.2, false);
-        const C1_circle = create_circle_with_text('C1', ut.sshwsValues[2][1], 'black', 200, 1.2, false);
-        const C2_circle = create_circle_with_text('C2', ut.sshwsValues[3][1], 'black', 200, 1.2, false);
-        const C3_circle = create_circle_with_text('C3', ut.sshwsValues[4][1], 'black', 200, 1.2, false);
-        const C4_circle = create_circle_with_text('C4', ut.sshwsValues[5][1], 'black', 200, 1.2, false);
-        const C5_circle = create_circle_with_text('C5', ut.sshwsValues[6][1], 'black', 200, 1.2, false);
+        window.atticData.hurricane_layers = [];
 
-        icons.add_icon_svg([
-            [TD_circle, 'TD'],
-            [TS_circle, 'TS'],
-            [C1_circle, 'C1'],
-            [C2_circle, 'C2'],
-            [C3_circle, 'C3'],
-            [C4_circle, 'C4'],
-            [C5_circle, 'C5'],
-        ], () => {
-            window.atticData.hurricane_layers = [];
-            // console.log(jtwc_storage);
+        const keys = Object.keys(jtwc_storage);
+        for (var i = 0; i < keys.length; i++) {
+            const storm_id = keys[i];
+            const storm_name = jtwc_storage[storm_id].name;
+            const cone = jtwc_storage[storm_id].cone;
+            const forecast_track = jtwc_storage[storm_id].forecast_track;
+            const points = jtwc_storage[storm_id].forecast_points;
+            const point_properties = jtwc_storage[storm_id].forecast_point_properties;
 
-            const keys = Object.keys(jtwc_storage);
-            for (var i = 0; i < keys.length; i++) {
-                const storm_id = keys[i];
-                const cone = jtwc_storage[storm_id].cone;
-                const forecast_track = jtwc_storage[storm_id].forecast_track;
-                const points = jtwc_storage[storm_id].forecast_points;
-                const point_properties = jtwc_storage[storm_id].forecast_point_properties;
-
-                const cyclone = new Hurricane(storm_id, cone, forecast_track, points, point_properties);
-                cyclone.plot();
-                console.log(cyclone);
-            }
-        });
+            const cyclone = new Hurricane(storm_id, storm_name, cone, forecast_track, points, point_properties);
+            cyclone.plot();
+            console.log(cyclone);
+        }
     });
 }
 
 module.exports = init_hurricane_loading;
-},{"../core/map/icons/icons":12,"../core/misc/create_circle_with_text":25,"../core/utils":30,"./Hurricane":31,"./jtwc/jtwc_fetch_data":33}],33:[function(require,module,exports){
+},{"./Hurricane":31,"./jtwc/jtwc_fetch_data":33}],33:[function(require,module,exports){
 const ut = require('../../core/utils');
 const jtwc_format_data = require('./jtwc_format_data');
 
 function _parse_jtwc_text(text) {
-    // Regular expression pattern to match the URL
+    // regex to match the URL
     const url_pattern = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/g;
-    // Find all occurrences of the URL pattern in the HTML code
-    const matches = [...text.matchAll(url_pattern)];
+    const url_matches = [...text.matchAll(url_pattern)];
+
+    // regex to match the cyclone's name
+    const name_pattern = /<b>Tropical Cyclone\s+\d+[A-Z]\s+\((.*?)\).*?<b>Tropical Storm\s+\d+[A-Z]\s+\((.*?)\)/gs;
+    const name_matches = name_pattern.exec(text);
+    var names_found = 0;
 
     const ids = [];
-    for (var i = 0; i < matches.length; i++) {
-        const url = matches[i][2];
+    const names = [];
+    for (var i = 0; i < url_matches.length; i++) {
+        const url = url_matches[i][2];
         if (url.includes('kmz')) {
             const url_parts = url.split('/');
             const id = url_parts[url_parts.length - 1].replaceAll('.kmz', '');
             ids.push(id);
+
+            const name = name_matches[names_found + 1];
+            names.push(name);
+            names_found++;
         }
     }
-    return ids;
+    return [ids, names];
 }
 
 function _list_storms(callback) {
@@ -4436,10 +4447,11 @@ function _list_storms(callback) {
     fetch(ut.phpProxy + jtwc_storm_list_url)
     .then(response => response.text())
     .then(text => {
-        const jtwc_ids = _parse_jtwc_text(text);
+        const [jtwc_ids, jtwc_names] = _parse_jtwc_text(text);
 
         for (var i = 0; i < jtwc_ids.length; i++) {
             jtwc_storage[jtwc_ids[i]] = {
+                'name': jtwc_names[i],
                 'kmz': ''
             }
         }
@@ -4523,6 +4535,7 @@ function _grab_cone_track_points(jtwc_storage) {
             if (type == 'Point') {
                 const properties = geojson.features[n].properties;
                 const name = properties.name;
+                const date = name.split(' ')[0];
                 const matched = name.match(/(\d+\s*knots)/)?.[0];
                 if (matched) {
                     const this_point_properties = {};
@@ -4530,6 +4543,14 @@ function _grab_cone_track_points(jtwc_storage) {
                     const knots = parseInt(matched.replaceAll(' knots', ''));
                     this_point_properties.knots = knots;
                     point_properties.push(this_point_properties);
+
+                    const date_split = date.split('/');
+                    const day = parseInt(date_split[0]);
+                    const time = date_split[1];
+                    const current_month_abbv = new Date().toLocaleString('default', { month: 'long' }).slice(0, 3);
+                    this_point_properties.current_month_abbv = current_month_abbv;
+                    this_point_properties.day = day;
+                    this_point_properties.time = time;
 
                     points.push(geojson.features[n].geometry.coordinates);
                 }

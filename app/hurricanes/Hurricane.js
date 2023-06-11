@@ -2,9 +2,31 @@ const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
 
+function _click_listener(e) {
+    const feature = e.features[0];
+    const properties = feature.properties;
+
+    const html_contents = 
+`<div style="text-align: center">
+<b style="color: ${properties.sshws_color}">${properties.sshws_value}
+<br>
+${properties.storm_name}</b>
+<br>
+<b>${ut.knotsToMph(properties.knots)}</b> mph
+<br>
+${properties.current_month_abbv} ${properties.day}, ${properties.time}
+</div>`
+
+    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+        .setLngLat(JSON.parse(properties.coordinates))
+        .setHTML(html_contents)
+        .addTo(map);
+}
+
 class Hurricane {
-    constructor (storm_id, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
+    constructor (storm_id, storm_name, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
         this._storm_id = storm_id;
+        this._storm_name = storm_name;
         this._cone_coordinates = cone_coordinates;
         this._forecast_track_coordinates = forecast_track_coordinates;
         this._forecast_point_coordinates = forecast_point_coordinates;
@@ -47,7 +69,7 @@ class Hurricane {
             map.getCanvas().style.cursor = '';
         });
 
-        // map.on('click', label_layer_name, _map_click);
+        map.on('click', layer_name, _click_listener);
     }
 
     _plot_forecast_track() {
@@ -114,6 +136,7 @@ class Hurricane {
             properties.sshws_abbv = sshws_value[2];
             properties.sshws_color = sshws_value[1];
             properties.coordinates = coords;
+            properties.storm_name = this._storm_name;
 
             points.push(turf.point(coords, properties));
         }

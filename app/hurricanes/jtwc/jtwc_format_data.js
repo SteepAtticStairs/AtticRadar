@@ -36,6 +36,7 @@ function _grab_cone_track_points(jtwc_storage) {
             if (type == 'Point') {
                 const properties = geojson.features[n].properties;
                 const name = properties.name;
+                const date = name.split(' ')[0];
                 const matched = name.match(/(\d+\s*knots)/)?.[0];
                 if (matched) {
                     const this_point_properties = {};
@@ -43,6 +44,14 @@ function _grab_cone_track_points(jtwc_storage) {
                     const knots = parseInt(matched.replaceAll(' knots', ''));
                     this_point_properties.knots = knots;
                     point_properties.push(this_point_properties);
+
+                    const date_split = date.split('/');
+                    const day = parseInt(date_split[0]);
+                    const time = date_split[1];
+                    const current_month_abbv = new Date().toLocaleString('default', { month: 'long' }).slice(0, 3);
+                    this_point_properties.current_month_abbv = current_month_abbv;
+                    this_point_properties.day = day;
+                    this_point_properties.time = time;
 
                     points.push(geojson.features[n].geometry.coordinates);
                 }
