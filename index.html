@@ -331,6 +331,15 @@
 
                     <br>
 
+                    <div class="armrHeader">SPC</div>
+                    <div class="atticRadarMenuRow" id="armrSPCOutlooksBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
+                        SPC Outlooks
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+
+                    <br>
+
                     <div class="armrHeader">RADIO</div>
                     <div class="atticRadarMenuRow" id="armrWeatherRadioBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-radio"></i>
@@ -410,15 +419,6 @@
                     </div> -->
                     <br>
 
-                    <div class="armrHeader">SPC</div>
-                    <div class="atticRadarMenuRow" id="armrSPCOutlooksBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
-                        SPC Outlooks
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-
-                    <br>
-
                     <div class="armrHeader armrHeaderWide">ALERTS</div>
                     <!-- <div class="atticRadarMenuRow armrTop armrWide" id="armrEUPBtn">
                         <b style="font-weight: 900">Standard Alerts Only</b>
@@ -449,15 +449,46 @@
                 <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
                     <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
                     <br>
-                    <div class="armrHeader">Day 1</div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrSPC_day1_cat_Btn">
-                        Categorical
-                        <i class="toggleSwitchContainter tscWide" id="armrSPC_day1_cat_BtnSwitch"><input type="checkbox" id="armrSPC_day1_cat_BtnSwitchElem" class="toggleSwitch" /><label for="armrSPC_day1_cat_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    <div class="armrHeader armrHeaderWide">Categorical</div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 1<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-categorical-day1_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-categorical-day1_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-                    <!-- <div class="atticRadarMenuRow armrTop armrWide" id="armrSPC_day1_fire_Btn">
-                        Fire
-                        <i class="toggleSwitchContainter tscWide" id="armrSPC_day1_fire_BtnSwitch"><input type="checkbox" id="armrSPC_day1_fire_BtnSwitchElem" class="toggleSwitch" /><label for="armrSPC_day1_fire_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
-                    </div> -->
+                    <div class="atticRadarMenuRow armrMiddle armrWide">Day 2<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-categorical-day2_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-categorical-day2_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrBottom armrWide">Day 3<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-categorical-day3_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-categorical-day3_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+
+                    <br>
+                    <div class="armrHeader armrHeaderWide">Probabalistic</div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 3<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-probabalistic-day3_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-probabalistic-day3_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 4<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-probabalistic-day4_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-probabalistic-day4_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 5<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-probabalistic-day5_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-probabalistic-day5_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 6<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-probabalistic-day6_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-probabalistic-day6_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 7<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-probabalistic-day7_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-probabalistic-day7_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrTop armrWide">Day 8<i class="toggleSwitchContainter tscWide"><input type="checkbox"
+                        id="armrSPC_convective-probabalistic-day8_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
+                        for="armrSPC_convective-probabalistic-day8_BtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
                 </div>
             </div>
         </div>

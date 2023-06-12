@@ -1772,8 +1772,8 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2Ewb
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/steepatticstairs/clgpoqhos00e001p9hvqcg1vp',
-    zoom: 3,
-    center: [-98.5606744, 36.8281576],
+    zoom: 3, // 2
+    center: [-98.5606744, 36.8281576], // [111.83024360762363, 27.174263144019363]
     maxZoom: 20,
     preserveDrawingBuffer: true,
     // bearingSnap: 360,
@@ -2266,13 +2266,15 @@ function slideDownToggle(armrElem, armrSlideDownElem) {
     }
 }
 
-function toggleswitchFunctions(switchElem, onFunction, offFunction) {
+function toggleswitchFunctions(switchElem, onFunction, offFunction, onclick_function = function() {}) {
     // you can't use .click() because it fires twice for some reason
     switchElem.on('click', function(e) {
         var checkbox = $(this); //.find('input');
         var isChecked = checkbox.is(':checked'); // true if the switch just turned on
-        if (isChecked) { onFunction() }
-        else { offFunction() }
+        if (isChecked) { onFunction.apply(this, []); }
+        else { offFunction.apply(this, []); }
+
+        onclick_function.apply(this, []);
     })
 }
 
@@ -2315,8 +2317,8 @@ $('#armrSPCOutlooksBtn').click(function() {
     });
 })
 $('#armsSPCBackBtn').click(function() {
-    $(`${mainMenuScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
-        $(`${settingsScreen}`).fadeIn(fadeDuration);
+    $(`${settingsScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
+        $(`${mainMenuScreen}`).fadeIn(fadeDuration);
     });
 })
 
@@ -29159,8 +29161,8 @@ const ut = require('../core/utils');
 const urls = require('./urls');
 const plot_data = require('./plot_data');
 
-function fetch_spc_data(day, category, type) {
-    fetch(ut.phpProxy + urls[day][category][type])
+function fetch_spc_data(type, category, day) {
+    fetch(ut.phpProxy + urls[type][category][day])
     .then(response => response.json())
     .then(json => {
         plot_data(json);
@@ -29183,13 +29185,42 @@ function _hide_layers() {
     }
 }
 
-armFunctions.toggleswitchFunctions($('#armrSPC_day1_cat_BtnSwitchElem'),
-function() { fetch_spc_data('day1', 'convective', 'categorical'); },
-function() { _hide_layers(); })
+function _load_spc_toggleswitch(items_list) {
+    for (var i = 0; i < items_list.length; i++) {
+        const type = items_list[i][0];
+        const category = items_list[i][1];
+        const day = items_list[i][2];
 
-armFunctions.toggleswitchFunctions($('#armrSPC_day1_fire_BtnSwitchElem'),
-function() { fetch_spc_data('day1', 'fire', 'windrh'); },
-function() { _hide_layers(); })
+        const elem = $(`#armrSPC_${type}-${category}-${day}_BtnSwitchElem`);
+
+        armFunctions.toggleswitchFunctions(elem,
+        function() {
+            const elem = $('.spcToggleswitchBtn');
+            elem.each(index => {
+                elem[index].checked = false;
+            });
+            $(this)[0].checked = true;
+
+            fetch_spc_data(type, category, day);
+        },
+        function() {
+            _hide_layers();
+        })
+    }
+}
+
+_load_spc_toggleswitch([
+    ['convective', 'categorical', 'day1'],
+    ['convective', 'categorical', 'day2'],
+    ['convective', 'categorical', 'day3'],
+
+    ['convective', 'probabalistic', 'day3'],
+    ['convective', 'probabalistic', 'day4'],
+    ['convective', 'probabalistic', 'day5'],
+    ['convective', 'probabalistic', 'day6'],
+    ['convective', 'probabalistic', 'day7'],
+    ['convective', 'probabalistic', 'day8'],
+]);
 },{"../core/map/map":13,"../core/menu/atticRadarMenu":17,"./fetch_data":87}],89:[function(require,module,exports){
 const map = require('../core/map/map');
 const set_layer_order = require('../core/map/setLayerOrder');
@@ -29257,195 +29288,195 @@ module.exports = plot_data;
 },{"../core/map/map":13,"../core/map/setLayerOrder":15}],90:[function(require,module,exports){
 // https://www.spc.noaa.gov/gis/
 const urls = {
-    day1: {
-        convective: {
-            categorical: 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson',
-            tornado: 'https://www.spc.noaa.gov/products/outlook/day1otlk_torn.nolyr.geojson',
-            significant_tornado: 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigtorn.nolyr.geojson',
-            wind: 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson',
-            significant_wind: 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigwind.nolyr.geojson',
-            hail: 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson',
-            significant_hail: 'https://www.spc.noaa.gov/products/outlook/day1otlk_sighail.nolyr.geojson',
+    convective: {
+        categorical: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_cat.nolyr.geojson',
+            'day3': 'https://www.spc.noaa.gov/products/outlook/day3otlk_cat.nolyr.geojson',
         },
-        fire: {
-            dryt: 'https://www.spc.noaa.gov/products/fire_wx/day1fw_dryt.nolyr.geojson',
-            windrh: 'https://www.spc.noaa.gov/products/fire_wx/day1fw_windrh.nolyr.geojson',
+
+        probabalistic: {
+            'day3': 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.nolyr.geojson',
+            'day4': 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.nolyr.geojson',
+            'day5': 'https://www.spc.noaa.gov/products/exper/day4-8/day5prob.nolyr.geojson',
+            'day6': 'https://www.spc.noaa.gov/products/exper/day4-8/day6prob.nolyr.geojson',
+            'day7': 'https://www.spc.noaa.gov/products/exper/day4-8/day7prob.nolyr.geojson',
+            'day8': 'https://www.spc.noaa.gov/products/exper/day4-8/day8prob.nolyr.geojson',
+        },
+        significant_probabalistic: {
+            'day3': 'https://www.spc.noaa.gov/products/outlook/day3otlk_sigprob.nolyr.geojson',
+        },
+
+        tornado: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_torn.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_torn.nolyr.geojson',
+        },
+        significant_tornado: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigtorn.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigtorn.nolyr.geojson',
+        },
+
+        wind: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_wind.nolyr.geojson',
+        },
+        significant_wind: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigwind.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigwind.nolyr.geojson',
+        },
+
+        hail: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_hail.nolyr.geojson',
+        },
+        significant_hail: {
+            'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_sighail.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_sighail.nolyr.geojson',
         }
     },
-    day2: {
-        convective: {
-            categorical: 'https://www.spc.noaa.gov/products/outlook/day2otlk_cat.nolyr.geojson',
-            tornado: 'https://www.spc.noaa.gov/products/outlook/day2otlk_torn.nolyr.geojson',
-            significant_tornado: 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigtorn.nolyr.geojson',
-            wind: 'https://www.spc.noaa.gov/products/outlook/day2otlk_wind.nolyr.geojson',
-            significant_wind: 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigwind.nolyr.geojson',
-            hail: 'https://www.spc.noaa.gov/products/outlook/day2otlk_hail.nolyr.geojson',
-            significant_hail: 'https://www.spc.noaa.gov/products/outlook/day2otlk_sighail.nolyr.geojson',
+    fire: {
+        dryt: {
+            'day1': 'https://www.spc.noaa.gov/products/fire_wx/day1fw_dryt.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/fire_wx/day2fw_dryt.nolyr.geojson'
         },
-        fire: {
-            dryt: 'https://www.spc.noaa.gov/products/fire_wx/day2fw_dryt.nolyr.geojson',
-            windrh: 'https://www.spc.noaa.gov/products/fire_wx/day2fw_windrh.nolyr.geojson',
-        }
-    },
-    day3: {
-        convective: {
-            categorical: 'https://www.spc.noaa.gov/products/outlook/day3otlk_cat.nolyr.geojson',
-            probabalistic: 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.nolyr.geojson',
-            significant_probabalistic: 'https://www.spc.noaa.gov/products/outlook/day3otlk_sigprob.nolyr.geojson',
+        windrh: {
+            'day1': 'https://www.spc.noaa.gov/products/fire_wx/day1fw_windrh.nolyr.geojson',
+            'day2': 'https://www.spc.noaa.gov/products/fire_wx/day2fw_windrh.nolyr.geojson'
         },
-        fire: {
-            dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytcat.nolyr.geojson',
-            dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytprob.nolyr.geojson',
-            windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhcat.nolyr.geojson',
-            windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhprob.nolyr.geojson',
-        }
-    },
-    day4: {
-        convective: {
-            probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.nolyr.geojson',
+
+        dryt_categorical: {
+            'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytcat.nolyr.geojson',
+            'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytcat.nolyr.geojson',
+            'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytcat.nolyr.geojson',
+            'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytcat.nolyr.geojson',
+            'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytcat.nolyr.geojson',
+            'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytcat.nolyr.geojson',
         },
-        fire: {
-            dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytcat.nolyr.geojson',
-            dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytprob.nolyr.geojson',
-            windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhcat.nolyr.geojson',
-            windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhprob.nolyr.geojson',
-        }
-    },
-    day5: {
-        convective: {
-            probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day5prob.nolyr.geojson',
+        dryt_probabalistic: {
+            'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytprob.nolyr.geojson',
+            'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytprob.nolyr.geojson',
+            'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytprob.nolyr.geojson',
+            'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytprob.nolyr.geojson',
+            'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytprob.nolyr.geojson',
+            'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytprob.nolyr.geojson',
         },
-        fire: {
-            dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytcat.nolyr.geojson',
-            dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytprob.nolyr.geojson',
-            windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhcat.nolyr.geojson',
-            windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhprob.nolyr.geojson',
-        }
-    },
-    day6: {
-        convective: {
-            probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day6prob.nolyr.geojson',
+
+        windrh_categorical: {
+            'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhcat.nolyr.geojson',
+            'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhcat.nolyr.geojson',
+            'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhcat.nolyr.geojson',
+            'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhcat.nolyr.geojson',
+            'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhcat.nolyr.geojson',
+            'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhcat.nolyr.geojson',
         },
-        fire: {
-            dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytcat.nolyr.geojson',
-            dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytprob.nolyr.geojson',
-            windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhcat.nolyr.geojson',
-            windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhprob.nolyr.geojson',
-        }
-    },
-    day7: {
-        convective: {
-            probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day7prob.nolyr.geojson',
+        windrh_probabalistic: {
+            'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhprob.nolyr.geojson',
+            'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhprob.nolyr.geojson',
+            'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhprob.nolyr.geojson',
+            'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhprob.nolyr.geojson',
+            'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhprob.nolyr.geojson',
+            'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhprob.nolyr.geojson',
         },
-        fire: {
-            dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytcat.nolyr.geojson',
-            dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytprob.nolyr.geojson',
-            windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhcat.nolyr.geojson',
-            windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhprob.nolyr.geojson',
-        }
-    },
-    day8: {
-        convective: {
-            probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day8prob.nolyr.geojson',
-        },
-        fire: {
-            dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytcat.nolyr.geojson',
-            dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytprob.nolyr.geojson',
-            windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhcat.nolyr.geojson',
-            windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhprob.nolyr.geojson',
-        }
     },
 
-    // convective: {
-    //     categorical: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_cat.nolyr.geojson',
-    //         'day3': 'https://www.spc.noaa.gov/products/outlook/day3otlk_cat.nolyr.geojson',
+    // day1: {
+    //     convective: {
+    //         categorical: 'https://www.spc.noaa.gov/products/outlook/day1otlk_cat.nolyr.geojson',
+    //         tornado: 'https://www.spc.noaa.gov/products/outlook/day1otlk_torn.nolyr.geojson',
+    //         significant_tornado: 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigtorn.nolyr.geojson',
+    //         wind: 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson',
+    //         significant_wind: 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigwind.nolyr.geojson',
+    //         hail: 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson',
+    //         significant_hail: 'https://www.spc.noaa.gov/products/outlook/day1otlk_sighail.nolyr.geojson',
     //     },
-
-    //     probabalistic: {
-    //         'day3': 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.nolyr.geojson',
-    //         'day4': 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.nolyr.geojson',
-    //         'day5': 'https://www.spc.noaa.gov/products/exper/day4-8/day5prob.nolyr.geojson',
-    //         'day6': 'https://www.spc.noaa.gov/products/exper/day4-8/day6prob.nolyr.geojson',
-    //         'day7': 'https://www.spc.noaa.gov/products/exper/day4-8/day7prob.nolyr.geojson',
-    //         'day8': 'https://www.spc.noaa.gov/products/exper/day4-8/day8prob.nolyr.geojson',
-    //     },
-    //     significant_probabalistic: {
-    //         'day3': 'https://www.spc.noaa.gov/products/outlook/day3otlk_sigprob.nolyr.geojson',
-    //     },
-
-    //     tornado: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_torn.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_torn.nolyr.geojson',
-    //     },
-    //     significant_tornado: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigtorn.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigtorn.nolyr.geojson',
-    //     },
-
-    //     wind: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_wind.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_wind.nolyr.geojson',
-    //     },
-    //     significant_wind: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_sigwind.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigwind.nolyr.geojson',
-    //     },
-
-    //     hail: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_hail.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_hail.nolyr.geojson',
-    //     },
-    //     significant_hail: {
-    //         'day1': 'https://www.spc.noaa.gov/products/outlook/day1otlk_sighail.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/outlook/day2otlk_sighail.nolyr.geojson',
+    //     fire: {
+    //         dryt: 'https://www.spc.noaa.gov/products/fire_wx/day1fw_dryt.nolyr.geojson',
+    //         windrh: 'https://www.spc.noaa.gov/products/fire_wx/day1fw_windrh.nolyr.geojson',
     //     }
     // },
-    // fire: {
-    //     dryt: {
-    //         'day1': 'https://www.spc.noaa.gov/products/fire_wx/day1fw_dryt.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/fire_wx/day2fw_dryt.nolyr.geojson'
+    // day2: {
+    //     convective: {
+    //         categorical: 'https://www.spc.noaa.gov/products/outlook/day2otlk_cat.nolyr.geojson',
+    //         tornado: 'https://www.spc.noaa.gov/products/outlook/day2otlk_torn.nolyr.geojson',
+    //         significant_tornado: 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigtorn.nolyr.geojson',
+    //         wind: 'https://www.spc.noaa.gov/products/outlook/day2otlk_wind.nolyr.geojson',
+    //         significant_wind: 'https://www.spc.noaa.gov/products/outlook/day2otlk_sigwind.nolyr.geojson',
+    //         hail: 'https://www.spc.noaa.gov/products/outlook/day2otlk_hail.nolyr.geojson',
+    //         significant_hail: 'https://www.spc.noaa.gov/products/outlook/day2otlk_sighail.nolyr.geojson',
     //     },
-    //     windrh: {
-    //         'day1': 'https://www.spc.noaa.gov/products/fire_wx/day1fw_windrh.nolyr.geojson',
-    //         'day2': 'https://www.spc.noaa.gov/products/fire_wx/day2fw_windrh.nolyr.geojson'
+    //     fire: {
+    //         dryt: 'https://www.spc.noaa.gov/products/fire_wx/day2fw_dryt.nolyr.geojson',
+    //         windrh: 'https://www.spc.noaa.gov/products/fire_wx/day2fw_windrh.nolyr.geojson',
+    //     }
+    // },
+    // day3: {
+    //     convective: {
+    //         categorical: 'https://www.spc.noaa.gov/products/outlook/day3otlk_cat.nolyr.geojson',
+    //         probabalistic: 'https://www.spc.noaa.gov/products/outlook/day3otlk_prob.nolyr.geojson',
+    //         significant_probabalistic: 'https://www.spc.noaa.gov/products/outlook/day3otlk_sigprob.nolyr.geojson',
     //     },
-
-    //     dryt_categorical: {
-    //         'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytcat.nolyr.geojson',
-    //         'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytcat.nolyr.geojson',
-    //         'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytcat.nolyr.geojson',
-    //         'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytcat.nolyr.geojson',
-    //         'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytcat.nolyr.geojson',
-    //         'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytcat.nolyr.geojson',
+    //     fire: {
+    //         dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytcat.nolyr.geojson',
+    //         dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytprob.nolyr.geojson',
+    //         windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhcat.nolyr.geojson',
+    //         windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhprob.nolyr.geojson',
+    //     }
+    // },
+    // day4: {
+    //     convective: {
+    //         probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day4prob.nolyr.geojson',
     //     },
-    //     dryt_probabalistic: {
-    //         'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_drytprob.nolyr.geojson',
-    //         'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytprob.nolyr.geojson',
-    //         'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytprob.nolyr.geojson',
-    //         'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytprob.nolyr.geojson',
-    //         'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytprob.nolyr.geojson',
-    //         'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytprob.nolyr.geojson',
+    //     fire: {
+    //         dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytcat.nolyr.geojson',
+    //         dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_drytprob.nolyr.geojson',
+    //         windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhcat.nolyr.geojson',
+    //         windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhprob.nolyr.geojson',
+    //     }
+    // },
+    // day5: {
+    //     convective: {
+    //         probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day5prob.nolyr.geojson',
     //     },
-
-    //     windrh_categorical: {
-    //         'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhcat.nolyr.geojson',
-    //         'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhcat.nolyr.geojson',
-    //         'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhcat.nolyr.geojson',
-    //         'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhcat.nolyr.geojson',
-    //         'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhcat.nolyr.geojson',
-    //         'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhcat.nolyr.geojson',
+    //     fire: {
+    //         dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytcat.nolyr.geojson',
+    //         dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_drytprob.nolyr.geojson',
+    //         windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhcat.nolyr.geojson',
+    //         windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhprob.nolyr.geojson',
+    //     }
+    // },
+    // day6: {
+    //     convective: {
+    //         probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day6prob.nolyr.geojson',
     //     },
-    //     windrh_probabalistic: {
-    //         'day3': 'https://www.spc.noaa.gov/products/exper/fire_wx/day3fw_windrhprob.nolyr.geojson',
-    //         'day4': 'https://www.spc.noaa.gov/products/exper/fire_wx/day4fw_windrhprob.nolyr.geojson',
-    //         'day5': 'https://www.spc.noaa.gov/products/exper/fire_wx/day5fw_windrhprob.nolyr.geojson',
-    //         'day6': 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhprob.nolyr.geojson',
-    //         'day7': 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhprob.nolyr.geojson',
-    //         'day8': 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhprob.nolyr.geojson',
+    //     fire: {
+    //         dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytcat.nolyr.geojson',
+    //         dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_drytprob.nolyr.geojson',
+    //         windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhcat.nolyr.geojson',
+    //         windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day6fw_windrhprob.nolyr.geojson',
+    //     }
+    // },
+    // day7: {
+    //     convective: {
+    //         probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day7prob.nolyr.geojson',
     //     },
-    // }
+    //     fire: {
+    //         dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytcat.nolyr.geojson',
+    //         dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_drytprob.nolyr.geojson',
+    //         windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhcat.nolyr.geojson',
+    //         windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day7fw_windrhprob.nolyr.geojson',
+    //     }
+    // },
+    // day8: {
+    //     convective: {
+    //         probabalistic: 'https://www.spc.noaa.gov/products/exper/day4-8/day8prob.nolyr.geojson',
+    //     },
+    //     fire: {
+    //         dryt_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytcat.nolyr.geojson',
+    //         dryt_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_drytprob.nolyr.geojson',
+    //         windrh_categorical: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhcat.nolyr.geojson',
+    //         windrh_probabalistic: 'https://www.spc.noaa.gov/products/exper/fire_wx/day8fw_windrhprob.nolyr.geojson',
+    //     }
+    // },
 }
 
 module.exports = urls;

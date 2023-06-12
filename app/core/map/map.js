@@ -2,8 +2,8 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2Ewb
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/steepatticstairs/clgpoqhos00e001p9hvqcg1vp',
-    zoom: 3,
-    center: [-98.5606744, 36.8281576],
+    zoom: 3, // 2
+    center: [-98.5606744, 36.8281576], // [111.83024360762363, 27.174263144019363]
     maxZoom: 20,
     preserveDrawingBuffer: true,
     // bearingSnap: 360,

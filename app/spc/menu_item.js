@@ -12,10 +12,39 @@ function _hide_layers() {
     }
 }
 
-armFunctions.toggleswitchFunctions($('#armrSPC_day1_cat_BtnSwitchElem'),
-function() { fetch_spc_data('day1', 'convective', 'categorical'); },
-function() { _hide_layers(); })
+function _load_spc_toggleswitch(items_list) {
+    for (var i = 0; i < items_list.length; i++) {
+        const type = items_list[i][0];
+        const category = items_list[i][1];
+        const day = items_list[i][2];
 
-armFunctions.toggleswitchFunctions($('#armrSPC_day1_fire_BtnSwitchElem'),
-function() { fetch_spc_data('day1', 'fire', 'windrh'); },
-function() { _hide_layers(); })
+        const elem = $(`#armrSPC_${type}-${category}-${day}_BtnSwitchElem`);
+
+        armFunctions.toggleswitchFunctions(elem,
+        function() {
+            const elem = $('.spcToggleswitchBtn');
+            elem.each(index => {
+                elem[index].checked = false;
+            });
+            $(this)[0].checked = true;
+
+            fetch_spc_data(type, category, day);
+        },
+        function() {
+            _hide_layers();
+        })
+    }
+}
+
+_load_spc_toggleswitch([
+    ['convective', 'categorical', 'day1'],
+    ['convective', 'categorical', 'day2'],
+    ['convective', 'categorical', 'day3'],
+
+    ['convective', 'probabalistic', 'day3'],
+    ['convective', 'probabalistic', 'day4'],
+    ['convective', 'probabalistic', 'day5'],
+    ['convective', 'probabalistic', 'day6'],
+    ['convective', 'probabalistic', 'day7'],
+    ['convective', 'probabalistic', 'day8'],
+]);

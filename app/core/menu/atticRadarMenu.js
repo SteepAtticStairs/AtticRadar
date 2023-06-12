@@ -101,13 +101,15 @@ function slideDownToggle(armrElem, armrSlideDownElem) {
     }
 }
 
-function toggleswitchFunctions(switchElem, onFunction, offFunction) {
+function toggleswitchFunctions(switchElem, onFunction, offFunction, onclick_function = function() {}) {
     // you can't use .click() because it fires twice for some reason
     switchElem.on('click', function(e) {
         var checkbox = $(this); //.find('input');
         var isChecked = checkbox.is(':checked'); // true if the switch just turned on
-        if (isChecked) { onFunction() }
-        else { offFunction() }
+        if (isChecked) { onFunction.apply(this, []); }
+        else { offFunction.apply(this, []); }
+
+        onclick_function.apply(this, []);
     })
 }
 
@@ -150,8 +152,8 @@ $('#armrSPCOutlooksBtn').click(function() {
     });
 })
 $('#armsSPCBackBtn').click(function() {
-    $(`${mainMenuScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
-        $(`${settingsScreen}`).fadeIn(fadeDuration);
+    $(`${settingsScreen},${spcScreen}`).fadeOut(fadeDuration, function() {
+        $(`${mainMenuScreen}`).fadeIn(fadeDuration);
     });
 })
 
