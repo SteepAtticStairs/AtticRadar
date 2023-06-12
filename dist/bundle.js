@@ -29270,6 +29270,23 @@ _load_spc_toggleswitch([
     ['convective', 'probabalistic', 'day6'],
     ['convective', 'probabalistic', 'day7'],
     ['convective', 'probabalistic', 'day8'],
+
+    ['convective', 'significant_probabalistic', 'day3'],
+
+    ['convective', 'tornado', 'day1'],
+    ['convective', 'tornado', 'day2'],
+    ['convective', 'significant_tornado', 'day1'],
+    ['convective', 'significant_tornado', 'day2'],
+
+    ['convective', 'wind', 'day1'],
+    ['convective', 'wind', 'day2'],
+    ['convective', 'significant_wind', 'day1'],
+    ['convective', 'significant_wind', 'day2'],
+
+    ['convective', 'hail', 'day1'],
+    ['convective', 'hail', 'day2'],
+    ['convective', 'significant_hail', 'day1'],
+    ['convective', 'significant_hail', 'day2'],
 ]);
 },{"../core/map/map":13,"../core/menu/atticRadarMenu":17,"./fetch_data":87}],89:[function(require,module,exports){
 const map = require('../core/map/map');
@@ -29286,17 +29303,15 @@ function _hide_layers() {
 }
 
 function _click_listener(e) {
-    for (var i = 0; i < e.features.length; i++) {
-        const properties = e.features[i].properties;
+    const properties = e.features[0].properties;
 
-        const popup_html = 
+    const popup_html = 
 `<div><b>${properties.LABEL2}</b></div>`
 
-        new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-        .setLngLat(e.lngLat)
-        .setHTML(popup_html)
-        .addTo(map);
-    }
+    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    .setLngLat(e.lngLat)
+    .setHTML(popup_html)
+    .addTo(map);
 }
 
 function plot_data(geojson) {

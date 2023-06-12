@@ -12,17 +12,15 @@ function _hide_layers() {
 }
 
 function _click_listener(e) {
-    for (var i = 0; i < e.features.length; i++) {
-        const properties = e.features[i].properties;
+    const properties = e.features[0].properties;
 
-        const popup_html = 
+    const popup_html = 
 `<div><b>${properties.LABEL2}</b></div>`
 
-        new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-        .setLngLat(e.lngLat)
-        .setHTML(popup_html)
-        .addTo(map);
-    }
+    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    .setLngLat(e.lngLat)
+    .setHTML(popup_html)
+    .addTo(map);
 }
 
 function plot_data(geojson) {
