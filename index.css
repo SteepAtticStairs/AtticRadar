@@ -913,6 +913,12 @@ https://tobiasahlin.com/spinkit/
     border-radius: 10px;
     padding: 10px;
 }
+.atticRadarMenuRowDisabled {
+    /* background-color: #272727;
+    color: #595959; */
+    opacity: 0.5;
+    pointer-events: none;
+}
 .atticRadarMenuRow:hover {
     background-color: rgb(44, 44, 44);
     cursor: pointer;
