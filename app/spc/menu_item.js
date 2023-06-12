@@ -42,26 +42,26 @@ _load_spc_toggleswitch([
     ['convective', 'categorical', 'day3'],
 
     ['convective', 'probabalistic', 'day3'],
-    ['convective', 'probabalistic', 'day4'],
-    ['convective', 'probabalistic', 'day5'],
-    ['convective', 'probabalistic', 'day6'],
-    ['convective', 'probabalistic', 'day7'],
-    ['convective', 'probabalistic', 'day8'],
+    // ['convective', 'probabalistic', 'day4'],
+    // ['convective', 'probabalistic', 'day5'],
+    // ['convective', 'probabalistic', 'day6'],
+    // ['convective', 'probabalistic', 'day7'],
+    // ['convective', 'probabalistic', 'day8'],
 
-    ['convective', 'significant_probabalistic', 'day3'],
+    // ['convective', 'significant_probabalistic', 'day3'],
 
     ['convective', 'tornado', 'day1'],
     ['convective', 'tornado', 'day2'],
-    ['convective', 'significant_tornado', 'day1'],
-    ['convective', 'significant_tornado', 'day2'],
+    // ['convective', 'significant_tornado', 'day1'],
+    // ['convective', 'significant_tornado', 'day2'],
 
     ['convective', 'wind', 'day1'],
     ['convective', 'wind', 'day2'],
-    ['convective', 'significant_wind', 'day1'],
-    ['convective', 'significant_wind', 'day2'],
+    // ['convective', 'significant_wind', 'day1'],
+    // ['convective', 'significant_wind', 'day2'],
 
     ['convective', 'hail', 'day1'],
     ['convective', 'hail', 'day2'],
-    ['convective', 'significant_hail', 'day1'],
-    ['convective', 'significant_hail', 'day2'],
+    // ['convective', 'significant_hail', 'day1'],
+    // ['convective', 'significant_hail', 'day2'],
 ]);

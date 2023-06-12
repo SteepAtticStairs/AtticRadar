@@ -1281,3 +1281,20 @@ https://tobiasahlin.com/spinkit/
 .C5 { background-color: #eb2f87; }
 .OTHER { background-color: #b75eff; }
 .UNKNOWN { background-color: #808080; }
+
+.spcTable /* table, th, td */ {
+    border: 1px solid rgba(255, 255, 255, 0);
+    table-layout: fixed;
+
+    /* border-collapse: collapse; */
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+.spcToggleswitchCircle {
+    display: inline-block;
+}
+.spcTableCellDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
