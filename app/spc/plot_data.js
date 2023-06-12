@@ -1,5 +1,33 @@
 const map = require('../core/map/map');
 const set_layer_order = require('../core/map/setLayerOrder');
+const turf = require('@turf/turf');
+const luxon = require('luxon');
+
+function _return_time_range(json) {
+    var issue;
+    var expire;
+    turf.propEach(json, (current_properties, feature_index) => {
+        expire = current_properties.EXPIRE;
+        issue = current_properties.ISSUE;
+    });
+
+    function _parse_format_date_string(date_string) {
+        const date = luxon.DateTime.fromFormat(date_string, 'yyyyMMddHHmm', { zone: 'UTC' });
+        const formatted_date = date.toLocal().toFormat('EEE MMM d, h:mm a'); // EEE h:mm a
+        return formatted_date;
+    }
+
+    const issue_formatted = _parse_format_date_string(issue);
+    const expire_formatted = _parse_format_date_string(expire);
+    const full_formatted = `${issue_formatted} - ${expire_formatted}`;
+    return [issue_formatted, expire_formatted];
+}
+
+function _return_time_range_html(issue_formatted, expire_formatted) {
+    return `\
+<p style="margin: 0px; font-size: 11px">&nbsp;&nbsp;&nbsp;${issue_formatted} thru</p>\
+<p style="margin: 0px; font-size: 11px">&nbsp;&nbsp;&nbsp;${expire_formatted}</p>`;
+}
 
 function _hide_layers() {
     if (map.getLayer('spc_fill')) {
@@ -23,7 +51,24 @@ function _click_listener(e) {
     .addTo(map);
 }
 
-function plot_data(geojson) {
+function plot_data(geojson, formatted_day, formatted_category) {
+    const is_empty = turf.coordAll(geojson).length == 0;
+    const [issue_formatted, expire_formatted] = _return_time_range(geojson);
+
+    var spc_info_html =
+`<b>${formatted_category} - ${formatted_day}</b>`
+
+    if (is_empty) {
+        spc_info_html +=
+`<p style="margin: 0px; font-size: 13px; font-weight: bold" class="old-file">EMPTY DATA</p>`
+    }
+
+    spc_info_html +=
+`<i class="helperText" style="opacity: 50%">
+${_return_time_range_html(issue_formatted, expire_formatted)}
+</i>`;
+    $('#spcDataInfo').html(spc_info_html);
+
     _hide_layers();
 
     map.addSource('spc_source', {

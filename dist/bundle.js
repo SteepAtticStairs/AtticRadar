@@ -29160,67 +29160,25 @@ module.exports = plotToMap;
 const ut = require('../core/utils');
 const urls = require('./urls');
 const plot_data = require('./plot_data');
-const turf = require('@turf/turf');
-const luxon = require('luxon');
-
-function _return_time_range(json) {
-    var issue;
-    var expire;
-    turf.propEach(json, (current_properties, feature_index) => {
-        expire = current_properties.EXPIRE;
-        issue = current_properties.ISSUE;
-    });
-
-    function _parse_format_date_string(date_string) {
-        const date = luxon.DateTime.fromFormat(date_string, 'yyyyMMddHHmm', { zone: 'UTC' });
-        const formatted_date = date.toLocal().toFormat('EEE MMM d, h:mm a'); // EEE h:mm a
-        return formatted_date;
-    }
-
-    const issue_formatted = _parse_format_date_string(issue);
-    const expire_formatted = _parse_format_date_string(expire);
-    const full_formatted = `${issue_formatted} - ${expire_formatted}`;
-    return [issue_formatted, expire_formatted];
-}
-
-function _return_time_range_html(issue_formatted, expire_formatted) {
-    return `\
-<p style="margin: 0px; font-size: 11px">&nbsp;&nbsp;&nbsp;${issue_formatted} thru</p>\
-<p style="margin: 0px; font-size: 11px">&nbsp;&nbsp;&nbsp;${expire_formatted}</p>`;
-}
 
 function fetch_spc_data(type, category, day) {
-    const elem = $(`#armrSPC_${type}-${category}-${day}_BtnSwitchElem`);
-    const atticRadarMenuRow = elem.closest('.atticRadarMenuRow');
-    atticRadarMenuRow.append(`<i class="helperText" style="opacity: 50%">&nbsp;&nbsp;&nbsp;Loading...</i>`);
+    function capitalize_first_letter(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+    // https://stackoverflow.com/a/38757490
+    const split_at = (index, xs) => [xs.slice(0, index), xs.slice(index)]
+
+    const split_day = split_at(3, day);
+    const formatted_day = `${capitalize_first_letter(split_day[0])} ${split_day[1]}`;
+    const formatted_category = capitalize_first_letter(category);
 
     fetch(ut.phpProxy + urls[type][category][day])
     .then(response => response.json())
     .then(json => {
-        const [issue_formatted, expire_formatted] = _return_time_range(json);
-
-        // atticRadarMenuRow.find('.helperText').remove();
-        $('.helperText').remove();
-        if (turf.coordAll(json).length == 0) {
-            atticRadarMenuRow
-                .addClass('atticRadarMenuRowDisabled')
-                .append(
-`<i class="helperTextDisabled" style="opacity: 50%">\
-<p style="margin: 0px; font-size: 11px; font-weight: bold">&nbsp;&nbsp;&nbsp;NO DATA</p>\
-${_return_time_range_html(issue_formatted, expire_formatted)}\
-</i>`
-);
-            elem[0].checked = false;
-        } else {
-            atticRadarMenuRow
-                .append(`<i class="helperText" style="opacity: 50%">${_return_time_range_html(issue_formatted, expire_formatted)}</i>`);
-            plot_data(json);
-        }
+        plot_data(json, formatted_day, formatted_category);
     })
 }
 
 module.exports = fetch_spc_data;
-},{"../core/utils":30,"./plot_data":89,"./urls":90,"@turf/turf":107,"luxon":113}],88:[function(require,module,exports){
+},{"../core/utils":30,"./plot_data":89,"./urls":90}],88:[function(require,module,exports){
 const map = require('../core/map/map');
 const armFunctions = require('../core/menu/atticRadarMenu');
 const fetch_spc_data = require('./fetch_data');
@@ -29291,6 +29249,34 @@ _load_spc_toggleswitch([
 },{"../core/map/map":13,"../core/menu/atticRadarMenu":17,"./fetch_data":87}],89:[function(require,module,exports){
 const map = require('../core/map/map');
 const set_layer_order = require('../core/map/setLayerOrder');
+const turf = require('@turf/turf');
+const luxon = require('luxon');
+
+function _return_time_range(json) {
+    var issue;
+    var expire;
+    turf.propEach(json, (current_properties, feature_index) => {
+        expire = current_properties.EXPIRE;
+        issue = current_properties.ISSUE;
+    });
+
+    function _parse_format_date_string(date_string) {
+        const date = luxon.DateTime.fromFormat(date_string, 'yyyyMMddHHmm', { zone: 'UTC' });
+        const formatted_date = date.toLocal().toFormat('EEE MMM d, h:mm a'); // EEE h:mm a
+        return formatted_date;
+    }
+
+    const issue_formatted = _parse_format_date_string(issue);
+    const expire_formatted = _parse_format_date_string(expire);
+    const full_formatted = `${issue_formatted} - ${expire_formatted}`;
+    return [issue_formatted, expire_formatted];
+}
+
+function _return_time_range_html(issue_formatted, expire_formatted) {
+    return `\
+<p style="margin: 0px; font-size: 11px">&nbsp;&nbsp;&nbsp;${issue_formatted} thru</p>\
+<p style="margin: 0px; font-size: 11px">&nbsp;&nbsp;&nbsp;${expire_formatted}</p>`;
+}
 
 function _hide_layers() {
     if (map.getLayer('spc_fill')) {
@@ -29314,7 +29300,24 @@ function _click_listener(e) {
     .addTo(map);
 }
 
-function plot_data(geojson) {
+function plot_data(geojson, formatted_day, formatted_category) {
+    const is_empty = turf.coordAll(geojson).length == 0;
+    const [issue_formatted, expire_formatted] = _return_time_range(geojson);
+
+    var spc_info_html =
+`<b>${formatted_category} - ${formatted_day}</b>`
+
+    if (is_empty) {
+        spc_info_html +=
+`<p style="margin: 0px; font-size: 13px; font-weight: bold" class="old-file">EMPTY DATA</p>`
+    }
+
+    spc_info_html +=
+`<i class="helperText" style="opacity: 50%">
+${_return_time_range_html(issue_formatted, expire_formatted)}
+</i>`;
+    $('#spcDataInfo').html(spc_info_html);
+
     _hide_layers();
 
     map.addSource('spc_source', {
@@ -29350,7 +29353,7 @@ function plot_data(geojson) {
 }
 
 module.exports = plot_data;
-},{"../core/map/map":13,"../core/map/setLayerOrder":15}],90:[function(require,module,exports){
+},{"../core/map/map":13,"../core/map/setLayerOrder":15,"@turf/turf":107,"luxon":113}],90:[function(require,module,exports){
 // https://www.spc.noaa.gov/gis/
 const urls = {
     convective: {

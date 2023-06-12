@@ -1298,3 +1298,7 @@ https://tobiasahlin.com/spinkit/
     justify-content: center;
     align-items: center;
 }
+
+#spcDataInfo {
+    text-align: center;
+}
