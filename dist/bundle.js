@@ -29160,6 +29160,7 @@ module.exports = plotToMap;
 const ut = require('../core/utils');
 const urls = require('./urls');
 const plot_data = require('./plot_data');
+const turf = require('@turf/turf');
 
 function fetch_spc_data(type, category, day) {
     function capitalize_first_letter(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
@@ -29173,12 +29174,19 @@ function fetch_spc_data(type, category, day) {
     fetch(ut.phpProxy + urls[type][category][day])
     .then(response => response.json())
     .then(json => {
+        const sorted_features = json.features.sort((a, b) => {
+            const areaA = turf.area(a);
+            const areaB = turf.area(b);
+            return areaB - areaA;
+        });
+        json.features = sorted_features;
+
         plot_data(json, formatted_day, formatted_category);
     })
 }
 
 module.exports = fetch_spc_data;
-},{"../core/utils":30,"./plot_data":89,"./urls":90}],88:[function(require,module,exports){
+},{"../core/utils":30,"./plot_data":89,"./urls":90,"@turf/turf":107}],88:[function(require,module,exports){
 const map = require('../core/map/map');
 const armFunctions = require('../core/menu/atticRadarMenu');
 const fetch_spc_data = require('./fetch_data');
@@ -29245,6 +29253,15 @@ _load_spc_toggleswitch([
     ['convective', 'hail', 'day2'],
     // ['convective', 'significant_hail', 'day1'],
     // ['convective', 'significant_hail', 'day2'],
+
+    // ['fire', 'dryt', 'day1'],
+    // ['fire', 'dryt', 'day2'],
+
+    // ['fire', 'dryt_categorical', 'day3'],
+    // ['fire', 'dryt_probabalistic', 'day3'],
+
+    // ['fire', 'windrh', 'day1'],
+    // ['fire', 'windrh', 'day2'],
 ]);
 },{"../core/map/map":13,"../core/menu/atticRadarMenu":17,"./fetch_data":87}],89:[function(require,module,exports){
 const map = require('../core/map/map');

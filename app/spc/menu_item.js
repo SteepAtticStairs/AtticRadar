@@ -64,4 +64,13 @@ _load_spc_toggleswitch([
     ['convective', 'hail', 'day2'],
     // ['convective', 'significant_hail', 'day1'],
     // ['convective', 'significant_hail', 'day2'],
+
+    // ['fire', 'dryt', 'day1'],
+    // ['fire', 'dryt', 'day2'],
+
+    // ['fire', 'dryt_categorical', 'day3'],
+    // ['fire', 'dryt_probabalistic', 'day3'],
+
+    // ['fire', 'windrh', 'day1'],
+    // ['fire', 'windrh', 'day2'],
 ]);
