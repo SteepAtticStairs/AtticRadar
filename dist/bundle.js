@@ -29332,7 +29332,7 @@ ${_return_time_range_html(issue_formatted, expire_formatted)}
         'source': 'spc_source',
         'paint': {
             'fill-color': ['get', 'fill'],
-            'fill-opacity': 0.5
+            'fill-opacity': 1 // 0.5
         }
     });
     // outline
