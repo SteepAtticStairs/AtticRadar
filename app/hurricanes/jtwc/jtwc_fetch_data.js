@@ -7,7 +7,7 @@ function _parse_jtwc_text(text) {
     const url_matches = [...text.matchAll(url_pattern)];
 
     // regex to match the cyclone's name
-    const name_pattern = /<b>Tropical Cyclone\s+\d+[A-Z]\s+\((.*?)\).*?<b>Tropical Storm\s+\d+[A-Z]\s+\((.*?)\)/gs;
+    const name_pattern = /\(([^)]+)\)/;
     const name_matches = name_pattern.exec(text);
     var names_found = 0;
 

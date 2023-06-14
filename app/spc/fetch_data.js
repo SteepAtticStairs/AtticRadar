@@ -16,6 +16,7 @@ function fetch_spc_data(type, category, day) {
     .then(response => response.json())
     .then(geojson => {
         geojson = fix_geojson_layering(geojson);
+        console.log(geojson);
         plot_data(geojson, formatted_day, formatted_category);
     })
 }
