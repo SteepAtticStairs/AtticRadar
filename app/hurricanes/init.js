@@ -1,10 +1,24 @@
 const jtwc_fetch_data = require('./jtwc/jtwc_fetch_data');
+
+const nhc_fetch_data = require('./nhc/nhc_fetch_data');
+const nhc_plot_outlook = require('./nhc/nhc_plot_outlook');
+
 const Hurricane = require('./Hurricane');
 
 function init_hurricane_loading() {
-    jtwc_fetch_data((jtwc_storage) => {
-        window.atticData.hurricane_layers = [];
+    window.atticData.hurricane_layers = [];
 
+    nhc_fetch_data((nhc_storage) => {
+        const keys = Object.keys(nhc_storage.outlooks);
+        for (var i = 0; i < keys.length; i++) {
+            const id = keys[i];
+            const kmz_blob = nhc_storage.outlooks[id].kmz;
+
+            nhc_plot_outlook(kmz_blob, id);
+        }
+    });
+
+    jtwc_fetch_data((jtwc_storage) => {
         const keys = Object.keys(jtwc_storage);
         for (var i = 0; i < keys.length; i++) {
             const storm_id = keys[i];
