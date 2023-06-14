@@ -61,7 +61,7 @@ function load() {
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
-    // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
+    // $('#armrSPC_convective-hail-day2_BtnSwitchElem').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {

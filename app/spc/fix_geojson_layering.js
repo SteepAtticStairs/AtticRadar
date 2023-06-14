@@ -12,11 +12,14 @@ function fix_geojson_layering(geojson) {
         return [];
     });
 
+    var index = 0;
     for (var i = 0; i < geojson.features.length; i++) {
         const this_feature = geojson.features[i];
+        this_feature.properties.zindex = 0;
 
         for (var j = i + 1; j < geojson.features.length; j++) {
             const next_feature = geojson.features[j];
+            next_feature.properties.zindex = 0;
 
             const is_this_within = turf.booleanWithin(this_feature, next_feature);
             const is_next_within = turf.booleanWithin(next_feature, this_feature);
@@ -29,6 +32,8 @@ function fix_geojson_layering(geojson) {
                 const is_equal = turf.booleanEqual(turf.polygon([polygonA]), turf.polygon([polygonB]));
                 if (!is_equal) {
                     next_feature.geometry.coordinates.push(...this_feature.geometry.coordinates);
+                    index++;
+                    this_feature.properties.zindex = index;
                 }
             } else if (is_next_within) { // surrounding one (bigger one) is "this_feature"
                 const polygonA = this_feature.geometry.coordinates[this_feature.geometry.coordinates.length - 1];
@@ -36,6 +41,8 @@ function fix_geojson_layering(geojson) {
                 const is_equal = turf.booleanEqual(turf.polygon([polygonA]), turf.polygon([polygonB]));
                 if (!is_equal) {
                     this_feature.geometry.coordinates.push(...next_feature.geometry.coordinates);
+                    index++;
+                    next_feature.properties.zindex = index;
                 }
             }
         }
