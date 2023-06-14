@@ -82,6 +82,7 @@ ${_return_time_range_html(issue_formatted, expire_formatted)}
         'type': 'fill',
         'source': 'spc_source',
         'paint': {
+            'fill-outline-color': ['get', 'stroke'],
             'fill-color': ['get', 'fill'],
             'fill-opacity': 1 // 0.5
         }

@@ -1618,6 +1618,7 @@ function load() {
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
+    // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
@@ -29197,17 +29198,29 @@ function fix_geojson_layering(geojson) {
 
     for (var i = 0; i < geojson.features.length; i++) {
         const this_feature = geojson.features[i];
-        const next_feature = geojson.features[i + 1];
 
-        if (next_feature != undefined) {
-            // console.log(this_feature, next_feature)
+        for (var j = i + 1; j < geojson.features.length; j++) {
+            const next_feature = geojson.features[j];
+
             const is_this_within = turf.booleanWithin(this_feature, next_feature);
             const is_next_within = turf.booleanWithin(next_feature, this_feature);
+            // console.log(is_this_within, is_next_within);
+            // console.log(this_feature, next_feature);
 
             if (is_this_within) { // surrounding one (bigger one) is "next_feature"
-                next_feature.geometry.coordinates.push(...this_feature.geometry.coordinates);
+                const polygonA = next_feature.geometry.coordinates[next_feature.geometry.coordinates.length - 1];
+                const polygonB = this_feature.geometry.coordinates[0];
+                const is_equal = turf.booleanEqual(turf.polygon([polygonA]), turf.polygon([polygonB]));
+                if (!is_equal) {
+                    next_feature.geometry.coordinates.push(...this_feature.geometry.coordinates);
+                }
             } else if (is_next_within) { // surrounding one (bigger one) is "this_feature"
-                this_feature.geometry.coordinates.push(...next_feature.geometry.coordinates);
+                const polygonA = this_feature.geometry.coordinates[this_feature.geometry.coordinates.length - 1];
+                const polygonB = next_feature.geometry.coordinates[0];
+                const is_equal = turf.booleanEqual(turf.polygon([polygonA]), turf.polygon([polygonB]));
+                if (!is_equal) {
+                    this_feature.geometry.coordinates.push(...next_feature.geometry.coordinates);
+                }
             }
         }
     }
@@ -29378,6 +29391,7 @@ ${_return_time_range_html(issue_formatted, expire_formatted)}
         'type': 'fill',
         'source': 'spc_source',
         'paint': {
+            'fill-outline-color': ['get', 'stroke'],
             'fill-color': ['get', 'fill'],
             'fill-opacity': 1 // 0.5
         }
