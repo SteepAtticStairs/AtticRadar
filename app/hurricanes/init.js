@@ -1,3 +1,5 @@
+const set_layer_order = require('../core/map/setLayerOrder');
+
 const jtwc_fetch_data = require('./jtwc/jtwc_fetch_data');
 
 const nhc_fetch_data = require('./nhc/nhc_fetch_data');
@@ -16,6 +18,8 @@ function init_hurricane_loading() {
 
             nhc_plot_outlook(kmz_blob, id);
         }
+
+        set_layer_order();
     });
 
     jtwc_fetch_data((jtwc_storage) => {
@@ -32,6 +36,8 @@ function init_hurricane_loading() {
             cyclone.plot();
             console.log(cyclone);
         }
+
+        set_layer_order();
     });
 }
 

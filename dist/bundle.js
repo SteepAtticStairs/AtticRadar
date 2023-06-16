@@ -2099,6 +2099,11 @@ function setLayerOrder() {
         for (var i = 0; i < hurricane_layers.length; i++) {
             move_layer_to_top(hurricane_layers[i]);
         }
+        for (var i = 0; i < hurricane_layers.length; i++) {
+            if (hurricane_layers[i].includes('hurricane_outlook_point')) {
+                move_layer_to_top(hurricane_layers[i]);
+            }
+        }
     }
 
     // surface fronts layers
@@ -4388,6 +4393,8 @@ class Hurricane {
 
 module.exports = Hurricane;
 },{"../core/map/map":13,"../core/utils":30,"@turf/turf":110}],32:[function(require,module,exports){
+const set_layer_order = require('../core/map/setLayerOrder');
+
 const jtwc_fetch_data = require('./jtwc/jtwc_fetch_data');
 
 const nhc_fetch_data = require('./nhc/nhc_fetch_data');
@@ -4406,6 +4413,8 @@ function init_hurricane_loading() {
 
             nhc_plot_outlook(kmz_blob, id);
         }
+
+        set_layer_order();
     });
 
     jtwc_fetch_data((jtwc_storage) => {
@@ -4422,11 +4431,13 @@ function init_hurricane_loading() {
             cyclone.plot();
             console.log(cyclone);
         }
+
+        set_layer_order();
     });
 }
 
 module.exports = init_hurricane_loading;
-},{"./Hurricane":31,"./jtwc/jtwc_fetch_data":33,"./nhc/nhc_fetch_data":37,"./nhc/nhc_plot_outlook":38}],33:[function(require,module,exports){
+},{"../core/map/setLayerOrder":15,"./Hurricane":31,"./jtwc/jtwc_fetch_data":33,"./nhc/nhc_fetch_data":37,"./nhc/nhc_plot_outlook":38}],33:[function(require,module,exports){
 const ut = require('../../core/utils');
 const jtwc_format_data = require('./jtwc_format_data');
 
