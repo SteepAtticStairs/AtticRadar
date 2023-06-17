@@ -2,6 +2,8 @@ const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
 
+const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
+
 function _click_listener(e) {
     const feature = e.features[0];
     const properties = feature.properties;
@@ -14,7 +16,9 @@ ${properties.storm_name}</b>
 <br>
 <b>${ut.knotsToMph(properties.knots)}</b> mph
 <br>
-${properties.current_month_abbv} ${properties.day}, ${properties.time}
+${custom_break}
+${properties.current_month_abbv} ${properties.day}<br>
+${properties.formatted_hour}
 </div>`
 
     new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })

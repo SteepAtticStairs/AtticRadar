@@ -4242,6 +4242,8 @@ const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
 
+const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
+
 function _click_listener(e) {
     const feature = e.features[0];
     const properties = feature.properties;
@@ -4254,7 +4256,9 @@ ${properties.storm_name}</b>
 <br>
 <b>${ut.knotsToMph(properties.knots)}</b> mph
 <br>
-${properties.current_month_abbv} ${properties.day}, ${properties.time}
+${custom_break}
+${properties.current_month_abbv} ${properties.day}<br>
+${properties.formatted_hour}
 </div>`
 
     new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
@@ -4526,6 +4530,7 @@ function jtwc_fetch_data(callback) {
 module.exports = jtwc_fetch_data;
 },{"../../core/utils":30,"./jtwc_format_data":34}],34:[function(require,module,exports){
 const kmz_to_geojson = require('../kmz_to_geojson');
+const luxon = require('luxon');
 
 function _parse_kmz(jtwc_storage, callback) {
     const keys = Object.keys(jtwc_storage);
@@ -4586,12 +4591,19 @@ function _grab_cone_track_points(jtwc_storage) {
                     last_day_seen = day;
 
                     const month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                    const current_month_abbv = month_names[new Date().getMonth() + month_look_index].slice(0, 3);
+                    const month_num = new Date().getMonth() + month_look_index;
+                    const current_month_abbv = month_names[month_num].slice(0, 3);
                     // const current_month_abbv = new Date().toLocaleString('default', { month: 'long' }).slice(0, 3);
+
+                    // const datetime = luxon.DateTime.fromFormat(`${month_num}, ${day}, ${time}`, "M, d, HH'Z'");
+                    const now = luxon.DateTime.now();
+                    const datetime = luxon.DateTime.utc(now.year, month_num, day, parseInt(time.slice(0, -1))).toLocal();
+                    const formatted_hour = datetime.toFormat('h:mm a ZZZZ');
 
                     this_point_properties.current_month_abbv = current_month_abbv;
                     this_point_properties.day = day;
                     this_point_properties.time = time;
+                    this_point_properties.formatted_hour = formatted_hour;
 
                     points.push(geojson.features[n].geometry.coordinates);
                 }
@@ -4617,7 +4629,7 @@ function jtwc_format_data(jtwc_storage, callback) {
 }
 
 module.exports = jtwc_format_data;
-},{"../kmz_to_geojson":35}],35:[function(require,module,exports){
+},{"../kmz_to_geojson":35,"luxon":116}],35:[function(require,module,exports){
 function kmz_to_geojson(kmz_blob, callback) {
     let getDom = xml => (new DOMParser()).parseFromString(xml, "text/xml")
     let getExtension = fileName => fileName.split(".").pop()

@@ -1,4 +1,5 @@
 const kmz_to_geojson = require('../kmz_to_geojson');
+const luxon = require('luxon');
 
 function _parse_kmz(jtwc_storage, callback) {
     const keys = Object.keys(jtwc_storage);
@@ -59,12 +60,19 @@ function _grab_cone_track_points(jtwc_storage) {
                     last_day_seen = day;
 
                     const month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                    const current_month_abbv = month_names[new Date().getMonth() + month_look_index].slice(0, 3);
+                    const month_num = new Date().getMonth() + month_look_index;
+                    const current_month_abbv = month_names[month_num].slice(0, 3);
                     // const current_month_abbv = new Date().toLocaleString('default', { month: 'long' }).slice(0, 3);
+
+                    // const datetime = luxon.DateTime.fromFormat(`${month_num}, ${day}, ${time}`, "M, d, HH'Z'");
+                    const now = luxon.DateTime.now();
+                    const datetime = luxon.DateTime.utc(now.year, month_num, day, parseInt(time.slice(0, -1))).toLocal();
+                    const formatted_hour = datetime.toFormat('h:mm a ZZZZ');
 
                     this_point_properties.current_month_abbv = current_month_abbv;
                     this_point_properties.day = day;
                     this_point_properties.time = time;
+                    this_point_properties.formatted_hour = formatted_hour;
 
                     points.push(geojson.features[n].geometry.coordinates);
                 }
