@@ -29,7 +29,7 @@ function click_listener(e) {
             var borderColor = chroma(initColor).darken(1.5);
             var textColor = chroma(initColor).luminance() > 0.4 ? 'black' : 'white';
             //<i class="fa-solid fa-circle-info" style="font-size: 15px"></i>
-            popupItem += `<div style="color: white; text-align: center;"><b class="extraAlertTextTrigger" id="${id}" style="
+            popupItem += `<div style="text-align: center;"><b class="extraAlertTextTrigger" id="${id}" style="
             text-align: center;
             width: auto;
             height: auto;
@@ -73,7 +73,7 @@ function click_listener(e) {
             const dateDiff = ut.getDateDiff(currentTime, expiresTime);
             var formattedDateDiff;
             var thingToAppend = '';
-            var textColor = 'white';
+            var textColor = ''; // white
             var isNegative = dateDiff.negative;
             if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
             if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }

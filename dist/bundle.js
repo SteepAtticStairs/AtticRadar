@@ -30,7 +30,7 @@ function click_listener(e) {
             var borderColor = chroma(initColor).darken(1.5);
             var textColor = chroma(initColor).luminance() > 0.4 ? 'black' : 'white';
             //<i class="fa-solid fa-circle-info" style="font-size: 15px"></i>
-            popupItem += `<div style="color: white; text-align: center;"><b class="extraAlertTextTrigger" id="${id}" style="
+            popupItem += `<div style="text-align: center;"><b class="extraAlertTextTrigger" id="${id}" style="
             text-align: center;
             width: auto;
             height: auto;
@@ -74,7 +74,7 @@ function click_listener(e) {
             const dateDiff = ut.getDateDiff(currentTime, expiresTime);
             var formattedDateDiff;
             var thingToAppend = '';
-            var textColor = 'white';
+            var textColor = ''; // white
             var isNegative = dateDiff.negative;
             if (dateDiff.s) { formattedDateDiff = `${dateDiff.s}s`; }
             if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
@@ -4241,6 +4241,7 @@ module.exports = {
 const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
+const chroma = require('chroma-js');
 
 const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
 
@@ -4303,6 +4304,9 @@ class Hurricane {
             'paint': {
                 'circle-radius': 6,
                 'circle-color': ['get', 'sshws_color'],
+
+                'circle-stroke-width': ['get', 'sshws_border_width'],
+                'circle-stroke-color': ['get', 'sshws_border_color']
             }
         });
 
@@ -4382,6 +4386,13 @@ class Hurricane {
             properties.coordinates = coords;
             properties.storm_name = this._storm_name;
 
+            properties.sshws_border_color = chroma(properties.sshws_color).darken().hex();
+            if (i == 0) {
+                properties.sshws_border_width = 4;
+            } else {
+                properties.sshws_border_width = 0;
+            }
+
             points.push(turf.point(coords, properties));
         }
         points = points.filter(feature => feature.properties.sshws_value != undefined);
@@ -4396,7 +4407,7 @@ class Hurricane {
 }
 
 module.exports = Hurricane;
-},{"../core/map/map":13,"../core/utils":30,"@turf/turf":110}],32:[function(require,module,exports){
+},{"../core/map/map":13,"../core/utils":30,"@turf/turf":110,"chroma-js":115}],32:[function(require,module,exports){
 const set_layer_order = require('../core/map/setLayerOrder');
 
 const jtwc_fetch_data = require('./jtwc/jtwc_fetch_data');
@@ -4774,7 +4785,7 @@ function _click_listener(e) {
     }
 
     const popup_content =
-        `<div style="overflow-y: scroll; max-height: 150px; color: white">
+        `<div style="overflow-y: scroll; max-height: 150px;">
             ${percentage_html}
             <br>
             <div>Disturbance <b>#${properties.Disturbance}</b></div>
@@ -4873,7 +4884,16 @@ function nhc_plot_outlook(kmz_blob, id) {
                         'type': 'circle',
                         'source': source_name,
                         'paint': {
-                            'circle-radius': 9,
+                            'circle-radius': [ // 9
+                                'interpolate',
+                                ['exponential', 0.5],
+                                ['zoom'],
+                                2,
+                                5,
+
+                                7,
+                                9
+                            ],
                             'circle-stroke-width': 2,
                             'circle-color': ['get', 'color'],
                             'circle-stroke-color': black,
@@ -5039,7 +5059,7 @@ function load_lightning(callback) {
 
                 map.on('zoom', () => {
                     const map_zoom = map.getZoom();
-                    if (map_zoom >= 6) {
+                    if (map_zoom >= 7) {
                         map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
                         map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
                     } else {

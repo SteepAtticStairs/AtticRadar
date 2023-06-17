@@ -1,6 +1,7 @@
 const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
+const chroma = require('chroma-js');
 
 const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
 
@@ -63,6 +64,9 @@ class Hurricane {
             'paint': {
                 'circle-radius': 6,
                 'circle-color': ['get', 'sshws_color'],
+
+                'circle-stroke-width': ['get', 'sshws_border_width'],
+                'circle-stroke-color': ['get', 'sshws_border_color']
             }
         });
 
@@ -141,6 +145,13 @@ class Hurricane {
             properties.sshws_color = sshws_value[1];
             properties.coordinates = coords;
             properties.storm_name = this._storm_name;
+
+            properties.sshws_border_color = chroma(properties.sshws_color).darken().hex();
+            if (i == 0) {
+                properties.sshws_border_width = 4;
+            } else {
+                properties.sshws_border_width = 0;
+            }
 
             points.push(turf.point(coords, properties));
         }

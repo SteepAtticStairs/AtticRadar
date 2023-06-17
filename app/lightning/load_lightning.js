@@ -105,7 +105,7 @@ function load_lightning(callback) {
 
                 map.on('zoom', () => {
                     const map_zoom = map.getZoom();
-                    if (map_zoom >= 6) {
+                    if (map_zoom >= 7) {
                         map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
                         map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
                     } else {

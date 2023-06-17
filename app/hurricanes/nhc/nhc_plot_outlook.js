@@ -18,7 +18,7 @@ function _click_listener(e) {
     }
 
     const popup_content =
-        `<div style="overflow-y: scroll; max-height: 150px; color: white">
+        `<div style="overflow-y: scroll; max-height: 150px;">
             ${percentage_html}
             <br>
             <div>Disturbance <b>#${properties.Disturbance}</b></div>
@@ -117,7 +117,16 @@ function nhc_plot_outlook(kmz_blob, id) {
                         'type': 'circle',
                         'source': source_name,
                         'paint': {
-                            'circle-radius': 9,
+                            'circle-radius': [ // 9
+                                'interpolate',
+                                ['exponential', 0.5],
+                                ['zoom'],
+                                2,
+                                5,
+
+                                7,
+                                9
+                            ],
                             'circle-stroke-width': 2,
                             'circle-color': ['get', 'color'],
                             'circle-stroke-color': black,
