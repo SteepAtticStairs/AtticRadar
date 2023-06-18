@@ -11,6 +11,10 @@ function _parse_jtwc_text(text) {
     const name_matches = name_pattern.exec(text);
     var names_found = 0;
 
+    if (name_matches[1] == 'JTWC CDO') {
+        throw new Error('No JTWC storms found.');
+    }
+
     const ids = [];
     const names = [];
     for (var i = 0; i < url_matches.length; i++) {

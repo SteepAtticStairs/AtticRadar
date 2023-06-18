@@ -1618,7 +1618,7 @@ function load() {
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
-    // $('#armrSPC_convective-hail-day2_BtnSwitchElem').click();
+    // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
@@ -4465,6 +4465,10 @@ function _parse_jtwc_text(text) {
     const name_pattern = /\(([^)]+)\)/;
     const name_matches = name_pattern.exec(text);
     var names_found = 0;
+
+    if (name_matches[1] == 'JTWC CDO') {
+        throw new Error('No JTWC storms found.');
+    }
 
     const ids = [];
     const names = [];
@@ -29641,7 +29645,7 @@ ${_return_time_range_html(issue_formatted, expire_formatted)}
         'paint': {
             'fill-outline-color': ['get', 'stroke'],
             'fill-color': ['get', 'fill'],
-            'fill-opacity': 1 // 0.5
+            'fill-opacity': 1, // 0.5
         },
         'layout': {
             'fill-sort-key': ['get', 'zindex']

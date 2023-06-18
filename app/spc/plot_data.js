@@ -84,7 +84,7 @@ ${_return_time_range_html(issue_formatted, expire_formatted)}
         'paint': {
             'fill-outline-color': ['get', 'stroke'],
             'fill-color': ['get', 'fill'],
-            'fill-opacity': 1 // 0.5
+            'fill-opacity': 1, // 0.5
         },
         'layout': {
             'fill-sort-key': ['get', 'zindex']
