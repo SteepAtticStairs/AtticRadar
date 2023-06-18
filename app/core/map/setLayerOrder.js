@@ -70,6 +70,7 @@ function setLayerOrder() {
         for (var i = 0; i < surface_fronts_layers.length; i++) {
             move_layer_to_top(surface_fronts_layers[i]);
         }
+        move_layer_to_top('pressure_points_layer');
     }
 }
 

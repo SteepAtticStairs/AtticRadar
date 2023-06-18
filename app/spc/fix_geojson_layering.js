@@ -1,6 +1,8 @@
 const turf = require('@turf/turf');
 
 function fix_geojson_layering(geojson) {
+    // geojson.features = geojson.features.filter(feature => feature.properties.DN == 30 || feature.properties.DN == 10);
+
     // convert all MultiPolygons to individual polygons within the FeatureCollection
     geojson.features = geojson.features.flatMap(feature => {
         if (feature.geometry.type === 'MultiPolygon') {
@@ -11,6 +13,11 @@ function fix_geojson_layering(geojson) {
         }
         return [];
     });
+    // for (var i = 0; i < geojson.features.length; i++) {
+    //     // console.log(geojson.features[i])
+    //     geojson.features[i].properties.id = i;
+    // }
+    // console.log(JSON.parse(JSON.stringify(geojson)))
 
     var index = 0;
     for (var i = 0; i < geojson.features.length; i++) {
