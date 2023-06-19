@@ -58,6 +58,9 @@ function load() {
     // detect if AtticRadar is being loaded in an iframe
     require('../misc/detect_iframe');
 
+    // load the tide stations module
+    require('../../tides/menu_item');
+
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();

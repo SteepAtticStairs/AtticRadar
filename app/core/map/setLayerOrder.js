@@ -23,6 +23,9 @@ function setLayerOrder() {
     // weather radio layer
     move_layer_to_top('radioStationLayer');
 
+    // tide station layer
+    move_layer_to_top('tide_station_layer');
+
     // alerts layers
     move_layer_to_top('alertsLayerOutline');
     move_layer_to_top('alertsLayer');

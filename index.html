@@ -340,21 +340,21 @@
 
                     <br>
 
+                    <div class="armrHeader">MARINE</div>
+                    <div class="atticRadarMenuRow" id="armrTideStationsBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-ship"></i>
+                        Tide Stations
+                        <i class="toggleSwitchContainter" id="armrTideStationsBtnSwitch"><input type="checkbox" id="armrTideStationsBtnSwitchElem" class="toggleSwitch" /><label for="armrTideStationsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                    </div>
+
+                    <br>
+
                     <div class="armrHeader">RADIO</div>
                     <div class="atticRadarMenuRow" id="armrWeatherRadioBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-radio"></i>
                         NOAA Weather Radio
                         <i class="toggleSwitchContainter" id="armrWeatherRadioBtnSwitch"><input type="checkbox" id="armrWeatherRadioBtnSwitchElem" class="toggleSwitch" /><label for="armrWeatherRadioBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div>
-
-                    <!-- <br>
-
-                    <div class="armrHeader">MARINE</div>
-                    <div class="atticRadarMenuRow" id="armrTideStationsBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-water"></i>
-                        Tide Stations
-                        <i class="toggleSwitchContainter" id="armrTideStationsBtnSwitch"><input type="checkbox" id="armrTideStationsBtnSwitchElem" class="toggleSwitch" /><label for="armrTideStationsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
-                    </div> -->
 
                     <!-- <br>
 
@@ -636,6 +636,8 @@
         </div>
     </div>
 
+    <!-- <div id="tide_chart_container"></div> -->
+
     <div id="colorPicker" class="colorPicker colorPickerCircle"></div>
     <div id="colorPickerBorder" class="colorPicker colorPickerCircle">
         <div id="verticalLine" class="colorPicker"></div>
@@ -847,6 +849,8 @@
             ['js', 'https://spin.js.org/spin.umd.js', 7274],
 
             ['js', 'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js', 46859],
+
+            ['js', 'https://code.highcharts.com/highcharts.js', 288146],
 
             // ['js', './app/hurricanes/historical/stormList.js'],
 
