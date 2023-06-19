@@ -1622,6 +1622,7 @@ function load() {
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
     // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
+    // $('#armrTideStationsBtnSwitchElem').click();
 }
 
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
@@ -30570,6 +30571,7 @@ function show_chart(tide_height_array, station_name) {
     const day_format = '%b %e';
     const time_format = '%l:%M %p';
     const full_date_format = `${day_format}<br>${time_format}`;
+    const extra_full_date_format = `%a ${full_date_format} ${local_zone_abbv}`;
 
     const grey_color = 'rgb(180, 180, 180)';
     const gridline_grey_color = 'rgb(90, 90, 90)';
@@ -30605,6 +30607,22 @@ function show_chart(tide_height_array, station_name) {
                     }
                 }
             },
+            currentDateIndicator: {
+                width: 2,
+                color: 'rgb(172, 63, 63)',
+                label: {
+                    format: extra_full_date_format,
+                    style: {
+                        'color': grey_color,
+                        // 'backgroundColor': gridline_grey_color,
+                        // 'borderRadius': '10px',
+                        // 'padding': '5px'
+                    },
+                    x: 10,
+                    y: 17,
+                    // useHTML: true
+                }
+            },
             gridLineWidth: 1,
             gridLineColor: gridline_grey_color
             // http://jsfiddle.net/phpdeveloperrahul/ddELH
@@ -30633,7 +30651,7 @@ function show_chart(tide_height_array, station_name) {
         },
         tooltip: {
             formatter: function () {
-                return `<b>${this.y} ft</b><br>${Highcharts.dateFormat(`%a ${full_date_format} ${local_zone_abbv}`, new Date(this.x))}`;
+                return `<b>${this.y} ft</b><br>${Highcharts.dateFormat(extra_full_date_format, new Date(this.x))}`;
             }
         },
         series: [{
