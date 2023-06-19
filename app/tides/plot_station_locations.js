@@ -10,7 +10,7 @@ function _click_listener(e) {
     // copy coordinates array
     const coordinates = e.features[0].geometry.coordinates.slice();
     const description = e.features[0].properties.description;
-    const name = e.features[0].properties.station_name;
+    const alt_name = e.features[0].properties.station_alt_name;
     const id = e.features[0].properties.station_id;
 
     display_attic_dialog({
@@ -19,7 +19,7 @@ function _click_listener(e) {
         'color': 'rgb(120, 120, 120)',
         'textColor': 'black',
     })
-    get_individual_data(id, (tide_height_array, station_name) => {
+    get_individual_data(id, alt_name, (tide_height_array, station_name) => {
         show_chart(tide_height_array, station_name);
     })
     // new mapboxgl.Popup({ className: 'alertPopup' })
@@ -37,6 +37,7 @@ function plot_station_locations(json) {
         const lat = json.stations[i].lat;
         const lng = json.stations[i].lng;
         const name = json.stations[i].name;
+        const alt_name = json.stations[i].alt_name;
         const id = json.stations[i].id;
 
         const popup_html = `
@@ -47,6 +48,7 @@ function plot_station_locations(json) {
 
         const point = turf.point([lng, lat], {
             'station_name': name,
+            'station_alt_name': alt_name,
             'station_id': id,
             'description': popup_html
         });
