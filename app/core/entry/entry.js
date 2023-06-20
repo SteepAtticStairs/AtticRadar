@@ -7,9 +7,6 @@ function load() {
     // which will store data that can be accessed globally
     window.atticData = {};
 
-    // load the main radar file
-    require('../../radar/main');
-
     // load the weather station menu item
     require('../../weather_station/menu_item').weatherstationToolsOption();
 
@@ -68,10 +65,21 @@ function load() {
     // $('#armrTideStationsBtnSwitchElem').click();
 }
 
+function _load_map() {
+    const map = require('../map/map');
+    if (map.loaded()) {
+        load();
+    } else {
+        map.on('load', function() {
+            load();
+        })
+    }
+}
+
 if (document.readyState == 'complete' || document.readyState == 'interactive') {
-    load();
+    _load_map();
 } else if (document.readyState == 'loading') {
     window.onload = function () {
-        load();
+        _load_map();
     }
 }

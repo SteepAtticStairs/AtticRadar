@@ -31,7 +31,4 @@ $(iconElem).on('click', function() {
 
 $('#stationMenuItemIcon').removeClass('icon-grey');
 $('#stationMenuItemIcon').addClass('icon-blue');
-$('#dataDiv').data('stationMarkersVisible', true);
-setTimeout(function() {
-    showStations();
-}, 200)
+showStations();

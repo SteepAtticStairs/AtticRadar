@@ -741,7 +741,7 @@ function zeroPad(num, length) {
     return (new Array(length).join('0') + num).slice(length*-1);
 }
 
-function setMapMargin(topOrBottom, value) {
+function setMapMargin(topOrBottom, value, map_obj = map) {
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
         $('.colorPickerCircle').css('top', value);
@@ -750,7 +750,7 @@ function setMapMargin(topOrBottom, value) {
         $('.colorPickerCircle').css('bottom', value);
         $('#colorPickerText').css('bottom', value - 80);
     }
-    map.resize();
+    map_obj.resize();
 
     // $('#colorPicker #colorPickerText').position({
     //     my: 'center',

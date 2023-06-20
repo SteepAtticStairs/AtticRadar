@@ -20,6 +20,23 @@ const map = new mapboxgl.Map({
     //fadeDuration: 0,
 });
 
+const ut = require('../utils');
+ut.setMapMargin('bottom', $('#mapFooter').height(), map);
+ut.setMapMargin('top', $('#radarHeader').height(), map);
+
+if (require('../misc/detect_mobile_browser')) {
+    const div = document.createElement('div');
+    div.className = 'mapFooter';
+    $(div).css('z-index', $('#mapFooter').css('z-index') - 1);
+    document.body.appendChild(div);
+
+    $('#mapFooter').css('bottom', '5%');
+    const offset = $(window).height() * (5 / 100);
+    ut.setMapMargin('bottom', offset + $('#mapFooter').height(), map);
+
+    $('.mapFooter').css('justify-content', 'space-evenly');
+}
+
 // MOBILE - disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
 // DESKTOP - disable map rotation using right click + drag
