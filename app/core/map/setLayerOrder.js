@@ -65,6 +65,11 @@ function setLayerOrder() {
                 move_layer_to_top(hurricane_layers[i]);
             }
         }
+        for (var i = 0; i < hurricane_layers.length; i++) {
+            if (!hurricane_layers[i].includes('outlook')) {
+                move_layer_to_top(hurricane_layers[i]);
+            }
+        }
     }
 
     // surface fronts layers

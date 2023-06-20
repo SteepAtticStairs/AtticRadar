@@ -1,4 +1,5 @@
 const kmz_to_geojson = require('../kmz_to_geojson');
+const set_layer_order = require('../../core/map/setLayerOrder');
 const map = require('../../core/map/map');
 
 function _click_listener(e) {
@@ -136,6 +137,7 @@ function nhc_plot_outlook(kmz_blob, id) {
                 }
             }
         }
+        set_layer_order();
     })
 }
 

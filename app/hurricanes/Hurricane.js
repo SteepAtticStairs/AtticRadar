@@ -2,6 +2,7 @@ const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
 const chroma = require('chroma-js');
+const set_layer_order = require('../core/map/setLayerOrder');
 
 const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
 
@@ -44,6 +45,8 @@ class Hurricane {
         this._plot_cone();
         this._plot_forecast_track();
         this._plot_forecast_points();
+
+        set_layer_order();
     }
 
     _plot_forecast_points() {

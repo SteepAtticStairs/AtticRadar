@@ -32,8 +32,6 @@ function init_hurricane_loading() {
             cyclone.plot();
             console.log(cyclone);
         }
-
-        set_layer_order();
     });
 
     jtwc_fetch_data((jtwc_storage) => {
@@ -50,8 +48,6 @@ function init_hurricane_loading() {
             cyclone.plot();
             console.log(cyclone);
         }
-
-        set_layer_order();
     });
 }
 
