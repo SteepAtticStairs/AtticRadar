@@ -3,6 +3,9 @@ const set_layer_order = require('../../core/map/setLayerOrder');
 const map = require('../../core/map/map');
 
 function _click_listener(e) {
+    const features = map.queryRenderedFeatures(e.point);
+    if (features[0].layer.id != e.features[0].layer.id) { return; }
+
     const lng = e.lngLat.lng;
     const lat = e.lngLat.lat;
     const properties = e.features[0].properties;

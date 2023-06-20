@@ -7,6 +7,9 @@ const set_layer_order = require('../core/map/setLayerOrder');
 const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
 
 function _click_listener(e) {
+    const features = map.queryRenderedFeatures(e.point);
+    if (features[0].layer.id != e.features[0].layer.id) { return; }
+
     const feature = e.features[0];
     const properties = feature.properties;
 

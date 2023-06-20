@@ -4,8 +4,6 @@
 */
 // https://attic-server.herokuapp.com/proxy/index.php/?
 
-const map = require('./map/map');
-
 // https://php-cors-proxy.herokuapp.com/?
 const phpProxy = 'https://attic-server.herokuapp.com/proxy/index.php/?'; //https://api.allorigins.win/raw?url=';
 const phpProxy2 = 'https://attic-server.herokuapp.com/proxy/index.php/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
@@ -741,7 +739,9 @@ function zeroPad(num, length) {
     return (new Array(length).join('0') + num).slice(length*-1);
 }
 
-function setMapMargin(topOrBottom, value, map_obj = map) {
+function setMapMargin(topOrBottom, value, map_obj = undefined) {
+    const map = require('./map/map');
+
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
         $('.colorPickerCircle').css('top', value);
@@ -750,7 +750,11 @@ function setMapMargin(topOrBottom, value, map_obj = map) {
         $('.colorPickerCircle').css('bottom', value);
         $('#colorPickerText').css('bottom', value - 80);
     }
-    map_obj.resize();
+    if (map_obj == undefined) {
+        map.resize();
+    } else {
+        map_obj.resize();
+    }
 
     // $('#colorPicker #colorPickerText').position({
     //     my: 'center',
