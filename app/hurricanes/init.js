@@ -11,12 +11,26 @@ function init_hurricane_loading() {
     window.atticData.hurricane_layers = [];
 
     nhc_fetch_data((nhc_storage) => {
-        const keys = Object.keys(nhc_storage.outlooks);
-        for (var i = 0; i < keys.length; i++) {
-            const id = keys[i];
+        const outlook_keys = Object.keys(nhc_storage.outlooks);
+        for (var i = 0; i < outlook_keys.length; i++) {
+            const id = outlook_keys[i];
             const kmz_blob = nhc_storage.outlooks[id].kmz;
 
             nhc_plot_outlook(kmz_blob, id);
+        }
+
+        const hurricane_keys = Object.keys(nhc_storage.hurricanes);
+        for (var i = 0; i < hurricane_keys.length; i++) {
+            const storm_id = hurricane_keys[i];
+            const storm_name = nhc_storage.hurricanes[storm_id].name;
+            const cone = nhc_storage.hurricanes[storm_id].cone;
+            const forecast_track = nhc_storage.hurricanes[storm_id].forecast_track;
+            const points = nhc_storage.hurricanes[storm_id].forecast_points;
+            const point_properties = nhc_storage.hurricanes[storm_id].forecast_point_properties;
+
+            const cyclone = new Hurricane(storm_id, storm_name, cone, forecast_track, points, point_properties);
+            cyclone.plot();
+            console.log(cyclone);
         }
 
         set_layer_order();
