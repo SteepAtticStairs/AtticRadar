@@ -60,7 +60,7 @@ function _grab_cone_track_points(nhc_storage) {
             // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
             // https://stackoverflow.com/a/12059321/18758797
             const max_wind_mph = max_wind.match(/\(([^)]+)\)/)[1].slice(0, -4);
-            this_point_properties.knots = parseInt(max_wind_mph) * 1.151; // mph to knots
+            this_point_properties.knots = parseInt(max_wind_mph) / 1.151; // mph to knots
             point_properties.push(this_point_properties);
 
             // Valid at: 4:00 PM EST November 07, 2022
