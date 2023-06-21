@@ -257,17 +257,6 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
     }
 
-    // console.log('File plotting complete');
-    ut.betterProgressBar('set', 100);
-    ut.betterProgressBar('hide');
-
-    var distanceMeasureMapLayers = $('#dataDiv').data('distanceMeasureMapLayers');
-    for (var i in distanceMeasureMapLayers) {
-        if (map.getLayer(distanceMeasureMapLayers[i])) {
-            map.moveLayer(distanceMeasureMapLayers[i]);
-        }
-    }
-
     if (isInFileUploadMode) {
         if (nexrad_factory.nexrad_level == 2) {
             const file_id = nexrad_factory.generate_unique_id();

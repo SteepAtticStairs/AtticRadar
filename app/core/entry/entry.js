@@ -8,10 +8,10 @@ function load() {
     window.atticData = {};
 
     // load the weather station menu item
-    require('../../weather_station/menu_item').weatherstationToolsOption();
+    require('../../weather_station/menu_item');
 
     // load the radio menu item
-    require('../../radio/menu_item').weatherRadioToolsOption();
+    require('../../radio/menu_item');
 
     // initialize the alerts
     require('../../alerts/init_alerts');
@@ -29,10 +29,7 @@ function load() {
     require('../menu/productSelectionMenu');
 
     // load the settings menu
-    require('../menu/settings').settingsOption();
-
-    // load the tools menu
-    require('../menu/tools');
+    require('../menu/settings');
 
     // load the data inspector tool
     require('../../radar/inspector/entry');
