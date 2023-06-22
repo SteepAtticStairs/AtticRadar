@@ -22,7 +22,7 @@ ${properties.storm_name}</b>
 <b>${ut.knotsToMph(properties.knots)}</b> mph
 <br>
 ${custom_break}
-${properties.current_month_abbv} ${properties.day}<br>
+${properties.day_of_week_abbv} ${properties.current_month_abbv} ${properties.day}<br>
 ${properties.formatted_hour}
 </div>`
 
@@ -153,11 +153,12 @@ class Hurricane {
             properties.storm_name = this._storm_name;
 
             properties.sshws_border_color = chroma(properties.sshws_color).darken().hex();
-            if (i == 0) {
-                properties.sshws_border_width = 4;
-            } else {
-                properties.sshws_border_width = 0;
-            }
+            properties.sshws_border_width = 2;
+            // if (i == 0) {
+            //     properties.sshws_border_width = 4;
+            // } else {
+            //     properties.sshws_border_width = 0;
+            // }
 
             points.push(turf.point(coords, properties));
         }

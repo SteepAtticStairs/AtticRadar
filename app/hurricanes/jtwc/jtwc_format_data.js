@@ -69,6 +69,7 @@ function _grab_cone_track_points(jtwc_storage) {
                     const datetime = luxon.DateTime.utc(now.year, month_num, day, parseInt(time.slice(0, -1))).toLocal();
                     const formatted_hour = datetime.toFormat('h:mm a ZZZZ');
 
+                    this_point_properties.day_of_week_abbv = datetime.toFormat('ccc');
                     this_point_properties.current_month_abbv = current_month_abbv;
                     this_point_properties.day = day;
                     this_point_properties.time = time;

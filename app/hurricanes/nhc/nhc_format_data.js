@@ -100,7 +100,8 @@ function _grab_cone_track_points(nhc_storage) {
             var formatted_date_obj = luxon.DateTime.fromISO(nhc_storage.hurricanes[current_storm].last_update).setZone(luxon_tz);
             formatted_date_obj = formatted_date_obj.plus({ hours: elapsed_hours });
 
-            this_point_properties.current_month_abbv = formatted_date_obj.toFormat('LLLL').slice(0, 3);
+            this_point_properties.day_of_week_abbv = formatted_date_obj.toFormat('ccc');
+            this_point_properties.current_month_abbv = formatted_date_obj.toFormat('LLL');
             this_point_properties.day = parseInt(formatted_date_obj.toFormat('d'));
             this_point_properties.time = formatted_date_obj.toFormat(`HH'Z'`);
             this_point_properties.formatted_hour = formatted_date_obj.toFormat('h:mm a ZZZZ');
