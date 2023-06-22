@@ -19,8 +19,8 @@ function _click_listener(e) {
         'color': 'rgb(120, 120, 120)',
         'textColor': 'black',
     })
-    get_individual_data(id, alt_name, (tide_height_array, station_name) => {
-        show_chart(tide_height_array, station_name);
+    get_individual_data(id, alt_name, (tide_height_array, station_name, plot_bands) => {
+        show_chart(tide_height_array, station_name, plot_bands);
     })
     // new mapboxgl.Popup({ className: 'alertPopup' })
     //     .setLngLat(coordinates)

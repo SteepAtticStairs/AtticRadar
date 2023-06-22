@@ -1,5 +1,7 @@
-function show_chart(tide_height_array, station_name) {
+function show_chart(tide_height_array, station_name, plot_bands) {
     // console.log(tide_height_array);
+
+    var tooltip_enabled = true;
 
     const timezone_offset = new Date().getTimezoneOffset();
     // https://stackoverflow.com/a/34405528
@@ -9,6 +11,16 @@ function show_chart(tide_height_array, station_name) {
     const time_format = '%l:%M %p';
     const full_date_format = `${day_format}<br>${time_format}`;
     const extra_full_date_format = `%a ${full_date_format} ${local_zone_abbv}`;
+
+    Math.easeOutBounce = pos => {
+        return pos;
+    };
+
+    // https://stackoverflow.com/a/8636674
+    const start_of_today = new Date();
+    start_of_today.setHours(0, 0, 0, 0);
+    const end_of_today = new Date();
+    end_of_today.setHours(23, 59, 59, 999);
 
     const grey_color = 'rgb(180, 180, 180)';
     const gridline_grey_color = 'rgb(90, 90, 90)';
@@ -22,7 +34,9 @@ function show_chart(tide_height_array, station_name) {
             type: 'spline',
             backgroundColor: 'transparent',
             plotBorderColor: grey_color,
-            plotBorderWidth: 2
+            plotBorderWidth: 2,
+            panning: true,
+            // animation: false
         },
         title: {
             text: station_name,
@@ -44,30 +58,20 @@ function show_chart(tide_height_array, station_name) {
                     }
                 }
             },
-            currentDateIndicator: {
-                width: 2,
+            plotLines: [{
                 color: 'rgb(172, 63, 63)',
-                label: {
-                    format: extra_full_date_format,
-                    style: {
-                        'color': grey_color,
-                        // 'backgroundColor': gridline_grey_color,
-                        // 'borderRadius': '10px',
-                        // 'padding': '5px'
-                    },
-                    x: 10,
-                    y: 17,
-                    // useHTML: true
-                }
-            },
+                value: Date.now(),
+                width: 2
+            }],
+            plotBands: plot_bands,
             gridLineWidth: 1,
-            gridLineColor: gridline_grey_color
+            gridLineColor: gridline_grey_color,
             // http://jsfiddle.net/phpdeveloperrahul/ddELH
             // dateTimeLabelFormats: {
             //     day: full_date_format,
             // },
-            // min: tide_height_array[0][0],
-            // max: tide_height_array[tide_height_array.length - 1][0]
+            min: start_of_today.getTime(),
+            max: end_of_today.getTime(),
         },
         yAxis: {
             title: {
@@ -88,12 +92,51 @@ function show_chart(tide_height_array, station_name) {
         },
         tooltip: {
             formatter: function () {
-                return `<b>${this.y} ft</b><br>${Highcharts.dateFormat(extra_full_date_format, new Date(this.x))}`;
+                if (tooltip_enabled) {
+                    return `<b>${this.y} ft</b><br>${Highcharts.dateFormat(extra_full_date_format, new Date(this.x))}`;
+                } else {
+                    return false;
+                }
             }
         },
         series: [{
             data: tide_height_array
         }]
+    });
+
+    // from ChatGPT
+    function _get_new_extremes(date) {
+        const closest_day = new Date(date);
+        closest_day.setHours(0, 0, 0, 0);
+
+        const one_day_later = new Date(closest_day);
+        one_day_later.setDate(one_day_later.getDate() + 1);
+
+        if (date.getHours() >= 12) {
+            closest_day.setDate(closest_day.getDate() + 1);
+            one_day_later.setDate(one_day_later.getDate() + 1);
+        }
+
+        return [closest_day, one_day_later];
+    }
+
+    Highcharts.wrap(Highcharts.Pointer.prototype, 'dragStart', function(p, e) {
+        tooltip_enabled = false;
+        this.chart.tooltip.destroy();
+
+        p.call(this);
+    });
+    Highcharts.wrap(Highcharts.Pointer.prototype, 'drop', function(p, e) {
+        const xAxis = this.chart.xAxis[0];
+        // xAxis.setExtremes(start_of_today.getTime(), end_of_today.getTime());
+
+        const current_extremes = xAxis.getExtremes();
+        const [new_min, new_max] = _get_new_extremes(new Date(current_extremes.min));
+        xAxis.setExtremes(new_min.getTime(), new_max.getTime());
+
+        tooltip_enabled = true;
+
+        p.call(this);
     });
 }
 

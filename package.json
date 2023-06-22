@@ -22,6 +22,7 @@
     "pngjs": "^6.0.0",
     "seek-bzip": "^2.0.0",
     "shelljs": "^0.8.5",
+    "suncalc": "^1.9.0",
     "webworkify": "^1.5.0"
   },
   "devDependencies": {
