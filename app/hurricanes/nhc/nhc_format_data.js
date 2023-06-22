@@ -65,13 +65,7 @@ function _grab_cone_track_points(nhc_storage) {
 
             // Valid at: 4:00 PM EST November 07, 2022
             const time = parsed_description.children[0].children[0].children[4].textContent;
-            var formatted_date = time
-                .replace('Valid at: ', '')
-                .replace(',', '')
-                .replace(':', ' ')
-                .split(' ');
-            for (var i in formatted_date) { formatted_date[i] = formatted_date[i].trim() } // removes spaces from array items
-            formatted_date = formatted_date.filter(n => n); // removes empty items
+            const formatted_date = time.replace('Valid at:', '').replace(',', '').trim().split(/\s|:/).filter(n => n);
             // ['1', '00', 'PM', 'EST', 'November', '12', '2022']
             const pdp = {}; // pdp = provided date parts
             pdp.hour = formatted_date[0];
