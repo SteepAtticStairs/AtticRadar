@@ -46,7 +46,9 @@ function _list_storms(callback) {
     fetch(ut.phpProxy + nhc_storm_list_url)
     .then(response => response.json())
     .then(json => {
+        // json.activeStorms.length = 0;
         if (json.activeStorms.length == 0) {
+            console.error('No NHC storms found.');
             callback(nhc_storage);
         } else {
             for (var i = 0; i < json.activeStorms.length; i++) {
@@ -69,38 +71,41 @@ function _list_storms(callback) {
 
 function _fetch_kmz(nhc_storage, callback) {
     const nhc_ids = Object.keys(nhc_storage.hurricanes);
+    if (nhc_ids.length == 0) {
+        callback(nhc_storage);
+    } else {
+        function _nhc_fetch_from_ids(cb, index = 0) {
+            const id = nhc_ids[index];
+            const cone_url = `https://www.nhc.noaa.gov/storm_graphics/api/${id}_CONE_latest.kmz`;
+            const track_url = `https://www.nhc.noaa.gov/storm_graphics/api/${id}_TRACK_latest.kmz`;
 
-    function _nhc_fetch_from_ids(cb, index = 0) {
-        const id = nhc_ids[index];
-        const cone_url = `https://www.nhc.noaa.gov/storm_graphics/api/${id}_CONE_latest.kmz`;
-        const track_url = `https://www.nhc.noaa.gov/storm_graphics/api/${id}_TRACK_latest.kmz`;
-
-        fetch(ut.phpProxy + cone_url)
-        .then(response => response.blob())
-        .then(blob => {
-            blob.lastModifiedDate = new Date();
-            blob.name = cone_url;
-            nhc_storage.hurricanes[id].cone_kmz = blob;
-
-            fetch(ut.phpProxy + track_url)
+            fetch(ut.phpProxy + cone_url)
             .then(response => response.blob())
             .then(blob => {
                 blob.lastModifiedDate = new Date();
-                blob.name = track_url;
-                nhc_storage.hurricanes[id].track_kmz = blob;
+                blob.name = cone_url;
+                nhc_storage.hurricanes[id].cone_kmz = blob;
 
-                if (index < nhc_ids.length - 1) {
-                    _nhc_fetch_from_ids(cb, index + 1);
-                } else {
-                    cb();
-                }
+                fetch(ut.phpProxy + track_url)
+                .then(response => response.blob())
+                .then(blob => {
+                    blob.lastModifiedDate = new Date();
+                    blob.name = track_url;
+                    nhc_storage.hurricanes[id].track_kmz = blob;
+
+                    if (index < nhc_ids.length - 1) {
+                        _nhc_fetch_from_ids(cb, index + 1);
+                    } else {
+                        cb();
+                    }
+                })
             })
-        })
-    }
+        }
 
-    _nhc_fetch_from_ids(() => {
-        callback(nhc_storage);
-    });
+        _nhc_fetch_from_ids(() => {
+            callback(nhc_storage);
+        });
+    }
 }
 
 function nhc_fetch_data(callback) {

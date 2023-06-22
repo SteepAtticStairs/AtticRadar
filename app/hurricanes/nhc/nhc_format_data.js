@@ -4,29 +4,32 @@ const luxon = require('luxon');
 
 function _parse_kmz(nhc_storage, callback) {
     const keys = Object.keys(nhc_storage.hurricanes);
-
-    function _parse_all_kmz(cb, index = 0) {
-        const cone_kmz_blob = nhc_storage.hurricanes[keys[index]].cone_kmz;
-        const track_kmz_blob = nhc_storage.hurricanes[keys[index]].track_kmz;
-
-        kmz_to_geojson(cone_kmz_blob, (geojson) => {
-            nhc_storage.hurricanes[keys[index]].cone_geojson = geojson;
-
-            kmz_to_geojson(track_kmz_blob, (geojson) => {
-                nhc_storage.hurricanes[keys[index]].track_geojson = geojson;
-
-                if (index < keys.length - 1) {
-                    _parse_all_kmz(cb, index + 1);
-                } else {
-                    cb(nhc_storage);
-                }
-            })
-        })
-    }
-
-    _parse_all_kmz(() => {
+    if (keys.length == 0) {
         callback(nhc_storage);
-    });
+    } else {
+        function _parse_all_kmz(cb, index = 0) {
+            const cone_kmz_blob = nhc_storage.hurricanes[keys[index]].cone_kmz;
+            const track_kmz_blob = nhc_storage.hurricanes[keys[index]].track_kmz;
+
+            kmz_to_geojson(cone_kmz_blob, (geojson) => {
+                nhc_storage.hurricanes[keys[index]].cone_geojson = geojson;
+
+                kmz_to_geojson(track_kmz_blob, (geojson) => {
+                    nhc_storage.hurricanes[keys[index]].track_geojson = geojson;
+
+                    if (index < keys.length - 1) {
+                        _parse_all_kmz(cb, index + 1);
+                    } else {
+                        cb(nhc_storage);
+                    }
+                })
+            })
+        }
+
+        _parse_all_kmz(() => {
+            callback(nhc_storage);
+        });
+    }
 }
 
 function _grab_cone_track_points(nhc_storage) {
