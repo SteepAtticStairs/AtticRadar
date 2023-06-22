@@ -41,6 +41,14 @@ function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_
             plotBorderColor: grey_color,
             plotBorderWidth: 2,
             panning: true,
+            pinchType: 'x',
+            zoomType: 'x',
+            // Hide reset zoom button
+            resetZoomButton: {
+                theme: {
+                    display: 'none'
+                }
+            },
             // animation: false
         },
         title: {
