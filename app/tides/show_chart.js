@@ -1,4 +1,4 @@
-function show_chart(tide_height_array, station_name, plot_bands) {
+function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_array) {
     // console.log(tide_height_array);
 
     var tooltip_enabled = true;
@@ -15,6 +15,11 @@ function show_chart(tide_height_array, station_name, plot_bands) {
     Math.easeOutBounce = pos => {
         return pos;
     };
+
+    const plot_lines = [{ color: 'rgb(172, 63, 63)', value: Date.now(), width: 2 }];
+    for (var i = 0; i < start_of_dates_array.length; i++) {
+        plot_lines.push({ color: 'black', value: start_of_dates_array[i].getTime(), width: 2 });
+    }
 
     // https://stackoverflow.com/a/8636674
     const start_of_today = new Date();
@@ -52,17 +57,13 @@ function show_chart(tide_height_array, station_name, plot_bands) {
                     const date = new Date(ms);
 
                     if (date.getHours() == 0) {
-                        return Highcharts.dateFormat(`<b>${full_date_format}</b>`, ms);
+                        return Highcharts.dateFormat(`<b>%a ${full_date_format}</b>`, ms);
                     } else {
                         return Highcharts.dateFormat(time_format, ms);
                     }
                 }
             },
-            plotLines: [{
-                color: 'rgb(172, 63, 63)',
-                value: Date.now(),
-                width: 2
-            }],
+            plotLines: plot_lines,
             plotBands: plot_bands,
             gridLineWidth: 1,
             gridLineColor: gridline_grey_color,
@@ -132,7 +133,7 @@ function show_chart(tide_height_array, station_name, plot_bands) {
 
         const current_extremes = xAxis.getExtremes();
         const [new_min, new_max] = _get_new_extremes(new Date(current_extremes.min));
-        xAxis.setExtremes(new_min.getTime(), new_max.getTime());
+        // xAxis.setExtremes(new_min.getTime(), new_max.getTime());
 
         tooltip_enabled = true;
 

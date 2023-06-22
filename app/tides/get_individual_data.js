@@ -87,8 +87,15 @@ function get_individual_data(station_id, alt_name, callback) {
             tide_height_array.push([time.getTime(), value]);
         }
 
+        const start_of_dates_array = [];
+        var current_date = new Date(start_day.getTime());
+        while (current_date <= end_day) {
+            start_of_dates_array.push(new Date(current_date)); // Create a new Date object and add it to the array
+            current_date.setDate(current_date.getDate() + 1); // Increment the date by 1 day
+        }
+
         const plot_bands = _get_sunrise_sunset_times(tide_height_array, station_id, start_day, end_day);
-        callback(tide_height_array, alt_name, plot_bands);
+        callback(tide_height_array, alt_name, plot_bands, start_of_dates_array);
     })
 }
 
