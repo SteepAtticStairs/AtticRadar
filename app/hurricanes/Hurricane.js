@@ -1,7 +1,6 @@
 const turf = require('@turf/turf');
 const ut = require('../core/utils');
 const map = require('../core/map/map');
-const chroma = require('chroma-js');
 const set_layer_order = require('../core/map/setLayerOrder');
 
 const custom_break = `<span style="display: block; margin-bottom: 0.5em;"></span>`;
@@ -144,21 +143,6 @@ class Hurricane {
         for (var i = 0; i < this._forecast_point_coordinates.length; i++) {
             const coords = this._forecast_point_coordinates[i];
             const properties = this._forecast_point_properties[i];
-
-            const sshws_value = ut.getSSHWSVal(ut.knotsToMph(properties.knots));
-            properties.sshws_value = sshws_value[0];
-            properties.sshws_abbv = sshws_value[2];
-            properties.sshws_color = sshws_value[1];
-            properties.coordinates = coords;
-            properties.storm_name = this._storm_name;
-
-            properties.sshws_border_color = chroma(properties.sshws_color).darken().hex();
-            properties.sshws_border_width = 2;
-            // if (i == 0) {
-            //     properties.sshws_border_width = 4;
-            // } else {
-            //     properties.sshws_border_width = 0;
-            // }
 
             points.push(turf.point(coords, properties));
         }

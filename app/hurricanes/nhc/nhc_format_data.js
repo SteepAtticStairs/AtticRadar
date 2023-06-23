@@ -1,6 +1,7 @@
 const kmz_to_geojson = require('../kmz_to_geojson');
 const ut = require('../../core/utils');
 const luxon = require('luxon');
+const chroma = require('chroma-js');
 
 function _parse_kmz(nhc_storage, callback) {
     const keys = Object.keys(nhc_storage.hurricanes);
@@ -64,7 +65,6 @@ function _grab_cone_track_points(nhc_storage) {
             // https://stackoverflow.com/a/12059321/18758797
             const max_wind_mph = max_wind.match(/\(([^)]+)\)/)[1].slice(0, -4);
             this_point_properties.knots = parseInt(max_wind_mph) / 1.151; // mph to knots
-            point_properties.push(this_point_properties);
 
             // Valid at: 4:00 PM EST November 07, 2022
             const time = parsed_description.children[0].children[0].children[4].textContent;
@@ -108,6 +108,19 @@ function _grab_cone_track_points(nhc_storage) {
             this_point_properties.day = parseInt(formatted_date_obj.toFormat('d'));
             this_point_properties.time = formatted_date_obj.toFormat(`HH'Z'`);
             this_point_properties.formatted_hour = formatted_date_obj.toFormat('h:mm a ZZZZ');
+
+            const sshws_value = ut.getSSHWSVal(ut.knotsToMph(this_point_properties.knots));
+            this_point_properties.sshws_value = sshws_value[0];
+            this_point_properties.sshws_abbv = sshws_value[2];
+            this_point_properties.sshws_color = sshws_value[1];
+            this_point_properties.coordinates = track_geojson.features[n].geometry.coordinates;
+
+            this_point_properties.sshws_border_color = chroma(this_point_properties.sshws_color).darken().hex();
+            this_point_properties.sshws_border_width = 2;
+
+            this_point_properties.storm_name = nhc_storage.hurricanes[current_storm].name;
+
+            point_properties.push(this_point_properties);
         }
 
         nhc_storage.hurricanes[current_storm].forecast_points = points;

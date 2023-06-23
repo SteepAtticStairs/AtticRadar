@@ -59,7 +59,21 @@ function load() {
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
     // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
+
     // $('#armrTideStationsBtnSwitchElem').click();
+
+    // const get_individual_data = require('../../tides/get_individual_data');
+    // const show_chart = require('../../tides/show_chart');
+    // const display_attic_dialog = require('../menu/attic_dialog');
+    // display_attic_dialog({
+    //     'title': 'Tide Station',
+    //     'body': '<div id="tide_chart_container"><div class="tide_chart_container_text">Loading...</div></div>',
+    //     'color': 'rgb(120, 120, 120)',
+    //     'textColor': 'black',
+    // })
+    // get_individual_data('8656590', 'Atlantic Beach Triple S Pier', (tide_height_array, station_name) => {
+    //     show_chart(tide_height_array, station_name);
+    // })
 }
 
 function _load_map() {
