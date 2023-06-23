@@ -1,4 +1,4 @@
-function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_array) {
+function show_chart(tide_height_array, station_name) {
     // console.log(tide_height_array);
 
     var tooltip_enabled = true;
@@ -11,15 +11,6 @@ function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_
     const time_format = '%l:%M %p';
     const full_date_format = `${day_format}<br>${time_format}`;
     const extra_full_date_format = `%a ${full_date_format} ${local_zone_abbv}`;
-
-    Math.easeOutBounce = pos => {
-        return pos;
-    };
-
-    const plot_lines = [{ color: 'rgb(172, 63, 63)', value: Date.now(), width: 2 }];
-    for (var i = 0; i < start_of_dates_array.length; i++) {
-        plot_lines.push({ color: 'black', value: start_of_dates_array[i].getTime(), width: 2 });
-    }
 
     // https://stackoverflow.com/a/8636674
     const start_of_today = new Date();
@@ -40,15 +31,6 @@ function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_
             backgroundColor: 'transparent',
             plotBorderColor: grey_color,
             plotBorderWidth: 2,
-            panning: true,
-            pinchType: 'x',
-            zoomType: 'x',
-            // Hide reset zoom button
-            resetZoomButton: {
-                theme: {
-                    display: 'none'
-                }
-            },
             // animation: false
         },
         title: {
@@ -71,8 +53,7 @@ function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_
                     }
                 }
             },
-            plotLines: plot_lines,
-            plotBands: plot_bands,
+            plotLines: [{ color: 'rgb(172, 63, 63)', value: Date.now(), width: 2 }],
             gridLineWidth: 1,
             gridLineColor: gridline_grey_color,
             // http://jsfiddle.net/phpdeveloperrahul/ddELH
@@ -111,41 +92,6 @@ function show_chart(tide_height_array, station_name, plot_bands, start_of_dates_
         series: [{
             data: tide_height_array
         }]
-    });
-
-    // from ChatGPT
-    function _get_new_extremes(date) {
-        const closest_day = new Date(date);
-        closest_day.setHours(0, 0, 0, 0);
-
-        const one_day_later = new Date(closest_day);
-        one_day_later.setDate(one_day_later.getDate() + 1);
-
-        if (date.getHours() >= 12) {
-            closest_day.setDate(closest_day.getDate() + 1);
-            one_day_later.setDate(one_day_later.getDate() + 1);
-        }
-
-        return [closest_day, one_day_later];
-    }
-
-    Highcharts.wrap(Highcharts.Pointer.prototype, 'dragStart', function(p, e) {
-        tooltip_enabled = false;
-        this.chart.tooltip.destroy();
-
-        p.call(this);
-    });
-    Highcharts.wrap(Highcharts.Pointer.prototype, 'drop', function(p, e) {
-        const xAxis = this.chart.xAxis[0];
-        // xAxis.setExtremes(start_of_today.getTime(), end_of_today.getTime());
-
-        const current_extremes = xAxis.getExtremes();
-        const [new_min, new_max] = _get_new_extremes(new Date(current_extremes.min));
-        // xAxis.setExtremes(new_min.getTime(), new_max.getTime());
-
-        tooltip_enabled = true;
-
-        p.call(this);
     });
 }
 
