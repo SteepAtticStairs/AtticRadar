@@ -1303,18 +1303,11 @@ https://tobiasahlin.com/spinkit/
     text-align: center;
 }
 
-.tide_chart_container_text {
-    text-align: center;
-    font-size: 40px;
-    font-weight: bold;
-    /* font-style: italic; */
-    color: rgb(180, 180, 180);
-}
-/* #tide_chart_container {
+#chart_container {
     width: 20px;
     height: 20px;
-} */
-/* #tide_chart_container {
+}
+#chart_container {
     position: absolute;
     z-index: 500;
     width: 75%;
@@ -1334,8 +1327,16 @@ https://tobiasahlin.com/spinkit/
     background-color: white;
     color: black;
     border-radius: 10px;
-} */
+}
 
+
+.tide_chart_container_text {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    /* font-style: italic; */
+    color: rgb(180, 180, 180);
+}
 #tide_chart_container {
     height: 300px;
 }

@@ -59,7 +59,6 @@ function load() {
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
     // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
-    // $('#armrTideStationsBtnSwitchElem').click();
 }
 
 function _load_map() {
