@@ -152,6 +152,11 @@ class Hurricane {
 
     _create_geojsons() {
         this.cone = turf.polygon(this._cone_coordinates);
+
+        const coords = this._forecast_track_coordinates;
+        if (coords.length == 1) {
+            this._forecast_track_coordinates = [coords, coords];
+        }
         this.forecast_track = turf.lineString(this._forecast_track_coordinates);
         this._format_points();
     }

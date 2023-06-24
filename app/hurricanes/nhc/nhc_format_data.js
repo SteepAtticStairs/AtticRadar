@@ -55,10 +55,17 @@ function _grab_cone_track_points(nhc_storage) {
             const this_point_properties = {};
             const properties = track_geojson.features[n].properties;
 
+            this_point_properties.storm_name = nhc_storage.hurricanes[current_storm].name;
+
             // parse the content of each point
             const div = document.createElement('div');
             div.innerHTML = properties.description;
             const parsed_description = JSON.parse(ut.html2json(div));
+
+            const storm_type = parsed_description.children[0].children[0].children[0].textContent;
+            const storm_type_regex = /^(.*?)\s+\([A-Z]+\d+\)$/;
+            const parsed_storm_type = storm_type.replace(this_point_properties.storm_name, '').match(storm_type_regex)[1];
+            this_point_properties.sshws_value = parsed_storm_type;
 
             const max_wind = parsed_description.children[0].children[0].children[6].textContent;
             // gets text in between parentheses, e.g. "70 mph" and removes the last 4 characters
@@ -110,15 +117,13 @@ function _grab_cone_track_points(nhc_storage) {
             this_point_properties.formatted_hour = formatted_date_obj.toFormat('h:mm a ZZZZ');
 
             const sshws_value = ut.getSSHWSVal(ut.knotsToMph(this_point_properties.knots));
-            this_point_properties.sshws_value = sshws_value[0];
+            // this_point_properties.sshws_value = sshws_value[0];
             this_point_properties.sshws_abbv = sshws_value[2];
             this_point_properties.sshws_color = sshws_value[1];
             this_point_properties.coordinates = track_geojson.features[n].geometry.coordinates;
 
             this_point_properties.sshws_border_color = chroma(this_point_properties.sshws_color).darken().hex();
             this_point_properties.sshws_border_width = 2;
-
-            this_point_properties.storm_name = nhc_storage.hurricanes[current_storm].name;
 
             point_properties.push(this_point_properties);
         }
