@@ -15,12 +15,20 @@ function _click_listener(e) {
 
     display_attic_dialog({
         'title': 'Tide Station',
-        'body': '<div id="tide_chart_container"><div class="tide_chart_container_text">Loading...</div></div>',
+
+        'body':
+`<div id="tide_chart_container">
+    <div class="tide_chart_container_text">Loading...</div>
+</div>\
+<div id="tide_stations_datepicker_container"><div id="tide_stations_datepicker"></div></div>`,
+
         'color': 'rgb(120, 120, 120)',
         'textColor': 'black',
     })
-    get_individual_data(id, alt_name, (tide_height_array, station_name) => {
-        show_chart(tide_height_array, station_name);
+
+    const today = new Date();
+    get_individual_data(id, alt_name, today, (tide_height_array, station_name) => {
+        show_chart(tide_height_array, station_name, id, today);
     })
     // new mapboxgl.Popup({ className: 'alertPopup' })
     //     .setLngLat(coordinates)

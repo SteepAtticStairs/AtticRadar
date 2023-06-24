@@ -1,4 +1,6 @@
-function show_chart(tide_height_array, station_name) {
+const get_individual_data = require('./get_individual_data');
+
+function show_chart(tide_height_array, station_name, station_id, ref_date) {
     // console.log(tide_height_array);
 
     var tooltip_enabled = true;
@@ -13,9 +15,9 @@ function show_chart(tide_height_array, station_name) {
     const extra_full_date_format = `%a ${full_date_format} ${local_zone_abbv}`;
 
     // https://stackoverflow.com/a/8636674
-    const start_of_today = new Date();
+    const start_of_today = new Date(ref_date.getTime());
     start_of_today.setHours(0, 0, 0, 0);
-    const end_of_today = new Date();
+    const end_of_today = new Date(ref_date.getTime());
     end_of_today.setHours(23, 59, 59, 999);
 
     const grey_color = 'rgb(180, 180, 180)';
@@ -93,6 +95,19 @@ function show_chart(tide_height_array, station_name) {
             data: tide_height_array
         }]
     });
+
+    $('#tide_stations_datepicker').datepicker({
+        todayHighlight: true
+    });
+
+    $('#tide_stations_datepicker').off();
+    $('#tide_stations_datepicker').on('changeDate', (e) => {
+        const selected_date = e.dates[0];
+
+        get_individual_data(station_id, station_name, selected_date, (tide_height_array, station_name) => {
+            show_chart(tide_height_array, station_name, station_id, selected_date);
+        })
+    })
 }
 
 module.exports = show_chart;

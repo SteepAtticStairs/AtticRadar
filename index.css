@@ -1335,3 +1335,24 @@ https://tobiasahlin.com/spinkit/
     color: black;
     border-radius: 10px;
 } */
+
+#tide_chart_container {
+    height: 300px;
+}
+
+#tide_stations_datepicker_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* For the Bootstrap Datepicker */
+td.day:hover, span.month:hover, span.year:hover,
+.datepicker-switch:hover, th.prev:hover, th.next:hover,
+.focused {
+    background-color: rgb(145, 145, 145) !important;
+}
+td.day.active, span.month.active, span.year.active {
+    background-color: rgb(55, 111, 185) !important;
+    background-image: none !important;
+}
