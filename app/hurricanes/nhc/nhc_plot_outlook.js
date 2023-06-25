@@ -37,8 +37,41 @@ function _click_listener(e) {
         .addTo(map);
 }
 
+// Sort the GeoJSON object by Disturbance property
+function _sort_order(geojson) {
+    // Filter out features that don't have the Disturbance property
+    const features_with_disturbance = geojson.features.filter(
+        feature =>
+            feature.properties &&
+            feature.properties.Disturbance !== undefined &&
+            !isNaN(parseInt(feature.properties.Disturbance))
+    );
+
+    // Sort the features by Disturbance property in descending order
+    features_with_disturbance.sort((a, b) =>
+        parseInt(b.properties.Disturbance) - parseInt(a.properties.Disturbance)
+    );
+
+    // Create a new GeoJSON object with the sorted features
+    const sorted_geojson = {
+        type: geojson.type,
+        features: features_with_disturbance.concat(
+            geojson.features.filter(
+                feature =>
+                    !feature.properties ||
+                    feature.properties.Disturbance === undefined ||
+                    isNaN(parseInt(feature.properties.Disturbance))
+            )
+        )
+    };
+
+    return sorted_geojson;
+}
+
 function nhc_plot_outlook(kmz_blob, id) {
     kmz_to_geojson(kmz_blob, (geojson) => {
+        geojson = _sort_order(geojson);
+
         for (var x = 0; x < geojson.features.length; x++) {
             const cur_feature = geojson.features[x];
             const type = cur_feature.geometry.type;
@@ -63,9 +96,7 @@ function nhc_plot_outlook(kmz_blob, id) {
                     'id': layer_name,
                     'type': 'fill',
                     'source': source_name,
-                    paint: {
-                        //#0080ff blue
-                        //#ff7d7d red
+                    'paint': {
                         'fill-color': fill_color,
                         'fill-opacity': 0.3
                     }
@@ -75,8 +106,6 @@ function nhc_plot_outlook(kmz_blob, id) {
                     'type': 'line',
                     'source': source_name,
                     'paint': {
-                        //#014385 blue
-                        //#850101 red
                         'line-color': border_color,
                         'line-width': border_width
                     }
@@ -118,22 +147,27 @@ function nhc_plot_outlook(kmz_blob, id) {
                     });
                     map.addLayer({
                         'id': layer_name,
-                        'type': 'circle',
+                        'type': 'symbol',
                         'source': source_name,
-                        'paint': {
-                            'circle-radius': [ // 9
+                        'layout': {
+                            'text-field': 'X',
+                            'text-size': [ // 35
                                 'interpolate',
                                 ['exponential', 0.5],
                                 ['zoom'],
                                 2,
-                                5,
+                                20,
 
-                                7,
-                                9
+                                5,
+                                45
                             ],
-                            'circle-stroke-width': 2,
-                            'circle-color': ['get', 'color'],
-                            'circle-stroke-color': black,
+                            'text-font': ['Open Sans Bold']
+                        },
+                        'paint': {
+                            'text-color': ['get', 'color'],
+                            'text-halo-color': 'black',
+                            'text-halo-width': 2,
+                            'text-halo-blur': 1
                         }
                     });
                     window.atticData.hurricane_layers.push(source_name, layer_name);
