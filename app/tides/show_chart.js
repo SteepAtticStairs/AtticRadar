@@ -21,6 +21,9 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
     const end_of_today = new Date(ref_date.getTime());
     end_of_today.setHours(23, 59, 59, 999);
 
+    const first_tide_time = tide_height_array[0][0];
+    const last_tide_time = tide_height_array[tide_height_array.length - 1][0];
+
     const grey_color = 'rgb(180, 180, 180)';
     const gridline_grey_color = 'rgb(90, 90, 90)';
 
@@ -49,7 +52,9 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
                 right: 20
             },
             color: grey_color,
-            markings: []
+            markings: [],
+            hoverable: true,
+			clickable: true
         },
         xaxis: {
             mode: 'time',
@@ -61,12 +66,22 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
             // http://www.flotcharts.org/flot/API/
             font: {
                 fill: grey_color
-            }
+            },
+            axisZoom: true,
+            plotZoom: true,
+            axisPan: true,
+            plotPan: true,
+            zoomRange: [6 * 60 * 60 * 1000, end_of_today.getTime() - start_of_today.getTime()], // 6 hours
+            panRange: [first_tide_time, last_tide_time]
         },
         yaxis: {
             font: {
                 fill: grey_color
-            }
+            },
+            axisZoom: false,
+            plotZoom: false,
+            axisPan: false,
+            plotPan: false,
         },
         series: {
             // https://github.com/MichaelZinsmaier/CurvedLines
@@ -78,24 +93,46 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
                 lineWidth: 3
             }
         },
-        colors: ['#4193bf']
+        colors: ['#4193bf'],
+        zoom: {
+            interactive: true,
+            active: true,
+            amount: 1.5,
+            enableTouch: true,
+        },
+        pan: {
+            interactive: true,
+            active: true,
+            cursor: 'move',
+            frameRate: 60,
+            mode: 'smart',
+            enableTouch: true,
+        },
     });
 
-    const line_width = plot.getAxes().xaxis.c2p(1.25) - plot.getAxes().xaxis.c2p(0);
-    const now = Date.now();
-    plot.getOptions().grid.markings.push({ xaxis: { from: now - line_width, to: now + line_width }, color: 'rgb(172, 63, 63)' });
+    function _update_chart() {
+        const line_width = plot.getAxes().xaxis.c2p(1.25) - plot.getAxes().xaxis.c2p(0);
+        const now = Date.now() + 43200000;
+        plot.getOptions().grid.markings = [{ xaxis: { from: now - line_width, to: now + line_width }, color: 'rgb(172, 63, 63)' }];
+        // plot.draw();
+
+        $('.flot-x-axis').find('text').each(function(index) {
+            $(this).css('text-anchor', 'middle');
+
+            const bbox = $(this).get(0).getBBox();
+            $(this).css('transform', `translate(${bbox.width / 2}px)`);
+
+            if ($(this).text().includes('/')) {
+                $(this).css('font-weight', 'bold');
+            }
+        })
+    }
+    _update_chart();
     plot.draw();
 
-    $('.flot-x-axis').find('text').each(function(index) {
-        $(this).css('text-anchor', 'middle');
-
-        const bbox = $(this).get(0).getBBox();
-        $(this).css('transform', `translate(${bbox.width / 2}px)`);
-
-        if ($(this).text().includes('/')) {
-            $(this).css('font-weight', 'bold');
-        }
-    })
+    plot.hooks.draw.push(function(plot, ctx) {
+        _update_chart();
+    });
 
     // const grey_color = 'rgb(180, 180, 180)';
     // const gridline_grey_color = 'rgb(90, 90, 90)';
