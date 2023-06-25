@@ -112,7 +112,7 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
 
     function _update_chart() {
         const line_width = plot.getAxes().xaxis.c2p(1.25) - plot.getAxes().xaxis.c2p(0);
-        const now = Date.now() + 43200000;
+        const now = Date.now();
         plot.getOptions().grid.markings = [{ xaxis: { from: now - line_width, to: now + line_width }, color: 'rgb(172, 63, 63)' }];
         // plot.draw();
 
