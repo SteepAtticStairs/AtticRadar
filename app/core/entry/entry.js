@@ -35,7 +35,7 @@ function load() {
     require('../../radar/inspector/entry');
 
     // load the station marker menu item
-    require('../../radar/station_markers/station_marker_menu');
+    // require('../../radar/station_markers/station_marker_menu');
 
     // load the radar message listener
     require('../../radar/radar_message/radar_message');
@@ -59,6 +59,7 @@ function load() {
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
     // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
+    // $('#armrTideStationsBtnSwitchElem').click();
 }
 
 function _load_map() {
