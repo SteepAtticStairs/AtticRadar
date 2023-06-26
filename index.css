@@ -1341,10 +1341,26 @@ https://tobiasahlin.com/spinkit/
     height: 300px;
 }
 
-#tide_stations_datepicker_container {
+#tide_station_footer {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
+}
+#tide_height_text {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.tide_title {
+    font-size: 20px;
+    font-weight: bold;
+
+    opacity: 60%;
+    -webkit-opacity: 60%;
+    filter: brightness(90%);
+    -webkit-filter: brightness(90%);
 }
 
 /* For the Bootstrap Datepicker */
@@ -1359,4 +1375,5 @@ td.day.active, span.month.active, span.year.active {
 }
 .datepicker table {
     margin: 0 auto !important;
+    color: rgb(220, 220, 220);
 }

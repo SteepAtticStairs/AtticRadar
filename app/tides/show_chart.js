@@ -210,6 +210,33 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
             show_chart(tide_height_array, station_name, station_id, selected_date);
         })
     })
+
+    var high_tides_html = '<div class="new-file"><span class="tide_title">High Tides</span>';
+    var low_tides_html = '<div class="old-file"><span class="tide_title">Low Tides</span>';
+    const interval = luxon.Interval.fromDateTimes(luxon.DateTime.fromJSDate(start_of_today), luxon.DateTime.fromJSDate(end_of_today));
+    for (var i = 0; i < tide_height_array.length; i++) {
+        const tide_date = luxon.DateTime.fromMillis(tide_height_array[i][0]);
+        const wave_height = parseFloat(tide_height_array[i][1]).toFixed(1);
+        const type = tide_height_array[i][2];
+
+        if (interval.contains(tide_date)) {
+            const html_content = `<div>${tide_date.toFormat('h:mm a')} @ ${wave_height} ft&nbsp;&nbsp;`;
+            if (type == 'H') {
+                high_tides_html += html_content;
+                high_tides_html += '<i class="fa-solid fa-caret-up"></i></div>';
+            } else if (type == 'L') {
+                low_tides_html += html_content;
+                low_tides_html += '<i class="fa-solid fa-caret-down"></i></div>';
+            }
+        }
+    }
+    $('#tide_height_text').css('width', $('#tide_stations_datepicker_container').width());
+    $('#tide_height_text').css('height', $('#tide_stations_datepicker_container').height());
+
+    $('#tide_height_text').html(`\
+${high_tides_html}</div>\
+<br>\
+${low_tides_html}</div>`);
 }
 
 module.exports = show_chart;

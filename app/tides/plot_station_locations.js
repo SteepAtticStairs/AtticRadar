@@ -20,7 +20,10 @@ function _click_listener(e) {
 `<div id="tide_chart_container">
     <div class="tide_chart_container_text">Loading...</div>
 </div>\
-<div id="tide_stations_datepicker_container"><div id="tide_stations_datepicker"></div></div>`,
+<div id="tide_station_footer">\
+<div id="tide_stations_datepicker_container"><div id="tide_stations_datepicker"></div></div>\
+<div id="tide_height_text"></div>\
+</div>`,
 
         'color': 'rgb(120, 120, 120)',
         'textColor': 'black',

@@ -12,10 +12,11 @@ function get_individual_data(station_id, alt_name, ref_date, callback) {
         const tide_height_array = [];
         for (var i = 0; i < tide_data.predictions.length; i++) {
             const value = parseFloat(tide_data.predictions[i].v);
+            const type = tide_data.predictions[i].type;
             // we need to replace the space in the middle with a T and append a Z, because safari won't parse the string otherwise
             const time = new Date(tide_data.predictions[i].t.replace(' ', 'T'));
 
-            tide_height_array.push([time.getTime(), value]);
+            tide_height_array.push([time.getTime(), value, type]);
         }
 
         callback(tide_height_array, alt_name);
