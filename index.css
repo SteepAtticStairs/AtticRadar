@@ -1357,3 +1357,6 @@ td.day.active, span.month.active, span.year.active {
     background-color: rgb(55, 111, 185) !important;
     background-image: none !important;
 }
+.datepicker table {
+    margin: 0 auto !important;
+}

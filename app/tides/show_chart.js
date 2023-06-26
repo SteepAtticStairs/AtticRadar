@@ -49,7 +49,7 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
                 top: 20,
                 bottom: 20,
                 left: 20,
-                right: 20
+                right: 0
             },
             color: grey_color,
             markings: [],
