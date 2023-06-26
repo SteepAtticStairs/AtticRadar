@@ -86,6 +86,24 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
             zoomRange: [6 * 60 * 60 * 1000, end_of_today.getTime() - start_of_today.getTime()], // 6 hours
             panRange: [first_tide_time, last_tide_time]
         },
+        xaxes: [{
+            position: 'top',
+            show: true,
+            showTickLabels: 'none',
+            showTicks: false,
+            gridLines: false,
+
+            axisLabel: `<div style="color: ${grey_color}; font-size: 20px; font-weight: bold">${station_name}</div>`,
+            axisLabelPadding: 4,
+            // axisLabelUseCanvas: true,
+            // axisLabelFontSizePixels: 20,
+            // axisLabelColour: grey_color
+        }, {
+            position: 'bottom',
+            show: true,
+            showTicks: true,
+            gridLines: true
+        }],
         yaxis: {
             font: {
                 fill: grey_color
