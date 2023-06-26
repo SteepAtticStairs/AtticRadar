@@ -40,13 +40,8 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
         }
     }
 
-    const tooltip_html = 
-`<div>
-<b>%x</b><br>\
-<span style="font-size: 20px; color: rgb(110, 110, 110)">%y ft</span>
-</div>`;
-
-    const plot = $.plot($('#tide_chart_container'), [
+    const placeholder = $('#tide_chart_container');
+    const plot = $.plot(placeholder, [
         tide_height_array
     ], {
         grid: {
@@ -60,11 +55,6 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
             markings: [],
             hoverable: true,
 			clickable: true
-        },
-        tooltip: {
-            show: true,
-            content: tooltip_html,
-            xDateFormat: extra_full_date_format,
         },
         xaxis: {
             mode: 'time',
@@ -141,6 +131,45 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
         //     mode: 'smart',
         //     enableTouch: true,
         // },
+    });
+
+    $('<div id="flot_tooltip"></div>').css({
+        position: 'absolute',
+        background: 'rgb(255, 255, 255)',
+        padding: '0.4em 0.6em',
+        border: '1px solid rgb(17, 17, 17)',
+        'z-index': '1040',
+        'border-radius': '0.5em',
+        'font-size': '0.8em',
+        'white-space': 'nowrap',
+        'pointer-events': 'none'
+    }).appendTo('body');
+
+    placeholder.off('plothover');
+    placeholder.on('plothover', function (event, pos, item) {
+        if (!pos.x || !pos.y) {
+            return;
+        }
+
+        if (item) {
+            const x = item.datapoint[0];
+            const y = item.datapoint[1].toFixed(1);
+
+            const date = luxon.DateTime.fromMillis(x);
+            const formatted_date = date.toFormat('ccc LLL d<br>h:mm a ZZZZ');
+
+            const tooltip_html = 
+`<div>
+<b>${formatted_date}</b><br>\
+<span style="font-size: 20px; color: rgb(110, 110, 110); font-weight: bold">${y} ft</span>
+</div>`;
+
+            $('#flot_tooltip').html(tooltip_html)
+                .css({ top: item.pageY + 5, left: item.pageX + 5 })
+                .show();
+        } else {
+            $('#flot_tooltip').hide();
+        }
     });
 
     function _update_chart() {
