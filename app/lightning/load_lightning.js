@@ -68,13 +68,13 @@ function load_lightning(callback) {
                         'icon-image': 'lightning_bolt_bold',
                         'icon-size': [
                             'interpolate',
-                            ['exponential', 0.5],
+                            ['exponential', 0.2],
                             ['zoom'],
                             7,
-                            0.24,
+                            0.2,
 
                             10,
-                            0.33
+                            0.23
                         ],
                         // 'text-allow-overlap': true,
                         // 'text-ignore-placement': true,
