@@ -133,11 +133,13 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
         // },
     });
 
+    $('#flot_tooltip').remove();
     $('<div id="flot_tooltip"></div>').css({
         position: 'absolute',
         background: 'rgb(255, 255, 255)',
         padding: '0.4em 0.6em',
         border: '1px solid rgb(17, 17, 17)',
+        display: 'none',
         'z-index': '1040',
         'border-radius': '0.5em',
         'font-size': '0.8em',
