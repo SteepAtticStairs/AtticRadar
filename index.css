@@ -1345,6 +1345,9 @@ https://tobiasahlin.com/spinkit/
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+
+    padding-left: 10px;
+    padding-right: 10px;
 }
 #tide_height_text {
     text-align: center;

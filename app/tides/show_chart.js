@@ -235,7 +235,6 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
 
     $('#tide_height_text').html(`\
 ${high_tides_html}</div>\
-<br>\
 ${low_tides_html}</div>`);
 
     $('#tide_height_text').css({
