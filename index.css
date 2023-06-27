@@ -1363,6 +1363,21 @@ https://tobiasahlin.com/spinkit/
     -webkit-filter: brightness(90%);
 }
 
+/* .datepicker,
+.table-condensed {
+    width: 50px;
+    font-size: x-small;
+}
+.datepicker td {
+    padding: 0;
+    height: 0;
+    line-height: 15px;
+}
+.datepicker td, .datepicker th {
+    width: 0px !important;
+    height: 0px !important;
+} */
+
 /* For the Bootstrap Datepicker */
 td.day:hover, span.month:hover, span.year:hover,
 .datepicker-switch:hover, th.prev:hover, th.next:hover,

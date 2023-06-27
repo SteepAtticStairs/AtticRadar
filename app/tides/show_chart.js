@@ -230,13 +230,30 @@ function show_chart(tide_height_array, station_name, station_id, ref_date) {
             }
         }
     }
-    $('#tide_height_text').css('width', $('#tide_stations_datepicker_container').width());
-    $('#tide_height_text').css('height', $('#tide_stations_datepicker_container').height());
+    // $('#tide_height_text').css('width', $('#tide_stations_datepicker_container').width());
+    // $('#tide_height_text').css('height', $('#tide_stations_datepicker_container').height());
 
     $('#tide_height_text').html(`\
 ${high_tides_html}</div>\
 <br>\
 ${low_tides_html}</div>`);
+
+    $('#tide_height_text').css({
+        'overflow': 'scroll',
+        'white-space': 'nowrap',
+        'text-align': 'left',
+        'align-items': ''
+    })
+    // https://stackoverflow.com/a/29956714
+    $.fn.isHScrollable = function () { return this[0].scrollWidth > this[0].clientWidth; };
+    $.fn.isVScrollable = function () { return this[0].scrollHeight > this[0].clientHeight; };
+    $.fn.isScrollable = function () { return this[0].scrollWidth > this[0].clientWidth || this[0].scrollHeight > this[0].clientHeight; };
+    if ($('#tide_height_text').isScrollable()) {
+        $('#tide_station_footer').css('flex-direction', 'column');
+    }
+    $('#tide_height_text').css({
+        'overflow': '', 'white-space': '', 'text-align': 'center', 'align-items': ''
+    })
 }
 
 module.exports = show_chart;
