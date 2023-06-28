@@ -5,7 +5,7 @@ A clean, simple, but powerful weather toolkit for the web browser. Includes NEXR
 ## Website
 
 You can find the app live here:<br>
-<b>[https://steepatticstairs.net/AtticRadar](https://steepatticstairs.net/AtticRadar)</b>
+<b>[https://atticradar.steepatticstairs.net](https://atticradar.steepatticstairs.net)</b>
 
 ## Credits
 
@@ -40,3 +40,4 @@ to use `watchify` (another project by Browserify) to auto-bundle the project eve
 ## History
 * `Jul 13 2022` - On that morning, I stumbled across QuadWeather's radar app, which was still in development, while browsing Twitter. This was the initial inspiration to create AtticRadar (called "NexradJS" at the time).
 * `Sep 10 2022` - Renamed this project from "NexradJS" to "AtticRadar"
+* `Jun 28 2023` - Updated URL from "steepatticstairs.net/AtticRadar" to "atticradar.steepatticstairs.net"

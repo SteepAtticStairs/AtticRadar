@@ -3,7 +3,7 @@ const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
 const combine_dictionary_data = require('./combine_dictionary_data');
 
-const url_prefix = 'https://steepatticstairs.net/AtticRadar/';
+const url_prefix = 'https://atticradar.steepatticstairs.net/';
 
 const new_alerts_url = `https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
 const sws_alerts_url = `https://preview.weather.gov/edd/resource/edd/hazards/getSps.php`;
