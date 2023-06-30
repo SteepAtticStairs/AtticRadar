@@ -1,5 +1,7 @@
 const kmz_to_geojson = require('../kmz_to_geojson');
 const luxon = require('luxon');
+const ut = require('../../core/utils');
+const chroma = require('chroma-js');
 
 function _parse_kmz(jtwc_storage, callback) {
     const keys = Object.keys(jtwc_storage);
@@ -74,6 +76,15 @@ function _grab_cone_track_points(jtwc_storage) {
                     this_point_properties.day = day;
                     this_point_properties.time = time;
                     this_point_properties.formatted_hour = formatted_hour;
+
+                    const sshws_value = ut.getSSHWSVal(ut.knotsToMph(this_point_properties.knots));
+                    this_point_properties.sshws_value = sshws_value[0];
+                    this_point_properties.sshws_abbv = sshws_value[2];
+                    this_point_properties.sshws_color = sshws_value[1];
+                    this_point_properties.coordinates = geojson.features[n].geometry.coordinates;
+
+                    this_point_properties.sshws_border_color = chroma(this_point_properties.sshws_color).darken().hex();
+                    this_point_properties.sshws_border_width = 2;
 
                     points.push(geojson.features[n].geometry.coordinates);
                 }
