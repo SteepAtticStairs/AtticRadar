@@ -31,6 +31,34 @@ ${properties.formatted_hour}
         .addTo(map);
 }
 
+/**
+ * A class to store and plot hurricane information.
+ * 
+ * @param {String} storm_id - An ID associated with the storm. Has to be unique to each storm.
+ * This is only used for differentiating between Mapbox layers.
+ * @param {String} storm_name - The name of the storm, e.g. "Katrina", "Andrew", "Harvey"
+ * @param {Array} cone_coordinates - A layered array of the cone's coordinates. Should be three layers, e.g.:
+ * [ [ [0, 1], [0, 0], [1, 0], [1, 1], [0, 1] ] ]. The first and last coordinate pair must be the same.
+ * @param {Array} forecast_track_coordinates - A 2D array of the cone's coordinates, e.g.:
+ * [ [0, 0], [1, 1], [2, 2], [3, 3], [4, 4] ]
+ * @param {Array} forecast_point_coordinates - Same format as "forecast_track_coordinates", but the coordinates for the forecast points
+ * @param {*} forecast_point_properties - An array of objects, where each array item corresponds to a forecast point. The format of the objects should be as such: 
+ * {
+ *  coordinates: [-31, 47.9, 0],
+ *  current_month_abbv: "Jul",
+ *  day: 4,
+ *  day_of_week_abbv: "Tue",
+ *  formatted_hour: "12:00 PM EDT",
+ *  knots: 56.47263249348393,
+ *  sshws_abbv: "TS",
+ *  sshws_border_color: "#009a11",
+ *  sshws_border_width: 2,
+ *  sshws_color: "rgb(18, 204, 71)",
+ *  sshws_value: "Tropical Storm",
+ *  storm_name: "Danielle",
+ *  time : "12Z"
+ * }
+ */
 class Hurricane {
     constructor (storm_id, storm_name, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
         this._storm_id = storm_id;
