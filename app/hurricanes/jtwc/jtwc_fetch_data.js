@@ -42,9 +42,11 @@ function _list_storms(callback) {
         const [jtwc_ids, jtwc_names] = _parse_jtwc_text(text);
 
         for (var i = 0; i < jtwc_ids.length; i++) {
-            jtwc_storage[jtwc_ids[i]] = {
-                'name': jtwc_names[i],
-                'kmz': ''
+            if (!jtwc_ids[i].toUpperCase().includes('EP') && !jtwc_ids[i].toUpperCase().includes('CP')) {
+                jtwc_storage[jtwc_ids[i]] = {
+                    'name': jtwc_names[i],
+                    'kmz': ''
+                }
             }
         }
 

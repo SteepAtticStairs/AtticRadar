@@ -46,6 +46,8 @@ function _grab_cone_track_points(jtwc_storage) {
                 if (matched) {
                     const this_point_properties = {};
 
+                    this_point_properties.storm_name = jtwc_storage[current_storm].name;
+
                     const knots = parseInt(matched.replaceAll(' knots', ''));
                     this_point_properties.knots = knots;
                     point_properties.push(this_point_properties);
