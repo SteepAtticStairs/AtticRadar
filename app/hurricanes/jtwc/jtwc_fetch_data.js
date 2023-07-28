@@ -7,9 +7,19 @@ function _parse_jtwc_text(text) {
     const url_matches = [...text.matchAll(url_pattern)];
 
     // regex to match the cyclone's name
-    const name_pattern = /\(([^)]+)\)/;
-    const name_matches = name_pattern.exec(text);
+    var name_matches = [];
     var names_found = 0;
+    const names_search_base = ut.xmlToJson(text);
+    const basins = names_search_base.rss.channel.item;
+    for (var i = 0; i < basins.length; i++) {
+        const data = basins[i].description['#cdata-section'];
+        const name_pattern = /\((.*?)\) Warning/g;
+        var matched = data.match(name_pattern);
+        if (matched != null) {
+            matched = matched.map((match) => match.match(/\((.*?)\)/)[1]);
+            name_matches.push(...matched);
+        }
+    }
 
     if (name_matches[1] == 'JTWC CDO') {
         throw new Error('No JTWC storms found.');
@@ -24,7 +34,7 @@ function _parse_jtwc_text(text) {
             const id = url_parts[url_parts.length - 1].replaceAll('.kmz', '');
             ids.push(id);
 
-            const name = name_matches[names_found + 1];
+            const name = name_matches[names_found];
             names.push(name);
             names_found++;
         }
