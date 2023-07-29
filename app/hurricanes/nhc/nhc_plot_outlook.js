@@ -161,7 +161,12 @@ function nhc_plot_outlook(kmz_blob, id) {
                                 5,
                                 45
                             ],
-                            'text-font': ['Open Sans Bold']
+                            'text-font': ['Open Sans Bold'],
+
+                            'text-allow-overlap': true,
+                            'text-ignore-placement': true,
+                            'icon-allow-overlap': true,
+                            'icon-ignore-placement': true,
                         },
                         'paint': {
                             'text-color': ['get', 'color'],
