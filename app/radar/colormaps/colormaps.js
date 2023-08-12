@@ -315,6 +315,8 @@ const productColors = {
     N1G: velocity,
     N2G: velocity,
     N3G: velocity,
+    NAG: velocity,
+    NBG: velocity,
 
     N0H: hydrometer_class,
     N1H: hydrometer_class,
