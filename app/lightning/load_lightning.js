@@ -78,7 +78,7 @@ function load_lightning(callback) {
                         ],
                         // 'text-allow-overlap': true,
                         // 'text-ignore-placement': true,
-                        // 'icon-allow-overlap': true,
+                        'icon-allow-overlap': false,
                         // 'icon-ignore-placement': true,
                         'icon-padding': 0,
                         'symbol-sort-key': ['get', 'diff_minutes'],
@@ -103,38 +103,25 @@ function load_lightning(callback) {
                     }
                 })
 
-                map.on('zoom', () => {
-                    const map_zoom = map.getZoom();
-                    if (map_zoom >= 7) {
-                        map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
-                        map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
-                    } else {
-                        map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
-                        map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', false);
+                function _show_only_visible() {
+                    const visible_lightning = turf.featureCollection(map.queryRenderedFeatures({ layers: ['lightningLayer'] }));
+                    map.getSource('lightningSource').setData(visible_lightning);
+                }
+
+                map.on('zoomstart', () => {
+                    if (window.atticData.station_lightning.features.length != 0) {
+                        _show_only_visible();
+                        setTimeout(() => {
+                            map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
+                        }, 100);
                     }
                 })
-
-                // map.on('zoomend', () => {
-                //     const bounds = map.getBounds();
-                //     const top_left = [bounds.getNorthWest().lng, bounds.getNorthWest().lat];
-                //     const top_right = [bounds.getNorthEast().lng, bounds.getNorthEast().lat];
-                //     const bottom_left = [bounds.getSouthWest().lng, bounds.getSouthWest().lat];
-                //     const bottom_right = [bounds.getSouthEast().lng, bounds.getSouthEast().lat];
-                //     const bbox = turf.polygon([[top_left, top_right, bottom_left, bottom_right, top_left]]);
-
-                //     // const lightning_within_view = turf.pointsWithinPolygon(collection, bbox);
-                //     // map.getSource('lightningSource').setData(lightning_within_view);
-                // })
-                // map.on('zoomend', () => {
-                //     // console.log('done');
-                //     map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
-                //     map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', false);
-                // })
-                // map.on('zoomstart', () => {
-                //     // console.log('done');
-                //     map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
-                //     map.setLayoutProperty('lightningLayer', 'icon-ignore-placement', true);
-                // })
+                map.on('zoomend', () => {
+                    if (window.atticData.station_lightning.features.length != 0) {
+                        map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
+                        map.getSource('lightningSource').setData(window.atticData.station_lightning);
+                    }
+                })
 
                 setLayerOrder();
                 callback();

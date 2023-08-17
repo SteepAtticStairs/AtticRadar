@@ -30,6 +30,7 @@ function filter_lightning(total_hide = false) {
         }
 
         const fc = turf.featureCollection(points);
+        window.atticData.station_lightning = JSON.parse(JSON.stringify(fc));
 
         if (map.getSource('lightningSource')) {
             map.getSource('lightningSource').setData(fc);
