@@ -13,6 +13,7 @@ const map = require('../../core/map/map');
 const RadarUpdater = require('../updater/RadarUpdater');
 const filter_lightning = require('../../lightning/filter_lightning');
 const load_lightning = require('../../lightning/load_lightning');
+const turf = require('@turf/turf');
 
 function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_factory) {
     var color_scale_data = product_colors[product];
@@ -247,6 +248,29 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
         }
     } else {
         filter_lightning(true);
+    }
+
+    const range = nexrad_factory?.initial_radar_obj?.max_range;
+    if (range != undefined) {
+        const location = nexrad_factory.get_location();
+        const range_circle = turf.circle([location[1], location[0]], range, { steps: 100, units: 'kilometers' });
+        if (map.getSource('station_range_source')) {
+            map.getSource('station_range_source').setData(range_circle);
+        } else {
+            map.addSource('station_range_source', {
+                type: 'geojson',
+                data: range_circle
+            })
+            map.addLayer({
+                'id': 'station_range_layer',
+                'type': 'line',
+                'source': 'station_range_source',
+                'paint': {
+                    'line-color': '#999999',
+                    'line-width': 0.25
+                }
+            });
+        }
     }
 
     // make sure the alerts are always on top

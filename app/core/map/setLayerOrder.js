@@ -13,6 +13,9 @@ function move_layer_to_top(layer_name, before_layer = undefined) {
 function setLayerOrder() {
     const before_layer = 'land-structure-line';
 
+    // the circle range of the selected radar tower
+    move_layer_to_top('station_range_layer', before_layer);
+
     // SPC Outlooks layers
     move_layer_to_top('spc_fill', before_layer);
     move_layer_to_top('spc_border', before_layer);
