@@ -103,25 +103,25 @@ function load_lightning(callback) {
                     }
                 })
 
-                function _show_only_visible() {
-                    const visible_lightning = turf.featureCollection(map.queryRenderedFeatures({ layers: ['lightningLayer'] }));
-                    map.getSource('lightningSource').setData(visible_lightning);
-                }
+                // function _show_only_visible() {
+                //     const visible_lightning = turf.featureCollection(map.queryRenderedFeatures({ layers: ['lightningLayer'] }));
+                //     map.getSource('lightningSource').setData(visible_lightning);
+                // }
 
-                map.on('zoomstart', () => {
-                    if (window.atticData.station_lightning.features.length != 0) {
-                        _show_only_visible();
-                        setTimeout(() => {
-                            map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
-                        }, 100);
-                    }
-                })
-                map.on('zoomend', () => {
-                    if (window.atticData.station_lightning.features.length != 0) {
-                        map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
-                        map.getSource('lightningSource').setData(window.atticData.station_lightning);
-                    }
-                })
+                // map.on('zoomstart', () => {
+                //     if (window.atticData.station_lightning.features.length != 0) {
+                //         _show_only_visible();
+                //         setTimeout(() => {
+                //             map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', true);
+                //         }, 100);
+                //     }
+                // })
+                // map.on('zoomend', () => {
+                //     if (window.atticData.station_lightning.features.length != 0) {
+                //         map.setLayoutProperty('lightningLayer', 'icon-allow-overlap', false);
+                //         map.getSource('lightningSource').setData(window.atticData.station_lightning);
+                //     }
+                // })
 
                 setLayerOrder();
                 callback();
