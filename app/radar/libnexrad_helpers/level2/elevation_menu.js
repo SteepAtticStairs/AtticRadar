@@ -95,6 +95,14 @@ function initEventListeners(L2Factory, lEAP, elevationProductLookup) {
         L2Factory.plot(product, scanNumber); // plot the current product and selected elevation
     })
 
+    function _toggle_dealias_btn(product) {
+        if (product == 'VEL') {
+            $('#completeDealiasBtnContainer').show();
+        } else {
+            $('#completeDealiasBtnContainer').hide();
+        }
+    }
+
     function _psm_click() {
         $('#productsDropdownTriggerText').text($(this).text()); // e.g. "Velocity"
         var product = $(this).attr('value'); // e.g. l2-vel
@@ -106,17 +114,15 @@ function initEventListeners(L2Factory, lEAP, elevationProductLookup) {
         // make sure the correct buttons are available
         _enable_correct_buttons(lEAP);
 
-        if (product == 'VEL') {
-            $('#completeDealiasBtnContainer').show();
-        } else {
-            $('#completeDealiasBtnContainer').hide();
-        }
+        _toggle_dealias_btn(product);
 
         L2Factory.plot(product, scanNumber); // plot the selected product and the current elevation
     }
     $('.psmRow.l2prodSel').off('click'); // disable all prior listeners
     $('.psmRow.l2prodSel').click(_psm_click);
 
+    _toggle_dealias_btn('REF');
+    $('#dealiasBtn').off();
     $('#dealiasBtn').click(function() {
         if ($(this).hasClass('dealiasBtnDeSelected')) {
             // we're turning dealias mode ON
