@@ -3,9 +3,10 @@
 * https://allorigins.win/
 */
 // https://attic-server.herokuapp.com/proxy/index.php/?
+// http://server.steepatticstairs.net/AtticServer/proxy/index.php/?
 
 // https://php-cors-proxy.herokuapp.com/?
-const phpProxy = 'http://server.steepatticstairs.net/AtticServer/proxy/index.php/?'; //https://api.allorigins.win/raw?url=';
+const phpProxy = 'https://attic-server.herokuapp.com/proxy/index.php/?'; //https://api.allorigins.win/raw?url=';
 // const phpProxy2 = 'https://attic-server.herokuapp.com/proxy/index.php/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
 //const phpProxy  = 'https://salty-citadel-44916.herokuapp.com/';
 //const phpProxy  = 'https://secret-retreat-45871.herokuapp.com/'
