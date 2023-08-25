@@ -1,28 +1,29 @@
 const ut = require('../utils');
 const chroma = require('chroma-js');
 
-const low_temp = 'rgb(247, 198, 251)';
-const high_temp = 'rgb(163, 8, 148)';
+// https://github.com/cambecc/earth/blob/5f091f0c3b60aa38a996a886985bacb3673d16c3/public/libs/earth/1.0.0/products.js#L178
 const temp_colors_dictionary = {
-    '0': low_temp,
-    '10': 'rgb(204, 120, 214)',
-    '20': 'rgb(137, 67, 177)',
-    '30': 'rgb(55, 30, 149)',
-    '40': 'rgb(78, 167, 222)',
-    '50': 'rgb(99, 214, 148)',
-    '60': 'rgb(114, 197, 60)',
-    '70': 'rgb(251, 251, 86)',
-    '80': 'rgb(236, 135, 51)',
-    '90': 'rgb(192, 56, 30)',
-    '100': 'rgb(237, 14, 133)',
-    '110': 'rgb(237, 14, 215)',
-    '120': high_temp
+    '-112.27': 'rgb(37, 4, 42)', // 193 K
+    '-88.87': 'rgb(41, 10, 130)', // 206 K
+    '-65.47': 'rgb(81, 40, 40)', // 219 K
+    '-40': 'rgb(192, 37, 149)', // 233.15 K, -40 C/F
+    '0': 'rgb(70, 215, 215)', // 255.372 K, 0 F
+    '32': 'rgb(21, 84, 187)', // 273.15 K, 0 C
+    '35.6': 'rgb(24, 132, 14)', // 275.15 K, just above 0 C
+    '64.13': 'rgb(247, 251, 59)', // 291 K
+    '76.73': 'rgb(235, 167, 21)', // 298 K
+    '100.13': 'rgb(230, 71, 39)', // 311 K
+    '130.73': 'rgb(88, 27, 67)' // 328 K
 }
+
 const temperatures = Object.keys(temp_colors_dictionary).map(Number);
 const colors = Object.values(temp_colors_dictionary);
 
 const min_temp = Math.min(...temperatures);
 const max_temp = Math.max(...temperatures);
+
+const low_temp = temp_colors_dictionary[min_temp];
+const high_temp = temp_colors_dictionary[max_temp];
 
 const chroma_scale = chroma.scale(colors).domain(temperatures).mode('lab');
 
