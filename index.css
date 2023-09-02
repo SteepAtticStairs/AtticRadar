@@ -611,7 +611,7 @@ https://tobiasahlin.com/spinkit/
     overflow: scroll;
 }
 
-.alertPopup .mapboxgl-popup-content{
+.alertPopup .mapboxgl-popup-content {
     background-color: black;
     /* background-color: rgba(0, 0, 0, .3);
     backdrop-filter: blur(10px);
@@ -619,6 +619,8 @@ https://tobiasahlin.com/spinkit/
 
     border-radius: 10px;
     color: #bababa;
+
+    padding: 10px 10px 5px;
 }
 .alertPopup .mapboxgl-popup-close-button {
     display: none;

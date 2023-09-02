@@ -14,7 +14,7 @@ function click_listener(e) {
     var popupItem = '';
     var alertContentObj = {};
     var alreadyAddedAlerts = [];
-    for (key in e.features) {
+    for (var key = 0; key < 1; key++) { // for (key in e.features) {
         var properties = e.features[key].properties;
         var parameters = JSON.parse(properties.parameters);
 

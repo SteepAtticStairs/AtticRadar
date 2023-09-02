@@ -28,9 +28,9 @@ function _add_alert_layers(geojson) {
                 'line-width': [
                     'case',
                     ['==', ['get', 'type'], 'outline'],
-                    3,
+                    2,
                     ['==', ['get', 'type'], 'border'],
-                    8,
+                    5,
                     0
                 ]
             }

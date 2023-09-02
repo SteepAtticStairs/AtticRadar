@@ -14,7 +14,7 @@ function load() {
     require('../../radio/menu_item');
 
     // initialize the alerts
-    require('../../alerts/init_alerts');
+    require('../../alerts/menu_item');
 
     // initialize the METARs module
     require('../../metars/entry');
