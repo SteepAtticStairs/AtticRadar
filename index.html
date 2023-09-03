@@ -276,7 +276,9 @@
                     <div class="atticRadarMenuRow" id="armrHurricanesBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-hurricane"></i>
                         Hurricane Tracks
-                        <i class="toggleSwitchContainter" id="armrHurricanesBtnSwitch"><input type="checkbox" id="armrHurricanesBtnSwitchElem" class="toggleSwitch" /><label for="armrHurricanesBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrHurricanesBtnSwitchElem">
+                        </div>
                     </div>
 
                     <br>
@@ -294,7 +296,9 @@
                     <div class="atticRadarMenuRow" id="armrTideStationsBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-ship"></i>
                         Tide Stations
-                        <i class="toggleSwitchContainter" id="armrTideStationsBtnSwitch"><input type="checkbox" id="armrTideStationsBtnSwitchElem" class="toggleSwitch" /><label for="armrTideStationsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrTideStationsBtnSwitchElem">
+                        </div>
                     </div>
 
                     <br>
@@ -303,7 +307,9 @@
                     <div class="atticRadarMenuRow" id="armrWeatherRadioBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-radio"></i>
                         NOAA Weather Radio
-                        <i class="toggleSwitchContainter" id="armrWeatherRadioBtnSwitch"><input type="checkbox" id="armrWeatherRadioBtnSwitchElem" class="toggleSwitch" /><label for="armrWeatherRadioBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrWeatherRadioBtnSwitchElem">
+                        </div>
                     </div>
 
                     <!-- <br>
@@ -333,15 +339,21 @@
                     <div class="armrHeader armrHeaderWide">MAP LAYERS</div>
                     <div class="atticRadarMenuRow armrTop armrWide" id="armrRadarVisBtn">
                         Radar
-                        <i class="toggleSwitchContainter tscWide" id="armrRadarVisBtnSwitch"><input type="checkbox" id="armrRadarVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrRadarVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrRadarVisBtnSwitchElem" checked>
+                        </div>
                     </div>
                     <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSTVisBtn">
                         Storm Tracks
-                        <i class="toggleSwitchContainter tscWide" id="armrSTVisBtnSwitch"><input type="checkbox" id="armrSTVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrSTVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrSTVisBtnSwitchElem" checked>
+                        </div>
                     </div>
                     <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightningVisBtn">
                         Lightning
-                        <i class="toggleSwitchContainter tscWide" id="armrLightningVisBtnSwitch"><input type="checkbox" id="armrLightningVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrLightningVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrLightningVisBtnSwitchElem" checked>
+                        </div>
                     </div>
                     <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSPCOutlooksVisBtn">
                         SPC Outlooks
@@ -357,11 +369,15 @@
                     </div> -->
                     <div class="atticRadarMenuRow armrMiddle armrWide" id="armrDayNightLineVisBtn">
                         Day / Night Line
-                        <i class="toggleSwitchContainter tscWide" id="armrDayNightLineVisBtnSwitch"><input type="checkbox" id="armrDayNightLineVisBtnSwitchElem" class="toggleSwitch" /><label for="armrDayNightLineVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrDayNightLineVisBtnSwitchElem">
+                        </div>
                     </div>
                     <div class="atticRadarMenuRow armrBottom armrWide" id="armrHurricaneLegendVisBtn">
                         Hurricane Legend&nbsp;<i style="opacity: 50%">(when hurricanes enabled)</i>
-                        <i class="toggleSwitchContainter tscWide" id="armrHurricaneLegendVisBtnSwitch"><input type="checkbox" id="armrHurricaneLegendVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrHurricaneLegendVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrHurricaneLegendVisBtnSwitchElem" checked>
+                        </div>
                     </div>
                     <!-- <div class="atticRadarMenuRow armrBottom armrWide" id="armrUSAMETARSBtn">
                         USA METARS Only
@@ -377,7 +393,9 @@
                     <!-- <span style="display: block; margin-bottom: 0.75em;"></span> -->
                     <div class="atticRadarMenuRow armrTop armrWide" id="armrWarningsBtn">
                         Warnings
-                        <i class="toggleSwitchContainter tscWide" id="armrWarningsBtnSwitch"><input type="checkbox" id="armrWarningsBtnSwitchElem" class="toggleSwitch" checked /><label for="armrWarningsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrWarningsBtnSwitchElem" checked>
+                        </div>
                     </div>
                     <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrWatchesBtn">
                         Watches
@@ -385,7 +403,9 @@
                     </div> -->
                     <div class="atticRadarMenuRow armrMiddle armrWide" id="armrStatementsBtn">
                         Statements
-                        <i class="toggleSwitchContainter tscWide" id="armrStatementsBtnSwitch"><input type="checkbox" id="armrStatementsBtnSwitchElem" class="toggleSwitch" checked /><label for="armrStatementsBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrStatementsBtnSwitchElem" checked>
+                        </div>
                     </div>
                 </div>
                 <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
@@ -769,8 +789,8 @@
             ['css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css', 100782],
 
             // https://getbootstrap.com/docs/5.2/getting-started/download/
-            // ['css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css'],
-            // ['js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js'],
+            ['css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css', 232855],
+            ['js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js', 80668],
 
             ['js', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js', 33871],
             ['css', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css', 15733],
@@ -795,8 +815,8 @@
             // ['js', 'https://unpkg.com/gpu.js@2.16.0/dist/gpu-browser.min.js'],
 
             // https://spin.js.org/
-            ['css', 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.1/spin.css', 609],
-            ['js', 'https://spin.js.org/spin.umd.js', 7274],
+            // ['css', 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.1/spin.css', 609],
+            // ['js', 'https://spin.js.org/spin.umd.js', 7274],
 
             ['js', 'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js', 46859],
 

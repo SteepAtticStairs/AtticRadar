@@ -1073,6 +1073,22 @@ https://tobiasahlin.com/spinkit/
 .tscWide {
     right: 15px;
 }
+.form-check-input:checked {
+    background-color: #4BD763;
+    border-color: #4BD763;
+}
+.form-check-input {
+    border: none;
+    background-color: grey;
+}
+.form-switch .form-check-input {
+    /* https://stackoverflow.com/a/60969539/18758797 */
+    height: calc(100px / 5);
+    width: calc(180px / 5);
+    border-radius: 3rem;
+
+    --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
 
 #radarStation:hover {
     filter: brightness(80%);
@@ -1299,6 +1315,9 @@ https://tobiasahlin.com/spinkit/
     display: flex;
     justify-content: center;
     align-items: center;
+}
+th.spcTable {
+    text-align: center;
 }
 
 #spcDataInfo {
