@@ -49,11 +49,14 @@ function load() {
     // load the SPC module
     require('../../spc/menu_item');
 
-    // detect if AtticRadar is being loaded in an iframe
-    require('../misc/detect_iframe');
-
     // load the tide stations module
     require('../../tides/menu_item');
+
+    // load the about menu
+    require('../about/about_screen');
+
+    // detect if AtticRadar is being loaded in an iframe
+    require('../misc/detect_iframe');
 
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();

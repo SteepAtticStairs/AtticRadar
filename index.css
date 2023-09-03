@@ -803,7 +803,7 @@ https://tobiasahlin.com/spinkit/
     top: 0;
     bottom: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 100000;
 
     background-color: rgba(0, 0, 0, 0.4);
 }
@@ -1068,6 +1068,7 @@ https://tobiasahlin.com/spinkit/
     display: flex;
     position: absolute;
     right: 30px;
+    cursor: pointer;
 }
 /* tsc = toggleSwitchContainter */
 .tscWide {
