@@ -10,7 +10,7 @@ function in_iframe() {
 
 if (in_iframe()) {
     const html_content = 
-`<div style="text-align: center; padding-left: 20px; padding-right: 20px">
+`<div style="text-align: center; padding-left: 20px; padding-right: 20px; color: rgb(200, 200, 200)">
 <div style="font-size: 20px"><b>Hey!</b></div>
 <div style="font-size: 15px">I see that you're loading AtticRadar from an iframe. \
 <b>Don't worry!</b> That's totally fine! \
@@ -18,13 +18,10 @@ if (in_iframe()) {
 So I do think you'd agree that giving credit isn't objectionable here!
 
 You can find AtticRadar on Twitter: <a href="https://twitter.com/AtticRadar" style="color: #53a2e0;">@AtticRadar</a>
-Hi, I'm Andrew, the developer! You can find me on Twitter too: <a href="https://twitter.com/Attic_Stairs" style="color: #53a2e0;">@Attic_Stairs</a>
-
-Want the source code? Look no further! Feel free to contribute on GitHub: <a href="https://github.com/SteepAtticStairs/AtticRadar" style="color: #53a2e0;">https://github.com/SteepAtticStairs/AtticRadar</a> \
-Opening issues is very helpful to me, and I do encourage it if you have a specific concern or request.
+Be sure to check there for updates and general info about the project.
 
 AtticRadar is free to use and doesn't have any ads. \
-I hope that you enjoy the app, and feel free to shoot me a message on twitter if you have a question! \
+I hope that you enjoy the app, and feel free to shoot me a message on Twitter if you have a question! \
 My email is also open: <a href="mailto:steepatticstairs@gmail.com" style="color: #53a2e0;">steepatticstairs@gmail.com</a>
 </div>
 </div>`
