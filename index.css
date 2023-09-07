@@ -620,7 +620,7 @@ https://tobiasahlin.com/spinkit/
     border-radius: 10px;
     color: #bababa;
 
-    padding: 10px 10px 5px;
+    /* padding: 10px 10px 5px; */
 }
 .alertPopup .mapboxgl-popup-close-button {
     display: none;
@@ -1291,15 +1291,16 @@ https://tobiasahlin.com/spinkit/
     pointer-events: none;
 }
 
-.TD { background-color: #348feb; }
-.TS { background-color: #12cc47; }
-.C1 { background-color: #ebcb2f; }
-.C2 { background-color: #eb932f; }
-.C3 { background-color: #eb642f; }
-.C4 { background-color: #eb3b2f; }
-.C5 { background-color: #eb2f87; }
+.TD { background-color: #08f; }
+.TS { background-color: #00f060; }
+.C1 { background-color: #fc0; }
+.C2 { background-color: #f80; }
+.C3 { background-color: #f50; }
+.C4 { background-color: #f02; }
+.C5 { background-color: #f5b; }
 .OTHER { background-color: #b75eff; }
 .UNKNOWN { background-color: #808080; }
+.NONTROPICAL { background-color: #72f; }
 
 .spcTable /* table, th, td */ {
     border: 1px solid rgba(255, 255, 255, 0);

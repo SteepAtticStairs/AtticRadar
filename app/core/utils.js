@@ -493,7 +493,8 @@ var sshwsValues = [
     ['Category 4', _return_css_color('C4'), 'C4'],
     ['Category 5', _return_css_color('C5'), 'C5'],
     ['Other', _return_css_color('OTHER'), 'Other'],
-    ['Unknown', _return_css_color('UNKNOWN'), '?']
+    ['Unknown', _return_css_color('UNKNOWN'), '?'],
+    ['Non-Tropical', _return_css_color('NONTROPICAL'), 'NT']
 ]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
@@ -511,9 +512,11 @@ function getSSHWSVal(windSpeed) {
     } else if (windSpeed >= 157) {
         return sshwsValues[6]; // C5
     } else if (windSpeed == 'Other') {
-        return sshwsValues[7]
+        return sshwsValues[7];
     } else if (windSpeed == 'Unknown') {
-        return sshwsValues[8]
+        return sshwsValues[8];
+    } else if (windSpeed == 'Non-Tropical') {
+        return sshwsValues[9];
     }
 }
 // https://www.nrlmry.navy.mil/atcf_web/docs/database/new/abdeck.txt
