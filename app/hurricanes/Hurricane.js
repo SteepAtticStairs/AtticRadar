@@ -89,15 +89,15 @@ class Hurricane {
                 'type': 'line',
                 'source': {
                     'type': 'geojson',
-                    'data': this.line_string
+                    'data': this.forecast_line
                 },
                 'layout': {
                     'line-join': 'round',
                     'line-cap': 'round'
                 },
                 'paint': {
-                    'line-color': '#888',
-                    'line-width': 5
+                    'line-color': ['get', 'color'], // #888
+                    'line-width': 4 // 5
                 }
             });
 
@@ -154,13 +154,17 @@ class Hurricane {
     }
 
     _create_line_geojson() {
-        var points = [];
+        var lines = [];
         for (var i = 0; i < this._forecast_points.length; i++) {
             const properties = this._forecast_points[i];
             const coords = [properties.lon, properties.lat];
-            points.push(coords);
+            const next_coords = [this._forecast_points[i + 1]?.lon, this._forecast_points[i + 1]?.lat];
+
+            if (next_coords[0] != undefined) {
+                lines.push(turf.lineString([coords, next_coords], { color: properties.color }));
+            }
         }
-        this.line_string = turf.lineString(points);
+        this.forecast_line = turf.featureCollection(lines);
     }
 }
 
