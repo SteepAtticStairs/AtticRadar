@@ -55,7 +55,7 @@ class Hurricane {
         } else {
             this._create_points_geojson();
             this._create_line_geojson();
-            this._create_current_point_geojson();
+            // this._create_current_point_geojson();
 
             const cone_source_name = `hurricane_cone_${this.storm_id}_source`;
             const cone_layer_name = `hurricane_cone_${this.storm_id}_layer`;
