@@ -1,4 +1,6 @@
 const map = require("../map");
+const ut = require('../../utils');
+const chroma = require('chroma-js');
 
 function _load_image(image_data) {
     return new Promise((resolve, reject) => {
@@ -130,7 +132,30 @@ const icons = {
     red_semicircle: 
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
         <path d="M0,100 A50,50 0 0,1 100,100 H0 Z" style="fill: rgb(234, 51, 35);" />
+    </svg>`,
+
+    hurricane_TD: _hurricane_color('TD'),
+    hurricane_TS: _hurricane_color('TS'),
+    hurricane_C1: _hurricane_color('C1'),
+    hurricane_C2: _hurricane_color('C2'),
+    hurricane_C3: _hurricane_color('C3'),
+    hurricane_C4: _hurricane_color('C4'),
+    hurricane_C5: _hurricane_color('C5'),
+    hurricane_OTHER: _hurricane_color('OTHER'),
+    hurricane_UNKNOWN: _hurricane_color('UNKNOWN'),
+    hurricane_NONTROPICAL: _hurricane_color('NONTROPICAL'),
+}
+
+function _hurricane_color(status) {
+    const color = ut.return_css_color(status);
+    const border_color = chroma(color).darken().hex();
+
+    const string =
+    `<svg viewBox="-30 -30 450 575" xmlns="http://www.w3.org/2000/svg">
+        <defs></defs>
+        <path style="fill: ${ut.return_css_color(status)}; stroke: ${border_color}; stroke-width: 50" d="M 216 42.1 C 216 19.400000000000002 195.9 -1.2999999999999972 170.4 3.3999999999999986 C 73.5 21.1 0 105.9 0 208 C 0 309.2 72.3 393.5 168 412.2 L 168 469.3 C 168 492 188.1 512.7 213.6 508 C 310.5 490.3 384 405.4 384 303.4 C 384 202.2 311.7 117.89999999999998 216 99.19999999999999 L 216 42.1 Z"></path>
     </svg>`
+    return string;
 }
 
 module.exports = {

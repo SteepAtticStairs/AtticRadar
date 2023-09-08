@@ -481,20 +481,20 @@ function preventFileCaching(url) {
     return url += `&?nocache=${curTime.getTime()}`;
 }
 
-function _return_css_color(class_name) {
+function return_css_color(class_name) {
     return $(`.${class_name}`).css('backgroundColor');
 }
 var sshwsValues = [
-    ['Tropical Depression', _return_css_color('TD'), 'TD'],
-    ['Tropical Storm', _return_css_color('TS'), 'TS'],
-    ['Category 1', _return_css_color('C1'), 'C1'],
-    ['Category 2', _return_css_color('C2'), 'C2'],
-    ['Category 3', _return_css_color('C3'), 'C3'],
-    ['Category 4', _return_css_color('C4'), 'C4'],
-    ['Category 5', _return_css_color('C5'), 'C5'],
-    ['Other', _return_css_color('OTHER'), 'Other'],
-    ['Unknown', _return_css_color('UNKNOWN'), '?'],
-    ['Non-Tropical', _return_css_color('NONTROPICAL'), 'NT']
+    ['Tropical Depression', return_css_color('TD'), 'TD'],
+    ['Tropical Storm', return_css_color('TS'), 'TS'],
+    ['Category 1', return_css_color('C1'), 'C1'],
+    ['Category 2', return_css_color('C2'), 'C2'],
+    ['Category 3', return_css_color('C3'), 'C3'],
+    ['Category 4', return_css_color('C4'), 'C4'],
+    ['Category 5', return_css_color('C5'), 'C5'],
+    ['Other', return_css_color('OTHER'), 'OTHER'],
+    ['Unknown', return_css_color('UNKNOWN'), 'UNKNOWN'],
+    ['Non-Tropical', return_css_color('NONTROPICAL'), 'NONTROPICAL']
 ]
 function getSSHWSVal(windSpeed) {
     if (windSpeed <= 38) {
@@ -874,6 +874,7 @@ module.exports = {
     degToCompass,
     getCardinalDirection,
     preventFileCaching,
+    return_css_color,
     sshwsValues,
     getSSHWSVal,
     hurricaneTypesAbbvs,
