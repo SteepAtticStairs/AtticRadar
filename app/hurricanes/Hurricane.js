@@ -118,53 +118,57 @@ class Hurricane {
                     'circle-radius': 6,
                     'circle-color': ['get', 'color'],
 
-                    'circle-stroke-width': 2, // ['get', 'sshws_border_width'],
-                    'circle-stroke-color': ['get', 'border_color']
+                    // 'circle-stroke-width': 2, // ['get', 'sshws_border_width'],
+                    // 'circle-stroke-color': ['get', 'border_color']
                 }
             });
 
-            const current_point_layer_name = `hurricane_current_point_${this.storm_id}_layer`;
-            window.atticData.hurricane_layers.push(current_point_layer_name);
-            icons.add_icon_svg([
-                [icons.icons.hurricane_TD, 'hurricane_TD'],
-                [icons.icons.hurricane_TS, 'hurricane_TS'],
-                [icons.icons.hurricane_C1, 'hurricane_C1'],
-                [icons.icons.hurricane_C2, 'hurricane_C2'],
-                [icons.icons.hurricane_C3, 'hurricane_C3'],
-                [icons.icons.hurricane_C4, 'hurricane_C4'],
-                [icons.icons.hurricane_C5, 'hurricane_C5'],
-                [icons.icons.hurricane_OTHER, 'hurricane_OTHER'],
-                [icons.icons.hurricane_UNKNOWN, 'hurricane_UNKNOWN'],
-                [icons.icons.hurricane_NONTROPICAL, 'hurricane_NONTROPICAL']
-            ], () => {
-                map.addLayer({
-                    'id': current_point_layer_name,
-                    'type': 'symbol',
-                    'source': {
-                        'type': 'geojson',
-                        'data': this.current_point
-                    },
-                    'layout': {
-                        'icon-image': ['get', 'icon_abbv'],
-                        'icon-size': 0.175
-                    }
-                    // 'paint': {
-                    //     // 'circle-radius': 5,
-                    //     // 'circle-color': ['get', 'color'],
+            map.on('mouseover', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = 'pointer'; });
+            map.on('mouseout', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = ''; });
+            map.on('click', forecast_points_layer_name, _click_listener);
 
-                    //     // 'circle-stroke-width': 5,
-                    //     // 'circle-stroke-color': ['get', 'border_color']
-                    // }
-                });
+            // const current_point_layer_name = `hurricane_current_point_${this.storm_id}_layer`;
+            // window.atticData.hurricane_layers.push(current_point_layer_name);
+            // icons.add_icon_svg([
+            //     [icons.icons.hurricane_TD, 'hurricane_TD'],
+            //     [icons.icons.hurricane_TS, 'hurricane_TS'],
+            //     [icons.icons.hurricane_C1, 'hurricane_C1'],
+            //     [icons.icons.hurricane_C2, 'hurricane_C2'],
+            //     [icons.icons.hurricane_C3, 'hurricane_C3'],
+            //     [icons.icons.hurricane_C4, 'hurricane_C4'],
+            //     [icons.icons.hurricane_C5, 'hurricane_C5'],
+            //     [icons.icons.hurricane_OTHER, 'hurricane_OTHER'],
+            //     [icons.icons.hurricane_UNKNOWN, 'hurricane_UNKNOWN'],
+            //     [icons.icons.hurricane_NONTROPICAL, 'hurricane_NONTROPICAL']
+            // ], () => {
+            //     map.addLayer({
+            //         'id': current_point_layer_name,
+            //         'type': 'symbol',
+            //         'source': {
+            //             'type': 'geojson',
+            //             'data': this.current_point
+            //         },
+            //         'layout': {
+            //             'icon-image': ['get', 'icon_abbv'],
+            //             'icon-size': 0.175
+            //         }
+            //         // 'paint': {
+            //         //     // 'circle-radius': 5,
+            //         //     // 'circle-color': ['get', 'color'],
 
-                map.on('mouseover', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = 'pointer'; });
-                map.on('mouseout', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = ''; });
-                map.on('click', forecast_points_layer_name, _click_listener);
+            //         //     // 'circle-stroke-width': 5,
+            //         //     // 'circle-stroke-color': ['get', 'border_color']
+            //         // }
+            //     });
 
-                map.on('mouseover', current_point_layer_name, function(e) { map.getCanvas().style.cursor = 'pointer'; });
-                map.on('mouseout', current_point_layer_name, function(e) { map.getCanvas().style.cursor = ''; });
-                map.on('click', current_point_layer_name, _click_listener);
-            })
+            //     map.on('mouseover', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = 'pointer'; });
+            //     map.on('mouseout', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = ''; });
+            //     map.on('click', forecast_points_layer_name, _click_listener);
+
+            //     map.on('mouseover', current_point_layer_name, function(e) { map.getCanvas().style.cursor = 'pointer'; });
+            //     map.on('mouseout', current_point_layer_name, function(e) { map.getCanvas().style.cursor = ''; });
+            //     map.on('click', current_point_layer_name, _click_listener);
+            // })
         }
     }
 
