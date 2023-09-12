@@ -1,6 +1,7 @@
 const map = require('../core/map/map');
 const ut = require('../core/utils');
 const icons = require('../core/map/icons/icons');
+const AtticPopup = require('../core/popup/AtticPopup');
 
 const turf = require('@turf/turf');
 const chroma = require('chroma-js');
@@ -35,10 +36,11 @@ ${date_first_line}<br>
 ${date_second_line}
 </div>`
 
-    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-        .setLngLat([properties.lon, properties.lat])
-        .setHTML(html_contents)
-        .addTo(map);
+    // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    //     .setLngLat([properties.lon, properties.lat])
+    //     .setHTML(html_contents)
+    //     .addTo(map);
+    new AtticPopup([properties.lon, properties.lat], html_contents).add_to_map();
 }
 
 class Hurricane {

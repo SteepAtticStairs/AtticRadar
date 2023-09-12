@@ -1388,6 +1388,9 @@ th.spcTable {
     filter: brightness(90%);
     -webkit-filter: brightness(90%);
 }
+#flot_tooltip {
+    z-index: 1000000 !important;
+}
 
 /* .datepicker,
 .table-condensed {
@@ -1417,4 +1420,19 @@ td.day.active, span.month.active, span.year.active {
 .datepicker table {
     margin: 0 auto !important;
     color: rgb(220, 220, 220);
+}
+
+
+.attic_popup {
+    position: absolute;
+    z-index: 1;
+
+    width: auto;
+    height: auto;
+    background-color: rgb(50, 50, 50);
+    color: rgb(180, 180, 180);
+    padding: 10px;
+    border-radius: 7px;
+    white-space: nowrap;
+    font-size: 12px;
 }

@@ -58,9 +58,20 @@ function load() {
     // detect if AtticRadar is being loaded in an iframe
     require('../misc/detect_iframe');
 
+    // document.addEventListener('keyup', event => {
+    //     if (event.code === 'Space') {
+    //         const image_url = map.getCanvas().toDataURL();
+    //         var image = new Image();
+    //         image.src = image_url;
+    //         var w = window.open('');
+    //         w.document.write(image.outerHTML);
+    //     }
+    // })
+
     // $('#settingsItemClass').click();
     // $('#armrSPCOutlooksBtn').click();
     // $('#armrHurricanesBtnSwitchElem').click();
+    // $('#alertMenuItemIcon').click();
     // $('#armrSPC_convective-hail-day1_BtnSwitchElem').click();
 //     $('#armrTideStationsBtnSwitchElem').click();
 

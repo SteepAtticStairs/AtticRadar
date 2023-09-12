@@ -4,6 +4,7 @@ const turf = require('@turf/turf');
 const map = require('../../../../core/map/map');
 const setLayerOrder = require('../../../../core/map/setLayerOrder');
 const ut = require('../../../../core/utils');
+const AtticPopup = require('../../../../core/popup/AtticPopup');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var metersInNauticalMiles = 1852;
@@ -172,10 +173,11 @@ function plot_storm_tracks(L3Factory) {
 <div>Height of Max Refl: <b>${cellProperties?.graph_data?.hgt} kft</b>`
             }
 
-            new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-                .setLngLat(JSON.parse(properties.coords))
-                .setHTML(popupHTML)
-                .addTo(map);
+            // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+            //     .setLngLat(JSON.parse(properties.coords))
+            //     .setHTML(popupHTML)
+            //     .addTo(map);
+            new AtticPopup(JSON.parse(properties.coords), popupHTML).add_to_map();
         // }
     }
     map.on('click', 'stormTrackInitialPoint', cellClick);

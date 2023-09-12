@@ -4,6 +4,7 @@ const turf = require('@turf/turf');
 const setLayerOrder = require('../core/map/setLayerOrder');
 const ut = require('../core/utils');
 var map = require('../core/map/map');
+const AtticPopup = require('../core/popup/AtticPopup');
 
 const radioBtnGreen = 'rgb(57, 161, 53)';
 const radioBtnRed = 'rgb(200, 44, 44)';
@@ -142,10 +143,11 @@ function plotToMap() {
 <div>${properties.SITENAME}, ${properties.SITESTATE}</div>
 ${radioPlayBtn}`
 
-            const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-                .setLngLat([properties.LON, properties.LAT])
-                .setHTML(popupContents)
-                .addTo(map);
+            // const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+            //     .setLngLat([properties.LON, properties.LAT])
+            //     .setHTML(popupContents)
+            //     .addTo(map);
+            new AtticPopup([properties.LON, properties.LAT], popupContents).add_to_map();
 
             $('#radioPlayBtn').click((e) => {
                 const radioPlayBtnIcon = document.getElementById('radioPlayBtnIcon');

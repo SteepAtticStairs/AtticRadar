@@ -5,6 +5,7 @@ const display_attic_dialog = require('../core/menu/attic_dialog');
 const chroma = require('chroma-js')
 const { DateTime } = require('luxon');
 const hash_string = require('./hash_string');
+const AtticPopup = require('../core/popup/AtticPopup');
 
 // https://www.geeksforgeeks.org/how-to-change-the-height-of-br-tag
 const break_small = `<span style="display: block; margin-bottom: -.4em;"></span>`;
@@ -80,7 +81,7 @@ function click_listener(e) {
             if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
             if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
             if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
-            if (amountOfParams != 0) { popupItem += break_small }
+            if (amountOfParams != 0) { popupItem += '<br>' }
             popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
 
             if (parseInt(key) + 1 < e.features.length) {
@@ -127,10 +128,11 @@ function click_listener(e) {
             //popupItem += '<br>';
         }
     }
-    const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-        .setLngLat(e.lngLat)
-        .setHTML(popupItem)
-        .addTo(map);
+    new AtticPopup(e.lngLat, popupItem).add_to_map();
+    // const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    //     .setLngLat(e.lngLat)
+    //     .setHTML(popupItem)
+    //     .addTo(map);
 
     $('.extraAlertTextTrigger').on('click', function(e) {
         var id = $(this).attr('id');

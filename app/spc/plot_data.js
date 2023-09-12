@@ -2,6 +2,7 @@ const map = require('../core/map/map');
 const set_layer_order = require('../core/map/setLayerOrder');
 const turf = require('@turf/turf');
 const luxon = require('luxon');
+const AtticPopup = require('../core/popup/AtticPopup');
 
 function _return_time_range(json) {
     var issue;
@@ -45,10 +46,11 @@ function _click_listener(e) {
     const popup_html = 
 `<div><b>${properties.LABEL2}</b></div>`
 
-    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-    .setLngLat(e.lngLat)
-    .setHTML(popup_html)
-    .addTo(map);
+    // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    // .setLngLat(e.lngLat)
+    // .setHTML(popup_html)
+    // .addTo(map);
+    new AtticPopup(e.lngLat, popup_html).add_to_map();
 }
 
 function plot_data(geojson, formatted_day, formatted_category) {
