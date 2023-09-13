@@ -107,6 +107,11 @@ function click_listener(e) {
                 main_headline = temp;
             }
 
+            var popup_html =
+`<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
+<div><span class="alert_popup_lessertext">Expires:</span> ${formattedDateDiff} ${thingToAppend}</div>
+<i id="${id}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
+
             var extentedAlertDescription = 
 `<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${checkPropertyExists(properties.event)}
 <hr>${checkPropertyExists(properties.senderName)}</b>
@@ -128,13 +133,17 @@ function click_listener(e) {
             //popupItem += '<br>';
         }
     }
-    new AtticPopup(e.lngLat, popupItem).add_to_map();
+
+    const popup = new AtticPopup(e.lngLat, popup_html);
+    popup.add_to_map();
+    popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() - parseInt($('.attic_popup').css('padding'))}`);
+    popup.update_popup_pos();
     // const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
     //     .setLngLat(e.lngLat)
     //     .setHTML(popupItem)
     //     .addTo(map);
 
-    $('.extraAlertTextTrigger').on('click', function(e) {
+    $('.alert_popup_info').on('click', function(e) {
         var id = $(this).attr('id');
         // ut.spawnModal({
         //     'title': alertContentObj[id].title,

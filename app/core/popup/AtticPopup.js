@@ -19,7 +19,7 @@ class AtticPopup {
 
     add_to_map() {
         $('body').append(this.attic_popup_div);
-        this._update_popup_pos();
+        this.update_popup_pos();
 
         map.on('move', this._move);
         map.on('click', this._click);
@@ -32,7 +32,7 @@ class AtticPopup {
         map.off('click', this._click);
     }
 
-    _update_popup_pos() {
+    update_popup_pos() {
         const pixel_coords = map.project(this.lngLat);
 
         const left = pixel_coords.x - (this.attic_popup_div.outerWidth() / 2);
@@ -40,13 +40,13 @@ class AtticPopup {
         this.attic_popup_div.css({ 'left': left, 'top': top });
     }
 
-    _move = () => { this._update_popup_pos.apply(this, []) };
+    _move = () => { this.update_popup_pos.apply(this, []) };
     _click = () => { this.remove.apply(this, []) };
 
     // main() {
     //     var click_lngLat;
     //     var attic_popup_div;
-    //     function _update_popup_pos(lngLat) {
+    //     function update_popup_pos(lngLat) {
     //         const pixel_coords = map.project(lngLat);
 
     //         const left = pixel_coords.x - (attic_popup_div.width() / 2);
@@ -58,11 +58,11 @@ class AtticPopup {
     //         $('body').append(attic_popup_div);
 
     //         click_lngLat = e.lngLat;
-    //         _update_popup_pos(click_lngLat);
+    //         update_popup_pos(click_lngLat);
     //     }
     //     function _popup_move(e) {
     //         if (click_lngLat != undefined) {
-    //             _update_popup_pos(click_lngLat);
+    //             update_popup_pos(click_lngLat);
     //         }
     //     }
     //     map.on('click', _popup_click);

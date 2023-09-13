@@ -74,7 +74,7 @@ hr {
     color:red;
 }
 .icon-blue {
-    color:rgb(92, 157, 255);
+    color:rgb(92, 157, 255) !important;
 }
 
 .selectedProduct {
@@ -1435,4 +1435,17 @@ td.day.active, span.month.active, span.year.active {
     border-radius: 7px;
     white-space: nowrap;
     font-size: 12px;
+}
+
+.alert_popup_info {
+    position: absolute;
+    right: 0px;
+    padding-right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+}
+.alert_popup_lessertext {
+    color: rgb(140, 140, 140);
 }
