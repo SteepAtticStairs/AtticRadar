@@ -1435,7 +1435,45 @@ td.day.active, span.month.active, span.year.active {
     border-radius: 7px;
     white-space: nowrap;
     font-size: 12px;
+    border: 0.1px solid rgb(100, 100, 100);
 }
+/* https://cssarrowplease.com/ */
+.attic_popup:after, .attic_popup:before {
+	top: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: '';
+	height: 0;
+	width: 0;
+	position: absolute;
+	/* pointer-events: none; */
+}
+.attic_popup:after {
+	border-color: rgba(50, 50, 50, 0);
+	border-top-color: #323232;
+	border-width: 10px;
+	margin-left: -10px;
+}
+.attic_popup:before {
+	border-color: rgba(100, 100, 100, 0);
+	border-top-color: #646464;
+	border-width: 11px;
+	margin-left: -11px;
+}
+/* https://stackoverflow.com/a/19719176/18758797 */
+/* .attic_popup:after {
+    content:'';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border: 2px solid red;
+    border-top: solid 10px rgb(50, 50, 50);
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+} */
 
 .alert_popup_info {
     position: absolute;

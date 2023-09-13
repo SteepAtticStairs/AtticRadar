@@ -35,8 +35,9 @@ class AtticPopup {
     update_popup_pos() {
         const pixel_coords = map.project(this.lngLat);
 
+        const triangle_height = 10;
         const left = pixel_coords.x - (this.attic_popup_div.outerWidth() / 2);
-        const top = pixel_coords.y - (this.attic_popup_div.outerHeight() - $('#radarHeader').height());
+        const top = pixel_coords.y - (this.attic_popup_div.outerHeight() - $('#radarHeader').height()) - triangle_height;
         this.attic_popup_div.css({ 'left': left, 'top': top });
     }
 
