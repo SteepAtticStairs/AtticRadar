@@ -9,7 +9,7 @@ function nhc_process_data() {
     // const nhc_storm_list_url = 'https://www.nrlmry.navy.mil/atcf_web/docs/current_storms/stormlist.current';
     const nhc_storm_list_url = 'https://www.nhc.noaa.gov/CurrentStorms.json';
 
-    fetch(ut.phpProxy + nhc_storm_list_url)
+    fetch(ut.phpProxy + nhc_storm_list_url, { headers: { 'Cache-Control': 'no-cache' } })
     .then(response => response.json())
     .then(json => {
         for (var i = 0; i < json.activeStorms.length; i++) {
@@ -46,7 +46,7 @@ function _nhc_fetch_track(storm_id) {
 function _nhc_fetch_cone(storm_id) {
     const cone_url = `https://www.nhc.noaa.gov/storm_graphics/api/${storm_id.toUpperCase()}_CONE_latest.kmz`;
 
-    fetch(ut.phpProxy + cone_url)
+    fetch(ut.phpProxy + cone_url, { headers: { 'Cache-Control': 'no-cache' } })
     .then(response => response.blob())
     .then(blob => {
         blob.lastModifiedDate = new Date();
@@ -65,7 +65,7 @@ function _nhc_fetch_cone(storm_id) {
 function _nhc_process_forecast_data(storm_id, storm_name, cone_geojson) {
     const storm_forecast_url = `https://ftp.nhc.noaa.gov/atcf/fst/${storm_id.toLowerCase()}.fst`;
 
-    fetch(ut.phpProxy + storm_forecast_url)
+    fetch(ut.phpProxy + storm_forecast_url, { headers: { 'Cache-Control': 'no-cache' } })
     .then(response => response.text())
     .then(text => {
         const line_split = text.split('\n').filter(n => n);
