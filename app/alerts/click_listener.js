@@ -11,8 +11,14 @@ const AtticPopup = require('../core/popup/AtticPopup');
 const break_small = `<span style="display: block; margin-bottom: -.4em;"></span>`;
 const break_large = `<span style="display: block; margin-bottom: 0.75em;"></span>`;
 
+// https://stackoverflow.com/a/4878800/18758797
+function to_title_case(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
 function click_listener(e) {
-    var popupItem = '';
     var alertContentObj = {};
     var alreadyAddedAlerts = [];
     for (var key = 0; key < 1; key++) { // for (key in e.features) {
@@ -24,50 +30,62 @@ function click_listener(e) {
         if (!alreadyAddedAlerts.includes(hash)) {
             alreadyAddedAlerts.push(hash);
 
+            console.log(parameters);
+
             var id = `${hash}alert`;
             var initColor = get_polygon_colors(properties.event).color;
             var backgroundColor = initColor;
             var borderColor = chroma(initColor).darken(1.5);
             var textColor = chroma(initColor).luminance() > 0.4 ? 'black' : 'white';
-            //<i class="fa-solid fa-circle-info" style="font-size: 15px"></i>
-            popupItem += `<div style="text-align: center;"><b class="extraAlertTextTrigger" id="${id}" style="
-            text-align: center;
-            width: auto;
-            height: auto;
-            padding: 1px 5px;
-            background-color: ${backgroundColor};
-            border: 2px solid ${borderColor};
-            border-radius: 25px;
-            cursor: pointer;
-            color: ${textColor};
-            "><i class="fa-solid fa-circle-info"></i> ${properties.event}</b>`;
 
-            var lineSpace = '';
-            var preStart = '<div style="margin-bottom: 0 !important">';
-            var lineBreak = `<br>${preStart}`;
-            var amountOfParams = 0;
-            function addParameter(parameterName, textValueID) {
-                if (parameters.hasOwnProperty(parameterName)) {
-                    if (amountOfParams == 0) { popupItem += lineBreak; }
-                    if (lineSpace == '' && amountOfParams != 0) { lineSpace = '&nbsp;&nbsp;&nbsp;'; }
-                    popupItem += `${lineSpace}<b>${textValueID}</b><b class="alertsMonospaceText" style="color: rgb(179, 143, 52)"> ${parameters[parameterName]}</b>`;
-                    amountOfParams++;
+            function _fix_value(value, text_value_ID) {
+                if (Array.isArray(value)) {
+                    value = value[0];
+                }
+                // check if string is all uppercase and only contains letters & spaces
+                // https://stackoverflow.com/a/12778207/18758797
+                if (value === value.toUpperCase() && /^[a-zA-Z\s]*$/.test(value)) {
+                    value = to_title_case(value);
+                }
+                value = value.replaceAll('MPH', 'mph');
+                if (text_value_ID == 'Hail:') {
+                    value += '"';
+                }
+                return value;
+            }
+
+            var parameters_html = '';
+            function add_parameter(parameter_name, text_value_ID) {
+                if (parameters.hasOwnProperty(parameter_name)) {
+                    value = _fix_value(parameters[parameter_name], text_value_ID);
+
+                    if (properties.event == 'Severe Thunderstorm Warning') {
+                        if (parameter_name == 'maxHailSize' && parameters.hasOwnProperty('hailThreat')) {
+                            value += `, ${_fix_value(parameters['hailThreat'])}`;
+                        }
+                        if (parameter_name == 'maxWindGust' && parameters.hasOwnProperty('windThreat')) {
+                            value += `, ${_fix_value(parameters['windThreat'])}`;
+                        }
+                    }
+
+                    parameters_html += `<div><span class="alert_popup_lessertext">${text_value_ID}</span> ${value}</div>`
                 }
             }
-            addParameter('maxHailSize', 'Hail:');
-            addParameter('maxWindGust', 'Wind:');
-            addParameter('tornadoDetection', 'Tornado:');
-
-            if (amountOfParams == 0) { popupItem += preStart; }
+            add_parameter('tornadoDetection', 'Tornado:');
+            add_parameter('waterspoutDetection', 'Waterspout:');
+            add_parameter('flashFloodDamageThreat', 'Damage Threat:');
+            add_parameter('flashFloodDetection', 'Source:');
+            add_parameter('maxHailSize', 'Hail:');
+            add_parameter('maxWindGust', 'Wind:');
 
             var alertExpiresTime;
-            var thingToPrepend;
+            var thingToPrepend = 'Expires:';
             if (properties.hasOwnProperty('ends')) {
                 alertExpiresTime = properties.ends;
-                thingToPrepend = 'Ends: ';
+                // thingToPrepend = 'Ends: ';
             } else {
                 alertExpiresTime = properties.expires;
-                thingToPrepend = 'Expires: ';
+                // thingToPrepend = 'Expires: ';
             }
             var expiresTime = DateTime.fromISO(alertExpiresTime).toUTC().toJSDate();
             var currentTime = DateTime.now().toUTC().toJSDate();
@@ -80,15 +98,7 @@ function click_listener(e) {
             if (dateDiff.m) { formattedDateDiff = `${dateDiff.m}m ${dateDiff.s}s`; }
             if (dateDiff.h) { formattedDateDiff = `${dateDiff.h}h ${dateDiff.m}m`; }
             if (dateDiff.d) { formattedDateDiff = `${dateDiff.d}d ${dateDiff.h}h`; }
-            if (isNegative) { thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
-            if (amountOfParams != 0) { popupItem += '<br>' }
-            popupItem += `<b style="color: ${textColor}"><b>${thingToPrepend}</b><b class="alertsMonospaceText"> ${formattedDateDiff}${thingToAppend}</b></b></div></div>`;
-
-            if (parseInt(key) + 1 < e.features.length) {
-                // popupItem += break_large;
-            } else {
-                popupItem += break_small;
-            }
+            if (isNegative) { thingToPrepend = 'Expired:'; thingToAppend = ' ago'; textColor = 'rgba(229, 78, 78, 1)'; }
 
             function checkPropertyExists(property) {
                 var isUndefined = typeof property == 'undefined';
@@ -109,7 +119,8 @@ function click_listener(e) {
 
             var popup_html =
 `<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
-<div><span class="alert_popup_lessertext">Expires:</span> ${formattedDateDiff} ${thingToAppend}</div>
+<div><span class="alert_popup_lessertext">${thingToPrepend}</span> ${formattedDateDiff} ${thingToAppend}</div>
+${parameters_html}
 <i id="${id}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
 
             var extentedAlertDescription = 
@@ -129,8 +140,6 @@ function click_listener(e) {
                 'color': initColor,
                 'textColor': chroma(initColor).luminance() > 0.4 ? 'black' : 'white'
             };
-
-            //popupItem += '<br>';
         }
     }
 
