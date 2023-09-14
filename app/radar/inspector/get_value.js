@@ -78,7 +78,8 @@ function getValue(e) {
         var [r, g, b, a] = readPixels(gl, bufferX, bufferY);
         var color = `rgba(${r}, ${g}, ${b}, ${a})`;
         if (color != 'rgba(0, 0, 0, 0)') {
-            $('#colorPicker').css('background-color', color);
+            const [r2, g2, b2, a2] = window.atticData.webgl_chroma_scale(parseFloat(value)).rgba();
+            $('#colorPicker').css('background-color', `rgba(${r2}, ${g2}, ${b2}, ${a2})`);
         }
 
         const radar_location = window.atticData.current_nexrad_location;

@@ -47,7 +47,8 @@ function calculate_coordinates(nexrad_factory, options) {
     var color_data = product_colors[product];
     var values = [...color_data.values];
     values = ut.scaleValues(values, product);
-    var chroma_scale = chroma.scale(color_data).domain(values).mode('lab');
+    var chroma_scale = chroma.scale(color_data.colors).domain(values).mode('lab');
+    window.atticData.webgl_chroma_scale = chroma_scale;
 
     var total = 0;
     var data_copy = [...data];
