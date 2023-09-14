@@ -15,6 +15,8 @@ function load() {
 
     // initialize the alerts
     require('../../alerts/menu_item');
+    // load alertd on entry
+    $('#alertMenuItemIcon').click();
 
     // initialize the METARs module
     require('../../metars/entry');

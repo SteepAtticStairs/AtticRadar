@@ -61,12 +61,13 @@ function _fetch_data(callback) {
         window.loaded_zones = true;
 
         _fetch_alerts_data((alerts_data) => {
-            _fetch_zone_dictionaries(() => {
-                const merged_geoJSON = combine_dictionary_data(alerts_data);
-                map.getSource('alertsSource').setData(merged_geoJSON);
+            callback();
+            // _fetch_zone_dictionaries(() => {
+            //     const merged_geoJSON = combine_dictionary_data(alerts_data);
+            //     map.getSource('alertsSource').setData(merged_geoJSON);
 
-                callback();
-            });
+            //     callback();
+            // });
         })
     } else {
         _fetch_alerts_data((alerts_data) => {

@@ -145,7 +145,7 @@ ${parameters_html}
 
     const popup = new AtticPopup(e.lngLat, popup_html);
     popup.add_to_map();
-    popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() - parseInt($('.attic_popup').css('padding'))}`);
+    popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() + parseInt($('.alert_popup_info').css('paddingRight'))}`);
     popup.update_popup_pos();
     // const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
     //     .setLngLat(e.lngLat)

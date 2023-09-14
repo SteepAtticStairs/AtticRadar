@@ -1461,7 +1461,7 @@ td.day.active, span.month.active, span.year.active {
     border-radius: 7px;
     white-space: nowrap;
     font-size: 12px;
-    border: 0.1px solid rgb(100, 100, 100);
+    border: 0.75px solid rgb(100, 100, 100);
 }
 /* https://cssarrowplease.com/ */
 .attic_popup:after, .attic_popup:before {
