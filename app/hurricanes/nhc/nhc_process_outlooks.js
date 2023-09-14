@@ -33,7 +33,7 @@ function _click_listener(e) {
         </div>`
 
     const popup = new AtticPopup([lng, lat], popup_content);
-    popup.attic_popup_div.css('maxWidth', '200px');
+    popup.attic_popup_div.css({ 'maxWidth': '200px', 'minWidth': '200px' });
     popup.add_to_map();
     // new mapboxgl.Popup({ className: 'alertPopup'})
     //     .setLngLat([lng, lat])
