@@ -12,9 +12,9 @@ const surface_fronts_layers = [
 window.atticData.surface_fronts_layers = surface_fronts_layers;
 
 $(icon_elem).on('click', function () {
-    if (!$(icon_elem).hasClass('icon-blue')) {
-        $(icon_elem).addClass('icon-blue');
-        $(icon_elem).removeClass('icon-grey');
+    if (!$(icon_elem).hasClass('menu_item_selected')) {
+        $(icon_elem).addClass('menu_item_selected');
+        $(icon_elem).removeClass('menu_item_not_selected');
 
         if (map.getLayer(surface_fronts_layers[0])) {
             for (var i = 0; i < surface_fronts_layers.length; i++) {
@@ -25,9 +25,9 @@ $(icon_elem).on('click', function () {
             // surface fronts layers do not exist, load them into the map style
             fetch_data();
         }
-    } else if ($(icon_elem).hasClass('icon-blue')) {
-        $(icon_elem).removeClass('icon-blue');
-        $(icon_elem).addClass('icon-grey');
+    } else if ($(icon_elem).hasClass('menu_item_selected')) {
+        $(icon_elem).removeClass('menu_item_selected');
+        $(icon_elem).addClass('menu_item_not_selected');
 
         for (var i = 0; i < surface_fronts_layers.length; i++) {
             // hide the surface fronts layers

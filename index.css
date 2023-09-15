@@ -341,7 +341,7 @@ https://tobiasahlin.com/spinkit/
     position: absolute;
     z-index: 120;
     bottom: 0%;
-    height: 45px;
+    height: 55px;
     width: 100%;
     background-color: rgb(32, 32, 32);
     display: flex;
@@ -353,6 +353,28 @@ https://tobiasahlin.com/spinkit/
 }
 .mapFooterMenuItem {
     cursor: pointer;
+}
+
+.menu_item_selected {
+    border: 7px solid rgb(92, 157, 255);
+    border-radius: 10px;
+    padding: 0px;
+    background: rgb(92, 157, 255);
+    color: rgb(32, 32, 32);
+
+    min-width: 23px;
+    display: flex;
+    justify-content: center;
+}
+.menu_item_not_selected {
+    border: none;
+    background: none;
+    padding: 7px;
+    color: rgb(148, 148, 148);
+
+    min-width: 23px;
+    display: flex;
+    justify-content: center;
 }
 
 #productMapFooter {

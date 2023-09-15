@@ -6,9 +6,9 @@ const div_elem = '#alertMenuItemDiv';
 const icon_elem = '#alertMenuItemIcon';
 
 $(icon_elem).on('click', function () {
-    if (!$(icon_elem).hasClass('icon-blue')) {
-        $(icon_elem).addClass('icon-blue');
-        $(icon_elem).removeClass('icon-grey');
+    if (!$(icon_elem).hasClass('menu_item_selected')) {
+        $(icon_elem).addClass('menu_item_selected');
+        $(icon_elem).removeClass('menu_item_not_selected');
 
         // this checks if an options switch has been changed while the alerts are disabled,
         // but they've already been initialized, so they would just be re-shown otherwise
@@ -26,9 +26,9 @@ $(icon_elem).on('click', function () {
         } else {
             fetch_data._fetch_data();
         }
-    } else if ($(icon_elem).hasClass('icon-blue')) {
-        $(icon_elem).removeClass('icon-blue');
-        $(icon_elem).addClass('icon-grey');
+    } else if ($(icon_elem).hasClass('menu_item_selected')) {
+        $(icon_elem).removeClass('menu_item_selected');
+        $(icon_elem).addClass('menu_item_not_selected');
 
         map.getCanvas().style.cursor = '';
         map.off('click', 'alertsLayerFill', click_listener);

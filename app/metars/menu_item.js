@@ -6,9 +6,9 @@ const divElem = '#metarStationMenuItemDiv';
 const iconElem = '#metarStationMenuItemIcon';
 
 $(iconElem).on('click', function() {
-    if (!$(iconElem).hasClass('icon-blue')) {
-        $(iconElem).addClass('icon-blue');
-        $(iconElem).removeClass('icon-grey');
+    if (!$(iconElem).hasClass('menu_item_selected')) {
+        $(iconElem).addClass('menu_item_selected');
+        $(iconElem).removeClass('menu_item_not_selected');
 
         if (map.getLayer('metarSymbolLayer')) {
             // layer does exist - toggle the visibility to on
@@ -17,9 +17,9 @@ $(iconElem).on('click', function() {
             // layer doesn't exist - load it onto the map for the first time
             fetchMETARData.fetchMETARData();
         }
-    } else if ($(iconElem).hasClass('icon-blue')) {
-        $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-grey');
+    } else if ($(iconElem).hasClass('menu_item_selected')) {
+        $(iconElem).removeClass('menu_item_selected');
+        $(iconElem).addClass('menu_item_not_selected');
 
         // layer does exist - toggle the visibility to off
         useData.toggleMETARStationMarkers('hide');

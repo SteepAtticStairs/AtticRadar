@@ -7,9 +7,9 @@ const divElem = '#stationMenuItemDiv';
 const iconElem = '#stationMenuItemIcon';
 
 $(iconElem).on('click', function() {
-    if ($(iconElem).hasClass('icon-grey')) {
-        $(iconElem).removeClass('icon-grey');
-        $(iconElem).addClass('icon-blue');
+    if ($(iconElem).hasClass('menu_item_not_selected')) {
+        $(iconElem).removeClass('menu_item_not_selected');
+        $(iconElem).addClass('menu_item_selected');
 
         $('#dataDiv').data('stationMarkersVisible', true);
         if (map.getLayer('stationSymbolLayer')) {
@@ -19,9 +19,9 @@ $(iconElem).on('click', function() {
             // station marker layer does not exist, load it into the map style
             showStations();
         }
-    } else if ($(iconElem).hasClass('icon-blue')) {
-        $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-grey');
+    } else if ($(iconElem).hasClass('menu_item_selected')) {
+        $(iconElem).removeClass('menu_item_selected');
+        $(iconElem).addClass('menu_item_not_selected');
 
         $('#dataDiv').data('stationMarkersVisible', false);
         // hide the station marker layer
@@ -29,6 +29,6 @@ $(iconElem).on('click', function() {
     }
 })
 
-$('#stationMenuItemIcon').removeClass('icon-grey');
-$('#stationMenuItemIcon').addClass('icon-blue');
+$('#stationMenuItemIcon').removeClass('menu_item_not_selected');
+$('#stationMenuItemIcon').addClass('menu_item_selected');
 showStations();

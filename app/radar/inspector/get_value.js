@@ -78,8 +78,17 @@ function getValue(e) {
         var [r, g, b, a] = readPixels(gl, bufferX, bufferY);
         var color = `rgba(${r}, ${g}, ${b}, ${a})`;
         if (color != 'rgba(0, 0, 0, 0)') {
-            const [r2, g2, b2, a2] = window.atticData.webgl_chroma_scale(parseFloat(value)).rgba();
-            $('#colorPicker').css('background-color', `rgba(${r2}, ${g2}, ${b2}, ${a2})`);
+            var color_to_show;
+            if (window.atticData.webgl_chroma_scale != undefined) {
+                const [r2, g2, b2, a2] = window.atticData.webgl_chroma_scale(parseFloat(value)).rgba();
+                color_to_show = `rgba(${r2}, ${g2}, ${b2}, ${a2})`;
+            } else {
+                color_to_show = color;
+            }
+            if (value == null) {
+                color_to_show = color;
+            }
+            $('#colorPicker').css('background-color', color_to_show);
         }
 
         const radar_location = window.atticData.current_nexrad_location;

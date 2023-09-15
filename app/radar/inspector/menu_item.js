@@ -6,9 +6,9 @@ const divElem = '#colorPickerItemDiv';
 const iconElem = '#colorPickerItemClass';
 
 $(iconElem).on('click', function() {
-    if (!$(iconElem).hasClass('icon-blue')) {
-        $(iconElem).addClass('icon-blue');
-        $(iconElem).removeClass('icon-grey');
+    if (!$(iconElem).hasClass('menu_item_selected')) {
+        $(iconElem).addClass('menu_item_selected');
+        $(iconElem).removeClass('menu_item_not_selected');
 
         map.on('move', getValue);
         $('.colorPicker').show();
@@ -46,9 +46,9 @@ $(iconElem).on('click', function() {
         //         });
         //     }
         // }
-    } else if ($(iconElem).hasClass('icon-blue')) {
-        $(iconElem).removeClass('icon-blue');
-        $(iconElem).addClass('icon-grey');
+    } else if ($(iconElem).hasClass('menu_item_selected')) {
+        $(iconElem).removeClass('menu_item_selected');
+        $(iconElem).addClass('menu_item_not_selected');
 
         $('.colorPicker').hide();
         map.off('move', getValue);

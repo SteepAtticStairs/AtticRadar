@@ -200,7 +200,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
             */
             // only render to the framebuffer if the color picker is active,
             // this helps with performance
-            if ($('#colorPickerItemClass').hasClass('icon-blue')) {
+            if ($('#colorPickerItemClass').hasClass('menu_item_selected')) {
                 renderToFramebuffer.apply(this, [gl, matrix]);
             }
 
