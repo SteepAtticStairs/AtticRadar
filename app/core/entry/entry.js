@@ -60,6 +60,9 @@ function load() {
     // detect if AtticRadar is being loaded in an iframe
     require('../misc/detect_iframe');
 
+    // load the draw menu item
+    require('../../draw/menu_item');
+
     // document.addEventListener('keyup', event => {
     //     if (event.code === 'Space') {
     //         const image_url = map.getCanvas().toDataURL();

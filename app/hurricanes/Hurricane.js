@@ -181,7 +181,7 @@ class Hurricane {
             const coords = [properties.lon, properties.lat];
 
             const sshws_value = ut.getSSHWSVal(properties.knots * 1.151);
-            if (!['HU', 'TS'].includes(properties.status)) {
+            if (!['HU', 'TS', 'TD'].includes(properties.status)) {
                 properties.color = ut.getSSHWSVal('Non-Tropical')[1];
                 properties.icon_abbv = `hurricane_${ut.getSSHWSVal('Non-Tropical')[2]}`;
                 properties.sshws_value = ut.hurricaneTypesAbbvs[properties.status];
