@@ -23,6 +23,16 @@ function getCoords(degNmObj, station) {
     return turf.getCoords(coords);
 }
 
+// const max_lut_value = 100;
+// const stormtrack_length_lookup_obj = {};
+// for (var i = 1; i <= max_lut_value; i++) {
+//     stormtrack_length_lookup_obj[i] = (0.2 * ((max_lut_value + 1) - i)) / 4;
+// }
+function _calculate_parallel_line(speed, interval) {
+    const calc = (0.15 * ((100 - speed) * interval)) / 2.2; // (1.25 - interval)
+    return calc;
+}
+
 function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
     function addToBearing(bearing, angle) { return (bearing + angle) % 360 }
     function subtractFromBearing(bearing, angle) { return (bearing - angle + 360) % 360 }
@@ -36,7 +46,8 @@ function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
     var timeIntervalLookup = [0.25, 0.5, 0.75, 1];
     // ((speed * time interval) * convert kts to mph) / scaling
     // const distanceForLine = (cellData.movement.kts * timeIntervalLookup[forecastIndex] * 0.868976242) / 12; // miles
-    const distanceForLine = 1.25; // miles
+    // const distanceForLine = 1.25; // miles
+    const distanceForLine = _calculate_parallel_line(cellData.movement.kts, timeIntervalLookup[forecastIndex]);
 
     var leftBearing = subtractFromBearing(bearing, 90);
     var leftPoint = turf.destination(destPoint, distanceForLine, leftBearing, {units: 'miles'});
