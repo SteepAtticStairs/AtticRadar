@@ -35,6 +35,7 @@ class Level3Factory {
         this.product_abbv = initial_radar_obj.product_abbv;
         this.station = nexrad_station_abbreviations[this.initial_radar_obj.siteID];
         this.elevation_angle = this.get_elevation_angle();
+        this.scaled = false;
 
         const tab_pages = this.initial_radar_obj?.tab_pages;
         const graph_pages = this.initial_radar_obj?.graph_pages;
@@ -59,7 +60,10 @@ class Level3Factory {
      */
     get_data() {
         var data = this.initial_radar_obj.sym_block[0][0].data;
-        data = this._scale_values(data);
+
+        if (!this.scaled) {
+            data = this._scale_values(data);
+        }
 
         return data;
     }
@@ -226,6 +230,7 @@ class Level3Factory {
                 input_values[i] = this.initial_radar_obj.map_data.__call__(input_values[i]);
             }
         }
+        this.scaled = true;
         return input_values;
     }
 }

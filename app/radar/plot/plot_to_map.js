@@ -20,9 +20,11 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     var colors = [...color_scale_data.colors];
     var values = [...color_scale_data.values];
 
-    // // add range folded colors
-    // colors.unshift('rgb(139, 0, 218)');
-    // values.unshift(-999);
+    // add range folded colors
+    if (color_scale_data.hasOwnProperty('range_folded')) {
+        colors.push(product_colors.range_folded);
+        values.push(product_colors.range_folded_val);
+    }
 
     values = ut.scaleValues(values, product);
     const cmin = values[0];

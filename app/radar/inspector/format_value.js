@@ -1,4 +1,5 @@
 const ut = require('../../core/utils');
+const product_colors = require('../colormaps/colormaps');
 
 const product_units = {
     'REF': 'dBZ', // level 2 reflectivity
@@ -31,9 +32,10 @@ function formatValue(color, cmin, cmax) {
     var scaled = color[0] / Math.pow(255, 1) + color[1] / Math.pow(255, 2) + color[2] / Math.pow(255, 3);
     // if it isn't 255 alpha (opaque), there is no radar data to read
     if (color[3] == 255) {
-        var value = scaled * (cmax - cmin) + cmin;
+        const orig_value = scaled * (cmax - cmin) + cmin;
+        var value = orig_value;
 
-        if (value == -999) {
+        if (value == product_colors.range_folded_val) {
             value = 'Range Folded';
         } else {
             if (
@@ -88,9 +90,9 @@ function formatValue(color, cmin, cmax) {
                 value = `${value} ${product_units[product_code]}`;
             }
         }
-        return value;
+        return [value, orig_value];
     } else {
-        return null;
+        return [null, null];
     }
 }
 

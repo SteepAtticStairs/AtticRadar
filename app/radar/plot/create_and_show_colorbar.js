@@ -1,4 +1,5 @@
 const ut = require('../../core/utils');
+const product_colors = require('../colormaps/colormaps');
 
 function rgbValToArray(rgbString) {
     return rgbString
@@ -23,8 +24,12 @@ function create_and_show_colorbar(colors, values) {
     colors = [...colors];
     values = [...values];
     // we don't want the "range folded" colors on the map colorbar
-    colors = remove(colors, 'rgb(139, 0, 218)');
-    values = remove(values, -999);
+    // colors = remove(colors, product_colors.range_folded);
+    // values = remove(values, product_colors.range_folded_val);
+    if (values.includes(product_colors.range_folded_val)) {
+        colors.pop();
+        values.pop();
+    }
 
     if ($('#mapColorScale').is(":hidden")) {
         ut.setMapMargin('bottom', '+=15px');

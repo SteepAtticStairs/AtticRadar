@@ -1,5 +1,6 @@
 const turf = require('@turf/turf');
 const formatValue = require('./format_value');
+const product_colors = require('../colormaps/colormaps');
 
 function beam_height(distance_km, elevation_meters, elevation_angle) {
     var elevation = elevation_meters; // m
@@ -64,8 +65,9 @@ function getValue(e) {
 
         const cmin = window.atticData.cmin;
         const cmax = window.atticData.cmax;
+        var value, orig_value;
         if (cmin != undefined) {
-            var value = formatValue(data, cmin, cmax);
+            [value, orig_value] = formatValue(data, cmin, cmax);
             if (value == null) {
                 $('#colorPickerText').hide();
             } else {
@@ -80,13 +82,16 @@ function getValue(e) {
         if (color != 'rgba(0, 0, 0, 0)') {
             var color_to_show;
             if (window.atticData.webgl_chroma_scale != undefined) {
-                const [r2, g2, b2, a2] = window.atticData.webgl_chroma_scale(parseFloat(value)).rgba();
+                const [r2, g2, b2, a2] = window.atticData.webgl_chroma_scale(parseFloat(orig_value)).rgba();
                 color_to_show = `rgba(${r2}, ${g2}, ${b2}, ${a2})`;
             } else {
                 color_to_show = color;
             }
             if (value == null) {
                 color_to_show = color;
+            }
+            if (value == 'Range Folded') {
+                color_to_show = product_colors.range_folded;
             }
             $('#colorPicker').css('background-color', color_to_show);
         }

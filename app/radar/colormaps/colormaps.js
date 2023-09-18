@@ -1,3 +1,6 @@
+const range_folded = 'rgb(139, 0, 218)';
+const range_folded_val = 999;
+
 const reflectivity = {
     colors: [
         'rgb(116, 78, 173)',
@@ -85,6 +88,7 @@ const velocity = {
     // RF: 139 0 218
 
     // 'rgb(000, 000, 000)',
+    range_folded: true,
     colors: [
         'rgb(252, 0, 130)', // -120
         'rgb(109, 2, 150)', // -100
@@ -275,6 +279,9 @@ const hydrometer_class = {
  * the colormaps for all products.
  */
 const productColors = {
+    range_folded: range_folded,
+    range_folded_val: range_folded_val,
+
     DVL: {
         colors: [
             'rgb(120, 120, 120)',

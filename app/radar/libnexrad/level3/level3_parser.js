@@ -297,7 +297,7 @@ class DataMapper {
     constructor(num = 256) {
         // Need to find way to handle range folded
         // RANGE_FOLD = -9999
-        this.RANGE_FOLD = null; // NaN;
+        this.RANGE_FOLD = 999; // NaN;
         this.MISSING = null; // NaN;
 
         this.lut = new Array(num).fill(this.MISSING);
@@ -352,6 +352,9 @@ class DigitalVelMapper extends DigitalMapper {
         super(prod);
         this.units = 'm/s';
         this.range_fold = true;
+
+        this.lut[0] = this.MISSING;
+        this.lut[1] = this.RANGE_FOLD;
     }
 }
 

@@ -17,7 +17,9 @@ function enable_drawing() {
 
 function disable_drawing() {
     // $('#draw_canvas').off().remove();
-    window.atticData.fabricjs_canvas.dispose();
+    if (window.atticData.fabricjs_canvas != undefined) {
+        window.atticData.fabricjs_canvas.dispose();
+    }
     // https://stackoverflow.com/a/10463219/18758797
     $('body > canvas').remove();
 }
