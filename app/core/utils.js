@@ -745,6 +745,7 @@ function zeroPad(num, length) {
 
 function setMapMargin(topOrBottom, value, map_obj = undefined) {
     const map = require('./map/map');
+    const update_attribution_div_pos = require('../core/attribution/attribution');
 
     if (topOrBottom == 'top') {
         $('#map').css('top', value);
@@ -759,6 +760,8 @@ function setMapMargin(topOrBottom, value, map_obj = undefined) {
     } else {
         map_obj.resize();
     }
+
+    update_attribution_div_pos();
 
     // $('#colorPicker #colorPickerText').position({
     //     my: 'center',

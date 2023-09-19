@@ -63,6 +63,9 @@ function load() {
     // load the draw menu item
     require('../../draw/menu_item');
 
+    // load the attribution map div
+    require('../attribution/attribution');
+
     // document.addEventListener('keyup', event => {
     //     if (event.code === 'Space') {
     //         const image_url = map.getCanvas().toDataURL();

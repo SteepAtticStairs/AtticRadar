@@ -1535,3 +1535,37 @@ td.day.active, span.month.active, span.year.active {
 .alert_popup_lessertext {
     color: rgb(140, 140, 140);
 }
+
+#attributionDiv {
+    color: #a0a0a0;
+    font-size: 13px;
+    line-height: 15px;
+    text-align: right !important;
+    pointer-events: none;
+
+    position: absolute;
+    z-index: 500;
+}
+/* https://stackoverflow.com/a/40530033/18758797 */
+@media (max-width: 435px) {
+    #attributionDiv {
+        font-size: 3vw;
+        line-height: calc(3vw + 2px);
+        /* font-size: 12px;
+        line-height: 14px; */
+    }
+}
+/* https://css-tricks.com/multi-line-padded-text/ */
+#attributionDivContent {
+    background: rgb(60, 60, 60);
+    color: rgb(175, 175, 175);
+    padding: 5px 5px;
+    border-radius: 5px;
+    -webkit-box-decoration-break: clone;
+    -moz-background-inline-policy: clone;
+    box-decoration-break: clone;
+}
+#attributionDivContent > span {
+    position: relative;
+    z-index: 1;
+}
