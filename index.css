@@ -1557,15 +1557,24 @@ td.day.active, span.month.active, span.year.active {
 }
 /* https://css-tricks.com/multi-line-padded-text/ */
 #attributionDivContent {
-    background: rgb(60, 60, 60);
+    /* background: rgb(60, 60, 60); */
     color: rgb(175, 175, 175);
-    padding: 5px 5px;
-    border-radius: 5px;
+    padding: 5px 0px;
     -webkit-box-decoration-break: clone;
     -moz-background-inline-policy: clone;
     box-decoration-break: clone;
 }
-#attributionDivContent > span {
+.attributionDivText {
+    border: 6px solid rgb(60, 60, 60);
+    border-radius: 5px;
+    background-color: rgb(60, 60, 60);
+}
+/* #attributionDivContent > span {
     position: relative;
     z-index: 1;
-}
+} */
+
+/* https://github.com/niklasvh/html2canvas/issues/2775#issuecomment-1000745303 */
+/* body {
+    line-height: 0.5 !important;
+} */
