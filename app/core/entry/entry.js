@@ -68,11 +68,34 @@ function load() {
 
     // document.addEventListener('keyup', event => {
     //     if (event.code === 'Space') {
-    //         const image_url = map.getCanvas().toDataURL();
-    //         var image = new Image();
-    //         image.src = image_url;
-    //         var w = window.open('');
-    //         w.document.write(image.outerHTML);
+    //         // const image_url = map.getCanvas().toDataURL();
+    //         // var image = new Image();
+    //         // image.src = image_url;
+    //         // var w = window.open('');
+    //         // w.document.write(image.outerHTML);
+
+    //         var original;
+    //         function _add_footer() {
+    //             original = $('#mapFooter').html();
+    //             const productMapFooter = $('#productMapFooter');
+
+    //             $('#mapFooter').html(`<div style="color: #a0a0a0; font-size: 20px"><b style="font-weight: 900">AtticRadar</b> - steepatticstairs.net</div>`);
+    //             $('#mapFooter').append(productMapFooter);
+    //         }
+
+    //         console.log($('#attributionDivContent').css('backgroundColor'))
+    //         // $('.mapFooter').hide();
+    //         // _add_footer();
+    //         html2canvas(document.body).then(function (canvas) {
+    //             const image_url = canvas.toDataURL();
+    //             var image = new Image();
+    //             image.src = image_url;
+    //             var w = window.open('');
+    //             w.document.write(image.outerHTML);
+
+    //             // $('.mapFooter').show();
+    //             // $('#mapFooter').html(original);
+    //         });
     //     }
     // })
 

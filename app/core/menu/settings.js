@@ -46,9 +46,15 @@ armFunctions.toggleswitchFunctions($('#armrRadarVisBtnSwitchElem'), function() {
     if (map.getLayer('baseReflectivity')) {
         map.setLayoutProperty('baseReflectivity', 'visibility', 'visible');
     }
+    if (map.getLayer('station_range_layer')) {
+        map.setLayoutProperty('station_range_layer', 'visibility', 'visible');
+    }
 }, function() {
     if (map.getLayer('baseReflectivity')) {
         map.setLayoutProperty('baseReflectivity', 'visibility', 'none');
+    }
+    if (map.getLayer('station_range_layer')) {
+        map.setLayoutProperty('station_range_layer', 'visibility', 'none');
     }
 })
 
