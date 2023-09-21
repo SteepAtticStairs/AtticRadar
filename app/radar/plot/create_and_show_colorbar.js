@@ -120,8 +120,13 @@ function create_and_show_colorbar(colors, values) {
 
         const width = $('#mapColorScale').width();
 
+        const right_bounds = (width - tooltip.outerWidth()) - padding;
         const new_x = x - (tooltip.outerWidth() / 2);
-        if (new_x >= padding && new_x <= (width - tooltip.outerWidth()) - padding) {
+        if (new_x <= padding) {
+            tooltip.css('left', padding);
+        } else if (new_x >= right_bounds) {
+            tooltip.css('left', right_bounds);
+        } else {
             tooltip.css('left', new_x);
         }
 
