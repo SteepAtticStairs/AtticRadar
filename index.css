@@ -1578,3 +1578,9 @@ td.day.active, span.month.active, span.year.active {
 /* body {
     line-height: 0.5 !important;
 } */
+
+.about_box_code {
+    background: #1f1f1f;
+    border: 3px solid #1f1f1f;
+    border-radius: 10px;
+}
