@@ -3,6 +3,7 @@ const turf = require('@turf/turf');
 const ut = require('../../../../core/utils');
 const setLayerOrder = require('../../../../core/map/setLayerOrder');
 const icons = require('../../../../core/map/icons/icons');
+const AtticPopup = require('../../../../core/popup/AtticPopup');
 
 function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var metersInNauticalMiles = 1852;
@@ -90,10 +91,11 @@ function plot_tornado_vortex_signature(L3Factory) {
     <div>Maximum Shear: <b>${cellProperties.maxshear} m/s/km</b>
     <div>Height of Max Shear: <b>${cellProperties.maxshearheight} kft</b>`
 
-                new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000', maxHeight: '300' })
-                    .setLngLat(JSON.parse(properties.coords))
-                    .setHTML(popupHTML)
-                    .addTo(map);
+                // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000', maxHeight: '300' })
+                //     .setLngLat(JSON.parse(properties.coords))
+                //     .setHTML(popupHTML)
+                //     .addTo(map);
+                new AtticPopup(JSON.parse(properties.coords), popupHTML).add_to_map();
             // }
         }
         map.on('click', 'tvsInitialPoint', cellClick);

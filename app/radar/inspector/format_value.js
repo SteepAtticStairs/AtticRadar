@@ -24,17 +24,26 @@ const product_units = {
     182: 'm/s', // tdwr base velocity
 }
 
-function formatValue(color, cmin, cmax) {
-    // const product = window.atticData.product;
-    const product_code = window.atticData.product_code;
-
+function decode_and_format(color, cmin, cmax) {
     // decode the rgb data
     var scaled = color[0] / Math.pow(255, 1) + color[1] / Math.pow(255, 2) + color[2] / Math.pow(255, 3);
     // if it isn't 255 alpha (opaque), there is no radar data to read
     if (color[3] == 255) {
         const orig_value = scaled * (cmax - cmin) + cmin;
         var value = orig_value;
+        value = format_value(value);
 
+        return [value, orig_value];
+    } else {
+        return [null, null];
+    }
+}
+
+function format_value(value) {
+    // const product = window.atticData.product;
+    const product_code = window.atticData.product_code;
+
+    if (value != null) {
         if (value == product_colors.range_folded_val) {
             value = 'Range Folded';
         } else {
@@ -43,13 +52,15 @@ function formatValue(color, cmin, cmax) {
             product_code == 'SW' /* || product_code == 'NSW' */ // spectrum width
             ) {
                 // round to the nearest 0.5
-                value = Math.round(value * 2) / 2;
+                value = Math.floor(value * 2) / 2;
             } else if (
                 product_code == 154 /* N0G */ || product_code == 99 /* N0U */ || product_code == 182 /* TVX */ || product_code == 'VEL' // velocity
             ) {
-                // round to the nearest 0.1
-                // level 2 & 3 velocity values are provided by default in m/s
-                value = parseFloat(value.toFixed(1));
+                // round to the nearest 0.5
+                value = Math.floor(value * 2) / 2;
+                // // round to the nearest 0.1
+                // // level 2 & 3 velocity values are provided by default in m/s
+                // value = parseFloat(value.toFixed(1));
             } else if (
             product_code == 159 /* N0X */ || product_code == 'ZDR' || // differential reflectivity
             product_code == 134 /* DVL */ // vertically integrated liquid
@@ -78,11 +89,15 @@ function formatValue(color, cmin, cmax) {
                     100: 'Hail / Rain', // HA
                     110: 'Large Hail', // LH
                     120: 'Giant Hail', // GH,
-                    130: '130', // ??
+                    130: 'Unused', // ??
                     140: 'Unknown', // UK
                     150: 'Range Folded' // RF
                 }
-                value = hycValues[Math.round(value)];
+                value = hycValues[Math.floor(value / 10) * 10];
+            }
+
+            if (parseFloat(value) % 1 == 0) {
+                value = `${value}.0`;
             }
 
             // we don't need to add units to hydrometer classification
@@ -90,10 +105,13 @@ function formatValue(color, cmin, cmax) {
                 value = `${value} ${product_units[product_code]}`;
             }
         }
-        return [value, orig_value];
+        return value;
     } else {
-        return [null, null];
+        return null;
     }
 }
 
-module.exports = formatValue;
+module.exports = {
+    decode_and_format,
+    format_value
+};

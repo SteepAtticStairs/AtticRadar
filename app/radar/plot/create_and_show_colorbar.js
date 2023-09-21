@@ -1,5 +1,6 @@
 const ut = require('../../core/utils');
 const product_colors = require('../colormaps/colormaps');
+const format_value = require('../inspector/format_value');
 
 function rgbValToArray(rgbString) {
     return rgbString
@@ -95,6 +96,46 @@ function create_and_show_colorbar(colors, values) {
             );
         }`)
         .appendTo('head');
+
+    // Get a reference to the colored div and listen for mousemove events.
+    const tooltip = $('#colorScalePicker');
+    const colorscale = $('#mapColorScale');
+    const padding = 10;
+
+    colorscale.off();
+    colorscale.on('mousemove touchmove touchstart', update_tooltip);
+    colorscale.on('mouseleave touchend', () => { tooltip.hide() });
+
+    function update_tooltip(e) {
+        var x, y;
+        // https://stackoverflow.com/a/41993300/18758797
+        if (e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel') {
+            var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+            x = touch.pageX;
+            y = touch.pageY;
+        } else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' || e.type == 'mouseover' || e.type == 'mouseout' || e.type == 'mouseenter' || e.type == 'mouseleave') {
+            x = e.clientX;
+            y = e.clientY;
+        }
+
+        const width = $('#mapColorScale').width();
+
+        const new_x = x - (tooltip.outerWidth() / 2);
+        if (new_x >= padding && new_x <= (width - tooltip.outerWidth()) - padding) {
+            tooltip.css('left', new_x);
+        }
+
+        const now_cmin = window.atticData.colorscale_cmin;
+        const now_cmax = window.atticData.colorscale_cmax;
+        const scaled = ut.scale(x, 0, width, now_cmin, now_cmax);
+        const color = window.atticData.webgl_chroma_scale(scaled);
+        const formatted_value = format_value.format_value(scaled);
+
+        tooltip.html(formatted_value);
+        tooltip.css('borderColor', color);
+
+        tooltip.show();
+    }
 
     // const png = new PNG({
     //     colorType: 2,

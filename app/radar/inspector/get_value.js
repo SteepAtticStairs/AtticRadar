@@ -1,5 +1,5 @@
 const turf = require('@turf/turf');
-const formatValue = require('./format_value');
+const format_value = require('./format_value');
 const product_colors = require('../colormaps/colormaps');
 
 function beam_height(distance_km, elevation_meters, elevation_angle) {
@@ -67,7 +67,7 @@ function getValue(e) {
         const cmax = window.atticData.cmax;
         var value, orig_value;
         if (cmin != undefined) {
-            [value, orig_value] = formatValue(data, cmin, cmax);
+            [value, orig_value] = format_value.decode_and_format(data, cmin, cmax);
             if (value == null) {
                 $('#colorPickerText').hide();
             } else {

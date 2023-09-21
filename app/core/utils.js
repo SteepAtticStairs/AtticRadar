@@ -763,6 +763,13 @@ function setMapMargin(topOrBottom, value, map_obj = undefined) {
 
     update_attribution_div_pos();
 
+    const elem = $('#colorScalePicker');
+    const padding = 10;
+    elem.css({
+        'bottom': (parseFloat($('#map').css('bottom')) + padding) + parseInt(elem.css('padding')),
+        // 'left': padding
+    });
+
     // $('#colorPicker #colorPickerText').position({
     //     my: 'center',
     //     at: 'center',
@@ -803,10 +810,15 @@ function scaleValues(values, product) {
     } else if (product == 'N0S') {
         // storm relative velocity
         for (var i in values) { if (values[i] != 999) { values[i] = values[i] - 0.5 } }
-    } else if (product == 'N0H' || product == 'HHC') {
-        // hydrometer classification || hybrid hydrometer classification
-        for (var i in values) { if (values[i] != 999) { values[i] = values[i] + 0.5 } }
     }
+
+    // slight modifications for hard colorscale stops
+    for (var i = 0; i < values.length; i++) {
+        if (values[i] == values[i + 1]) {
+            values[i] = values[i] - 0.00001;
+        }
+    }
+
     return values;
 }
 

@@ -30,8 +30,14 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     values = ut.scaleValues(values, product);
     const cmin = values[0];
     window.atticData.cmin = cmin;
+    window.atticData.colorscale_cmin = cmin;
     const cmax = values[values.length - 1];
     window.atticData.cmax = cmax;
+    window.atticData.colorscale_cmax = cmax;
+    if (color_scale_data.hasOwnProperty('range_folded')) {
+        const colorscale_cmax = values[values.length - 2];
+        window.atticData.colorscale_cmax = colorscale_cmax;
+    }
 
     //var vertexF32 = new Float32Array(verticiesArr);
     //var colorF32 = new Float32Array(colorsArr);
