@@ -22,8 +22,8 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     var values = [...color_scale_data.values];
 
     // add range folded colors
-    if (color_scale_data.hasOwnProperty('range_folded')) {
-        colors.push(product_colors.range_folded);
+    if (color_scale_data.hasOwnProperty('range_fold')) {
+        colors.push(color_scale_data.range_fold);
         values.push(product_colors.range_folded_val);
     }
 
@@ -34,7 +34,7 @@ function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_f
     const cmax = values[values.length - 1];
     window.atticData.cmax = cmax;
     window.atticData.colorscale_cmax = cmax;
-    if (color_scale_data.hasOwnProperty('range_folded')) {
+    if (color_scale_data.hasOwnProperty('range_fold')) {
         const colorscale_cmax = values[values.length - 2];
         window.atticData.colorscale_cmax = colorscale_cmax;
     }
