@@ -18,6 +18,7 @@ const product_units = {
     99: 'm/s', // digital base velocity
     134: 'kg/m²', // vertically integrated liquid
     // 'N0S': 'knots', // storm relative velocity
+    163: 'deg/km', // specific differential phase
 
     180: 'dBZ', // tdwr short-range reflectivity
     186: 'dBZ', // tdwr long-range reflectivity
@@ -66,6 +67,10 @@ function format_value(value) {
             product_code == 134 /* DVL */ // vertically integrated liquid
             ) {
                 value = parseFloat(value.toFixed(2));
+            } else if (
+            product_code == 163 // specific differential phase
+            ) {
+                value = parseFloat(value.toFixed(1));
             } else if (
             product_code == 161 /* N0C */ || product_code == 'RHO' || // correlation coefficient
             product_code == 'PHI' // differential phase shift

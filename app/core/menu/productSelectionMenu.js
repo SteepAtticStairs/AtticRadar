@@ -14,6 +14,7 @@ var productLookup = {
         'hyc': 'N0H',
         'srv': 'N0S',
         'vil': '134il',
+        'kdp': 'N0K',
         'sr-ref': 'TZ0',
         'lr-ref': 'TZL',
         'tdwrVel': 'TV0',
@@ -28,6 +29,7 @@ var productLookup = {
         'hhc': 'HHC',
         'hyc': 'N1H',
         'srv': 'N1S',
+        'kdp': 'N1K',
         'sr-ref': 'TZ1',
         'tdwrVel': 'TV1',
     },
@@ -40,6 +42,7 @@ var productLookup = {
         'zdr': 'N2X',
         'hyc': 'N2H',
         'srv': 'N2S',
+        'kdp': 'N2K',
         'sr-ref': 'TZ2',
         'tdwrVel': 'TV2',
     },
@@ -51,6 +54,7 @@ var productLookup = {
         'zdr': 'N3X',
         'hyc': 'N3H',
         'srv': 'N3S',
+        'kdp': 'N3K',
     }
 }
 
