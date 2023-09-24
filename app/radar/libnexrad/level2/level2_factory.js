@@ -4,6 +4,7 @@ const display_file_info = require('../../libnexrad_helpers/display_file_info');
 const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
 const dealias = require('../../libnexrad_helpers/level2/dealias/dealias');
 const map = require('../../../core/map/map');
+const plot_to_map = require('../../plot/plot_to_map');
 
 // https://stackoverflow.com/a/8043061
 function _zero_pad(num) {
@@ -432,6 +433,50 @@ class Level2Factory {
             // we HAVE dealiased
             return true;
         }
+    }
+
+    init_wasm(cb) {
+        const thisobj = this;
+
+        const worker = new Worker('./app/radar/libnexrad/level2/wasm/worker.js');
+        setTimeout(function() {
+            worker.postMessage({ message: "initialize", fileName: 'KTLX20130520_201643_V06', buffer: thisobj.initial_radar_obj.buffer }, [thisobj.initial_radar_obj.buffer]);
+            worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: 1, field: 255 } });
+            // worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: 1, field: 255 } });
+            // worker.postMessage({ "message": "set3d", "data": { "selections": [ { "elevation": 0, "file": 0, "type": 0, "dealiased": 0, "scan": { "fileNumber": 0, "scan": [ { "elevation": 0.483394980430603, "idx": 0, "date": "2013-05-20T20:16:43.000Z", "percent": 0.007259317208081484, "fields": [ 0, 5, 10, 9 ], "fileNumber": 0, "rounded": "0.5" }, { "elevation": 0.483394980430603, "idx": 1, "date": "2013-05-20T20:17:01.000Z", "percent": 0.1176551803946495, "fields": [ 0, 1, 2 ], "fileNumber": 0, "rounded": "0.5" } ], "station": "KTLX" } } ], "scans": [ { "fileName": "KTLX20130520_201643_V06.gz", "fileNumber": 0, "station": "KTLX", "scans": [ [ [ { "elevation": 0.483394980430603, "idx": 0, "date": "2013-05-20T20:16:43.000Z", "percent": 0.007259317208081484, "fields": [ 0, 5, 10, 9 ], "fileNumber": 0, "rounded": "0.5" }, { "elevation": 0.483394980430603, "idx": 1, "date": "2013-05-20T20:17:01.000Z", "percent": 0.1176551803946495, "fields": [ 0, 1, 2 ], "fileNumber": 0, "rounded": "0.5" } ] ], [ [ { "elevation": 0.8789100050926208, "idx": 2, "date": "2013-05-20T20:17:15.000Z", "percent": 0.17910736799240112, "fields": [ 0, 5, 10, 9 ], "fileNumber": 0, "rounded": "0.9" }, { "elevation": 0.8789100050926208, "idx": 3, "date": "2013-05-20T20:17:32.000Z", "percent": 0.2895032465457916, "fields": [ 0, 1, 2 ], "fileNumber": 0, "rounded": "0.9" } ] ], [ [ { "elevation": 1.3183599710464478, "idx": 4, "date": "2013-05-20T20:17:47.000Z", "percent": 0.35095542669296265, "fields": [ 0, 5, 10, 9 ], "fileNumber": 0, "rounded": "1.3" }, { "elevation": 1.3183599710464478, "idx": 5, "date": "2013-05-20T20:18:04.000Z", "percent": 0.4595552086830139, "fields": [ 0, 1, 2 ], "fileNumber": 0, "rounded": "1.3" } ] ], [ [ { "elevation": 1.8017549514770508, "idx": 6, "date": "2013-05-20T20:18:20.000Z", "percent": 0.5210074186325073, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "1.8" } ] ], [ [ { "elevation": 2.416995048522949, "idx": 7, "date": "2013-05-20T20:18:35.000Z", "percent": 0.5935049057006836, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "2.4" } ] ], [ [ { "elevation": 3.120115041732788, "idx": 8, "date": "2013-05-20T20:18:49.000Z", "percent": 0.6642903685569763, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "3.1" } ] ], [ [ { "elevation": 3.9990248680114746, "idx": 9, "date": "2013-05-20T20:19:03.000Z", "percent": 0.7321251034736633, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "4.0" } ] ], [ [ { "elevation": 5.097660064697266, "idx": 10, "date": "2013-05-20T20:19:17.000Z", "percent": 0.7900813817977905, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "5.1" } ] ], [ [ { "elevation": 6.416019916534424, "idx": 11, "date": "2013-05-20T20:19:31.000Z", "percent": 0.8388325572013855, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "6.4" } ] ], [ [ { "elevation": 7.998049736022949, "idx": 12, "date": "2013-05-20T20:19:44.000Z", "percent": 0.8797258734703064, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "8.0" } ] ], [ [ { "elevation": 10.019530296325684, "idx": 13, "date": "2013-05-20T20:19:57.000Z", "percent": 0.9127612113952637, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "10.0" } ] ], [ [ { "elevation": 12.480469703674316, "idx": 14, "date": "2013-05-20T20:20:11.000Z", "percent": 0.9410818219184875, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "12.5" } ] ], [ [ { "elevation": 15.600584983825684, "idx": 15, "date": "2013-05-20T20:20:24.000Z", "percent": 0.9644631743431091, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "15.6" } ] ], [ [ { "elevation": 19.51171875, "idx": 16, "date": "2013-05-20T20:20:37.000Z", "percent": 0.9838033318519592, "fields": [ 0, 1, 2, 5, 10, 9 ], "fileNumber": 0, "rounded": "19.5" } ] ] ], "idxs": { "0.5": 0, "0.9": 1, "1.3": 2, "1.8": 3, "2.4": 4, "3.1": 5, "4.0": 6, "5.1": 7, "6.4": 8, "8.0": 9, "10.0": 10, "12.5": 11, "15.6": 12, "19.5": 13 }, "percent": -1, "vcp": 12, "radarMetadata": { "lat": 35.33305740356445, "lon": -97.27748107910156, "station": "KTLX" } }, null, null, null, null ] } })
+            // worker.postMessage({ 'message': 'returnScaleOffset', 'data': [0, 0]})
+
+            worker.onmessage = (event) => {
+                console.log(event.data);
+
+                if (event.data.action == 'loadData') {
+                    const f32 = event.data.data.float;
+                    const array = Array.from(f32);
+
+                    const values = [];
+                    const points = [];
+                    for (var i = 0; i < array.length; i += 3) {
+                        points.push(array[i]);
+                        points.push(array[i + 1]);
+                        values.push(array[i + 2] / 1.944);
+                    }
+                    // console.log(values);
+                    // console.log(points);
+                    plot_to_map(new Float32Array(points), new Float32Array(values), 'VEL', {lat: 35.233000000000004, lng: -101.709}, thisobj);
+
+                    // const arr = [];
+                    // for (var i = 17; i < array.length; i += 18) {
+                    //     arr.push(array[i]);
+                    // }
+                    // console.log(arr)
+                    // // const result = [];
+                    // // for (let i = 0; i < arr.length; i += 1832) {
+                    // //     const subarray = arr.slice(i, i + 1832);
+                    // //     result.push(subarray);
+                    // // }
+                }
+            };
+        }, 500);
     }
 
     /**

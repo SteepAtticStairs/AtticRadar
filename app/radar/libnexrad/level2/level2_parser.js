@@ -40,6 +40,8 @@ class NEXRADLevel2File {
         var fh = new RandomAccessFile(fileBuffer);
         fh = _decompressFile(fh);
 
+        this.buffer = fh.buffer.buffer;
+
         this.filename = filename;
 
         this.nexradLevel = 2;
