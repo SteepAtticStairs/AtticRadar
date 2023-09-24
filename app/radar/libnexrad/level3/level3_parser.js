@@ -408,7 +408,7 @@ class DigitalVILMapper extends DataMapper {
         for (var i = 3; i < log_start; i++) {
             this.lut[i] = (ind[i] - lin_offset) / lin_scale;
         }
-        for (var i = log_start; i < ind.length - 1; i++) {
+        for (var i = log_start; i < ind.length; i++) {
             this.lut[i] = Math.exp((ind[i] - log_offset) / log_scale);
         }
         // this.lut.set((ind.slice(2, log_start).map((val) => (val - lin_offset) / lin_scale)), 2);
