@@ -31,6 +31,8 @@ class Level2Factory {
         this.nscans = this.initial_radar_obj.nscans;
         this.vcp = this.get_vcp();
 
+        this.dealias_data = {};
+
         this.station = this.header.icao;
         const station_remove_irregular = this.station.replaceAll('\u0000', '').trim();
         if (station_remove_irregular == '') {
@@ -437,32 +439,44 @@ class Level2Factory {
 
     dealias_alt_and_plot(elevation_number, callback) {
         const thisobj = this;
-        const buffer = thisobj.initial_radar_obj.buffer.slice(0); // copy the buffer
 
-        const worker = new Worker('./app/radar/libnexrad/level2/wasm/worker.js');
-        setTimeout(function() {
-            worker.postMessage({ message: "initialize", fileName: 'KTLX20130520_201643_V06', buffer: buffer }, [buffer]);
-            worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+        const already_dealiased = this.dealias_data[elevation_number];
+        if (already_dealiased != undefined) {
+            plot_to_map(new Float32Array(already_dealiased.points), new Float32Array(already_dealiased.values), 'VEL', this);
+            callback();
+        } else {
+            const buffer = this.initial_radar_obj.buffer.slice(0); // copy the buffer
 
-            worker.onmessage = (event) => {
-                // console.log(event.data);
+            const worker = new Worker('./app/radar/libnexrad/level2/wasm/worker.js');
+            setTimeout(function() {
+                worker.postMessage({ message: "initialize", fileName: 'KTLX20130520_201643_V06', buffer: buffer }, [buffer]);
+                worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
 
-                if (event.data.action == 'loadDataDealias') {
-                    const f32 = event.data.data.float;
-                    const array = Array.from(f32);
+                worker.onmessage = (event) => {
+                    // console.log(event.data);
 
-                    const values = [];
-                    const points = [];
-                    for (var i = 0; i < array.length; i += 3) {
-                        points.push(array[i]);
-                        points.push(array[i + 1]);
-                        values.push(array[i + 2] / 1.944);
+                    if (event.data.action == 'loadDataDealias') {
+                        const f32 = event.data.data.float;
+                        const array = Array.from(f32);
+
+                        const values = [];
+                        const points = [];
+                        for (var i = 0; i < array.length; i += 3) {
+                            points.push(array[i]);
+                            points.push(array[i + 1]);
+                            values.push(array[i + 2] / 1.944);
+                        }
+
+                        if (thisobj.dealias_data[elevation_number] == undefined) {
+                            thisobj.dealias_data[elevation_number] = { points: points, values: values }
+                        }
+
+                        plot_to_map(new Float32Array(points), new Float32Array(values), 'VEL', thisobj);
+                        callback();
                     }
-                    plot_to_map(new Float32Array(points), new Float32Array(values), 'VEL', thisobj);
-                    callback();
-                }
-            };
-        }, 500);
+                };
+            }, 500);
+        }
     }
 
     /**
