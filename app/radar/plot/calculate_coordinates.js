@@ -24,9 +24,11 @@ function calculate_coordinates(nexrad_factory, options) {
     var should_plot_dealiased;
     if (nexrad_factory.nexrad_level == 2 && product == 'VEL') {
         should_plot_dealiased = window.atticData.should_plot_dealiased;
-        var already_dealiased = nexrad_factory.check_if_already_dealiased(elevation);
-        if (should_plot_dealiased && !already_dealiased) {
-            nexrad_factory.dealias(elevation);
+        // var already_dealiased = nexrad_factory.check_if_already_dealiased(elevation);
+        if (should_plot_dealiased/* && !already_dealiased*/) {
+            // nexrad_factory.dealias(elevation);
+            nexrad_factory.dealias_alt_and_plot(elevation - 1, () => {});
+            return;
         }
     }
 
@@ -139,7 +141,7 @@ function calculate_coordinates(nexrad_factory, options) {
     var w = work(require('./calculation_worker'));
     w.addEventListener('message', function(ev) {
         console.log(`Calculated vertices in ${Date.now() - start} ms`);
-        plot_to_map(ev.data, colors, product, radar_lat_lng, nexrad_factory);
+        plot_to_map(ev.data, colors, product, nexrad_factory);
     })
     w.postMessage([points, radar_lat_lng], [points.buffer]);
 }

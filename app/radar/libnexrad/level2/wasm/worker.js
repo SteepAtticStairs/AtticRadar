@@ -87,7 +87,7 @@ function printMetadata(elevation, file, fileName) {
     })
 }
 
-function getVertData(elevation, file, type, fileName, override=null) {
+function getVertData(elevation, file, type, fileName, override=null, is_dealias = false) {
 
     //this is all for TDWR velocity. Show raw velocity instead of dealiased
     if (!override) {
@@ -103,6 +103,11 @@ function getVertData(elevation, file, type, fileName, override=null) {
     //console.log("floatResult", floatResult[floatResult.length-1],floatResult[floatResult.length-2],
     //floatResult[floatResult.length-3], floatResult[0], floatResult[1], floatResult[2]);
 
+    var message = 'loadData';
+    if (is_dealias) {
+        message += 'Dealias';
+    }
+
     postMessage(
         {
         "data": {
@@ -112,7 +117,7 @@ function getVertData(elevation, file, type, fileName, override=null) {
             "fileName":fileName,
             "float":floatResult
         },
-        "action":"loadData"
+        "action":message
         }, 
         [floatResult.buffer]
         ); 
@@ -437,9 +442,9 @@ onmessage = function(e) {
         //console.log("after dealias");
         const override = api.separate(eventData.data.fileNum, eventData.data.idx, 1);
         if (override) {
-            getVertData(eventData.data.idx, eventData.data.fileNum, 255, eventData.data.fileName, 1);
+            getVertData(eventData.data.idx, eventData.data.fileNum, 255, eventData.data.fileName, 1, true);
         } else {
-            getVertData(eventData.data.idx, eventData.data.fileNum, 255, eventData.data.fileName);
+            getVertData(eventData.data.idx, eventData.data.fileNum, 255, eventData.data.fileName, null, true);
         }
 
         //free all data needed to create vertices

@@ -16,10 +16,13 @@ const load_lightning = require('../../lightning/load_lightning');
 const turf = require('@turf/turf');
 const CheapRuler = require('cheap-ruler');
 
-function plot_to_map(verticies_arr, colors_arr, product, radar_lat_lng, nexrad_factory) {
+function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
     var color_scale_data = product_colors[product];
     var colors = [...color_scale_data.colors];
     var values = [...color_scale_data.values];
+
+    const location = nexrad_factory.get_location();
+    const radar_lat_lng = { lat: location[0], lng: location[1] }
 
     // add range folded colors
     if (color_scale_data.hasOwnProperty('range_fold')) {
