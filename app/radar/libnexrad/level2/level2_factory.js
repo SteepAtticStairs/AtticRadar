@@ -5,6 +5,7 @@ const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
 const dealias = require('../../libnexrad_helpers/level2/dealias/dealias');
 const map = require('../../../core/map/map');
 const plot_to_map = require('../../plot/plot_to_map');
+const work = require('webworkify');
 
 // https://stackoverflow.com/a/8043061
 function _zero_pad(num) {
@@ -437,6 +438,13 @@ class Level2Factory {
         }
     }
 
+    /**
+     * Dealiases a radar sweep using an algorithm that works well on tornadic signatures.
+     * It automatically plots the dealiased data to the map.
+     * 
+     * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
+     * @param {Function} callback A callback function to execute after the map plotting has completed.
+     */
     dealias_alt_and_plot(elevation_number, callback) {
         const thisobj = this;
 
@@ -447,32 +455,57 @@ class Level2Factory {
         } else {
             const buffer = this.initial_radar_obj.buffer.slice(0); // copy the buffer
 
-            const worker = new Worker('./app/radar/libnexrad/level2/wasm/worker.js');
-            setTimeout(function() {
-                worker.postMessage({ message: "initialize", fileName: 'KTLX20130520_201643_V06', buffer: buffer }, [buffer]);
-                worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+            if (this._wasm_worker == undefined) {
+                const worker = new Worker('./app/radar/libnexrad/level2/wasm/worker.js');
+                this._wasm_worker = worker;
+            }
 
-                worker.onmessage = (event) => {
-                    // console.log(event.data);
+            setTimeout(function() {
+                thisobj._wasm_worker.postMessage({ message: "checkExists", name: thisobj.generate_unique_id()});
+                // worker.postMessage({ message: "initialize", fileName: thisobj.generate_unique_id(), buffer: buffer }, [buffer]);
+                // worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+
+                thisobj._wasm_worker.onmessage = (event) => {
+                    console.log(event.data);
+
+                    if (event.data.action == 'doesExist') {
+                        // thisobj._wasm_worker.postMessage({ message: "deleteFile", fileNum: 0 });
+                        thisobj._wasm_worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+                    }
+
+                    if (event.data.action == 'doesNotExist') {
+                        thisobj._wasm_worker.postMessage({ message: "initialize", fileName: thisobj.generate_unique_id(), buffer: buffer }, [buffer]);
+                        thisobj._wasm_worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+                    }
 
                     if (event.data.action == 'loadDataDealias') {
                         const f32 = event.data.data.float;
                         const array = Array.from(f32);
 
+                        const location = thisobj.get_location();
+
                         const values = [];
-                        const points = [];
+                        var points = [];
                         for (var i = 0; i < array.length; i += 3) {
-                            points.push(array[i]);
-                            points.push(array[i + 1]);
+                            const x = array[i];
+                            const y = array[i + 1];
+
+                            points.push(x);
+                            points.push(y);
                             values.push(array[i + 2] / 1.944);
                         }
+                        points = new Float32Array(points);
 
-                        if (thisobj.dealias_data[elevation_number] == undefined) {
-                            thisobj.dealias_data[elevation_number] = { points: points, values: values }
-                        }
+                        var w = work(require('./wasm/correction_worker'));
+                        w.addEventListener('message', function (ev) {
+                            if (thisobj.dealias_data[elevation_number] == undefined) {
+                                thisobj.dealias_data[elevation_number] = { points: ev.data, values: values }
+                            }
 
-                        plot_to_map(new Float32Array(points), new Float32Array(values), 'VEL', thisobj);
-                        callback();
+                            plot_to_map(ev.data, new Float32Array(values), 'VEL', thisobj);
+                            callback();
+                        })
+                        w.postMessage([points, location], [points.buffer]);
                     }
                 };
             }, 500);

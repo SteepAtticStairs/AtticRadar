@@ -431,9 +431,9 @@ onmessage = function(e) {
             api.createVertices(eventData.data.fileNum, eventData.data.idx, 0);
             api.processElevationData(eventData.data.fileNum, eventData.data.idx, 1);
             api.createVertices(eventData.data.fileNum, eventData.data.idx, 1);
-            getVertData(eventData.data.idx, eventData.data.fileNum, 1, eventData.data.fileName);
+            // getVertData(eventData.data.idx, eventData.data.fileNum, 1, eventData.data.fileName);
             //every process needs to be followed by getVertData so free_buffer can be called
-            getVertData(eventData.data.idx, eventData.data.fileNum, 0, eventData.data.fileName);
+            // getVertData(eventData.data.idx, eventData.data.fileNum, 0, eventData.data.fileName);
         //}
 
         //dealias velocity
@@ -450,6 +450,34 @@ onmessage = function(e) {
         //free all data needed to create vertices
         api.cleanupFile(eventData.data.fileNum);
         
+    }
+
+    if (eventData.message === "checkExists") {
+        const name = eventData.name;
+
+        const metaPtr = api.returnFullFile(0)
+
+        //know it's of size 255
+        const metaResultView = new Uint8Array(Module.HEAP8.buffer, metaPtr, 255);
+        const metaResult = new Uint8Array(metaResultView);
+
+        for (let i=0; i<name.length; i++) {
+            if (metaResult[i] != name.charCodeAt(i)) {
+                postMessage({
+                    "data": {
+                        "fileName":name
+                    },
+                    "action":"doesNotExist"
+                });
+                return;
+            }
+        }
+        postMessage({
+            "data": {
+                "fileName":name
+            },
+            "action":"doesExist"
+        });
     }
 
     if (eventData.message === "set3d") {
