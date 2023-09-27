@@ -33,6 +33,7 @@ class Level2Factory {
         this.vcp = this.get_vcp();
 
         this.dealias_data = {};
+        this._wasm_loaded = false;
 
         this.station = this.header.icao;
         const station_remove_irregular = this.station.replaceAll('\u0000', '').trim();
@@ -460,55 +461,61 @@ class Level2Factory {
                 this._wasm_worker = worker;
             }
 
-            setTimeout(function() {
+            function _init() {
+                thisobj._wasm_loaded = true;
                 thisobj._wasm_worker.postMessage({ message: "checkExists", name: thisobj.generate_unique_id()});
-                // worker.postMessage({ message: "initialize", fileName: thisobj.generate_unique_id(), buffer: buffer }, [buffer]);
-                // worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+            }
 
-                thisobj._wasm_worker.onmessage = (event) => {
-                    // console.log(event.data);
+            if (this._wasm_loaded) {
+                _init();
+            }
 
-                    if (event.data.action == 'doesExist') {
-                        // thisobj._wasm_worker.postMessage({ message: "deleteFile", fileNum: 0 });
-                        thisobj._wasm_worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+            thisobj._wasm_worker.onmessage = (event) => {
+                // console.log(event.data);
+
+                if (event.data == 'loaded') {
+                    _init();
+                }
+
+                if (event.data.action == 'doesExist') {
+                    // thisobj._wasm_worker.postMessage({ message: "deleteFile", fileNum: 0 });
+                    thisobj._wasm_worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+                }
+                if (event.data.action == 'doesNotExist') {
+                    thisobj._wasm_worker.postMessage({ message: "initialize", fileName: thisobj.generate_unique_id(), buffer: buffer }, [buffer]);
+                    thisobj._wasm_worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
+                }
+
+                if (event.data.action == 'loadDataDealias') {
+                    const f32 = event.data.data.float;
+                    const array = Array.from(f32);
+
+                    const location = thisobj.get_location();
+
+                    const values = [];
+                    var points = [];
+                    for (var i = 0; i < array.length; i += 3) {
+                        const x = array[i];
+                        const y = array[i + 1];
+
+                        points.push(x);
+                        points.push(y);
+                        values.push(array[i + 2] / 1.944);
                     }
+                    points = new Float32Array(points);
 
-                    if (event.data.action == 'doesNotExist') {
-                        thisobj._wasm_worker.postMessage({ message: "initialize", fileName: thisobj.generate_unique_id(), buffer: buffer }, [buffer]);
-                        thisobj._wasm_worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
-                    }
-
-                    if (event.data.action == 'loadDataDealias') {
-                        const f32 = event.data.data.float;
-                        const array = Array.from(f32);
-
-                        const location = thisobj.get_location();
-
-                        const values = [];
-                        var points = [];
-                        for (var i = 0; i < array.length; i += 3) {
-                            const x = array[i];
-                            const y = array[i + 1];
-
-                            points.push(x);
-                            points.push(y);
-                            values.push(array[i + 2] / 1.944);
+                    var w = work(require('./wasm/correction_worker'));
+                    w.addEventListener('message', function (ev) {
+                        if (thisobj.dealias_data[elevation_number] == undefined) {
+                            thisobj.dealias_data[elevation_number] = { points: ev.data, values: values }
                         }
-                        points = new Float32Array(points);
 
-                        var w = work(require('./wasm/correction_worker'));
-                        w.addEventListener('message', function (ev) {
-                            if (thisobj.dealias_data[elevation_number] == undefined) {
-                                thisobj.dealias_data[elevation_number] = { points: ev.data, values: values }
-                            }
-
-                            plot_to_map(ev.data, new Float32Array(values), 'VEL', thisobj);
-                            callback();
-                        })
-                        w.postMessage([points, location], [points.buffer]);
-                    }
-                };
-            }, 500);
+                        plot_to_map(ev.data, new Float32Array(values), 'VEL', thisobj);
+                        callback();
+                    })
+                    w.postMessage([points, location], [points.buffer]);
+                }
+            }
         }
     }
 
