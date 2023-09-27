@@ -30,6 +30,7 @@ units: KTS
 step: 5
 scale: 1.9426
 
+color: -140 255 204 230
 color: -120 252 0 130 109 2 150 
 color: -100 110 3 151 22 13 156
 color: -90  24 39 165 30 111 188
@@ -46,6 +47,7 @@ color: 55 253 160 201 255 232 172
 color: 60 253 228 160 253 149 83 
 color: 80 254 142 80 110 14 9
 color: 120 110 14 9
+color: 140 0 0 0
 
 RF: 139 0 218`
 const diff_reflectivity = 
