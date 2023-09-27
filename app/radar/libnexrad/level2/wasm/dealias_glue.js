@@ -13,8 +13,8 @@ Module.expectedDataFileDownloads++;
         } else if (typeof process === "undefined" && typeof location !== "undefined") {
             PACKAGE_PATH = encodeURIComponent(location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf("/")) + "/")
         }
-        var PACKAGE_NAME = "radar-single.data";
-        var REMOTE_PACKAGE_BASE = "radar-single.data";
+        var PACKAGE_NAME = "radar.data";
+        var REMOTE_PACKAGE_BASE = "radar.data";
         if (typeof Module["locateFilePackage"] === "function" && !Module["locateFile"]) {
             Module["locateFile"] = Module["locateFilePackage"];
             err("warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)")
@@ -142,9 +142,9 @@ Module.expectedDataFileDownloads++;
                 for (var i = 0; i < files.length; ++i) {
                     DataRequest.prototype.requests[files[i].filename].onload()
                 }
-                Module["removeRunDependency"]("datafile_radar-single.data")
+                Module["removeRunDependency"]("datafile_radar.data")
             }
-            Module["addRunDependency"]("datafile_radar-single.data");
+            Module["addRunDependency"]("datafile_radar.data");
             if (!Module.preloadResults)
                 Module.preloadResults = {};
             Module.preloadResults[PACKAGE_NAME] = {
@@ -946,7 +946,7 @@ function createExportWrapper(name, fixedasm) {
     }
 }
 var wasmBinaryFile;
-wasmBinaryFile = "radar-single.wasm";
+wasmBinaryFile = "dealias.wasm";
 if (!isDataURI(wasmBinaryFile)) {
     wasmBinaryFile = locateFile(wasmBinaryFile)
 }

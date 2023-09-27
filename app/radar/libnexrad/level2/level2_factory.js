@@ -457,7 +457,7 @@ class Level2Factory {
             const buffer = this.initial_radar_obj.buffer.slice(0); // copy the buffer
 
             if (this._wasm_worker == undefined) {
-                const worker = new Worker('./app/radar/libnexrad/level2/wasm/worker.js');
+                const worker = new Worker('./app/radar/libnexrad/level2/wasm/dealias_worker.js');
                 this._wasm_worker = worker;
             }
 

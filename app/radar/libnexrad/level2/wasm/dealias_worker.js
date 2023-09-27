@@ -1,5 +1,5 @@
 //check if pthreads will work in browser
-importScripts('./radar.js');
+importScripts('./dealias_glue.js');
 
 function closest (num, arr) {
     let idx = 0;
