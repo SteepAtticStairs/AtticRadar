@@ -1,3 +1,5 @@
+const armFunctions = require('../../../core/menu/atticRadarMenu');
+
 function _generateBtnTemplate(angle, number) {
     return `<div class="col">
         <div class="l2ElevationBtn" value="${angle}" number="${number}">${angle.toFixed(1)}°</div>
@@ -7,7 +9,7 @@ function _generateRow(btnsHTML) {
     return `<div class="row gx-1" style="margin-top: 0.25rem">${btnsHTML}</div>`;
 }
 
-const dealiasBtnSelector = ':not(#dealiasBtn)';
+const dealiasBtnSelector = ':not(.l2elev-nonstandard)';
 const dbs = dealiasBtnSelector; // just for shorthand
 
 function _generateElevationProductLookup(lEAP) {
@@ -174,5 +176,19 @@ function load_elevation_menu(lEAP) {
     $('#productsDropdownTriggerText').text('Reflectivity'); // we start out with reflectivity
     initEventListeners(this, lEAP, elevationProductLookup); // initialize the event listeners for all of these buttons
 }
+
+$('#dealiasSettingsIcon').click(function() {
+    armFunctions.showARMwindow();
+    $('#armrDealiasSettingsBtn').click();
+})
+
+const elem = $('.armrDealiasBtnSwitchElem');
+armFunctions.toggleswitchFunctions(elem,
+function() {
+    elem.each(index => {
+        elem[index].checked = false;
+    });
+    $(this)[0].checked = true;
+})
 
 module.exports = load_elevation_menu;

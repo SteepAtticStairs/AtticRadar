@@ -444,6 +444,51 @@
                             <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrStatementsBtnSwitchElem" checked>
                         </div>
                     </div>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">DEALIAS</div>
+                    <div class="atticRadarMenuRow armrWide" id="armrDealiasSettingsBtn">
+                        Dealiasing Settings
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div id="atticRadarMenuDealiasScreen" class="armScreen" style="display: none">
+                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsDealiasBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Dealiasing Settings<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">ALGORITHM</div>
+                    <div class="atticRadarMenuRow armrTop armrWide" id="armrDealiasRegionBasedBtn">
+                        Region Based
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide armrDealiasBtnSwitchElem" onfocus="this.blur();" type="checkbox" role="switch" id="armrDealiasRegionBasedBtnSwitchElem" checked>
+                        </div>
+                    </div>
+                    <div class="atticRadarMenuRow armrTop armrWide" id="armrDealiasTornadicBtn">
+                        Tornadic
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggleSwitchContainter tscWide armrDealiasBtnSwitchElem" onfocus="this.blur();" type="checkbox" role="switch" id="armrDealiasTornadicBtnSwitchElem">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div>
+                        <b>What does this mean?</b>
+                        <br>
+                        Dealiasing is the action of correcting issues in velocity sweeps.
+                        When you load a Level 2 file and view its velocity data, a lot of the time,
+                        the velocity values will seem wrong. There is a process to correct this, and it's called dealiasing.
+                        AtticRadar implements two dealiasing algorithms.
+                        <br><br>
+                        The <b>Region Based</b> algorithm was originally developed for use in the python package <a href="https://github.com/ARM-DOE/pyart" style="color: #53a2e0;">pyart</a>.
+                        I simply rewrote it in JavaScript, for use in AtticRadar. This algorithm is very robust, and is great at dealing with gaps in data, e.g. hurricanes.
+                        <br><br>
+                        The <b>Tornadic</b> algorithm is much better suited for dealing with velocity scans with tornado signatures, or tight rotation in general.
+                        The region based algorithm struggles with these cases, so if you find an issue with that algorithm, you should try this one.
+                        <br><br>
+                    </div>
                 </div>
                 <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
                     <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
@@ -597,11 +642,12 @@
         <div id="level2_psm" class="psm" style="display: none">
             <div id="completeDealiasBtnContainer" style="display: none">
                 <div id="dealiasToggleSwitchContainer" style="display: flex; justify-content: space-around; align-items: center;">
-                    <div class="l2ElevationBtn dealiasBtnDeSelected noselect" id="dealiasBtn" style="width: 100%">
+                    <div class="l2ElevationBtn dealiasBtnDeSelected l2elev-nonstandard noselect" id="dealiasBtn" style="width: 100%">
                         <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Dealias
                     </div>
                 </div>
-                <br>
+                <i id="dealiasSettingsIcon" class="fa-solid fa-gear l2ElevationBtn l2elev-nonstandard"></i>
+                <br><br>
             </div>
             <!-- <div id="l2ElevButtonsExpander" style="display: flex; justify-content: space-between; align-items: center;">
                 <span>Elevations</span>

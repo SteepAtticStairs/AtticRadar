@@ -466,7 +466,7 @@ class Level2Factory {
                 // worker.postMessage({ message: "dealiasVelocity", data: { fileNum: 0, idx: elevation_number, field: 255 } });
 
                 thisobj._wasm_worker.onmessage = (event) => {
-                    console.log(event.data);
+                    // console.log(event.data);
 
                     if (event.data.action == 'doesExist') {
                         // thisobj._wasm_worker.postMessage({ message: "deleteFile", fileNum: 0 });

@@ -1301,6 +1301,20 @@ https://tobiasahlin.com/spinkit/
     background-color: #ab6262 !important;
     border-color: #764646 !important;
 }
+#completeDealiasBtnContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#dealiasToggleSwitchContainer {
+    /* 100% width - (right pos of settings btn) - (right + left padding of settings btn) - .gx-1 class --bs-gutter-x */
+    width: calc(100% - 20px - 12px - 0.25rem);
+}
+#dealiasSettingsIcon {
+    position: absolute;
+    right: 20px;
+    padding: 6px;
+}
 
 #hurricaneLegendDiv {
     position: absolute;

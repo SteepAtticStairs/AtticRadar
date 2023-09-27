@@ -21,14 +21,24 @@ function calculate_coordinates(nexrad_factory, options) {
     }
     window.atticData.product = product;
 
+    const dealias_mode_region_based = $('#armrDealiasRegionBasedBtnSwitchElem').is(':checked');
+    const dealias_mode_tornadic = $('#armrDealiasTornadicBtnSwitchElem').is(':checked');
+
     var should_plot_dealiased;
     if (nexrad_factory.nexrad_level == 2 && product == 'VEL') {
         should_plot_dealiased = window.atticData.should_plot_dealiased;
-        // var already_dealiased = nexrad_factory.check_if_already_dealiased(elevation);
-        if (should_plot_dealiased/* && !already_dealiased*/) {
-            // nexrad_factory.dealias(elevation);
-            nexrad_factory.dealias_alt_and_plot(elevation - 1, () => {});
-            return;
+
+        if (dealias_mode_tornadic) {
+            if (should_plot_dealiased) {
+                nexrad_factory.dealias_alt_and_plot(elevation - 1, () => {});
+                return;
+            }
+        }
+        if (dealias_mode_region_based) {
+            var already_dealiased = nexrad_factory.check_if_already_dealiased(elevation);
+            if (should_plot_dealiased && !already_dealiased) {
+                nexrad_factory.dealias(elevation);
+            }
         }
     }
 

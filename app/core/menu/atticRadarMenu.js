@@ -10,6 +10,9 @@ function hideARMwindow() {
     $('#atticRadarMenu').fadeOut(showHideDuration);
     $('#atticRadarMenuContainer').hide('slide', { direction: 'down' }, showHideDuration, function() {
         $('#atticRadarMenu').hide();
+
+        $('.armScreen').hide();
+        $('#atticRadarMenuMainScreen').show();
     });
 }
 
@@ -123,11 +126,12 @@ const fadeDuration = 150;
 var mainMenuScreen = '#atticRadarMenuMainScreen';
 var settingsScreen = '#atticRadarMenuSettingsScreen';
 var spcScreen = '#atticRadarMenuSPCScreen';
+var dealiasScreen = '#atticRadarMenuDealiasScreen';
 
 $('#armrSettingsBtn').click(function() {
     $(mainMenuScreen).fadeOut(fadeDuration, function() {
         $(spcScreen).fadeOut(fadeDuration, function() {
-            $(settingsScreen).fadeIn(fadeDuration);
+            $(settingsScreen).scrollTop(0).fadeIn(fadeDuration);
         });
     });
     // mainMenuScreen.css('position', 'absolute').hide('slide', { direction: 'left' }, 1000);
@@ -145,7 +149,7 @@ $('#armrSettingsBtn').click(function() {
 $('#armsSettingsBackBtn').click(function() {
     $(settingsScreen).fadeOut(fadeDuration, function() {
         $(spcScreen).fadeOut(fadeDuration, function() {
-            $(mainMenuScreen).fadeIn(fadeDuration);
+            $(mainMenuScreen).scrollTop(0).fadeIn(fadeDuration);
         });
     });
 })
@@ -160,7 +164,22 @@ $('#armrSPCOutlooksBtn').click(function() {
 $('#armsSPCBackBtn').click(function() {
     $(settingsScreen).fadeOut(fadeDuration, function() {
         $(spcScreen).fadeOut(fadeDuration, function() {
-            $(mainMenuScreen).fadeIn(fadeDuration);
+            $(mainMenuScreen).scrollTop(0).fadeIn(fadeDuration);
+        });
+    });
+})
+
+$('#armrDealiasSettingsBtn').click(function() {
+    $(mainMenuScreen).fadeOut(fadeDuration, function() {
+        $(settingsScreen).fadeOut(fadeDuration, function() {
+            $(dealiasScreen).scrollTop(0).fadeIn(fadeDuration);
+        });
+    });
+})
+$('#armsDealiasBackBtn').click(function() {
+    $(mainMenuScreen).fadeOut(fadeDuration, function() {
+        $(dealiasScreen).fadeOut(fadeDuration, function() {
+            $(settingsScreen).scrollTop(0).fadeIn(fadeDuration);
         });
     });
 })
