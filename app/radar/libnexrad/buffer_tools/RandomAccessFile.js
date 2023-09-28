@@ -2,40 +2,84 @@ const BIG_ENDIAN = 0;
 const LITTLE_ENDIAN = 1;
 
 class RandomAccessFile {
-	/**
-	 * Store a buffer or string and add functionality for random access
-	 * Unless otherwise noted all read functions advance the file's pointer by the length of the data read
-	 *
-	 * @param {Buffer|string} file A file as a string or Buffer to load for random access
-	 * @param {number} endian Endianess of the file constants BIG_ENDIAN and LITTLE_ENDIAN are provided
-	 */
-	constructor(file, endian = BIG_ENDIAN) {
-		this.offset = 0;
-		this.buffer = null;
+    /**
+     * Store an ArrayBuffer and add functionality for random access
+     * Unless otherwise noted all read functions advance the file's pointer by the length of the data read
+     *
+     * @param {ArrayBuffer|string} file An ArrayBuffer or string to load for random access
+     * @param {number} endian Endianess of the file constants BIG_ENDIAN and LITTLE_ENDIAN are provided
+     */
+    constructor(file, endian = BIG_ENDIAN) {
+		// https://stackoverflow.com/a/18002694/18758797
+		if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+			this.offset = 0;
+			this.buffer = null;
 
-		// set the binary endian order
-		if (endian < 0) return;
-		this.bigEndian = (endian === BIG_ENDIAN);
+			// set the binary endian order
+			if (endian < 0) return;
+			this.bigEndian = (endian === BIG_ENDIAN);
 
-		// string to buffer if string was provided
-		if (typeof file === 'string') {
-			this.buffer = Buffer.from(file, 'binary');
+			// string to ArrayBuffer if string was provided
+			if (typeof file === 'string') {
+				const encoder = new TextEncoder();
+				this.buffer = encoder.encode(file).buffer;
+			} else {
+				// load the ArrayBuffer directly
+				this.buffer = file;
+			}
+
+			// set up local read functions so we don't constantly query endianess
+			this.readFloatLocal = (offset) => {
+				const result = this.bigEndian ?
+					new DataView(this.buffer.buffer, offset, 4).getFloat32(0, false) :
+					new DataView(this.buffer.buffer, offset, 4).getFloat32(0, true);
+				this.offset += 4;
+				return result;
+			};
+
+			this.readIntLocal = (offset, byteLength) => {
+				const result = this.bigEndian ?
+					new DataView(this.buffer.buffer, offset, byteLength).getUint32(0, false) :
+					new DataView(this.buffer.buffer, offset, byteLength).getUint32(0, true);
+				this.offset += byteLength;
+				return result;
+			};
+
+			this.readSignedIntLocal = (offset, byteLength) => {
+				const result = this.bigEndian ?
+					new DataView(this.buffer.buffer, offset, byteLength).getInt32(0, false) :
+					new DataView(this.buffer.buffer, offset, byteLength).getInt32(0, true);
+				this.offset += byteLength;
+				return result;
+			};
 		} else {
-			// load the buffer directly
-			this.buffer = file;
-		}
+			this.offset = 0;
+			this.buffer = null;
 
-		// set up local read functions so we don't constantly query endianess
-		if (this.bigEndian) {
-			this.readFloatLocal = this.buffer.readFloatBE.bind(this.buffer);
-			this.readIntLocal = this.buffer.readUIntBE.bind(this.buffer);
-			this.readSignedIntLocal = this.buffer.readIntBE.bind(this.buffer);
-		}	else {
-			this.readFloatLocal = this.buffer.readFloatLE.bind(this.buffer);
-			this.readIntLocal = this.buffer.readUIntLE.bind(this.buffer);
-			this.readSignedIntLocal = this.buffer.readIntLE.bind(this.buffer);
+			// set the binary endian order
+			if (endian < 0) return;
+			this.bigEndian = (endian === BIG_ENDIAN);
+
+			// string to buffer if string was provided
+			if (typeof file === 'string') {
+				this.buffer = Buffer.from(file, 'binary');
+			} else {
+				// load the buffer directly
+				this.buffer = file;
+			}
+
+			// set up local read functions so we don't constantly query endianess
+			if (this.bigEndian) {
+				this.readFloatLocal = this.buffer.readFloatBE.bind(this.buffer);
+				this.readIntLocal = this.buffer.readUIntBE.bind(this.buffer);
+				this.readSignedIntLocal = this.buffer.readIntBE.bind(this.buffer);
+			}	else {
+				this.readFloatLocal = this.buffer.readFloatLE.bind(this.buffer);
+				this.readIntLocal = this.buffer.readUIntLE.bind(this.buffer);
+				this.readSignedIntLocal = this.buffer.readIntLE.bind(this.buffer);
+			}
 		}
-	}
+    }
 
 	/**
 	 * Get buffer length

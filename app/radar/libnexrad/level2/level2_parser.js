@@ -7,6 +7,9 @@ const BufferPack = require('bufferpack');
 const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
 const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 
+const work = require('webworkify');
+const decompress_worker = require('./decompress_worker');
+
 function _arraysEqual(arr1, arr2) {
     return JSON.stringify(arr1) == JSON.stringify(arr2);
 }
@@ -32,11 +35,32 @@ function _decompressFile(fh) {
 }
 
 function _bufferToString(buffer) {
-    return buffer.toString('UTF-8');
+    return new TextDecoder('UTF-8').decode(buffer);
+}
+
+function _handle_compression(fh, compression_or_ctm_info, callback) {
+    var buf;
+    if (_bufferToString(compression_or_ctm_info) == 'BZ') {
+        // buf = _decompress_records(fh);
+        const w = work(decompress_worker);
+        w.addEventListener('message', function (ev) {
+            buf = ev.data;
+            callback(buf);
+        })
+        w.postMessage(fh.buffer/*, [fh.buffer]*/);
+    } else if (_arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x00, 0x00])) || _arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x09, 0x80]))) {
+        buf = fh.read();
+        callback(buf);
+    } else {
+        console.error('Unknown compression record.');
+        buf = fh.read();
+        callback(buf);
+    }
 }
 
 class NEXRADLevel2File {
-    constructor (fileBuffer, filename) {
+    constructor (fileBuffer, callback, filename) {
+        console.log('Start');
         var fh = new RandomAccessFile(fileBuffer);
         fh = _decompressFile(fh);
 
@@ -52,58 +76,57 @@ class NEXRADLevel2File {
 
         // read the records in the file, decompressing as needed
         var compression_or_ctm_info = compression_record.slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2);
-        var buf;
-        if (_bufferToString(compression_or_ctm_info) == 'BZ') {
-            buf = _decompress_records(fh);
-        } else if (_arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x00, 0x00])) || _arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x09, 0x80]))) {
-            buf = fh.read();
-        } else {
-            console.error('Unknown compression record.');
-        }
-        this._fh = fh;
 
-        // read the records from the buffer
-        this._records = [];
-        var buf_length = buf.length;
-        var pos = 0;
-        while (pos < buf_length) {
-            var record = _get_record_from_buf(buf, pos);
-            pos = record[0];
-            var dic = record[1];
-            this._records.push(dic);
-        }
+        console.log('Start decompression');
+        _handle_compression(fh, compression_or_ctm_info, (buf) => {
+            console.log('End decompression');
+            this._fh = fh;
 
-        // pull out radial records (1 or 31) which contain the moment data.
-        this.radial_records = this._records.filter(r => r['header']['type'] == 31);
-        this.msg_type = '31';
-        if (this.radial_records.length == 0) {
-            this.radial_records = this._records.filter(r => r['header']['type'] == 1);
-            this.msg_type = '1';
-        }
-        if (this.radial_records.length == 0) {
-            console.error('No MSG31 records found, cannot read file');
-        }
-        var elev_nums = this.radial_records.map(m => m['msg_header']['elevation_number']);
-        this.scan_msgs = Array.from({ length: Math.max(...elev_nums) }, (_, i) => {
-            return elev_nums.reduce((acc, val, idx) => {
-                if (val === i + 1) acc.push(idx);
-                return acc;
-            }, []);
-        });
-        this.nscans = this.scan_msgs.length;
+            // read the records from the buffer
+            this._records = [];
+            var buf_length = buf.length;
+            var pos = 0;
+            while (pos < buf_length) {
+                var record = _get_record_from_buf(buf, pos);
+                pos = record[0];
+                var dic = record[1];
+                this._records.push(dic);
+            }
 
-        // pull out the vcp record
-        var msg_5 = this._records.filter(r => r['header']['type'] == 5);
+            // pull out radial records (1 or 31) which contain the moment data.
+            this.radial_records = this._records.filter(r => r['header']['type'] == 31);
+            this.msg_type = '31';
+            if (this.radial_records.length == 0) {
+                this.radial_records = this._records.filter(r => r['header']['type'] == 1);
+                this.msg_type = '1';
+            }
+            if (this.radial_records.length == 0) {
+                console.error('No MSG31 records found, cannot read file');
+            }
+            var elev_nums = this.radial_records.map(m => m['msg_header']['elevation_number']);
+            this.scan_msgs = Array.from({ length: Math.max(...elev_nums) }, (_, i) => {
+                return elev_nums.reduce((acc, val, idx) => {
+                    if (val === i + 1) acc.push(idx);
+                    return acc;
+                }, []);
+            });
+            this.nscans = this.scan_msgs.length;
 
-        if (msg_5.length) {
-            this.vcp = msg_5[0];
-        } else {
-            // There is no VCP Data.. This is uber dodgy
-            this.vcp = null;
+            // pull out the vcp record
+            var msg_5 = this._records.filter(r => r['header']['type'] == 5);
 
-            console.error(`No MSG5 detected. Setting to meaningless data. Rethink your life choices and be ready for errors. Specifically fixed angle data will be missing`);
-        }
-        return;
+            if (msg_5.length) {
+                this.vcp = msg_5[0];
+            } else {
+                // There is no VCP Data.. This is uber dodgy
+                this.vcp = null;
+
+                console.error(`No MSG5 detected. Setting to meaningless data. Rethink your life choices and be ready for errors. Specifically fixed angle data will be missing`);
+            }
+
+            callback(this);
+            // return;
+        })
     }
     location(station = null) {
         /*
@@ -714,11 +737,22 @@ function _get_msg31_from_buf(buf, pos, dic) {
     return new_pos;
 }
 
+function swap16(buffer) {
+    const length = buffer.length / 2;
+    var data = new Uint16Array(length);
+    for (let i = 0; i < length; i++) {
+        // Combine two Uint8Array elements into one Uint16Array element
+        data[i] = (buffer[i * 2] << 8) | buffer[i * 2 + 1];
+    }
+    return data;
+}
+
 function _get_msg31_data_block(buf, ptr) {
     /* Unpack a msg_31 data block into a dictionary. */
     var block_name = _bufferToString(buf.slice(ptr + 1, ptr + 4)).trim();
     // remove invalid characters (https://stackoverflow.com/a/12756018)
     block_name = block_name.replace(/[^a-z0-9 ,.?!]/ig, '');
+    // console.log(block_name)
 
     var dic;
     if (block_name == 'VOL') {
@@ -734,8 +768,7 @@ function _get_msg31_data_block(buf, ptr) {
         var data;
         if (dic['word_size'] == 16) {
             var buffer = buf.slice(ptr2, ptr2 + ngates * 2);
-            buffer.swap16();
-            data = new Uint16Array(buffer.buffer, buffer.byteOffset, buffer.length / 2);
+            data = swap16(buffer);
         } else if (dic['word_size'] == 8) {
             data = Array.from(buf.slice(ptr2, ptr2 + ngates)); // Uint8Array.from()
         } else {
