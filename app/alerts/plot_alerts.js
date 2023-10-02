@@ -3,6 +3,7 @@ const set_layer_order = require('../core/map/setLayerOrder');
 const click_listener = require('./click_listener');
 const filter_alerts = require('./filter_alerts');
 const map = require('../core/map/map');
+const AlertUpdater = require('./updater/AlertUpdater');
 
 function _add_alert_layers(geojson) {
     if (map.getSource('alertsSource')) {
@@ -94,6 +95,22 @@ function plot_alerts(alerts_data, callback) {
     _add_alert_layers(alerts_data);
 
     set_layer_order();
+
+    // if (window?.atticData?.current_RadarUpdater != undefined) {
+    //     window.atticData.current_RadarUpdater.disable();
+    // }
+    // if (!isInFileUploadMode) {
+    //     const current_RadarUpdater = new RadarUpdater(nexrad_factory);
+    //     window.atticData.current_RadarUpdater = current_RadarUpdater;
+    //     current_RadarUpdater.enable();
+    // }
+    if (!window.location.hash.includes('dev')) {
+        if (window.atticData.current_AlertUpdater == undefined) {
+            const current_AlertUpdater = new AlertUpdater();
+            current_AlertUpdater.enable();
+            window.atticData.current_AlertUpdater = current_AlertUpdater;
+        }
+    }
 
     callback(alerts_data);
 }

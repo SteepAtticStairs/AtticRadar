@@ -79,6 +79,18 @@ function _fetch_data(callback) {
     }
 }
 
+function return_data(callback) {
+    fetch(noaa_alerts_url, {
+        cache: 'no-store',
+        // headers: headers
+    })
+    .then(response => response.json())
+    .then(alerts_data => {
+        callback(alerts_data);
+    })
+}
+
 module.exports = {
-    _fetch_data
+    _fetch_data,
+    return_data
 }
