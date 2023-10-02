@@ -26,8 +26,8 @@ class AlertUpdater {
         const formatted_now = DateTime.now().toFormat('h:mm.ss a ZZZZ');
 
         this.get_new_data_func((alerts_data) => {
-            const fetched_date = alerts_data.updated;
-            const fetched_date_ms = DateTime.fromISO(fetched_date).toMillis();
+            const fetched_date = DateTime.fromISO(alerts_data.updated);
+            const fetched_date_ms = fetched_date.toMillis();
 
             if (this.latest_date == undefined) {
                 this.latest_date = fetched_date_ms;
@@ -40,7 +40,7 @@ class AlertUpdater {
                 this.plot_func(alerts_data);
                 this.latest_date = fetched_date_ms;
             } else {
-                console.log(`There is no new alert data as of ${formatted_now}, ${fetched_date}.`);
+                console.log(`There is no new alert data as of ${formatted_now}. Last data was at ${fetched_date.toFormat('h:mm.ss a ZZZZ')}.`);
             }
         })
     }
