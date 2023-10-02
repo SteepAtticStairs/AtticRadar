@@ -1,6 +1,7 @@
 const compressjs = require('../../../../lib/compressjs/main');
 const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
 const BufferPack = require('bufferpack');
+const level2_constants = require('./level2_constants');
 
 module.exports = function (self) {
     self.addEventListener('message', function (ev) {
@@ -23,7 +24,7 @@ module.exports = function (self) {
                 var blockSize = Math.abs(rafData.readInt());
                 // console.log(blockSize);
 
-                data = data.slice(CONTROL_WORD_SIZE, data.length);
+                data = data.slice(level2_constants.CONTROL_WORD_SIZE, data.length);
                 var uncompressed = this._decompress_chunk(data);
 
                 this.unused_data = data.slice(blockSize, data.length);
@@ -42,7 +43,7 @@ module.exports = function (self) {
             var cbuf = file_handler.peek();
             var decompressor = new RadarDecompressor();
             // skip the radar file header (24 bits)
-            var skip = _structure_size(VOLUME_HEADER);
+            var skip = _structure_size(level2_constants.VOLUME_HEADER);
             // initialize the buffer with all of the radar file's data, except for the header
             var buf = [decompressor.decompress(cbuf.slice(skip, cbuf.length))];
             // while there's still data to decompress
@@ -58,7 +59,7 @@ module.exports = function (self) {
             // combine the array of Uint8Arrays + 1 buffer to a single buffer
             var finalBuffer = Buffer.concat(buf);
             // trim the 'COMPRESSION_RECORD_SIZE' from the start of the buffer
-            finalBuffer = finalBuffer.slice(COMPRESSION_RECORD_SIZE, finalBuffer.length);
+            finalBuffer = finalBuffer.slice(level2_constants.COMPRESSION_RECORD_SIZE, finalBuffer.length);
             return finalBuffer;
         }
 
@@ -68,18 +69,6 @@ module.exports = function (self) {
             var size = BufferPack.calcLength(format);
             return size;
         }
-
-        const COMPRESSION_RECORD_SIZE = 12;
-        const CONTROL_WORD_SIZE = 4;
-        // Figure 1 in Interface Control Document for the Archive II/User
-        // page 7-2
-        const VOLUME_HEADER = [
-            ['tape', '9s'],
-            ['extension', '3s'],
-            ['date', 'I'],
-            ['time', 'I'],
-            ['icao', '4s']
-        ]
 
         var fh = new RandomAccessFile(ev.data);
         const buf = _decompress_records(fh);
