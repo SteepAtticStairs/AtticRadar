@@ -5,6 +5,7 @@ const product_colors = require('../colormaps/colormaps');
 function beam_height(distance_km, elevation_meters, elevation_angle) {
     var elevation = elevation_meters; // m
     var height = elevation / 1000; // km
+    height = 0; // because we're doing ARL, not MSL
     var range = distance_km; // km
     var elevAngle = elevation_angle; // 0.5;
     var earthRadius = 6374; // km
@@ -12,10 +13,11 @@ function beam_height(distance_km, elevation_meters, elevation_angle) {
     const radians = Math.PI / 180;
 
     /*
-    * Calculates the beam height MSL (mean sea level (this means above sea level)) in km.
+    // // Calculates the beam height MSL (mean sea level (this means above sea level)) in km.
+    * Calculates the beam height ARL (above radar level) in ft.
     * Formula taken from https://wx.erau.edu/faculty/mullerb/Wx365/Doppler_formulas/doppler_formulas.pdf
     */
-    var beamHeightMSL = Math.sqrt(
+    var beamHeightARL = Math.sqrt(
         Math.pow(range, 2)
         +
         Math.pow((4/3) * earthRadius + height, 2)
@@ -27,11 +29,13 @@ function beam_height(distance_km, elevation_meters, elevation_angle) {
 
     function km_to_kft(km) { return km * 3.28084 }
     function km_to_miles(km) { return km * 1.609 }
+    function km_to_ft(km) { return km * 3280.8 }
 
-    var beamHeightKFT = km_to_kft(beamHeightMSL);
-    var beamHeightMI = km_to_miles(beamHeightMSL);
+    // var beamHeightKFT = km_to_kft(beamHeightMSL);
+    // var beamHeightMI = km_to_miles(beamHeightMSL);
+    var beamHeightFT = km_to_ft(beamHeightARL);
 
-    return beamHeightMI;
+    return beamHeightFT;
 }
 
 function readPixels(gl, x, y) {
@@ -111,7 +115,7 @@ function getValue(e) {
             const current_elevation_angle = window.atticData.current_elevation_angle;
             const distance_from_radar = turf.distance(map_center_formatted, radar_location_formatted, { units: 'kilometers' });
             const beam_height_calculated = beam_height(distance_from_radar, radar_location[2], current_elevation_angle);
-            $('#colorPickerTextBeamHeight').text(`${beam_height_calculated.toFixed(1)} mi`)
+            $('#colorPickerTextBeamHeight').text(`${beam_height_calculated.toFixed(0)} ft ARL`);
         }
     }
 }
