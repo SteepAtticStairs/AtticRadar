@@ -263,9 +263,14 @@
                     <div class="armsHeader">Menu<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
                     <br>
                     <div class="armrHeader">SETTINGS</div>
-                    <div class="atticRadarMenuRow" id="armrSettingsBtn">
+                    <div class="atticRadarMenuRow armrTop" id="armrSettingsBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-gear"></i>
                         Settings
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrBottom" id="armrColortablesBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-palette"></i>
+                        Colortables
                         <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                     </div>
 
@@ -277,64 +282,37 @@
                         Upload Radar File
                         <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                     </div>
-                    <!-- <div class="armrHeader">MODE</div>
-                    <div class="atticRadarMenuRow" id="armrModeBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-sliders"></i>
-                        Change Mode
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-                    <div class="atticRadarMenuRow armrSlideDown armrText-Green" id="armrModeBtnSlideDown" style="display: none">
-                        <i class="armrIcon armrIcon-Green fa-solid fa-clock"></i>
-                        <span class="slideDownText">Current File Mode</span>
-                        <i class="toggleSwitchContainter" id="armrModeBtnSwitch"><input type="checkbox" id="armrModeBtnSwitchElem" class="toggleSwitch" /><label for="armrModeBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
-                    </div> -->
 
                     <br>
 
-                    <div class="armrHeader">TROPICAL</div>
-                    <div class="atticRadarMenuRow" id="armrHurricanesBtn">
+                    <div class="armrHeader">LAYERS</div>
+                    <div class="atticRadarMenuRow armrTop" id="armrSPCOutlooksBtn">
+                        <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
+                        SPC Outlooks
+                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="atticRadarMenuRow armrMiddle" id="armrHurricanesBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-hurricane"></i>
                         Hurricane Tracks
                         <div class="form-check form-switch">
                             <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrHurricanesBtnSwitchElem">
                         </div>
                     </div>
-
-                    <br>
-
-                    <div class="armrHeader">SPC</div>
-                    <div class="atticRadarMenuRow" id="armrSPCOutlooksBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
-                        SPC Outlooks
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-
-                    <br>
-
-                    <div class="armrHeader">MARINE</div>
-                    <div class="atticRadarMenuRow" id="armrTideStationsBtn">
+                    <div class="atticRadarMenuRow armrMiddle" id="armrTideStationsBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-ship"></i>
                         Tide Stations
                         <div class="form-check form-switch">
                             <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrTideStationsBtnSwitchElem">
                         </div>
                     </div>
-
-                    <br>
-
-                    <div class="armrHeader">ATMOSPHERE</div>
-                    <div class="atticRadarMenuRow" id="armrSurfaceFrontsBtn">
+                    <div class="atticRadarMenuRow armrMiddle" id="armrSurfaceFrontsBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-wind"></i>
                         Surface Fronts
                         <div class="form-check form-switch">
                             <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrSurfaceFrontsBtnSwitchElem">
                         </div>
                     </div>
-
-                    <br>
-
-                    <div class="armrHeader">RADIO</div>
-                    <div class="atticRadarMenuRow" id="armrWeatherRadioBtn">
+                    <div class="atticRadarMenuRow armrBottom" id="armrWeatherRadioBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-radio"></i>
                         NOAA Weather Radio
                         <div class="form-check form-switch">
@@ -493,6 +471,47 @@
                         The region based algorithm struggles with these cases, so if you find an issue with that algorithm, you should try this one.
                         <br><br>
                     </div>
+                </div>
+                <div id="atticRadarMenuColortablesScreen" class="armScreen" style="display: none">
+                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsColortablesBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Colortable Settings<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">REFLECTIVITY</div>
+                    <span>
+                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrREF1ColortableBtn" name="REF1">
+                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                        <span class="colortable_menu_text">Default</span>
+                        <div class="colortable_menu_image_preview" id="REF1_colortable_preview"></div>
+                    </div>
+                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF2ColortableBtn" name="REF2">
+                        <span class="colortable_menu_text">RadarScope</span>
+                        <div class="colortable_menu_image_preview" id="REF2_colortable_preview"></div>
+                    </div>
+                    </span>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">VELOCITY</div>
+                    <span>
+                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrVEL1ColortableBtn" name="VEL1">
+                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                        <span class="colortable_menu_text">Default</span>
+                        <div class="colortable_menu_image_preview" id="VEL1_colortable_preview"></div>
+                    </div>
+                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrVEL2ColortableBtn" name="VEL2">
+                        <span class="colortable_menu_text">Balance</span>
+                        <div class="colortable_menu_image_preview" id="VEL2_colortable_preview"></div>
+                    </div>
+                    </span>
+                    <br>
+
+                    <!-- <input type="file" id="hidden_colortable_file_uploader" style="display: none">
+                    <div class="drop_zone" id="colortable_file_drop_zone">Drop .pal colortable here</div>
+
+                    <br>
+
+                    <input type="text" id="colortable_upload_name" class="armTextInput"> -->
                 </div>
                 <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
                     <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>

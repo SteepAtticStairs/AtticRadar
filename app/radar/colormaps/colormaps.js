@@ -23,6 +23,264 @@ color: 70 178 0 255 99 0 214
 color: 75 5 236 240 1 32 32
 color: 85 1 32 32
 color: 95 1 32 32`
+const reflectivity_radarscoope = 
+`Product: BR
+Units:   DBZ
+Step:    5
+SolidColor:	-32.0		115	77	172
+SolidColor:	-31.5		115	78	168
+SolidColor:	-31.0		115	79	165
+SolidColor:	-30.5		115	81	162
+SolidColor:	-30.0		116	82	158
+SolidColor:	-29.5		116	84	155
+SolidColor:	-29.0		116	85	152
+SolidColor:	-28.5		117	86	148
+SolidColor:	-28.0		117	88	145
+SolidColor:	-27.5		117	89	142
+SolidColor:	-27.0		118	91	138
+SolidColor:	-26.5		118	92	135
+SolidColor:	-26.0		118	94	132
+SolidColor:	-25.5		119	95	128
+SolidColor:	-25.0		119	96	125
+SolidColor:	-24.5		119	98	122
+SolidColor:	-24.0		120	99	118
+SolidColor:	-23.5		120	101	115
+SolidColor:	-23.0		120	102	112
+SolidColor:	-22.5		121	103	108
+SolidColor:	-22.0		121	105	105
+SolidColor:	-21.5		121	106	102
+SolidColor:	-21.0		122	108	98
+SolidColor:	-20.5		122	109	95
+SolidColor:	-20.0		122	111	92
+SolidColor:	-19.5		123	112	88
+SolidColor:	-19.0		123	113	85
+SolidColor:	-18.5		123	115	82
+SolidColor:	-18.0		124	116	78
+SolidColor:	-17.5		124	118	75
+SolidColor:	-17.0		124	119	72
+SolidColor:	-16.5		125	121	69
+SolidColor:	-16.0		127	123	72
+SolidColor:	-15.5		129	125	75
+SolidColor:	-15.0		131	127	79
+SolidColor:	-14.5		133	130	82
+SolidColor:	-14.0		135	132	85
+SolidColor:	-13.5		137	134	89
+SolidColor:	-13.0		139	137	92
+SolidColor:	-12.5		141	139	96
+SolidColor:	-12.0		144	141	99
+SolidColor:	-11.5		146	144	102
+SolidColor:	-11.0		148	146	106
+SolidColor:	-10.5		150	148	109
+SolidColor:	-10.0		152	151	113
+SolidColor:	-9.5		154	153	116
+SolidColor:	-9.0		156	155	119
+SolidColor:	-8.5		158	158	123
+SolidColor:	-8.0		161	160	126
+SolidColor:	-7.5		163	162	130
+SolidColor:	-7.0		165	165	133
+SolidColor:	-6.5		167	167	136
+SolidColor:	-6.0		169	169	140
+SolidColor:	-5.5		171	172	143
+SolidColor:	-5.0		173	174	147
+SolidColor:	-4.5		175	176	150
+SolidColor:	-4.0		178	179	154
+SolidColor:	-3.5		173	175	153
+SolidColor:	-3.0		168	171	152
+SolidColor:	-2.5		163	167	151
+SolidColor:	-2.0		158	163	150
+SolidColor:	-1.5		154	159	149
+SolidColor:	-1.0		149	155	148
+SolidColor:	-0.5		144	151	147
+SolidColor:	 0.0		139	147	146
+SolidColor:	 0.5		135	144	145
+SolidColor:	 1.0		130	140	144
+SolidColor:	 1.5		125	136	143
+SolidColor:	 2.0		120	132	142
+SolidColor:	 2.5		115	128	142
+SolidColor:	 3.0		111	124	141
+SolidColor:	 3.5		106	120	140
+SolidColor:	 4.0		101	116	139
+SolidColor:	 4.5		96	112	138
+SolidColor:	 5.0		92	109	137
+SolidColor:	 5.5		87	105	136
+SolidColor:	 6.0		82	101	135
+SolidColor:	 6.5		77	97	134
+SolidColor:	 7.0		73	93	133
+SolidColor:	 7.5		68	89	132
+SolidColor:	 8.0		63	85	131
+SolidColor:	 8.5		58	81	130
+SolidColor:	 9.0		54	78	130
+SolidColor:	 9.5		55	81	132
+SolidColor:	10.0		57	85	134
+SolidColor:	10.5		59	89	136
+SolidColor:	11.0		61	93	138
+SolidColor:	11.5		63	97	141
+SolidColor:	12.0		65	101	143
+SolidColor:	12.5		67	105	145
+SolidColor:	13.0		69	109	147
+SolidColor:	13.5		71	113	149
+SolidColor:	14.0		73	117	152
+SolidColor:	14.5		74	121	154
+SolidColor:	15.0		76	125	156
+SolidColor:	15.5		78	129	158
+SolidColor:	16.0		80	133	160
+SolidColor:	16.5		82	137	163
+SolidColor:	17.0		84	141	165
+SolidColor:	17.5		86	145	167
+SolidColor:	18.0		88	149	169
+SolidColor:	18.5		90	153	171
+SolidColor:	19.0		92	157	174
+SolidColor:	19.5		76	165	142
+SolidColor:	20.0		60	173	110
+SolidColor:	20.5		45	182	78
+SolidColor:	21.0		42	175	72
+SolidColor:	21.5		39	169	67
+SolidColor:	22.0		37	163	62
+SolidColor:	22.5		34	156	56
+SolidColor:	23.0		31	150	51
+SolidColor:	23.5		29	144	46
+SolidColor:	24.0		26	137	40
+SolidColor:	24.5		24	131	35
+SolidColor:	25.0		21	125	30
+SolidColor:	25.5		18	118	24
+SolidColor:	26.0		16	112	19
+SolidColor:	26.5		13	106	14
+SolidColor:	27.0		11	100	9
+SolidColor:	27.5		35	115	8
+SolidColor:	28.0		59	130	7
+SolidColor:	28.5		83	145	6
+SolidColor:	29.0		107	161	5
+SolidColor:	29.5		131	176	4
+SolidColor:	30.0		155	191	3
+SolidColor:	30.5		179	207	2
+SolidColor:	31.0		203	222	1
+SolidColor:	31.5		227	237	0
+SolidColor:	32.0		252	253	0
+SolidColor:	32.5		248	248	0
+SolidColor:	33.0		244	243	0
+SolidColor:	33.5		241	238	0
+SolidColor:	34.0		237	233	0
+SolidColor:	34.5		233	228	0
+SolidColor:	35.0		230	223	0
+SolidColor:	35.5		226	218	0
+SolidColor:	36.0		222	213	0
+SolidColor:	36.5		219	208	0
+SolidColor:	37.0		215	203	0
+SolidColor:	37.5		211	198	0
+SolidColor:	38.0		208	193	0
+SolidColor:	38.5		204	188	0
+SolidColor:	39.0		200	183	0
+SolidColor:	39.5		197	179	0
+SolidColor:	40.0		250	148	0
+SolidColor:	40.5		246	144	0
+SolidColor:	41.0		242	141	1
+SolidColor:	41.5		238	138	1
+SolidColor:	42.0		234	135	2
+SolidColor:	42.5		231	132	3
+SolidColor:	43.0		227	129	3
+SolidColor:	43.5		223	126	4
+SolidColor:	44.0		219	123	5
+SolidColor:	44.5		215	120	5
+SolidColor:	45.0		212	116	6
+SolidColor:	45.5		208	113	6
+SolidColor:	46.0		204	110	7
+SolidColor:	46.5		200	107	8
+SolidColor:	47.0		196	104	8
+SolidColor:	47.5		193	101	9
+SolidColor:	48.0		189	98	10
+SolidColor:	48.5		185	95	10
+SolidColor:	49.0		181	92	11
+SolidColor:	49.5		178	89	12
+SolidColor:	50.0		249	35	11
+SolidColor:	50.5		242	35	12
+SolidColor:	51.0		236	35	13
+SolidColor:	51.5		230	35	14
+SolidColor:	52.0		223	36	15
+SolidColor:	52.5		217	36	16
+SolidColor:	53.0		211	36	17
+SolidColor:	53.5		205	36	18
+SolidColor:	54.0		198	37	19
+SolidColor:	54.5		192	37	20
+SolidColor:	55.0		186	37	22
+SolidColor:	55.5		180	37	23
+SolidColor:	56.0		173	38	24
+SolidColor:	56.5		167	38	25
+SolidColor:	57.0		161	38	26
+SolidColor:	57.5		155	38	27
+SolidColor:	58.0		148	39	28
+SolidColor:	58.5		142	39	29
+SolidColor:	59.0		136	39	30
+SolidColor:	59.5		130	40	32
+SolidColor:	60.0		202	153	180
+SolidColor:	60.5		201	146	176
+SolidColor:	61.0		201	139	173
+SolidColor:	61.5		200	133	169
+SolidColor:	62.0		200	126	166
+SolidColor:	62.5		199	120	162
+SolidColor:	63.0		199	113	159
+SolidColor:	63.5		199	106	155
+SolidColor:	64.0		198	100	152
+SolidColor:	64.5		198	93	148
+SolidColor:	65.0		197	87	145
+SolidColor:	65.5		197	80	141
+SolidColor:	66.0		196	74	138
+SolidColor:	66.5		196	67	134
+SolidColor:	67.0		196	60	131
+SolidColor:	67.5		195	54	127
+SolidColor:	68.0		195	47	124
+SolidColor:	68.5		194	41	120
+SolidColor:	69.0		194	34	117
+SolidColor:	69.5		194	28	114
+SolidColor:	70.0		154	36	224
+SolidColor:	70.5		149	34	219
+SolidColor:	71.0		144	33	215
+SolidColor:	71.5		139	32	210
+SolidColor:	72.0		134	31	206
+SolidColor:	72.5		129	30	201
+SolidColor:	73.0		124	29	197
+SolidColor:	73.5		120	28	193
+SolidColor:	74.0		115	27	188
+SolidColor:	74.5		110	26	184
+SolidColor:	75.0		105	24	179
+SolidColor:	75.5		100	23	175
+SolidColor:	76.0		95	22	170
+SolidColor:	76.5		91	21	166
+SolidColor:	77.0		86	20	162
+SolidColor:	77.5		81	19	157
+SolidColor:	78.0		76	18	153
+SolidColor:	78.5		71	17	148
+SolidColor:	79.0		66	16	144
+SolidColor:	79.5		62	15	140
+SolidColor:	80.0		132	253	255
+SolidColor:	80.5		128	245	249
+SolidColor:	81.0		125	238	243
+SolidColor:	81.5		121	231	237
+SolidColor:	82.0		118	224	231
+SolidColor:	82.5		115	217	225
+SolidColor:	83.0		111	210	219
+SolidColor:	83.5		108	203	213
+SolidColor:	84.0		105	196	207
+SolidColor:	84.5		101	189	201
+SolidColor:	85.0		98	181	196
+SolidColor:	85.5		94	174	190
+SolidColor:	86.0		91	167	184
+SolidColor:	86.5		88	160	178
+SolidColor:	87.0		84	153	172
+SolidColor:	87.5		81	146	166
+SolidColor:	88.0		78	139	160
+SolidColor:	88.5		74	132	154
+SolidColor:	89.0		71	125	148
+SolidColor:	89.5		68	118	143
+SolidColor:	90.0		161	101	73
+SolidColor:	90.5		155	90	65
+SolidColor:	91.0		150	80	56
+SolidColor:	91.5		145	70	48
+SolidColor:	92.0		140	60	40
+SolidColor:	92.5		135	50	32
+SolidColor:	93.0		130	40	24
+SolidColor:	93.5		125	30	16
+SolidColor:	94.0		120	20	8
+SolidColor:	94.5		115	10	1`
 
 const velocity = 
 `Product:bv
@@ -50,6 +308,266 @@ color: 120 110 14 9
 color: 140 0 0 0
 
 RF: 139 0 218`
+const velocity_balance = 
+`Product: BV
+Units:   ???
+Step:    5
+RF:      127	0	207
+SolidColor:	1	25	30	70
+SolidColor:	2	26	31	73
+SolidColor:	3	27	33	76
+SolidColor:	4	28	34	79
+SolidColor:	5	29	35	82
+SolidColor:	6	30	37	85
+SolidColor:	7	31	38	88
+SolidColor:	8	32	39	91
+SolidColor:	9	33	41	95
+SolidColor:	10	33	42	98
+SolidColor:	11	34	43	101
+SolidColor:	12	35	45	105
+SolidColor:	13	36	46	108
+SolidColor:	14	37	47	111
+SolidColor:	15	37	48	115
+SolidColor:	16	38	50	118
+SolidColor:	17	39	51	122
+SolidColor:	18	39	52	125
+SolidColor:	19	40	54	129
+SolidColor:	20	40	55	132
+SolidColor:	21	41	56	136
+SolidColor:	22	41	58	140
+SolidColor:	23	41	59	143
+SolidColor:	24	41	60	147
+SolidColor:	25	41	62	151
+SolidColor:	26	41	63	154
+SolidColor:	27	41	64	158
+SolidColor:	28	41	66	162
+SolidColor:	29	40	67	165
+SolidColor:	30	39	69	169
+SolidColor:	31	38	71	172
+SolidColor:	32	37	72	176
+SolidColor:	33	35	74	179
+SolidColor:	34	33	76	182
+SolidColor:	35	31	78	184
+SolidColor:	36	28	80	186
+SolidColor:	37	25	82	188
+SolidColor:	38	22	85	189
+SolidColor:	39	19	87	190
+SolidColor:	40	16	89	190
+SolidColor:	41	13	91	190
+SolidColor:	42	12	94	190
+SolidColor:	43	10	96	190
+SolidColor:	44	10	98	190
+SolidColor:	45	10	100	190
+SolidColor:	46	11	102	189
+SolidColor:	47	13	104	189
+SolidColor:	48	15	106	189
+SolidColor:	49	17	108	188
+SolidColor:	50	19	110	188
+SolidColor:	51	22	112	188
+SolidColor:	52	25	114	187
+SolidColor:	53	27	116	187
+SolidColor:	54	30	118	187
+SolidColor:	55	33	120	187
+SolidColor:	56	35	122	186
+SolidColor:	57	38	123	186
+SolidColor:	58	41	125	186
+SolidColor:	59	43	127	186
+SolidColor:	60	46	129	186
+SolidColor:	61	48	131	186
+SolidColor:	62	51	132	186
+SolidColor:	63	54	134	186
+SolidColor:	64	56	136	186
+SolidColor:	65	59	137	186
+SolidColor:	66	62	139	186
+SolidColor:	67	64	141	186
+SolidColor:	68	67	143	186
+SolidColor:	69	70	144	186
+SolidColor:	70	72	146	186
+SolidColor:	71	75	148	186
+SolidColor:	72	78	149	186
+SolidColor:	73	81	151	186
+SolidColor:	74	83	153	186
+SolidColor:	75	86	154	187
+SolidColor:	76	89	156	187
+SolidColor:	77	92	157	187
+SolidColor:	78	95	159	187
+SolidColor:	79	98	160	187
+SolidColor:	80	101	162	188
+SolidColor:	81	104	164	188
+SolidColor:	82	107	165	188
+SolidColor:	83	110	167	189
+SolidColor:	84	113	168	189
+SolidColor:	85	117	170	190
+SolidColor:	86	120	171	190
+SolidColor:	87	123	172	191
+SolidColor:	88	126	174	191
+SolidColor:	89	129	175	192
+SolidColor:	90	133	177	192
+SolidColor:	91	136	178	193
+SolidColor:	92	139	180	194
+SolidColor:	93	142	181	195
+SolidColor:	94	145	183	195
+SolidColor:	95	148	184	196
+SolidColor:	96	152	186	197
+SolidColor:	97	155	187	198
+SolidColor:	98	158	188	199
+SolidColor:	99	161	190	200
+SolidColor:	100	164	191	201
+SolidColor:	101	167	193	202
+SolidColor:	102	170	194	203
+SolidColor:	103	173	196	204
+SolidColor:	104	176	197	205
+SolidColor:	105	179	199	206
+SolidColor:	106	182	201	207
+SolidColor:	107	185	202	208
+SolidColor:	108	188	204	210
+SolidColor:	109	191	205	211
+SolidColor:	110	193	207	212
+SolidColor:	111	196	208	213
+SolidColor:	112	199	210	215
+SolidColor:	113	202	212	216
+SolidColor:	114	205	213	217
+SolidColor:	115	208	215	218
+SolidColor:	116	211	217	220
+SolidColor:	117	213	218	221
+SolidColor:	118	216	220	222
+SolidColor:	119	219	222	224
+SolidColor:	120	222	224	225
+SolidColor:	121	225	225	227
+SolidColor:	122	227	227	228
+SolidColor:	123	230	229	230
+SolidColor:	124	233	231	231
+SolidColor:	125	235	233	233
+SolidColor:	126	238	234	234
+SolidColor:	127	241	236	236
+SolidColor:	128	241	236	235
+SolidColor:	129	240	234	233
+SolidColor:	130	239	232	230
+SolidColor:	131	238	229	227
+SolidColor:	132	237	227	224
+SolidColor:	133	236	224	222
+SolidColor:	134	235	222	219
+SolidColor:	135	234	220	216
+SolidColor:	136	233	217	213
+SolidColor:	137	232	215	210
+SolidColor:	138	231	213	207
+SolidColor:	139	230	210	205
+SolidColor:	140	229	208	202
+SolidColor:	141	229	206	199
+SolidColor:	142	228	203	196
+SolidColor:	143	227	201	193
+SolidColor:	144	226	199	190
+SolidColor:	145	225	196	187
+SolidColor:	146	225	194	184
+SolidColor:	147	224	192	181
+SolidColor:	148	223	189	178
+SolidColor:	149	223	187	176
+SolidColor:	150	222	185	173
+SolidColor:	151	221	182	170
+SolidColor:	152	220	180	167
+SolidColor:	153	220	178	164
+SolidColor:	154	219	175	161
+SolidColor:	155	218	173	158
+SolidColor:	156	218	171	155
+SolidColor:	157	217	169	152
+SolidColor:	158	216	166	150
+SolidColor:	159	216	164	147
+SolidColor:	160	215	162	144
+SolidColor:	161	214	159	141
+SolidColor:	162	214	157	138
+SolidColor:	163	213	155	135
+SolidColor:	164	212	153	132
+SolidColor:	165	211	150	129
+SolidColor:	166	211	148	127
+SolidColor:	167	210	146	124
+SolidColor:	168	209	143	121
+SolidColor:	169	209	141	118
+SolidColor:	170	208	139	115
+SolidColor:	171	207	137	112
+SolidColor:	172	207	134	110
+SolidColor:	173	206	132	107
+SolidColor:	174	205	130	104
+SolidColor:	175	205	127	101
+SolidColor:	176	204	125	99
+SolidColor:	177	203	123	96
+SolidColor:	178	202	121	93
+SolidColor:	179	202	118	91
+SolidColor:	180	201	116	88
+SolidColor:	181	200	114	85
+SolidColor:	182	199	111	83
+SolidColor:	183	199	109	80
+SolidColor:	184	198	107	77
+SolidColor:	185	197	104	75
+SolidColor:	186	196	102	72
+SolidColor:	187	195	99	70
+SolidColor:	188	195	97	67
+SolidColor:	189	194	95	65
+SolidColor:	190	193	92	63
+SolidColor:	191	192	90	60
+SolidColor:	192	191	87	58
+SolidColor:	193	190	85	56
+SolidColor:	194	190	82	54
+SolidColor:	195	189	80	52
+SolidColor:	196	188	77	50
+SolidColor:	197	187	75	48
+SolidColor:	198	186	72	46
+SolidColor:	199	185	69	44
+SolidColor:	200	184	67	43
+SolidColor:	201	183	64	41
+SolidColor:	202	182	61	40
+SolidColor:	203	180	59	39
+SolidColor:	204	179	56	38
+SolidColor:	205	178	53	37
+SolidColor:	206	177	51	37
+SolidColor:	207	175	48	36
+SolidColor:	208	174	46	36
+SolidColor:	209	172	43	36
+SolidColor:	210	171	41	36
+SolidColor:	211	169	38	36
+SolidColor:	212	167	36	36
+SolidColor:	213	165	33	37
+SolidColor:	214	163	31	37
+SolidColor:	215	161	29	37
+SolidColor:	216	159	27	38
+SolidColor:	217	157	25	38
+SolidColor:	218	155	23	39
+SolidColor:	219	153	22	39
+SolidColor:	220	151	20	40
+SolidColor:	221	148	19	40
+SolidColor:	222	146	18	40
+SolidColor:	223	144	16	41
+SolidColor:	224	141	16	41
+SolidColor:	225	139	15	41
+SolidColor:	226	136	15	41
+SolidColor:	227	134	14	41
+SolidColor:	228	131	14	41
+SolidColor:	229	128	14	41
+SolidColor:	230	126	14	41
+SolidColor:	231	123	14	41
+SolidColor:	232	120	14	40
+SolidColor:	233	118	14	40
+SolidColor:	234	115	14	39
+SolidColor:	235	112	14	39
+SolidColor:	236	109	14	38
+SolidColor:	237	107	15	37
+SolidColor:	238	104	15	37
+SolidColor:	239	101	15	36
+SolidColor:	240	99	14	35
+SolidColor:	241	96	14	34
+SolidColor:	242	94	14	33
+SolidColor:	243	91	14	32
+SolidColor:	244	88	14	31
+SolidColor:	245	86	14	30
+SolidColor:	246	83	13	29
+SolidColor:	247	81	13	28
+SolidColor:	248	78	13	27
+SolidColor:	249	75	12	25
+SolidColor:	250	73	12	24
+SolidColor:	251	70	11	23
+SolidColor:	252	68	11	22
+SolidColor:	253	65	10	20
+SolidColor:	254	63	10	19`
+
 const diff_reflectivity = 
 `Product: ZDR
 Units:   DB
@@ -310,6 +828,7 @@ SolidColor:	 7.689	254	246	250
 SolidColor:	 7.751	254	250	252
 SolidColor:	 7.813	255	255	255
 SolidColor:	 7.875	255	255	255`
+
 const corr_coeff = 
 `Product: CC
 Units:	 NONE
@@ -569,6 +1088,7 @@ SolidColor:	1.038	235	148	191
 SolidColor:	1.041	242	160	200
 SolidColor:	1.045	250	172	209
 SolidColor:	1.048	255	255	255`
+
 const spectrum_width = {
     colors: [
         '#242424',
@@ -587,6 +1107,7 @@ const spectrum_width = {
         // 0, 10, 15, 20, 25, 30, 35, 40, 60
     ],
 }
+
 const hydrometer_class = 
 `Product: HC
 Units:   NONE
@@ -607,6 +1128,7 @@ SolidColor:	120	255	255	  0
 SolidColor:	130	  0	  0	  0
 SolidColor:	140	231	  0	255
 SolidColor:	150	119	  0	125`
+
 const specific_differential_phase = 
 `Product: KDP
 Units:   Deg/km
@@ -866,6 +1388,7 @@ SolidColor:	 9.81	255	253	250
 SolidColor:	 9.86	255	254	252
 SolidColor:	 9.90	255	255	255
 SolidColor:	 9.95	255	255	255`
+
 const vertically_integrated_liquid = {
     colors: [
         'rgb(132, 132, 132)',
@@ -901,7 +1424,7 @@ const vertically_integrated_liquid = {
  * This is the main object that contains
  * the colormaps for all products.
  */
-const productColors = {
+const product_colors = {
     range_folded: range_folded,
     range_folded_val: range_folded_val,
 
@@ -1049,6 +1572,32 @@ const productColors = {
     N1K: colortable_parser(specific_differential_phase),
     N2K: colortable_parser(specific_differential_phase),
     N3K: colortable_parser(specific_differential_phase),
+
+
+    // these are for the colortable menu
+    REF1: colortable_parser(reflectivity),
+    REF2: colortable_parser(reflectivity_radarscoope),
+    VEL1: colortable_parser(velocity),
+    VEL2: {
+        colors: [
+            'rgb(24, 28, 67)', // -120
+            'rgb(41, 56, 136)', // -100
+            'rgb(12, 94, 190)', // -80
+            'rgb(56, 136, 186)', // -60
+            'rgb(117, 170, 190)', // -40
+            'rgb(182, 201, 207)', // -20
+            'rgb(241, 236, 235)', // 0
+            'rgb(223, 187, 176)', // 20
+            'rgb(208, 139, 115)', // 40
+            'rgb(191, 87, 58)', // 60
+            'rgb(165, 33, 37)', // 80
+            'rgb(115, 14, 39)', // 100
+            'rgb(60, 9, 18)' // 120
+        ],
+        values: [
+            -120, -100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100, 120
+        ],
+    },
 }
 
-module.exports = productColors;
+module.exports = product_colors;

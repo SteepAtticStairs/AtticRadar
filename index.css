@@ -271,7 +271,7 @@ https://tobiasahlin.com/spinkit/
     cursor: pointer;
 }
 
-#drop_zone {
+.drop_zone {
     height: 100px;
     width: auto;
     /* top right bottom left */
@@ -1048,6 +1048,15 @@ https://tobiasahlin.com/spinkit/
     margin-left: 0px;
 }
 
+.armTextInput {
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 20px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    color: #aeaeae;
+    outline: none;
+}
+
 .toggleSwitch[type=checkbox] {
     height: 0;
     width: 0;
@@ -1613,4 +1622,20 @@ td.day.active, span.month.active, span.year.active {
     border-radius: 15px;
     font-size: 12px;
     display: none;
+}
+
+.colortableRow {
+    height: calc(var(--bs-body-line-height) * 16px);
+}
+.colortable_menu_image_preview {
+    position: absolute;
+    height: calc(var(--bs-body-line-height) * 16px);
+    width: 1000px;
+    max-width: 30%;
+    background-color: red;
+    right: 15px;
+}
+.colortable_menu_text {
+    position: absolute;
+    left: calc(15px * 3);
 }
