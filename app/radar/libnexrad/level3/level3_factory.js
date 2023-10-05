@@ -162,6 +162,7 @@ class Level3Factory {
             plot_tornado_vortex_signature(this);
         } else {
             this.display_file_info();
+            window.atticData.nexrad_factory = this;
             calculate_coordinates(this);
         }
     }

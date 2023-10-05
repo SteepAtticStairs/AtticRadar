@@ -270,6 +270,11 @@ class Level2Factory {
 
         this.display_file_info();
         const options = {'product': moment, 'elevation': elevation_number};
+
+        window.atticData.nexrad_factory_moment = moment
+        window.atticData.nexrad_factory_elevation_number = elevation_number;
+        window.atticData.nexrad_factory = this;
+
         calculate_coordinates(this, options);
     }
 

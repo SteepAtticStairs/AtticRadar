@@ -53,4 +53,13 @@ function change_colortable(product, new_ctable) {
         product_colors[cur_product].colors = colors;
         product_colors[cur_product].values = values;
     }
+
+    var a_d = window.atticData;
+    if (a_d?.nexrad_factory != undefined) {
+        if (a_d.nexrad_factory.nexrad_level == 3) {
+            a_d.nexrad_factory.plot();
+        } else {
+            a_d.nexrad_factory.plot(a_d.nexrad_factory_moment, a_d.nexrad_factory_elevation_number);
+        }
+    }
 }
