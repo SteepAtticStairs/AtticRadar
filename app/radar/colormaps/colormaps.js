@@ -23,7 +23,7 @@ color: 70 178 0 255 99 0 214
 color: 75 5 236 240 1 32 32
 color: 85 1 32 32
 color: 95 1 32 32`
-const reflectivity_radarscoope = 
+const reflectivity_radarscope = 
 `Product: BR
 Units:   DBZ
 Step:    5
@@ -1576,7 +1576,7 @@ const product_colors = {
 
     // these are for the colortable menu
     REF1: colortable_parser(reflectivity),
-    REF2: colortable_parser(reflectivity_radarscoope),
+    REF2: colortable_parser(reflectivity_radarscope),
     VEL1: colortable_parser(velocity),
     VEL2: {
         colors: [

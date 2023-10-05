@@ -16,8 +16,8 @@ function create_css_gradient(colors, values) {
 }
 
 const lookup = {
-    'REF': ['N0B', 'N1B', 'N2B', 'N3B', 'REF', 'TZL', 'TZ0', 'TZ1', 'TZ2', 'TZ3'],
-    'VEL': ['N0G', 'N1G', 'N2G', 'N3G', 'NAG', 'NBG', 'N0U', 'N1U', 'N2U', 'N3U', 'TV0', 'TV1', 'TV2']
+    'REF': ['REF', 'N0B', 'N1B', 'N2B', 'N3B', 'TZL', 'TZ0', 'TZ1', 'TZ2', 'TZ3'],
+    'VEL': ['VEL', 'N0G', 'N1G', 'N2G', 'N3G', 'NAG', 'NBG', 'N0U', 'N1U', 'N2U', 'N3U', 'TV0', 'TV1', 'TV2']
 }
 const ctables = [
     'REF1', 'REF2',
