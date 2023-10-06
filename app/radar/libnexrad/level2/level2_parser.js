@@ -7,6 +7,7 @@ const BufferPack = require('bufferpack');
 const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
 const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const level2_constants = require('./level2_constants');
+const progress_bar = require('../../../core/misc/progress_bar');
 
 const work = require('webworkify');
 const decompress_worker = require('./decompress_worker');
@@ -42,11 +43,19 @@ function _bufferToString(buffer) {
 function _handle_compression(fh, compression_or_ctm_info, callback) {
     var buf;
     if (_bufferToString(compression_or_ctm_info) == 'BZ') {
+        progress_bar.show_progress_bar();
         // buf = _decompress_records(fh);
         const w = work(decompress_worker);
         w.addEventListener('message', function (ev) {
-            buf = ev.data;
-            callback(buf);
+            if (ev.data.message == 'finish') {
+                buf = ev.data.data;
+                callback(buf);
+                progress_bar.hide_progress_bar();
+            } else if (ev.data.message == 'progress') {
+                const percent = ev.data.data;
+                progress_bar.set_progress_bar_width(percent);
+                progress_bar.set_progress_bar_text(`Loading... ${percent}%`);
+            }
         })
         w.postMessage(fh.buffer/*, [fh.buffer]*/);
     } else if (_arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x00, 0x00])) || _arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x09, 0x80]))) {

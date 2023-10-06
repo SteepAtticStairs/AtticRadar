@@ -266,10 +266,11 @@ function level_3_plot_from_url(url, callback = null) {
  * @param {ArrayBuffer} arraybuffer - An ArrayBuffer which contains the data of the radar file.
  * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L2Factory class.
  */
-function return_level_2_factory_from_buffer(arraybuffer, filename, callback) {
-    const file = new NEXRADLevel2File(arraybuffer, filename);
-    const L2Factory = new Level2Factory(file);
-    callback(L2Factory);
+function return_level_2_factory_from_buffer(arraybuffer, callback, filename) {
+    new NEXRADLevel2File(arraybuffer, (file) => {
+        const L2Factory = new Level2Factory(file);
+        callback(L2Factory);
+    }, filename);
 }
 
 module.exports = {

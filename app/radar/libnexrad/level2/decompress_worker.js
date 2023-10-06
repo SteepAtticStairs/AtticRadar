@@ -3,8 +3,16 @@ const RandomAccessFile = require('../buffer_tools/RandomAccessFile');
 const BufferPack = require('bufferpack');
 const level2_constants = require('./level2_constants');
 
+function _structure_size(structure) {
+    /* Find the size of a structure in bytes. */
+    var format = '>' + structure.map(i => i[1]).join('');
+    var size = BufferPack.calcLength(format);
+    return size;
+}
+
 module.exports = function (self) {
     self.addEventListener('message', function (ev) {
+        var seen_length = 0;
         class RadarDecompressor {
             constructor() {
                 this.unused_data;
@@ -22,7 +30,12 @@ module.exports = function (self) {
 
                 var rafData = new RandomAccessFile(data);
                 var blockSize = Math.abs(rafData.readInt());
-                // console.log(blockSize);
+
+                var block_percent = blockSize / ev.data.length;
+                seen_length += block_percent;
+                var percent_loaded = parseFloat((seen_length * 100).toFixed(1));
+                if (percent_loaded > 100) { percent_loaded = 100 }
+                self.postMessage({ 'message': 'progress', 'data': percent_loaded });
 
                 data = data.slice(level2_constants.CONTROL_WORD_SIZE, data.length);
                 var uncompressed = this._decompress_chunk(data);
@@ -63,16 +76,9 @@ module.exports = function (self) {
             return finalBuffer;
         }
 
-        function _structure_size(structure) {
-            /* Find the size of a structure in bytes. */
-            var format = '>' + structure.map(i => i[1]).join('');
-            var size = BufferPack.calcLength(format);
-            return size;
-        }
-
         var fh = new RandomAccessFile(ev.data);
         const buf = _decompress_records(fh);
 
-        self.postMessage(buf);
+        self.postMessage({ 'message': 'finish', 'data': buf });
     })
 }
