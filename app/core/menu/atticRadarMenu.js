@@ -127,6 +127,7 @@ var mainMenuScreen = '#atticRadarMenuMainScreen';
 var settingsScreen = '#atticRadarMenuSettingsScreen';
 var spcScreen = '#atticRadarMenuSPCScreen';
 var dealiasScreen = '#atticRadarMenuDealiasScreen';
+var colortablesScreen = '#atticRadarMenuColortablesScreen';
 
 $('#armrSettingsBtn').click(function() {
     $(mainMenuScreen).fadeOut(fadeDuration, function() {
@@ -180,6 +181,21 @@ $('#armsDealiasBackBtn').click(function() {
     $(mainMenuScreen).fadeOut(fadeDuration, function() {
         $(dealiasScreen).fadeOut(fadeDuration, function() {
             $(settingsScreen).scrollTop(0).fadeIn(fadeDuration);
+        });
+    });
+})
+
+$('#armrColortablesBtn').click(function() {
+    $(mainMenuScreen).fadeOut(fadeDuration, function() {
+        $(settingsScreen).fadeOut(fadeDuration, function() {
+            $(colortablesScreen).fadeIn(fadeDuration);
+        });
+    });
+})
+$('#armsColortablesBackBtn').click(function() {
+    $(settingsScreen).fadeOut(fadeDuration, function() {
+        $(colortablesScreen).fadeOut(fadeDuration, function() {
+            $(mainMenuScreen).scrollTop(0).fadeIn(fadeDuration);
         });
     });
 })

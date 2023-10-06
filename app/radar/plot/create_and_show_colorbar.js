@@ -71,14 +71,25 @@ function create_and_show_colorbar(colors, values) {
     var cmin = values[0];
     var clen = colors.length;
 
-    var gradColors = '';
+    var gradColors = 'linear-gradient(to right, ';
     for (var i = 0; i < clen; ++i) {
         actualGradient.addColorStop((values[i] - cmin) / (cmax - cmin), colors[i]);
         visualGradient.addColorStop((values[i] - cmin) / (cmax - cmin), colors[i]);
 
-        var curPercent = (((values[i] - cmin) / (cmax - cmin)) * 100);
-        gradColors += `${colors[i]} ${curPercent}%`;
-        if (!(i == clen - 1)) { gradColors += ',\n' }
+        const is_last_iter = (i == clen - 1);
+        const should_start_new = i != 0 && i % 10 == 0;
+
+        var cur_percent = (((values[i] - cmin) / (cmax - cmin)) * 100);
+        gradColors += `${colors[i]} ${cur_percent}%`;
+        if (!is_last_iter) {
+            gradColors += ',\n'
+        } else if (is_last_iter) {
+            gradColors += ');';
+        }
+        if (should_start_new && !is_last_iter) {
+            gradColors += 
+`rgba(0, 0, 0, 0) ${cur_percent}%,\nrgba(0, 0, 0, 0) 100%),\nlinear-gradient(to right, ${colors[i]} ${cur_percent}%,\n`;
+        }
     }
     actualCTX.fillStyle = actualGradient;
     //visualCTX.fillStyle = visualGradient;
@@ -90,10 +101,7 @@ function create_and_show_colorbar(colors, values) {
         .prop('type', 'text/css')
         .html(`
         #mapColorScale {
-            background: linear-gradient(
-                to right,
-                ${gradColors}
-            );
+            background: ${gradColors}
         }`)
         .appendTo('head');
 

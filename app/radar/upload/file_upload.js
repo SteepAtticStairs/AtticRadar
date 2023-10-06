@@ -82,14 +82,14 @@ function dragLeave(thisObj) {
 }
 
 function init_event_listeners() {
-    $('#hiddenFileUploader').on('input', () => {
-        var files = document.getElementById('hiddenFileUploader').files;
+    $('#hidden_radar_file_uploader').on('input', () => {
+        var files = document.getElementById('hidden_radar_file_uploader').files;
         window.atticData.uploaded_file_name = files[0].name;
 
         load_file(files);
     })
 
-    const drop_zone = document.getElementById('drop_zone');
+    const drop_zone = document.getElementById('radar_file_drop_zone');
     drop_zone.addEventListener('dragover', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -104,24 +104,24 @@ function init_event_listeners() {
         load_file(files);
     }, false);
 
-    $('#drop_zone').on('mouseenter', function(e) {
+    $('#radar_file_drop_zone').on('mouseenter', function(e) {
         $(this).animate({
             backgroundColor: 'rgb(150, 150, 150)',
         }, 150);
     })
-    $('#drop_zone').on('mouseleave', function(e) {
+    $('#radar_file_drop_zone').on('mouseleave', function(e) {
         $(this).animate({
             backgroundColor: 'rgba(0, 0, 0, 0)',
         }, 150);
     })
-    $('#drop_zone').on('dragenter', function(e) {
+    $('#radar_file_drop_zone').on('dragenter', function(e) {
         dragEnter(this);
     })
-    $('#drop_zone').on('dragleave drop', function(e) {
+    $('#radar_file_drop_zone').on('dragleave drop', function(e) {
         dragLeave(this);
     })
-    $('#drop_zone').on('click', function(e) {
-        $('#hiddenFileUploader').click();
+    $('#radar_file_drop_zone').on('click', function(e) {
+        $('#hidden_radar_file_uploader').click();
     })
 
     // // $('#dataDiv').data('currentLevelInput', '2');

@@ -3,8 +3,8 @@ const arm_functions = require('../../core/menu/atticRadarMenu');
 const init_event_listeners = require('./file_upload');
 
 const upload_dialog_content = 
-`<input type="file" id="hiddenFileUploader" style="display: none">\
-<div id="drop_zone">Drop NEXRAD file here</div>`
+`<input type="file" id="hidden_radar_file_uploader" style="display: none">\
+<div class="drop_zone" id="radar_file_drop_zone">Drop NEXRAD file here</div>`
 
 $('#armrUploadFileBtn').click(() => {
     arm_functions.hideARMwindow();

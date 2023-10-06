@@ -66,6 +66,9 @@ function load() {
     // load the attribution map div
     require('../attribution/attribution');
 
+    // load the colortable menu
+    require('../../radar/colormaps/menu');
+
     // document.addEventListener('keyup', event => {
     //     if (event.code === 'Space') {
     //         // const image_url = map.getCanvas().toDataURL();

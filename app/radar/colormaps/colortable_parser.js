@@ -2,22 +2,22 @@
 function colortable_parser(colortable_string, should_print = false) {
     // console.log(colortable_string);
 
-    const colors = [];
-    const values = [];
+    var colors = [];
+    var values = [];
     var range_fold = undefined;
 
     // this removes empty lines and splits at new lines.
     // https://stackoverflow.com/a/16369666/18758797
-    const lines = colortable_string.replace(/(^[ \t]*\n)/gm, '').split('\n');
+    const lines = colortable_string.replace(/(^[ \t]*\n)/gm, '').replaceAll('\r', '\n').split('\n');
     for (var i = 0; i < lines.length; i++) {
         const prev_line = lines[i - 1]?.toLowerCase();
         const cur_line = lines[i].toLowerCase();
         const next_line = lines[i + 1]?.toLowerCase();
         if (['color', 'color4', 'solidcolor', 'solidcolor4', 'rf'].some(prefix => cur_line.startsWith(prefix))) {
             // https://stackoverflow.com/a/32727737/18758797
-            const prev_line_parts = prev_line?.split(/\s+/);
-            const line_parts = cur_line.split(/\s+/);
-            const next_line_parts = next_line?.split(/\s+/);
+            const prev_line_parts = prev_line?.replaceAll(',', '').split(/\s+/).filter(n => n);
+            const line_parts = cur_line.replaceAll(',', '').split(/\s+/).filter(n => n);
+            const next_line_parts = next_line?.replaceAll(',', '').split(/\s+/).filter(n => n);
             const prefix = line_parts[0];
             var has_alpha = false;
             if (prefix.includes('4')) { has_alpha = true; }
