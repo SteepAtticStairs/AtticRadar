@@ -473,12 +473,12 @@
                     </div>
                 </div>
                 <div id="atticRadarMenuColortablesScreen" class="armScreen" style="display: none">
-                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsColortablesBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Colortable Settings<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
+                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsColortablesBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Colortable Settings (BETA)<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
 
                     <br>
 
-                    <div class="armrHeader armrHeaderWide">REFLECTIVITY</div>
-                    <span>
+                    <div class="armrHeader armrHeaderWide">Reflectivity&nbsp;&nbsp;<i name="REF" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                    <span id="REF_ctable_options">
                     <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrREF1ColortableBtn" name="REF1">
                         <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
                         <span class="colortable_menu_text">Default</span>
@@ -492,8 +492,8 @@
 
                     <br>
 
-                    <div class="armrHeader armrHeaderWide">VELOCITY</div>
-                    <span>
+                    <div class="armrHeader armrHeaderWide">Velocity&nbsp;&nbsp;<i name="VEL" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                    <span id="VEL_ctable_options">
                     <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrVEL1ColortableBtn" name="VEL1">
                         <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
                         <span class="colortable_menu_text">Default</span>
@@ -504,14 +504,54 @@
                         <div class="colortable_menu_image_preview" id="VEL2_colortable_preview"></div>
                     </div>
                     </span>
-                    <br>
-
-                    <!-- <input type="file" id="hidden_colortable_file_uploader" style="display: none">
-                    <div class="drop_zone" id="colortable_file_drop_zone">Drop .pal colortable here</div>
 
                     <br>
 
-                    <input type="text" id="colortable_upload_name" class="armTextInput"> -->
+                    <div class="armrHeader armrHeaderWide">Correlation Coefficient&nbsp;&nbsp;<i name="RHO" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                    <span id="RHO_ctable_options">
+                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrRHO1ColortableBtn" name="RHO1">
+                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                        <span class="colortable_menu_text">Default</span>
+                        <div class="colortable_menu_image_preview" id="RHO1_colortable_preview"></div>
+                    </div>
+                    </span>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">Differential Reflectivity&nbsp;&nbsp;<i name="ZDR" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                    <span id="ZDR_ctable_options">
+                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrZDR1ColortableBtn" name="ZDR1">
+                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                        <span class="colortable_menu_text">Default</span>
+                        <div class="colortable_menu_image_preview" id="ZDR1_colortable_preview"></div>
+                    </div>
+                    </span>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">Specific Differential Phase&nbsp;&nbsp;<i name="KDP" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                    <span id="KDP_ctable_options">
+                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrKDP1ColortableBtn" name="KDP1">
+                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                        <span class="colortable_menu_text">Default</span>
+                        <div class="colortable_menu_image_preview" id="KDP1_colortable_preview"></div>
+                    </div>
+                    </span>
+
+                    <br>
+
+                    <div class="armrHeader armrHeaderWide">Vertically Integrated Liquid&nbsp;&nbsp;<i name="DVL" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                    <span id="DVL_ctable_options">
+                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrDVL1ColortableBtn" name="DVL1">
+                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                        <span class="colortable_menu_text">Default</span>
+                        <div class="colortable_menu_image_preview" id="DVL1_colortable_preview"></div>
+                    </div>
+                    </span>
+
+                    <br>
+
+                    <input type="file" id="hidden_colortable_file_uploader" style="display: none">
                 </div>
                 <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
                     <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>

@@ -1639,3 +1639,6 @@ td.day.active, span.month.active, span.year.active {
     position: absolute;
     left: calc(15px * 3);
 }
+.colortable_upload_btn {
+    cursor: pointer;
+}

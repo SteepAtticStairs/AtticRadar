@@ -1577,7 +1577,7 @@ const product_colors = {
     // these are for the colortable menu
     REF1: colortable_parser(reflectivity),
     REF2: colortable_parser(reflectivity_radarscope),
-    VEL1: colortable_parser(velocity),
+    VEL1: colortable_parser(velocity, true),
     VEL2: {
         colors: [
             'rgb(24, 28, 67)', // -120
@@ -1598,6 +1598,10 @@ const product_colors = {
             -120, -100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100, 120
         ],
     },
+    RHO1: colortable_parser(corr_coeff),
+    ZDR1: colortable_parser(diff_reflectivity),
+    KDP1: colortable_parser(specific_differential_phase),
+    DVL1: vertically_integrated_liquid,
 }
 
 module.exports = product_colors;
