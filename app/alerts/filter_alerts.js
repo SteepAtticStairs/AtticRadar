@@ -4,6 +4,7 @@ const warnings_whitelist = [
     'Flash Flood Warning',
     'Special Marine Warning',
     'Snow Squall Warning',
+    'Extreme Wind Warning',
     // 'Hurricane Warning',
     // 'Tropical Storm Warning'
 ];

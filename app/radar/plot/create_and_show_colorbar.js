@@ -81,6 +81,7 @@ function create_and_show_colorbar(colors, values) {
 
         var cur_percent = (((values[i] - cmin) / (cmax - cmin)) * 100);
         gradColors += `${colors[i]} ${cur_percent}%`;
+        // https://stackoverflow.com/a/66619836/18758797
         if (!is_last_iter) {
             gradColors += ',\n'
         } else if (is_last_iter) {

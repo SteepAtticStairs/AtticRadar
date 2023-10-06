@@ -1,6 +1,8 @@
 const fetch_data = require('./fetch_data');
 const click_listener = require('./click_listener');
 const set_layer_order = require('../core/map/setLayerOrder');
+const filter_alerts = require('./filter_alerts');
+const plot_alerts = require('./plot_alerts');
 
 const div_elem = '#alertMenuItemDiv';
 const icon_elem = '#alertMenuItemIcon';
@@ -36,5 +38,13 @@ $(icon_elem).on('click', function () {
         map.setLayoutProperty('alertsLayer', 'visibility', 'none');
         map.setLayoutProperty('alertsLayerFill', 'visibility', 'none');
         // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
+    }
+})
+
+$('.alert_options_btn').click(function() {
+    var filtered;
+    if (window.atticData?.alerts_data != undefined) {
+        filtered = filter_alerts(JSON.parse(JSON.stringify(window.atticData.alerts_data)));
+        plot_alerts(filtered);
     }
 })

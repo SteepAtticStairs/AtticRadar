@@ -31,14 +31,17 @@ function _fetch_alerts_data(callback) {
     })
     .then(response => response.json())
     .then(alerts_data => {
-        plot_alerts(alerts_data, callback);
+        window.atticData.alerts_data = alerts_data;
+        callback(alerts_data);
     })
 }
 
+var byte_length = 0;
 function _fetch_zone_dictionaries(callback, index = 0) {
     fetch(zone_urls[index])
     .then(response => response.arrayBuffer())
     .then(buffer => {
+        byte_length += buffer.byteLength;
         const inflated = pako.inflate(buffer, { to: 'string' });
 
         var s = document.createElement('script');
@@ -49,32 +52,28 @@ function _fetch_zone_dictionaries(callback, index = 0) {
         if (index < zone_urls.length - 1) {
             _fetch_zone_dictionaries(callback, index + 1);
         } else {
+            console.log(`Loaded alert zone dictionaries with a size length of ${ut.formatBytes(byte_length)}.`);
             callback();
         }
     })
 }
 
-function _fetch_data(callback) {
-    if (callback == undefined) { callback = function() {} }
-
+function _fetch_data() {
     if (window.loaded_zones == undefined || window.loaded_zones == false) {
         window.loaded_zones = true;
 
         _fetch_alerts_data((alerts_data) => {
-            callback();
-            // _fetch_zone_dictionaries(() => {
-            //     const merged_geoJSON = combine_dictionary_data(alerts_data);
-            //     map.getSource('alertsSource').setData(merged_geoJSON);
+            plot_alerts(alerts_data);
 
-            //     callback();
-            // });
+            _fetch_zone_dictionaries(() => {
+                const merged_geoJSON = combine_dictionary_data(alerts_data);
+                map.getSource('alertsSource').setData(merged_geoJSON);
+            });
         })
     } else {
         _fetch_alerts_data((alerts_data) => {
             const merged_geoJSON = combine_dictionary_data(alerts_data);
             map.getSource('alertsSource').setData(merged_geoJSON);
-
-            callback();
         })
     }
 }
@@ -86,6 +85,7 @@ function return_data(callback) {
     })
     .then(response => response.json())
     .then(alerts_data => {
+        window.atticData.alerts_data = alerts_data;
         callback(alerts_data);
     })
 }

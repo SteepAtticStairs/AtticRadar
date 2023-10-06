@@ -64,9 +64,7 @@ function _sort_by_priority(data) {
     return data;
 }
 
-function plot_alerts(alerts_data, callback) {
-    if (callback == undefined) { callback = function() {} }
-
+function plot_alerts(alerts_data) {
     // const already_data = map.getSource('alertsSource')?._data;
     // if (already_data != undefined) {
     //     alerts_data = already_data;
@@ -111,8 +109,6 @@ function plot_alerts(alerts_data, callback) {
             window.atticData.current_AlertUpdater = current_AlertUpdater;
         }
     }
-
-    callback(alerts_data);
 }
 
 module.exports = plot_alerts;
