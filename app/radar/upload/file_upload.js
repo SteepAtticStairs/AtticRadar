@@ -44,7 +44,7 @@ function load_file(files_obj) {
                 reset_everything();
             })
         } else if (detected_radar_level == 2) {
-            loaders_nexrad.return_level_2_factory_from_buffer(buffer, filename, (L2Factory) => {
+            loaders_nexrad.return_level_2_factory_from_buffer(buffer, (L2Factory) => {
                 window.atticData.from_file_upload = true;
                 console.log(L2Factory);
                 // console.log(L2Factory.list_elevations_and_products())
@@ -57,7 +57,7 @@ function load_file(files_obj) {
                 L2Factory.plot('REF', 1);
 
                 reset_everything();
-            })
+            }, filename);
         } else if (detected_radar_level == undefined) {
             // nothing here yet
             console.error('Level detection failed.');

@@ -154,13 +154,14 @@ function load() {
     // //     console.log(L3Factory)
     // //     L3Factory.plot();
     // // })
-    // loaders_nexrad.file_to_buffer('../../../data/KBMX20110427_221945_V03.gz#', function (buffer) {
-    //     const file = new NEXRADLevel2File(buffer);
-    //     const L2Factory = new Level2Factory(file);
-    //     console.log(L2Factory);
-    //     L2Factory.dealias_alt_and_plot(1, () => {
-    //         console.log('done');
-    //     })
+    // loaders_nexrad.file_to_buffer('../../../data/KCRP20170825_235733_V06#', function (buffer) {
+    //     new NEXRADLevel2File(buffer, (file) => {
+    //         const L2Factory = new Level2Factory(file);
+    //         console.log(L2Factory);
+    //         L2Factory.plot('PHI', 1);
+    //     });
+    //     // const L2Factory = new Level2Factory(file);
+    //     // console.log(L2Factory);
     //     // L2Factory.plot();
     // })
 }

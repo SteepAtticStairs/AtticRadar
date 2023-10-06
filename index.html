@@ -89,7 +89,7 @@
             font-size: 50px;
             font-weight: bold;
         }
-        #loadingLibrariesProgressBar {
+        .progress_bar {
             position: absolute;
             /* width: 100%; */
             height: 30px;
@@ -106,7 +106,7 @@
             background-color: rgb(103, 103, 103);
             border-radius: 10px;
         }
-        #loadingLibrariesProgressBarInner {
+        .progress_bar_inner {
             position: absolute;
             top: 4px;
             bottom: 4px;
@@ -116,7 +116,7 @@
             background-color: rgb(51, 51, 51);
             border-radius: 10px;
         }
-        #progressBarText {
+        .progress_bar_text {
             position: absolute;
             z-index: 500001;
 
@@ -130,13 +130,21 @@
 <body>
     <div id="loadingLibrariesDiv">
         <div id="loadingLibrariesDivContent">AtticRadar</div>
-        <div id="loadingLibrariesProgressBar">
-            <span id="progressBarText"></span>
-            <div id="loadingLibrariesProgressBarInner"></div>
+        <div id="loadingLibrariesProgressBar" class="progress_bar">
+            <span id="progressBarText" class="progress_bar_text"></span>
+            <div id="loadingLibrariesProgressBarInner" class="progress_bar_inner"></div>
         </div>
     </div>
 
     <div id="bodyDiv">
+
+    <div id="progress_bar_screen_background">
+        <div id="mainProgressBar" class="progress_bar" style="bottom: calc(50% - 15px); box-shadow: 0px 0px 20px 8px rgb(25, 25, 25);">
+            <span id="mainProgressBarText" class="progress_bar_text"></span>
+            <div id="mainProgressBarInner" class="progress_bar_inner"></div>
+        </div>
+    </div>
+
     <!-- <input type="text" id="gateRes" value="500" style="position: absolute; z-index: 1237109230; left: 200px">
     <br>
     <input type="text" id="multiplier" value="2" style="position: absolute; z-index: 1237109230; left: 200px"> -->
