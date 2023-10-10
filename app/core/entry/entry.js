@@ -134,36 +134,36 @@ function load() {
 //         show_chart(tide_height_array, station_name, id, today);
 //     })
 
-    // const NEXRADLevel2File = require('../../radar/libnexrad/level2/level2_parser');
-    // const Level2Factory = require('../../radar/libnexrad/level2/level2_factory');
+    const NEXRADLevel2File = require('../../radar/libnexrad/level2/level2_parser');
+    const Level2API = require('../../radar/libnexrad/level2/level2_api');
+    const Level2Factory = require('../../radar/libnexrad/level2/level2_factory');
 
-    // const NEXRADLevel3File = require('../../radar/libnexrad/level3/level3_parser');
-    // const Level3Factory = require('../../radar/libnexrad/level3/level3_factory');
+    const NEXRADLevel3File = require('../../radar/libnexrad/level3/level3_parser');
+    const Level3Factory = require('../../radar/libnexrad/level3/level3_factory');
 
-    // const loaders_nexrad = require('../../radar/libnexrad/loaders_nexrad');
+    const loaders_nexrad = require('../../radar/libnexrad/loaders_nexrad');
 
-    // // // ../data/KTLX20130520_201643_V06.gz#
-    // // // ../data/level3/SHV_NMD_2023_04_03_02_29_56# (from Unidata AWS bucket)
-    // // // ../data/level3/DTX_NTV_2023_04_05_17_40_06# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
-    // // // ../data/level3/DTX_NHI_2023_04_05_18_05_14# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
-    // // TLX_NST_2023_04_19_21_55_59
-    // // TLX_TVS_2023_04_19_21_55_59
-    // // TLX_NMD_2023_04_19_21_55_59
-    // // EWR_TV0_2023_08_13_05_42_06
-    // // loaders_nexrad.return_level_3_factory_from_info('KAKQ', 'DVL', function (L3Factory) {
-    // //     console.log(L3Factory)
-    // //     L3Factory.plot();
-    // // })
-    // loaders_nexrad.file_to_buffer('../../../data/KCRP20170825_235733_V06#', function (buffer) {
-    //     new NEXRADLevel2File(buffer, (file) => {
-    //         const L2Factory = new Level2Factory(file);
-    //         console.log(L2Factory);
-    //         L2Factory.plot('PHI', 1);
-    //     });
-    //     // const L2Factory = new Level2Factory(file);
-    //     // console.log(L2Factory);
-    //     // L2Factory.plot();
+    // // ../data/KTLX20130520_201643_V06.gz#
+    // // ../data/level3/SHV_NMD_2023_04_03_02_29_56# (from Unidata AWS bucket)
+    // // ../data/level3/DTX_NTV_2023_04_05_17_40_06# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
+    // // ../data/level3/DTX_NHI_2023_04_05_18_05_14# (from https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/)
+    // TLX_NST_2023_04_19_21_55_59
+    // TLX_TVS_2023_04_19_21_55_59
+    // TLX_NMD_2023_04_19_21_55_59
+    // EWR_TV0_2023_08_13_05_42_06
+    // loaders_nexrad.return_level_3_factory_from_info('KAKQ', 'DVL', function (L3Factory) {
+    //     console.log(L3Factory)
+    //     L3Factory.plot();
     // })
+    loaders_nexrad.file_to_buffer('../../../data/KTLX20130520_201643_V06.gz#', function (buffer) {
+        new Level2API(buffer, (L2API) => {
+            console.log(L2API);
+
+            L2API.get_object_path(`vcp['msg5_header']['pattern_number']`, (data) => {
+                console.log(data);
+            })
+        });
+    })
 }
 
 function _load_map() {

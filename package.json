@@ -15,6 +15,7 @@
     "cheap-ruler": "^3.0.2",
     "chroma-js": "^2.4.2",
     "glslify-require": "^1.1.0",
+    "lodash": "^4.17.21",
     "luxon": "^3.0.3",
     "metar-plot": "^2.0.0",
     "pako": "^2.1.0",

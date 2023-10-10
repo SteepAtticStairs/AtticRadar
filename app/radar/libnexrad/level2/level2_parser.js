@@ -43,21 +43,22 @@ function _bufferToString(buffer) {
 function _handle_compression(fh, compression_or_ctm_info, callback) {
     var buf;
     if (_bufferToString(compression_or_ctm_info) == 'BZ') {
-        progress_bar.show_progress_bar();
-        // buf = _decompress_records(fh);
-        const w = work(decompress_worker);
-        w.addEventListener('message', function (ev) {
-            if (ev.data.message == 'finish') {
-                buf = ev.data.data;
-                callback(buf);
-                progress_bar.hide_progress_bar();
-            } else if (ev.data.message == 'progress') {
-                const percent = ev.data.data;
-                progress_bar.set_progress_bar_width(percent);
-                progress_bar.set_progress_bar_text(`Loading... ${percent}%`);
-            }
-        })
-        w.postMessage(fh.buffer/*, [fh.buffer]*/);
+        // progress_bar.show_progress_bar();
+        buf = _decompress_records(fh);
+        callback(buf);
+        // const w = work(decompress_worker);
+        // w.addEventListener('message', function (ev) {
+        //     if (ev.data.message == 'finish') {
+        //         buf = ev.data.data;
+        //         callback(buf);
+        //         progress_bar.hide_progress_bar();
+        //     } else if (ev.data.message == 'progress') {
+        //         const percent = ev.data.data;
+        //         progress_bar.set_progress_bar_width(percent);
+        //         progress_bar.set_progress_bar_text(`Loading... ${percent}%`);
+        //     }
+        // })
+        // w.postMessage(fh.buffer/*, [fh.buffer]*/);
     } else if (_arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x00, 0x00])) || _arraysEqual(new Uint8Array(compression_or_ctm_info), new Uint8Array([0x09, 0x80]))) {
         buf = fh.read();
         callback(buf);
@@ -785,7 +786,7 @@ function _get_msg31_data_block(buf, ptr) {
             console.error(`Unsupported bit size: ${s}.`);
         }
 
-        dic['data'] = data;
+        dic['data'] = null;
     } else {
         dic = {};
     }
