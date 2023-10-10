@@ -45,7 +45,7 @@ function format_value(value) {
     const product_code = window.atticData.product_code;
 
     if (value != null) {
-        if (value == product_colors.range_folded_val) {
+        if (Math.round(value) == product_colors.range_folded_val) {
             value = 'Range Folded';
         } else {
             if (
