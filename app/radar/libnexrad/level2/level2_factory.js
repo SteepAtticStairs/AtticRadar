@@ -2,7 +2,7 @@ const get_nexrad_location = require('../nexrad_locations').get_nexrad_location;
 const calculate_coordinates = require('../../plot/calculate_coordinates');
 const display_file_info = require('../../libnexrad_helpers/display_file_info');
 const elevation_menu = require('../../libnexrad_helpers/level2/elevation_menu');
-const dealias = require('../../libnexrad_helpers/level2/dealias/dealias');
+// const dealias = require('../../libnexrad_helpers/level2/dealias/dealias');
 const map = require('../../../core/map/map');
 const plot_to_map = require('../../plot/plot_to_map');
 const work = require('webworkify');
@@ -418,14 +418,29 @@ class Level2Factory {
      * 
      * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
      */
-    dealias(elevation_number) {
+    dealias(elevation_number, callback) {
+        const thisobj = this;
+
         const nyquist = this.get_nyquist_vel(elevation_number);
         const velocities = this.get_data('VEL', elevation_number);
-        const dealiased_velocities = dealias(velocities, nyquist);
 
-        for (var i = 0; i < this.grouped_sweeps[elevation_number].length; i++) {
-            this.grouped_sweeps[elevation_number][i].VEL.dealiased_data = dealiased_velocities[i];
-        }
+        const shape = velocities[0].length;
+        const flat_velocities = new Float32Array(velocities.flat().map(value => value == null ? 333 : value));
+
+        var w = work(require('../../libnexrad_helpers/level2/dealias/dealias'));
+        w.addEventListener('message', function (ev) {
+            const dealiased_velocities = [];
+            const dealiased_velocities_flat = ev.data;
+
+            while (dealiased_velocities_flat.length) dealiased_velocities.push(dealiased_velocities_flat.splice(0, shape));
+
+            for (var i = 0; i < thisobj.grouped_sweeps[elevation_number].length; i++) {
+                thisobj.grouped_sweeps[elevation_number][i].VEL.dealiased_data = dealiased_velocities[i];
+            }
+
+            callback();
+        })
+        w.postMessage([flat_velocities, nyquist, shape], [flat_velocities.buffer]);
     }
 
     /**
