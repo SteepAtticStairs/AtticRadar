@@ -214,6 +214,100 @@ function _find_sweep_interval_splits(nyquist, interval_splits, velocities) {
     return np.linspace(start, end, num);
 }
 
+/**
+ * This function dealiases a 2D array of
+ * doppler velocity values using a region-based algorithm.
+ * 
+ * @param {Array} velocities A 2D array containing all of the velocity values.
+ * @param {Number} nyquist_vel A number representing the nyquist velocity.
+ * 
+ * @returns {Array} The corrected 2D array. It is the same as the original,
+ * except the aliased regions are corrected.
+ */
+function dealias(velocities, nyquist_vel) {
+    var interval_splits = 3;
+    // scan number "9" (pyart "8") of the radar file "KBMX20210325_222143_V06"
+    // only dealiases correctly with a value of 99 instead of 100
+    var skip_between_rays = 99;
+    var skip_along_ray = 100;
+    var centered = true;
+    var rays_wrap_around = true;
+
+    for (var sweep_slice = 1; sweep_slice < 2; sweep_slice++) {
+        // extract sweep data
+        var sdata = copy(velocities); // copy of data for processing
+        sdata = _mask_values(sdata);
+        var scorr = copy(velocities); // copy of data for output
+
+        var nyquist_interval = 2 * nyquist_vel;
+        var interval_limits = _find_sweep_interval_splits(nyquist_vel, interval_splits, sdata);
+        // skip sweep if all gates are masked or only a single region
+        if (nfeatures < 2) {
+            continue;
+        }
+
+        var [labels, nfeatures] = _find_regions(sdata, interval_limits);
+        var bincount = np.bincount(labels.flat());
+        var num_masked_gates = bincount[0];
+        var region_sizes = bincount.slice(1);
+
+        var [indices, edge_count, velos] = _edge_sum_and_count(
+            labels, num_masked_gates, sdata, rays_wrap_around,
+            skip_between_rays, skip_along_ray);
+
+        // no unfolding required if no edges exist between regions
+        if (edge_count.length == 0) {
+            continue;
+        }
+
+        // find the number of folds in the regions
+        var region_tracker = new _RegionTracker(region_sizes);
+        var edge_tracker = new _EdgeTracker(indices, edge_count, velos, nyquist_interval, nfeatures + 1);
+        while (true) {
+            if (_combine_regions(region_tracker, edge_tracker)) {
+                break;
+            }
+        }
+
+        // center sweep if requested, determine a global sweep unfold number
+        // so that the average number of gate folds is zero.
+        if (centered) {
+            var gates_dealiased = region_sizes.reduce((a, b) => a + b, 0);
+            var total_folds = 0;
+            for (var i = 0; i < region_sizes.length; i++) {
+                total_folds += region_sizes[i] * region_tracker.unwrap_number[i + 1];
+            }
+            var sweep_offset = Math.round(total_folds / gates_dealiased);
+            if (sweep_offset !== 0) {
+                for (var i = 0; i < region_tracker.unwrap_number.length; i++) {
+                    region_tracker.unwrap_number[i] -= sweep_offset;
+                }
+            }
+        }
+
+        // dealias the data using the fold numbers
+        // start from label 1 to skip masked region
+        for (var i = 1; i < nfeatures + 1; i++) {
+            var nwrap = region_tracker.unwrap_number[i];
+            if (nwrap != 0) {
+                // scorr[labels == i] += nwrap * nyquist_interval
+                for (let r = 0; r < labels.length; r++) {
+                    for (let c = 0; c < labels[0].length; c++) {
+                        if (labels[r][c] === i) {
+                            scorr[r][c] += nwrap * nyquist_interval;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // _jumpToMapPosition();
+    // l2rad = _mergeCorrectedVelocities(scorr, l2rad, scanNumber);
+
+    return scorr;
+}
+
 function _combine_regions(region_tracker, edge_tracker) {
     /* Returns True when done. */
     // Edge parameters from edge with largest weight
@@ -743,110 +837,4 @@ function _find_regions(vel, limits) {
     return [label, nfeatures];
 }
 
-module.exports = function (self) {
-    self.addEventListener('message', function (ev) {
-        const flat_velocities = Array.from(ev.data[0]).map(value => value == 333 ? null : value);
-        const nyquist = ev.data[1];
-        const shape = ev.data[2];
-
-        const velocities = [];
-        while (flat_velocities.length) velocities.push(flat_velocities.splice(0, shape));
-
-        const dealiased = dealias(velocities, nyquist);
-        self.postMessage(dealiased.flat());
-
-        /**
-         * This function dealiases a 2D array of
-         * doppler velocity values using a region-based algorithm.
-         * 
-         * @param {Array} velocities A 2D array containing all of the velocity values.
-         * @param {Number} nyquist_vel A number representing the nyquist velocity.
-         * 
-         * @returns {Array} The corrected 2D array. It is the same as the original,
-         * except the aliased regions are corrected.
-         */
-        function dealias(velocities, nyquist_vel) {
-            var interval_splits = 3;
-            // scan number "9" (pyart "8") of the radar file "KBMX20210325_222143_V06"
-            // only dealiases correctly with a value of 99 instead of 100
-            var skip_between_rays = 99;
-            var skip_along_ray = 100;
-            var centered = true;
-            var rays_wrap_around = true;
-
-            for (var sweep_slice = 1; sweep_slice < 2; sweep_slice++) {
-                // extract sweep data
-                var sdata = copy(velocities); // copy of data for processing
-                sdata = _mask_values(sdata);
-                var scorr = copy(velocities); // copy of data for output
-
-                var nyquist_interval = 2 * nyquist_vel;
-                var interval_limits = _find_sweep_interval_splits(nyquist_vel, interval_splits, sdata);
-                // skip sweep if all gates are masked or only a single region
-                if (nfeatures < 2) {
-                    continue;
-                }
-
-                var [labels, nfeatures] = _find_regions(sdata, interval_limits);
-                var bincount = np.bincount(labels.flat());
-                var num_masked_gates = bincount[0];
-                var region_sizes = bincount.slice(1);
-
-                var [indices, edge_count, velos] = _edge_sum_and_count(
-                    labels, num_masked_gates, sdata, rays_wrap_around,
-                    skip_between_rays, skip_along_ray);
-
-                // no unfolding required if no edges exist between regions
-                if (edge_count.length == 0) {
-                    continue;
-                }
-
-                // find the number of folds in the regions
-                var region_tracker = new _RegionTracker(region_sizes);
-                var edge_tracker = new _EdgeTracker(indices, edge_count, velos, nyquist_interval, nfeatures + 1);
-                while (true) {
-                    if (_combine_regions(region_tracker, edge_tracker)) {
-                        break;
-                    }
-                }
-
-                // center sweep if requested, determine a global sweep unfold number
-                // so that the average number of gate folds is zero.
-                if (centered) {
-                    var gates_dealiased = region_sizes.reduce((a, b) => a + b, 0);
-                    var total_folds = 0;
-                    for (var i = 0; i < region_sizes.length; i++) {
-                        total_folds += region_sizes[i] * region_tracker.unwrap_number[i + 1];
-                    }
-                    var sweep_offset = Math.round(total_folds / gates_dealiased);
-                    if (sweep_offset !== 0) {
-                        for (var i = 0; i < region_tracker.unwrap_number.length; i++) {
-                            region_tracker.unwrap_number[i] -= sweep_offset;
-                        }
-                    }
-                }
-
-                // dealias the data using the fold numbers
-                // start from label 1 to skip masked region
-                for (var i = 1; i < nfeatures + 1; i++) {
-                    var nwrap = region_tracker.unwrap_number[i];
-                    if (nwrap != 0) {
-                        // scorr[labels == i] += nwrap * nyquist_interval
-                        for (let r = 0; r < labels.length; r++) {
-                            for (let c = 0; c < labels[0].length; c++) {
-                                if (labels[r][c] === i) {
-                                    scorr[r][c] += nwrap * nyquist_interval;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // _jumpToMapPosition();
-            // l2rad = _mergeCorrectedVelocities(scorr, l2rad, scanNumber);
-
-            return scorr;
-        }
-    })
-}
+module.exports = dealias;

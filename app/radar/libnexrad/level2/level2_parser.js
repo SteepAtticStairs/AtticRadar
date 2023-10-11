@@ -70,6 +70,7 @@ function _handle_compression(fh, compression_or_ctm_info, callback) {
 
 class NEXRADLevel2File {
     constructor (fileBuffer, callback, filename) {
+        console.log('Start');
         var fh = new RandomAccessFile(fileBuffer);
         fh = _decompressFile(fh);
 
@@ -86,7 +87,9 @@ class NEXRADLevel2File {
         // read the records in the file, decompressing as needed
         var compression_or_ctm_info = compression_record.slice(level2_constants.CONTROL_WORD_SIZE, level2_constants.CONTROL_WORD_SIZE + 2);
 
+        console.log('Start decompression');
         _handle_compression(fh, compression_or_ctm_info, (buf) => {
+            console.log('End decompression');
             this._fh = fh;
 
             // read the records from the buffer
