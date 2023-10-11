@@ -1,5 +1,5 @@
 const use_data = require('./use_data');
-const create_circle_with_text = require('../core/misc/create_circle_with_text');
+const create_square_with_text = require('../core/misc/create_square_with_text');
 const get_temp_color = require('../core/misc/temp_colors');
 const metar_plot = require('metar-plot');
 
@@ -15,7 +15,7 @@ function load_images(parsedXMLData) {
     for (var i = 0; i < 120; i++) {
         const temp_color = get_temp_color(i);
         // const png_data = create_circle_with_text(`${degrees} °F`, tempColor[0], tempColor[1], 200, 0.75);
-        const png_data = create_circle_with_text(`${i}`, temp_color[0], temp_color[1], 200, 1.2);
+        const png_data = create_square_with_text(`${i}`, temp_color[0], temp_color[1], 200, 1.2);
         all_images_to_add.push([png_data, `${i}`]);
     }
 
