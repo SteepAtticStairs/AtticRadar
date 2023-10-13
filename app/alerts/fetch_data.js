@@ -3,6 +3,9 @@ const plot_alerts = require('./plot_alerts');
 const pako = require('pako');
 const combine_dictionary_data = require('./combine_dictionary_data');
 
+const fetch_watches = require('./watches/watches');
+const fetch_discussions = require('./discussions/discussions');
+
 const url_prefix = 'https://atticradar.steepatticstairs.net/';
 
 const new_alerts_url = `https://preview.weather.gov/edd/resource/edd/hazards/getShortFusedHazards.php?all=true`;
@@ -31,6 +34,9 @@ function _fetch_alerts_data(callback) {
     })
     .then(response => response.json())
     .then(alerts_data => {
+        fetch_watches();
+        fetch_discussions();
+
         window.atticData.alerts_data = alerts_data;
         callback(alerts_data);
     })
@@ -85,6 +91,9 @@ function return_data(callback) {
     })
     .then(response => response.json())
     .then(alerts_data => {
+        fetch_watches();
+        fetch_discussions();
+
         window.atticData.alerts_data = alerts_data;
         callback(alerts_data);
     })

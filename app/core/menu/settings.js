@@ -100,8 +100,16 @@ function _reload_alerts() {
     }
 }
 armFunctions.toggleswitchFunctions($('#armrWarningsBtnSwitchElem'), _reload_alerts, _reload_alerts);
-armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), _reload_alerts, _reload_alerts);
 armFunctions.toggleswitchFunctions($('#armrStatementsBtnSwitchElem'), _reload_alerts, _reload_alerts);
+armFunctions.toggleswitchFunctions($('#armrWatchesBtnSwitchElem'), function() {
+    if ($('#alertMenuItemIcon').hasClass('menu_item_selected')) {
+        if (map.getLayer('watches_layer')) { map.setLayoutProperty('watches_layer', 'visibility', 'visible'); }
+        if (map.getLayer('watches_layer_fill')) { map.setLayoutProperty('watches_layer_fill', 'visibility', 'visible'); }
+    }
+}, function() {
+    if (map.getLayer('watches_layer')) { map.setLayoutProperty('watches_layer', 'visibility', 'none'); }
+    if (map.getLayer('watches_layer_fill')) { map.setLayoutProperty('watches_layer_fill', 'visibility', 'none'); }
+})
 
 armFunctions.toggleswitchFunctions($('#armrHurricaneLegendVisBtnSwitchElem'), function() {
     const is_hurricanes_enabled = $('#armrHurricanesBtnSwitchElem').is(':checked');

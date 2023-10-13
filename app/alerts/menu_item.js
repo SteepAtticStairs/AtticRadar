@@ -21,8 +21,13 @@ $(icon_elem).on('click', function () {
         if (map.getLayer('alertsLayer')) {
             map.on('click', 'alertsLayerFill', click_listener);
 
-            map.setLayoutProperty('alertsLayer', 'visibility', 'visible');
-            map.setLayoutProperty('alertsLayerFill', 'visibility', 'visible');
+            _show_layer('alertsLayer');
+            _show_layer('alertsLayerFill');
+
+            if ($('#armrWatchesBtnSwitchElem').is(':checked')) {
+                _show_layer('watches_layer');
+                _show_layer('watches_layer_fill');
+            }
 
             set_layer_order();
         } else {
@@ -35,11 +40,17 @@ $(icon_elem).on('click', function () {
         map.getCanvas().style.cursor = '';
         map.off('click', 'alertsLayerFill', click_listener);
 
-        map.setLayoutProperty('alertsLayer', 'visibility', 'none');
-        map.setLayoutProperty('alertsLayerFill', 'visibility', 'none');
+        _hide_layer('alertsLayer');
+        _hide_layer('alertsLayerFill');
+
+        _hide_layer('watches_layer');
+        _hide_layer('watches_layer_fill');
         // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
     }
 })
+
+function _show_layer(layer) { if (map.getLayer(layer)) { map.setLayoutProperty(layer, 'visibility', 'visible') } }
+function _hide_layer(layer) { if (map.getLayer(layer)) { map.setLayoutProperty(layer, 'visibility', 'none') } }
 
 $('.alert_options_btn').click(function() {
     var filtered;

@@ -29,6 +29,10 @@ function setLayerOrder() {
     // tide station layer
     move_layer_to_top('tide_station_layer');
 
+    // watches layers
+    move_layer_to_top('watches_layer');
+    move_layer_to_top('watches_layer_fill');
+
     // alerts layers
     move_layer_to_top('alertsLayerOutline');
     move_layer_to_top('alertsLayer');
