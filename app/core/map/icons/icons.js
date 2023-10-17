@@ -2,27 +2,21 @@ const map = require("../map");
 const ut = require('../../utils');
 const chroma = require('chroma-js');
 
-function _load_image(image_data) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = image_data;
-        img.onload = () => {
-            resolve(img);
-        }
-    });
+function _load_image(image_data, callback) {
+    const img = new Image();
+    img.onload = () => {
+        callback(img);
+    }
+    img.src = image_data;
 }
 
 function _add_image_to_map(image_data, image_name, callback) {
-    _load_image(image_data)
-        .then((image) => {
-            if (!map.hasImage(image_name)) {
-                map.addImage(image_name, image);
-            }
-            callback();
-        })
-        .catch((error) => {
-            throw error;
-        });
+    _load_image(image_data, (image) => {
+        if (!map.hasImage(image_name)) {
+            map.addImage(image_name, image);
+        }
+        callback();
+    })
 }
 
 function add_icon_svg(icons_array, callback, i = 0) {
@@ -115,22 +109,22 @@ const icons = {
     </svg>`,
 
     blue_triangle: 
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
         <polygon points="0,100 50,0 100,100" style="fill: rgb(0, 100, 245);" />
     </svg>`,
 
     purple_triangle: 
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
         <polygon points="0,100 50,0 100,100" style="fill: rgb(95, 54, 196);" />
     </svg>`,
 
     purple_semicircle: 
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
         <path d="M0,100 A50,50 0 0,1 100,100 H0 Z" style="fill: rgb(95, 54, 196);" />
     </svg>`,
 
     red_semicircle: 
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
         <path d="M0,100 A50,50 0 0,1 100,100 H0 Z" style="fill: rgb(234, 51, 35);" />
     </svg>`,
 
