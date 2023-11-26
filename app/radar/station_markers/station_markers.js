@@ -51,6 +51,11 @@ function _generate_stations_geojson(status_info = null) {
                 }
 
                 const point = turf.point([lon, lat], station_properties);
+                if (nexrad_locations[station].type == 'WSR-88D') {
+                    point.properties.order = 1;
+                } else {
+                    point.properties.order = 2;
+                }
                 points.push(point);
             }
         }
@@ -84,6 +89,7 @@ function _add_stations_layer(radar_stations_geojson, callback) {
             'type': 'symbol',
             'source': 'stationSymbolLayer',
             'layout': {
+                'symbol-sort-key': ['get', 'order'],
                 'icon-image': [
                     'case',
                     ['==', ['get', 'clicked'], 'yes'],
