@@ -3,6 +3,7 @@ const set_layer_order = require('../core/map/setLayerOrder');
 const turf = require('@turf/turf');
 const luxon = require('luxon');
 const AtticPopup = require('../core/popup/AtticPopup');
+const ut = require('../core/utils');
 
 function _return_time_range(json) {
     var issue;
@@ -40,8 +41,26 @@ function _hide_layers() {
     }
 }
 
+function _get_text_url(category, day) {
+    if (category == 'Categorical') {
+        return `https://tgftp.nws.noaa.gov/data/raw/ac/acus0${day}.kwns.swo.dy${day}.txt`;
+    }
+}
+
 function _click_listener(e) {
     const properties = e.features[0].properties;
+
+    var current_info = $('#spcDataInfo').find('b').text();
+    current_info = current_info.split(' ');
+    const category = current_info[0];
+    const day = current_info[current_info.length - 1];
+
+    const text_url = _get_text_url(category, day);
+    fetch(ut.phpProxy + text_url)
+    .then(response => response.text())
+    .then(text => {
+        console.log(text);
+    })
 
     const popup_html = 
 `<div><b>${properties.LABEL2}</b></div>`
