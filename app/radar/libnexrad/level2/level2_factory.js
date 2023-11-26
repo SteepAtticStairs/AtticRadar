@@ -184,6 +184,18 @@ class Level2Factory {
     }
 
     /**
+     * Scales an elevation angle value by the standard set in the ICD.
+     * 
+     * @param {Number} elevation_angle The unscaled elevation number.
+     */
+    _scale_elevation_angle(elevation_angle) {
+        var scaled_elev_angle = elevation_angle * (180 / (4096 * 8));
+        if (scaled_elev_angle >= 50) {
+            scaled_elev_angle = scaled_elev_angle - 360;
+        }
+        return scaled_elev_angle;
+    }
+    /**
      * Get the elevation angle for a given elevation number.
      * 
      * @param {Number} elevation_number A number that represents the elevation's index from the base sweep. Indices start at 1.
@@ -197,7 +209,7 @@ class Level2Factory {
             elev_angle = this.initial_radar_obj.vcp.cut_parameters[elevation_number - 1].elevation_angle;
         }
 
-        return elev_angle * (180 / (4096 * 8));
+        return this._scale_elevation_angle(elev_angle);
     }
 
     /**
@@ -309,7 +321,7 @@ class Level2Factory {
                         }
                     });
 
-                    elevation_angle = elevations_base.elevation_angle * (180 / (4096 * 8));
+                    elevation_angle = this._scale_elevation_angle(elevations_base.elevation_angle);
                     elev_angle_arr.push([
                         elevation_angle,
                         (key + 1).toString(),
@@ -333,7 +345,7 @@ class Level2Factory {
                         }
                     });
 
-                    elevation_angle = elevations_base.elevation_angle * (180 / (4096 * 8));
+                    elevation_angle = this._scale_elevation_angle(elevations_base.elevation_angle);
                     elev_angle_arr.push([
                         elevation_angle,
                         key.toString(),
