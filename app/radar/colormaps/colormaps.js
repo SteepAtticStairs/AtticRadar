@@ -281,6 +281,33 @@ SolidColor:	93.0		130	40	24
 SolidColor:	93.5		125	30	16
 SolidColor:	94.0		120	20	8
 SolidColor:	94.5		115	10	1`
+const reflectivity_nws = 
+`product: BR
+units: dBZ
+step: 5
+
+color4: -30 165 165 165 0 8 230 230 255
+color: 10 0 165 255 0 8 197
+color: 20 16 255 8 10 126 3
+color: 35 251 238 0 210 112 2
+color: 50 255 0 0 171 0 1
+color: 65 247 1 249 136 63 174
+color: 75 255 255 255 184 184 184
+color: 85 184 184 184
+color: 95 184 184 184`
+const reflectivity_gr2analyst = 
+`product: BR
+units: dBZ
+step: 10
+
+color: 10 164 164 255 100 100 192
+color: 20 64 128 255 32 64 128
+color: 30 0 255 0 0 128 0
+color: 40 255 255 0 255 128 0
+color: 50 255 0 0 160 0 0
+color: 60 255 0 255 128 0 128
+color: 70 255 255 255
+color: 80 128 128 128`
 
 const velocity = 
 `Product:bv
@@ -1577,6 +1604,8 @@ const product_colors = {
     // these are for the colortable menu
     REF1: colortable_parser(reflectivity),
     REF2: colortable_parser(reflectivity_radarscope),
+    REF3: colortable_parser(reflectivity_nws),
+    REF4: colortable_parser(reflectivity_gr2analyst),
     VEL1: colortable_parser(velocity),
     VEL2: {
         colors: [
