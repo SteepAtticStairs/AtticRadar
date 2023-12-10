@@ -308,6 +308,21 @@ color: 50 255 0 0 160 0 0
 color: 60 255 0 255 128 0 128
 color: 70 255 255 255
 color: 80 128 128 128`
+const reflectivity_radaromega = 
+`product: BR
+units: dBZ
+step: 5
+
+color4: -10 7 59 71 0
+color: 0 62 69 71 191 193 197
+color: 20 135 229 125 
+color: 30 48 102 43
+color: 35 253 227 0
+color: 50 254 26 0 181 0 52
+color: 60 163 0 136 254 4 250
+color: 70 67 190 254 19 144 242
+color: 80 166 176 150 255 231 188
+color: 85 255 231 188`
 
 const velocity = 
 `Product:bv
@@ -1606,6 +1621,7 @@ const product_colors = {
     REF2: colortable_parser(reflectivity_radarscope),
     REF3: colortable_parser(reflectivity_nws),
     REF4: colortable_parser(reflectivity_gr2analyst),
+    REF5: colortable_parser(reflectivity_radaromega),
     VEL1: colortable_parser(velocity),
     VEL2: {
         colors: [
