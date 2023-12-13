@@ -39,25 +39,14 @@ function change_map_style(style) {
         }
     }
 
-    if (style == 'satellite') {
-        window.atticData.map_type = 'satellite';
-        map.addSource('mapbox-satellite', { 'type': 'raster', 'url': 'mapbox://mapbox.satellite', 'tileSize': 256 });
-        map.addLayer({ 'type': 'raster', 'id': 'satellite-map', 'source': 'mapbox-satellite' }, map_funcs.get_base_layer());
-    } else if (style == 'dark') {
-        window.atticData.map_type = 'dark';
-
+    function set_dark() {
         const ds = window.atticData.default_styles;
         map.setPaintProperty('land', 'background-color', ds.land);
         map.setPaintProperty('national-park', 'fill-color', ds.national_park);
         map.setPaintProperty('landuse', 'fill-color', ds.landuse);
         map.setPaintProperty('water', 'fill-color', ds.water);
-
-        if (map.getLayer('satellite-map')) {
-            map.removeLayer('satellite-map');
-            map.removeSource('mapbox-satellite');
-        }
-    } else if (style == 'light') {
-        window.atticData.map_type = 'light';
+    }
+    function set_light() {
         const white = 'rgb(246, 244, 237)';
         const blue = 'rgb(167, 192, 200)';
 
@@ -65,6 +54,28 @@ function change_map_style(style) {
         map.setPaintProperty('national-park', 'fill-color', white);
         map.setPaintProperty('landuse', 'fill-color', white);
         map.setPaintProperty('water', 'fill-color', blue);
+    }
+
+    if (style == 'satellite') {
+        window.atticData.map_type = 'satellite';
+
+        set_dark();
+
+        map.addSource('mapbox-satellite', { 'type': 'raster', 'url': 'mapbox://mapbox.satellite', 'tileSize': 256 });
+        map.addLayer({ 'type': 'raster', 'id': 'satellite-map', 'source': 'mapbox-satellite' }, map_funcs.get_base_layer());
+    } else if (style == 'dark') {
+        window.atticData.map_type = 'dark';
+
+        set_dark();
+
+        if (map.getLayer('satellite-map')) {
+            map.removeLayer('satellite-map');
+            map.removeSource('mapbox-satellite');
+        }
+    } else if (style == 'light') {
+        window.atticData.map_type = 'light';
+
+        set_light();
 
         if (map.getLayer('satellite-map')) {
             map.removeLayer('satellite-map');
