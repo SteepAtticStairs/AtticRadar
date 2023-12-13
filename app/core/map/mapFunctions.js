@@ -72,8 +72,21 @@ function moveMapLayer(lay) {
     }
 }
 
+function get_base_layer() {
+    const current_style_name = window.atticData.map_type; // map.getStyle().name;
+
+    if (current_style_name == 'satellite') {
+        return 'tunnel-path-trail';
+    } else if (current_style_name == 'dark') {
+        return 'land-structure-line';
+    } else if (current_style_name == 'light') {
+        return 'land-structure-line';
+    }
+}
+
 module.exports = {
     removeMapLayer,
     setGeojsonLayer,
-    moveMapLayer
+    moveMapLayer,
+    get_base_layer
 }

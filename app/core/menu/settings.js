@@ -6,6 +6,7 @@ const setLayerOrder = require('../map/setLayerOrder');
 const fetchMETARData = require('../../metars/fetch_data');
 const fetch_alerts_data = require('../../alerts/fetch_data');
 const fetch_spc_data = require('../../spc/fetch_data');
+const change_map_style = require('../map/styles');
 
 const divElem = '#settingsItemDiv';
 const iconElem = '#settingsItemClass';
@@ -93,6 +94,13 @@ armFunctions.toggleswitchFunctions($('#armrDayNightLineVisBtnSwitchElem'), funct
 }, function() {
     terminator.toggleVisibility('hide');
 })
+
+$('.map_style_button').click(function() {
+    $('.map_style_button').not(this).each(function() { this.checked = false; })
+})
+armFunctions.toggleswitchFunctions($('#armrSatelliteMapBtnSwitchElem'), function() { change_map_style('satellite'); })
+armFunctions.toggleswitchFunctions($('#armrLightMapBtnSwitchElem'), function() { change_map_style('light'); })
+armFunctions.toggleswitchFunctions($('#armrDarkMapBtnSwitchElem'), function() { change_map_style('dark'); })
 
 function _reload_alerts() {
     if ($('#alertMenuItemIcon').hasClass('icon-blue')) {

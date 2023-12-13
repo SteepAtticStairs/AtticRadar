@@ -6,6 +6,7 @@ function load() {
     // initialize the "atticData" global variable,
     // which will store data that can be accessed globally
     window.atticData = {};
+    window.atticData.map_type = 'dark';
 
     // load the weather station menu item
     require('../../weather_station/menu_item');

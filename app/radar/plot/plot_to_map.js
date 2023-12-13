@@ -235,7 +235,7 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
     }
 
     map_funcs.removeMapLayer('baseReflectivity');
-    map.addLayer(layer, 'land-structure-line');
+    map.addLayer(layer, map_funcs.get_base_layer());
 
     var isInFileUploadMode = window.atticData.from_file_upload; /* $('#armrModeBtnSwitchElem').is(':checked'); */
     if (!isInFileUploadMode) {

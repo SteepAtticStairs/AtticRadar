@@ -1,4 +1,5 @@
 var map = require('./map');
+const map_funcs = require('./mapFunctions');
 
 function move_layer_to_top(layer_name, before_layer = undefined) {
     if (map.getLayer(layer_name)) {
@@ -11,7 +12,7 @@ function move_layer_to_top(layer_name, before_layer = undefined) {
 }
 
 function setLayerOrder() {
-    const before_layer = 'land-structure-line';
+    const before_layer = map_funcs.get_base_layer();
 
     // the circle range of the selected radar tower
     move_layer_to_top('station_range_layer', before_layer);
