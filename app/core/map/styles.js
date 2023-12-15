@@ -48,7 +48,7 @@ function change_map_style(style) {
     }
     function set_light() {
         const white = 'rgb(246, 244, 237)';
-        const blue = 'rgb(167, 192, 200)';
+        const blue = 'rgb(136, 190, 227)';
 
         map.setPaintProperty('land', 'background-color', white);
         map.setPaintProperty('national-park', 'fill-color', white);

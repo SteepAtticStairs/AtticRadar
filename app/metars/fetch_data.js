@@ -46,7 +46,7 @@ function fetchMETARData() {
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&minLat=${minLat}&minLon=${minLon}&maxLat=${maxLat}&maxLon=${maxLon}&hoursBeforeNow=3#`;
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=~us&hoursBeforeNow=3#`;
     //var url = `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=${distanceMiles};${stationLon},${stationLat}&hoursBeforeNow=3#`;
-    var url = 'https://www.aviationweather.gov/adds/dataserver_current/current/metars.cache.xml.gz#';
+    var url = 'https://aviationweather.gov/data/cache/metars.cache.xml.gz#';
     //var url =  '../resources/USA_Test_METAR.xml';
     var noCacheURL = ut.preventFileCaching(ut.phpProxy + url);
     // console.log(noCacheURL)
