@@ -5,12 +5,36 @@ const turf = require('@turf/turf');
 const map = require('../../core/map/map');
 const set_layer_order = require('../../core/map/setLayerOrder');
 const AtticPopup = require('../../core/popup/AtticPopup');
+const display_attic_dialog = require('../../core/menu/attic_dialog');
 
 const all_watches_url = ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ActiveWW.kmz`; // https://www.spc.noaa.gov/products/watch/ActiveWW.kmz
 
 function click_listener(e) {
-    const popup = new AtticPopup(e.lngLat, `<b><div>${e.features[0].properties.event}</div></b>`);
+    // if (e.originalEvent.cancelBubble) { return; }
+    // const popup = new AtticPopup(e.lngLat, `<b><div>${e.features[0].properties.event}</div></b>`);
+    // popup.add_to_map();
+
+    if (e.originalEvent.cancelBubble) { return; }
+    const properties = e.features[0].properties;
+    const divid = `ww${properties.id}`
+
+    var popup_html =
+`<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
+<i id="${divid}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
+
+    const popup = new AtticPopup(e.lngLat, popup_html);
     popup.add_to_map();
+    popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() + parseInt($('.alert_popup_info').css('paddingRight'))}`);
+    popup.update_popup_pos();
+
+    $(`#${divid}`).on('click', function() {
+        display_attic_dialog({
+            'title': `${properties.event}`,
+            'body': properties.full_desc,
+            'color': properties.color,
+            'textColor': 'white',
+        })
+    })
 }
 
 function _fetch_individual_watch(url, callback) {
@@ -114,9 +138,20 @@ function fetch_watches() {
                 geojson.features[0].properties.event = event;
                 geojson.features[0].properties.color = color;
                 geojson.features[0].properties.id = id;
-                features.push(geojson.features[0]);
+                // features.push(geojson.features[0]);
 
-                _plot_watches(turf.featureCollection(features));
+                fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
+                .then(response => response.text())
+                .then(text => {
+                    const doc = new DOMParser().parseFromString(text, 'text/html');
+                    const full_desc = doc.querySelectorAll('pre')[0].innerHTML;
+                    geojson.features[0].properties.full_desc = full_desc;
+                    // console.log($('pre', $( '<div></div>' ).html(text)).text())
+
+                    features.push(geojson.features[0]);
+                    console.log(geojson.features[0]);
+                    _plot_watches(turf.featureCollection(features));
+                })
             })
         }, true);
     })

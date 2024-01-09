@@ -28,6 +28,10 @@ $(icon_elem).on('click', function () {
                 _show_layer('watches_layer');
                 _show_layer('watches_layer_fill');
             }
+            if ($('#armrDiscussionsBtnSwitchElem').is(':checked')) {
+                _show_layer('discussions_layer');
+                _show_layer('discussions_layer_fill');
+            }
 
             set_layer_order();
         } else {
@@ -45,6 +49,9 @@ $(icon_elem).on('click', function () {
 
         _hide_layer('watches_layer');
         _hide_layer('watches_layer_fill');
+
+        _hide_layer('discussions_layer');
+        _hide_layer('discussions_layer_fill');
         // map.setLayoutProperty('alertsLayerOutline', 'visibility', 'none');
     }
 })
