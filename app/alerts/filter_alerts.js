@@ -35,11 +35,11 @@ function filter_alerts(alerts_data) {
                 return true;
             }
         }
-        if (show_watches) {
-            if (watches_whitelist.includes(current_alert_name)) {
-                return true;
-            }
-        }
+        // if (show_watches) {
+        //     if (watches_whitelist.includes(current_alert_name)) {
+        //         return true;
+        //     }
+        // }
         if (show_statements) {
             if (statements_whitelist.includes(current_alert_name) && has_geometry) {
                 return true;

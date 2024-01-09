@@ -30,6 +30,14 @@ function setLayerOrder() {
     // tide station layer
     move_layer_to_top('tide_station_layer');
 
+    // discussions layers
+    move_layer_to_top('discussions_layer');
+    move_layer_to_top('discussions_layer_fill');
+
+    // watches layers
+    move_layer_to_top('watches_layer');
+    move_layer_to_top('watches_layer_fill');
+
     // alerts layers
     move_layer_to_top('alertsLayerOutline');
     move_layer_to_top('alertsLayer');

@@ -19,6 +19,8 @@ function to_title_case(str) {
 }
 
 function click_listener(e) {
+    e.originalEvent.cancelBubble = true;
+
     var alertContentObj = {};
     var alreadyAddedAlerts = [];
     for (var key = 0; key < 1; key++) { // for (key in e.features) {

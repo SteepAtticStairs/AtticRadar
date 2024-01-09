@@ -1,4 +1,4 @@
-function kmz_to_geojson(kmz_blob, callback) {
+function kmz_to_geojson(kmz_blob, callback, return_dom = false) {
     let getDom = xml => (new DOMParser()).parseFromString(xml, "text/xml")
     let getExtension = fileName => fileName.split(".").pop()
 
@@ -17,11 +17,15 @@ function kmz_to_geojson(kmz_blob, callback) {
     }
 
     getKmlDom(kmz_blob).then(kmlDom => {
-        let geoJsonObject = toGeoJSON.kml(kmlDom)
-        callback(geoJsonObject);
-        // //console.log(`${hurricaneID} - KMZ successfully unzipped.`);
-        // //drawHurricanesToMap(geoJsonObject, type, index, hurricaneID);
-        // cb(geoJsonObject);
+        if (return_dom) {
+            callback(kmlDom);
+        } else {
+            let geoJsonObject = toGeoJSON.kml(kmlDom)
+            callback(geoJsonObject);
+            // //console.log(`${hurricaneID} - KMZ successfully unzipped.`);
+            // //drawHurricanesToMap(geoJsonObject, type, index, hurricaneID);
+            // cb(geoJsonObject);
+        }
     })
 }
 
