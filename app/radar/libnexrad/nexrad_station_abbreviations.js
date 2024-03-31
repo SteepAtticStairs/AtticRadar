@@ -64,6 +64,7 @@ const nexrad_station_abbreviations = {
     'GSP': 'KGSP',
     'GWX': 'KGWX',
     'GYX': 'KGYX',
+    'HDC': 'KHDC',
     'HDX': 'KHDX',
     'HGX': 'KHGX',
     'HNX': 'KHNX',

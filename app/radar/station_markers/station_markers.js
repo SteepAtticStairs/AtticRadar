@@ -39,24 +39,26 @@ function do_when_map_load(func) {
 function _generate_stations_geojson(status_info = null) {
     var points = [];
     for (var station in nexrad_locations) {
-        if (nexrad_locations[station].NONSTANDARD == undefined || nexrad_locations[station].NONSTANDARD == false) {
-            if (nexrad_locations[station].type == 'WSR-88D' || nexrad_locations[station].type == 'TDWR') {
-                const lat = nexrad_locations[station].lat;
-                const lon = nexrad_locations[station].lon;
+        if (station != 'KLIX') {
+            if (nexrad_locations[station].NONSTANDARD == undefined || nexrad_locations[station].NONSTANDARD == false) {
+                if (nexrad_locations[station].type == 'WSR-88D' || nexrad_locations[station].type == 'TDWR') {
+                    const lat = nexrad_locations[station].lat;
+                    const lon = nexrad_locations[station].lon;
 
-                const station_properties = _copy(nexrad_locations[station]);
-                station_properties.station_id = station;
-                if (status_info != null) {
-                    station_properties.status = status_info[station].status;
-                }
+                    const station_properties = _copy(nexrad_locations[station]);
+                    station_properties.station_id = station;
+                    if (status_info != null) {
+                        station_properties.status = status_info[station]?.status;
+                    }
 
-                const point = turf.point([lon, lat], station_properties);
-                if (nexrad_locations[station].type == 'WSR-88D') {
-                    point.properties.order = 1;
-                } else {
-                    point.properties.order = 2;
+                    const point = turf.point([lon, lat], station_properties);
+                    if (nexrad_locations[station].type == 'WSR-88D') {
+                        point.properties.order = 1;
+                    } else {
+                        point.properties.order = 2;
+                    }
+                    points.push(point);
                 }
-                points.push(point);
             }
         }
     }

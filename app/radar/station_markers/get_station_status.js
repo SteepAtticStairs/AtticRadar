@@ -31,6 +31,11 @@ function getStationStatus(callback) {
                 }
             }
         }
+        allStationStatusObj['KHDC'] = {
+            'status': 'up',
+            'lastRecievedL2': new Date().toISOString(),
+            'stationType': 'WSR-88D'
+        }
         $('#dataDiv').data('stationStatusObj', allStationStatusObj);
         callback(allStationStatusObj);
     })

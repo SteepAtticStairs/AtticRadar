@@ -1492,6 +1492,13 @@ const NEXRAD_LOCATIONS = {
         'type': 'N/A',
         'name': 'WLX X-Band'
     },
+    'KHDC': {
+        'lat': 30.51959991455078,
+        'lon': -90.40740203857422,
+        'elev': 47,
+        'type': 'WSR-88D',
+        'name': 'Hammond'
+    },
 }
 
 module.exports = {
