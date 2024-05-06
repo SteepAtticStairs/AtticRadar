@@ -126,33 +126,36 @@ function fetch_watches() {
 
         kmz_to_geojson(blob, (kml_dom) => {
             const parsed_xml = ut.xmlToJson(kml_dom);
-            const first_watch_url = parsed_xml.kml.Folder.NetworkLink.Link.href['#text'];
-            const first_watch_desc = parsed_xml.kml.Folder.NetworkLink.name['#text'];
-            const event = /(.*? Watch \d+).*/.exec(first_watch_desc)[1];
-            const color = get_polygon_colors(event.substring(0, event.lastIndexOf(' '))).color;
+            const base = parsed_xml.kml.Folder.NetworkLink;
+            for (var i = 0; i < base.length; i++) {
+                const this_discussion_url = base[i].Link.href['#text'];
+                const this_discussion_desc = base[i].name['#text'];
+                const event = /(.*? Watch \d+).*/.exec(this_discussion_desc)[1];
+                const color = get_polygon_colors(event.substring(0, event.lastIndexOf(' '))).color;
 
-            var id_split = event.split(' ');
-            const id = id_split[id_split.length - 1];
+                var id_split = event.split(' ');
+                const id = id_split[id_split.length - 1];
 
-            _fetch_individual_watch(first_watch_url, (geojson) => {
-                geojson.features[0].properties.event = event;
-                geojson.features[0].properties.color = color;
-                geojson.features[0].properties.id = id;
-                // features.push(geojson.features[0]);
+                _fetch_individual_watch(this_discussion_url, (geojson) => {
+                    geojson.features[0].properties.event = event;
+                    geojson.features[0].properties.color = color;
+                    geojson.features[0].properties.id = id;
+                    // features.push(geojson.features[0]);
 
-                fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
-                .then(response => response.text())
-                .then(text => {
-                    const doc = new DOMParser().parseFromString(text, 'text/html');
-                    const full_desc = doc.querySelectorAll('pre')[0].innerHTML;
-                    geojson.features[0].properties.full_desc = full_desc;
-                    // console.log($('pre', $( '<div></div>' ).html(text)).text())
+                    fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
+                    .then(response => response.text())
+                    .then(text => {
+                        const doc = new DOMParser().parseFromString(text, 'text/html');
+                        const full_desc = doc.querySelectorAll('pre')[0].innerHTML;
+                        geojson.features[0].properties.full_desc = full_desc;
+                        // console.log($('pre', $( '<div></div>' ).html(text)).text())
 
-                    features.push(geojson.features[0]);
-                    console.log(geojson.features[0]);
-                    _plot_watches(turf.featureCollection(features));
+                        features.push(geojson.features[0]);
+                        console.log(geojson.features[0]);
+                        _plot_watches(turf.featureCollection(features));
+                    })
                 })
-            })
+            }
         }, true);
     })
 }

@@ -1,0 +1,107 @@
+#menuitem A:link { color: white; text-decoration: none; }
+#menuitem A:Visited { color: #FFFFFF; }
+#menuitem A:hover { color : #F0E68C; text-decoration : underline; }
+
+A:link {
+	color: #0000FF;
+	text-decoration: none;
+}
+
+A:Visited  {
+color: #003399;
+text-decoration: none;
+}
+
+A:hover {
+color : #FF0000;
+text-decoration : underline;
+}
+
+.white  {
+	font-size : 9pt;
+	color : #FFFFFF;
+	font-weight : bold;
+	font-family : Arial, Helvetica, San Serif;
+}
+
+.yellow  {
+	font-family : Arial, Helvetica, San Serif;
+	font-size : 9pt;
+	font-weight : bold;
+	color : #F0E68C;
+}
+
+.searchinput, .searchinput SELECT, .searchinput INPUT  {
+	font-size : 8pt;
+}
+
+td  {
+	font-size : 9pt;
+	font-family : Arial, Helvetica, San Serif;
+}
+
+h3 {
+	font-size : 13pt;
+	font-family : Arial, Helvetica, San Serif;
+}
+
+.gray  {
+	font-size : 8pt;
+	color : #808080;
+}
+
+.nav  {
+	font-size : 9pt;
+	color : #FFFFFF;
+	font-weight : bold;
+	font-family : Arial, Helvetica, San Serif;
+}
+
+.nwslink  {
+	font-size : 9pt;
+	color: Black;
+	text-decoration: none;
+	font-family : Arial, Helvetica, San Serif;
+}
+
+.srhwhite  {
+	font-size : 9pt;
+	text-decoration: none;
+	color : #FFFFFF;
+	font-weight : bold;
+	font-family : Arial, Helvetica, San Serif;
+}
+.topbanner {
+    background-image:url('topbanner.jpg');
+}
+.ncep_bckgrnd {
+    background-image:url('ncep_bkgrnd.jpg');
+}
+.navbckgrnd {
+    background-image:url('navbkgrnd.gif');
+}
+a.navbar:link {font-weight:bold; color:#FFFFFF; text-decoration:none;}
+a.navbar:visited {font-weight:bold; color:#FFFFFF; text-decoration:none;}
+a.navbar:hover {font-weight:bold; color:#F0E68C; text-decoration:underline;}
+
+a.navbar_yellow:link {font-weight:bold; color:#F0E68C; text-decoration:none;}
+a.navbar_yellow:visited {font-weight:bold; color:#F0E68C; text-decoration:none;}
+a.navbar_yellow:hover {font-weight:bold; color:#F0E68C; text-decoration:underline;}
+
+.sepsearches {
+    line-height:.5em;
+}
+
+.whitehpc  {
+	font-size : 9pt;
+	color : #FFFFFF;
+	font-weight : bold;
+	font-family : Arial, Helvetica, San Serif;
+        line-height:2.5em;
+        text-indent:.9em;
+}
+
+body {
+    margin : 0em;
+    /* background-image:url('background.gif'); */
+}
