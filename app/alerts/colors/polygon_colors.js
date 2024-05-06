@@ -3,6 +3,7 @@ var noaa_colors = require('./noaa_colors');
 // these are custom colors that override noaa's colors
 const my_polygon_colors = {
     'Tornado Watch': 'rgb(117, 20, 12)',
+    'Severe Thunderstorm Watch': 'rgb(128, 128, 38)'
 
 
     // 'Tornado Warning': 'rgb(233, 51, 35)',
