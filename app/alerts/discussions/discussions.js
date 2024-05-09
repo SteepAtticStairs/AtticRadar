@@ -16,7 +16,7 @@ function click_listener(e) {
     const divid = `md${properties.id}`
 
     var popup_html =
-`<div style="font-weight: bold; font-size: 13px;">Mesocyclone Discussion ${properties.id}</div>
+`<div style="font-weight: bold; font-size: 13px;">Mesoscale Discussion ${properties.id}</div>
 <i id="${divid}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
 
     const popup = new AtticPopup(e.lngLat, popup_html);
@@ -26,7 +26,7 @@ function click_listener(e) {
 
     $(`#${divid}`).on('click', function() {
         display_attic_dialog({
-            'title': `Mesocyclone Discussion ${properties.id}`,
+            'title': `Mesoscale Discussion ${properties.id}`,
             'body': properties.full_desc,
             'color': properties.color,
             'textColor': 'white',
