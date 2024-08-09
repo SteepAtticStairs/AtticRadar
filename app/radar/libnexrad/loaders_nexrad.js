@@ -5,6 +5,7 @@ const Level2Factory = require('../libnexrad/level2/level2_factory');
 
 const NEXRADLevel3File = require('../libnexrad/level3/level3_parser');
 const Level3Factory = require('../libnexrad/level3/level3_factory');
+const map = require('../../core/map/map');
 
 /**
  * Function that fetches a file and returns it as a Buffer.
@@ -219,6 +220,36 @@ function return_level_3_factory_from_buffer(arraybuffer, callback) {
     callback(L3Factory);
 }
 
+function loop(factories) {
+    console.log(factories)
+    var ids = [];
+    for (var i = 0; i < factories.length; i++) {
+        ids.push(factories[i].generate_unique_id());
+    }
+
+    var i = 0;
+    function myLoop() {
+        setTimeout(function () {
+
+            if (i != 0) {
+                map.setLayoutProperty(ids[i - 1], 'visibility', 'none');
+            } else {
+                map.setLayoutProperty(ids[ids.length - 1], 'visibility', 'none');
+            }
+            map.setLayoutProperty(ids[i], 'visibility', 'visible');
+
+            i++;
+            if (i < ids.length) {
+                myLoop();
+            } else {
+                i = 0;
+                myLoop()
+            }
+        }, 200)
+    }
+    myLoop();
+}
+
 /**
  * Function to quickly plot and display info about a Level 3 file.
  * 
@@ -228,17 +259,50 @@ function return_level_3_factory_from_buffer(arraybuffer, callback) {
  */
 function quick_level_3_plot(station, product, callback = null) {
     if (callback == null) { callback = function() {} }
-    return_level_3_factory_from_info(station, product, (L3Factory) => {
-        if (window?.atticData?.current_RadarUpdater != undefined) {
-            window.atticData.current_RadarUpdater.disable();
-        }
 
-        console.log('Main file:', L3Factory);
-        // L3Factory.display_file_info();
-        L3Factory.plot();
+    var factories = [];
 
-        callback(L3Factory);
-    })
+    var i = 5;
+    function run(i) {
+        console.log(i)
+        get_latest_level_3_url(station, product, i, (url) => {
+            return_level_3_factory_from_url(url, (L3Factory) => {
+                if (window?.atticData?.current_RadarUpdater != undefined) {
+                    window.atticData.current_RadarUpdater.disable();
+                }
+
+                // console.log('Main file:', L3Factory);
+                // L3Factory.display_file_info();
+                // console.log(L3Factory.generate_unique_id())
+                factories.push(L3Factory);
+                L3Factory.plot();
+                if (i == 0) {
+                    // L3Factory.plot();
+                    // console.log(factories);
+                    loop(factories);
+                } else {
+                    i--;
+                    run(i);
+                }
+
+                callback(L3Factory);
+            })
+        })
+    }
+    run(i);
+    // get_latest_level_3_url(station, product, 0, (url) => {
+    //     return_level_3_factory_from_url(url, (L3Factory) => {
+    //         if (window?.atticData?.current_RadarUpdater != undefined) {
+    //             window.atticData.current_RadarUpdater.disable();
+    //         }
+
+    //         console.log('Main file:', L3Factory);
+    //         // L3Factory.display_file_info();
+    //         L3Factory.plot();
+
+    //         callback(L3Factory);
+    //     })
+    // })
 }
 
 /**

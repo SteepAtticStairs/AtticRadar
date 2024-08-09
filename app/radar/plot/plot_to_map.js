@@ -86,8 +86,9 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
+    const layer_name = nexrad_factory.generate_unique_id();
     var layer = {
-        id: 'baseReflectivity',
+        id: layer_name,
         type: 'custom',
 
         onAdd: function (map, gl) {
@@ -236,31 +237,33 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
 
     map_funcs.removeMapLayer('baseReflectivity');
     map.addLayer(layer, map_funcs.get_base_layer());
+    map.setLayoutProperty(layer_name, 'visibility', 'none');
+    console.log(layer_name)
 
     var isInFileUploadMode = window.atticData.from_file_upload; /* $('#armrModeBtnSwitchElem').is(':checked'); */
-    if (!isInFileUploadMode) {
-        init_storm_tracks.fetch_data();
-        // STstuff.loadAllStormTrackingStuff();
+    // if (!isInFileUploadMode) {
+    //     init_storm_tracks.fetch_data();
+    //     // STstuff.loadAllStormTrackingStuff();
 
-        function _after() {
-            filter_lightning();
-            const isLightningVisChecked = $('#armrLightningVisBtnSwitchElem').is(':checked');
-            if (!isLightningVisChecked) {
-                if (map.getLayer('lightningLayer')) {
-                    map.setLayoutProperty('lightningLayer', 'visibility', 'none');
-                }
-            }
-        }
-        if (!map.getLayer('lightningLayer')) {
-            load_lightning(() => {
-                _after();
-            });
-        } else {
-            _after();
-        }
-    } else {
-        filter_lightning(true);
-    }
+    //     function _after() {
+    //         filter_lightning();
+    //         const isLightningVisChecked = $('#armrLightningVisBtnSwitchElem').is(':checked');
+    //         if (!isLightningVisChecked) {
+    //             if (map.getLayer('lightningLayer')) {
+    //                 map.setLayoutProperty('lightningLayer', 'visibility', 'none');
+    //             }
+    //         }
+    //     }
+    //     if (!map.getLayer('lightningLayer')) {
+    //         load_lightning(() => {
+    //             _after();
+    //         });
+    //     } else {
+    //         _after();
+    //     }
+    // } else {
+    //     filter_lightning(true);
+    // }
 
     const range = nexrad_factory?.initial_radar_obj?.max_range;
     if (range != undefined) {
@@ -327,7 +330,7 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
     if (!isInFileUploadMode) {
         const current_RadarUpdater = new RadarUpdater(nexrad_factory);
         window.atticData.current_RadarUpdater = current_RadarUpdater;
-        current_RadarUpdater.enable();
+        // current_RadarUpdater.enable();
     }
 
     window.atticData.current_nexrad_location = nexrad_factory.get_location();
