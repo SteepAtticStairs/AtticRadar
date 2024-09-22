@@ -4428,6 +4428,18 @@ const radio_streams = {
         "stateabbr": "ON",
         "goldstar": "<small title=\"Good Quality\" style=\"color:#ffdf00;display:inline;font-size:150%\">&star;<\/small>",
         "samecode": []
+    },
+    "WXN99": {
+        "radiourl": "https://broadcastify.cdnstream1.com/27542"
+    },
+    "WXL70": {
+        "radiourl": "https://broadcastify.cdnstream1.com/40128"
+    },
+    "WXL56": {
+        "radiourl": "https://broadcastify.cdnstream1.com/37459"
+    },
+    "KHC27": {
+        "radiourl": "https://broadcastify.cdnstream1.com/43189"
     }
 }
 
