@@ -5,7 +5,7 @@ $('#armrAboutBtn').click(function() {
 `<div style="text-align: center; padding-left: 20px; padding-right: 20px; color: rgb(200, 200, 200)">
 <div style="font-size: 20px"><b>Hey!</b></div>
 Thanks for checking out my project AtticRadar!
-This app was made by an independent developer - a high school student.
+This app was made by an independent developer - a (recently graduated) high school student.
 
 You can find AtticRadar on Twitter: <a href="https://twitter.com/AtticRadar" style="color: #53a2e0;">@AtticRadar</a>
 Be sure to check there for updates and general info about the project.
@@ -20,7 +20,7 @@ Due to previous use of my code that I wasn't comfortable with, I have unfortunat
 However, if you believe you have a legitimate reason for viewing the code, feel free to send me a message or an email explaining why, and I'll consider it. \
 Thanks!
 
-Copyright © 2023 SteepAtticStairs. All rights reserved.
+Copyright © 2024 SteepAtticStairs. All rights reserved.
 </div>
 </div>`
 
