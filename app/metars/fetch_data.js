@@ -68,6 +68,9 @@ function fetchMETARData() {
                             delete parsedXMLData.response.data.METAR[item];
                         }
                     }
+                } else {
+                    // deletes all unknown metar stations not in atticradar's database
+                    delete parsedXMLData.response.data.METAR[item];
                 }
             }
         }
