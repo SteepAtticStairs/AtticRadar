@@ -2680,37 +2680,37 @@ const radio_streams = {
             "Worcester": "Worcester,&nbsp;MA(SAME&nbsp;025027&nbsp;for&nbsp;SW)"
         }
     },
-    "WXJ52": {
-        "call": "WXJ52",
-        "alt": "N",
-        "loc": "Fayetteville, AR",
-        "freq": "162.475 MHz",
-        "who": "\"Ozarks\"<span style=\"padding-left:12px;color:#009a00\">*WRO*<\/span>",
-        "type": "WRO",
-        "wxurl": "",
-        "lat": "35.814333",
-        "long": "-94.028194",
-        "watts": "1000",
-        "xmloc": "Winslow,AR",
-        "wfo": "Tulsa",
-        "wxown": "WXJ52",
-        "radiourl": "https:\/\/wxradio.org\/AR-Fayetteville-WXJ52",
-        "mapurl": "https:\/\/www.nws.noaa.gov\/nwr\/Maps\/GIF\/WXJ52.gif",
-        "logo": "./ajax-images/NWRNWRo150.png",
-        "state": "Arkansas",
-        "stateabbr": "AR",
-        "goldstar": "",
-        "samecode": {
-            "Benton": "Benton,&nbsp;AR(SAME&nbsp;005007)",
-            "Carroll": "Carroll,&nbsp;AR(SAME&nbsp;005015)",
-            "Crawford": "Crawford,&nbsp;AR(SAME&nbsp;005033)",
-            "Franklin": "Franklin,&nbsp;AR(SAME&nbsp;005047)",
-            "Madison": "Madison,&nbsp;AR(SAME&nbsp;005087)",
-            "Washington": "Washington,&nbsp;AR(SAME&nbsp;005143)",
-            "Adair": "Adair,&nbsp;OK(SAME&nbsp;040001)",
-            "Delaware": "Delaware,&nbsp;OK(SAME&nbsp;040041)"
-        }
-    },
+    // "WXJ52": {
+    //     "call": "WXJ52",
+    //     "alt": "N",
+    //     "loc": "Fayetteville, AR",
+    //     "freq": "162.475 MHz",
+    //     "who": "\"Ozarks\"<span style=\"padding-left:12px;color:#009a00\">*WRO*<\/span>",
+    //     "type": "WRO",
+    //     "wxurl": "",
+    //     "lat": "35.814333",
+    //     "long": "-94.028194",
+    //     "watts": "1000",
+    //     "xmloc": "Winslow,AR",
+    //     "wfo": "Tulsa",
+    //     "wxown": "WXJ52",
+    //     "radiourl": "https:\/\/wxradio.org\/AR-Fayetteville-WXJ52",
+    //     "mapurl": "https:\/\/www.nws.noaa.gov\/nwr\/Maps\/GIF\/WXJ52.gif",
+    //     "logo": "./ajax-images/NWRNWRo150.png",
+    //     "state": "Arkansas",
+    //     "stateabbr": "AR",
+    //     "goldstar": "",
+    //     "samecode": {
+    //         "Benton": "Benton,&nbsp;AR(SAME&nbsp;005007)",
+    //         "Carroll": "Carroll,&nbsp;AR(SAME&nbsp;005015)",
+    //         "Crawford": "Crawford,&nbsp;AR(SAME&nbsp;005033)",
+    //         "Franklin": "Franklin,&nbsp;AR(SAME&nbsp;005047)",
+    //         "Madison": "Madison,&nbsp;AR(SAME&nbsp;005087)",
+    //         "Washington": "Washington,&nbsp;AR(SAME&nbsp;005143)",
+    //         "Adair": "Adair,&nbsp;OK(SAME&nbsp;040001)",
+    //         "Delaware": "Delaware,&nbsp;OK(SAME&nbsp;040041)"
+    //     }
+    // },
     "WXJ57": {
         "call": "WXJ57",
         "alt": "N",
@@ -4440,7 +4440,19 @@ const radio_streams = {
     },
     "KHC27": {
         "radiourl": "https://broadcastify.cdnstream1.com/43189"
-    }
+    },
+    "WXJ52": {
+        "radiourl": "https://broadcastify.cdnstream1.com/30688"
+    },
+    "KIH27": {
+        "radiourl": "https://wxradio.org/OK-Tulsa-KIH27"
+    },
+    "KIH54": {
+        "radiourl": "https://broadcastify.cdnstream1.com/30979"
+    },
+    "KIH57": {
+        "radiourl": "https://broadcastify.cdnstream1.com/42160"
+    },
 }
 
 
