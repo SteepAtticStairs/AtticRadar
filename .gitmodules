@@ -1,3 +1,0 @@
-[submodule "server/AtticServer"]
-	path = server/AtticServer
-	url = https://github.com/SteepAtticStairs/AtticServer.git
