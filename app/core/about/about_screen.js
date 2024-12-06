@@ -16,9 +16,9 @@ My email is also open: <a href="mailto:steepatticstairs@gmail.com" style="color:
 You can also message me on Discord; my username is <code class="about_box_code">steepatticstairs</code>.
 
 Are you looking for AtticRadar's source code?
-Due to previous use of my code that I wasn't comfortable with, I have unfortunately decided to make the source code private, for the time being. \
-However, if you believe you have a legitimate reason for viewing the code, feel free to send me a message or an email explaining why, and I'll consider it. \
-Thanks!
+It's on GitHub! Check it out:
+<a href="https://github.com/SteepAtticStairs/AtticRadar" style="color: #53a2e0;">https://github.com/SteepAtticStairs/AtticRadar</a>
+I’d appreciate giving credit if you do find the code helpful!
 
 Copyright © 2024 SteepAtticStairs. All rights reserved.
 </div>
