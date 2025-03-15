@@ -254,6 +254,7 @@ function quick_storm_relative_velocity_plot(station, product, callback = null) {
             window.atticData.current_RadarUpdater.disable();
         }
 
+        console.log('Main file:', combinedFactory);
         combinedFactory.plot();
         callback(combinedFactory);
     });

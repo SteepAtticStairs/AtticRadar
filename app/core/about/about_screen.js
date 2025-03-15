@@ -20,7 +20,7 @@ It's on GitHub! Check it out:
 <a href="https://github.com/SteepAtticStairs/AtticRadar" style="color: #53a2e0;">https://github.com/SteepAtticStairs/AtticRadar</a>
 I’d appreciate giving credit if you do find the code helpful!
 
-Copyright © 2024 SteepAtticStairs. All rights reserved.
+Copyright © 2025 SteepAtticStairs. All rights reserved.
 </div>
 </div>`
 
