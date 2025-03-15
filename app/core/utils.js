@@ -271,6 +271,7 @@ var tiltObject = {
 var numOfTiltsObj = {
     'ref': [1, 2, 3, 4],
     'vel': [1, 2, 3],
+    'srvel': [1, 2, 3],
     'lowres-ref': [1, 2, 3, 4],
     'lowres-vel': [1, 2, 3, 4],
     'rho': [1, 2, 3, 4],

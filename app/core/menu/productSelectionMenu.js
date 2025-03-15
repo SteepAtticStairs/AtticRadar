@@ -5,6 +5,7 @@ var productLookup = {
     1: {
         'ref': 'N0B',
         'vel': 'N0G',
+        'srvel': 'N0G',
         'lowres-ref': 'p94r0',
         'lowres-vel': 'p99v0',
         'rho': 'N0C',
@@ -22,6 +23,7 @@ var productLookup = {
     2: {
         'ref': 'N1B',
         'vel': 'NAG',
+        'srvel': 'NAG',
         'lowres-ref': 'p94r1',
         'lowres-vel': 'p99v1',
         'rho': 'N1C',
@@ -36,6 +38,7 @@ var productLookup = {
     3: {
         'ref': 'N2B',
         'vel': 'N1G',
+        'srvel': 'N1G',
         'lowres-ref': 'p94r2',
         'lowres-vel': 'p99v2',
         'rho': 'N2C',
@@ -107,7 +110,11 @@ $('.psmRow').click(function(e) {
         var resultProduct = productLookup[selectedTiltNum][value];
 
         window.atticData.from_file_upload = false;
-        loaders_nexrad.quick_level_3_plot(currentStation, resultProduct, (L3Factory) => {});
+        if (value == 'srvel') {
+            loaders_nexrad.quick_storm_relative_velocity_plot(currentStation, resultProduct, (L3Factory) => { });
+        } else {
+            loaders_nexrad.quick_level_3_plot(currentStation, resultProduct, (L3Factory) => { });
+        }
         // loaders.getLatestFile(currentStation, [3, resultProduct, 0], function(url) {
         //     console.log(url)
         //     loaders.loadFileObject(ut.phpProxy + url + '#', 3);
