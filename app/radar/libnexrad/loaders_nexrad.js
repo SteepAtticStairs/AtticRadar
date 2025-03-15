@@ -242,25 +242,6 @@ function quick_level_3_plot(station, product, callback = null) {
 }
 
 /**
- * Function to quickly plot storm relative velocity.
- * 
- * @param {String} station - Station ICAO code
- * @param {Function} callback - Optional callback function
- */
-function quick_storm_relative_velocity_plot(station, product, callback = null) {
-    if (callback == null) { callback = function () { } }
-    create_super_res_storm_relative_velocity(station, product, (combinedFactory) => {
-        if (window?.atticData?.current_RadarUpdater !== undefined) {
-            window.atticData.current_RadarUpdater.disable();
-        }
-
-        combinedFactory.plot();
-        callback(combinedFactory);
-    });
-}
-
-
-/**
  * Plot a Level 3 file from a url.
  * 
  * @param {String} url - See documentation for "file_to_buffer" function.
@@ -292,100 +273,6 @@ function return_level_2_factory_from_buffer(arraybuffer, callback, filename) {
     }, filename);
 }
 
-/**
- * Calculate the storm component contribution along a radial direction
- * 
- * @param {Number} stormSpeed - Storm speed in appropriate units
- * @param {Number} stormDirection - Storm direction in degrees
- * @param {Number} azimuth - Radial azimuth angle in degrees
- * @returns {Number} The component of the storm vector along the radial
- */
-function calculateStormComponent(stormSpeed, stormDirection, azimuth) {
-    // Convert angles to radians
-    const stormDirRad = stormDirection * Math.PI / 180;
-    const azimuthRad = azimuth * Math.PI / 180;
-
-    // Calculate the component
-    return stormSpeed * Math.cos(stormDirRad - azimuthRad);
-}
-
-
-
-/**
- * Processes storm relative velocity data by combining base velocity data with storm vector information.
- * This function creates a factory that adds storm motion vector correction to base velocity measurements.
- * 
- * @param {Object} baseVelocityFactory - The factory object for base velocity data processing
- * @param {Object} stormVectorFactory - The factory object containing storm vector information from N0S product
- * @returns {Object} A modified velocity factory with storm-relative velocity calculation capability
- * 
- * @description
- * The function extracts storm motion vector information (speed and direction) from the product description
- * in the stormVectorFactory. It then creates a combined factory that inherits from baseVelocityFactory,
- * but overrides the get_data method to apply storm motion correction to the velocity measurements.
- * 
- * Storm speed is converted from knots to meters per second.
- * 
- * The storm component is used to modify each valid velocity measurement, ignoring missing or range-folded values.
- */
-function process_storm_relative_velocity(baseVelocityFactory, stormVectorFactory) {
-    const combinedFactory = Object.assign(Object.create(Object.getPrototypeOf(baseVelocityFactory)), baseVelocityFactory);
-    combinedFactory.storm_relative_velocity = true;
-    // Extract storm motion vector information from N0S product
-    // Get storm speed and dir from the product description block
-    const product_desc = stormVectorFactory.initial_radar_obj.prod_desc;
-
-    
-    const stormSpeed = (product_desc.dep8 || 0) / 10 * 0.514444; // Convert to m/s
-    const stormDirection = (product_desc.dep9 || 0) / 10;
-    // Override the get_data method to apply the storm vector to the velocity data
-    const originalGetData = combinedFactory.get_data;
-    combinedFactory.get_data = function () {
-        const velocityData = originalGetData.call(this);
-        const azimuthAngles = this.get_azimuth_angles();
-
-        // Apply the storm vector to each gate in each radial
-        return velocityData.map((radial, i) => {
-            const azimuth = azimuthAngles[i];
-            return radial.map(velocity => {
-                if (velocity === null || 
-                    velocity === this.initial_radar_obj.map_data.MISSING ||
-                    velocity === this.initial_radar_obj.map_data.RANGE_FOLD) {
-                    return velocity;
-                }
-
-                // Calculate the storm component in the radial direction
-                const stormComponent = calculateStormComponent(stormSpeed, stormDirection, azimuth);
-
-                // Modify the storm component from the measured velocity
-                return velocity + stormComponent;
-            });
-        });
-    };
-
-    // Update product information to indicate this is storm relative velocity
-
-    return combinedFactory;
-}
-
-
-/**
- * Function to create storm relative velocity by combining storm vector and base velocity data.
- * 
- * @param {String} station - The station ICAO code
- * @param {Function} callback - A callback function that receives the combined L3Factory instance
- */
-function create_super_res_storm_relative_velocity(station, product, callback) {
-    // Get the storm vector data from N0S product
-    return_level_3_factory_from_info(station, 'N0S', (stormVectorFactory) => {
-        return_level_3_factory_from_info(station, product, (baseVelocityFactory) => {
-            const combinedFactory = process_storm_relative_velocity(baseVelocityFactory, stormVectorFactory);
-            combinedFactory.isStormRelative = true;
-            callback(combinedFactory);
-        });
-    });
-}
-
 module.exports = {
     file_to_buffer,
     get_latest_level_2_url,
@@ -397,9 +284,5 @@ module.exports = {
     quick_level_3_plot,
     level_3_plot_from_url,
 
-    return_level_2_factory_from_buffer,
-
-    create_super_res_storm_relative_velocity,
-    quick_storm_relative_velocity_plot,
-    process_storm_relative_velocity
+    return_level_2_factory_from_buffer
 };

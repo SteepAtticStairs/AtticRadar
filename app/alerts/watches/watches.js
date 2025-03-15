@@ -127,7 +127,6 @@ function fetch_watches() {
         kmz_to_geojson(blob, (kml_dom) => {
             const parsed_xml = ut.xmlToJson(kml_dom);
             const base = parsed_xml.kml.Folder.NetworkLink;
-            if (!base) { return; }
             for (var i = 0; i < base.length; i++) {
                 const this_discussion_url = base[i].Link.href['#text'];
                 const this_discussion_desc = base[i].name['#text'];
