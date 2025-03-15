@@ -58,8 +58,9 @@ function load() {
     // load the about menu
     require('../about/about_screen');
 
-    // detect if AtticRadar is being loaded in an iframe
-    require('../misc/detect_iframe');
+    // // detect if AtticRadar is being loaded in an iframe
+    // require('../misc/detect_iframe');
+    // require('../misc/disclaimer');
 
     // load the draw menu item
     require('../../draw/menu_item');
