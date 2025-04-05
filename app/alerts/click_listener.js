@@ -21,7 +21,8 @@ function to_title_case(str) {
 function click_listener(e) {
     e.originalEvent.cancelBubble = true;
 
-    if (map.queryRenderedFeatures(e.point)[0].layer.id == 'stationSymbolLayer') return;
+    const renderedFeatures = map.queryRenderedFeatures(e.point);
+    if (renderedFeatures[0] && renderedFeatures[0].layer.id == 'stationSymbolLayer') return;
 
     var alertContentObj = {};
     var alreadyAddedAlerts = [];
