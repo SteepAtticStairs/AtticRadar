@@ -15,11 +15,12 @@ function click_listener(e) {
     // popup.add_to_map();
 
     if (e.originalEvent.cancelBubble) { return; }
+    if (map.queryRenderedFeatures(e.point)[0].layer.id == 'stationSymbolLayer') return;
     const properties = e.features[0].properties;
     const divid = `ww${properties.id}`
 
     var popup_html =
-`<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
+        `<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
 <i id="${divid}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
 
     const popup = new AtticPopup(e.lngLat, popup_html);
@@ -27,7 +28,7 @@ function click_listener(e) {
     popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() + parseInt($('.alert_popup_info').css('paddingRight'))}`);
     popup.update_popup_pos();
 
-    $(`#${divid}`).on('click', function() {
+    $(`#${divid}`).on('click', function () {
         display_attic_dialog({
             'title': `${properties.event}`,
             'body': properties.full_desc,
@@ -39,15 +40,15 @@ function click_listener(e) {
 
 function _fetch_individual_watch(url, callback) {
     fetch(ut.phpProxy + url, { cache: 'no-store' })
-    .then(response => response.blob())
-    .then(blob => {
-        blob.lastModifiedDate = new Date();
-        blob.name = url;
+        .then(response => response.blob())
+        .then(blob => {
+            blob.lastModifiedDate = new Date();
+            blob.name = url;
 
-        kmz_to_geojson(blob, (geojson) => {
-            callback(geojson);
-        });
-    })
+            kmz_to_geojson(blob, (geojson) => {
+                callback(geojson);
+            });
+        })
 }
 
 function _plot_watches(feature_collection) {
@@ -104,10 +105,10 @@ function _plot_watches(feature_collection) {
             }
         });
 
-        map.on('mouseover', `watches_layer_fill`, function(e) {
+        map.on('mouseover', `watches_layer_fill`, function (e) {
             map.getCanvas().style.cursor = 'pointer';
         });
-        map.on('mouseout', `watches_layer_fill`, function(e) {
+        map.on('mouseout', `watches_layer_fill`, function (e) {
             map.getCanvas().style.cursor = '';
         });
         map.on('click', `watches_layer_fill`, click_listener);
@@ -119,46 +120,46 @@ function _plot_watches(feature_collection) {
 const features = [];
 function fetch_watches() {
     fetch(/*ut.phpProxy + */all_watches_url, { cache: 'no-store' })
-    .then(response => response.blob())
-    .then(blob => {
-        blob.lastModifiedDate = new Date();
-        blob.name = all_watches_url;
+        .then(response => response.blob())
+        .then(blob => {
+            blob.lastModifiedDate = new Date();
+            blob.name = all_watches_url;
 
-        kmz_to_geojson(blob, (kml_dom) => {
-            const parsed_xml = ut.xmlToJson(kml_dom);
-            const base = parsed_xml.kml.Folder.NetworkLink;
-            if (!base) { return; }
-            for (var i = 0; i < base.length; i++) {
-                const this_discussion_url = base[i].Link.href['#text'];
-                const this_discussion_desc = base[i].name['#text'];
-                const event = /(.*? Watch \d+).*/.exec(this_discussion_desc)[1];
-                const color = get_polygon_colors(event.substring(0, event.lastIndexOf(' '))).color;
+            kmz_to_geojson(blob, (kml_dom) => {
+                const parsed_xml = ut.xmlToJson(kml_dom);
+                const base = parsed_xml.kml.Folder.NetworkLink;
+                if (!base) { return; }
+                for (var i = 0; i < base.length; i++) {
+                    const this_discussion_url = base[i].Link.href['#text'];
+                    const this_discussion_desc = base[i].name['#text'];
+                    const event = /(.*? Watch \d+).*/.exec(this_discussion_desc)[1];
+                    const color = get_polygon_colors(event.substring(0, event.lastIndexOf(' '))).color;
 
-                var id_split = event.split(' ');
-                const id = id_split[id_split.length - 1];
+                    var id_split = event.split(' ');
+                    const id = id_split[id_split.length - 1];
 
-                _fetch_individual_watch(this_discussion_url, (geojson) => {
-                    geojson.features[0].properties.event = event;
-                    geojson.features[0].properties.color = color;
-                    geojson.features[0].properties.id = id;
-                    // features.push(geojson.features[0]);
+                    _fetch_individual_watch(this_discussion_url, (geojson) => {
+                        geojson.features[0].properties.event = event;
+                        geojson.features[0].properties.color = color;
+                        geojson.features[0].properties.id = id;
+                        // features.push(geojson.features[0]);
 
-                    fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
-                    .then(response => response.text())
-                    .then(text => {
-                        const doc = new DOMParser().parseFromString(text, 'text/html');
-                        const full_desc = doc.querySelectorAll('pre')[0].innerHTML;
-                        geojson.features[0].properties.full_desc = full_desc;
-                        // console.log($('pre', $( '<div></div>' ).html(text)).text())
+                        fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
+                            .then(response => response.text())
+                            .then(text => {
+                                const doc = new DOMParser().parseFromString(text, 'text/html');
+                                const full_desc = doc.querySelectorAll('pre')[0].innerHTML;
+                                geojson.features[0].properties.full_desc = full_desc;
+                                // console.log($('pre', $( '<div></div>' ).html(text)).text())
 
-                        features.push(geojson.features[0]);
-                        console.log(geojson.features[0]);
-                        _plot_watches(turf.featureCollection(features));
+                                features.push(geojson.features[0]);
+                                console.log(geojson.features[0]);
+                                _plot_watches(turf.featureCollection(features));
+                            })
                     })
-                })
-            }
-        }, true);
-    })
+                }
+            }, true);
+        })
 }
 
 module.exports = fetch_watches;

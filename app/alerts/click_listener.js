@@ -13,13 +13,15 @@ const break_large = `<span style="display: block; margin-bottom: 0.75em;"></span
 
 // https://stackoverflow.com/a/4878800/18758797
 function to_title_case(str) {
-    return str.replace(/\w\S*/g, function(txt){
+    return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 }
 
 function click_listener(e) {
     e.originalEvent.cancelBubble = true;
+
+    if (map.queryRenderedFeatures(e.point)[0].layer.id == 'stationSymbolLayer') return;
 
     var alertContentObj = {};
     var alreadyAddedAlerts = [];
@@ -120,13 +122,13 @@ function click_listener(e) {
             }
 
             var popup_html =
-`<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
+                `<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
 <div><span class="alert_popup_lessertext">${thingToPrepend}</span> ${formattedDateDiff} ${thingToAppend}</div>
 ${parameters_html}
 <i id="${id}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
 
-            var extentedAlertDescription = 
-`<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${checkPropertyExists(properties.event)}
+            var extentedAlertDescription =
+                `<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${checkPropertyExists(properties.event)}
 <hr>${checkPropertyExists(properties.senderName)}</b>
 <hr>${secondary_headline}
 <hr>${main_headline}
@@ -154,7 +156,7 @@ ${parameters_html}
     //     .setHTML(popupItem)
     //     .addTo(map);
 
-    $('.alert_popup_info').on('click', function(e) {
+    $('.alert_popup_info').on('click', function (e) {
         var id = $(this).attr('id');
         // ut.spawnModal({
         //     'title': alertContentObj[id].title,
