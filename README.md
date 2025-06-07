@@ -1,4 +1,6 @@
-# AtticRadar
+# AtticRadar-Returned
+
+A fork of [AtticRadar](https://github.com/SteepAtticStairs/AtticRadar), built by [SteepAtticStairs](https://github.com/SteepAtticStairs/), made functional again.
 
 A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.
 
