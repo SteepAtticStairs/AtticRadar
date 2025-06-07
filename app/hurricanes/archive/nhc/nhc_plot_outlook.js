@@ -30,7 +30,7 @@ function _click_listener(e) {
             <div class="code">${properties.Discussion}</div>
         </div>`
 
-    new mapboxgl.Popup({ className: 'alertPopup'})
+    new maplibregl.Popup({ className: 'alertPopup' })
         .setLngLat([lng, lat])
         .setHTML(popup_content)
         //.setHTML(e.features[0].properties.description)

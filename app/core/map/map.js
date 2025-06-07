@@ -1,7 +1,6 @@
-mapboxgl.accessToken = 'pk.eyJ1Ijoiam1ja2lubGV5ODkiLCJhIjoiY2x4aHVyejBmMHd0OTJzcHc4ZmYxNzZ3MSJ9.0z8npzsQirgQyecqCoc_zg';
-const map = new mapboxgl.Map({
+const map = new maplibregl.Map({
     container: 'map',
-    style: 'mapbox://styles/jmckinley89/clxhutckh010601qk2mt7duci',
+    style: 'app/core/map/style.json',
     zoom: 3, // 2
     center: [-98.5606744, 36.8281576], // [111.83024360762363, 27.174263144019363]
     maxZoom: 20,
@@ -44,8 +43,8 @@ map.dragRotate.disable();
 // DESKTOP - disable map rotation using the keyboard
 map.keyboard.disableRotation();
 // prevent the context menu from opening when right clicking on the map
-$('#map').on('contextmenu', function(e) {
-    if ($(e.target).hasClass('mapboxgl-canvas')) {
+$('#map').on('contextmenu', function (e) {
+    if ($(e.target).hasClass('maplibre-canvas')) {
         e.preventDefault();
     }
 })
@@ -59,7 +58,7 @@ $('#map').on('contextmenu', function(e) {
 // })
 
 // map.on('click', (e) => {
-//     const popup = new mapboxgl.Popup({ className: 'alertPopup' })
+//     const popup = new maplibregl.Popup({ className: 'alertPopup' })
 //         .setLngLat(e.lngLat)
 //         .setHTML("Hello World!")
 //         .addTo(map);
@@ -73,7 +72,7 @@ $('#map').on('contextmenu', function(e) {
 //     for (var i in oldMark) {
 //         oldMark[i].remove();
 //     }
-//     var mark = new mapboxgl.Marker()
+//     var mark = new maplibregl.Marker()
 //     .setLngLat([mapCenter.lng, mapCenter.lat])
 //     .addTo(map);
 //     oldMark.push(mark)
@@ -117,7 +116,7 @@ window.onclick = () => { map.resize() }
 //         return;
 //     }
 //     var positionContainer = document.createElement('div');
-//     positionContainer.className = `mapboxgl-ctrl-${positionName}`;
+//     positionContainer.className = `maplibregl-ctrl-${positionName}`;
 //     map._controlContainer.appendChild(positionContainer);
 //     map._controlPositions[positionName] = positionContainer;
 // }

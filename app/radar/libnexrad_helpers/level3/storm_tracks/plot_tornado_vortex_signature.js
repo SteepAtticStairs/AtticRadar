@@ -11,7 +11,7 @@ function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var bearing = bearingDEG;
 
     var point = turf.point([startLng, startLat]);
-    var destiation = turf.destination(point, distanceMeters, bearing, {units: 'meters'});
+    var destiation = turf.destination(point, distanceMeters, bearing, { units: 'meters' });
     return destiation;
 }
 
@@ -24,7 +24,7 @@ function plot_tornado_vortex_signature(L3Factory) {
 
         function individual_cell(id) {
             const base_point = findTerminalCoordinates(station_info.lat, station_info.lon, all_tracks[id].range, all_tracks[id].az);
-            const coords = {'lng': base_point.geometry.coordinates[0], 'lat': base_point.geometry.coordinates[1]};
+            const coords = { 'lng': base_point.geometry.coordinates[0], 'lat': base_point.geometry.coordinates[1] };
             base_point.properties.cellProperties = all_tracks[id];
             base_point.properties.cellID = all_tracks[id].cell_id;
             base_point.properties.coords = coords;
@@ -61,23 +61,23 @@ function plot_tornado_vortex_signature(L3Factory) {
 
         function cellClick(e) {
             // if (window.atticData.currentStation == L3Factory.station) {
-                const properties = e.features[0].properties;
-                const cellID = properties.cellID;
-                const cellProperties = JSON.parse(properties.cellProperties);
+            const properties = e.features[0].properties;
+            const cellID = properties.cellID;
+            const cellProperties = JSON.parse(properties.cellProperties);
 
-                var fileTime = L3Factory.get_date();
-                var hourMin = ut.printHourMin(fileTime, ut.userTimeZone);
+            var fileTime = L3Factory.get_date();
+            var hourMin = ut.printHourMin(fileTime, ut.userTimeZone);
 
-                function flip(num) {
-                    if (num >= 180) {
-                        return num - 180;
-                    } else if (num < 180) {
-                        return num + 180;
-                    }
+            function flip(num) {
+                if (num >= 180) {
+                    return num - 180;
+                } else if (num < 180) {
+                    return num + 180;
                 }
+            }
 
-                var popupHTML =
-    `<b><u>TVS</u></b>
+            var popupHTML =
+                `<b><u>TVS</u></b>
     <div>Cell <b>${cellID}</b> at <b>${hourMin}</b></div>
     <div><b>${ut.degToCompass(flip(cellProperties.az))}</b> at <b>${ut.knotsToMph(cellProperties.range, 0)}</b> mph</div>
     <br>
@@ -91,11 +91,11 @@ function plot_tornado_vortex_signature(L3Factory) {
     <div>Maximum Shear: <b>${cellProperties.maxshear} m/s/km</b>
     <div>Height of Max Shear: <b>${cellProperties.maxshearheight} kft</b>`
 
-                // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000', maxHeight: '300' })
-                //     .setLngLat(JSON.parse(properties.coords))
-                //     .setHTML(popupHTML)
-                //     .addTo(map);
-                new AtticPopup(JSON.parse(properties.coords), popupHTML).add_to_map();
+            // new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000', maxHeight: '300' })
+            //     .setLngLat(JSON.parse(properties.coords))
+            //     .setHTML(popupHTML)
+            //     .addTo(map);
+            new AtticPopup(JSON.parse(properties.coords), popupHTML).add_to_map();
             // }
         }
         map.on('click', 'tvsInitialPoint', cellClick);

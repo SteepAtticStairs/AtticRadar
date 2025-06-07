@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>AtticRadar</title>
-    <meta name="description" content="A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.">
+    <meta name="description"
+        content="A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.">
     <link rel="icon" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -58,6 +60,7 @@
 
             background-color: rgb(75, 75, 75);
         }
+
         #loadingLibrariesDiv {
             position: absolute;
             top: 0;
@@ -68,6 +71,7 @@
             background: url('./logo.png') no-repeat center fixed, #7b7b7b;
             background-size: contain;
         }
+
         #loadingLibrariesDivContent {
             position: absolute;
             top: 0;
@@ -89,6 +93,7 @@
             font-size: 50px;
             font-weight: bold;
         }
+
         .progress_bar {
             position: absolute;
             /* width: 100%; */
@@ -106,6 +111,7 @@
             background-color: rgb(103, 103, 103);
             border-radius: 10px;
         }
+
         .progress_bar_inner {
             position: absolute;
             top: 4px;
@@ -116,6 +122,7 @@
             background-color: rgb(51, 51, 51);
             border-radius: 10px;
         }
+
         .progress_bar_text {
             position: absolute;
             z-index: 500001;
@@ -125,6 +132,9 @@
             font-style: italic;
         }
     </style>
+
+    <link href="https://unpkg.com/maplibre-gl@^5.6.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/maplibre-gl@^5.6.0/dist/maplibre-gl.js"></script>
 </head>
 
 <body>
@@ -138,208 +148,234 @@
 
     <div id="bodyDiv">
 
-    <div id="progress_bar_screen_background">
-        <div id="mainProgressBar" class="progress_bar" style="bottom: calc(50% - 15px); box-shadow: 0px 0px 20px 8px rgb(25, 25, 25);">
-            <span id="mainProgressBarText" class="progress_bar_text"></span>
-            <div id="mainProgressBarInner" class="progress_bar_inner"></div>
+        <div id="progress_bar_screen_background">
+            <div id="mainProgressBar" class="progress_bar"
+                style="bottom: calc(50% - 15px); box-shadow: 0px 0px 20px 8px rgb(25, 25, 25);">
+                <span id="mainProgressBarText" class="progress_bar_text"></span>
+                <div id="mainProgressBarInner" class="progress_bar_inner"></div>
+            </div>
         </div>
-    </div>
 
-    <!-- <input type="text" id="gateRes" value="500" style="position: absolute; z-index: 1237109230; left: 200px">
+        <!-- <input type="text" id="gateRes" value="500" style="position: absolute; z-index: 1237109230; left: 200px">
     <br>
     <input type="text" id="multiplier" value="2" style="position: absolute; z-index: 1237109230; left: 200px"> -->
-    <!--
+        <!--
         MAP FOOTER
     -->
-    <div id="mapFooter" class="mapFooter">
-        <div id="productMapFooter" style="display: none">
-            <div id="productsDropdownTrigger" class="noselect pdt"><div id="productsDropdownTriggerText" class="icon-blue pdt">Products</div>
-                <div id="extraProductInfo" class="noselect" style="display: none">Info</div>
+        <div id="mapFooter" class="mapFooter">
+            <div id="productMapFooter" style="display: none">
+                <div id="productsDropdownTrigger" class="noselect pdt">
+                    <div id="productsDropdownTriggerText" class="icon-blue pdt">Products</div>
+                    <div id="extraProductInfo" class="noselect" style="display: none">Info</div>
+                </div>
+                <div id="radarDateTime" class="noselect" style="display: none">Date & Time</div>
             </div>
-            <div id="radarDateTime" class="noselect" style="display: none">Date & Time</div>
-        </div>
 
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <div id="stationMenuItemDiv" class="mapFooterMenuItem">
-            <span id="stationMenuItemIcon" class="fa fa-satellite-dish icon-grey menu_item_not_selected"></span>
-        </div>
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <div id="alertMenuItemDiv" class="mapFooterMenuItem">
-            <span id="alertMenuItemIcon" class="fa fa-circle-exclamation icon-grey menu_item_not_selected"></span>
-        </div>
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <div id="metarStationMenuItemDiv" class="mapFooterMenuItem">
-            <span id="metarStationMenuItemIcon" class="fa fa-temperature-half icon-grey menu_item_not_selected"></span>
-        </div>
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <div id="colorPickerItemDiv" class="mapFooterMenuItem">
-            <span id="colorPickerItemClass" class="fa fa-crosshairs icon-grey menu_item_not_selected"></span>
-        </div>
-        <!-- <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <div id="stationMenuItemDiv" class="mapFooterMenuItem">
+                <span id="stationMenuItemIcon" class="fa fa-satellite-dish icon-grey menu_item_not_selected"></span>
+            </div>
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <div id="alertMenuItemDiv" class="mapFooterMenuItem">
+                <span id="alertMenuItemIcon" class="fa fa-circle-exclamation icon-grey menu_item_not_selected"></span>
+            </div>
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <div id="metarStationMenuItemDiv" class="mapFooterMenuItem">
+                <span id="metarStationMenuItemIcon"
+                    class="fa fa-temperature-half icon-grey menu_item_not_selected"></span>
+            </div>
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <div id="colorPickerItemDiv" class="mapFooterMenuItem">
+                <span id="colorPickerItemClass" class="fa fa-crosshairs icon-grey menu_item_not_selected"></span>
+            </div>
+            <!-- <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
         <div id="lightningItemDiv" class="mapFooterMenuItem">
             <span id="lightningItemClass" class="fa fa-bolt icon-grey"></span>
         </div> -->
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <div id="drawMenuItemDiv" class="mapFooterMenuItem">
-            <span id="drawMenuItemIcon" class="fa fa-pencil icon-grey menu_item_not_selected"></span>
-        </div>
-        <!-- <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <div id="drawMenuItemDiv" class="mapFooterMenuItem">
+                <span id="drawMenuItemIcon" class="fa fa-pencil icon-grey menu_item_not_selected"></span>
+            </div>
+            <!-- <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
         <div id="forecastMenuItemDiv" class="mapFooterMenuItem">
             <span id="forecastMenuItemIcon" class="fa fa-cloud-sun icon-grey"></span>
         </div> -->
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <div id="settingsItemDiv" class="mapFooterMenuItem">
-            <span id="settingsItemClass" class="fa fa-sliders icon-grey menu_item_not_selected"></span>
-        </div>
-        <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
-        <!-- <div id="toolsItemDiv" class="mapFooterMenuItem">
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <div id="settingsItemDiv" class="mapFooterMenuItem">
+                <span id="settingsItemClass" class="fa fa-sliders icon-grey menu_item_not_selected"></span>
+            </div>
+            <span class="noselect">&nbsp;&nbsp;&nbsp;</span>
+            <!-- <div id="toolsItemDiv" class="mapFooterMenuItem">
             <span id="toolsItemClass" class="fa icon-grey fa-circle-chevron-right"></span>
         </div>
         <span class="noselect">&nbsp;&nbsp;&nbsp;</span> -->
-    </div>
+        </div>
 
-    <!--
+        <!--
         MAP HEADER
     -->
-    <div id="radarHeader" class="radarHeader">
-        <!-- <div id="top-left" style="color: #a0a0a0; font-size: 15px; line-height: 17px; text-align: left !important;">
+        <div id="radarHeader" class="radarHeader">
+            <!-- <div id="top-left" style="color: #a0a0a0; font-size: 15px; line-height: 17px; text-align: left !important;">
             <span><b style="font-weight: 900">AtticRadar</b><br>steepatticstairs.net</span>
         </div> -->
-        <div id="top-right" style="font-weight: bold"></div>
-        <span id="radarInfoSpan" style="display: none">
-            <!-- <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
+            <div id="top-right" style="font-weight: bold"></div>
+            <span id="radarInfoSpan" style="display: none">
+                <!-- <div style="font-size: 15px"><b>VCP: </b><a id='radarVCP'>None</a></div>
             <div style="font-size: 12px"><sus id='radarStationParent'><i class="fa-solid fa-circle-info" id="radarStationIcon" style="display: none">&nbsp;&nbsp;</i><b id='radarStation'>No Station Selected</b></sus><a id="radarTime"></a></div> -->
-            <div style="font-size: 15px"><b class="icon-blue" id="radarStation" style="cursor: pointer">KLWX</b> <span id="radarLocation"></span></div>
-            <div style="font-size: 13px; color: rgb(161, 161, 161)"><span id="radarVCP"></span></div>
-        </span>
-    </div>
+                <div style="font-size: 15px"><b class="icon-blue" id="radarStation" style="cursor: pointer">KLWX</b>
+                    <span id="radarLocation"></span>
+                </div>
+                <div style="font-size: 13px; color: rgb(161, 161, 161)"><span id="radarVCP"></span></div>
+            </span>
+        </div>
 
-    <!--
+        <!--
         THIS IS THE HTML FOR THE NEW MODAL (DIALOG) (i wrote it myself)
     -->
-    <div id="atcDlg" style="display: none">
-        <div id="atcDlgContainer">
-            <div id="atcDlgHeader"><span id="atcDlgHeaderText">header</span><i id="atcDlgClose" class="fa fa-xmark"></i></div>
-            <div id="atcDlgBody">body</div>
+        <div id="atcDlg" style="display: block">
+            <div id="atcDlgContainer">
+                <div id="atcDlgHeader"><span id="atcDlgHeaderText">PLEASE READ</span><i id="atcDlgClose"
+                        class="fa fa-xmark"></i></div>
+                <div id="atcDlgBody" style="text-align: center">On June 6, 2025, the official AtticRadar website was shut down. The original developer, <a target="_blank" href="https://github.com/SteepAtticStairs/">SteepAtticStairs</a>, stated:
+
+<img src="statement.png" style="width: 34rem">
+
+With the source code left open, I decided to make a fork of the original code and modify it to keep AtticRadar running.
+
+Now, you may have already noticed that there have been some changes, and that change being the completely different map style.
+Why is this you may ask?
+Well the answer is because I switched from <a target="_blank" href="https://mapbox.com/">Mapbox</a> (which, to a point, is paid) to <a target="_blank" href="https://maplibre.org/">MapLibre</a> (which is free). I made this change because I don't want to have to pay for Mapbox, and MapLibre does all of the same things for free. I may add custom styles later on, but for now it will remain as this style.
+
+Have any questions?
+Feel free to DM me on Discord, my username is <code class="about_box_code">cgray.09</code>.
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div id="hurricaneLegendDiv" style="display: none">
-        <span class="hurricaneLegendCircle TD"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Tropical Depression</span>
-        <br>
-        <span class="hurricaneLegendCircle TS"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Tropical Storm</span>
-        <br>
-        <span class="hurricaneLegendCircle C1"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Category 1</span>
-        <br>
-        <span class="hurricaneLegendCircle C2"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Category 2</span>
-        <br>
-        <span class="hurricaneLegendCircle C3"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Category 3</span>
-        <br>
-        <span class="hurricaneLegendCircle C4"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Category 4</span>
-        <br>
-        <span class="hurricaneLegendCircle C5"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Category 5</span>
-        <br>
-        <span class="hurricaneLegendCircle NONTROPICAL"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Non-Tropical</span>
-        <br>
-        <span style="display: none" class="hurricaneLegendCircle OTHER"><span class="hurricaneLegendCircleInner">X</span></span>
-        <!-- <span>Other</span>
+        <div id="hurricaneLegendDiv" style="display: none">
+            <span class="hurricaneLegendCircle TD"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Tropical Depression</span>
+            <br>
+            <span class="hurricaneLegendCircle TS"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Tropical Storm</span>
+            <br>
+            <span class="hurricaneLegendCircle C1"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Category 1</span>
+            <br>
+            <span class="hurricaneLegendCircle C2"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Category 2</span>
+            <br>
+            <span class="hurricaneLegendCircle C3"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Category 3</span>
+            <br>
+            <span class="hurricaneLegendCircle C4"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Category 4</span>
+            <br>
+            <span class="hurricaneLegendCircle C5"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Category 5</span>
+            <br>
+            <span class="hurricaneLegendCircle NONTROPICAL"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Non-Tropical</span>
+            <br>
+            <span style="display: none" class="hurricaneLegendCircle OTHER"><span
+                    class="hurricaneLegendCircleInner">X</span></span>
+            <!-- <span>Other</span>
         <br> -->
-        <span class="hurricaneLegendCircle UNKNOWN"><span class="hurricaneLegendCircleInner">X</span></span>
-        <span>Unknown</span>
-    </div>
+            <span class="hurricaneLegendCircle UNKNOWN"><span class="hurricaneLegendCircleInner">X</span></span>
+            <span>Unknown</span>
+        </div>
 
-    <div id="attributionDiv" class="noselect">
-        <b id="attributionDivContent">
-            <span><b style="font-weight: 900; z-index: 1; position: relative; border-bottom: none;" class="attributionDivText">AtticRadar</b><br><span style="font-weight: normal" class="attributionDivText">steepatticstairs.net</span></span>
-        </b>
-    </div>
+        <div id="attributionDiv" class="noselect">
+            <b id="attributionDivContent">
+                <span><b style="font-weight: 900; z-index: 1; position: relative; border-bottom: none;"
+                        class="attributionDivText">AtticRadar</b><br><span style="font-weight: normal"
+                        class="attributionDivText">steepatticstairs.net</span></span>
+            </b>
+        </div>
 
-    <div id="colorScalePicker"></div>
+        <div id="colorScalePicker"></div>
 
-    <div id="atticRadarMenu" style="display: none">
-        <div id="atticRadarMenuContainer">
-            <div id="atticRadarMenuBody">
-                <div id="atticRadarMenuMainScreen" class="armScreen">
-                    <div class="armsHeader">Menu<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
-                    <br>
-                    <div class="armrHeader">SETTINGS</div>
-                    <div class="atticRadarMenuRow armrTop" id="armrSettingsBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-gear"></i>
-                        Settings
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-                    <div class="atticRadarMenuRow armrBottom" id="armrColortablesBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-palette"></i>
-                        Colortables
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-
-                    <br>
-
-                    <div class="armrHeader">OPEN FILE</div>
-                    <div class="atticRadarMenuRow" id="armrUploadFileBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-upload"></i>
-                        Upload Radar File
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-
-                    <br>
-
-                    <div class="armrHeader">LAYERS</div>
-                    <div class="atticRadarMenuRow armrTop" id="armrSPCOutlooksBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
-                        SPC Outlooks
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle" id="armrHurricanesBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-hurricane"></i>
-                        Hurricane Tracks
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrHurricanesBtnSwitchElem">
+        <div id="atticRadarMenu" style="display: none">
+            <div id="atticRadarMenuContainer">
+                <div id="atticRadarMenuBody">
+                    <div id="atticRadarMenuMainScreen" class="armScreen">
+                        <div class="armsHeader">Menu<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle" id="armrTideStationsBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-ship"></i>
-                        Tide Stations
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrTideStationsBtnSwitchElem">
+                        <br>
+                        <div class="armrHeader">SETTINGS</div>
+                        <div class="atticRadarMenuRow armrTop" id="armrSettingsBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-gear"></i>
+                            Settings
+                            <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle" id="armrSurfaceFrontsBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-wind"></i>
-                        Surface Fronts
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrSurfaceFrontsBtnSwitchElem">
+                        <div class="atticRadarMenuRow armrBottom" id="armrColortablesBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-palette"></i>
+                            Colortables
+                            <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrBottom" id="armrWeatherRadioBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-radio"></i>
-                        NOAA Weather Radio
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();" type="checkbox" role="switch" id="armrWeatherRadioBtnSwitchElem">
+
+                        <br>
+
+                        <div class="armrHeader">OPEN FILE</div>
+                        <div class="atticRadarMenuRow" id="armrUploadFileBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-upload"></i>
+                            Upload Radar File
+                            <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                         </div>
-                    </div>
 
-                    <br>
+                        <br>
 
-                    <div class="armrHeader">INFO</div>
-                    <div class="atticRadarMenuRow" id="armrAboutBtn">
-                        <i class="armrIcon armrIcon-Blue fa-solid fa-circle-info"></i>
-                        About
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
+                        <div class="armrHeader">LAYERS</div>
+                        <div class="atticRadarMenuRow armrTop" id="armrSPCOutlooksBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-cloud-bolt"></i>
+                            SPC Outlooks
+                            <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                        </div>
+                        <div class="atticRadarMenuRow armrMiddle" id="armrHurricanesBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-hurricane"></i>
+                            Hurricane Tracks
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrHurricanesBtnSwitchElem">
+                            </div>
+                        </div>
+                        <div class="atticRadarMenuRow armrMiddle" id="armrTideStationsBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-ship"></i>
+                            Tide Stations
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrTideStationsBtnSwitchElem">
+                            </div>
+                        </div>
+                        <div class="atticRadarMenuRow armrMiddle" id="armrSurfaceFrontsBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-wind"></i>
+                            Surface Fronts
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrSurfaceFrontsBtnSwitchElem">
+                            </div>
+                        </div>
+                        <div class="atticRadarMenuRow armrBottom" id="armrWeatherRadioBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-radio"></i>
+                            NOAA Weather Radio
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrWeatherRadioBtnSwitchElem">
+                            </div>
+                        </div>
 
-                    <br>
+                        <br>
 
-                    <!-- <br>
+                        <div class="armrHeader">INFO</div>
+                        <div class="atticRadarMenuRow" id="armrAboutBtn">
+                            <i class="armrIcon armrIcon-Blue fa-solid fa-circle-info"></i>
+                            About
+                            <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                        </div>
+
+                        <br>
+
+                        <!-- <br>
 
                     <div class="armrHeader">WEATHER STATIONS</div>
                     <div class="atticRadarMenuRow" id="armrAtticStationBtn">
@@ -348,339 +384,429 @@
                         <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                     </div> -->
 
-                    <!-- <div class="armrHeader">HURRICANES</div>
+                        <!-- <div class="armrHeader">HURRICANES</div>
                     <div class="atticRadarMenuRow" id="armrHurricaneArchiveBtn">
                         <i class="armrIcon armrIcon-Blue fa-solid fa-hurricane"></i>
                         Hurricane Archive
                         <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
                     </div> -->
-                    <!-- <div class="atticRadarMenuRow armrTop">Contents Top</div>
+                        <!-- <div class="atticRadarMenuRow armrTop">Contents Top</div>
                     <div class="atticRadarMenuRow armrMiddle">Contents Middle</div>
                     <div class="atticRadarMenuRow armrBottom">Contents Bottom</div>
                     <br>
                     <div class="atticRadarMenuRow">Contents Top</div> -->
-                </div>
-                <div id="atticRadarMenuSettingsScreen" class="armScreen" style="display: none">
-                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSettingsBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Settings<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
-                    <br>
-                    <div class="armrHeader armrHeaderWide">MAP LAYERS</div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrRadarVisBtn">
-                        Radar
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrRadarVisBtnSwitchElem" checked>
-                        </div>
                     </div>
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSTVisBtn">
-                        Storm Tracks
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrSTVisBtnSwitchElem" checked>
+                    <div id="atticRadarMenuSettingsScreen" class="armScreen" style="display: none">
+                        <div class="armsHeader">
+                            <div class="armsHeaderBackBtn" id="armsSettingsBackBtn"><i
+                                    class="fa fa-chevron-left"></i>&nbsp;Back</div>Settings<div
+                                class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightningVisBtn">
-                        Lightning
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrLightningVisBtnSwitchElem">
+                        <br>
+                        <div class="armrHeader armrHeaderWide">MAP LAYERS</div>
+                        <div class="atticRadarMenuRow armrTop armrWide" id="armrRadarVisBtn">
+                            Radar
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrRadarVisBtnSwitchElem" checked>
+                            </div>
                         </div>
-                    </div>
-                    <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSPCOutlooksVisBtn">
+                        <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSTVisBtn">
+                            Storm Tracks
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrSTVisBtnSwitchElem" checked>
+                            </div>
+                        </div>
+                        <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightningVisBtn">
+                            Lightning
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrLightningVisBtnSwitchElem">
+                            </div>
+                        </div>
+                        <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrSPCOutlooksVisBtn">
                         SPC Outlooks
                         <i class="toggleSwitchContainter tscWide" id="armrSPCOutlooksVisBtnSwitch"><input type="checkbox" id="armrSPCOutlooksVisBtnSwitchElem" class="toggleSwitch" /><label for="armrSPCOutlooksVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div> -->
-                    <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightningVisBtn">
+                        <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightningVisBtn">
                         Lightning
                         <i class="toggleSwitchContainter tscWide" id="armrLightningVisBtnSwitch"><input type="checkbox" id="armrLightningVisBtnSwitchElem" class="toggleSwitch" checked /><label for="armrLightningVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div> -->
-                    <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrRoadsStreetsVisBtn">
+                        <!-- <div class="atticRadarMenuRow armrMiddle armrWide" id="armrRoadsStreetsVisBtn">
                         Roads & Streets
                         <i class="toggleSwitchContainter tscWide" id="armrRoadsStreetsVisBtnSwitch"><input type="checkbox" id="armrRoadsStreetsVisBtnSwitchElem" class="toggleSwitch" /><label for="armrRoadsStreetsVisBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div> -->
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrDayNightLineVisBtn">
-                        Day / Night Line
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrDayNightLineVisBtnSwitchElem">
+                        <div class="atticRadarMenuRow armrMiddle armrWide" id="armrDayNightLineVisBtn">
+                            Day / Night Line
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrDayNightLineVisBtnSwitchElem">
+                            </div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrBottom armrWide" id="armrHurricaneLegendVisBtn">
-                        Hurricane Legend&nbsp;<i style="opacity: 50%">(when hurricanes enabled)</i>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrHurricaneLegendVisBtnSwitchElem">
+                        <div class="atticRadarMenuRow armrBottom armrWide" id="armrHurricaneLegendVisBtn">
+                            Hurricane Legend&nbsp;<i style="opacity: 50%">(when hurricanes enabled)</i>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();"
+                                    type="checkbox" role="switch" id="armrHurricaneLegendVisBtnSwitchElem">
+                            </div>
                         </div>
-                    </div>
-                    <!-- <div class="atticRadarMenuRow armrBottom armrWide" id="armrUSAMETARSBtn">
+                        <!-- <div class="atticRadarMenuRow armrBottom armrWide" id="armrUSAMETARSBtn">
                         USA METARS Only
                         <i class="toggleSwitchContainter tscWide" id="armrUSAMETARSBtnSwitch"><input type="checkbox" id="armrUSAMETARSBtnSwitchElem" class="toggleSwitch" checked /><label for="armrUSAMETARSBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div> -->
-                    <br>
+                        <br>
 
-                    <div class="armrHeader armrHeaderWide">MAP STYLES</div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrDarkMapBtn">
-                        Dark
-                        <div class="form-check form-switch">
-                            <input class="map_style_button form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrDarkMapBtnSwitchElem" checked>
+                        <div class="armrHeader armrHeaderWide">MAP STYLES</div>
+                        <div class="atticRadarMenuRow armrTop armrWide" id="armrDarkMapBtn">
+                            Dark
+                            <div class="form-check form-switch">
+                                <input class="map_style_button form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch" id="armrDarkMapBtnSwitchElem"
+                                    checked>
+                            </div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightMapBtn">
-                        Light
-                        <div class="form-check form-switch">
-                            <input class="map_style_button form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrLightMapBtnSwitchElem">
+                        <div class="atticRadarMenuRow armrMiddle armrWide" id="armrLightMapBtn">
+                            Light
+                            <div class="form-check form-switch">
+                                <input class="map_style_button form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch" id="armrLightMapBtnSwitchElem">
+                            </div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrBottom armrWide" id="armrSatelliteMapBtn">
-                        Satellite
-                        <div class="form-check form-switch">
-                            <input class="map_style_button form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrSatelliteMapBtnSwitchElem">
+                        <div class="atticRadarMenuRow armrBottom armrWide" id="armrSatelliteMapBtn">
+                            Satellite
+                            <div class="form-check form-switch">
+                                <input class="map_style_button form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch"
+                                    id="armrSatelliteMapBtnSwitchElem">
+                            </div>
                         </div>
-                    </div>
 
-                    <br>
+                        <br>
 
-                    <div class="armrHeader armrHeaderWide">ALERTS</div>
-                    <!-- <div class="atticRadarMenuRow armrTop armrWide" id="armrEUPBtn">
+                        <div class="armrHeader armrHeaderWide">ALERTS</div>
+                        <!-- <div class="atticRadarMenuRow armrTop armrWide" id="armrEUPBtn">
                         <b style="font-weight: 900">Standard Alerts Only</b>
                         <i class="toggleSwitchContainter tscWide" id="armrEUPBtnSwitch"><input type="checkbox" id="armrEUPBtnSwitchElem" class="toggleSwitch" checked /><label for="armrEUPBtnSwitchElem" class="toggleSwitchCircle">Toggle</label></i>
                     </div> -->
-                    <!-- <span style="display: block; margin-bottom: 0.75em;"></span> -->
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrWarningsBtn">
-                        Warnings
-                        <div class="form-check form-switch">
-                            <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrWarningsBtnSwitchElem" checked>
+                        <!-- <span style="display: block; margin-bottom: 0.75em;"></span> -->
+                        <div class="atticRadarMenuRow armrTop armrWide" id="armrWarningsBtn">
+                            Warnings
+                            <div class="form-check form-switch">
+                                <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch" id="armrWarningsBtnSwitchElem"
+                                    checked>
+                            </div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrWatchesBtn">
-                        Watches
-                        <div class="form-check form-switch">
-                            <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrWatchesBtnSwitchElem" checked>
+                        <div class="atticRadarMenuRow armrTop armrWide" id="armrWatchesBtn">
+                            Watches
+                            <div class="form-check form-switch">
+                                <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch" id="armrWatchesBtnSwitchElem"
+                                    checked>
+                            </div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrStatementsBtn">
-                        Statements
-                        <div class="form-check form-switch">
-                            <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrStatementsBtnSwitchElem" checked>
+                        <div class="atticRadarMenuRow armrMiddle armrWide" id="armrStatementsBtn">
+                            Statements
+                            <div class="form-check form-switch">
+                                <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch"
+                                    id="armrStatementsBtnSwitchElem" checked>
+                            </div>
                         </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrMiddle armrWide" id="armrDiscussionsBtn">
-                        Discussions
-                        <div class="form-check form-switch">
-                            <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide" onfocus="this.blur();" type="checkbox" role="switch" id="armrDiscussionsBtnSwitchElem" checked>
+                        <div class="atticRadarMenuRow armrMiddle armrWide" id="armrDiscussionsBtn">
+                            Discussions
+                            <div class="form-check form-switch">
+                                <input class="alert_options_btn form-check-input toggleSwitchContainter tscWide"
+                                    onfocus="this.blur();" type="checkbox" role="switch"
+                                    id="armrDiscussionsBtnSwitchElem" checked>
+                            </div>
                         </div>
-                    </div>
 
-                    <br>
-
-                    <div class="armrHeader armrHeaderWide">DEALIAS</div>
-                    <div class="atticRadarMenuRow armrWide" id="armrDealiasSettingsBtn">
-                        Dealiasing Settings
-                        <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div id="atticRadarMenuDealiasScreen" class="armScreen" style="display: none">
-                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsDealiasBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Dealiasing Settings<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
-
-                    <br>
-
-                    <div class="armrHeader armrHeaderWide">ALGORITHM</div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrDealiasRegionBasedBtn">
-                        Region Based
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide armrDealiasBtnSwitchElem" onfocus="this.blur();" type="checkbox" role="switch" id="armrDealiasRegionBasedBtnSwitchElem" checked>
-                        </div>
-                    </div>
-                    <div class="atticRadarMenuRow armrTop armrWide" id="armrDealiasTornadicBtn">
-                        Tornadic
-                        <div class="form-check form-switch">
-                            <input class="form-check-input toggleSwitchContainter tscWide armrDealiasBtnSwitchElem" onfocus="this.blur();" type="checkbox" role="switch" id="armrDealiasTornadicBtnSwitchElem">
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <div>
-                        <b>What does this mean?</b>
                         <br>
-                        Dealiasing is the action of correcting issues in velocity sweeps.
-                        When you load a Level 2 file and view its velocity data, a lot of the time,
-                        the velocity values will seem wrong. There is a process to correct this, and it's called dealiasing.
-                        AtticRadar implements two dealiasing algorithms.
-                        <br><br>
-                        The <b>Region Based</b> algorithm was originally developed for use in the python package <a href="https://github.com/ARM-DOE/pyart" style="color: #53a2e0;">pyart</a>.
-                        I simply rewrote it in JavaScript, for use in AtticRadar. This algorithm is very robust, and is great at dealing with gaps in data, e.g. hurricanes.
-                        <br><br>
-                        The <b>Tornadic</b> algorithm is much better suited for dealing with velocity scans with tornado signatures, or tight rotation in general.
-                        The region based algorithm struggles with these cases, so if you find an issue with that algorithm, you should try this one.
-                        <br><br>
+
+                        <div class="armrHeader armrHeaderWide">DEALIAS</div>
+                        <div class="atticRadarMenuRow armrWide" id="armrDealiasSettingsBtn">
+                            Dealiasing Settings
+                            <i class="armrIconArrowRight fa-solid fa-chevron-right"></i>
+                        </div>
                     </div>
-                </div>
-                <div id="atticRadarMenuColortablesScreen" class="armScreen" style="display: none">
-                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsColortablesBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>Colortable Settings (BETA)<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
+                    <div id="atticRadarMenuDealiasScreen" class="armScreen" style="display: none">
+                        <div class="armsHeader">
+                            <div class="armsHeaderBackBtn" id="armsDealiasBackBtn"><i
+                                    class="fa fa-chevron-left"></i>&nbsp;Back</div>Dealiasing Settings<div
+                                class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div>
+                        </div>
 
-                    <br>
+                        <br>
 
-                    <div class="armrHeader armrHeaderWide">Reflectivity&nbsp;&nbsp;<i name="REF" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
-                    <span id="REF_ctable_options">
-                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrREF1ColortableBtn" name="REF1">
-                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
-                        <span class="colortable_menu_text">Default</span>
-                        <div class="colortable_menu_image_preview" id="REF1_colortable_preview"></div>
+                        <div class="armrHeader armrHeaderWide">ALGORITHM</div>
+                        <div class="atticRadarMenuRow armrTop armrWide" id="armrDealiasRegionBasedBtn">
+                            Region Based
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide armrDealiasBtnSwitchElem"
+                                    onfocus="this.blur();" type="checkbox" role="switch"
+                                    id="armrDealiasRegionBasedBtnSwitchElem" checked>
+                            </div>
+                        </div>
+                        <div class="atticRadarMenuRow armrTop armrWide" id="armrDealiasTornadicBtn">
+                            Tornadic
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggleSwitchContainter tscWide armrDealiasBtnSwitchElem"
+                                    onfocus="this.blur();" type="checkbox" role="switch"
+                                    id="armrDealiasTornadicBtnSwitchElem">
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div>
+                            <b>What does this mean?</b>
+                            <br>
+                            Dealiasing is the action of correcting issues in velocity sweeps.
+                            When you load a Level 2 file and view its velocity data, a lot of the time,
+                            the velocity values will seem wrong. There is a process to correct this, and it's called
+                            dealiasing.
+                            AtticRadar implements two dealiasing algorithms.
+                            <br><br>
+                            The <b>Region Based</b> algorithm was originally developed for use in the python package <a
+                                href="https://github.com/ARM-DOE/pyart" style="color: #53a2e0;">pyart</a>.
+                            I simply rewrote it in JavaScript, for use in AtticRadar. This algorithm is very robust, and
+                            is great at dealing with gaps in data, e.g. hurricanes.
+                            <br><br>
+                            The <b>Tornadic</b> algorithm is much better suited for dealing with velocity scans with
+                            tornado signatures, or tight rotation in general.
+                            The region based algorithm struggles with these cases, so if you find an issue with that
+                            algorithm, you should try this one.
+                            <br><br>
+                        </div>
                     </div>
-                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF2ColortableBtn" name="REF2">
-                        <span class="colortable_menu_text">RadarScope</span>
-                        <div class="colortable_menu_image_preview" id="REF2_colortable_preview"></div>
+                    <div id="atticRadarMenuColortablesScreen" class="armScreen" style="display: none">
+                        <div class="armsHeader">
+                            <div class="armsHeaderBackBtn" id="armsColortablesBackBtn"><i
+                                    class="fa fa-chevron-left"></i>&nbsp;Back</div>Colortable Settings (BETA)<div
+                                class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div>
+                        </div>
+
+                        <br>
+
+                        <div class="armrHeader armrHeaderWide">Reflectivity&nbsp;&nbsp;<i name="REF"
+                                class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                        <span id="REF_ctable_options">
+                            <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrREF1ColortableBtn"
+                                name="REF1">
+                                <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                                <span class="colortable_menu_text">Default</span>
+                                <div class="colortable_menu_image_preview" id="REF1_colortable_preview"></div>
+                            </div>
+                            <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF2ColortableBtn"
+                                name="REF2">
+                                <span class="colortable_menu_text">RadarScope</span>
+                                <div class="colortable_menu_image_preview" id="REF2_colortable_preview"></div>
+                            </div>
+                            <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF3ColortableBtn"
+                                name="REF3">
+                                <span class="colortable_menu_text">NWS Default</span>
+                                <div class="colortable_menu_image_preview" id="REF3_colortable_preview"></div>
+                            </div>
+                            <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF4ColortableBtn"
+                                name="REF4">
+                                <span class="colortable_menu_text">GR2Analyst</span>
+                                <div class="colortable_menu_image_preview" id="REF4_colortable_preview"></div>
+                            </div>
+                            <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF5ColortableBtn"
+                                name="REF5">
+                                <span class="colortable_menu_text">RadarOmega</span>
+                                <div class="colortable_menu_image_preview" id="REF5_colortable_preview"></div>
+                            </div>
+                        </span>
+
+                        <br>
+
+                        <div class="armrHeader armrHeaderWide">Velocity&nbsp;&nbsp;<i name="VEL"
+                                class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                        <span id="VEL_ctable_options">
+                            <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrVEL1ColortableBtn"
+                                name="VEL1">
+                                <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                                <span class="colortable_menu_text">Default</span>
+                                <div class="colortable_menu_image_preview" id="VEL1_colortable_preview"></div>
+                            </div>
+                            <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrVEL2ColortableBtn"
+                                name="VEL2">
+                                <span class="colortable_menu_text">Balance</span>
+                                <div class="colortable_menu_image_preview" id="VEL2_colortable_preview"></div>
+                            </div>
+                        </span>
+
+                        <br>
+
+                        <div class="armrHeader armrHeaderWide">Correlation Coefficient&nbsp;&nbsp;<i name="RHO"
+                                class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                        <span id="RHO_ctable_options">
+                            <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrRHO1ColortableBtn"
+                                name="RHO1">
+                                <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                                <span class="colortable_menu_text">Default</span>
+                                <div class="colortable_menu_image_preview" id="RHO1_colortable_preview"></div>
+                            </div>
+                        </span>
+
+                        <br>
+
+                        <div class="armrHeader armrHeaderWide">Differential Reflectivity&nbsp;&nbsp;<i name="ZDR"
+                                class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                        <span id="ZDR_ctable_options">
+                            <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrZDR1ColortableBtn"
+                                name="ZDR1">
+                                <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                                <span class="colortable_menu_text">Default</span>
+                                <div class="colortable_menu_image_preview" id="ZDR1_colortable_preview"></div>
+                            </div>
+                        </span>
+
+                        <br>
+
+                        <div class="armrHeader armrHeaderWide">Specific Differential Phase&nbsp;&nbsp;<i name="KDP"
+                                class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                        <span id="KDP_ctable_options">
+                            <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrKDP1ColortableBtn"
+                                name="KDP1">
+                                <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                                <span class="colortable_menu_text">Default</span>
+                                <div class="colortable_menu_image_preview" id="KDP1_colortable_preview"></div>
+                            </div>
+                        </span>
+
+                        <br>
+
+                        <div class="armrHeader armrHeaderWide">Vertically Integrated Liquid&nbsp;&nbsp;<i name="DVL"
+                                class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
+                        <span id="DVL_ctable_options">
+                            <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrDVL1ColortableBtn"
+                                name="DVL1">
+                                <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
+                                <span class="colortable_menu_text">Default</span>
+                                <div class="colortable_menu_image_preview" id="DVL1_colortable_preview"></div>
+                            </div>
+                        </span>
+
+                        <br>
+
+                        <input type="file" id="hidden_colortable_file_uploader" style="display: none">
                     </div>
-                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF3ColortableBtn" name="REF3">
-                        <span class="colortable_menu_text">NWS Default</span>
-                        <div class="colortable_menu_image_preview" id="REF3_colortable_preview"></div>
-                    </div>
-                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF4ColortableBtn" name="REF4">
-                        <span class="colortable_menu_text">GR2Analyst</span>
-                        <div class="colortable_menu_image_preview" id="REF4_colortable_preview"></div>
-                    </div>
-                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrREF5ColortableBtn" name="REF5">
-                        <span class="colortable_menu_text">RadarOmega</span>
-                        <div class="colortable_menu_image_preview" id="REF5_colortable_preview"></div>
-                    </div>
-                    </span>
+                    <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
+                        <div class="armsHeader">
+                            <div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i
+                                    class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div
+                                class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div>
+                        </div>
 
-                    <br>
+                        <br>
+                        <div id="spcDataInfo"></div>
+                        <br>
 
-                    <div class="armrHeader armrHeaderWide">Velocity&nbsp;&nbsp;<i name="VEL" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
-                    <span id="VEL_ctable_options">
-                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrVEL1ColortableBtn" name="VEL1">
-                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
-                        <span class="colortable_menu_text">Default</span>
-                        <div class="colortable_menu_image_preview" id="VEL1_colortable_preview"></div>
-                    </div>
-                    <div class="atticRadarMenuRow colortableRow armrWide armrBottom" id="armrVEL2ColortableBtn" name="VEL2">
-                        <span class="colortable_menu_text">Balance</span>
-                        <div class="colortable_menu_image_preview" id="VEL2_colortable_preview"></div>
-                    </div>
-                    </span>
+                        <!-- <div style="text-align: center; font-size: 20px; font-weight: bold;">CATEGORICAL</div> -->
+                        <table style="width: 100%" class="spcTable">
+                            <tr>
+                                <th class="spcTable"></th>
+                                <th class="spcTable">Day 1</th>
+                                <th class="spcTable">Day 2</th>
+                                <th class="spcTable">Day 3</th>
+                            </tr>
+                            <tr>
+                                <td class="spcTable">Categorical</td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-categorical-day1_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-categorical-day1_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-categorical-day2_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-categorical-day2_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-categorical-day3_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-categorical-day3_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="spcTable">Probabalistic</td>
+                                <td class="spcTable"></td>
+                                <td class="spcTable"></td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-probabalistic-day3_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-probabalistic-day3_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="spcTable">Tornado</td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-tornado-day1_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-tornado-day1_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-tornado-day2_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-tornado-day2_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable"></td>
+                            </tr>
+                            <tr>
+                                <td class="spcTable">Wind</td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-wind-day1_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-wind-day1_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-wind-day2_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-wind-day2_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable"></td>
+                            </tr>
+                            <tr>
+                                <td class="spcTable">Hail</td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-hail-day1_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-hail-day1_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable">
+                                    <div class="spcTableCellDiv"><input type="checkbox"
+                                            id="armrSPC_convective-hail-day2_BtnSwitchElem"
+                                            class="toggleSwitch spcToggleswitchBtn" /><label
+                                            for="armrSPC_convective-hail-day2_BtnSwitchElem"
+                                            class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
+                                </td>
+                                <td class="spcTable"></td>
+                            </tr>
+                        </table>
 
-                    <br>
-
-                    <div class="armrHeader armrHeaderWide">Correlation Coefficient&nbsp;&nbsp;<i name="RHO" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
-                    <span id="RHO_ctable_options">
-                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrRHO1ColortableBtn" name="RHO1">
-                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
-                        <span class="colortable_menu_text">Default</span>
-                        <div class="colortable_menu_image_preview" id="RHO1_colortable_preview"></div>
-                    </div>
-                    </span>
-
-                    <br>
-
-                    <div class="armrHeader armrHeaderWide">Differential Reflectivity&nbsp;&nbsp;<i name="ZDR" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
-                    <span id="ZDR_ctable_options">
-                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrZDR1ColortableBtn" name="ZDR1">
-                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
-                        <span class="colortable_menu_text">Default</span>
-                        <div class="colortable_menu_image_preview" id="ZDR1_colortable_preview"></div>
-                    </div>
-                    </span>
-
-                    <br>
-
-                    <div class="armrHeader armrHeaderWide">Specific Differential Phase&nbsp;&nbsp;<i name="KDP" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
-                    <span id="KDP_ctable_options">
-                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrKDP1ColortableBtn" name="KDP1">
-                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
-                        <span class="colortable_menu_text">Default</span>
-                        <div class="colortable_menu_image_preview" id="KDP1_colortable_preview"></div>
-                    </div>
-                    </span>
-
-                    <br>
-
-                    <div class="armrHeader armrHeaderWide">Vertically Integrated Liquid&nbsp;&nbsp;<i name="DVL" class="colortable_upload_btn fa fa-square-plus icon-green"></i></div>
-                    <span id="DVL_ctable_options">
-                    <div class="atticRadarMenuRow colortableRow armrWide armrTop" id="armrDVL1ColortableBtn" name="DVL1">
-                        <span class="colortable_menu_check"><i class="fa fa-circle-check icon-blue"></i></span>
-                        <span class="colortable_menu_text">Default</span>
-                        <div class="colortable_menu_image_preview" id="DVL1_colortable_preview"></div>
-                    </div>
-                    </span>
-
-                    <br>
-
-                    <input type="file" id="hidden_colortable_file_uploader" style="display: none">
-                </div>
-                <div id="atticRadarMenuSPCScreen" class="armScreen" style="display: none">
-                    <div class="armsHeader"><div class="armsHeaderBackBtn" id="armsSPCBackBtn"><i class="fa fa-chevron-left"></i>&nbsp;Back</div>SPC Outlooks<div class="armsHeaderExitBtn"><i class="fa fa-xmark"></i></div></div>
-
-                    <br>
-                    <div id="spcDataInfo"></div>
-                    <br>
-
-                    <!-- <div style="text-align: center; font-size: 20px; font-weight: bold;">CATEGORICAL</div> -->
-                    <table style="width: 100%" class="spcTable">
-                        <tr>
-                            <th class="spcTable"></th>
-                            <th class="spcTable">Day 1</th>
-                            <th class="spcTable">Day 2</th>
-                            <th class="spcTable">Day 3</th>
-                        </tr>
-                        <tr>
-                            <td class="spcTable">Categorical</td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-categorical-day1_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-categorical-day1_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-categorical-day2_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-categorical-day2_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-categorical-day3_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-categorical-day3_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spcTable">Probabalistic</td>
-                            <td class="spcTable"></td>
-                            <td class="spcTable"></td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-probabalistic-day3_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-probabalistic-day3_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spcTable">Tornado</td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-tornado-day1_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-tornado-day1_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-tornado-day2_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-tornado-day2_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"></td>
-                        </tr>
-                        <tr>
-                            <td class="spcTable">Wind</td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-wind-day1_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-wind-day1_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-wind-day2_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-wind-day2_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"></td>
-                        </tr>
-                        <tr>
-                            <td class="spcTable">Hail</td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-hail-day1_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-hail-day1_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"><div class="spcTableCellDiv"><input type="checkbox"
-                                id="armrSPC_convective-hail-day2_BtnSwitchElem" class="toggleSwitch spcToggleswitchBtn" /><label
-                                for="armrSPC_convective-hail-day2_BtnSwitchElem" class="toggleSwitchCircle spcToggleswitchCircle">Toggle</label></div>
-                            </td>
-                            <td class="spcTable"></td>
-                        </tr>
-                    </table>
-
-                    <!-- <br>
+                        <!-- <br>
 
                     <div style="text-align: center; font-size: 20px; font-weight: bold;">FIRE</div>
                     <table style="width: 100%" class="spcTable">
@@ -712,67 +838,96 @@
                             </td>
                         </tr>
                     </table> -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="psmTiltDropdownBackdrop" class="psm psmNoHideElem" style="display: none"></div>
-    <div id="psmTiltDropdown" class="psm psmNoHideElem" style="display: none">
-        <div class="psmTiltDropdownRow psmNoHideElem" value="1">Tilt 1</div>
-        <div class="psmTiltDropdownRow psmNoHideElem" value="2">Tilt 2</div>
-        <div class="psmTiltDropdownRow psmNoHideElem" value="3">Tilt 3</div>
-        <div class="psmTiltDropdownRow psmNoHideElem" value="4">Tilt 4</div>
-    </div>
-    <div id="productSelectionMenu" style="display: none">
-        <div id="wsr88d_psm" class="psm" style="display: none">
-            <div class="psmSectionBreak"></div>
-
-            <div class="psmSectionTitle">Super Resolution</div>
-            <div class="psmRow noselect" value="ref">Super-Res Base Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="vel">Super-Res Base Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="srvel">Super-Res Storm Relative Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
-
-            <div class="psmSectionBreak"></div>
-
-            <div class="psmSectionTitle">Digital</div>
-            <div class="psmRow noselect" value="rho">Correlation Coefficient<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="zdr">Differential Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="hyc">Hydrometer Classification<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="hhc">Hybrid Hydrometer Classification<div class="psmRowTiltSelect blankText">Tilt 1</div></div>
-            <div class="psmRow noselect" value="vil">Vertically Integrated Liquid<div class="psmRowTiltSelect blankText">Tilt 1</div></div>
-            <div class="psmRow noselect" value="kdp">Specific Differential Phase<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="lowres-ref">Digital Base Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="lowres-vel">Digital Base Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
-        </div>
-        <div id="tdwr_psm" class="psm" style="display: none">
-            <div class="psmSectionBreak"></div>
-
-            <div class="psmSectionTitle">TDWR</div>
-            <div class="psmRow noselect" value="sr-ref">Short-Range Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="lr-ref">Long-Range Reflectivity<div class="psmRowTiltSelect">Tilt 1</div></div>
-            <div class="psmRow noselect" value="tdwrVel">Base Velocity<div class="psmRowTiltSelect">Tilt 1</div></div>
-        </div>
-        <div id="level2_psm" class="psm" style="display: none">
-            <div id="completeDealiasBtnContainer" style="display: none">
-                <div id="dealiasToggleSwitchContainer" style="display: flex; justify-content: space-around; align-items: center;">
-                    <div class="l2ElevationBtn dealiasBtnDeSelected l2elev-nonstandard noselect" id="dealiasBtn" style="width: 100%">
-                        <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Dealias
                     </div>
                 </div>
-                <i id="dealiasSettingsIcon" class="fa-solid fa-gear l2ElevationBtn l2elev-nonstandard"></i>
-                <br><br>
             </div>
-            <!-- <div id="l2ElevButtonsExpander" style="display: flex; justify-content: space-between; align-items: center;">
+        </div>
+
+        <div id="psmTiltDropdownBackdrop" class="psm psmNoHideElem" style="display: none"></div>
+        <div id="psmTiltDropdown" class="psm psmNoHideElem" style="display: none">
+            <div class="psmTiltDropdownRow psmNoHideElem" value="1">Tilt 1</div>
+            <div class="psmTiltDropdownRow psmNoHideElem" value="2">Tilt 2</div>
+            <div class="psmTiltDropdownRow psmNoHideElem" value="3">Tilt 3</div>
+            <div class="psmTiltDropdownRow psmNoHideElem" value="4">Tilt 4</div>
+        </div>
+        <div id="productSelectionMenu" style="display: none">
+            <div id="wsr88d_psm" class="psm" style="display: none">
+                <div class="psmSectionBreak"></div>
+
+                <div class="psmSectionTitle">Super Resolution</div>
+                <div class="psmRow noselect" value="ref">Super-Res Base Reflectivity<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="vel">Super-Res Base Velocity<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="srvel">Super-Res Storm Relative Velocity<div
+                        class="psmRowTiltSelect">Tilt 1</div>
+                </div>
+
+                <div class="psmSectionBreak"></div>
+
+                <div class="psmSectionTitle">Digital</div>
+                <div class="psmRow noselect" value="rho">Correlation Coefficient<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="zdr">Differential Reflectivity<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="hyc">Hydrometer Classification<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="hhc">Hybrid Hydrometer Classification<div
+                        class="psmRowTiltSelect blankText">Tilt 1</div>
+                </div>
+                <div class="psmRow noselect" value="vil">Vertically Integrated Liquid<div
+                        class="psmRowTiltSelect blankText">Tilt 1</div>
+                </div>
+                <div class="psmRow noselect" value="kdp">Specific Differential Phase<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="lowres-ref">Digital Base Reflectivity<div class="psmRowTiltSelect">
+                        Tilt 1</div>
+                </div>
+                <div class="psmRow noselect" value="lowres-vel">Digital Base Velocity<div class="psmRowTiltSelect">Tilt
+                        1</div>
+                </div>
+            </div>
+            <div id="tdwr_psm" class="psm" style="display: none">
+                <div class="psmSectionBreak"></div>
+
+                <div class="psmSectionTitle">TDWR</div>
+                <div class="psmRow noselect" value="sr-ref">Short-Range Reflectivity<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="lr-ref">Long-Range Reflectivity<div class="psmRowTiltSelect">Tilt 1
+                    </div>
+                </div>
+                <div class="psmRow noselect" value="tdwrVel">Base Velocity<div class="psmRowTiltSelect">Tilt 1</div>
+                </div>
+            </div>
+            <div id="level2_psm" class="psm" style="display: none">
+                <div id="completeDealiasBtnContainer" style="display: none">
+                    <div id="dealiasToggleSwitchContainer"
+                        style="display: flex; justify-content: space-around; align-items: center;">
+                        <div class="l2ElevationBtn dealiasBtnDeSelected l2elev-nonstandard noselect" id="dealiasBtn"
+                            style="width: 100%">
+                            <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Dealias
+                        </div>
+                    </div>
+                    <i id="dealiasSettingsIcon" class="fa-solid fa-gear l2ElevationBtn l2elev-nonstandard"></i>
+                    <br><br>
+                </div>
+                <!-- <div id="l2ElevButtonsExpander" style="display: flex; justify-content: space-between; align-items: center;">
                 <span>Elevations</span>
                 <span id="l2ElevButtonsExpanderIcon" class="fa fa-chevron-right" style="font-size: 18px"></span>
             </div>
             <div id="l2ElevButtons" class="l2ElevButtons" class="container" style="display: none"></div> -->
-            <!-- <span class="l2ElevBtn">0.5</span>
+                <!-- <span class="l2ElevBtn">0.5</span>
             <span class="l2ElevBtn">1.5</span>
             <span class="l2ElevBtn">2.5</span> -->
-            <div id="l2ElevationButtons" class="container">
-                <!-- <div class="row gx-1" style="margin-top: 0.25rem">
+                <div id="l2ElevationButtons" class="container">
+                    <!-- <div class="row gx-1" style="margin-top: 0.25rem">
                     <div class="col">
                         <div class="l2ElevationBtn" value="1">0.5°</div>
                     </div>
@@ -783,43 +938,44 @@
                         <div class="l2ElevationBtn" value="1">0.5°</div>
                     </div>
                 </div> -->
+                </div>
+                <div class="psmSectionBreak"></div>
+
+                <div class="psmSectionTitle">Level II Products</div>
+                <div class="psmRow l2prodSel noselect" value="l2-ref">Reflectivity</div>
+                <div class="psmRow l2prodSel noselect" value="l2-vel">Velocity</div>
+                <div class="psmRow l2prodSel noselect" value="l2-rho">Correlation Coefficient</div>
+                <div class="psmRow l2prodSel noselect" value="l2-zdr">Differential Reflectivity</div>
+                <div class="psmRow l2prodSel noselect" value="l2-sw">Spectrum Width</div>
+                <div class="psmRow l2prodSel noselect" value="l2-phi">Differential Phase Shift</div>
             </div>
-            <div class="psmSectionBreak"></div>
-
-            <div class="psmSectionTitle">Level II Products</div>
-            <div class="psmRow l2prodSel noselect" value="l2-ref">Reflectivity</div>
-            <div class="psmRow l2prodSel noselect" value="l2-vel">Velocity</div>
-            <div class="psmRow l2prodSel noselect" value="l2-rho">Correlation Coefficient</div>
-            <div class="psmRow l2prodSel noselect" value="l2-zdr">Differential Reflectivity</div>
-            <div class="psmRow l2prodSel noselect" value="l2-sw">Spectrum Width</div>
-            <div class="psmRow l2prodSel noselect" value="l2-phi">Differential Phase Shift</div>
         </div>
-    </div>
 
-    <!-- <div id="chart_container"></div> -->
+        <!-- <div id="chart_container"></div> -->
 
-    <div id="colorPicker" class="colorPicker colorPickerCircle"></div>
-    <div id="colorPickerBorder" class="colorPicker colorPickerCircle">
-        <div id="verticalLine" class="colorPicker"></div>
-        <div id="horizontalLine" class="colorPicker"></div>
-        <div id="radarCenterLine" class="colorPicker"></div>
-    </div>
-    <div id="colorPickerText" class="colorPicker">
-        <div id="colorPickerTextValue" style="font-weight: bold"></div>
-        <div id="colorPickerTextBeamHeight" style="font-size: 15px; font-style: italic; opacity: 50%">12.3 mi</div>
-    </div>
+        <div id="colorPicker" class="colorPicker colorPickerCircle"></div>
+        <div id="colorPickerBorder" class="colorPicker colorPickerCircle">
+            <div id="verticalLine" class="colorPicker"></div>
+            <div id="horizontalLine" class="colorPicker"></div>
+            <div id="radarCenterLine" class="colorPicker"></div>
+        </div>
+        <div id="colorPickerText" class="colorPicker">
+            <div id="colorPickerTextValue" style="font-weight: bold"></div>
+            <div id="colorPickerTextBeamHeight" style="font-size: 15px; font-style: italic; opacity: 50%">12.3 mi</div>
+        </div>
 
-    <div id='optionsBox' style="display: none">
-        <div id="smallInfo" style="display: none"></div>
-        <div id="mainInfo" style="display: none"></div>
-    </div>
-    <div id="stationInp" style="display: none"></div>
-    <canvas id="theCanvas" style="display: none"></canvas>
-    <canvas id="texturecolorbar" style="display: none" class="texturecolorbar" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
-    <canvas id="mapColorScale" class="screenshot"></canvas>
-    <!-- <canvas id="mapColorScale"></canvas> -->
+        <div id='optionsBox' style="display: none">
+            <div id="smallInfo" style="display: none"></div>
+            <div id="mainInfo" style="display: none"></div>
+        </div>
+        <div id="stationInp" style="display: none"></div>
+        <canvas id="theCanvas" style="display: none"></canvas>
+        <canvas id="texturecolorbar" style="display: none" class="texturecolorbar" data-bs-toggle="tooltip"
+            data-bs-placement="bottom" data-bs-title="Default tooltip" data-bs-animation="false"></canvas>
+        <canvas id="mapColorScale" class="screenshot"></canvas>
+        <!-- <canvas id="mapColorScale"></canvas> -->
 
-    <div id="map" class="screenshot"></div>
+        <div id="map" class="screenshot"></div>
 
     </div>
 
@@ -963,10 +1119,10 @@
         function load_all_libraries(library_configs, callback) {
             function _pre(cb) {
                 fetch('./tools/size.txt')
-                .then(response => response.json())
-                .then(json => {
-                    cb(json);
-                })
+                    .then(response => response.json())
+                    .then(json => {
+                        cb(json);
+                    })
             }
             _pre((filesizes) => {
                 library_configs[library_configs.length - 2][2] = filesizes['index.css'];
@@ -982,8 +1138,8 @@
             ['js', 'https://code.jquery.com/ui/1.13.1/jquery-ui.min.js', 255082],
             ['css', 'https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css', 36099],
 
-            ['css', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css', 36640],
-            ['js', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js', 971097],
+            // ['css', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css', 36640],
+            // ['js', 'https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js', 971097],
 
             // https://cdnjs.com/libraries/font-awesome
             ['css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css', 100782],
@@ -1053,4 +1209,5 @@
         })
     </script>
 </body>
+
 </html>

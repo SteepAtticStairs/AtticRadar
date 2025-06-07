@@ -56,33 +56,6 @@ function change_map_style(style) {
         map.setPaintProperty('water', 'fill-color', blue);
     }
 
-    if (style == 'satellite') {
-        window.atticData.map_type = 'satellite';
-
-        set_dark();
-
-        map.addSource('mapbox-satellite', { 'type': 'raster', 'url': 'mapbox://mapbox.satellite', 'tileSize': 256 });
-        map.addLayer({ 'type': 'raster', 'id': 'satellite-map', 'source': 'mapbox-satellite' }, map_funcs.get_base_layer());
-    } else if (style == 'dark') {
-        window.atticData.map_type = 'dark';
-
-        set_dark();
-
-        if (map.getLayer('satellite-map')) {
-            map.removeLayer('satellite-map');
-            map.removeSource('mapbox-satellite');
-        }
-    } else if (style == 'light') {
-        window.atticData.map_type = 'light';
-
-        set_light();
-
-        if (map.getLayer('satellite-map')) {
-            map.removeLayer('satellite-map');
-            map.removeSource('mapbox-satellite');
-        }
-    }
-
     set_layer_order();
 }
 

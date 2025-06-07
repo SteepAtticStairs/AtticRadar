@@ -12,7 +12,7 @@ function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     var bearing = bearingDEG;
 
     var point = turf.point([startLng, startLat]);
-    var destiation = turf.destination(point, distanceMeters, bearing, {units: 'meters'});
+    var destiation = turf.destination(point, distanceMeters, bearing, { units: 'meters' });
     return destiation;
 }
 
@@ -50,9 +50,9 @@ function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
     // const distanceForLine = _calculate_parallel_line(cellData.movement.kts, timeIntervalLookup[forecastIndex]);
 
     var leftBearing = subtractFromBearing(bearing, 90);
-    var leftPoint = turf.destination(destPoint, distanceForLine, leftBearing, {units: 'miles'});
+    var leftPoint = turf.destination(destPoint, distanceForLine, leftBearing, { units: 'miles' });
     var rightBearing = addToBearing(bearing, 90);
-    var rightPoint = turf.destination(destPoint, distanceForLine, rightBearing, {units: 'miles'});
+    var rightPoint = turf.destination(destPoint, distanceForLine, rightBearing, { units: 'miles' });
 
     return turf.lineString([turf.getCoords(leftPoint), turf.getCoords(rightPoint)]);
 }
@@ -69,15 +69,15 @@ function plot_storm_tracks(L3Factory) {
 
         coords = getCoords(curCell.current, L3Factory.station);
         points.push(coords);
-        const originalInitialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
-        initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
+        const originalInitialPoint = turf.point(coords, { cellID: id, coords: coords, cellProperties: curCell });
+        initialPoint = turf.point(coords, { cellID: id, coords: coords, cellProperties: curCell });
         for (var i in curCell.forecast) {
             var curPoint = curCell.forecast[i];
             if (curPoint != null) {
                 coords = getCoords(curPoint, L3Factory.station);
                 parallelLines.push(generateParallelLine(initialPoint, coords, curCell, i));
                 points.push(coords);
-                initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
+                initialPoint = turf.point(coords, { cellID: id, coords: coords, cellProperties: curCell });
             }
         }
 
@@ -153,42 +153,42 @@ function plot_storm_tracks(L3Factory) {
 
     function cellClick(e) {
         // if (window.atticData.currentStation == L3Factory.station) {
-            const properties = e.features[0].properties;
-            const cellID = properties.cellID;
-            const cellProperties = JSON.parse(properties.cellProperties);
-            // console.log(allTracks)
+        const properties = e.features[0].properties;
+        const cellID = properties.cellID;
+        const cellProperties = JSON.parse(properties.cellProperties);
+        // console.log(allTracks)
 
-            var fileTime = L3Factory.get_date();
-            var hourMin = ut.printHourMin(fileTime, ut.userTimeZone);
+        var fileTime = L3Factory.get_date();
+        var hourMin = ut.printHourMin(fileTime, ut.userTimeZone);
 
-            var popupHTML =
-`<b><u>Storm Track</u></b>
+        var popupHTML =
+            `<b><u>Storm Track</u></b>
 <div>Cell <b>${cellID}</b> at <b>${hourMin}</b></div>`
 
-            function flip(num) {
-                if (num >= 180) {
-                    return num - 180;
-                } else if (num < 180) {
-                    return num + 180;
-                }
+        function flip(num) {
+            if (num >= 180) {
+                return num - 180;
+            } else if (num < 180) {
+                return num + 180;
             }
+        }
 
-            if (cellProperties.movement != 'new') {
-                popupHTML += `<div><b>${ut.degToCompass(flip(cellProperties.movement.deg))}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
-            }
+        if (cellProperties.movement != 'new') {
+            popupHTML += `<div><b>${ut.degToCompass(flip(cellProperties.movement.deg))}</b> at <b>${ut.knotsToMph(cellProperties.movement.kts, 0)}</b> mph</div>`
+        }
 
-            if (cellProperties.graph_data != undefined) {
-                popupHTML +=
-`<br>
+        if (cellProperties.graph_data != undefined) {
+            popupHTML +=
+                `<br>
 <div>Max Reflectivity: <b>${cellProperties?.graph_data?.dbzm} dBZ</b>
 <div>Height of Max Refl: <b>${cellProperties?.graph_data?.hgt} kft</b>`
-            }
+        }
 
-            // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
-            //     .setLngLat(JSON.parse(properties.coords))
-            //     .setHTML(popupHTML)
-            //     .addTo(map);
-            new AtticPopup(JSON.parse(properties.coords), popupHTML).add_to_map();
+        // new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+        //     .setLngLat(JSON.parse(properties.coords))
+        //     .setHTML(popupHTML)
+        //     .addTo(map);
+        new AtticPopup(JSON.parse(properties.coords), popupHTML).add_to_map();
         // }
     }
     map.on('click', 'stormTrackInitialPoint', cellClick);

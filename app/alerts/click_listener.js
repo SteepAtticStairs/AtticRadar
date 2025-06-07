@@ -151,7 +151,7 @@ ${parameters_html}
     popup.add_to_map();
     popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() + parseInt($('.alert_popup_info').css('paddingRight'))}`);
     popup.update_popup_pos();
-    // const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    // const popup = new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
     //     .setLngLat(e.lngLat)
     //     .setHTML(popupItem)
     //     .addTo(map);

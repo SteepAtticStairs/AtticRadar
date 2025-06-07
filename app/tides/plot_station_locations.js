@@ -17,7 +17,7 @@ function _click_listener(e) {
         'title': 'Tide Station',
 
         'body':
-`<div id="tide_chart_container">
+            `<div id="tide_chart_container">
     <div class="tide_chart_container_text">Loading...</div>
 </div>\
 <div id="tide_station_footer">\
@@ -33,7 +33,7 @@ function _click_listener(e) {
     get_individual_data(id, alt_name, today, (tide_height_array, station_name) => {
         show_chart(tide_height_array, station_name, id, today);
     })
-    // new mapboxgl.Popup({ className: 'alertPopup' })
+    // new maplibregl.Popup({ className: 'alertPopup' })
     //     .setLngLat(coordinates)
     //     .setHTML(description)
     //     .addTo(map);

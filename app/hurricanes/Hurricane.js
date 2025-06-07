@@ -23,8 +23,8 @@ function _click_listener(e) {
     const date_first_line = date.toFormat('ccc LLL d');
     const date_second_line = date.toFormat('h:mm a ZZZZ');
 
-    const html_contents = 
-`<div style="text-align: center">
+    const html_contents =
+        `<div style="text-align: center">
 <b style="color: ${properties.color}">${properties.sshws_value}
 <br>
 ${properties.storm_name}</b>
@@ -36,7 +36,7 @@ ${date_first_line}<br>
 ${date_second_line}
 </div>`
 
-    // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    // new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
     //     .setLngLat([properties.lon, properties.lat])
     //     .setHTML(html_contents)
     //     .addTo(map);
@@ -44,7 +44,7 @@ ${date_second_line}
 }
 
 class Hurricane {
-    constructor (storm_id, storm_name, forecast_points, cone_geojson) {
+    constructor(storm_id, storm_name, forecast_points, cone_geojson) {
         this.storm_id = storm_id;
         this.storm_name = storm_name;
         this.cone_geojson = cone_geojson;
@@ -125,8 +125,8 @@ class Hurricane {
                 }
             });
 
-            map.on('mouseover', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = 'pointer'; });
-            map.on('mouseout', forecast_points_layer_name, function(e) { map.getCanvas().style.cursor = ''; });
+            map.on('mouseover', forecast_points_layer_name, function (e) { map.getCanvas().style.cursor = 'pointer'; });
+            map.on('mouseout', forecast_points_layer_name, function (e) { map.getCanvas().style.cursor = ''; });
             map.on('click', forecast_points_layer_name, _click_listener);
 
             // const current_point_layer_name = `hurricane_current_point_${this.storm_id}_layer`;

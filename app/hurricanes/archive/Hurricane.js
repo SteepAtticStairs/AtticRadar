@@ -12,8 +12,8 @@ function _click_listener(e) {
     const feature = e.features[0];
     const properties = feature.properties;
 
-    const html_contents = 
-`<div style="text-align: center">
+    const html_contents =
+        `<div style="text-align: center">
 <b style="color: ${properties.sshws_color}">${properties.sshws_value}
 <br>
 ${properties.storm_name}</b>
@@ -25,7 +25,7 @@ ${properties.day_of_week_abbv} ${properties.current_month_abbv} ${properties.day
 ${properties.formatted_hour}
 </div>`
 
-    new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
         .setLngLat(JSON.parse(properties.coordinates))
         .setHTML(html_contents)
         .addTo(map);
@@ -60,7 +60,7 @@ ${properties.formatted_hour}
  * }
  */
 class Hurricane {
-    constructor (storm_id, storm_name, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
+    constructor(storm_id, storm_name, cone_coordinates, forecast_track_coordinates, forecast_point_coordinates, forecast_point_properties) {
         this._storm_id = storm_id;
         this._storm_name = storm_name;
         this._cone_coordinates = cone_coordinates;
@@ -103,10 +103,10 @@ class Hurricane {
             }
         });
 
-        map.on('mouseover', layer_name, function(e) {
+        map.on('mouseover', layer_name, function (e) {
             map.getCanvas().style.cursor = 'pointer';
         });
-        map.on('mouseout', layer_name, function(e) {
+        map.on('mouseout', layer_name, function (e) {
             map.getCanvas().style.cursor = '';
         });
 

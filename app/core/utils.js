@@ -6,7 +6,7 @@
 // http://server.steepatticstairs.net/AtticServer/proxy/index.php/?
 
 // https://php-cors-proxy.herokuapp.com/?
-const phpProxy = 'https://corsproxy.io/?key=9873d094&url='; //https://api.allorigins.win/raw?url=';
+const phpProxy = ''; //https://api.allorigins.win/raw?url=';
 // const phpProxy2 = 'https://attic-server.herokuapp.com/proxy/index.php/?'; // http://127.0.0.1:3333/server/AtticServer/proxy/?
 //const phpProxy  = 'https://salty-citadel-44916.herokuapp.com/';
 //const phpProxy  = 'https://secret-retreat-45871.herokuapp.com/'
@@ -35,11 +35,11 @@ function toBuffer(ab) {
 }
 
 function printFancyTime(dateObj, tz) {
-    var timeZ = new Date().toLocaleTimeString(undefined, {timeZoneName: 'short'}).split(' ')[2];
+    var timeZ = new Date().toLocaleTimeString(undefined, { timeZoneName: 'short' }).split(' ')[2];
     if (tz == 'UTC') {
         timeZ = 'UTC';
     }
-    return dateObj.toLocaleDateString(undefined, {timeZone: tz}) + " " + dateObj.toLocaleTimeString(undefined, {timeZone: tz}) + ` ${timeZ}`;
+    return dateObj.toLocaleDateString(undefined, { timeZone: tz }) + " " + dateObj.toLocaleTimeString(undefined, { timeZone: tz }) + ` ${timeZ}`;
 }
 function printHourMin(dateObj, tz) {
     return dateObj.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: tz })
@@ -47,7 +47,7 @@ function printHourMin(dateObj, tz) {
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 function addMinutes(date, minutes) {
-    return new Date(date.getTime() + minutes*60000);
+    return new Date(date.getTime() + minutes * 60000);
 }
 function msToTime(s) {
     // Pad to 2 or 3 digits, default is 2
@@ -81,7 +81,7 @@ function findTerminalCoordinates(startLat, startLng, distanceNM, bearingDEG) {
     const destination = geolib.computeDestinationPoint(
         startPoint,
         distanceMeters,
-        bearing 
+        bearing
     );
     return destination;
 }
@@ -178,12 +178,12 @@ function colorLog(content, color, otherCss) {
 }
 
 const Elem = e => ({
-    tagName: 
+    tagName:
         e.tagName,
     textContent:
         e.textContent,
     attributes:
-        Array.from(e.attributes, ({name, value}) => [name, value]),
+        Array.from(e.attributes, ({ name, value }) => [name, value]),
     children:
         Array.from(e.children, Elem)
 })
@@ -407,7 +407,7 @@ const tideChartDivName = 'container';
 
 // https://dev.to/kapantzak/waiting-for-visible-element-4ck9
 function elementVisible(elem) {
-    return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+    return !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
 }
 function waitVisible(elem, callback, timeout) {
     let timer = setInterval(() => {
@@ -429,18 +429,18 @@ function flyToStation() {
     var map = require('./map/map');
 
     var shtation = document.getElementById('fileStation').innerHTML;
-    $.getJSON('./resources/radarStations.json', function(data) {
-		var statLat;
-		var statLng;
-		if (data.hasOwnProperty(shtation)) {
-			statLat = data[shtation][1];
-			statLng = data[shtation][2];
-		} else {
-			var fileNameStation = $('#dataDiv').data('fileName').slice(0, 4);
-			statLat = data[fileNameStation][1];
-			statLng = data[fileNameStation][2];
-		}
-		// map.flyTo({
+    $.getJSON('./resources/radarStations.json', function (data) {
+        var statLat;
+        var statLng;
+        if (data.hasOwnProperty(shtation)) {
+            statLat = data[shtation][1];
+            statLng = data[shtation][2];
+        } else {
+            var fileNameStation = $('#dataDiv').data('fileName').slice(0, 4);
+            statLat = data[fileNameStation][1];
+            statLng = data[fileNameStation][2];
+        }
+        // map.flyTo({
         //     center: [statLng, statLat],
         //     zoom: 8,
         //     duration: 1000,
@@ -477,7 +477,7 @@ function getCardinalDirection(angle) {
     const degree = 360 / directions.length;
     angle = angle + degree / 2;
     for (let i = 0; i < directions.length; i++) {
-      if (angle >= (i * degree) && angle < (i + 1) * degree) return arrows[directions[i]];
+        if (angle >= (i * degree) && angle < (i + 1) * degree) return arrows[directions[i]];
     }
     return arrows['north'];
 }
@@ -633,47 +633,47 @@ function getRadialConstants(radVersion) {
     if (radVersion == "01") {
         // version 01 is non hi-res data
         gateRes = 2000;
-        multiplier = gateRes*8;
+        multiplier = gateRes * 8;
     } else if (radVersion == "E2") {
         // version 01 is non hi-res data
         gateRes = 500;
-        multiplier = gateRes*32;
+        multiplier = gateRes * 32;
     } else if (radVersion == "08") {
         // version 08 is level 2 TDWR
         gateRes = 150;
-        multiplier = gateRes*1.2;
+        multiplier = gateRes * 1.2;
     } else if (radVersion == "l3") {
         // version l3 is level 3 data
         gateRes = 125;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
     } else if (radVersion == "NXQ" || radVersion == "N0S") {
         // different resolution for l3 base reflectivity
         gateRes = 500;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
     } else if (radVersion == "DVL" || radVersion == "NSW") {
         // different resolution for vertically integrated liquid
         gateRes = 500;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
     } else if (radVersion == "TZX") {
         // different resolution for TDWR short-range reflectivity
         gateRes = 73.7;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
         // gateRes = parseFloat($('#gateRes').val());
         // multiplier = gateRes*parseFloat($('#multiplier').val());
     } else if (radVersion == "TVX") {
         // different resolution for TDWR base velocity
         gateRes = 73.7;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
         // gateRes = parseFloat($('#gateRes').val());
         // multiplier = gateRes*parseFloat($('#multiplier').val());
     } else if (radVersion == "TZL") {
         // different resolution for TDWR long-range reflectivity
         gateRes = 150;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
     } else {
         // everything else (new l2 files - hi-res)
         gateRes = 125;
-        multiplier = gateRes*2;
+        multiplier = gateRes * 2;
     }
 
     return {
@@ -684,19 +684,19 @@ function getRadialConstants(radVersion) {
 
 // https://stackoverflow.com/a/544429/18758797
 function getDateDiff(date1, date2) {
-    var diff = Date.parse( date2 ) - Date.parse( date1 );
+    var diff = Date.parse(date2) - Date.parse(date1);
     var isNegative = (diff < 0);
     if (isNegative) {
         // negative
         diff = Math.abs(diff);
     }
-    return isNaN( diff ) ? NaN : {
+    return isNaN(diff) ? NaN : {
         //diff : diff,
-        ms : Math.floor( diff            % 1000 ),
-        s  : Math.floor( diff /     1000 %   60 ),
-        m  : Math.floor( diff /    60000 %   60 ),
-        h  : Math.floor( diff /  3600000 %   24 ),
-        d  : Math.floor( diff / 86400000        ),
+        ms: Math.floor(diff % 1000),
+        s: Math.floor(diff / 1000 % 60),
+        m: Math.floor(diff / 60000 % 60),
+        h: Math.floor(diff / 3600000 % 24),
+        d: Math.floor(diff / 86400000),
         negative: isNegative
     }
 }
@@ -718,13 +718,13 @@ function csvToJson(csv) {
 
 function animateBrightness(startVal, stopVal, duration, div) {
     // https://stackoverflow.com/a/20082518/18758797
-    $({blurRadius: startVal}).animate({blurRadius: stopVal}, {
+    $({ blurRadius: startVal }).animate({ blurRadius: stopVal }, {
         duration: duration,
         easing: 'linear',
-        step: function() {
+        step: function () {
             $(div).css({
-                "-webkit-filter": "brightness("+this.blurRadius+"%)",
-                "filter": "brightness("+this.blurRadius+"%)"
+                "-webkit-filter": "brightness(" + this.blurRadius + "%)",
+                "filter": "brightness(" + this.blurRadius + "%)"
             });
         }
     });
@@ -746,7 +746,7 @@ function haMapControlActions(mode, value) {
 
 function zeroPad(num, length) {
     length = length || 2; // defaults to 2 if no parameter is passed
-    return (new Array(length).join('0') + num).slice(length*-1);
+    return (new Array(length).join('0') + num).slice(length * -1);
 }
 
 function setMapMargin(topOrBottom, value, map_obj = undefined) {

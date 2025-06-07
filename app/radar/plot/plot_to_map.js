@@ -101,16 +101,25 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
             var vertexShader = gl.createShader(gl.VERTEX_SHADER);
             gl.shaderSource(vertexShader, vertex_source);
             gl.compileShader(vertexShader);
+            if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+                console.error('Vertex shader compilation error:', gl.getShaderInfoLog(vertexShader));
+            }
 
             // compile the main fragment shader
             var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
             gl.shaderSource(fragmentShader, fragment_source);
             gl.compileShader(fragmentShader);
+            if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+                console.error('Fragment shader compilation error:', gl.getShaderInfoLog(fragmentShader));
+            }
 
             // compile the framebuffer fragment shader
             var fragmentShaderFramebuffer = gl.createShader(gl.FRAGMENT_SHADER);
             gl.shaderSource(fragmentShaderFramebuffer, fragment_framebuffer_source);
             gl.compileShader(fragmentShaderFramebuffer);
+            if (!gl.getShaderParameter(fragmentShaderFramebuffer, gl.COMPILE_STATUS)) {
+                console.error('Fragment shader frame buffer compilation error:', gl.getShaderInfoLog(fragmentShaderFramebuffer));
+            }
 
             // create the main program
             this.program = gl.createProgram();
@@ -213,7 +222,7 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
             // only render to the framebuffer if the color picker is active,
             // this helps with performance
             if ($('#colorPickerItemClass').hasClass('menu_item_selected')) {
-                renderToFramebuffer.apply(this, [gl, matrix]);
+                renderToFramebuffer.apply(this, [gl, matrix.defaultProjectionData.mainMatrix]);
             }
 
             /*
@@ -222,7 +231,7 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
             gl.useProgram(this.program);
 
             // set uniforms for the main shaders
-            gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+            gl.uniformMatrix4fv(this.matrixLocation, false, matrix.defaultProjectionData.mainMatrix);
             gl.uniform2fv(this.radarLngLatLocation, [radar_lat_lng.lat, radar_lat_lng.lng]);
             gl.uniform2fv(this.minmaxLocation, [cmin, cmax]);
             gl.uniform1i(this.textureLocation, 0);

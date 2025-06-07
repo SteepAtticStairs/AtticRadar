@@ -143,7 +143,7 @@ function plotToMap() {
 <div>${properties.SITENAME}, ${properties.SITESTATE}</div>
 ${radioPlayBtn}`
 
-            // const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+            // const popup = new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
             //     .setLngLat([properties.LON, properties.LAT])
             //     .setHTML(popupContents)
             //     .addTo(map);
@@ -193,7 +193,7 @@ ${radioPlayBtn}`
         });
 
         // map.on('click', (e) => {
-        //     const popup = new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+        //     const popup = new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
         //         .setLngLat(e.lngLat) // [-98.5606744, 36.8281576]
         //         .setHTML('This is a test.')
         //         .addTo(map);
@@ -201,7 +201,7 @@ ${radioPlayBtn}`
     }
 
     if (map.loaded()) { addToMap() }
-    else { map.on('load', function() { addToMap() }) }
+    else { map.on('load', function () { addToMap() }) }
 }
 
 module.exports = plotToMap;

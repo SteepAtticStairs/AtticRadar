@@ -57,15 +57,15 @@ function _click_listener(e) {
 
     const text_url = _get_text_url(category, day);
     fetch(ut.phpProxy + text_url)
-    .then(response => response.text())
-    .then(text => {
-        console.log(text);
-    })
+        .then(response => response.text())
+        .then(text => {
+            console.log(text);
+        })
 
-    const popup_html = 
-`<div><b>${properties.LABEL2}</b></div>`
+    const popup_html =
+        `<div><b>${properties.LABEL2}</b></div>`
 
-    // new mapboxgl.Popup({ className: 'alertPopup', maxWidth: '1000' })
+    // new maplibregl.Popup({ className: 'alertPopup', maxWidth: '1000' })
     // .setLngLat(e.lngLat)
     // .setHTML(popup_html)
     // .addTo(map);
@@ -77,15 +77,15 @@ function plot_data(geojson, formatted_day, formatted_category) {
     const [issue_formatted, expire_formatted] = _return_time_range(geojson);
 
     var spc_info_html =
-`<b>${formatted_category} - ${formatted_day}</b>`
+        `<b>${formatted_category} - ${formatted_day}</b>`
 
     if (is_empty) {
         spc_info_html +=
-`<p style="margin: 0px; font-size: 13px; font-weight: bold" class="old-file">EMPTY DATA</p>`
+            `<p style="margin: 0px; font-size: 13px; font-weight: bold" class="old-file">EMPTY DATA</p>`
     }
 
     spc_info_html +=
-`<i class="helperText" style="opacity: 50%">
+        `<i class="helperText" style="opacity: 50%">
 ${_return_time_range_html(issue_formatted, expire_formatted)}
 </i>`;
     $('#spcDataInfo').html(spc_info_html);

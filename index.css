@@ -27,6 +27,7 @@ hr {
     margin-right: calc(-.5 * var(--bs-gutter-x));
     margin-left: calc(-.5 * var(--bs-gutter-x));
 }
+
 .row>* {
     flex-shrink: 0;
     width: 100%;
@@ -35,9 +36,11 @@ hr {
     padding-left: calc(var(--bs-gutter-x) * .5);
     margin-top: var(--bs-gutter-y);
 }
+
 .gx-1 {
     --bs-gutter-x: 0.25rem;
 }
+
 .col {
     flex: 1 0 0%;
 }
@@ -52,36 +55,42 @@ hr {
 .false-anchor {
     cursor: pointer;
     text-decoration: underline;
-    color:rgb(0, 0, 238) !important;
+    color: rgb(0, 0, 238) !important;
 }
+
 .false-anchor:hover {
-    color:rgb(0, 0, 131) !important;
+    color: rgb(0, 0, 131) !important;
 }
 
 .icon-black {
-    color:rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
 }
+
 .icon-grey {
-    color:rgb(148, 148, 148);
+    color: rgb(148, 148, 148);
 }
+
 .icon-selected {
-    color:rgb(0, 132, 255);
+    color: rgb(0, 132, 255);
 }
+
 .icon-green {
-    color:rgb(17, 167, 17);
+    color: rgb(17, 167, 17);
 }
+
 .icon-red {
-    color:red;
+    color: red;
 }
+
 .icon-blue {
-    color:rgb(92, 157, 255) !important;
+    color: rgb(92, 157, 255) !important;
 }
 
 .selectedProduct {
     background-color: rgba(58, 172, 88, 0.6);
 }
 
-.mapboxgl-ctrl-top-center {
+.maplibregl-ctrl-top-center {
     position: relative !important;
     left: 0;
     right: 0;
@@ -91,7 +100,8 @@ hr {
     flex-direction: column;
     justify-content: center;
 }
-.mapboxgl-ctrl-bottom-center {
+
+.maplibregl-ctrl-bottom-center {
     position: absolute !important;
     left: 0;
     right: 0;
@@ -123,6 +133,7 @@ hr {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.2);
 }
+
 #spinnerDisplayText {
     color: rgb(0, 162, 255);
     /*background-color: rgb(87, 87, 87);*/
@@ -132,6 +143,7 @@ hr {
     font-size: 30px;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 /*
 https://tobiasahlin.com/spinkit/
 */
@@ -139,7 +151,7 @@ https://tobiasahlin.com/spinkit/
     width: 40px;
     height: 40px;
     position: absolute;
-    top:0;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
@@ -152,9 +164,10 @@ https://tobiasahlin.com/spinkit/
     height: 100%;
     position: absolute;
     left: 0;
-    top: 0; 
-    animation: sk-chase-dot 1.0s infinite ease-in-out both; 
+    top: 0;
+    animation: sk-chase-dot 1.0s infinite ease-in-out both;
 }
+
 .sk-chase-dot:before {
     content: '';
     display: block;
@@ -162,33 +175,80 @@ https://tobiasahlin.com/spinkit/
     height: 25%;
     background-color: #fff;
     border-radius: 100%;
-    animation: sk-chase-dot-before 1.0s infinite ease-in-out both; 
+    animation: sk-chase-dot-before 1.0s infinite ease-in-out both;
 }
-.sk-chase-dot:nth-child(1) { animation-delay: -1.1s; }
-.sk-chase-dot:nth-child(2) { animation-delay: -1.0s; }
-.sk-chase-dot:nth-child(3) { animation-delay: -0.9s; }
-.sk-chase-dot:nth-child(4) { animation-delay: -0.8s; }
-.sk-chase-dot:nth-child(5) { animation-delay: -0.7s; }
-.sk-chase-dot:nth-child(6) { animation-delay: -0.6s; }
-.sk-chase-dot:nth-child(1):before { animation-delay: -1.1s; }
-.sk-chase-dot:nth-child(2):before { animation-delay: -1.0s; }
-.sk-chase-dot:nth-child(3):before { animation-delay: -0.9s; }
-.sk-chase-dot:nth-child(4):before { animation-delay: -0.8s; }
-.sk-chase-dot:nth-child(5):before { animation-delay: -0.7s; }
-.sk-chase-dot:nth-child(6):before { animation-delay: -0.6s; }
+
+.sk-chase-dot:nth-child(1) {
+    animation-delay: -1.1s;
+}
+
+.sk-chase-dot:nth-child(2) {
+    animation-delay: -1.0s;
+}
+
+.sk-chase-dot:nth-child(3) {
+    animation-delay: -0.9s;
+}
+
+.sk-chase-dot:nth-child(4) {
+    animation-delay: -0.8s;
+}
+
+.sk-chase-dot:nth-child(5) {
+    animation-delay: -0.7s;
+}
+
+.sk-chase-dot:nth-child(6) {
+    animation-delay: -0.6s;
+}
+
+.sk-chase-dot:nth-child(1):before {
+    animation-delay: -1.1s;
+}
+
+.sk-chase-dot:nth-child(2):before {
+    animation-delay: -1.0s;
+}
+
+.sk-chase-dot:nth-child(3):before {
+    animation-delay: -0.9s;
+}
+
+.sk-chase-dot:nth-child(4):before {
+    animation-delay: -0.8s;
+}
+
+.sk-chase-dot:nth-child(5):before {
+    animation-delay: -0.7s;
+}
+
+.sk-chase-dot:nth-child(6):before {
+    animation-delay: -0.6s;
+}
 
 @keyframes sk-chase {
-    100% { transform: rotate(360deg); } 
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
 @keyframes sk-chase-dot {
-    80%, 100% { transform: rotate(360deg); } 
+
+    80%,
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
 @keyframes sk-chase-dot-before {
     50% {
-        transform: scale(0.6); 
-    } 100%, 0% {
-        transform: scale(1.0); 
-    } 
+        transform: scale(0.6);
+    }
+
+    100%,
+    0% {
+        transform: scale(1.0);
+    }
 }
 
 #optionsBox {
@@ -228,6 +288,7 @@ https://tobiasahlin.com/spinkit/
 
     cursor: pointer;*/
 }
+
 /*#optionsBox:hover { 
     background-color: rgb(212, 212, 212);
     -webkit-transition: background-color 150ms linear;
@@ -306,6 +367,7 @@ https://tobiasahlin.com/spinkit/
     z-index: 99999;
     display: none;
 }
+
 #exampleModal {
     z-index: 100000;
 }
@@ -314,6 +376,7 @@ https://tobiasahlin.com/spinkit/
     height: 50vh;
     overflow: scroll;
 }
+
 .alertAccordionBody {
     white-space: pre-wrap;
 }
@@ -323,17 +386,24 @@ https://tobiasahlin.com/spinkit/
     display: inline-block;
     padding: 5px 10px;
 }
+
 #offcanvasExample {
     width: 30vw;
 }
 
 .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 
@@ -348,9 +418,11 @@ https://tobiasahlin.com/spinkit/
     justify-content: center;
     align-items: center;
 }
+
 .mapFooter span {
     font-size: 23px;
 }
+
 .mapFooterMenuItem {
     cursor: pointer;
 }
@@ -366,6 +438,7 @@ https://tobiasahlin.com/spinkit/
     display: flex;
     justify-content: center;
 }
+
 .menu_item_not_selected {
     border: none;
     background: none;
@@ -390,13 +463,16 @@ https://tobiasahlin.com/spinkit/
     padding: 0px 5px 0px 5px;
     box-sizing: border-box;
 }
-#productsDropdownTrigger, #productsDropdown {
+
+#productsDropdownTrigger,
+#productsDropdown {
     font-size: small;
     /* color: white; */
     cursor: pointer;
     position: absolute;
     left: 10px;
 }
+
 #radarDateTime {
     font-size: small;
     color: white;
@@ -404,6 +480,7 @@ https://tobiasahlin.com/spinkit/
     position: absolute;
     right: 10px;
 }
+
 #extraProductInfo {
     font-size: small;
     color: rgb(161, 161, 161);
@@ -421,6 +498,7 @@ https://tobiasahlin.com/spinkit/
     align-items: center;
     color: white;
 }
+
 .radarHeader div {
     text-align: center;
 }
@@ -430,6 +508,7 @@ https://tobiasahlin.com/spinkit/
     left: 10px;
     display: flex;
 }
+
 #top-right {
     position: absolute;
     right: 10px;
@@ -444,6 +523,7 @@ https://tobiasahlin.com/spinkit/
     width: 100%;
     background-color: rgb(20, 103, 204);
 }
+
 #mapColorScale {
     position: absolute;
     z-index: 115;
@@ -464,9 +544,11 @@ https://tobiasahlin.com/spinkit/
     border: 3px solid rgb(125, 125, 125);
     border-radius: 50%;
 
-    /* outline: 1px solid black; */ /* doesn't work on safari */
+    /* outline: 1px solid black; */
+    /* doesn't work on safari */
     box-shadow: 0px 0px 0px 1px black inset,
-    0px 0px 0px 1px black; /* https://github.com/google/model-viewer/issues/662#issuecomment-1451606074 */
+        0px 0px 0px 1px black;
+    /* https://github.com/google/model-viewer/issues/662#issuecomment-1451606074 */
 
     position: absolute;
     z-index: 1000;
@@ -478,6 +560,7 @@ https://tobiasahlin.com/spinkit/
     pointer-events: none;
     display: none;
 }
+
 #colorPicker {
     width: 10px;
     height: 10px;
@@ -485,15 +568,18 @@ https://tobiasahlin.com/spinkit/
     z-index: 1002;
     background-color: black;
 }
+
 #colorPickerBorder {
     width: 40px;
     height: 40px;
 
     z-index: 1001;
-    display: none; /* display: flex; */
+    display: none;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
 }
+
 #verticalLine {
     border-left: 3px solid rgb(125, 125, 125);
     border-radius: 25px;
@@ -505,6 +591,7 @@ https://tobiasahlin.com/spinkit/
     pointer-events: none;
     display: none;
 }
+
 #horizontalLine {
     border-top: 3px solid rgb(125, 125, 125);
     border-radius: 25px;
@@ -516,6 +603,7 @@ https://tobiasahlin.com/spinkit/
     pointer-events: none;
     display: none;
 }
+
 #radarCenterLine {
     border-left: 3px solid red;
     border-radius: 25px;
@@ -532,6 +620,7 @@ https://tobiasahlin.com/spinkit/
     transform: rotate(45deg);
     transform-origin: 50% 100%;
 }
+
 #colorPickerText {
     text-align: center;
     width: fit-content;
@@ -563,12 +652,15 @@ https://tobiasahlin.com/spinkit/
 .new-file {
     color: rgb(17, 167, 17);
 }
+
 .recent-file {
     color: rgb(217, 184, 0);
 }
+
 .old-file {
     color: rgb(229, 78, 78);
 }
+
 .uploaded-file {
     color: rgb(78, 181, 229);
 }
@@ -606,12 +698,14 @@ https://tobiasahlin.com/spinkit/
     top: 50px;
     left: 0;
 }
+
 #haClearMapOuter {
     margin: 8px 40px -8px 8px;
     display: flex;
     justify-content: center;
     overflow: hidden;
 }
+
 #haMapControlMinimize {
     position: absolute;
     top: 0;
@@ -627,13 +721,14 @@ https://tobiasahlin.com/spinkit/
 
     cursor: pointer;
 }
+
 #haMapControlText {
     height: fit-content;
     max-height: 30vh;
     overflow: scroll;
 }
 
-.alertPopup .mapboxgl-popup-content {
+.alertPopup .maplibregl-popup-content {
     background-color: black;
     /* background-color: rgba(0, 0, 0, .3);
     backdrop-filter: blur(10px);
@@ -644,19 +739,43 @@ https://tobiasahlin.com/spinkit/
 
     /* padding: 10px 10px 5px; */
 }
-.alertPopup .mapboxgl-popup-close-button {
+
+.alertPopup .maplibregl-popup-close-button {
     display: none;
 }
-/* https://github.com/mapbox/mapbox-gl-js/issues/2848#issuecomment-354447882 */
-.alertPopup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip { border-top-color: black; }
-.alertPopup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip { border-bottom-color: black; }
-.alertPopup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip { border-right-color: black; }
-.alertPopup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip { border-left-color: black; }
 
-.alertPopup.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip { border-bottom-color: black; }
-.alertPopup.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip { border-bottom-color: black; }
-.alertPopup.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip { border-top-color: black; }
-.alertPopup.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip { border-top-color: black; }
+/* https://github.com/mapbox/mapbox-gl-js/issues/2848#issuecomment-354447882 */
+.alertPopup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+    border-top-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+    border-bottom-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip {
+    border-bottom-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+    border-bottom-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip {
+    border-top-color: black;
+}
+
+.alertPopup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+    border-top-color: black;
+}
 
 #atticDialog {
     position: absolute;
@@ -667,6 +786,7 @@ https://tobiasahlin.com/spinkit/
 
     background-color: rgba(0, 0, 0, 0.4);
 }
+
 #atticDialogContainer {
     position: absolute;
     z-index: 1001;
@@ -690,6 +810,7 @@ https://tobiasahlin.com/spinkit/
     background-color: rgb(19, 19, 19);
     color: rgb(172, 172, 172);
 }
+
 #atticDialogHeaderContainer {
     position: absolute;
     top: 0;
@@ -704,6 +825,7 @@ https://tobiasahlin.com/spinkit/
     justify-content: center;
     align-items: center;
 }
+
 #atticDialogClose {
     position: absolute;
     z-index: 1002;
@@ -712,6 +834,7 @@ https://tobiasahlin.com/spinkit/
     transform: scale(1.5);
     cursor: pointer;
 }
+
 #atticDialogBody {
     position: absolute;
     bottom: 0;
@@ -721,9 +844,11 @@ https://tobiasahlin.com/spinkit/
     overflow: scroll;
     margin: 5px 5px 5px 5px;
 }
+
 .alertsMonospaceText {
     font-family: 'Consolas', monospace;
 }
+
 .alertTextDescriber {
     color: rgba(0, 132, 255, 1);
 }
@@ -743,6 +868,7 @@ https://tobiasahlin.com/spinkit/
     justify-content: center;
     align-items: center;
 }
+
 #toolsMenuTooltip:after {
     top: 100%;
     left: 50%;
@@ -762,6 +888,7 @@ https://tobiasahlin.com/spinkit/
     margin: auto;
     width: 90%;
 }
+
 .l2ElevBtn {
     /* width: fit-content;
     height: fit-content; */
@@ -795,16 +922,19 @@ https://tobiasahlin.com/spinkit/
 
     /* text-align: center; */
 }
+
 #l2ElevButtonsExpander:hover {
     filter: brightness(80%);
     -webkit-filter: brightness(80%);
     -moz-filter: brightness(80%);
 }
+
 .l2ElevButtonsExpanderSelected {
     color: #084298 !important;
     background-color: #cfe2ff !important;
     border-color: #b6d4fe !important;
 }
+
 .l2ElevBtnSelected {
     color: #0f5132 !important;
     background-color: #d1e7dd !important;
@@ -829,6 +959,7 @@ https://tobiasahlin.com/spinkit/
 
     background-color: rgba(0, 0, 0, 0.4);
 }
+
 #atcDlgContainer {
     position: absolute;
     left: 0;
@@ -841,6 +972,7 @@ https://tobiasahlin.com/spinkit/
     height: auto;
     max-height: 100%;
 }
+
 #atcDlgHeader {
     display: flex;
     align-items: center;
@@ -865,12 +997,14 @@ https://tobiasahlin.com/spinkit/
     background-color: rgb(175, 175, 175);
     color: rgb(71, 71, 71);
 }
+
 #atcDlgClose {
     position: absolute;
     right: 20px;
     transform: scale(1.5);
     cursor: pointer;
 }
+
 #atcDlgBody {
     /* position: absolute; */
     overflow: scroll;
@@ -901,6 +1035,7 @@ https://tobiasahlin.com/spinkit/
 
     background-color: rgba(0, 0, 0, 0.4);
 }
+
 #atticRadarMenuContainer {
     position: absolute;
     left: 0;
@@ -923,10 +1058,12 @@ https://tobiasahlin.com/spinkit/
     border-top: 1px solid black;
     border-right: 1px solid black;
 }
+
 #atticRadarMenuBody {
     color: #aeaeae;
     padding: 15px;
 }
+
 .atticRadarMenuRow {
     display: flex;
     justify-content: flex-start;
@@ -937,42 +1074,50 @@ https://tobiasahlin.com/spinkit/
     border-radius: 10px;
     padding: 10px;
 }
+
 .atticRadarMenuRowDisabled {
     /* background-color: #272727;
     color: #595959; */
     opacity: 0.5;
     pointer-events: none;
 }
+
 .atticRadarMenuRow:hover {
     background-color: rgb(44, 44, 44);
     cursor: pointer;
 }
+
 .atticRadarMenuRow:active {
     /* border: 1px solid rgba(97, 178, 203, 0.542); */
     background-color: rgb(40, 40, 40);
 }
+
 .armrSlideDown {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     /* border-top: 0.25px solid rgb(70, 70, 70); */
     background-color: rgb(60, 60, 60);
 }
+
 /* armr = atticRadarMenuRow */
 .armrTop {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
     border-bottom: 0.25px solid rgb(70, 70, 70);
 }
+
 .armrMiddle {
     border-radius: 0px;
     border-top: 0.25px solid rgb(70, 70, 70);
     border-bottom: 0.25px solid rgb(70, 70, 70);
 }
+
 .armrBottom {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-top: 0.25px solid rgb(70, 70, 70);
 }
+
 .armrWide {
     border-radius: 0px;
     /* 15px is the padding for #atticRadarMenuContainer */
@@ -986,18 +1131,23 @@ https://tobiasahlin.com/spinkit/
     margin-left: 5px;
     margin-right: 10px;
 }
+
 .armrIcon-Red {
     color: rgb(235, 85, 70);
 }
+
 .armrText-Red {
     color: rgb(187, 64, 53);
 }
+
 .armrIcon-Blue {
     color: rgb(70, 143, 235);
 }
+
 .armrIcon-Green {
     color: rgb(79, 183, 94);
 }
+
 .armrText-Green {
     color: rgb(25, 133, 57);
 }
@@ -1017,6 +1167,7 @@ https://tobiasahlin.com/spinkit/
     color: rgb(200, 200, 200);
     font-size: 18px;
 }
+
 .armsHeaderBackBtn {
     position: absolute;
     left: 15px;
@@ -1027,9 +1178,11 @@ https://tobiasahlin.com/spinkit/
     /* font-weight: bold; */
     /* text-decoration: underline; */
 }
+
 .armsHeaderBackBtn:hover {
     color: rgb(44, 110, 164);
 }
+
 .armsHeaderExitBtn {
     position: absolute;
     right: 15px;
@@ -1040,10 +1193,12 @@ https://tobiasahlin.com/spinkit/
 }
 
 .armrHeader {
-    margin-left: calc(10px + 5px); /* atticRadarMenuRow padding + armrIcon margin-left */
+    margin-left: calc(10px + 5px);
+    /* atticRadarMenuRow padding + armrIcon margin-left */
     margin-bottom: 3px;
     font-size: 15px;
 }
+
 .armrHeaderWide {
     margin-left: 0px;
 }
@@ -1062,6 +1217,7 @@ https://tobiasahlin.com/spinkit/
     width: 0;
     visibility: hidden;
 }
+
 .toggleSwitchCircle {
     cursor: pointer;
     text-indent: -9999px;
@@ -1073,6 +1229,7 @@ https://tobiasahlin.com/spinkit/
     position: relative;
     transition: 0.3s;
 }
+
 .toggleSwitchCircle:after {
     content: "";
     position: absolute;
@@ -1084,14 +1241,17 @@ https://tobiasahlin.com/spinkit/
     border-radius: 90px;
     transition: 0.3s;
 }
+
 .toggleSwitch:checked+.toggleSwitchCircle {
     background: #4BD763;
     transition: 0.3s;
 }
+
 .toggleSwitch:checked+.toggleSwitchCircle:after {
     left: calc(100% - calc(5px / 5));
     transform: translateX(-100%);
 }
+
 /* .toggleSwitchCircle:active:after {
     width: calc(110px / 5);
 } */
@@ -1101,6 +1261,7 @@ https://tobiasahlin.com/spinkit/
     right: 30px;
     cursor: pointer;
 }
+
 /* tsc = toggleSwitchContainter */
 .tscWide {
     right: 15px;
@@ -1112,6 +1273,7 @@ https://tobiasahlin.com/spinkit/
     border: none;
     background-color: grey;
 }
+
 .form-switch .form-check-input {
     height: calc(100px / 5);
     width: calc(180px / 5);
@@ -1121,6 +1283,7 @@ https://tobiasahlin.com/spinkit/
     background-position: left center;
     transition: background-position .15s ease-in-out;
 }
+
 .form-check .form-check-input,
 .form-check-input {
     float: left;
@@ -1133,15 +1296,18 @@ https://tobiasahlin.com/spinkit/
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
 }
+
 .form-switch {
     padding-left: 2.5em;
 }
+
 .form-check {
     display: block;
     min-height: 1.5rem;
     padding-left: 1.5em;
     margin-bottom: 0.125rem;
 }
+
 .form-check-input:checked {
     background-color: #4BD763;
     border-color: #4BD763;
@@ -1171,6 +1337,7 @@ https://tobiasahlin.com/spinkit/
 
     overflow: scroll;
 }
+
 /* psm = productSelectionMenu */
 .psmRow {
     cursor: pointer;
@@ -1185,11 +1352,13 @@ https://tobiasahlin.com/spinkit/
     padding-left: 20px;
     padding-right: 20px;
 }
+
 .psmRowDisabled {
     pointer-events: none;
     /* background-color: #3a3a3a !important; */
     color: #7d7d7d !important;
 }
+
 /* .psmRow:hover {
     background-color: rgb(85, 85, 85);
 } */
@@ -1200,20 +1369,24 @@ https://tobiasahlin.com/spinkit/
     margin-left: -20px;
     margin-right: -20px;
 }
+
 .psmSectionTitle {
     color: rgb(185, 185, 185);
     font-size: 13px;
     margin-bottom: 3px;
 }
+
 .psmRowTiltSelect {
     color: rgb(92, 157, 255);
     margin-left: 20px;
     /* font-weight: bold; */
 }
+
 .psmRowTiltSelect:hover {
     filter: brightness(80%);
     text-decoration: underline;
 }
+
 .blankText {
     color: rgba(0, 0, 0, 0);
     pointer-events: none;
@@ -1233,6 +1406,7 @@ https://tobiasahlin.com/spinkit/
     /* backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px); */
 }
+
 #psmTiltDropdownBackdrop {
     position: absolute;
     z-index: 998;
@@ -1241,6 +1415,7 @@ https://tobiasahlin.com/spinkit/
     width: 100%;
     background-color: rgba(0, 0, 0, 0);
 }
+
 .psmTiltDropdownRow {
     cursor: pointer;
     color: white;
@@ -1259,6 +1434,7 @@ https://tobiasahlin.com/spinkit/
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
 .psmTiltDropdownRow:hover {
     background-color: rgb(76, 110, 181);
 }
@@ -1269,6 +1445,7 @@ https://tobiasahlin.com/spinkit/
     padding-left: 0px;
     padding-right: 0px;
 }
+
 .l2ElevationBtn {
     padding: 2px;
     background-color: #898989;
@@ -1279,25 +1456,30 @@ https://tobiasahlin.com/spinkit/
 
     text-align: center;
 }
+
 .l2ElevationBtn:hover {
     filter: brightness(80%);
     -webkit-filter: brightness(80%);
     -moz-filter: brightness(80%);
 }
+
 .l2ElevationBtn:active {
     filter: brightness(70%);
     -webkit-filter: brightness(70%);
     -moz-filter: brightness(70%);
 }
+
 .l2ElevationBtnSelected {
     color: #125234 !important;
     background-color: #96b0a4 !important;
     border-color: #265d44 !important;
 }
+
 .l2ElevationBtnDisabled {
     pointer-events: none;
     background-color: #606060 !important;
-    border-color: #3e3e3e !important; /* same as .l2ElevationBtn */
+    border-color: #3e3e3e !important;
+    /* same as .l2ElevationBtn */
 }
 
 .dealiasBtnSelected {
@@ -1305,20 +1487,24 @@ https://tobiasahlin.com/spinkit/
     background-color: #45863c !important;
     border-color: #153627 !important;
 }
+
 .dealiasBtnDeSelected {
     color: #521212 !important;
     background-color: #ab6262 !important;
     border-color: #764646 !important;
 }
+
 #completeDealiasBtnContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 #dealiasToggleSwitchContainer {
     /* 100% width - (right pos of settings btn) - (right + left padding of settings btn) - .gx-1 class --bs-gutter-x */
     width: calc(100% - 20px - 12px - 0.25rem);
 }
+
 #dealiasSettingsIcon {
     position: absolute;
     right: 20px;
@@ -1357,23 +1543,56 @@ https://tobiasahlin.com/spinkit/
     font-size: 1em;
     line-height: 1em;
 }
+
 .hurricaneLegendCircleInner {
     color: rgba(0, 0, 0, 0);
     pointer-events: none;
 }
 
-.TD { background-color: #08f; }
-.TS { background-color: #00f060; }
-.C1 { background-color: #fc0; }
-.C2 { background-color: #f80; }
-.C3 { background-color: #f50; }
-.C4 { background-color: #f02; }
-.C5 { background-color: #f5b; }
-.OTHER { background-color: #b75eff; }
-.UNKNOWN { background-color: #808080; }
-.NONTROPICAL { background-color: #72f; }
+.TD {
+    background-color: #08f;
+}
 
-.spcTable /* table, th, td */ {
+.TS {
+    background-color: #00f060;
+}
+
+.C1 {
+    background-color: #fc0;
+}
+
+.C2 {
+    background-color: #f80;
+}
+
+.C3 {
+    background-color: #f50;
+}
+
+.C4 {
+    background-color: #f02;
+}
+
+.C5 {
+    background-color: #f5b;
+}
+
+.OTHER {
+    background-color: #b75eff;
+}
+
+.UNKNOWN {
+    background-color: #808080;
+}
+
+.NONTROPICAL {
+    background-color: #72f;
+}
+
+.spcTable
+
+/* table, th, td */
+    {
     border: 1px solid rgba(255, 255, 255, 0);
     table-layout: fixed;
 
@@ -1381,14 +1600,17 @@ https://tobiasahlin.com/spinkit/
     border-collapse: separate;
     border-spacing: 10px;
 }
+
 .spcToggleswitchCircle {
     display: inline-block;
 }
+
 .spcTableCellDiv {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 th.spcTable {
     text-align: center;
 }
@@ -1401,6 +1623,7 @@ th.spcTable {
     width: 20px;
     height: 20px;
 }
+
 #chart_container {
     position: absolute;
     z-index: 500;
@@ -1431,6 +1654,7 @@ th.spcTable {
     /* font-style: italic; */
     color: rgb(180, 180, 180);
 }
+
 #tide_chart_container {
     height: 300px;
 }
@@ -1443,6 +1667,7 @@ th.spcTable {
     padding-left: 10px;
     padding-right: 10px;
 }
+
 #tide_height_text {
     text-align: center;
     display: flex;
@@ -1450,6 +1675,7 @@ th.spcTable {
     flex-direction: column;
     justify-content: center;
 }
+
 .tide_title {
     font-size: 20px;
     font-weight: bold;
@@ -1459,6 +1685,7 @@ th.spcTable {
     filter: brightness(90%);
     -webkit-filter: brightness(90%);
 }
+
 #flot_tooltip {
     z-index: 1000000 !important;
 }
@@ -1479,15 +1706,23 @@ th.spcTable {
 } */
 
 /* For the Bootstrap Datepicker */
-td.day:hover, span.month:hover, span.year:hover,
-.datepicker-switch:hover, th.prev:hover, th.next:hover,
+td.day:hover,
+span.month:hover,
+span.year:hover,
+.datepicker-switch:hover,
+th.prev:hover,
+th.next:hover,
 .focused {
     background-color: rgb(145, 145, 145) !important;
 }
-td.day.active, span.month.active, span.year.active {
+
+td.day.active,
+span.month.active,
+span.year.active {
     background-color: rgb(55, 111, 185) !important;
     background-image: none !important;
 }
+
 .datepicker table {
     margin: 0 auto !important;
     color: rgb(220, 220, 220);
@@ -1508,29 +1743,34 @@ td.day.active, span.month.active, span.year.active {
     font-size: 12px;
     border: 0.75px solid rgb(100, 100, 100);
 }
+
 /* https://cssarrowplease.com/ */
-.attic_popup:after, .attic_popup:before {
-	top: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: '';
-	height: 0;
-	width: 0;
-	position: absolute;
-	/* pointer-events: none; */
-}
-.attic_popup:after {
-	border-color: rgba(50, 50, 50, 0);
-	border-top-color: #323232;
-	border-width: 10px;
-	margin-left: -10px;
-}
+.attic_popup:after,
 .attic_popup:before {
-	border-color: rgba(100, 100, 100, 0);
-	border-top-color: #646464;
-	border-width: 11px;
-	margin-left: -11px;
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: '';
+    height: 0;
+    width: 0;
+    position: absolute;
+    /* pointer-events: none; */
 }
+
+.attic_popup:after {
+    border-color: rgba(50, 50, 50, 0);
+    border-top-color: #323232;
+    border-width: 10px;
+    margin-left: -10px;
+}
+
+.attic_popup:before {
+    border-color: rgba(100, 100, 100, 0);
+    border-top-color: #646464;
+    border-width: 11px;
+    margin-left: -11px;
+}
+
 /* https://stackoverflow.com/a/19719176/18758797 */
 /* .attic_popup:after {
     content:'';
@@ -1555,6 +1795,7 @@ td.day.active, span.month.active, span.year.active {
     font-size: 20px;
     cursor: pointer;
 }
+
 .alert_popup_lessertext {
     color: rgb(140, 140, 140);
 }
@@ -1569,6 +1810,7 @@ td.day.active, span.month.active, span.year.active {
     position: absolute;
     z-index: 500;
 }
+
 /* https://stackoverflow.com/a/40530033/18758797 */
 @media (max-width: 435px) {
     #attributionDiv {
@@ -1578,6 +1820,7 @@ td.day.active, span.month.active, span.year.active {
         line-height: 14px; */
     }
 }
+
 /* https://css-tricks.com/multi-line-padded-text/ */
 #attributionDivContent {
     /* background: rgb(60, 60, 60); */
@@ -1587,11 +1830,13 @@ td.day.active, span.month.active, span.year.active {
     -moz-background-inline-policy: clone;
     box-decoration-break: clone;
 }
+
 .attributionDivText {
     border: 6px solid rgb(60, 60, 60);
     border-radius: 5px;
     background-color: rgb(60, 60, 60);
 }
+
 /* #attributionDivContent > span {
     position: relative;
     z-index: 1;
@@ -1627,6 +1872,7 @@ td.day.active, span.month.active, span.year.active {
 .colortableRow {
     height: calc(var(--bs-body-line-height) * 16px);
 }
+
 .colortable_menu_image_preview {
     position: absolute;
     height: calc(var(--bs-body-line-height) * 16px);
@@ -1635,10 +1881,12 @@ td.day.active, span.month.active, span.year.active {
     background-color: red;
     right: 15px;
 }
+
 .colortable_menu_text {
     position: absolute;
     left: calc(15px * 3);
 }
+
 .colortable_upload_btn {
     cursor: pointer;
 }

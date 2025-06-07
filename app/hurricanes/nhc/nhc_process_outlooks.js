@@ -35,7 +35,7 @@ function _click_listener(e) {
     const popup = new AtticPopup([lng, lat], popup_content);
     popup.attic_popup_div.css({ 'maxWidth': '200px', 'minWidth': '200px' });
     popup.add_to_map();
-    // new mapboxgl.Popup({ className: 'alertPopup'})
+    // new maplibregl.Popup({ className: 'alertPopup'})
     //     .setLngLat([lng, lat])
     //     .setHTML(popup_content)
     //     //.setHTML(e.features[0].properties.description)
@@ -55,21 +55,21 @@ function nhc_process_outlooks() {
         const id = split_url[split_url.length - 1].replace('.kmz', '');
 
         fetch(ut.phpProxy + url, { headers: { 'Cache-Control': 'no-cache' } })
-        .then(response => response.blob())
-        .then(blob => {
-            blob.lastModifiedDate = new Date();
-            blob.name = url;
+            .then(response => response.blob())
+            .then(blob => {
+                blob.lastModifiedDate = new Date();
+                blob.name = url;
 
-            // nhc_storage.outlooks[id] = {};
-            // nhc_storage.outlooks[id].kmz = blob;
-            nhc_plot_outlook(blob, id);
+                // nhc_storage.outlooks[id] = {};
+                // nhc_storage.outlooks[id].kmz = blob;
+                nhc_plot_outlook(blob, id);
 
-            if (index < outlook_urls.length - 1) {
-                _fetch_individual_outlook(cb, index + 1);
-            } else {
-                cb();
-            }
-        })
+                if (index < outlook_urls.length - 1) {
+                    _fetch_individual_outlook(cb, index + 1);
+                } else {
+                    cb();
+                }
+            })
     }
 
     _fetch_individual_outlook(() => {
