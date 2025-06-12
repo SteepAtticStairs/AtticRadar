@@ -10,9 +10,14 @@ I'll do my best in the future to make sure this stays up permanently.
 </div>
 </div>`
 
-display_attic_dialog({
-    'title': 'AtticRadar is back (again)',
-    'body': html_content,
-    'color': 'rgb(120, 120, 120)',
-    'textColor': 'black',
-})
+// localStorage.removeItem('displayed_dialog');
+const dd = localStorage.getItem('displayed_dialog');
+if (!dd) {
+    display_attic_dialog({
+        'title': 'AtticRadar is back (again)',
+        'body': html_content,
+        'color': 'rgb(120, 120, 120)',
+        'textColor': 'black',
+    })
+    localStorage.setItem('displayed_dialog', true);
+}
