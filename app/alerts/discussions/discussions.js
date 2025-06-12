@@ -7,7 +7,7 @@ const set_layer_order = require('../../core/map/setLayerOrder');
 const AtticPopup = require('../../core/popup/AtticPopup');
 const display_attic_dialog = require('../../core/menu/attic_dialog');
 
-const all_discussions_url = ut.phpProxy + `https://www.spc.noaa.gov/products/md/ActiveMD.kmz`; // https://www.spc.noaa.gov/products/md/ActiveMD.kmz
+const all_discussions_url = `https://www.spc.noaa.gov/products/md/ActiveMD.kmz`; // https://www.spc.noaa.gov/products/md/ActiveMD.kmz
 // const all_discussions_url = `http://localhost:3333/ActiveMD.kmz`
 
 function click_listener(e) {

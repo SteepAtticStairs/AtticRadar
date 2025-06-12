@@ -13,6 +13,9 @@ const Level3Factory = require('../libnexrad/level3/level3_factory');
  * @param {*} callback A callback function that has a single paramater, which is the buffer of the file.
  */
 function file_to_buffer(url, callback) {
+    // good catch! thanks CGray1234!
+    if (url.includes('tgftp.nws.noaa.gov')) url = ut.phpProxy + url;
+
     fetch(url)
     .then(response => response.arrayBuffer())
     .then(buffer => {
