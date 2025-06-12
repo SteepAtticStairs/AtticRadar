@@ -152,6 +152,9 @@ function plot_storm_tracks(L3Factory) {
     window.atticData.storm_track_layers = storm_track_layers;
 
     function cellClick(e) {
+        const renderedFeatures = map.queryRenderedFeatures(e.point);
+        if (renderedFeatures[0] && renderedFeatures[0].layer.id == 'stationSymbolLayer') return;
+
         // if (window.atticData.currentStation == L3Factory.station) {
             const properties = e.features[0].properties;
             const cellID = properties.cellID;
