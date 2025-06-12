@@ -17,6 +17,8 @@ Inspiration for the app to be created, and some of the code for WebGL rendering,
 
 Virtually all of the code for the doppler dealiasing algorithm comes from [pyart](https://github.com/ARM-DOE/pyart). I used their [region-based](https://github.com/ARM-DOE/pyart/blob/main/pyart/correct/region_dealias.py) dealiasing algorithm. I go into more depth about the process behind this in the JavaScript dealiasing file in this project.
 
+The Storm-Relative Velocity implementation comes from [@slash2314](https://github.com/slash2314)! Here's the [pull request](https://github.com/SteepAtticStairs/AtticRadar/pull/12) link for more details.
+
 ## Setup
 ```
 git clone https://github.com/SteepAtticStairs/AtticRadar.git
