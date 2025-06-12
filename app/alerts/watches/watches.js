@@ -7,7 +7,7 @@ const set_layer_order = require('../../core/map/setLayerOrder');
 const AtticPopup = require('../../core/popup/AtticPopup');
 const display_attic_dialog = require('../../core/menu/attic_dialog');
 
-const all_watches_url = ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ActiveWW.kmz`; // https://www.spc.noaa.gov/products/watch/ActiveWW.kmz
+const all_watches_url = `https://www.spc.noaa.gov/products/watch/ActiveWW.kmz`; // https://www.spc.noaa.gov/products/watch/ActiveWW.kmz
 
 function click_listener(e) {
     // if (e.originalEvent.cancelBubble) { return; }
@@ -129,6 +129,7 @@ function fetch_watches() {
         kmz_to_geojson(blob, (kml_dom) => {
             const parsed_xml = ut.xmlToJson(kml_dom);
             const base = parsed_xml.kml.Folder.NetworkLink;
+            console.log(base)
             if (!base) { return; }
             for (var i = 0; i < base.length; i++) {
                 const this_discussion_url = base[i].Link.href['#text'];
