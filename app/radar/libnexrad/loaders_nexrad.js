@@ -55,7 +55,7 @@ function get_latest_level_2_url(station, callback) {
     var baseURL = 'https://noaa-nexrad-level2.s3.amazonaws.com';
     //https://noaa-nexrad-level2.s3.amazonaws.com/2022/08/09/KATX/KATX20220809_004942_V06
     fullURL = ut.preventFileCaching(fullURL);
-    $.get(ut.phpProxy + fullURL, function (data) {
+    $.get(fullURL, function (data) {
         var dataToWorkWith = JSON.stringify(ut.xmlToJson(data)).replace(/#/g, 'HASH')
         dataToWorkWith = JSON.parse(dataToWorkWith)
         //console.log(dataToWorkWith)
@@ -204,7 +204,7 @@ function return_level_3_factory_from_info(station, product, callback) {
  * @param {Function} callback - A callback function. Passes a single variable, which is an instance of a L3Factory class.
  */
 function return_level_3_factory_from_url(url, callback) {
-    file_to_buffer(ut.phpProxy + url, (buffer) => {
+    file_to_buffer(url, (buffer) => {
         const file = new NEXRADLevel3File(buffer);
         const L3Factory = new Level3Factory(file);
         callback(L3Factory);
