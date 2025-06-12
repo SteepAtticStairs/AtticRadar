@@ -110,7 +110,7 @@ function get_latest_level_3_url(station, product, index, callback, date) {
         fullURL = ut.preventFileCaching(fullURL);
 
         const headers = new Headers().append('Cache-Control', 'no-cache');
-        fetch(ut.phpProxy + fullURL, {cache: 'no-store', headers: headers}).then(response => response.text())
+        fetch(fullURL, {cache: 'no-store', headers: headers}).then(response => response.text())
         .then(function(data) {
         //$.get(ut.phpProxy + fullURL, function (data) {
             try {
