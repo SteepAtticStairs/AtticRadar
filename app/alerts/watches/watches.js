@@ -15,6 +15,8 @@ function click_listener(e) {
     // popup.add_to_map();
 
     if (e.originalEvent.cancelBubble) { return; }
+    const renderedFeatures = map.queryRenderedFeatures(e.point);
+    if (renderedFeatures[0] && renderedFeatures[0].layer.id == 'stationSymbolLayer') return;
     const properties = e.features[0].properties;
     const divid = `ww${properties.id}`
 
