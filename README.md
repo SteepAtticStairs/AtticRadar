@@ -2,6 +2,14 @@
 
 A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.
 
+## ⚠️ WARNING ⚠️
+Some radar data may be plotted slightly inaccurately on the map, even more so the further away you get from the radar station. This was an issue [recently discovered](https://github.com/SteepAtticStairs/AtticRadar/issues/21) and we are working towards a fix.
+<br><br>
+🚨 **AtticRadar should NEVER be used for life-saving information! ALWAYS go to the NWS or other sources with accurate data and information!!!** 🚨
+<br><br>
+In my mind, AtticRadar is more of a proof-of-concept rather than an app to use in the field.
+<br> Some apps with data that is known to be accurate include [radar.weather.gov](https://radar.weather.gov), RadarScope, RadarOmega, [WeatherWise](https://web.weatherwise.app/), and [QuadWeather](https://radar.quadweather.com)
+
 ## Website
 
 You can find the app live here:<br>
