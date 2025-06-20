@@ -14,12 +14,10 @@ In my mind, AtticRadar is more of a proof-of-concept rather than an app to use i
 AtticRadar's source code is published here on GitHub for people to explore and see how everything works under the hood. If you're interested in using some of AtticRadar's code in your project, I'd really appreciate it if you reached out to me first. My email is open at `steepatticstairs@gmail.com`, or you can send me a message on Discord at `steepatticstairs` if you'd prefer.
 
 ## Website
-
 You can find the app live here:<br>
 <b>[https://atticradar.steepatticstairs.net](https://atticradar.steepatticstairs.net)</b>
 
 ## Credits
-
 The libraries that parse NEXRAD files client-side were provided by two python packages, which can be found here:
 - Level 2 parsing comes from [nexrad_level2.py](https://github.com/ARM-DOE/pyart/blob/main/pyart/io/nexrad_level2.py), ported to JavaScript from [pyart](https://github.com/ARM-DOE/pyart/)
 - Level 3 parsing comes from [nexrad.py](https://github.com/Unidata/MetPy/blob/main/src/metpy/io/nexrad.py), ported to JavaScript from [MetPy](https://github.com/Unidata/MetPy/)
