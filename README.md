@@ -10,6 +10,10 @@ Some radar data may be plotted slightly inaccurately on the map, even more so th
 In my mind, AtticRadar is more of a proof-of-concept rather than an app to use in the field.
 <br> Some apps with data that is known to be accurate include [radar.weather.gov](https://radar.weather.gov), RadarScope, RadarOmega, [WeatherWise](https://web.weatherwise.app/), and [QuadWeather](https://radar.quadweather.com)
 
+## Approved Source Code Usage
+AtticRadar's source code is published here on GitHub for people to explore and see how everything works under the hood.
+<br> If you're interested in using some of AtticRadar's code in your project, I'd really appreciate it if you reached out to me first. My email is open at `steepatticstairs@gmail.com`, or you can send me a message on Discord at `steepatticstairs` if you'd prefer.
+
 ## Website
 
 You can find the app live here:<br>
