@@ -1,6 +1,6 @@
 // const geojsonMerge = require('@mapbox/geojson-merge');
 const turf = require('@turf/turf');
-const map = require('../core/map/map');
+const map = require('../../core/map/map');
 const merge_polygons = require('./merge_polygons');
 
 function combine_dictionary_data(alerts_data) {

@@ -39,8 +39,33 @@ const my_polygon_colors = {
 }
 
 function get_polygon_colors(alert_event) {
+    // var noaa_colors = require('./noaa_colors');
+    // for (var item in noaa_colors) {
+    //     delete noaa_colors[item].FIELD3;
+    //     var unformattedRGB = noaa_colors[item].rgb2;
+    //     var formattedRGB = unformattedRGB.split(' ');
+    //     formattedRGB = `rgb(${formattedRGB[0]}, ${formattedRGB[1]}, ${formattedRGB[2]})`
+    //     noaa_colors[item].rgb = formattedRGB;
+
+    //     noaa_colors[item].hex = `#${noaa_colors[item].hex2}`;
+
+    //     delete noaa_colors[item].rgb2;
+    //     delete noaa_colors[item].hex2;
+    // }
+    // console.log(noaa_colors)
+    // for (var item in noaa_colors) {
+    //     if (myPolygonColors[item] != undefined) {
+    //         noaa_colors[item].rgb = myPolygonColors[item];
+    //         //noaa_colors[item].rgb = myPolygonColors[item];
+    //     }
+    // }
+    // console.log(noaa_colors)
+
     if (Object.keys(noaa_colors).includes(alert_event)) {
         var c = noaa_colors[alert_event].rgb;
+        if (Object.keys(noaa_colors[alert_event]).includes('originalColor')) {
+            c = noaa_colors[alert_event].rgb;
+        }
         if (my_polygon_colors.hasOwnProperty(alert_event)) {
             c = my_polygon_colors[alert_event];
         }

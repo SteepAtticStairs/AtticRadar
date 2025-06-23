@@ -1,5 +1,5 @@
 {
-  "name": "AtticRadar",
+  "name": "atticradar",
   "main": "main.js",
   "scripts": {
     "build": "browserify -t brfs app/core/entry/entry.js -o dist/bundle.js; uglifyjs dist/bundle.js -m -o dist/bundle.js",

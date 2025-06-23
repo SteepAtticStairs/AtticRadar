@@ -1,5 +1,5 @@
-var map = require('../core/map/map');
-const ut = require('../core/utils');
+var map = require('../../core/map/map');
+const ut = require('../../core/utils');
 const get_polygon_colors = require('./colors/polygon_colors');
 const display_attic_dialog = require('../core/menu/attic_dialog');
 const chroma = require('chroma-js')
