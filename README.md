@@ -3,7 +3,7 @@
 A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.
 
 ## ⚠️ WARNING ⚠️
-Some radar data may be plotted slightly inaccurately on the map, even more so the further away you get from the radar station. This was an issue [recently discovered](https://github.com/SteepAtticStairs/AtticRadar/issues/21) and we are working towards a fix.
+Some reflectivity data on higher tilts may be plotted slightly inaccurately on the map, even more so the further away you get from the radar station. This was an issue [recently discovered](https://github.com/SteepAtticStairs/AtticRadar/issues/21) and we are working towards a fix.
 <br><br>
 🚨 **AtticRadar should NEVER be used for life-saving information! ALWAYS go to the NWS or other sources with accurate data and information!!!** 🚨
 <br><br>
@@ -41,6 +41,11 @@ then you can go to `localhost:3333` or `127.0.0.1:3333` to view the website.
 Using PHP as the local server was intentional, because of development that I do of server-side code that affects AtticRadar.
 
 Browserify is used in AtticRadar to implement a moduling system. `npm run build` bundles the project with Browserify to be used in distribution.
+
+`uglify-js` is required for `npm run build`, so you can install it with
+```
+npm install uglify-js -g
+```
 
 You can also run
 ```
