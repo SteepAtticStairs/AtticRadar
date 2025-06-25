@@ -1,4 +1,4 @@
-const CheapRuler = require('cheap-ruler');
+const dest_vincenty = require('../../../plot/dest_vincenty')
 
 module.exports = function (self) {
     self.addEventListener('message', function (ev) {
@@ -65,11 +65,9 @@ module.exports = function (self) {
                 return [mercatorXfromLng(coords[0]), mercatorYfromLat(coords[1])];
             }
 
-            var ruler = new CheapRuler(lngLat.lat, 'kilometers');
-
             const azimuth = calculateAzimuth(lngLat, x, y);
-            const range = haversineDistance(lngLat, x, y) / 1000;
-            var calc = mc(ruler.destination([lngLat.lng, lngLat.lat], range, azimuth));
+            const range = haversineDistance(lngLat, x, y);
+            var calc = mc(dest_vincenty({lng: lngLat.lng, lat: lngLat.lat}, range, azimuth));
 
             return [calc[0], calc[1]];
         }

@@ -14,7 +14,6 @@ const RadarUpdater = require('../updater/RadarUpdater');
 const filter_lightning = require('../../lightning/filter_lightning');
 const load_lightning = require('../../lightning/load_lightning');
 const turf = require('@turf/turf');
-const CheapRuler = require('cheap-ruler');
 
 function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
     var color_scale_data = product_colors[product];
@@ -265,21 +264,7 @@ function plot_to_map(verticies_arr, colors_arr, product, nexrad_factory) {
     const range = nexrad_factory?.initial_radar_obj?.max_range;
     if (range != undefined) {
         const location = nexrad_factory.get_location();
-        // const range_circle = turf.circle([location[1], location[0]], range, { steps: 100, units: 'kilometers' });
-
-        // CheapRuler is better than turf because it's used to calculate the radar data anyways
-        var ruler = new CheapRuler(location[0], 'kilometers');
-        const center = [location[1], location[0]];
-        const radius = range;
-        const segments = 500;
-        const points = [];
-        for (let i = 0; i < segments; i++) {
-            const angle = (360 / segments) * i; // Calculate the angle for each segment
-            const point = ruler.destination(center, radius, angle); // Calculate the point on the circle
-            points.push(point);
-        }
-        points.push(points[0]);
-        const range_circle = turf.polygon([points]);
+        const range_circle = turf.circle([location[1], location[0]], range, { steps: 100, units: 'kilometers' });
 
         if (map.getSource('station_range_source')) {
             map.getSource('station_range_source').setData(range_circle);
