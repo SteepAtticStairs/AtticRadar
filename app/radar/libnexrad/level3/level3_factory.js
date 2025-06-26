@@ -24,7 +24,7 @@ function _zero_pad(num) {
  * A class that provides simple access to the radar data returned from the 'NEXRADLevel3File' class.
  */
 class Level3Factory {
-    constructor (initial_radar_obj) {
+    constructor(initial_radar_obj) {
         this.initial_radar_obj = initial_radar_obj;
 
         this.nexrad_level = 3;
@@ -84,9 +84,10 @@ class Level3Factory {
      * @returns {Array} An array, containing all of the ranges for any azimuth in the sweep.
      */
     get_ranges() {
-        var max_range = this.initial_radar_obj.max_range;
         var num_bins = this.initial_radar_obj.sym_block[0][0].num_bins;
-        var prod_range = np_linspace(0, max_range, num_bins + 1);
+        var gate_scale = this.initial_radar_obj.sym_block[0][0].gate_scale * product_range_resolution[this.product_code];
+        var first_bin = this.initial_radar_obj.sym_block[0][0].first;
+        var prod_range = np_arange(num_bins).map(x => x * gate_scale + first_bin);
         return prod_range;
     }
     /**
@@ -236,14 +237,68 @@ class Level3Factory {
     }
 }
 
-// https://stackoverflow.com/a/40475362/18758797
-function np_linspace(startValue, stopValue, cardinality) {
-    var arr = [];
-    var step = (stopValue - startValue) / (cardinality - 1);
-    for (var i = 0; i < cardinality; i++) {
-      arr.push(startValue + (step * i));
+function np_arange(start, stop, step) {
+    if (stop === undefined) {
+        stop = start;
+        start = 0;
     }
-    return arr;
+
+    step = step === undefined ? 1 : step;
+    if (step === 0) {
+        throw new Error('Step must not be zero.');
+    }
+
+    const result = [];
+    if (step > 0) {
+        for (let value = start; value < stop; value += step) {
+            result.push(value);
+        }
+    } else {
+        for (let value = start; value > stop; value += step) {
+            result.push(value);
+        }
+    }
+
+    return result;
+}
+
+const product_range_resolution = {
+    19: 1.0,  // 124 nm
+    20: 2.0,  // 248 nm
+    25: 0.25, // 32 nm
+    27: 1.0,
+    28: 0.25,
+    30: 1.0,
+    32: 1.0,
+    34: 1.0,
+    56: 1.0,
+    78: 1.0,
+    79: 1.0,
+    80: 1.0,
+    94: 1.0,
+    99: 0.25,
+    134: 1000.0,
+    135: 1000.0,
+    138: 1.0,
+    153: 0.25,
+    154: 0.25,
+    155: 0.25,
+    159: 0.25,
+    161: 0.25,
+    163: 0.25,
+    165: 0.25,
+    169: 1.0,
+    170: 1.0,
+    171: 1.0,
+    172: 1.0,
+    173: 1.0,
+    174: 1.0,
+    175: 1.0,
+    176: 0.25,
+    177: 0.25,
+    181: 150.0,
+    182: 150.0,
+    186: 300.0,
 }
 
 module.exports = Level3Factory;
