@@ -20,6 +20,8 @@ Virtually all of the code for the doppler dealiasing algorithm comes from [pyart
 
 The Storm-Relative Velocity implementation comes from [@slash2314](https://github.com/slash2314)! Here's the [pull request](https://github.com/SteepAtticStairs/AtticRadar/pull/12) link for more details.
 
+Thanks to [@wolf20482](https://github.com/wolf20482) for fixing some serious radar accuracy bugs!
+
 ## Setup
 ```
 git clone https://github.com/SteepAtticStairs/AtticRadar.git
