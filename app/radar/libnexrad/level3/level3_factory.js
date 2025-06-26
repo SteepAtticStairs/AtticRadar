@@ -262,6 +262,7 @@ function np_arange(start, stop, step) {
     return result;
 }
 
+// https://github.com/ARM-DOE/pyart/blob/main/pyart/io/nexrad_level3.py
 const product_range_resolution = {
     19: 1.0,  // 124 nm
     20: 2.0,  // 248 nm
