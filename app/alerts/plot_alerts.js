@@ -15,6 +15,20 @@ function _add_alert_layers(geojson) {
             data: geojson,
         })
         map.addLayer({
+            'id': 'alerts_layer_fill',
+            'type': 'fill',
+            'source': 'alerts_source',
+            paint: {
+                'fill-color': ['get', 'color'],
+                'fill-opacity': [
+                    'case',
+                    ['==', ['get', 'is_zone'], true],
+                    0.5,
+                    0
+                ]
+            }
+        });
+        map.addLayer({
             'id': 'alerts_layer',
             'type': 'line',
             'source': 'alerts_source',
@@ -29,23 +43,14 @@ function _add_alert_layers(geojson) {
                 ],
                 'line-width': [
                     'case',
-                    // ['==', ['get', 'is_zone'], 'true'],
-                    // 0.5,
+                    ['==', ['get', 'is_zone'], true],
+                    0.5,
                     ['==', ['get', 'type'], 'outline'],
                     2,
                     ['==', ['get', 'type'], 'border'],
                     5,
                     0
                 ]
-            }
-        });
-        map.addLayer({
-            'id': 'alerts_layer_fill',
-            'type': 'fill',
-            'source': 'alerts_source',
-            paint: {
-                'fill-color': ['get', 'color'],
-                'fill-opacity': 0
             }
         });
 
@@ -66,6 +71,7 @@ function _sort_by_priority(data) {
 }
 
 function plot_alerts(alerts_data) {
+    const now = Date.now();
     // console.log(alerts_data);
 
     for (var item in alerts_data.features) {
@@ -73,7 +79,6 @@ function plot_alerts(alerts_data) {
         alerts_data.features[item].properties.color = gpc.color;
         alerts_data.features[item].properties.priority = parseInt(gpc.priority);
     }
-    alerts_data = _sort_by_priority(alerts_data);
 
     const polygons = [];
     for (var i = 0; i < alerts_data.features.length; i++) {
@@ -102,23 +107,32 @@ function plot_alerts(alerts_data) {
             }
         }
     }
-    // console.log(polygons);
-    // console.log(alerts_data);
     alerts_data.features = alerts_data.features.concat(polygons);
 
-    var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
-    duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
-    for (var i = 0; i < duplicate_features.length; i++) {
-        if (i % 2 === 0) {
-            duplicate_features[i].properties.type = 'border';
+    var duplicate_features = [];
+    alerts_data.features.forEach((element) => {
+        if (element.properties.is_zone == true) {
+            var temp_element = JSON.parse(JSON.stringify(element));
+            temp_element.properties.type = 'outline';
+            duplicate_features.push(temp_element);
         } else {
-            duplicate_features[i].properties.type = 'outline';
+            var temp_border_element = JSON.parse(JSON.stringify(element));
+            temp_border_element.properties.type = 'border';
+
+            var temp_outline_element = JSON.parse(JSON.stringify(element));
+            temp_outline_element.properties.type = 'outline';
+
+            duplicate_features.push(temp_border_element, temp_outline_element);
         }
-    }
+    });
     alerts_data.features = duplicate_features;
+
+    alerts_data = _sort_by_priority(alerts_data);
 
     // console.log(alerts_data);
     _add_alert_layers(alerts_data);
+
+    console.log(`Loaded alerts onto the map in ${Date.now() - now} ms`);
 }
 
 module.exports = plot_alerts;
