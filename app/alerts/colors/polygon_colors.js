@@ -41,6 +41,7 @@ const my_polygon_colors = {
 function get_polygon_colors(alert_event) {
     if (Object.keys(noaa_colors).includes(alert_event)) {
         var c = noaa_colors[alert_event].rgb;
+        // take priority over NOAA colors if i have my own colors
         if (my_polygon_colors.hasOwnProperty(alert_event)) {
             c = my_polygon_colors[alert_event];
         }
