@@ -1,5 +1,10 @@
 const map = require('../core/map/map');
 const get_polygon_colors = require('./colors/polygon_colors');
+const turf = require('@turf/turf')
+
+const forecast_zones = require('./zones/forecast_zones');
+const county_zones = require('./zones/county_zones');
+const fire_zones = require('./zones/fire_zones');
 
 function _add_alert_layers(geojson) {
     if (map.getSource('alerts_source')) {
@@ -24,6 +29,8 @@ function _add_alert_layers(geojson) {
                 ],
                 'line-width': [
                     'case',
+                    // ['==', ['get', 'is_zone'], 'true'],
+                    // 0.5,
                     ['==', ['get', 'type'], 'outline'],
                     2,
                     ['==', ['get', 'type'], 'border'],
@@ -68,72 +75,50 @@ function plot_alerts(alerts_data) {
     }
     alerts_data = _sort_by_priority(alerts_data);
 
-    var index = 0;
-    function _next() {
-        index++;
-        process_alert(index);
-    }
-    function process_alert(i) {
-        console.log(i, alerts_data.features.length);
-        if (i >= alerts_data.features.length) {
-            var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
-            duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
-            for (var i = 0; i < duplicate_features.length; i++) {
-                if (i % 2 === 0) {
-                    duplicate_features[i].properties.type = 'border';
-                } else {
-                    duplicate_features[i].properties.type = 'outline';
-                }
-            }
-            alerts_data.features = duplicate_features;
-
-            console.log(alerts_data);
-            _add_alert_layers(alerts_data);
-            return;
-        };
-
+    const polygons = [];
+    for (var i = 0; i < alerts_data.features.length; i++) {
         const this_feature = alerts_data.features[i];
         if (this_feature.geometry == null) {
             const affected_zones = this_feature.properties.affectedZones;
-            // for (var x = 0; x < 10; x++) {
-            //     fetch(affected_zones[x], {
-            //         cache: 'no-store',
-            //         // headers: headers
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         // console.log(alerts_data.features[i].geometry);
-            //         console.log(JSON.parse(JSON.stringify(alerts_data.features[i])))
-            //         alerts_data.features[i].geometry = data.geometry;
-            //         console.log(JSON.parse(JSON.stringify(alerts_data.features[i])))
-            //         _next();
-            //     })
-            //     .catch((error) => {
-            //         // console.error(`repeating ${i}`);
-            //         // process_alert(i);
-            //     });
-            // }
-            _next();
-        } else {
-            // console.log('already has geometry');
-            _next();
+
+            for (var x = 0; x < affected_zones.length; x++) {
+                var zone_to_push;
+                if (affected_zones[x].includes('forecast')) {
+                    const formatted = affected_zones[x].replace('https://api.weather.gov/zones/forecast/', '');
+                    zone_to_push = forecast_zones[formatted];
+                } else if (affected_zones[x].includes('county')) {
+                    const formatted = affected_zones[x].replace('https://api.weather.gov/zones/county/', '');
+                    zone_to_push = county_zones[formatted];
+                } else if (affected_zones[x].includes('fire')) {
+                    const formatted = affected_zones[x].replace('https://api.weather.gov/zones/fire/', '');
+                    zone_to_push = fire_zones[formatted];
+                }
+                if (zone_to_push != undefined) {
+                    const polygon = turf.feature(zone_to_push.geometry, alerts_data.features[i].properties);
+                    polygon.id = alerts_data.features[i].id;
+                    polygon.properties.is_zone = true;
+                    polygons.push(polygon);
+                }
+            }
         }
     }
-    process_alert(index);
+    // console.log(polygons);
+    // console.log(alerts_data);
+    alerts_data.features = alerts_data.features.concat(polygons);
 
-    // var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
-    // duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
-    // for (var i = 0; i < duplicate_features.length; i++) {
-    //     if (i % 2 === 0) {
-    //         duplicate_features[i].properties.type = 'border';
-    //     } else {
-    //         duplicate_features[i].properties.type = 'outline';
-    //     }
-    // }
-    // alerts_data.features = duplicate_features;
+    var duplicate_features = alerts_data.features.flatMap((element) => [element, element]);
+    duplicate_features = JSON.parse(JSON.stringify(duplicate_features));
+    for (var i = 0; i < duplicate_features.length; i++) {
+        if (i % 2 === 0) {
+            duplicate_features[i].properties.type = 'border';
+        } else {
+            duplicate_features[i].properties.type = 'outline';
+        }
+    }
+    alerts_data.features = duplicate_features;
 
-    // // console.log(alerts_data);
-    // _add_alert_layers(alerts_data);
+    // console.log(alerts_data);
+    _add_alert_layers(alerts_data);
 }
 
 module.exports = plot_alerts;

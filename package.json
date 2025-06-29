@@ -6,6 +6,7 @@
     "serve": "watchify -t brfs app/core/entry/entry.js -o dist/bundle.js -v"
   },
   "dependencies": {
+    "@turf/turf": "^7.2.0",
     "brfs": "^2.0.2",
     "uglify-js": "^3.19.3",
     "webworkify": "^1.5.0"
