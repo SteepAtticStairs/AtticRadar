@@ -1,7 +1,6 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoidHdhbGtlcjkyIiwiYSI6ImNtYnN0cWx2ajA1cTAycnEycWJwMG4zZ3MifQ.jlFBO6utDzfwyEHzRiwoOQ';
-const map = new mapboxgl.Map({
+const map = new maplibregl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'https://tiles.openfreemap.org/styles/dark',
     zoom: 3,
     center: [-97.3302, 38.5667],
     maxZoom: 20,
@@ -10,9 +9,12 @@ const map = new mapboxgl.Map({
 
     fadeDuration: 0,
 
-    attributionControl: false,
+    attributionControl: true,
     projection: 'mercator',
 });
+
+// can't find any other way to collapse the attribution by default
+$('.maplibregl-ctrl-attrib-button').click();
 
 // MOBILE - disable map rotation using touch rotation gesture
 map.touchZoomRotate.disableRotation();
@@ -22,7 +24,7 @@ map.dragRotate.disable();
 map.keyboard.disableRotation();
 // prevent the context menu from opening when right clicking on the map
 $('#map').on('contextmenu', function(e) {
-    if ($(e.target).hasClass('mapboxgl-canvas')) {
+    if ($(e.target).hasClass('maplibregl-canvas')) {
         e.preventDefault();
     }
 })
