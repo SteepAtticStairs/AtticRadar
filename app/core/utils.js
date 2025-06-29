@@ -749,40 +749,6 @@ function zeroPad(num, length) {
     return (new Array(length).join('0') + num).slice(length*-1);
 }
 
-function setMapMargin(topOrBottom, value, map_obj = undefined) {
-    const map = require('./map/map');
-    const update_attribution_div_pos = require('../core/attribution/attribution');
-
-    if (topOrBottom == 'top') {
-        $('#map').css('top', value);
-        $('.colorPickerCircle').css('top', value);
-    } else if (topOrBottom == 'bottom') {
-        $('#map').css('bottom', value);
-        $('.colorPickerCircle').css('bottom', value);
-        $('#colorPickerText').css('bottom', value - 80);
-    }
-    if (map_obj == undefined) {
-        map.resize();
-    } else {
-        map_obj.resize();
-    }
-
-    update_attribution_div_pos();
-
-    const elem = $('#colorScalePicker');
-    const padding = 10;
-    elem.css({
-        'bottom': (parseFloat($('#map').css('bottom')) + padding) + parseInt(elem.css('padding')),
-        // 'left': padding
-    });
-
-    // $('#colorPicker #colorPickerText').position({
-    //     my: 'center',
-    //     at: 'center',
-    //     of: $('#map')
-    // })
-}
-
 function displayAtticDialog(options) {
     var title = options.title;
     var body = options.body;
@@ -909,7 +875,6 @@ module.exports = {
     animateBrightness,
     haMapControlActions,
     zeroPad,
-    setMapMargin,
     displayAtticDialog,
     scaleValues,
     loadingSpinner

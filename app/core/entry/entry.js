@@ -3,6 +3,10 @@
 */
 
 function load() {
+    // initialize the "attic_data" global variable,
+    // which will store data that can be accessed globally
+    window.attic_data = {};
+
     // initialize the alerts module
     require('../../alerts/entry');
 }

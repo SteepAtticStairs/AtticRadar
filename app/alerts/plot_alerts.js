@@ -2,10 +2,6 @@ const map = require('../core/map/map');
 const get_polygon_colors = require('./colors/polygon_colors');
 const turf = require('@turf/turf')
 
-const forecast_zones = require('./zones/forecast_zones');
-const county_zones = require('./zones/county_zones');
-const fire_zones = require('./zones/fire_zones');
-
 function _add_alert_layers(geojson) {
     if (map.getSource('alerts_source')) {
         map.getSource('alerts_source').setData(geojson);
@@ -112,9 +108,9 @@ function plot_alerts(alerts_data) {
     var duplicate_features = [];
     alerts_data.features.forEach((element) => {
         if (element.properties.is_zone == true) {
-            var temp_element = JSON.parse(JSON.stringify(element));
-            temp_element.properties.type = 'outline';
-            duplicate_features.push(temp_element);
+            var temp_outline_element = JSON.parse(JSON.stringify(element));
+            temp_outline_element.properties.type = 'outline';
+            duplicate_features.push(temp_outline_element);
         } else {
             var temp_border_element = JSON.parse(JSON.stringify(element));
             temp_border_element.properties.type = 'border';
