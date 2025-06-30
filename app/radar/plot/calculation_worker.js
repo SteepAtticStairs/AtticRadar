@@ -16,6 +16,7 @@ module.exports = function (self) {
         var points = ev.data[0];
         var lngLat = ev.data[1];
         // [-75.0, 45.0] // lng, lat
+        var ruler = new CheapRuler(lngLat.lat, 'kilometers');
 
         for (var i = 0; i < points.length; i += 2) {
             var az = points[i];
@@ -27,7 +28,6 @@ module.exports = function (self) {
             // eveything else is vincenty. WSR-88Ds don't have this problem so they only use vincenty.
             if (distance == 0) {
                 console.warn('Gate distance is 0');
-                var ruler = new CheapRuler(lngLat.lat, 'kilometers');
                 calc = mc(ruler.destination([lngLat.lng, lngLat.lat], distance, az));
             } else {
                 calc = mc(dest_vincenty({lng: lngLat.lng, lat: lngLat.lat}, distance * 1000, az));

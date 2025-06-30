@@ -3,7 +3,7 @@
 A clean, simple, but powerful weather toolkit for the web browser. Includes NEXRAD parsing and plotting, doppler velocity dealiasing, weather alerts, real time lightning data, METAR station data, and much more.
 
 ## Approved Source Code Usage
-AtticRadar's source code is published here on GitHub for people to explore and see how everything works under the hood. If you're interested in using some of AtticRadar's code in your project, I'd really appreciate it if you reached out to me first. My email is open at `steepatticstairs@gmail.com`, or you can send me a message on Discord at `steepatticstairs` if you'd prefer.
+AtticRadar's source code is published here on GitHub for people to explore and see how everything works under the hood. If you're interested in using some of AtticRadar's code in your project, please reach out to me first. My email is open at `steepatticstairs@gmail.com`, or you can send me a message on Discord at `steepatticstairs` if you'd prefer.
 
 ## Website
 You can find the app live here:<br>
