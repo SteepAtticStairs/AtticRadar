@@ -130,6 +130,8 @@ function plot_alerts(alerts_data) {
         if (element.properties.is_zone == true) {
             var temp_outline_element = JSON.parse(JSON.stringify(element));
             temp_outline_element.properties.type = 'outline';
+            // make sure every part of zone alerts are drawn under the main alerts
+            temp_outline_element.properties.priority += 1000;
             duplicate_features.push(temp_outline_element);
         } else {
             var temp_border_element = JSON.parse(JSON.stringify(element));
