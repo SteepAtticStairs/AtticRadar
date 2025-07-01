@@ -36,11 +36,6 @@ Using PHP as the local server was intentional, because of development that I do 
 
 Browserify is used in AtticRadar to implement a moduling system. `npm run build` bundles the project with Browserify to be used in distribution.
 
-`uglify-js` is required for `npm run build`, so you can install it with
-```
-npm install uglify-js -g
-```
-
 You can also run
 ```
 npm run serve
