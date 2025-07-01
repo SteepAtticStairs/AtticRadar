@@ -1,0 +1,319 @@
+body
+{
+  margin: 0px;
+  padding: 0px;
+}
+
+table.mwmain
+{
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border-collapse: collapse; 
+  
+}
+
+table.mwversions
+{
+  
+  width: 510px;
+  padding: 0;
+  margin-left: 0;
+  border-collapse: collapse;
+}
+
+
+td.mwmaintitle
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 200%;
+  color: red; 
+  padding-bottom:5px;
+}
+
+td.mwmtitle
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial, Helvetica;
+  font-size: 175%;
+  color: green;
+  padding-bottom: 5px;
+}
+
+td.mwsubtitle
+{
+  text-align: left;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 150%;
+  font-weight: bold;
+  color: black;
+}
+
+td.mwatitle
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 140%;
+  font-weight: bold;
+  color: black;
+}
+
+td.update
+{
+  text-align: left;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: normal;
+  color: black;
+}
+
+td.clickmap
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: normal;
+  color: black;
+}
+
+td.mwissuet
+{
+  text-align: left;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: bold;
+  color: green;
+  padding-left: 10px;
+}
+
+td.mwversions
+{
+  text-align: left;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: bold;
+  color: black;
+  padding-left: 10px;
+}
+
+
+td.mwfb
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: bold;
+  color: green;
+}
+
+td.mwep
+{
+  text-align: left;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: bold;
+  color: black;
+}
+
+td.mwfaq
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: bold;
+  color: black;
+}
+
+td.mwmd
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 100%;
+  font-weight: bold;
+  color: green;
+}
+
+td.mwversionl
+{
+  text-align: left;
+  width: 100px;
+  font-family: Arial,Helvetica;
+  font-size: 130%;
+  font-weight: bold;
+  color: black;
+  padding-left: 10px;
+}
+
+td.mwversionp
+{
+  text-align: left;
+  width: 82px;
+  font-family: Arial,Helvetica;
+  font-size: 130%;
+  font-weight: bold;
+  color: black;
+}
+
+td.mwversionn
+{
+  text-align: left;
+  width: 100px;
+  font-family: Arial,Helvetica;
+  font-size: 130%;
+  font-weight: bold;
+  color: black;
+}
+
+td.backtosummary
+{
+  text-align: right;
+  font-family: Arial,Helvetica;
+  font-size: 130%;
+  font-weight: bold;
+  color: black;
+  /* padding-left: 85px; */
+}
+
+
+td.mwdisclaim
+{
+  text-align: left;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 90%;
+  font-weight: bold;
+  color: red;
+  padding-left: 10px;
+}
+
+
+td.mwdiscussion
+{
+  text-align: left;
+  width: 75%;
+  padding-left: 10px;
+}
+
+table.matchingmpds
+{
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: center;
+}
+
+td.nompd
+{
+  text-align: center;
+  font-family: Arial,Helvetica;
+  font-size: 140%;
+}
+
+td.missingmpd
+{
+  text-align: left;
+  font-family: Arial,Helvetica;
+  font-size: 1.5em;
+  color: red;
+  padding-top:5px;
+}
+
+
+td.lilimage
+{
+  text-align: left;
+}
+
+img.lilimage
+{
+  width: 267px;
+}
+
+img.alilimage
+{
+  width: 375px;
+}
+
+td.aliltext
+{
+  text-align: center;
+  font-family: Arial,Helvetica;
+  font-size: 120%;
+}
+
+td.liltext
+{
+  text-align: left;
+  font-family: Arial,Helvetica;
+  font-size: 120%;
+}
+
+td.mwarchive
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 1.12em;
+  font-weight: bold;
+  color: black;
+  padding-left: 10px;
+}
+
+td.mwarchdate
+{
+  text-align: center;
+  width: 100%;
+  font-family: Arial,Helvetica;
+  font-size: 0.9em;
+  font-weight: normal;
+  color: black;
+  padding-left: 10px;
+}
+
+.mwfeedback:link {
+	text-decoration: underline; 
+	color: green; 
+	background: white;
+
+}
+.mwfeedback:visited {
+	text-decoration: underline; 
+	color: green; 
+	background: white;
+}
+.mwfeedback:hover {
+	text-decoration: none; 
+	color: #FFF; 
+	background: #000;
+}
+
+.mwquestions:link {
+        text-decoration: underline;
+        color: white;
+        background: green;
+
+}
+.mwquestions:visited {
+        text-decoration: underline;
+        color: white;
+        background: green;
+}
+.mwquestions:hover {
+        text-decoration: none;
+        color: #FFF;
+        background: green;
+}
+
+

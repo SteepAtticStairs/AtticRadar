@@ -1,0 +1,46 @@
+{
+  "name": "nexrad-level-2-data",
+  "version": "2.4.0",
+  "description": "Decode Nexrad Level II radar archive files",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "node test.js",
+    "docs": "npx gulp docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netbymatt/nexrad-level-2-data.git"
+  },
+  "bugs": {
+    "url": "https://github.com/netbymatt/nexrad-level-2-data/issues"
+  },
+  "homepage": "https://github.com/netbymatt/nexrad-level-2-data#readme",
+  "keywords": [
+    "NEXRAD",
+    "level",
+    "2",
+    "radar",
+    "data",
+    "parsing"
+  ],
+  "author": "Matt Walsh",
+  "license": "MIT",
+  "dependencies": {
+    "seek-bzip": "^2.0.0"
+  },
+  "devDependencies": {
+    "del": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsdoc": "^39.1.0",
+    "glob": "^8.0.1",
+    "gulp": "^4.0.2",
+    "gulp-jsdoc3": "^3.0.0",
+    "jsdoc": "^3.6.10",
+    "jsdoc-to-markdown": "^7.1.1"
+  },
+  "engines": {
+    "node": ">=13.0.0"
+  }
+}

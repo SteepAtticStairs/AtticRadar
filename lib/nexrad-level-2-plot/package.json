@@ -1,0 +1,39 @@
+{
+	"name": "nexrad-level-2-plot",
+	"version": "2.6.2",
+	"description": "Plotting library for nexrad-level-2-data",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/netbymatt/nexrad-level-2-plot.git"
+	},
+	"keywords": [
+		"NEXRAD",
+		"level",
+		"2",
+		"radar",
+		"plot"
+	],
+	"author": "Matt Walsh",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/netbymatt/nexrad-level-2-plot/issues"
+	},
+	"homepage": "https://github.com/netbymatt/nexrad-level-2-plot#readme",
+	"dependencies": {
+		"canvas": "^2.9.1",
+		"nexrad-level-2-data": "^2.3.5"
+	},
+	"devDependencies": {
+		"eslint": "^8.0.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-plugin-import": "^2.23.4",
+		"glob": "^7.1.7"
+	},
+	"engines": {
+		"node": ">=13.0.0"
+	}
+}

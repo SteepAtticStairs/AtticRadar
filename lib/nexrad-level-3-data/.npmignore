@@ -1,0 +1,8 @@
+.vscode
+data
+data-error
+output
+*.code-workspace
+test.js
+testoutput.js
+.eslint*

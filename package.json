@@ -1,0 +1,40 @@
+{
+  "name": "AtticRadar",
+  "main": "main.js",
+  "scripts": {
+    "build": "browserify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js; uglifyjs dist/bundle.js -m -o dist/bundle.js; ./tools/size.sh",
+    "serve": "watchify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js -v",
+    "start": "electron .",
+    "package": "npx electron-packager . --overwrite --icon ./icons/icon.icns"
+  },
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "aewx-metar-parser": "^1.0.0",
+    "brfs": "^2.0.2",
+    "browserify": "^17.0.1",
+    "bufferpack": "^0.0.6",
+    "cheap-ruler": "^4.0.0",
+    "chroma-js": "^2.4.2",
+    "glslify-require": "^1.1.0",
+    "luxon": "^3.0.3",
+    "metar-plot": "^2.0.0",
+    "pako": "^2.1.0",
+    "papaparse": "^5.4.1",
+    "pngjs": "^6.0.0",
+    "seek-bzip": "^2.0.0",
+    "shelljs": "^0.8.5",
+    "uglify-js": "^3.19.3",
+    "watchify": "^4.0.0",
+    "webworkify": "^1.5.0"
+  },
+  "devDependencies": {
+    "electron": "^21.2.0",
+    "electron-packager": "^17.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.22.1"
+  },
+  "engines": {
+    "node": ">=13.0.0"
+  }
+}

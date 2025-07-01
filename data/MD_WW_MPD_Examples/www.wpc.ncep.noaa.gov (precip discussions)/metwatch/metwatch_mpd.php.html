@@ -1,0 +1,561 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>WPC Met Watch</title>
+  <meta name="DC.title" content="WPC Met Watch">
+  <meta name="DC.description" content="WPC Met Watch">
+  <meta name="DC.creator" content="NOAA's National Weather Service">
+  <meta name="DC.date.created" scheme="ISO8601" content="2013-01-21">
+  <meta name="DC.date.reviewed" scheme="ISO8601" content="2013-04-11">
+  <meta name="DC.language" scheme="DCTERMS.RFC1766" content="EN-US">
+  <meta http-equiv="refresh" content="300">
+  <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+  <meta content="NCEP Web Team" name="GENERATOR">
+  <link href="../nwscwi/main.css" type="text/css" rel="STYLESHEET">
+  <link href="metwatch_style.css" type="text/css" rel="STYLESHEET">
+  <link rel="alternate" type="application/rss+xml" title="WPC Mesoscale Precipitation Discussions" href="mdrss.xml">
+  <script type="text/javascript" language="JavaScript">
+    function DisplayInfo(divId){
+      if(document.getElementById(divId).style.display == 'none'){
+        document.getElementById(divId).style.display='block';
+        } else{
+        document.getElementById(divId).style.display = 'none';
+        }
+      } 
+    function getmpds(){
+      //get date selected
+      var mpddate = document.mpdarchive.inputdate.value;
+      var myr = mpddate.substr(6,4);
+      var mmn = mpddate.substr(0,2);
+      var mdy = mpddate.substr(3,2);
+      var selmpd = myr + mmn + mdy;      
+
+      //determine if date selected is within archived database
+      var sarchive = "20130410";
+      var today = new Date();
+      var month = today.getMonth() + 1;     
+      var day = today.getDate();
+      var year = today.getFullYear();
+      //if day or month is <10 add 0 (ie "6" will equal "06")
+      if (month < 10){month = '0'+month };
+      if (day   < 10){day   = '0'+day};      
+      var earchive = year + "" + month + "" + day;
+
+      if (selmpd < sarchive) {
+        alert("Please select a date after 04/10/2013");
+      }else if (selmpd > earchive){
+        alert("Please select a date on or before " + month + "/" + day + "/" + year + " (today)");
+      }else{
+        window.location.href = "../archives/metwatch/mpd_archive_days.php?mpddate=" + mpddate +"&seldate="+selmpd;
+      }
+
+     }
+  </script>
+  <script type="text/javascript" language="javascript" src="CalendarPopup_new.js"></script>
+  <script type="text/javascript" language="javascript">document.write(getCalendarStyles());</script>
+  <script type="text/javascript" language="javascript" ID="jscal1xx">
+    var cal1xx = new CalendarPopup("calarea");
+    cal1xx.showNavigationDropdowns();
+  </script>
+
+
+<script type="text/javascript">if (top != self) {top.location.href = self.location.href;}</script></head>
+
+<div id=noprint_header><body background="../nwscwi/background.gif"><!-- Load the information for the header -->
+
+<!-- Begin far top banner of page and link to weather.gov -->
+<table cellSpacing="0" cellPadding="0" width="100%" class="topbanner" border="0" summary="Top Banner">
+  <tbody>
+  <tr>
+    <td align="right" height="19">
+      <a href="metwatch_mpd.php.html#contents"><img height="1" alt="Skip Navigation Links" 
+         src="../nwscwi/skipgraphic.gif" width="1" border="0"></a>
+      <a href="https://www.weather.gov/"><span class="nwslink">weather.gov</span></a>&nbsp;</td>
+  </tr>
+  </tbody>
+</table>
+<!-- End far top of banner -->
+
+<!-- Begin main part of banner (NOAA logo, Center identifier, NWS logo) -->
+<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+  <tbody>
+  <tr>
+    <td rowSpan="2"><a href="http://www.noaa.gov/">
+      <img height="78" alt="NOAA logo - Click to go to the NOAA homepage"
+      src="../nwscwi/noaaleft.jpg" width="85" border="0"></a></td>
+    <td align="left"><img height="20" alt="National Weather Service"
+      src="../nwscwi/nws_title.jpg" width="500" border="0"></td>
+    <td rowSpan="2" width="100%" class="ncep_bckgrnd">&nbsp;</td>
+    <td rowSpan="2" align="right"><a href="https://www.weather.gov/">
+      <img height="78" alt="NWS logo - Click to go to the NWS homepage"
+      src="../nwscwi/nwsright.jpg" width="85" border="0"></a></td>
+  </tr>
+<!-- End main part of banner -->
+
+<!-- WPC center header image and link to home page -->
+  <tr>
+    <td><a href="https://www.wpc.ncep.noaa.gov/index.shtml"><img height="58" alt="The Weather Prediction Center" src="../nwscwi/wpc.jpg"width="500" border="0"></a></td>
+  </tr>
+  </tbody>
+</table>
+<!-- End main banner table -->
+
+<!-- Begin site map, News, Organization and Search engine code -->
+<table cellSpacing="0" cellPadding="0" width="100%" class="navbckgrnd" border="0">
+  <tbody>
+  <tr>
+    <td align="left" valign="top" width="94"><img height="23" alt="" src="../nwscwi/navbarleft.jpg" width="94" border="0"></td>
+    <td align="center" width="10%">
+      <a href="https://www.wpc.ncep.noaa.gov/sitemap2.shtml" class="navbar">Site Map</a></td> <!-- Build a text only sitemap, and link to it via this
+                                                    sitemap button just below the banner.
+                                                    The sitemap should include a heirarchy of links
+                                                    from NOAA, to the NWS, to NCEP, and then through your site. -->
+    <td align="right" width="10%">
+      <a href="http://www.weather.gov/news/" class="navbar">News</a></td>
+    <td align="right" width="19%">
+      <a href="http://weather.gov/organization.php" class="navbar">Organization</a></td>
+    <td class="searchinput" align="right">
+      <form method="get" action="https://search.usa.gov/search" style="margin-bottom:0;
+       margin-top:0;">
+       <label for="Search"><span class="yellow">Search</span>&nbsp;&nbsp;</label>
+       <input type="hidden" name="affiliate" value="nws.noaa.gov">
+       <input type="hidden" name="v:project" value="firstgov">
+       <input name="query" type="text" value="" size="20" maxlength="256" id="Search">
+       <input type="submit" value="Go">
+      </form>
+     </td>
+
+    <td align="right"><img height="23" alt="" src="../nwscwi/navbarendcap.jpg" width="24" border="0"></td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Begin code for the navigation strip with links to multiple Centers -->
+
+<table cellSpacing="0" cellPadding="0" width="670" class="navbckgrnd" border="0">
+  <tbody>
+  <tr>
+    <td align="left" valign="top" width="133" style="padding-top:4px;padding-bottom:4px;">&nbsp;</td>
+    <td align="left" width="32" style="border-top:1px solid white;border-left:1px solid white;padding-left:3px;">
+      <a href="http://www.commerce.gov" class="navbar" title="Department of Commerce">DOC</a>
+    </td>
+    <td align="left" width="42" style="border-top:1px solid white;">
+      <a href="http://www.noaa.gov" class="navbar" title="National Oceanographic and Atmospheric Administration">NOAA</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;border-right:1px solid white;">
+      <a href="https://www.weather.gov" class="navbar" title="National Weather Service">NWS</a>
+    </td>
+
+    <td align="left" width="92" style="padding-left:5px;border-top:1px solid white;">
+      <a href="https://www.weather.gov/ncep" class="navbar" title="National Centers for Environmental Prediction">NCEP Centers:</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="https://www.aviationweather.gov" class="navbar" title="Aviation Weather Center">AWC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="http://www.cpc.ncep.noaa.gov" class="navbar" title="Climate Prediction Center">CPC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="http://www.emc.ncep.noaa.gov" class="navbar" title="Environmental Modeling Center">EMC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="http://www.nco.ncep.noaa.gov" class="navbar" title="NCEP Central Operations">NCO</a>
+    </td>
+
+    <td align="left" style="border-top:1px solid white;">
+      <a href="https://www.nhc.noaa.gov" class="navbar" title="National Hurricane Center">NHC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="https://ocean.weather.gov" class="navbar" title="Ocean Prediction Center">OPC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="https://www.spc.noaa.gov" class="navbar" title="Storm Prediction Center">SPC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="https://www.swpc.noaa.gov" class="navbar" title="Space Weather Prediction Center">SWPC</a>
+    </td>
+    <td align="left" style="border-top:1px solid white;">
+      <a href="http://www.wpc.ncep.noaa.gov" class="navbar" title="Weather Prediction Center">WPC</a>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+
+<!-- End of code for the navigation strip with links to multiple Centers -->
+
+<!-- End site map, etc.... -->
+
+<!-- Include Google Analytics Tracking code -->
+<script type="text/javascript" async="true" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=DOC&subagency=WPC&pua=ua-86992316-1"></script>
+
+<!-- End Google Analytics Tracking code -->
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XS4XRRNHSQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XS4XRRNHSQ');
+</script>
+</div> 
+
+<TABLE cellSpacing="0" cellPadding="3" width="670" border="0" bgcolor="white">
+  <TR vAlign="top">
+    <TD width="130" background="../nwscwi/background.gif">
+
+           <table cellSpacing="0" cellPadding="2" width="130" border="0">
+        <tbody>
+      	<tr valign="top">
+	  <td class="searchinput" align="left">
+           <form method="post" action="https://forecast.weather.gov/zipcity.php" style="display:inline;"><input type='hidden' name='__csrf_magic' value="sid:7375c549cf9636f86620c4afde9193083bfe557c,1715024506;ip:d30e7a75cc7e594bfc988fd75ff9b4287a18deb8,1715024506" />
+	     <div id="Layer2" STYLE="position:absolute; width:200px; height:115px; z-index:2; visibility: hidden">
+              Search by city or zip code. Press enter or select the go button to submit request</DIV>
+	     <span class="yellow"><label for="city_state">Local forecast by<br>&quot;City, St&quot;
+               or Zip Code</label></span><br>
+	          <input type="text" id="city_state" name="inputstring" size="8" value="City, St">&nbsp;
+	          <input type="submit" name="Go2" value="Go">
+           </form>
+          </td> 
+	</tr>
+        <tr><td style="line-height:.25em;">&nbsp;</td></tr>
+
+        <tr>
+          <td class="searchinput" align="left" colSpan="2">
+           <form method="get" action="https://search.usa.gov/search" style="margin-bottom:0;
+       margin-top:0;">
+       <label for="Search"> <span class="yellow">Search&nbsp;WPC</span></label><br>
+       <input type="hidden" name="affiliate" value="ncep.noaa.gov">
+       <input type="hidden" name="v:sources" value="firstgov-affiliates-search">
+       <input type="hidden" name="v:project" value="firstgov">
+       <input type="hidden" name="query" value="site:www.wpc.ncep.noaa.gov">
+       <input name="query" type="text" value="" size="8" maxlength="256">&nbsp;
+       <input type="submit" value="Go">
+      </form>
+      </td>
+      </tr>
+
+      <tr><td style="line-height:.10em;padding:0px;"><hr width="96%"></td></tr>
+
+      <tr>
+        <td align="center" style="padding:0px;"><a href="https://www.wpc.ncep.noaa.gov/html/hpcexit.php?reason=facebook" style="font-weight:bold;" class="navbar">
+          <img src="../images/facebook_logo_new.png" alt="Follow the Weather Prediction Center on Facebook" title="Follow the Weather Prediction Center on Facebook" border="0"></a>
+          <a href="https://www.wpc.ncep.noaa.gov/html/hpcexit.php?reason=twitter" style="font-weight:bold;" class="navbar">
+          <img src="../images/twitter_logo_new.png" alt="Follow the Weather Prediction Center on Twitter" title="Follow the Weather Prediction Center on Twitter" border="0"></a>
+        </td>
+      </tr>  
+
+      <!-- Add link to quarterly newsletter -->
+      <tr>
+        <td align="center">
+          <span class="yellow">
+          <a href="http://www.ncep.noaa.gov/newsletter/" class="navbar">NCEP Quarterly Newsletter</a>
+          </span>
+        </td>
+      </tr>
+
+      <tr><td style="font-size : 9pt;color : #FFFFFF;font-weight : bold;padding-top:8px;">
+          <a href="https://www.wpc.ncep.noaa.gov/index.shtml" class="navbar">WPC Home</a></td></tr>
+
+        <tr>
+          <td class="white" colSpan="2">
+            <span class="yellow">Analyses and Forecasts</span><br>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+              &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/national_forecast/natfcst.php?day=1" class="navbar">National Forecast<br>
+                 Charts</a><br>
+            </div>
+             &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=nathilo&amp;version=0&amp;fmt=reg" class="navbar">National High & Low</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/html/discuss.shtml" class="navbar">WPC Discussions</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/html/sfc2.shtml" class="navbar">Surface Analysis</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/basicwx/basicwx_ndfd.php" class="navbar">Days &#189-2&#189 CONUS</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/medr/medr.shtml" class="navbar">Days 3-7 CONUS</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/alaska/akmedr.shtml" class="navbar">Days 4-8 Alaska</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/qpf/qpf2.shtml" class="navbar">QPF</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/pqpf/conus_hpc_pqpf.php" class="navbar">PQPF</a><br>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/qpf/excess_rain.shtml" class="navbar">Excessive<br>
+                Rainfall</a><br></div>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+            &nbsp;&nbsp;&nbsp;<a href="metwatch_mpd.php.html" class="navbar">Mesoscale Precip<br>
+                Discussion</a><br></div>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/nationalfloodoutlook/index.html" class="navbar">Flood Outlook</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/wwd/winter_wx.shtml" class="navbar">Winter Weather</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/storm_summaries/storm_summaries.shtml" class="navbar">Storm Summaries</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/heat_index.shtml" class="navbar">Heat Index</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/tropical/tropstorms.shtml" class="navbar">Tropical Products</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/dwm/dwm.shtml" class="navbar">Daily Weather Map</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/kml/kmlproducts.php" class="navbar">GIS Products</a><br></td>
+        </tr>
+
+        <tr>
+ 	  <td colSpan="2">
+	  <a href="http://www.nws.noaa.gov" class="navbar"><span class="yellow">Current Watches/<br>Warnings</span></a><br>
+ 	  </td>
+	</tr>
+
+        <tr>
+          <td class="white"  colSpan="2">
+          <span class="yellow">Satellite and Radar Imagery</span><br>
+          &nbsp;&nbsp;<a href="http://www.star.nesdis.noaa.gov/goes/conus.php?sat=G16" class="navbar">GOES-East Satellite</a><br>
+          &nbsp;&nbsp;<a href="http://www.star.nesdis.noaa.gov/goes/conus.php?sat=G17" class="navbar">GOES-West Satellite</a><br>
+          &nbsp;&nbsp;<A href="http://www.weather.gov/radar_tab.php" class="navbar">National Radar</a><br>
+          </td>
+        </tr>
+
+        <tr>
+          <td colSpan="2">
+          <a href="https://www.wpc.ncep.noaa.gov/archives/web_pages/wpc_arch/get_wpc_archives.php" class="navbar"><span class="yellow">Product Archive</span></a><br>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="white" colSpan="2">
+            <span class="yellow">WPC Verification</span><br>
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/hpcverif.shtml#qpf" class="navbar">QPF</a><br>
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/hpcverif.shtml#medmin" class="navbar">Medium Range</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/html/model2.shtml" class="navbar">Model Diagnostics</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/storm_summaries/event_reviews.php" class="navbar">Event Reviews</a><br> 
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/verification/winwx/winwx.php" class="navbar">Winter Weather</a><br>           
+          </td>
+        </tr>
+        <tr>
+          <td class="white" colSpan="2">
+            <a href="https://www.wpc.ncep.noaa.gov/international/intl2.shtml" class="navbar"><span class="yellow">International Desks</span></a>
+            <br>
+          </td>
+        </tr>
+        <tr>
+          <td class="white" colSpan="2">
+            <span class="yellow">Development and Training</span><br>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+              &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/hmt" class="navbar">WPC HydroMet<br>
+              Testbed</a>
+            </div>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/research/res2.shtml" class="navbar">Development</a>
+            
+	  </td>
+        </tr>
+        <tr>
+          <td class="white" colSpan="2">
+            <span class="yellow">WPC Overview</span><br>
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/about2.shtml" class="navbar">About the WPC</a><br>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/fcst2.shtml" class="navbar">Mission and<br>
+	    Vision</a></div>
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/staff/wpc_staff.shtml" class="navbar">Staff</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="https://www.wpc.ncep.noaa.gov/html/WPC_history.pdf" class="navbar">WPC History</a><br>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/fam2.shtml" class="navbar">About Our<br>
+	    Products</a></div>
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/othersites.shtml" class="navbar">Other Sites</a><br>
+            &nbsp;&nbsp;&nbsp;<A href="https://www.wpc.ncep.noaa.gov/html/faq.shtml" class="navbar">FAQs</a><br>
+	  </td>
+        </tr>
+        <tr>
+          <td class="white" colSpan="2">
+           <a href="https://www.wpc.ncep.noaa.gov/html/calc.shtml" class="navbar"><span class="yellow">
+            Meteorological Calculators</span></a><br>
+          </td>
+        </tr>
+        <tr>
+          <td class="white" colSpan="2">
+            <span class="yellow">Contact Us</span><br>
+            &nbsp;&nbsp;&nbsp;<A href="https://origin.wpc.ncep.noaa.gov/mail_webmaster" target="_blank" class="navbar">About Our Site</a><br>
+            <div style="text-indent:-1.7em ; padding-left: 1.7em">
+	    &nbsp;&nbsp;&nbsp;<A href="https://origin.wpc.ncep.noaa.gov/mail_products" target="_new" class="navbar">About Our<br>
+	    Products</a></div></td>
+        </tr>
+        <tr>
+          <td class="white">&nbsp;</td>
+        </tr>
+        <tr>
+          <td align="center" class="white"><a href="http://www.usa.gov/" class="navbar">
+            <img src="../images/usagov_logo_color_110w_30h.gif" 
+             alt="USA.gov is the U.S. Government's official web portal to all federal, state, and local government web resources and services."
+                  width="110" height="30" border="0"></a></td>
+        </tr>  
+        </TBODY>
+      </TABLE>
+    </TD>
+    <TD vAlign="top" align="left" width="10">&nbsp;</td>
+    <TD vAlign="top" align="left" width="670"><A name="contents"></A><BR>
+
+
+<!--************* set up main table of the metwatch page ************-->
+   
+    <table id="mwmainid" class="mwmain" >   
+      <!--Main title of page-->
+      <tr><td class="mwmaintitle">WPC Met Watch</td></tr>
+
+      <tr><td class="mwsubtitle" id="subtitle">Current Mesoscale Precipitation Discussions (MPDs)</td></tr>
+
+      <!--Display time page was last refreshed/updated-->     
+              <tr><td class="update">Updated:&nbsp;&nbsp;19:41:05 UTC Mon May 06 2024</td></tr>
+      <!-- Insert code for image map here -->
+      <tr><td>
+        <img src="latest_mdmap.gif" border=0 usemap="#mdimgmap" alt="Valid WPC Mesoscale Precipitation Discussions">
+
+        <map name="mdimgmap">
+<area shape="poly" coords="483,159,482,160,480,160,479,160,478,160,477,160,475,160,473,161,472,161,470,162,469,162,468,163,466,164,465,165,464,166,462,167,461,168,459,169,458,170,457,171,456,172,454,174,453,175,452,177,451,178,450,180,449,181,448,182,448,183,447,185,447,186,448,188,449,189,449,190,450,192,451,193,452,194,453,196,453,198,453,200,452,202,452,204,452,206,452,208,452,209,453,210,454,211,454,210,455,210,456,210,458,209,459,208,461,207,462,206,464,205,465,203,467,202,468,201,470,200,471,199,473,198,474,197,475,196,477,195,478,194,480,194,481,193,482,193,483,192,484,191,485,190,485,189,486,188,487,186,488,185,489,183,490,182,491,181,491,179,492,178,493,176,494,175,495,173,495,172,496,171,496,169,496,168,496,167,496,165,495,164,494,162,493,161,492,161,491,160,490,159,489,159,487,160,483,159" href="metwatch_mpd_multi.php%3Fmd=0231&amp;yr=2024.html" title="Mesoscale Precipitation Discussion #0231" alt="Mesoscale Precipitation Discussion #0231"><area shape="poly" coords="214,58,212,57,211,56,209,56,208,56,206,57,204,58,203,60,202,61,201,63,200,65,199,66,198,68,197,70,196,71,196,72,196,74,196,76,195,78,195,79,195,81,195,82,195,84,195,86,195,87,196,89,196,91,196,93,196,96,196,98,197,100,197,101,198,103,199,105,200,106,201,107,202,108,204,109,206,109,207,109,209,109,211,109,213,109,215,109,216,109,218,108,219,108,220,105,220,104,220,102,220,100,220,98,220,96,220,94,220,92,220,90,219,88,219,86,219,84,219,82,219,81,219,79,219,77,219,76,218,74,218,72,217,70,217,68,216,67,216,65,215,63,215,61,215,60,214,58" href="metwatch_mpd_multi.php%3Fmd=0230&amp;yr=2024.html" title="Mesoscale Precipitation Discussion #0230" alt="Mesoscale Precipitation Discussion #0230"></map>
+      </td></tr>
+      <!-- End code for image map -->
+
+      <!--Add note to click on U.S. map-->
+                  <tr><td class="clickmap">Clicking on the U.S. map will take you to the MPD and associated graphic</td></tr>      <!--End note to click on U.S. map-->
+
+      <!--Add links to shapefiles and kmls -->
+      <tr>
+        <td class="gis">
+          Download MPDs in GIS format:&nbsp;&nbsp;&nbsp;      <a href="https://ftp.wpc.ncep.noaa.gov/shapefiles/qpf/mpd"><b><u>Shapefile</u></b></a>
+          &nbsp;|&nbsp;<a href="https://www.wpc.ncep.noaa.gov/kml/mpd"><b><u>KML</u></b></a>
+        </td>
+      </tr>
+
+
+      <tr><td><hr width="96%"><br></td></tr>
+
+                  <tr><td>
+              <table>
+                <tr>
+                  <td class="lilimage">
+                    <a href="metwatch_mpd_multi.php%3Fmd=0231&amp;yr=2024.html">
+                      <img class="lilimage" src="images/sm_mcd0231.gif" border=0 alt="MD0231 Thumbnail Image" title="MD0231 Thumbnail Image">
+                    </a>
+                  </td>
+                  <td class="liltext">
+                    <strong><a href="metwatch_mpd_multi.php%3Fmd=0231&amp;yr=2024.html">MPD #0231</a></strong><br/>
+                    Issued: 06/1835 UTC<br/>
+                    Until: 07/0030 UTC<br/>
+                    Concerning: <strong> Heavy rainfall...Flash flooding possible
+</strong><br/>
+                  </td>
+                </tr>
+                <tr><td><br/></td></tr>
+              </table>
+            </td></tr>            <tr><td>
+              <table>
+                <tr>
+                  <td class="lilimage">
+                    <a href="metwatch_mpd_multi.php%3Fmd=0230&amp;yr=2024.html">
+                      <img class="lilimage" src="images/sm_mcd0230.gif" border=0 alt="MD0230 Thumbnail Image" title="MD0230 Thumbnail Image">
+                    </a>
+                  </td>
+                  <td class="liltext">
+                    <strong><a href="metwatch_mpd_multi.php%3Fmd=0230&amp;yr=2024.html">MPD #0230</a></strong><br/>
+                    Issued: 06/1659 UTC<br/>
+                    Until: 06/2300 UTC<br/>
+                    Concerning: <strong> Heavy rainfall...Flash flooding possible
+</strong><br/>
+                  </td>
+                </tr>
+                <tr><td><br/></td></tr>
+              </table>
+            </td></tr>
+      <tr><td class="mwfb">
+        <a onclick ="javascript:DisplayInfo('HiddenDiv')" class="mwfeedback" href="javascript:;" >**More About MPDs (Click to Show/Hide)**</a>
+      </td></tr>
+      <tr><td>
+           <div class="mid" id="HiddenDiv" style="DISPLAY: none" >
+           <p>The meteorological watch (Metwatch) desk at WPC provides short term guidance during
+              heavy rain events leading to a threat of flash flooding to the National Weather Service (NWS) Weather Forecast Offices (WFOs),
+              River Forecast Centers (RFCs), the media, emergency managers and interested partners.  Guidance is given in the form of Mesoscale
+              Precipitation Discussions (MPDs), that are ideally issued 1-6 hours ahead of time, averaging an area equal to roughly half the
+              size of the state of Kansas.  Each MPD consists of a graphic indicating the area of concern and any pertinent meteorological
+              features as well as a brief text discussion focused on the mesoscale features supporting the anticipated heavy rainfall.
+              The potential for flash flooding within the area of concern will be highlighted by one of three headlines:</p>
+
+           <p><b>FLASH FLOODING LIKELY</b>  High confidence exists that environmental conditions are favorable, or will become favorable, for heavy rainfall
+           that will result in flash flooding.</p>
+           <p><b>FLASH FLOODING POSSIBLE</b>  Environmental conditions are favorable, or will become favorable, for
+           heavy rainfall, but there are questions about how the event will evolve and/or whether
+           flash flooding will occur.</p>
+           <p><b>FLASH FLOODING UNLIKELY</b>  High confidence exists that environmental conditions are unfavorable, or will become unfavorable, for
+           heavy rainfall that will result in flash flooding. (typically issued toward the end of an event)</p>
+
+           <p>While flash flooding is caused by a variety of factors (e.g., intense rainfall, dam failure, ice jams), WPC's Metwatch desk will only
+              focus on flash floods triggered by intense rainfall that occur over a sufficient areal coverage. Localized flash flooding is not considered.
+           </p>
+
+           <p>The MPD appears under WMO Header: AWUS01 KWNH<br>
+              and AWIPS header: KWNH FFGMPD
+           </p>
+ 
+           <p>For additional information on WPC's MetWatch desk, please view this <a href="https://www.wpc.ncep.noaa.gov/html/metwatch_webinar/presentation_html5.html"><b><u>webinar</u></b></a>
+           (31 minutes)
+
+           </div>      
+      </td></tr>
+
+<!--Begin section to get Archived MPDs-->
+
+      <tr><td><hr width="96%"><br></td></tr>
+      <tr><td><br></td></tr>
+      <tr><td class="mwarchive">Archived Mesoscale Precipitation Discussions (MPDs)</td></tr>
+      <tr><td><br></td></tr>
+      <tr><td class="mwarchdate">
+        <form name="mpdarchive" style="display:inline;" action="metwatch_mpd.php.html">
+        <div id="calarea" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
+        <div>
+          <input id="inputdate" name="inputdate" type="text" maxlength="10" value=05/06/2024            onclick="cal1xx.select(document.forms['mpdarchive'].inputdate,'anchor1xx','MM/dd/yyyy'); return false;" onblur="reset_accums();"
+            name="anchor1xx" id="anchor1xx" style="width:8.5em;text-align:center;">
+          <a href="metwatch_mpd.php.html#" onclick="cal1xx.select(document.forms['mpdarchive'].inputdate,'anchor1xx','MM/dd/yyyy'); return false;"
+            name="anchor1xx" id="anchor1xx">&nbsp;</a>
+          <input name="retrieve" value="Retrieve MPDs" type="button" onclick="getmpds();">
+          <br>
+          (data available starting on <b>April 10th, 2013</b>)
+        </div>
+        </form>
+      </td></tr>
+    </table>
+
+<!--*************************************************************-->
+
+      
+
+      <div style="line-height:150%;">&nbsp;</div>
+
+      <TABLE cellSpacing="0" cellPadding="0" width="96%" border="0" align="center">
+        <TBODY>
+                  <tr>
+          <td colSpan="3"><hr></td>
+        </tr>
+        <tr vAlign="top">
+          <td align="left" nowrap="nowrap" class="gray">
+            <a href="http://www.noaa.gov"><span class="gray">NOAA/</span></a>
+            <a href="http://www.nws.noaa.gov/"><span class="gray">National Weather Service</span></a><br>
+               <a href="http://www.ncep.noaa.gov/">
+               <span class="gray">National Centers for Environmental Prediction</span></a><br>
+                         Weather Prediction Center<br>
+                         5830 University Research Court<br>
+                         College Park, Maryland 20740<br>				
+                         <a href="https://www.wpc.ncep.noaa.gov/mail_webmaster" target="_new"><span class="gray">Weather Prediction Center Web Team</span></a></td>
+          <td nowrap="nowrap">
+            <a href="http://www.nws.noaa.gov/disclaimer.php"><span class="gray">Disclaimer</span></a><br>
+            <a href="http://www.weather.gov/credits.php"><span class="gray">Credits</span></a><br>
+            <a href="http://www.weather.gov/glossary/"><span class="gray">Glossary</span></a><br>
+          </td>
+
+          <td align="right" nowrap="nowrap">
+            <a href="http://www.weather.gov/privacy.php"><span class="gray">Privacy Policy</span></a><br> 
+            <a href="http://www.weather.gov/admin.php"><span class="gray">About Us</span></a><br>
+            <a href="http://www.weather.gov/careers.php"><span class="gray">Career Opportunities</span></a><br>
+          </td>
+        </tr>
+ 
+        <TR vAlign="top">
+          <TD class="gray" colSpan="3">
+            Page last modified: Monday, 30-Oct-2023 16:29:02 GMT          </TD>
+        </TR>
+        </TBODY>
+      </TABLE>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+
