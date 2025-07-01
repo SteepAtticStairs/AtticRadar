@@ -1,7 +1,0 @@
-.vscode
-data
-*.code-workspace
-test.js
-test*.js
-.eslint*
-docs
