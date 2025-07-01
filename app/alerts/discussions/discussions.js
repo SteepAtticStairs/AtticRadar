@@ -141,7 +141,7 @@ function fetch_discussions() {
                     geojson.features[0].properties.color = 'rgb(0, 0, 245)';
                     geojson.features[0].properties.id = id;
 
-                    fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/md/md${id}.html`)
+                    fetch(`https://www.spc.noaa.gov/products/md/md${id}.html`)
                     .then(response => response.text())
                     .then(text => {
                         const doc = new DOMParser().parseFromString(text, 'text/html');

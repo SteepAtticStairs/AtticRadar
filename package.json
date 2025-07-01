@@ -11,6 +11,7 @@
     "@turf/turf": "^6.5.0",
     "aewx-metar-parser": "^1.0.0",
     "brfs": "^2.0.2",
+    "browserify": "^17.0.1",
     "bufferpack": "^0.0.6",
     "cheap-ruler": "^4.0.0",
     "chroma-js": "^2.4.2",
@@ -22,6 +23,8 @@
     "pngjs": "^6.0.0",
     "seek-bzip": "^2.0.0",
     "shelljs": "^0.8.5",
+    "uglify-js": "^3.19.3",
+    "watchify": "^4.0.0",
     "webworkify": "^1.5.0"
   },
   "devDependencies": {
