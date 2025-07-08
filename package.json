@@ -23,7 +23,7 @@
     "pngjs": "^6.0.0",
     "seek-bzip": "^2.0.0",
     "shelljs": "^0.8.5",
-    "uglify": "^0.1.5",
+    "uglify-js": "^3.19.3",
     "watchify": "^4.0.0",
     "webworkify": "^1.5.0"
   },
