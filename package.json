@@ -4,8 +4,7 @@
   "scripts": {
     "build": "browserify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js; uglifyjs dist/bundle.js -m -o dist/bundle.js; ./tools/size.sh",
     "serve": "watchify -t brfs app/core/entry/entry.js -p [ glslify-require ] -o dist/bundle.js -v",
-    "start": "electron .",
-    "package": "npx electron-packager . --overwrite --icon ./icons/icon.icns"
+    "start": "npx http-server -c-1 -p 3333"
   },
   "dependencies": {
     "@turf/turf": "^6.5.0",
@@ -16,6 +15,7 @@
     "cheap-ruler": "^4.0.0",
     "chroma-js": "^2.4.2",
     "glslify-require": "^1.1.0",
+    "http-server": "^14.1.1",
     "luxon": "^3.0.3",
     "metar-plot": "^2.0.0",
     "pako": "^2.1.0",

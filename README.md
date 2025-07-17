@@ -28,11 +28,9 @@ git clone https://github.com/SteepAtticStairs/AtticRadar.git
 cd AtticRadar
 npm install
 npm run build
-php -S 127.0.0.1:3333
+npm run start
 ```
 then you can go to `localhost:3333` or `127.0.0.1:3333` to view the website.
-
-Using PHP as the local server was intentional, because of development that I do of server-side code that affects AtticRadar.
 
 Browserify is used in AtticRadar to implement a moduling system. `npm run build` bundles the project with Browserify to be used in distribution.
 
