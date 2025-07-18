@@ -1,3 +1,25 @@
+/* https://stackoverflow.com/a/38994837 */
+/* https://stackoverflow.com/a/13184693 */
+html {
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+hr {
+    margin: 1rem 0;
+    color: inherit;
+    border: 0;
+    border-top: 1px solid;
+    opacity: .25;
+}
+
 #map {
     position: absolute;
     top: 0;
@@ -81,6 +103,13 @@
     color: rgb(140, 140, 140);
 }
 
+.alertsMonospaceText {
+    font-family: 'Consolas', monospace;
+}
+.alertTextDescriber {
+    color: rgba(0, 132, 255, 1);
+}
+
 .icon-black { color:rgb(0, 0, 0) }
 .icon-grey { color:rgb(148, 148, 148) }
 .icon-selected { color:rgb(0, 132, 255) }
@@ -94,4 +123,76 @@
 }
 .swiper-wrapper {
     align-items: center !important;
+}
+
+#attic_dialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 100000;
+
+    background-color: rgba(0, 0, 0, 0.4);
+}
+#attic_dialog_container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
+    margin: auto;
+
+    width: 550px;
+    max-width: 90vw;
+    height: auto;
+    max-height: 100%;
+}
+#attic_dialog_header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* width: 100%; */
+    height: 50px;
+    padding: 5px;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+
+    font-weight: bold;
+    font-weight: 900;
+    letter-spacing: 1.25px;
+
+    text-align: center;
+
+    background-color: rgb(175, 175, 175);
+    color: rgb(71, 71, 71);
+}
+#attic_dialog_close {
+    position: absolute;
+    right: 20px;
+    transform: scale(1.5);
+    cursor: pointer;
+}
+#attic_dialog_body {
+    /* position: absolute; */
+    overflow: scroll;
+
+    /* width: 100%; */
+    height: auto;
+    /* 85vh - top padding - header height */
+    max-height: calc(85vh - 10px - 50px);
+    padding: 5px;
+    white-space: pre-wrap;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+
+    background-color: rgb(51, 51, 51);
+    color: rgb(255, 255, 255);
 }

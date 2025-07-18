@@ -820,7 +820,7 @@ https://tobiasahlin.com/spinkit/
     text-align: center;
 }
 
-#atcDlg {
+#attic_dialog {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -829,7 +829,7 @@ https://tobiasahlin.com/spinkit/
 
     background-color: rgba(0, 0, 0, 0.4);
 }
-#atcDlgContainer {
+#attic_dialog_container {
     position: absolute;
     left: 0;
     right: 0;
@@ -841,7 +841,7 @@ https://tobiasahlin.com/spinkit/
     height: auto;
     max-height: 100%;
 }
-#atcDlgHeader {
+#attic_dialog_header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -865,13 +865,13 @@ https://tobiasahlin.com/spinkit/
     background-color: rgb(175, 175, 175);
     color: rgb(71, 71, 71);
 }
-#atcDlgClose {
+#attic_dialog_close {
     position: absolute;
     right: 20px;
     transform: scale(1.5);
     cursor: pointer;
 }
-#atcDlgBody {
+#attic_dialog_body {
     /* position: absolute; */
     overflow: scroll;
 

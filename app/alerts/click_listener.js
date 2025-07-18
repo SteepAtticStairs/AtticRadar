@@ -2,6 +2,7 @@ var map = require('../core/map/map');
 const AtticPopup = require('../core/popup/AtticPopup');
 const hash_string = require('./hash_string');
 const get_polygon_colors = require('./colors/polygon_colors');
+const display_attic_dialog = require('../core/menu/attic_dialog');
 const ut = require('../core/utils');
 const chroma = require('chroma-js').default;
 const { DateTime } = require('luxon');
@@ -43,76 +44,100 @@ function click_listener(e) {
 
     const rendered_features = map.queryRenderedFeatures(e.point);
 
+    const alert_content_obj = {};
+    const already_added_alerts = [];
     const popup_htmls = [];
     for (var i = 0; i < e.features.length; i++) {
         var properties = e.features[i].properties;
         var parameters = JSON.parse(properties.parameters);
-        const hash = hash_string(JSON.stringify(properties));
 
-        var id = `${hash}alert`;
-        var init_color = get_polygon_colors(properties.event).color;
-        var background_color = init_color;
-        var border_color = chroma(init_color).darken(1.5);
-        var text_color = chroma(init_color).luminance() > 0.4 ? 'black' : 'white';
+        const hash = hash_string(JSON.stringify(properties?.['@id']));
+        if (!already_added_alerts.includes(hash)) {
+            already_added_alerts.push(hash);
 
-        var parameters_html = '';
-        function add_parameter(parameter_name, text_value_ID) {
-            if (parameters.hasOwnProperty(parameter_name)) {
-                value = _fix_value(parameters[parameter_name], text_value_ID);
+            var id = `${hash}alert`;
+            var init_color = get_polygon_colors(properties.event).color;
+            var background_color = init_color;
+            var border_color = chroma(init_color).darken(1.5);
+            var text_color = chroma(init_color).luminance() > 0.4 ? 'black' : 'white';
 
-                if (properties.event == 'Severe Thunderstorm Warning') {
-                    if (parameter_name == 'maxHailSize' && parameters.hasOwnProperty('hailThreat')) {
-                        value += `, ${_fix_value(parameters['hailThreat'])}`;
+            var parameters_html = '';
+            function add_parameter(parameter_name, text_value_ID) {
+                if (parameters.hasOwnProperty(parameter_name)) {
+                    value = _fix_value(parameters[parameter_name], text_value_ID);
+
+                    if (properties.event == 'Severe Thunderstorm Warning') {
+                        if (parameter_name == 'maxHailSize' && parameters.hasOwnProperty('hailThreat')) {
+                            value += `, ${_fix_value(parameters['hailThreat'])}`;
+                        }
+                        if (parameter_name == 'maxWindGust' && parameters.hasOwnProperty('windThreat')) {
+                            value += `, ${_fix_value(parameters['windThreat'])}`;
+                        }
                     }
-                    if (parameter_name == 'maxWindGust' && parameters.hasOwnProperty('windThreat')) {
-                        value += `, ${_fix_value(parameters['windThreat'])}`;
-                    }
+
+                    parameters_html += `<div><span class="alert_popup_lessertext">${text_value_ID}</span> ${value}</div>`
                 }
-
-                parameters_html += `<div><span class="alert_popup_lessertext">${text_value_ID}</span> ${value}</div>`
             }
-        }
-        add_parameter('tornadoDetection', 'Tornado:');
-        add_parameter('waterspoutDetection', 'Waterspout:');
-        add_parameter('flashFloodDamageThreat', 'Damage Threat:');
-        add_parameter('flashFloodDetection', 'Source:');
-        add_parameter('maxHailSize', 'Hail:');
-        add_parameter('maxWindGust', 'Wind:');
+            add_parameter('tornadoDetection', 'Tornado:');
+            add_parameter('waterspoutDetection', 'Waterspout:');
+            add_parameter('flashFloodDamageThreat', 'Damage Threat:');
+            add_parameter('flashFloodDetection', 'Source:');
+            add_parameter('maxHailSize', 'Hail:');
+            add_parameter('maxWindGust', 'Wind:');
 
-        var alert_expires_time;
-        var thing_to_prepend = 'Expires:';
-        if (properties.hasOwnProperty('ends')) {
-            alert_expires_time = properties.ends;
-        } else {
-            alert_expires_time = properties.expires;
-        }
-        var expires_time = DateTime.fromISO(alert_expires_time).toUTC().toJSDate();
-        var current_time = DateTime.now().toUTC().toJSDate();
-        const date_diff = ut.getDateDiff(current_time, expires_time);
-        var formatted_date_diff;
-        var thing_to_append = '';
-        var text_color = ''; // white
-        var is_negative = date_diff.negative;
-        if (date_diff.s) { formatted_date_diff = `${date_diff.s}s`; }
-        if (date_diff.m) { formatted_date_diff = `${date_diff.m}m ${date_diff.s}s`; }
-        if (date_diff.h) { formatted_date_diff = `${date_diff.h}h ${date_diff.m}m`; }
-        if (date_diff.d) { formatted_date_diff = `${date_diff.d}d ${date_diff.h}h`; }
-        if (is_negative) { thing_to_prepend = 'Expired:'; thing_to_append = ' ago'; text_color = 'rgba(229, 78, 78, 1)'; }
+            var alert_expires_time;
+            var thing_to_prepend = 'Expires:';
+            if (properties.hasOwnProperty('ends')) {
+                alert_expires_time = properties.ends;
+            } else {
+                alert_expires_time = properties.expires;
+            }
+            var expires_time = DateTime.fromISO(alert_expires_time).toUTC().toJSDate();
+            var current_time = DateTime.now().toUTC().toJSDate();
+            const date_diff = ut.getDateDiff(current_time, expires_time);
+            var formatted_date_diff;
+            var thing_to_append = '';
+            var text_color = ''; // white
+            var is_negative = date_diff.negative;
+            if (date_diff.s) { formatted_date_diff = `${date_diff.s}s`; }
+            if (date_diff.m) { formatted_date_diff = `${date_diff.m}m ${date_diff.s}s`; }
+            if (date_diff.h) { formatted_date_diff = `${date_diff.h}h ${date_diff.m}m`; }
+            if (date_diff.d) { formatted_date_diff = `${date_diff.d}d ${date_diff.h}h`; }
+            if (is_negative) { thing_to_prepend = 'Expired:'; thing_to_append = ' ago'; text_color = 'rgba(229, 78, 78, 1)'; }
 
-        var main_headline = check_property_exists(parameters.NWSheadline);
-        var secondary_headline = check_property_exists(properties.headline);
-        if (main_headline == 'None') {
-            var temp = secondary_headline;
-            secondary_headline = main_headline;
-            main_headline = temp;
-        }
+            var main_headline = check_property_exists(parameters.NWSheadline);
+            var secondary_headline = check_property_exists(properties.headline);
+            if (main_headline == 'None') {
+                var temp = secondary_headline;
+                secondary_headline = main_headline;
+                main_headline = temp;
+            }
 
-        var popup_html =
+            var popup_html =
 `<div style="font-weight: bold; font-size: 13px;">${properties.event}</div>
 <div><span class="alert_popup_lessertext">${thing_to_prepend}</span> ${formatted_date_diff} ${thing_to_append}</div>
 ${parameters_html}\
 <i id="${id}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
-        popup_htmls.push(popup_html);
+            popup_htmls.push(popup_html);
+
+            var extented_alert_description = 
+`<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${check_property_exists(properties.event)}
+<hr>${check_property_exists(properties.senderName)}</b>
+<hr>${secondary_headline}
+<hr>${main_headline}
+<hr><b class="alertTextDescriber">Sent:</b><br>${ut.printFancyTime(new Date(properties.sent))}
+<br><b class="alertTextDescriber">Description:</b><br>${check_property_exists(properties.description)}
+<br><b class="alertTextDescriber">Instructions:</b><br>${check_property_exists(properties.instruction)}
+<br><b class="alertTextDescriber">Areas affected:</b><br><i>${check_property_exists(properties.areaDesc)}</i>
+<br><b class="alertTextDescriber">WMO Identifier:</b><br>${check_property_exists(parameters.WMOidentifier)}
+<b class="alertTextDescriber">VTEC:</b><br>${check_property_exists(parameters.VTEC)}</div>`
+            alert_content_obj[id] = {
+                'title': `${properties.event}`,
+                'body': extented_alert_description,
+                'color': init_color,
+                'textColor': chroma(init_color).luminance() > 0.4 ? 'black' : 'white'
+            };
+        }
     }
 
     // create hidden container for measuring
@@ -171,6 +196,16 @@ ${parameters_html}\
         },
     });
     popup.update_popup_pos();
+
+    $('.alert_popup_info').on('click', function(e) {
+        var id = $(this).attr('id');
+        display_attic_dialog({
+            'title': alert_content_obj[id].title,
+            'body': alert_content_obj[id].body,
+            'color': alert_content_obj[id].color,
+            'textColor': alert_content_obj[id].textColor,
+        })
+    })
 }
 
 module.exports = click_listener;
