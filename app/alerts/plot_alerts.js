@@ -1,6 +1,7 @@
 const map = require('../core/map/map');
 const get_polygon_colors = require('./colors/polygon_colors');
-const turf = require('@turf/turf')
+const turf = require('@turf/turf');
+const click_listener = require('./click_listener');
 
 function _add_alert_layers(geojson) {
     // if the alerts have already been plotted to the map, calling _add_alert_layers just updates the existing data
@@ -63,7 +64,7 @@ function _add_alert_layers(geojson) {
             map.getCanvas().style.cursor = '';
         });
 
-        // map.on('click', 'alerts_layer_fill', click_listener);
+        map.on('click', 'alerts_layer_fill', click_listener);
     }
 }
 

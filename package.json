@@ -2,15 +2,17 @@
   "name": "atticradar",
   "main": "main.js",
   "scripts": {
-    "build": "browserify -t brfs app/core/entry/entry.js -o dist/bundle.js; uglifyjs dist/bundle.js -m -o dist/bundle.js",
-    "serve": "watchify -t brfs app/core/entry/entry.js -o dist/bundle.js -v",
+    "build": "browserify -p esmify -t brfs app/core/entry/entry.js -o dist/bundle.js; uglifyjs dist/bundle.js -m -o dist/bundle.js",
+    "serve": "watchify -p esmify -t brfs app/core/entry/entry.js -o dist/bundle.js -v",
     "start": "npx http-server -c-1 -p 3333"
   },
   "dependencies": {
     "@turf/turf": "^7.2.0",
     "brfs": "^2.0.2",
     "browserify": "^17.0.1",
-    "http-server": "^14.1.1",
+    "chroma-js": "^3.1.2",
+    "esmify": "^2.1.1",
+    "luxon": "^3.7.1",
     "pako": "^2.1.0",
     "uglify-js": "^3.19.3",
     "watchify": "^4.0.0",
