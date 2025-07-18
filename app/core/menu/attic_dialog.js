@@ -14,18 +14,11 @@ function display_attic_dialog(options) {
 
     $('#attic_dialog_body').scrollTop(0);
     $('#attic_dialog_body').html(body);
-
-    // const headerHeight = $('#atticDialogHeaderContainer').height();
-    // var contentHeight = 0;
-    // $('#atticDialogBody').children().each(function() { contentHeight = contentHeight + $(this).height() })
-    //$('#atticDialogContainer').height(headerHeight + contentHeight);
-    // var bodyHeight = $('#atticDialogBody').outerHeight();
-    // console.log(bodyHeight)
-    // $('#atticDialogContainer').height(bodyHeight);
 }
 
 $('#attic_dialog').on('click', function(e) {
     var clickedTarget = $(e.target).attr('id');
+    // if we clicked on the darkened background or on the x button
     if (clickedTarget == 'attic_dialog' || clickedTarget == 'attic_dialog_close') {
         $(this).hide();
     }

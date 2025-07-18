@@ -51,6 +51,7 @@ function click_listener(e) {
         var properties = e.features[i].properties;
         var parameters = JSON.parse(properties.parameters);
 
+        // some alerts are duplicates, this filters out ones already seen
         const hash = hash_string(JSON.stringify(properties?.['@id']));
         if (!already_added_alerts.includes(hash)) {
             already_added_alerts.push(hash);
@@ -62,6 +63,8 @@ function click_listener(e) {
             var text_color = chroma(init_color).luminance() > 0.4 ? 'black' : 'white';
 
             var parameters_html = '';
+            // parameters are the little info lines on the map popup,
+            // we're just building a big html block here
             function add_parameter(parameter_name, text_value_ID) {
                 if (parameters.hasOwnProperty(parameter_name)) {
                     value = _fix_value(parameters[parameter_name], text_value_ID);
@@ -105,6 +108,7 @@ function click_listener(e) {
             if (date_diff.d) { formatted_date_diff = `${date_diff.d}d ${date_diff.h}h`; }
             if (is_negative) { thing_to_prepend = 'Expired:'; thing_to_append = ' ago'; text_color = 'rgba(229, 78, 78, 1)'; }
 
+            // there are 2 types of headlines for some reason
             var main_headline = check_property_exists(parameters.NWSheadline);
             var secondary_headline = check_property_exists(properties.headline);
             if (main_headline == 'None') {
@@ -118,8 +122,11 @@ function click_listener(e) {
 <div><span class="alert_popup_lessertext">${thing_to_prepend}</span> ${formatted_date_diff} ${thing_to_append}</div>
 ${parameters_html}\
 <i id="${id}" class="alert_popup_info icon-blue fa fa-circle-info" style="color: rgb(255, 255, 255);"></i>`;
+
+            // add to the array of future scrollable alerts on the popup
             popup_htmls.push(popup_html);
 
+            // this goes on the dialog when the info button is pressed
             var extented_alert_description = 
 `<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${check_property_exists(properties.event)}
 <hr>${check_property_exists(properties.senderName)}</b>
@@ -131,6 +138,8 @@ ${parameters_html}\
 <br><b class="alertTextDescriber">Areas affected:</b><br><i>${check_property_exists(properties.areaDesc)}</i>
 <br><b class="alertTextDescriber">WMO Identifier:</b><br>${check_property_exists(parameters.WMOidentifier)}
 <b class="alertTextDescriber">VTEC:</b><br>${check_property_exists(parameters.VTEC)}</div>`
+
+            // store specific dialog information for later (click events)
             alert_content_obj[id] = {
                 'title': `${properties.event}`,
                 'body': extented_alert_description,
@@ -140,7 +149,8 @@ ${parameters_html}\
         }
     }
 
-    // create hidden container for measuring
+    // we need to determine the widest element in popup_htmls so that the map popup is that wide, no bigger
+    // this creates a fake hidden element to measure them 
     const measure_container = $('<div></div>').css({
         position: 'absolute',
         visibility: 'hidden',
@@ -153,7 +163,7 @@ ${parameters_html}\
         left: '-9999px'
     }).appendTo('body');
 
-    let max_width = 0;
+    var max_width = 0;
 
     popup_htmls.forEach(html => {
         const temp_div = $('<div></div>').html(html).appendTo(measure_container);
@@ -166,6 +176,7 @@ ${parameters_html}\
 
     measure_container.remove();
 
+    // set up the scrollable div
     var swiper_div = `<div class="swiper mySwiper"><div class="swiper-wrapper">`;
     var swiper_div_end = `</div><div class="swiper-pagination"></div></div>`;
     for (var i = 0; i < popup_htmls.length; i++) {
@@ -183,20 +194,22 @@ ${parameters_html}\
         // need to fix padding issues with the dots at the bottom
         $('.attic_popup').css('padding-bottom', 0);
     }
+    // make sure the blue info button has enough space
     popup.attic_popup_div.width(`+=${$('.alert_popup_info').outerWidth() + parseInt($('.alert_popup_info').css('paddingRight')) * 2}`);
 
     new Swiper(".mySwiper", {
         pagination: {
             el: ".swiper-pagination",
-            clickable: true,
+            clickable: true, // makes the dots clickable
         },
         mousewheel: {
-            forceToAxis: false,
+            forceToAxis: false, // you can scroll vertically or horizontally to change slides
             sensitivity: 1,
         },
     });
     popup.update_popup_pos();
 
+    // click listener for the blue info button
     $('.alert_popup_info').on('click', function(e) {
         var id = $(this).attr('id');
         display_attic_dialog({
