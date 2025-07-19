@@ -8,9 +8,8 @@ const noaa_colors = {
     "Tornado Warning": {
         "priority": "2",
         "colorName": "Red",
-        "rgb": "rgb(233, 51, 35)",
-        "hex": "#FF0000",
-        "originalColor": "rgb(255, 0, 0)"
+        "rgb": "rgb(255, 0, 0)",
+        "hex": "#FF0000"
     },
     "Extreme Wind Warning": {
         "priority": "3",
@@ -21,16 +20,14 @@ const noaa_colors = {
     "Severe Thunderstorm Warning": {
         "priority": "4",
         "colorName": "Orange",
-        "rgb": "rgb(244, 185, 65)",
-        "hex": "#FFA500",
-        "originalColor": "rgb(255, 165, 0)"
+        "rgb": "rgb(255, 165, 0)",
+        "hex": "#FFA500"
     },
     "Flash Flood Warning": {
         "priority": "5",
         "colorName": "Darkred",
-        "rgb": "rgb(147, 241, 75)",
-        "hex": "#8B0000",
-        "originalColor": "rgb(139, 0, 0)"
+        "rgb": "rgb(139, 0, 0)",
+        "hex": "#8B0000"
     },
     "Flash Flood Statement": {
         "priority": "6",
@@ -101,9 +98,8 @@ const noaa_colors = {
     "Storm Surge Warning": {
         "priority": "17",
         "colorName": "Darkpurple",
-        "rgb": "rgb(76, 87, 246)",
-        "hex": "#B524F7",
-        "originalColor": "rgb(181, 36, 247)"
+        "rgb": "rgb(181, 36, 247)",
+        "hex": "#B524F7"
     },
     "Hurricane Force Wind Warning": {
         "priority": "18",
@@ -114,9 +110,8 @@ const noaa_colors = {
     "Hurricane Warning": {
         "priority": "19",
         "colorName": "Crimson",
-        "rgb": "rgb(199, 63, 155)",
-        "hex": "#DC143C",
-        "originalColor": "rgb(220, 20, 60)"
+        "rgb": "rgb(220, 20, 60)",
+        "hex": "#DC143C"
     },
     "Typhoon Warning": {
         "priority": "20",
@@ -127,193 +122,182 @@ const noaa_colors = {
     "Special Marine Warning": {
         "priority": "21",
         "colorName": "Orange",
-        "rgb": "rgb(197, 155, 249)",
-        "hex": "#FFA500",
-        "originalColor": "rgb(255, 165, 0)"
+        "rgb": "rgb(255, 165, 0)",
+        "hex": "#FFA500"
     },
     "Blizzard Warning": {
         "priority": "22",
         "colorName": "Orangered",
-        "rgb": "rgb(235, 78, 65)",
-        "hex": "#FF4500",
-        "originalColor": "rgb(255, 69, 0)"
+        "rgb": "rgb(255, 69, 0)",
+        "hex": "#FF4500"
     },
     "Snow Squall Warning": {
         "priority": "23",
         "colorName": "Mediumvioletred",
-        "rgb": "rgb(3, 0, 163)",
-        "hex": "#C71585",
-        "originalColor": "rgb(199, 21, 133)"
+        "rgb": "rgb(199, 21, 133)",
+        "hex": "#C71585"
     },
     "Ice Storm Warning": {
         "priority": "24",
         "colorName": "Darkmagenta",
-        "rgb": "rgb(173, 74, 248)",
-        "hex": "#8B008B",
-        "originalColor": "rgb(139, 0, 139)"
+        "rgb": "rgb(139, 0, 139)",
+        "hex": "#8B008B"
+    },
+    "Heavy Freezing Spray Warning": {
+        "priority": "25",
+        "colorName": "Deepskyblue",
+        "rgb": "rgb(0, 191, 255)",
+        "hex": "#00BFFF"
     },
     "Winter Storm Warning": {
-        "priority": "25",
-        "colorName": "Hotpink",
-        "rgb": "rgb(240, 141, 233)",
-        "hex": "#FF69B4",
-        "originalColor": "rgb(255, 105, 180)"
-    },
-    "High Wind Warning": {
         "priority": "26",
-        "colorName": "Goldenrod",
-        "rgb": "rgb(218, 165, 32)",
-        "hex": "#DAA520"
+        "colorName": "Hotpink",
+        "rgb": "rgb(255, 105, 180)",
+        "hex": "#FF69B4"
     },
-    "Tropical Storm Warning": {
+    "Lake Effect Snow Warning": {
         "priority": "27",
-        "colorName": "Firebrick",
-        "rgb": "rgb(251, 231, 88)",
-        "hex": "#B22222",
-        "originalColor": "rgb(178, 34, 34)"
-    },
-    "Storm Warning": {
-        "priority": "28",
-        "colorName": "Darkviolet",
-        "rgb": "rgb(148, 0, 211)",
-        "hex": "#9400D3"
-    },
-    "Tsunami Advisory": {
-        "priority": "29",
-        "colorName": "Chocolate",
-        "rgb": "rgb(210, 105, 30)",
-        "hex": "#D2691E"
-    },
-    "Tsunami Watch": {
-        "priority": "30",
-        "colorName": "Fushsia",
-        "rgb": "rgb(255, 0, 255)",
-        "hex": "#FF00FF"
-    },
-    "Avalanche Warning": {
-        "priority": "31",
-        "colorName": "Dodgerblue",
-        "rgb": "rgb(30, 144, 255)",
-        "hex": "#1E90FF"
-    },
-    "Earthquake Warning": {
-        "priority": "32",
-        "colorName": "Saddlebrown",
-        "rgb": "rgb(139, 69, 19)",
-        "hex": "#8B4513"
-    },
-    "Volcano Warning": {
-        "priority": "33",
-        "colorName": "darkslategray",
-        "rgb": "rgb(47, 79, 79)",
-        "hex": "#2F4F4F"
-    },
-    "Ashfall Warning": {
-        "priority": "34",
-        "colorName": "Darkgray",
-        "rgb": "rgb(169, 169, 169)",
-        "hex": "#A9A9A9"
-    },
-    "Coastal Flood Warning": {
-        "priority": "35",
-        "colorName": "Forestgreen",
-        "rgb": "rgb(34, 139, 34)",
-        "hex": "#228B22"
-    },
-    "Lakeshore Flood Warning": {
-        "priority": "36",
-        "colorName": "Forestgreen",
-        "rgb": "rgb(34, 139, 34)",
-        "hex": "#228B22"
-    },
-    "Flood Warning": {
-        "priority": "37",
-        "colorName": "Lime",
-        "rgb": "rgb(147, 241, 75)",
-        "hex": "#00FF00",
-        "originalColor": "rgb(0, 255, 0)"
-    },
-    "High Surf Warning": {
-        "priority": "38",
-        "colorName": "Forestgreen",
-        "rgb": "rgb(34, 139, 34)",
-        "hex": "#228B22"
+        "colorName": "Darkcyan",
+        "rgb": "rgb(0, 139, 139)",
+        "hex": "#008B8B"
     },
     "Dust Storm Warning": {
-        "priority": "39",
+        "priority": "28",
         "colorName": "Bisque",
         "rgb": "rgb(255, 228, 196)",
         "hex": "#FFE4C4"
     },
     "Blowing Dust Warning": {
-        "priority": "40",
+        "priority": "29",
         "colorName": "Bisque",
         "rgb": "rgb(255, 228, 196)",
         "hex": "#FFE4C4"
     },
-    "Lake Effect Snow Warning": {
-        "priority": "41",
-        "colorName": "Darkcyan",
-        "rgb": "rgb(0, 139, 139)",
-        "hex": "#008B8B"
+    "High Wind Warning": {
+        "priority": "30",
+        "colorName": "Goldenrod",
+        "rgb": "rgb(218, 165, 32)",
+        "hex": "#DAA520"
     },
-    "Excessive Heat Warning": {
+    "Tropical Storm Warning": {
+        "priority": "31",
+        "colorName": "Firebrick",
+        "rgb": "rgb(178, 34, 34)",
+        "hex": "#B22222"
+    },
+    "Storm Warning": {
+        "priority": "32",
+        "colorName": "Darkviolet",
+        "rgb": "rgb(148, 0, 211)",
+        "hex": "#9400D3"
+    },
+    "Tsunami Advisory": {
+        "priority": "33",
+        "colorName": "Chocolate",
+        "rgb": "rgb(210, 105, 30)",
+        "hex": "#D2691E"
+    },
+    "Tsunami Watch": {
+        "priority": "34",
+        "colorName": "Fushsia",
+        "rgb": "rgb(255, 0, 255)",
+        "hex": "#FF00FF"
+    },
+    "Avalanche Warning": {
+        "priority": "35",
+        "colorName": "Dodgerblue",
+        "rgb": "rgb(30, 144, 255)",
+        "hex": "#1E90FF"
+    },
+    "Earthquake Warning": {
+        "priority": "36",
+        "colorName": "Saddlebrown",
+        "rgb": "rgb(139, 69, 19)",
+        "hex": "#8B4513"
+    },
+    "Volcano Warning": {
+        "priority": "37",
+        "colorName": "darkslategray",
+        "rgb": "rgb(47, 79, 79)",
+        "hex": "#2F4F4F"
+    },
+    "Ashfall Warning": {
+        "priority": "38",
+        "colorName": "Darkgray",
+        "rgb": "rgb(169, 169, 169)",
+        "hex": "#A9A9A9"
+    },
+    "Flood Warning": {
+        "priority": "39",
+        "colorName": "Lime",
+        "rgb": "rgb(0, 255, 0)",
+        "hex": "#00FF00"
+    },
+    "Coastal Flood Warning": {
+        "priority": "40",
+        "colorName": "Forestgreen",
+        "rgb": "rgb(34, 139, 34)",
+        "hex": "#228B22"
+    },
+    "Lakeshore Flood Warning": {
+        "priority": "41",
+        "colorName": "Forestgreen",
+        "rgb": "rgb(34, 139, 34)",
+        "hex": "#228B22"
+    },
+    "Ashfall Advisory": {
         "priority": "42",
+        "colorName": "Dimgray",
+        "rgb": "rgb(105, 105, 105)",
+        "hex": "#696969"
+    },
+    "High Surf Warning": {
+        "priority": "43",
+        "colorName": "Forestgreen",
+        "rgb": "rgb(34, 139, 34)",
+        "hex": "#228B22"
+    },
+    "Extreme Heat Warning": {
+        "priority": "44",
         "colorName": "Mediumvioletred",
         "rgb": "rgb(199, 21, 133)",
         "hex": "#C71585"
     },
     "Tornado Watch": {
-        "priority": "43",
+        "priority": "45",
         "colorName": "Yellow",
-        "rgb": "rgb(245, 254, 83)",
-        "hex": "#FFFF00",
-        "originalColor": "rgb(255, 255, 0)"
+        "rgb": "rgb(255, 255, 0)",
+        "hex": "#FFFF00"
     },
     "Severe Thunderstorm Watch": {
-        "priority": "44",
+        "priority": "46",
         "colorName": "Palevioletred",
-        "rgb": "rgb(238, 135, 134)",
-        "hex": "#DB7093",
-        "originalColor": "rgb(219, 112, 147)"
+        "rgb": "rgb(219, 112, 147)",
+        "hex": "#DB7093"
     },
     "Flash Flood Watch": {
-        "priority": "45",
+        "priority": "47",
         "colorName": "Seagreen",
-        "rgb": "rgb(58, 111, 29)",
-        "hex": "#2E8B57",
-        "originalColor": "rgb(46, 139, 87)"
+        "rgb": "rgb(46, 139, 87)",
+        "hex": "#2E8B57"
     },
     "Gale Warning": {
-        "priority": "46",
+        "priority": "48",
         "colorName": "Plum",
-        "rgb": "rgb(50, 111, 255)",
-        "hex": "#DDA0DD",
-        "originalColor": "rgb(221, 160, 221)"
+        "rgb": "rgb(221, 160, 221)",
+        "hex": "#DDA0DD"
     },
     "Flood Statement": {
-        "priority": "47",
+        "priority": "49",
         "colorName": "Lime",
         "rgb": "rgb(0, 255, 0)",
         "hex": "#00FF00"
     },
-    "Wind Chill Warning": {
-        "priority": "48",
-        "colorName": "Lightsteelblue",
-        "rgb": "rgb(176, 196, 222)",
-        "hex": "#B0C4DE"
-    },
     "Extreme Cold Warning": {
-        "priority": "49",
+        "priority": "50",
         "colorName": "Blue",
         "rgb": "rgb(0, 0, 255)",
         "hex": "#0000FF"
-    },
-    "Hard Freeze Warning": {
-        "priority": "50",
-        "colorName": "Darkviolet",
-        "rgb": "rgb(148, 0, 211)",
-        "hex": "#9400D3"
     },
     "Freeze Warning": {
         "priority": "51",
@@ -330,16 +314,14 @@ const noaa_colors = {
     "Storm Surge Watch": {
         "priority": "53",
         "colorName": "Lightpurple",
-        "rgb": "rgb(165, 202, 182)",
-        "hex": "#DB7FF7",
-        "originalColor": "rgb(219, 127, 247)"
+        "rgb": "rgb(219, 127, 247)",
+        "hex": "#DB7FF7"
     },
     "Hurricane Watch": {
         "priority": "54",
         "colorName": "Magenta",
-        "rgb": "rgb(234, 51, 247)",
-        "hex": "#FF00FF",
-        "originalColor": "rgb(255, 0, 255)"
+        "rgb": "rgb(255, 0, 255)",
+        "hex": "#FF00FF"
     },
     "Hurricane Force Wind Watch": {
         "priority": "55",
@@ -356,9 +338,8 @@ const noaa_colors = {
     "Tropical Storm Watch": {
         "priority": "57",
         "colorName": "Lightcoral",
-        "rgb": "rgb(239, 127, 131)",
-        "hex": "#F08080",
-        "originalColor": "rgb(240, 128, 128)"
+        "rgb": "rgb(240, 128, 128)",
+        "hex": "#F08080"
     },
     "Storm Watch": {
         "priority": "58",
@@ -366,424 +347,321 @@ const noaa_colors = {
         "rgb": "rgb(255, 228, 181)",
         "hex": "#FFE4B5"
     },
-    "Hurricane Local Statement": {
+    "Tropical Cyclone Local Statement": {
         "priority": "59",
         "colorName": "Moccasin",
         "rgb": "rgb(255, 228, 181)",
         "hex": "#FFE4B5"
     },
-    "Typhoon Local Statement": {
+    "Winter Weather Advisory": {
         "priority": "60",
-        "colorName": "Moccasin",
-        "rgb": "rgb(255, 228, 181)",
-        "hex": "#FFE4B5"
-    },
-    "Tropical Storm Local Statement": {
-        "priority": "61",
-        "colorName": "Moccasin",
-        "rgb": "rgb(255, 228, 181)",
-        "hex": "#FFE4B5"
-    },
-    "Tropical Depression Local Statement": {
-        "priority": "62",
-        "colorName": "Moccasin",
-        "rgb": "rgb(255, 228, 181)",
-        "hex": "#FFE4B5"
+        "colorName": "Mediumslateblue",
+        "rgb": "rgb(123, 104, 238)",
+        "hex": "#7B68EE"
     },
     "Avalanche Advisory": {
-        "priority": "63",
+        "priority": "61",
         "colorName": "Peru",
         "rgb": "rgb(205, 133, 63)",
         "hex": "#CD853F"
     },
-    "Winter Weather Advisory": {
-        "priority": "64",
-        "colorName": "Mediumslateblue",
-        "rgb": "rgb(167, 129, 249)",
-        "hex": "#7B68EE",
-        "originalColor": "rgb(123, 104, 238)"
-    },
-    "Wind Chill Advisory": {
-        "priority": "65",
+    "Cold Weather Advisory": {
+        "priority": "62",
         "colorName": "Paleturquoise",
         "rgb": "rgb(175, 238, 238)",
         "hex": "#AFEEEE"
     },
     "Heat Advisory": {
-        "priority": "66",
+        "priority": "63",
         "colorName": "Coral",
         "rgb": "rgb(255, 127, 80)",
         "hex": "#FF7F50"
     },
-    "Urban and Small Stream Flood Advisory": {
-        "priority": "67",
-        "colorName": "Springgreen",
-        "rgb": "rgb(0, 255, 127)",
-        "hex": "#00FF7F"
-    },
-    "Small Stream Flood Advisory": {
-        "priority": "68",
-        "colorName": "Springgreen",
-        "rgb": "rgb(0, 255, 127)",
-        "hex": "#00FF7F"
-    },
-    "Arroyo and Small Stream Flood Advisory": {
-        "priority": "69",
-        "colorName": "Springgreen",
-        "rgb": "rgb(0, 255, 127)",
-        "hex": "#00FF7F"
-    },
     "Flood Advisory": {
-        "priority": "70",
+        "priority": "64",
         "colorName": "Springgreen",
         "rgb": "rgb(0, 255, 127)",
         "hex": "#00FF7F"
     },
-    "Hydrologic Advisory": {
-        "priority": "71",
-        "colorName": "Springgreen",
-        "rgb": "rgb(0, 255, 127)",
-        "hex": "#00FF7F"
-    },
-    "Lakeshore Flood Advisory": {
-        "priority": "72",
+    "Coastal Flood Advisory": {
+        "priority": "65",
         "colorName": "Lawngreen",
         "rgb": "rgb(124, 252, 0)",
         "hex": "#7CFC00"
     },
-    "Coastal Flood Advisory": {
-        "priority": "73",
+    "Lakeshore Flood Advisory": {
+        "priority": "66",
         "colorName": "Lawngreen",
         "rgb": "rgb(124, 252, 0)",
         "hex": "#7CFC00"
     },
     "High Surf Advisory": {
-        "priority": "74",
+        "priority": "67",
         "colorName": "Mediumorchid",
         "rgb": "rgb(186, 85, 211)",
         "hex": "#BA55D3"
     },
-    "Heavy Freezing Spray Warning": {
-        "priority": "75",
-        "colorName": "Deepskyblue",
-        "rgb": "rgb(0, 191, 255)",
-        "hex": "#00BFFF"
-    },
     "Dense Fog Advisory": {
-        "priority": "76",
+        "priority": "68",
         "colorName": "Slategray",
         "rgb": "rgb(112, 128, 144)",
         "hex": "#708090"
     },
     "Dense Smoke Advisory": {
-        "priority": "77",
+        "priority": "69",
         "colorName": "Khaki",
         "rgb": "rgb(240, 230, 140)",
         "hex": "#F0E68C"
     },
-    "Small Craft Advisory For Hazardous Seas": {
-        "priority": "78",
-        "colorName": "Thistle",
-        "rgb": "rgb(216, 191, 216)",
-        "hex": "#D8BFD8"
-    },
-    "Small Craft Advisory for Rough Bar": {
-        "priority": "79",
-        "colorName": "Thistle",
-        "rgb": "rgb(216, 191, 216)",
-        "hex": "#D8BFD8"
-    },
-    "Small Craft Advisory for Winds": {
-        "priority": "80",
-        "colorName": "Thistle",
-        "rgb": "rgb(216, 191, 216)",
-        "hex": "#D8BFD8"
-    },
     "Small Craft Advisory": {
-        "priority": "81",
+        "priority": "70",
         "colorName": "Thistle",
-        "rgb": "rgb(109, 186, 150)",
-        "hex": "#D8BFD8",
-        "originalColor": "rgb(216, 191, 216)"
+        "rgb": "rgb(216, 191, 216)",
+        "hex": "#D8BFD8"
     },
     "Brisk Wind Advisory": {
-        "priority": "82",
+        "priority": "71",
         "colorName": "Thistle",
         "rgb": "rgb(216, 191, 216)",
         "hex": "#D8BFD8"
     },
     "Hazardous Seas Warning": {
-        "priority": "83",
+        "priority": "72",
         "colorName": "Thistle",
         "rgb": "rgb(216, 191, 216)",
         "hex": "#D8BFD8"
     },
     "Dust Advisory": {
-        "priority": "84",
+        "priority": "73",
         "colorName": "Darkkhaki",
         "rgb": "rgb(189, 183, 107)",
         "hex": "#BDB76B"
     },
     "Blowing Dust Advisory": {
-        "priority": "85",
+        "priority": "74",
         "colorName": "Darkkhaki",
         "rgb": "rgb(189, 183, 107)",
         "hex": "#BDB76B"
     },
     "Lake Wind Advisory": {
-        "priority": "86",
+        "priority": "75",
         "colorName": "Tan",
         "rgb": "rgb(210, 180, 140)",
         "hex": "#D2B48C"
     },
     "Wind Advisory": {
-        "priority": "87",
+        "priority": "76",
         "colorName": "Tan",
         "rgb": "rgb(210, 180, 140)",
         "hex": "#D2B48C"
     },
     "Frost Advisory": {
-        "priority": "88",
+        "priority": "77",
         "colorName": "Cornflowerblue",
         "rgb": "rgb(100, 149, 237)",
         "hex": "#6495ED"
     },
-    "Ashfall Advisory": {
-        "priority": "89",
-        "colorName": "Dimgray",
-        "rgb": "rgb(105, 105, 105)",
-        "hex": "#696969"
-    },
     "Freezing Fog Advisory": {
-        "priority": "90",
+        "priority": "78",
         "colorName": "Teal",
         "rgb": "rgb(0, 128, 128)",
         "hex": "#008080"
     },
     "Freezing Spray Advisory": {
-        "priority": "91",
+        "priority": "79",
         "colorName": "Deepskyblue",
         "rgb": "rgb(0, 191, 255)",
         "hex": "#00BFFF"
     },
     "Low Water Advisory": {
-        "priority": "92",
+        "priority": "80",
         "colorName": "Brown",
         "rgb": "rgb(165, 42, 42)",
         "hex": "#A52A2A"
     },
     "Local Area Emergency": {
-        "priority": "93",
+        "priority": "81",
         "colorName": "Silver",
         "rgb": "rgb(192, 192, 192)",
         "hex": "#C0C0C0"
     },
-    "Avalanche Watch": {
-        "priority": "94",
-        "colorName": "Sandybrown",
-        "rgb": "rgb(244, 164, 96)",
-        "hex": "#F4A460"
-    },
-    "Blizzard Watch": {
-        "priority": "95",
-        "colorName": "Greenyellow",
-        "rgb": "rgb(234, 254, 89)",
-        "hex": "#ADFF2F",
-        "originalColor": "rgb(173, 255, 47)"
+    "Winter Storm Watch": {
+        "priority": "82",
+        "colorName": "Steelblue",
+        "rgb": "rgb(70, 130, 180)",
+        "hex": "#4682B4"
     },
     "Rip Current Statement": {
-        "priority": "96",
+        "priority": "83",
         "colorName": "Turquoise",
         "rgb": "rgb(64, 224, 208)",
         "hex": "#40E0D0"
     },
     "Beach Hazards Statement": {
-        "priority": "97",
+        "priority": "84",
         "colorName": "Turquoise",
         "rgb": "rgb(64, 224, 208)",
         "hex": "#40E0D0"
     },
     "Gale Watch": {
-        "priority": "98",
+        "priority": "85",
         "colorName": "Pink",
-        "rgb": "rgb(102, 147, 255)",
-        "hex": "#FFC0CB",
-        "originalColor": "rgb(255, 192, 203)"
+        "rgb": "rgb(255, 192, 203)",
+        "hex": "#FFC0CB"
     },
-    "Winter Storm Watch": {
-        "priority": "99",
-        "colorName": "Steelblue",
-        "rgb": "rgb(57, 129, 247)",
-        "hex": "#4682B4",
-        "originalColor": "rgb(70, 130, 180)"
+    "Avalanche Watch": {
+        "priority": "86",
+        "colorName": "Sandybrown",
+        "rgb": "rgb(244, 164, 96)",
+        "hex": "#F4A460"
     },
     "Hazardous Seas Watch": {
-        "priority": "100",
+        "priority": "87",
         "colorName": "Darkslateblue",
         "rgb": "rgb(72, 61, 139)",
         "hex": "#483D8B"
     },
     "Heavy Freezing Spray Watch": {
-        "priority": "101",
+        "priority": "88",
         "colorName": "Rosybrown",
         "rgb": "rgb(188, 143, 143)",
         "hex": "#BC8F8F"
     },
+    "Flood Watch": {
+        "priority": "89",
+        "colorName": "Seagreen",
+        "rgb": "rgb(46, 139, 87)",
+        "hex": "#2E8B57"
+    },
     "Coastal Flood Watch": {
-        "priority": "102",
+        "priority": "90",
         "colorName": "Mediumaquamarine",
         "rgb": "rgb(102, 205, 170)",
         "hex": "#66CDAA"
     },
     "Lakeshore Flood Watch": {
-        "priority": "103",
+        "priority": "91",
         "colorName": "Mediumaquamarine",
         "rgb": "rgb(102, 205, 170)",
         "hex": "#66CDAA"
     },
-    "Flood Watch": {
-        "priority": "104",
-        "colorName": "Seagreen",
-        "rgb": "rgb(58, 111, 29)",
-        "hex": "#2E8B57",
-        "originalColor": "rgb(46, 139, 87)"
-    },
     "High Wind Watch": {
-        "priority": "105",
+        "priority": "92",
         "colorName": "Darkgoldenrod",
         "rgb": "rgb(184, 134, 11)",
         "hex": "#B8860B"
     },
-    "Excessive Heat Watch": {
-        "priority": "106",
+    "Extreme Heat Watch": {
+        "priority": "93",
         "colorName": "Maroon",
         "rgb": "rgb(128, 0, 0)",
         "hex": "#800000"
     },
     "Extreme Cold Watch": {
-        "priority": "107",
-        "colorName": "Blue",
-        "rgb": "rgb(0, 0, 255)",
-        "hex": "#0000FF"
-    },
-    "Wind Chill Watch": {
-        "priority": "108",
-        "colorName": "Cadetblue",
+        "priority": "94",
+        "colorName": "CadetBlue",
         "rgb": "rgb(95, 158, 160)",
         "hex": "#5F9EA0"
     },
-    "Lake Effect Snow Watch": {
-        "priority": "109",
-        "colorName": "Lightskyblue",
-        "rgb": "rgb(135, 206, 250)",
-        "hex": "#87CEFA"
-    },
-    "Hard Freeze Watch": {
-        "priority": "110",
-        "colorName": "Royalblue",
-        "rgb": "rgb(65, 105, 225)",
-        "hex": "#4169E1"
-    },
     "Freeze Watch": {
-        "priority": "111",
+        "priority": "95",
         "colorName": "Cyan",
         "rgb": "rgb(0, 255, 255)",
         "hex": "#00FFFF"
     },
     "Fire Weather Watch": {
-        "priority": "112",
+        "priority": "96",
         "colorName": "Navajowhite",
         "rgb": "rgb(255, 222, 173)",
         "hex": "#FFDEAD"
     },
     "Extreme Fire Danger": {
-        "priority": "113",
+        "priority": "97",
         "colorName": "Darksalmon",
         "rgb": "rgb(233, 150, 122)",
         "hex": "#E9967A"
     },
     "911 Telephone Outage": {
-        "priority": "114",
+        "priority": "98",
         "colorName": "Silver",
         "rgb": "rgb(192, 192, 192)",
         "hex": "#C0C0C0"
     },
     "Coastal Flood Statement": {
-        "priority": "115",
+        "priority": "99",
         "colorName": "Olivedrab",
         "rgb": "rgb(107, 142, 35)",
         "hex": "#6B8E23"
     },
     "Lakeshore Flood Statement": {
-        "priority": "116",
+        "priority": "100",
         "colorName": "Olivedrab",
         "rgb": "rgb(107, 142, 35)",
         "hex": "#6B8E23"
     },
     "Special Weather Statement": {
-        "priority": "117",
+        "priority": "101",
         "colorName": "Moccasin",
-        "rgb": "rgb(151, 204, 230)",
-        "hex": "#FFE4B5",
-        "originalColor": "rgb(255, 228, 181)"
+        "rgb": "rgb(255, 228, 181)",
+        "hex": "#FFE4B5"
     },
     "Marine Weather Statement": {
-        "priority": "118",
+        "priority": "102",
         "colorName": "Peachpuff",
         "rgb": "rgb(255, 239, 213)",
         "hex": "#FFDAB9"
     },
     "Air Quality Alert": {
-        "priority": "119",
+        "priority": "103",
         "colorName": "Gray",
         "rgb": "rgb(128, 128, 128)",
         "hex": "#808080"
     },
     "Air Stagnation Advisory": {
-        "priority": "120",
+        "priority": "104",
         "colorName": "Gray",
         "rgb": "rgb(128, 128, 128)",
         "hex": "#808080"
     },
     "Hazardous Weather Outlook": {
-        "priority": "121",
+        "priority": "105",
         "colorName": "Palegoldenrod",
         "rgb": "rgb(238, 232, 170)",
         "hex": "#EEE8AA"
     },
     "Hydrologic Outlook": {
-        "priority": "122",
+        "priority": "106",
         "colorName": "Lightgreen",
         "rgb": "rgb(144, 238, 144)",
         "hex": "#90EE90"
     },
     "Short Term Forecast": {
-        "priority": "123",
+        "priority": "107",
         "colorName": "Palegreen",
         "rgb": "rgb(152, 251, 152)",
         "hex": "#98FB98"
     },
     "Administrative Message": {
-        "priority": "124",
+        "priority": "108",
         "colorName": "Silver",
         "rgb": "rgb(192, 192, 192)",
         "hex": "#C0C0C0"
     },
     "Test": {
-        "priority": "125",
+        "priority": "109",
         "colorName": "Azure",
         "rgb": "rgb(240, 255, 255)",
         "hex": "#F0FFFF"
     },
     "Child Abduction Emergency": {
-        "priority": "126",
-        "colorName": "Transperant",
+        "priority": "110",
+        "colorName": "Transparent",
         "rgb": "rgb(255, 255, 255)",
         "hex": "#FFFFFF"
     },
     "Blue Alert": {
-        "priority": "127",
-        "colorName": "Transperant",
+        "priority": "111",
+        "colorName": "Transparent",
         "rgb": "rgb(255, 255, 255)",
         "hex": "#FFFFFF"
     }
