@@ -11,7 +11,7 @@ const my_polygon_colors = {
     // 'Flood Warning': 'rgb(147, 241, 75)',
     'Flash Flood Warning': 'rgb(147, 241, 75)',
     // 'Special Marine Warning': 'rgb(197, 155, 249)',
-    // 'Special Weather Statement': 'rgb(151, 204, 230)',
+    'Special Weather Statement': 'rgb(151, 204, 230)',
 
     // 'Tornado Watch': 'rgb(245, 254, 83)',
     // 'Severe Thunderstorm Watch': 'rgb(238, 135, 134)',

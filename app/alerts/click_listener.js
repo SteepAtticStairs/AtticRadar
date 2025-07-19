@@ -109,12 +109,13 @@ function click_listener(e) {
             if (is_negative) { thing_to_prepend = 'Expired:'; thing_to_append = ' ago'; text_color = 'rgba(229, 78, 78, 1)'; }
 
             // there are 2 types of headlines for some reason
-            var main_headline = check_property_exists(parameters.NWSheadline);
-            var secondary_headline = check_property_exists(properties.headline);
-            if (main_headline == 'None') {
-                var temp = secondary_headline;
-                secondary_headline = main_headline;
-                main_headline = temp;
+            var NWS_headline = check_property_exists(parameters.NWSheadline); // usually capitalized
+            var other_headline = check_property_exists(properties.headline); // usually a rewording of the basic alert info
+            // we can switch the secondary headline into the main slot just in case
+            if (NWS_headline == 'None') {
+                var temp = other_headline;
+                other_headline = NWS_headline;
+                NWS_headline = temp;
             }
 
             var popup_html =
@@ -128,10 +129,9 @@ ${parameters_html}\
 
             // this goes on the dialog when the info button is pressed
             var extented_alert_description = 
-`<div style="white-space: pre-wrap;"><b><span style="display: block; margin-bottom: 1em;"></span>${check_property_exists(properties.event)}
-<hr>${check_property_exists(properties.senderName)}</b>
-<hr>${secondary_headline}
-<hr>${main_headline}
+`<div style="white-space: pre-wrap; color: rgb(200, 200, 200);"><b style="color: ${init_color} !important;"><span style="display: block; margin-bottom: 1em;"></span>${check_property_exists(properties.event)}</b>
+${check_property_exists(properties.senderName)}
+<hr>${NWS_headline}
 <hr><b class="alertTextDescriber">Sent:</b><br>${ut.printFancyTime(new Date(properties.sent))}
 <br><b class="alertTextDescriber">Description:</b><br>${check_property_exists(properties.description)}
 <br><b class="alertTextDescriber">Instructions:</b><br>${check_property_exists(properties.instruction)}
