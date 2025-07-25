@@ -30,7 +30,7 @@ npm install
 npm run build
 npm run start
 ```
-then you can go to `localhost:3333` or `127.0.0.1:3333` to view the website.
+I use `http-server` as my local dev server on port 3333, so you can go to `localhost:3333` to view your local copy of AtticRadar.
 
 Browserify is used in AtticRadar to implement a moduling system. `npm run build` bundles the project with Browserify to be used in distribution.
 
