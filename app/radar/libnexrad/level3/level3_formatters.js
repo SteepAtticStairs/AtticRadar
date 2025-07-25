@@ -15,6 +15,7 @@
  *  current: {deg,nm} current position from radar in degrees and nautical miles
  *  movement: {deg,kts} movement of storm in degrees and knots
  *  forecast: [{deg, nm},...] forecasted position of storm in degrees and nm from radar site at [15,30,45,60] minutes
+ *  error: {error, mean} the error portion of the tabular line. both values in nautical miles
  *  }
  * 
  * @param {*} pages An array with all of the tabular pages to parse. Each array element should be one page, with lines separated by "\n".
@@ -23,13 +24,14 @@
 function format_storm_tracks(tab_pages, graph_pages) {
     // parse no data, new and positional info
     // kts returns {deg,kts} instead of the default {deg,nm}
-    const parseStringPosition = (position, kts = false) => {
+    // error returns {error,mean}
+    const parseStringPosition = (position, kts = false, error = false) => {
         // fixed strings
         if (position === 'NO DATA') return null;
         if (position === '  NEW  ') return 'new';
 
         // extract the two numbers
-        const values = position.match(/([ 0-9]{3})\/([ 0-9]{3})/);
+        const values = position.match(/([0-9. ]{3,})\/\s*([0-9. ]{3,})/);
         // couldn't find two numbers
         if (!values) return undefined;
         // return the formatted numbers
@@ -37,6 +39,13 @@ function format_storm_tracks(tab_pages, graph_pages) {
             return {
                 deg: +values[1],
                 kts: +values[2],
+            };
+        }
+        if (error) {
+            // both in nautical miles
+            return {
+                error: +values[1],
+                mean: +values[2],
             };
         }
         return {
@@ -91,19 +100,22 @@ function format_storm_tracks(tab_pages, graph_pages) {
             const id = idMatch[1];
 
             // extract 6 positional values
-            const rawPositions = [...line.matchAll(/([ 0-9]{3}\/[ 0-9]{3}|NO DATA| {2}NEW {2})/g)];
+            const rawPositions = [...line.matchAll(/([ 0-9]{3}\/[ 0-9]{3}|NO DATA| {2}NEW {2}|[0-9.]+\/\s*[0-9.]+)/g)];
             // extract the matched strings and parse into objects
             // second string (index 1) is in knots
-            const stringPositions = rawPositions.map((position, index) => parseStringPosition(position[1], index === 1));
+            // seventh string (index 6) both values are nautical miles
+            const stringPositions = rawPositions.map((position, index) => parseStringPosition(position[1], index === 1, index === 6));
 
             // format the result
-            const [current, movement, ...forecast] = stringPositions;
+            const [current, movement] = stringPositions;
+            const forecast = stringPositions.slice(2, 6);
+            const error = stringPositions[6];
             var graph_data;
             if (graph_formatted[id] != undefined) { graph_data = graph_formatted[id]; }
 
             // store to array
             result[id] = {
-                current, movement, forecast, graph_data,
+                current, movement, forecast, error, graph_data,
             };
         });
     });

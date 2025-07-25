@@ -23,31 +23,18 @@ function getCoords(degNmObj, station) {
     return turf.getCoords(coords);
 }
 
-// const max_lut_value = 100;
-// const stormtrack_length_lookup_obj = {};
-// for (var i = 1; i <= max_lut_value; i++) {
-//     stormtrack_length_lookup_obj[i] = (0.2 * ((max_lut_value + 1) - i)) / 4;
-// }
-function _calculate_parallel_line(speed, interval) {
-    const calc = (0.15 * ((100 - speed) * interval)) / 2.2; // (1.25 - interval)
-    return calc;
-}
-
-function generateParallelLine(basePoint, destPoint, cellData, forecastIndex) {
+function generatePerpendicularLine(basePoint, destPoint, cellData, forecastIndex) {
     function addToBearing(bearing, angle) { return (bearing + angle) % 360 }
     function subtractFromBearing(bearing, angle) { return (bearing - angle + 360) % 360 }
-
-    // basePoint = turf.point(turf.getCoords(basePoint));
-    // destPoint = turf.point(turf.getCoords(destPoint));
 
     var bearing = turf.bearing(basePoint, destPoint);
 
     // 15min, 30min, 45min, 1hr
-    var timeIntervalLookup = [0.25, 0.5, 0.75, 1];
+    var timeIntervalLookup = [2, 4, 6, 8];
     // ((speed * time interval) * convert kts to mph) / scaling
     // const distanceForLine = (cellData.movement.kts * timeIntervalLookup[forecastIndex] * 0.868976242) / 12; // miles
-    const distanceForLine = 1; // miles
-    // const distanceForLine = _calculate_parallel_line(cellData.movement.kts, timeIntervalLookup[forecastIndex]);
+    const distanceForLine = cellData.error.error * timeIntervalLookup[forecastIndex]; // miles
+    // const distanceForLine = _calculate_perpendicular_line(cellData.movement.kts, timeIntervalLookup[forecastIndex]);
 
     var leftBearing = subtractFromBearing(bearing, 90);
     var leftPoint = turf.destination(destPoint, distanceForLine, leftBearing, {units: 'miles'});
@@ -62,7 +49,7 @@ function plot_storm_tracks(L3Factory) {
 
     function individualCell(id) {
         var points = [];
-        var parallelLines = [];
+        var perpendicularLines = [];
         var coords;
         var initialPoint;
         var curCell = allTracks[id];
@@ -75,13 +62,13 @@ function plot_storm_tracks(L3Factory) {
             var curPoint = curCell.forecast[i];
             if (curPoint != null) {
                 coords = getCoords(curPoint, L3Factory.station);
-                parallelLines.push(generateParallelLine(initialPoint, coords, curCell, i));
+                perpendicularLines.push(generatePerpendicularLine(initialPoint, coords, curCell, i));
                 points.push(coords);
                 initialPoint = turf.point(coords, {cellID: id, coords: coords, cellProperties: curCell});
             }
         }
 
-        return [points, originalInitialPoint, parallelLines];
+        return [points, originalInitialPoint, perpendicularLines];
     }
 
     var stormIDs = Object.keys(allTracks);
@@ -101,9 +88,9 @@ function plot_storm_tracks(L3Factory) {
     var storm_track_layers = [];
     // to add black borders to the lines
     for (var i = 0; i <= 1; i++) {
-        storm_track_layers.push('stormTrackParallelLines' + i);
+        storm_track_layers.push('stormTrackPerpendicularLines' + i);
         map.addLayer({
-            id: 'stormTrackParallelLines' + i,
+            id: 'stormTrackPerpendicularLines' + i,
             type: 'line',
             source: {
                 'type': 'geojson',
