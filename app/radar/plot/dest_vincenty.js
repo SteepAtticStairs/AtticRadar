@@ -2,6 +2,7 @@ function dest_vincenty(start, distance, bearing) {
     const a = 6378137.0;
     const f = 1 / 298.257223563;
     const b = a * (1 - f);
+    const one_minus_f = 1 - f;
 
     if (distance === 0) {
         return [start.lat, start.lng];
@@ -15,7 +16,6 @@ function dest_vincenty(start, distance, bearing) {
     const α1 = to_rad(bearing);
 
     const sinα1 = Math.sin(α1), cosα1 = Math.cos(α1);
-    const one_minus_f = 1 - f;
 
     const tanU1 = one_minus_f * Math.tan(φ1);
     const cosU1 = 1 / Math.sqrt(1 + tanU1 * tanU1);
@@ -29,28 +29,44 @@ function dest_vincenty(start, distance, bearing) {
     const A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
     const B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
 
-    const invBA = 1 / (b * A);
-    let σ = distance * invBA;
+    const sOverBA = distance / (b * A);
+    let σ = sOverBA + (f / 6.0) * sinα1 * tanU1 * sOverBA * sOverBA;
 
-    const TOL = 1e-6;
-    const MAX_ITER = 20;
-    let σPrev, sinσ, cosσ, cos2σm, Δσ;
+    const TOL = 3.0 * 1e-6;
+    const MAX_ITER = 6;
+    let sinσ, cosσ, cos2σm, Δσ;
 
     for (let i = 0; i < MAX_ITER; i++) {
         sinσ = Math.sin(σ);
         cosσ = Math.cos(σ);
         cos2σm = Math.cos(2 * σ1 + σ);
 
-        const t1 = cosσ * (-1 + 2 * cos2σm * cos2σm);
-        const t2 = cos2σm * (-3 + 4 * sinσ * sinσ) * (-3 + 4 * cos2σm * cos2σm);
-        Δσ = B * sinσ * (cos2σm + B / 4 * (t1 - B / 6 * t2));
+        const temp1 = cosσ * (-1 + 2 * cos2σm * cos2σm);
+        const temp2 = cos2σm * (-3 + 4 * sinσ * sinσ) * (-3 + 4 * cos2σm * cos2σm);
+        Δσ = B * sinσ * (cos2σm + B / 4 * (temp1 - B / 6 * temp2));
 
-        σPrev = σ;
-        σ = distance * invBA + Δσ;
+        const sin2σm = Math.sin(2 * σ1 + σ);
+        
+        const dTemp1Dσ = -sinσ * (-1 + 2 * cos2σm * cos2σm) + cosσ * (-4 * cos2σm * sin2σm);
+        const dTemp2Dσ = -sin2σm * (-3 + 4 * sinσ * sinσ) * (-3 + 4 * cos2σm * cos2σm)
+            + cos2σm * (8 * sinσ * cosσ) * (-3 + 4 * cos2σm * cos2σm)
+            + cos2σm * (-3 + 4 * sinσ * sinσ) * (-8 * cos2σm * sin2σm);
 
-        if (Math.abs(σ - σPrev) < TOL) {
+        const dΔσDσ = B * cosσ * (cos2σm + B / 4 * (temp1 - B / 6 * temp2))
+            + B * sinσ * (-sin2σm + B / 4 * (dTemp1Dσ - B / 6 * dTemp2Dσ));
+
+        const fσ = σ - distance / (b * A) - Δσ;
+        const fPrimeσ = 1 - dΔσDσ;
+
+        const ΔσNR = fσ / fPrimeσ;
+        const σNew = σ - ΔσNR;
+
+        if (Math.abs(ΔσNR) <= TOL) {
+            σ = σNew;
             break;
         }
+
+        σ = σNew;
     }
 
     sinσ = Math.sin(σ);
