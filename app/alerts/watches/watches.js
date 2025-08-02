@@ -40,7 +40,7 @@ function click_listener(e) {
 }
 
 function _fetch_individual_watch(url, callback) {
-    fetch(ut.phpProxy + url, { cache: 'no-store' })
+    fetch(/*ut.phpProxy + */url, { cache: 'no-store' })
     .then(response => response.blob())
     .then(blob => {
         blob.lastModifiedDate = new Date();
@@ -145,7 +145,7 @@ function fetch_watches() {
                     geojson.features[0].properties.id = id;
                     // features.push(geojson.features[0]);
 
-                    fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
+                    fetch(/*ut.phpProxy + */`https://www.spc.noaa.gov/products/watch/ww${id.padStart(4, '0')}.html`)
                     .then(response => response.text())
                     .then(text => {
                         const doc = new DOMParser().parseFromString(text, 'text/html');

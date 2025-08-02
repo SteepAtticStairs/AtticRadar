@@ -37,7 +37,7 @@ function click_listener(e) {
 }
 
 function _fetch_individual_discussion(url, callback) {
-    fetch(ut.phpProxy + url, { cache: 'no-store' })
+    fetch(/*ut.phpProxy + */url, { cache: 'no-store' })
     .then(response => response.blob())
     .then(blob => {
         blob.lastModifiedDate = new Date();
@@ -141,7 +141,7 @@ function fetch_discussions() {
                     geojson.features[0].properties.color = 'rgb(0, 0, 245)';
                     geojson.features[0].properties.id = id;
 
-                    fetch(ut.phpProxy + `https://www.spc.noaa.gov/products/md/md${id}.html`)
+                    fetch(/*ut.phpProxy + */`https://www.spc.noaa.gov/products/md/md${id}.html`)
                     .then(response => response.text())
                     .then(text => {
                         const doc = new DOMParser().parseFromString(text, 'text/html');
