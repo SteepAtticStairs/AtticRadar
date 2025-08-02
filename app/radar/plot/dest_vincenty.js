@@ -5,7 +5,7 @@ function dest_vincenty(start, distance, bearing) {
     const one_minus_f = 1 - f;
 
     if (distance === 0) {
-        return [start.lat, start.lng];
+        return [start.lng, start.lat];
     }
 
     const to_rad = deg => deg * Math.PI / 180;
