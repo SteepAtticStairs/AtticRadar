@@ -49,8 +49,8 @@ function format_value(value) {
             value = 'Range Folded';
         } else {
             if (
-            product_code == 'REF' || product_code == 153 /* N0B */ || product_code == 94 /* NXQ */ || product_code == 180 /* TZ0 */ || product_code == 186 /* TZL */ || // reflectivity
-            product_code == 'SW' /* || product_code == 'NSW' */ // spectrum width
+                product_code == 'REF' || product_code == 153 /* N0B */ || product_code == 94 /* NXQ */ || product_code == 180 /* TZ0 */ || product_code == 186 /* TZL */ || // reflectivity
+                product_code == 'SW' /* || product_code == 'NSW' */ // spectrum width
             ) {
                 // round to the nearest 0.5
                 value = Math.floor(value * 2) / 2;
@@ -63,17 +63,17 @@ function format_value(value) {
                 // // level 2 & 3 velocity values are provided by default in m/s
                 // value = parseFloat(value.toFixed(1));
             } else if (
-            product_code == 159 /* N0X */ || product_code == 'ZDR' || // differential reflectivity
-            product_code == 134 /* DVL */ // vertically integrated liquid
+                product_code == 159 /* N0X */ || product_code == 'ZDR' || // differential reflectivity
+                product_code == 134 /* DVL */ // vertically integrated liquid
             ) {
                 value = parseFloat(value.toFixed(2));
             } else if (
-            product_code == 163 // specific differential phase
+                product_code == 163 // specific differential phase
             ) {
                 value = parseFloat(value.toFixed(1));
             } else if (
-            product_code == 161 /* N0C */ || product_code == 'RHO' || // correlation coefficient
-            product_code == 'PHI' // differential phase shift
+                product_code == 161 /* N0C */ || product_code == 'RHO' || // correlation coefficient
+                product_code == 'PHI' // differential phase shift
             ) {
                 // round to the nearest 16th
                 value = parseFloat(value.toFixed(3));
@@ -81,22 +81,22 @@ function format_value(value) {
                 product_code == 165 || product_code == 177 // hydrometer classification || hybrid hydrometer classification
             ) {
                 var hycValues = {
-                    0: 'Below Threshold', // ND
-                    10: 'Biological', // BI
-                    20: 'Ground Clutter', // GC
-                    30: 'Ice Crystals', // IC
-                    40: 'Dry Snow', // DS
-                    50: 'Wet Snow', // WS
-                    60: 'Light-Mod. Rain', // RA
-                    70: 'Heavy Rain', // HR
-                    80: 'Big Drops', // BD
-                    90: 'Graupel', // GR
-                    100: 'Hail / Rain', // HA
-                    110: 'Large Hail', // LH
-                    120: 'Giant Hail', // GH,
-                    130: 'Unused', // ??
-                    140: 'Unknown', // UK
-                    150: 'Range Folded' // RF
+                    // 0: 'Below Threshold', // ND
+                    0: 'Biological', // BI
+                    10: 'Ground Clutter', // GC
+                    20: 'Ice Crystals', // IC
+                    30: 'Dry Snow', // DS
+                    40: 'Wet Snow', // WS
+                    50: 'Light-Mod. Rain', // RA
+                    60: 'Heavy Rain', // HR
+                    70: 'Big Drops', // BD
+                    80: 'Graupel', // GR
+                    90: 'Hail / Rain', // HA
+                    100: 'Large Hail', // LH
+                    110: 'Giant Hail', // GH,
+                    120: 'Unused', // ??
+                    130: 'Unknown', // UK
+                    140: 'Range Folded' // RF
                 }
                 value = hycValues[Math.floor(value / 10) * 10];
             }
