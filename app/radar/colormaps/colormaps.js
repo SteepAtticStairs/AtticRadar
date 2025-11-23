@@ -3,8 +3,8 @@ const colortable_parser = require('./colortable_parser');
 const range_folded = 'rgb(139, 0, 218)';
 const range_folded_val = 999;
 
-const reflectivity = 
-`product: BR
+const reflectivity =
+    `product: BR
 units: dBZ
 step: 5
 
@@ -23,8 +23,8 @@ color: 70 178 0 255 99 0 214
 color: 75 5 236 240 1 32 32
 color: 85 1 32 32
 color: 95 1 32 32`
-const reflectivity_radarscope = 
-`Product: BR
+const reflectivity_radarscope =
+    `Product: BR
 Units:   DBZ
 Step:    5
 SolidColor:	-32.0		115	77	172
@@ -281,8 +281,8 @@ SolidColor:	93.0		130	40	24
 SolidColor:	93.5		125	30	16
 SolidColor:	94.0		120	20	8
 SolidColor:	94.5		115	10	1`
-const reflectivity_nws = 
-`product: BR
+const reflectivity_nws =
+    `product: BR
 units: dBZ
 step: 5
 
@@ -295,8 +295,8 @@ color: 65 247 1 249 136 63 174
 color: 75 255 255 255 184 184 184
 color: 85 184 184 184
 color: 95 184 184 184`
-const reflectivity_gr2analyst = 
-`product: BR
+const reflectivity_gr2analyst =
+    `product: BR
 units: dBZ
 step: 10
 
@@ -308,8 +308,8 @@ color: 50 255 0 0 160 0 0
 color: 60 255 0 255 128 0 128
 color: 70 255 255 255
 color: 80 128 128 128`
-const reflectivity_radaromega = 
-`product: BR
+const reflectivity_radaromega =
+    `product: BR
 units: dBZ
 step: 5
 
@@ -324,8 +324,8 @@ color: 70 67 190 254 19 144 242
 color: 80 166 176 150 255 231 188
 color: 85 255 231 188`
 
-const velocity = 
-`Product:bv
+const velocity =
+    `Product:bv
 units: KTS
 step: 5
 scale: 1.9426
@@ -350,8 +350,8 @@ color: 120 110 14 9
 color: 140 0 0 0
 
 RF: 139 0 218`
-const velocity_balance = 
-`Product: BV
+const velocity_balance =
+    `Product: BV
 Units:   ???
 Step:    5
 RF:      127	0	207
@@ -610,8 +610,8 @@ SolidColor:	252	68	11	22
 SolidColor:	253	65	10	20
 SolidColor:	254	63	10	19`
 
-const diff_reflectivity = 
-`Product: ZDR
+const diff_reflectivity =
+    `Product: ZDR
 Units:   DB
 Step:    5
 
@@ -871,8 +871,8 @@ SolidColor:	 7.751	254	250	252
 SolidColor:	 7.813	255	255	255
 SolidColor:	 7.875	255	255	255`
 
-const corr_coeff = 
-`Product: CC
+const corr_coeff =
+    `Product: CC
 Units:	 NONE
 Step:    5
 SolidColor:	0.208	  0	  0	  0
@@ -1150,29 +1150,29 @@ const spectrum_width = {
     ],
 }
 
-const hydrometer_class = 
-`Product: HC
+const hydrometer_class =
+    `Product: HC
 Units:   NONE
 Step:    1
 
-SolidColor:	 10	156	156	156
-SolidColor:	 20	118	118	118
-SolidColor:	 30	255	176	176
-SolidColor:	 40	  0	255	255
-SolidColor:	 50	  0	144	255
-SolidColor:	 60	  0	251	144
-SolidColor:	 70	  0	187	  0
-SolidColor:	 80	208	208	 96
-SolidColor:	 90	210	132	132
-SolidColor:	100	255	  0	  0
-SolidColor:	110	160	 20	 20
-SolidColor:	120	255	255	  0
-SolidColor:	130	  0	  0	  0
-SolidColor:	140	231	  0	255
-SolidColor:	150	119	  0	125`
+SolidColor:	  0	156	156	156
+SolidColor:	 10	118	118	118
+SolidColor:	 20	255	176	176
+SolidColor:	 30	  0	255	255
+SolidColor:	 40	  0	144	255
+SolidColor:	 50	  0	251	144
+SolidColor:	 60	  0	187	  0
+SolidColor:	 70	208	208	 96
+SolidColor:	 80	210	132	132
+SolidColor:	 90	255	  0	  0
+SolidColor:	100	160	 20	 20
+SolidColor:	110	255	255	  0
+SolidColor:	120	  0	  0	  0
+SolidColor:	130	231	  0	255
+SolidColor:	140	119	  0	125`
 
-const specific_differential_phase = 
-`Product: KDP
+const specific_differential_phase =
+    `Product: KDP
 Units:   Deg/km
 Step:    5
 SolidColor:	-2.05	135	  0	135
